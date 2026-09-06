@@ -1,6 +1,6 @@
 # Herramientas de acompañamiento
 
-Veintiséis hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
+Veintinueve hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
 HTML** que funciona con doble clic: sin instalación, sin servidor y sin conexión.
 
 Todo se elige, se calibra o se arrastra. Cada hoja lleva plegado un bloque de notas del
@@ -20,7 +20,7 @@ sirve cada hoja, en qué casos rinde, con qué va antes o después y dónde conv
 | **DBT** | Análisis en cadena · Tarjeta de crisis · Verificar los hechos · Pedir y decir que no · Mente sabia · Tarjeta diaria |
 | **Cognitivo-conductual** | Registro de pensamientos · Flecha descendente · Escalera de exposición · Activación conductual · Solución de problemas · Autoinstrucciones · Análisis funcional |
 
-Diez de ellas tienen **escena viva**: la metáfora ocurre en tiempo real y no espera a que se
+Ocho de ellas tienen **escena viva**: la metáfora ocurre en tiempo real y no espera a que se
 apriete un botón. El monstruo jala solo, el bus avanza solo, las piezas negras brotan solas, la
 aguja del polígrafo se mueve sola y las hojas bajan solas por el arroyo. Lo que sí lleva botón es
 la decisión: jalar, discutir, empujar, controlar, cavar o soltar.
@@ -38,7 +38,7 @@ producto: **se sobreescriben en cada construcción**, así que no se editan a ma
 
 ```bash
 cd _fuente
-python construir.py      # rehace las 26 hojas, index.html y guia.html
+python construir.py      # rehace las hojas, index.html y guia.html
 python revisar.py        # comprueba las hojas antes de repartirlas
 ```
 

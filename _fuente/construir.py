@@ -195,7 +195,7 @@ def construir_indice(fichas, kit_css):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Herramientas de la Ruta de Atención Clínica</title>
+<title>Herramientas de acompañamiento</title>
 <style>
 {kit_css}
 {css_extra}
