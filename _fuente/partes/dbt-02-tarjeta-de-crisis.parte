@@ -7,7 +7,7 @@ etiqueta: Tolerancia al malestar
 lamina: si
 sub: Las habilidades de crisis no sirven para sentirse mejor: sirven para que el tiempo pase sin empeorar las cosas. El termómetro decide qué se puede usar, porque pedir pros y contras en 95 es pedir algo que el cuerpo no puede hacer. Al final se arma una tarjeta del tamaño de un carné.
 fuente: Habilidades de supervivencia a la crisis, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 10, fichas de tolerancia al malestar 3 a 9.
-resumen: Un termómetro decide qué habilidades se ofrecen: STOP y TIP arriba, ACEPTAS y los cinco sentidos en medio, pros y contras abajo. Con lo elegido arma una tarjeta imprimible.
+resumen: Un termómetro decide qué habilidades se ofrecen: STOP y TIP arriba, ACEPTAS y los cinco sentidos en medio, y abajo pros y contras, SALVARA y aceptación radical. Con lo elegido arma una tarjeta imprimible.
 @@css
   .termometro{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
     padding:18px 22px;margin-bottom:16px}

@@ -70,6 +70,12 @@ son indicaciones para quien acompaña. La ficha los muestra plegados.
 Solo llevan guion las hojas experienciales, donde la manera de proponerlas decide si el ejercicio
 ocurre o se convierte en otra cosa. Las de registro y las de evaluación no lo necesitan.
 
+Al cambiar el número de elementos de una lista hay que barrer la prosa que lo menciona, que vive
+en cuatro sitios distintos y es fácil dejar uno atrás: el `sub` y el `resumen` de `@@meta`, los
+`<p class="ayuda">` dentro de la hoja, la ficha en `guia.py` y las frases del guion en
+`guiones.py`. Al pasar el jardín de veinte a veinticuatro semillas quedaron tres sitios diciendo
+veinte y uno diciendo que se dejaban catorce afuera.
+
 Cuidado con el CSS que vive dentro de `guia.py`: está en una cadena de Python, así que un escape
 CSS como `2` se lee como escape octal y sale un carácter de control. Ahí van los caracteres
 literales.

@@ -67,11 +67,11 @@ GUIONES = {
  ("Antes de proponerlo", [
   "Es la alternativa a la brújula cuando preguntar «¿cuáles son tus valores?» produce silencio o "
   "discurso aprendido. No exige escribir ni argumentar.",
-  "El momento clínico no es sembrar: es tener que dejar catorce afuera."]),
+  "El momento clínico no es sembrar: es tener que dejar dieciocho afuera."]),
 
  ("Cómo se presenta", [
-  "«Un jardín tiene espacio para seis surcos, no para veinte. Lo que dejes afuera no es que no "
-  "importe: es que no cabe.»",
+  "«Un jardín tiene espacio para seis surcos, y aquí hay veinticuatro semillas. Lo que "
+  "dejes afuera no es que no importe: es que no cabe.»",
   "«No hay respuesta correcta, y no voy a opinar de lo que siembres.»"]),
 
  ("Durante", [
@@ -94,7 +94,7 @@ GUIONES = {
   "tamizar sintomatología depresiva antes de seguir.",
   "Siembra seis y los riega todos al máximo: suele ser deseabilidad. Bajar a la semana concreta, "
   "día por día, y volver a regar.",
-  "Aparece un surco que rieg mucho y que no eligió como valor: mirarlo. Casi siempre es evitación "
+  "Aparece un surco que riega mucho y que no eligió como valor: mirarlo. Casi siempre es evitación "
   "bien disfrazada de responsabilidad."]),
 ],
 

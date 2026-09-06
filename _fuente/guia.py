@@ -45,7 +45,7 @@ GUIA = [
             "dentro de la partida. El indicador es que la persona pregunte si «funcionó»."},
 
  {"archivo":"met-jardin-de-valores.html", "titulo":"El jardín de valores", "etq":"Valores",
-  "paraque":"Clarificación por elección y no por escritura: seis surcos de veinte, y la distancia "
+  "paraque":"Clarificación por elección y no por escritura: seis surcos de veinticuatro, y la distancia "
             "entre lo que importa y lo que efectivamente se regó.",
   "conviene":[
     "Cuando preguntar «¿cuáles son tus valores?» produce silencio o discurso aprendido.",
@@ -73,7 +73,8 @@ GUIA = [
 
  {"archivo":"met-hojas-en-el-arroyo.html", "titulo":"Hojas en el arroyo", "etq":"Defusión",
   "paraque":"No entrena calmarse ni dejar de pensar: entrena notar que uno se enganchó y volver. "
-            "Ese ciclo es la repetición útil, y por eso la hoja cuenta enganches.",
+            "Ese ciclo es la repetición útil, y por eso el marcador cuenta retornos y no fallos. "
+            "La corriente trae los pensamientos sola, y hacia el final llegan en racimo.",
   "conviene":[
     "Rumiación depresiva y preocupación anticipatoria: es su indicación más clara.",
     "Fusión que ya resistió la reestructuración: hizo el registro completo y sigue enganchado.",
