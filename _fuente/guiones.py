@@ -429,4 +429,357 @@ GUIONES = {
   "de crisis. La práctica contemplativa no es el lugar."]),
 ],
 
+# ============================================================================
+# Guiones de entrevista. Aquí la técnica es la secuencia de preguntas, así que
+# el guion es el orden y los puntos donde la conversación descarrila.
+# ============================================================================
+
+"tcc-flecha-descendente.html": [
+ ("Por dónde se entra", [
+  "Por un pensamiento concreto de una situación concreta. «No sirvo» no sirve de punto de partida; "
+  "«pensé que se iban a dar cuenta en la reunión» sí.",
+  "«Supongamos, solo para mirar, que eso fuera cierto. ¿Qué significaría para ti?»"]),
+
+ ("La secuencia", [
+  "Se repite la misma pregunta con las mismas palabras, cuatro o cinco veces: «¿y qué tendría eso "
+  "de malo?», «¿y qué significaría eso sobre ti?»",
+  "No reformular para que suene mejor. La repetición monótona es lo que hace bajar; variarla "
+  "devuelve a la persona a la superficie.",
+  "Se para cuando la respuesta empieza a repetirse, o cuando aparece una frase corta, absoluta y "
+  "en primera persona: «soy un fraude», «no valgo». Ahí está el fondo y no se baja más."]),
+
+ ("Dónde descarrila", [
+  "Consolar a mitad del descenso corta la cadena y hay que volver a empezar.",
+  "Discutir la creencia en el momento en que aparece. Ese no es el momento: apenas es el hallazgo.",
+  "Bajar deprisa con alguien muy activado. Si la activación sube mucho, se para y se ancla."]),
+
+ ("Lo que no se dice", [
+  "✗ «Pero eso no es verdad.» Justo cuando llega al fondo, invalida lo que acaba de costarle.",
+  "✗ «¿Ves cómo exageras?»",
+  "✗ Terminar la sesión en el fondo. Siempre se sube antes de cerrar."]),
+
+ ("Cómo se cierra", [
+  "Nombrar que lo que apareció es una creencia y no un hecho, y dejarla anotada para trabajarla.",
+  "«Si eso fuera solo una frase que tu mente dice, ¿qué harías distinto esta semana?»"]),
+],
+
+"dbt-analisis-en-cadena.html": [
+ ("Antes de empezar", [
+  "Sobre una conducta problema concreta y reciente, no sobre «las veces que me pasa». Una sola, "
+  "con día y hora."]),
+
+ ("Cómo se abre", [
+  "«Vamos a reconstruir eso como una película, cuadro por cuadro. No para juzgarlo: para ver dónde "
+  "había puertas.»"]),
+
+ ("La secuencia", [
+  "Vulnerabilidad previa, evento desencadenante, y después eslabón por eslabón sin saltar.",
+  "Cada vez que resuma —«y ahí exploté»— devolver: «¿y justo antes de eso?» Los saltos grandes son "
+  "donde estaban las puertas.",
+  "Describir, no explicar. El análisis en cadena no busca el porqué, busca el qué pasó después."]),
+
+ ("Lo que no se dice", [
+  "✗ «¿Por qué hiciste eso?» Pide justificación y trae vergüenza, y la vergüenza cierra la cadena.",
+  "✗ «Ahí te equivocaste.»",
+  "✗ Pasar a soluciones antes de tener la cadena completa."]),
+
+ ("Cómo se cierra", [
+  "Elegir dos o tres eslabones, no diez, y solo ahí buscar qué habría cabido.",
+  "Si el tiempo se acaba antes: mejor una cadena completa sin soluciones que media cadena con "
+  "soluciones."]),
+],
+
+"tcc-analisis-funcional.html": [
+ ("Cómo se abre", [
+  "«Vamos a mirar para qué sirve eso que haces. Sirve para algo, o no lo harías.»",
+  "Esa frase evita que se lea como reproche, que es el riesgo de esta hoja."]),
+
+ ("La secuencia", [
+  "Antecedente: dónde, con quién y qué pasó justo antes.",
+  "Conducta: en verbos observables. «Me pongo ansioso» no es una conducta; «me fui del salón» sí.",
+  "Consecuencia inmediata y consecuencia a la larga, en columnas separadas. La distancia entre las "
+  "dos es todo el análisis."]),
+
+ ("Dónde descarrila", [
+  "Describir la conducta como rasgo en vez de como acto. Si no se puede filmar, no es la conducta.",
+  "Quedarse en la consecuencia a largo plazo, que la persona ya conoce. La que mantiene el "
+  "problema es la inmediata, y es la que cuesta admitir."]),
+
+ ("Lo que no se dice", [
+  "✗ «Eso es una conducta de evitación.» Etiquetar antes de que se vea lo deja en teoría.",
+  "✗ «Entonces lo haces por llamar la atención.»",
+  "✗ Proponer la función. Se deduce de los datos o no se deduce."]),
+
+ ("Cómo se cierra", [
+  "Leer en voz alta la columna del alivio inmediato, seguida. Suele bastar."]),
+],
+
+"dbt-verificar-los-hechos.html": [
+ ("Antes de proponerlo", [
+  "Solo tiene sentido cuando la emoción no encaja con los hechos, o cuando la intensidad no "
+  "encaja. Si encaja, la habilidad es otra: resolver el problema, no verificar."]),
+
+ ("Cómo se abre", [
+  "«No vamos a decidir si tienes razón en sentirlo. Vamos a mirar qué pasó exactamente, y después "
+  "qué encaja con qué.»"]),
+
+ ("La secuencia", [
+  "Nombrar la emoción. Describir el hecho sin una sola interpretación dentro.",
+  "Buscar otras interpretaciones posibles, incluidas las aburridas.",
+  "Estimar la probabilidad de la temida, y después preguntar si la intensidad encaja con lo que de "
+  "verdad hay."]),
+
+ ("Dónde descarrila", [
+  "Usarlo para convencer. Si el profesional queda del lado de los hechos y la persona del lado de "
+  "la emoción, ya se perdió y toca validar antes de seguir."]),
+
+ ("Lo que no se dice", [
+  "✗ «Estás exagerando.»",
+  "✗ «No tienes por qué sentirte así.» Invalida, y la invalidación sube la emoción que se estaba "
+  "verificando.",
+  "✗ Saltar a la acción opuesta antes de haber verificado."]),
+
+ ("Cómo se cierra", [
+  "Si los hechos encajan: se valida y se pasa a resolver el problema.",
+  "Si no encajan: ahí sí, acción opuesta, y completa."]),
+],
+
+"act-costo-de-la-lucha.html": [
+ ("La premisa, dicha en voz alta", [
+  "«No vamos a mirar si has hecho lo suficiente. Doy por hecho que sí, y con todo lo que tenías. "
+  "Vamos a mirar otra cosa: qué te ha costado.»",
+  "Sin esa frase la hoja se lee como reproche, y entonces la persona defiende en vez de mirar."]),
+
+ ("La secuencia", [
+  "Cada estrategia por separado, y dos preguntas que no se responden juntas: «¿alivió en el "
+  "momento?» y «¿lo resolvió a la larga?»",
+  "Si contesta las dos de una: «espera, esa es la segunda. ¿Alivió, en el momento?»"]),
+
+ ("Dónde descarrila", [
+  "La persona empieza a defender sus estrategias. Cuando eso pasa es que se sintió juzgada: se "
+  "vuelve a la premisa y se dice otra vez."]),
+
+ ("Lo que no se dice", [
+  "✗ «¿Ves que nada de eso funciona?» Sí funcionó, para aliviar. Por eso lo siguió haciendo.",
+  "✗ «Entonces deja de hacerlo.»",
+  "✗ Leer el costo como si fuera una factura que se le pasa."]),
+
+ ("Cómo se cierra", [
+  "Con la pregunta, no con la conclusión. La desesperanza creativa que cierra el profesional deja "
+  "de ser creativa.",
+  "«Si esto que has intentado es lo que hay, ¿qué es lo que no has probado?»"]),
+],
+
+# ============================================================================
+# Guiones de enseñanza. Aquí lo que se transmite es una habilidad, y el riesgo
+# está en el mal uso que se instala si se enseña de más o de menos.
+# ============================================================================
+
+"dbt-mente-sabia.html": [
+ ("Cómo se enseña", [
+  "Con los dos estados primero, y con ejemplos suyos, no con los del manual.",
+  "«Cuéntame una decisión que tomaste desde la emoción pura.» Y después: «otra desde pura "
+  "razón, sin sentir nada.»"]),
+
+ ("La imagen", [
+  "«Mente sabia no es el punto medio entre las dos. Es lo que sabes cuando ya paraste de discutir "
+  "contigo.»"]),
+
+ ("El ensayo", [
+  "En sesión, con una decisión pequeña y real, no hipotética.",
+  "Preguntar dónde lo siente en el cuerpo. Sin eso se queda en concepto."]),
+
+ ("El mal uso habitual", [
+  "Usarla para justificar lo que ya se quería hacer.",
+  "Si la respuesta llega instantánea y cómoda, casi nunca es mente sabia. Vale la pena decirlo: "
+  "«¿eso lo sabías antes de preguntarte?»"]),
+
+ ("Lo que no se dice", [
+  "✗ «Usa la mente sabia», como consejo suelto y sin ensayo.",
+  "✗ «Cálmate y piensa.» Eso es mente racional, que es justamente uno de los dos extremos.",
+  "✗ Presentarla como una voz mística o infalible."]),
+],
+
+"dbt-pedir-y-decir-no.html": [
+ ("Cómo se enseña", [
+  "Con una petición real y pendiente de esta semana. En abstracto no se aprende."]),
+
+ ("La intensidad va antes que el guion", [
+  "Decidir primero cuánto pedir, de insinuar a insistir. Muchos fracasos son de intensidad y no de "
+  "forma: el guion perfecto en la intensidad equivocada no funciona."]),
+
+ ("El ensayo", [
+  "Escribirlo, decirlo en voz alta y repetirlo hasta que suene suyo.",
+  "Y ensayar el no: qué dice si le dicen que no. Sin eso, la primera negativa desarma todo."]),
+
+ ("El mal uso habitual", [
+  "Aplicarlo palabra por palabra suena a robot y la otra persona lo nota. Se ensaya para tener la "
+  "estructura, no el libreto."]),
+
+ ("Lo que no se dice", [
+  "✗ «Solo tienes que ser más asertivo.»",
+  "✗ Prometer que va a funcionar. La habilidad es pedir bien; conseguir no depende de ella.",
+  "✗ Cerrar sin acordar una petición concreta, y pequeña."]),
+],
+
+"tcc-autoinstrucciones.html": [
+ ("Cómo se enseña: modelando", [
+  "El profesional dice primero, en voz alta, lo que se diría a sí mismo en esa situación, dudas "
+  "incluidas. Si el modelo sale perfecto no sirve de modelo."]),
+
+ ("El orden es la técnica", [
+  "La persona lo dice en voz alta, después en voz baja, después por dentro. Ese desvanecimiento "
+  "progresivo es lo que hace que quede disponible cuando toque."]),
+
+ ("Las frases", [
+  "En sus palabras, cortas y en primera persona.",
+  "Una autoinstrucción dice qué hacer, no cómo sentirse: «leo la primera línea» sirve; «voy a "
+  "estar tranquilo» no."]),
+
+ ("El mal uso habitual", [
+  "Convertirlas en frases motivacionales. En cuanto suenan a taller, dejan de usarse el día que "
+  "hacen falta."]),
+
+ ("Lo que no se dice", [
+  "✗ «Repítete que sí puedes.»",
+  "✗ «Piensa en positivo.»",
+  "✗ Dárselas escritas por el profesional. Las que no salen de su boca no vuelven a su cabeza."]),
+],
+
+"tcc-solucion-de-problemas.html": [
+ ("Antes de proponerlo", [
+  "Distinguir problema de malestar. Si no hay un problema resoluble, esta hoja hace daño: convierte "
+  "una emoción en una tarea que se falla."]),
+
+ ("La orientación va primero, y es la mitad", [
+  "Si la persona cree que los problemas no se resuelven o que ella no es capaz, ninguna lista de "
+  "alternativas va a servir.",
+  "«¿Esto es un problema que se pueda resolver, o es algo que toca cargar?» Las dos respuestas "
+  "llevan a hojas distintas."]),
+
+ ("La generación", [
+  "Cantidad antes que calidad, y sin evaluar mientras se generan. Si evalúa a la vez, se queda en "
+  "tres y las tres serán las de siempre.",
+  "Incluir a propósito una o dos absurdas. Sueltan el resto."]),
+
+ ("El mal uso habitual", [
+  "Elegir la mejor alternativa y no probarla. La técnica termina en ejecución y revisión, no en la "
+  "lista."]),
+
+ ("Lo que no se dice", [
+  "✗ «Es cuestión de organizarse.»",
+  "✗ Proponer las alternativas uno mismo, por rápido que sea."]),
+],
+
+"act-soltar-el-anzuelo.html": [
+ ("Cómo se enseña", [
+  "Con un pensamiento que esté activo hoy, no con el más grave del historial."]),
+
+ ("La distinción que sostiene todo", [
+  "No es dejar de tener el pensamiento, es dejar de morderlo.",
+  "«¿Qué hace tu vida cuando muerdes ese anzuelo?» Y después: «¿qué haría si estuviera ahí y no lo "
+  "mordieras?»"]),
+
+ ("El ensayo", [
+  "Probar dos o tres formas de defusión en la sesión y quedarse con la que le funcione a él, no "
+  "con la que suene mejor."]),
+
+ ("El mal uso habitual", [
+  "Usarlo para que el pensamiento se vaya. Si pregunta «¿y cuánto tarda en irse?», volvió a "
+  "morder, y conviene nombrarlo sin corregirlo."]),
+
+ ("Lo que no se dice", [
+  "✗ «No le hagas caso.»",
+  "✗ «Eso es solo un pensamiento», dicho como consuelo. Es una descripción, no un calmante."]),
+],
+
+# ============================================================================
+# Guiones de acuerdo. Aquí el riesgo no está en cómo se presenta la hoja, sino
+# en pactar algo irreal, ambiguo o impuesto.
+# ============================================================================
+
+"tcc-escalera-de-exposicion.html": [
+ ("Antes de pactar", [
+  "La jerarquía la construye la persona. Un peldaño puesto por el profesional se cumple por "
+  "obediencia y no enseña nada.",
+  "Se empieza por uno que pueda hacer, no por uno que deba."]),
+
+ ("Cómo se acuerda", [
+  "Un solo peldaño, con día, y sin puerta de salida en el enunciado.",
+  "Explícito antes de empezar: no se sube hasta que ese baje.",
+  "Las conductas de seguridad se nombran una por una. Una exposición con conducta de seguridad "
+  "dentro no es una exposición."]),
+
+ ("Lo que no se pacta", [
+  "✗ Un peldaño elegido por el profesional porque «ya está listo».",
+  "✗ «Aguanta hasta que se te pase», sin criterio de bajada.",
+  "✗ Subir dos peldaños porque la semana salió bien."]),
+
+ ("En la siguiente sesión", [
+  "Preguntar la unidad de ansiedad al empezar, en el pico y al terminar.",
+  "Si no bajó, casi siempre pasó una de dos: salió antes de tiempo, o llevaba una conducta de "
+  "seguridad que no se había nombrado."]),
+],
+
+"tcc-activacion-conductual.html": [
+ ("Antes de pactar", [
+  "La actividad se elige por valor, no por agrado. Esperar a tener ganas es el problema, no la "
+  "solución, y conviene decirlo con esas palabras.",
+  "«La ganas vienen después de empezar, no antes. Vamos a probarlo esta semana.»"]),
+
+ ("Cómo se acuerda", [
+  "Pequeña, concreta, con día y hora, y que no dependa de que otra persona responda.",
+  "Se hace tenga o no tenga ganas. Y se registra dominio y agrado después de hacerla, nunca antes."]),
+
+ ("Lo que no se pacta", [
+  "✗ Una semana entera de actividades de golpe.",
+  "✗ Algo que dependa de que alguien más conteste o acepte.",
+  "✗ «Sal a distraerte.» Eso no es activación conductual, es evitación con buen nombre."]),
+
+ ("En la siguiente sesión", [
+  "Mirar dominio y agrado, no si le gustó.",
+  "Varias actividades con dominio alto y agrado bajo es exactamente el patrón esperado al empezar, "
+  "y conviene decirlo antes de que lo lea como fracaso."]),
+],
+
+"dbt-tarjeta-de-crisis.html": [
+ ("Antes de pactar", [
+  "Se llena fuera de la crisis y con la persona en calma. Una tarjeta hecha en crisis no se usa en "
+  "crisis."]),
+
+ ("Cómo se acuerda", [
+  "Pocas cosas y muy concretas. Tres habilidades, no ocho: con ocho no lee ninguna.",
+  "Los teléfonos van con nombre y número escritos. «Llamar a alguien» no es un plan.",
+  "Todo lo que exija concentración se descarta: a noventa de activación no se sostiene."]),
+
+ ("Lo que no se pacta", [
+  "✗ Habilidades que solo funcionan con la cabeza fría.",
+  "✗ «Respirar profundo» como única opción.",
+  "✗ Dejarla solo en el celular, si el celular es parte de lo que se descontrola."]),
+
+ ("La comprobación que casi siempre se olvida", [
+  "«¿Dónde va a estar la tarjeta, físicamente?» Y que lo diga en voz alta.",
+  "Una tarjeta que no se sabe dónde está es una tarjeta que no existe."]),
+],
+
+"dbt-tarjeta-diaria.html": [
+ ("Antes de pactar", [
+  "Sirve si se llena. Una tarjeta que no se llena no es un fracaso de la persona: es un diseño "
+  "demasiado grande."]),
+
+ ("Cómo se acuerda", [
+  "Empezar con menos columnas de las que parecen necesarias. Añadir es fácil; quitar cuesta.",
+  "El momento del día se acuerda explícito y se engancha a algo que ya ocurre: después de lavarse "
+  "los dientes, antes de acostarse."]),
+
+ ("Lo que no se pacta", [
+  "✗ Registrar cinco variables desde la primera semana.",
+  "✗ Revisarla solo cuando algo va mal, que la convierte en instrumento de castigo."]),
+
+ ("En la siguiente sesión", [
+  "Se revisa siempre, aunque esté vacía, y se revisa primero.",
+  "Si se mira al final, o solo algunas semanas, deja de llenarse. Eso es predecible y no es "
+  "resistencia."]),
+],
+
 }
