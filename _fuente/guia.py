@@ -10,6 +10,8 @@ ni guardado, ni notas. Se reconstruye sola al correr construir.py.
 """
 from pathlib import Path
 
+import guiones
+
 SALTO = chr(10)
 
 AQUI = Path(__file__).resolve().parent
@@ -85,76 +87,7 @@ GUIA = [
   "cuidado":"El botón de enganche se puede quitar desde la hoja. Conviene dejarlo cuando marcar ayuda a que volver sea un acto y no una idea, y quitarlo cuando el botón se vuelve puntaje y la persona empieza a marcar para quedar bien; sin él, el enganche se pregunta después, sabiendo que el reporte retrospectivo siempre queda corto. La trampa más frecuente no es engancharse: es mirar el agua para no ver las hojas. Eso es evitación con buena presentación, y deja la agenda de control intacta. Lo que se entrena es mirar la hoja de frente y dejarla pasar igual. Por encima de 70 u 80 de activación no hay práctica contemplativa que funcione: ahí va "
             "la Tarjeta de crisis. Con disociación o intrusiones traumáticas, ojos abiertos mirando "
             "el arroyo de la pantalla, minuto y medio y anclaje. En psicosis activa, la instrucción "
-            "de observar los pensamientos como objetos puede confundir.",
-  "guion":[
-   ("Antes de proponerlo",[
-     "Pide desesperanza creativa ya hecha. Sin eso se escucha como una técnica más para sacarse "
-     "cosas de encima, y se usa así.",
-     "No se anuncia como relajación y no se promete calma. Anunciada como calma, la persona la "
-     "evalúa por si se calmó, y en ese momento el ejercicio ya se perdió.",
-     "Se eligen juntos tres o cuatro pensamientos de los de todos los días. Los peores no: con "
-     "esos la práctica se vuelve exposición sin preparar."]),
-
-   ("Cómo se presenta",[
-     "«Vamos a hacer algo que suena raro, y te aviso desde ya: no es para que te sientas mejor. "
-     "Puede que termines igual de incómodo que ahora, y estaría bien.»",
-     "«Tu mente va a seguir produciendo todo el rato. No vamos a apagarla ni a discutirle. Vamos a "
-     "practicar mirar los pensamientos, en vez de mirar desde ellos.»",
-     "«En la pantalla baja un arroyo. Cada hoja trae uno de los que escogimos. Léelo, y déjalo "
-     "pasar. No lo empujes, no lo retengas, y tampoco mires el agua para no verlo: se trata de "
-     "mirarlo de frente y dejarlo ir igual.»",
-     "Todo el encargo cabe en tres verbos, y conviene dejarlos dichos así: leer, soltar, volver a "
-     "mirar."]),
-
-   ("Nombrar el enganche antes de que ocurra",[
-     "«En algún momento vas a notar que llevas un rato sin leer ninguna hoja, o que le estabas "
-     "contestando a una. Eso va a pasar, y no es un error: esa parte es justamente la que estamos "
-     "entrenando.»",
-     "«Cuando lo notes, vuelve a mirar el arroyo. Si el botón naranja está puesto, márcalo: "
-     "marcarlo es parte de volver.»",
-     "Decirlo antes evita que lo viva como fracaso cuando ocurra, y le deja un nombre para poder "
-     "contarlo después."]),
-
-   ("Durante: callarse",[
-     "El guion ya está en la pantalla. No hace falta acompañar con voz, ni narrar, ni repetir la "
-     "instrucción a mitad de camino.",
-     "Si habla, no se responde el contenido: «eso también va en una hoja».",
-     "Si se ríe o dice que esto es raro: «ponlo en una hoja».",
-     "Si pide parar antes de tiempo, se para. El tiempo no se negocia.",
-     "Mirar cuándo marca, no cuántas veces. Tres marcas seguidas después de un minuto limpio dicen "
-     "algo que el total no dice."]),
-
-   ("Al terminar: el orden importa",[
-     "«¿Cómo te fue?» Abierta, sin dirección, y después callarse. El silencio lo llena la persona.",
-     "«¿En qué momento dejaste de ver el arroyo?» y «¿qué te hizo darte cuenta de que te habías "
-     "ido?» El proceso, no el resultado.",
-     "«¿Hubo alguna que no pudiste dejar ir? ¿Qué hiciste con esa?» Ahí está el material.",
-     "«¿Notaste algo distinto en cómo pesan?» Solo al final, y solo si la persona lo trae. Nunca "
-     "de primera."]),
-
-   ("Lo que no se dice",[
-     "✗ «¿Verdad que te sientes más tranquilo?» Pide en voz alta la respuesta que arruina el "
-     "ejercicio.",
-     "✗ «Muy bien, casi no te enganchaste.» Convierte en puntaje lo que era práctica, y la próxima "
-     "vez marcará menos para quedar bien.",
-     "✗ «Trata de que no te afecten.» Es la agenda de control otra vez, con otro nombre.",
-     "✗ «Si te distraes, vuelve a concentrarte.» Esto no es concentración, y llamarlo así cambia "
-     "lo que la persona practica.",
-     "✗ Explicar la metáfora después de haberla hecho. Ya la vivió; explicarla la devuelve a idea."]),
-
-   ("Qué hacer con lo que salga",[
-     "Se enganchó muchas veces: es una buena sesión, y conviene decirlo con esas palabras. La "
-     "dosis del ejercicio es el número de retornos, no el de aciertos.",
-     "No se enganchó ninguna: casi nunca significa que no se fue. Repetir más corto, o pasar a La "
-     "palabra repetida, que no depende de notar.",
-     "«Se detuvo el arroyo», «se quedó atascada una hoja»: señal clásica de fusión. Se marca y se "
-     "vuelve, sin interpretarla en el momento.",
-     "«Quedé tranquilo, me sirvió»: preguntar «¿lo hiciste para que se fueran?». Si la respuesta "
-     "es que sí, el ejercicio se volvió control y toca volver a El costo de la lucha.",
-     "Quiso acelerar las hojas, empujarlas o saltarse alguna: es la agenda de control apareciendo "
-     "dentro del ejercicio. Es de lo mejor que puede pasar, y se nombra.",
-     "Se activó, se disoció o no pudo sostener la pantalla: se para, se ancla y se pasa a la "
-     "Tarjeta de crisis. La práctica contemplativa no es el lugar."])]},
+            "de observar los pensamientos como objetos puede confundir."},
 
  {"archivo":"met-el-bus.html", "titulo":"El bus y los pasajeros", "etq":"Acción comprometida",
   "paraque":"Comprobar que el bus se mueve con los pasajeros gritando, y que discutir con ellos "
@@ -629,7 +562,7 @@ CSS = """
   .ficha-guia details.guion summary::before{content:"+";display:inline-flex;align-items:center;
     justify-content:center;width:16px;height:16px;border:1px solid var(--linea);border-radius:4px;
     font-size:13px;line-height:1}
-  .ficha-guia details.guion[open] summary::before{content:"\2212"}
+  .ficha-guia details.guion[open] summary::before{content:"−"}
   .ficha-guia .tramo-guion{margin-top:13px}
   .ficha-guia .tramo-guion p{margin:0 0 7px;font-size:13.5px;line-height:1.55;
     color:var(--tinta-suave)}
@@ -649,6 +582,16 @@ CSS = """
     .fichas{grid-template-columns:1fr 1fr}
   }
 """
+
+
+def con_guiones(guia):
+    """Engancha a cada ficha el guion de sesión que le corresponda, si lo tiene."""
+    for _, hojas in guia:
+        for h in hojas:
+            libreto = guiones.GUIONES.get(h["archivo"])
+            if libreto:
+                h["guion"] = libreto
+    return guia
 
 
 def guion(bloques):
@@ -709,7 +652,7 @@ def construir(kit_css=None):
         kit_css = (AQUI / "kit.css").read_text(encoding="utf-8")
 
     bloques = []
-    for enfoque, hojas in GUIA:
+    for enfoque, hojas in con_guiones(GUIA):
         color = COLORES[enfoque]
         fichas = "\n".join(ficha(h, color) for h in hojas)
         bloques.append(f"""<h2 class="enfoque" style="color:{color}">{enfoque}</h2>

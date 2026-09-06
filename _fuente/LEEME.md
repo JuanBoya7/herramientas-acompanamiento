@@ -14,6 +14,7 @@ Esto sirve únicamente para cuando haya que cambiar algo en todas a la vez.
 | `partes/*.parte` | El contenido propio de cada herramienta. Una por archivo. |
 | `construir.py` | Junta todo y escribe los `.html` autónomos, el `index.html` y la guía. |
 | `guia.py` | El contenido clínico de `guia.html`: para qué sirve cada hoja, en qué casos y con qué va antes o después. |
+| `guiones.py` | Los guiones de sesión: qué se dice en voz alta al proponer cada metáfora, qué no se dice y qué hacer con lo que salga. |
 | `armonizar_antiguas.py` | Rehace las tres hojas anteriores al kit desde `_respaldo/`, sin tocar sus motores. |
 | `revisar.py` | Comprueba las hojas construidas antes de repartirlas. |
 | `_respaldo/` | Las tres hojas anteriores al kit, como estaban antes de armonizarlas. |
@@ -60,6 +61,18 @@ guardado, ni notas. Su contenido vive en `guia.py`, en dos estructuras:
 
 **Al agregar una herramienta nueva hay que agregarle también su ficha ahí**, o quedará en el índice
 sin indicación de uso.
+
+Los guiones de sesión van aparte, en `guiones.py`, en un diccionario indexado por nombre de archivo.
+Cada guion es una lista de bloques `(título, [líneas])`, y dentro de las líneas: las que empiezan
+por `«` son lo que se dice en voz alta, las que empiezan por `✗` son lo que no se dice, y el resto
+son indicaciones para quien acompaña. La ficha los muestra plegados.
+
+Solo llevan guion las hojas experienciales, donde la manera de proponerlas decide si el ejercicio
+ocurre o se convierte en otra cosa. Las de registro y las de evaluación no lo necesitan.
+
+Cuidado con el CSS que vive dentro de `guia.py`: está en una cadena de Python, así que un escape
+CSS como `2` se lee como escape octal y sale un carácter de control. Ahí van los caracteres
+literales.
 
 ## Cómo se agrega una herramienta nueva
 
