@@ -1,0 +1,1284 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La flecha descendente</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6;
+    --alerta:#8a4a2c; --alerta-fondo:#fdf3ef; --alerta-linea:#f0d3c6;
+    --logro:#3f7d5a; --logro-fondo:#eef6f1;
+    --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+
+  /* ---------- cabecera ---------- */
+  header.tapa,section.bloque,section.paso{background:var(--papel);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:74ch}
+  .fuente{margin:10px 0 0;font-size:12.5px;color:var(--tinta-suave);font-style:italic}
+  .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--linea)}
+  .campos-id label{flex:1 1 160px;font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fdfefe}
+  .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+
+  /* ---------- pasos y bloques ---------- */
+  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;display:flex;
+    align-items:center;gap:11px}
+  .num{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);font-size:14px;font-weight:700}
+  .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+  .cuerpo{margin-top:14px}
+  textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
+    font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
+    padding:9px 11px;background:#fdfefe}
+  textarea{min-height:78px;resize:vertical;line-height:1.5}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--acento-claro);
+    border-color:var(--acento)}
+  label.etiqueta{font-size:13.5px;font-weight:600;display:block;margin:14px 0 5px}
+  label.etiqueta:first-child{margin-top:0}
+
+  /* ---------- fichas de opcion ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{font:inherit;font-size:13.5px;border:1px solid var(--linea);border-radius:999px;
+    padding:6px 14px;cursor:pointer;background:#fdfefe;color:var(--tinta-suave);
+    transition:background .12s,color .12s,border-color .12s}
+  .chip:hover{border-color:var(--acento)}
+  .chip.activa{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  /* ficha añadida por la persona: lleva su aspa para quitarla */
+  .chip.libre{padding-right:8px;display:inline-flex;align-items:center;gap:7px}
+  .chip.libre .quitarChip{display:inline-flex;align-items:center;justify-content:center;
+    width:16px;height:16px;border-radius:50%;font-size:13px;line-height:1;opacity:.55}
+  .chip.libre .quitarChip:hover{opacity:1;background:#ffffff40}
+  /* el boton de agregar: mismo tamaño, sin peso visual */
+  .chip.mas{border-style:dashed;color:var(--acento);font-weight:700;padding:6px 13px;
+    line-height:1}
+  .chip.mas:hover{background:var(--acento-claro)}
+  input.chipNuevo{font:inherit;font-size:13.5px;border:1px solid var(--acento);
+    border-radius:999px;padding:6px 14px;background:#fff;width:auto;min-width:190px}
+
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px}
+  .opcion{border:1px solid var(--linea);border-radius:9px;padding:10px 13px;cursor:pointer;
+    background:#fdfefe;transition:border-color .12s,background .12s}
+  .opcion:hover{border-color:var(--acento)}
+  .opcion.activa{border-color:var(--acento);background:var(--acento-claro)}
+  .opcion b{display:block;font-size:14px;margin-bottom:2px}
+  .opcion span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+
+  /* ---------- lo que se deja abierto ----------
+     Sin rotulo ni instruccion: una pregunta puesta en la hoja para que el
+     profesional la use cuando corresponda. */
+  .hablado{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f;margin:12px 0}
+  .hablado b{color:#16303d}
+  details.apunte{margin-top:9px}
+  details.apunte summary{cursor:pointer;font-size:12px;color:var(--tinta-suave);
+    list-style:none;display:inline-flex;align-items:center;gap:5px}
+  details.apunte summary::-webkit-details-marker{display:none}
+  details.apunte summary::before{content:"+";display:inline-flex;align-items:center;
+    justify-content:center;width:15px;height:15px;border:1px solid var(--linea);
+    border-radius:4px;font-size:12px;line-height:1}
+  details.apunte[open] summary::before{content:"\2212"}
+  details.apunte summary:hover{color:var(--acento)}
+  details.apunte textarea,details.apunte input{margin-top:7px;font-size:14px}
+  details.apunte textarea{min-height:52px}
+
+  /* ---------- mostrador y ranuras (arrastrar o tocar) ---------- */
+  .mostrador{margin-top:6px}
+  .mostrador .grupo{margin-bottom:13px}
+  .mostrador .grupo > .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.7px;
+    color:var(--tinta-suave);font-weight:700;margin-bottom:6px}
+  .pieza{border:1px solid var(--linea);border-radius:9px;padding:9px 12px;background:#fdfefe;
+    cursor:grab;transition:border-color .12s,transform .12s,opacity .12s;user-select:none}
+  .pieza:hover{border-color:var(--acento);transform:translateY(-1px)}
+  .pieza.usada{opacity:.32;cursor:default;pointer-events:none}
+  .pieza.arrastrando{opacity:.5}
+  .pieza b{display:block;font-size:13.5px;margin-bottom:2px}
+  .pieza span{display:block;font-size:12px;color:var(--tinta-suave);line-height:1.42}
+  .ranuras{display:grid;gap:10px}
+  .ranura{border:2px dashed var(--linea);border-radius:10px;padding:13px 15px;min-height:64px;
+    display:flex;align-items:center;gap:11px;background:#fbfcfd;transition:border-color .12s,
+    background .12s}
+  .ranura.encima{border-color:var(--acento);background:var(--acento-claro)}
+  .ranura.llena{border-style:solid;background:var(--papel)}
+  .ranura .hueco{color:#adb9c4;font-size:13.5px;font-style:italic}
+  .ranura .puesto{flex:1}
+  .ranura .puesto b{display:block;font-size:14.5px}
+  .ranura .puesto span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+  .ranura .orden{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);display:flex;align-items:center;justify-content:center;font-size:13px;
+    font-weight:700}
+  .ranura .sacar{flex:0 0 auto;border:0;background:transparent;color:var(--tinta-suave);
+    font-size:18px;cursor:pointer;padding:2px 7px;border-radius:6px;line-height:1}
+  .ranura .sacar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .pista-arrastre{font-size:12.5px;color:var(--tinta-suave);margin:0 0 9px}
+
+  /* ---------- medidores ---------- */
+  .medidor{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .medidor label{font-size:13.5px;color:var(--tinta-suave)}
+  .medidor input[type=range]{flex:1;min-width:130px;height:22px;accent-color:var(--acento)}
+  .valor{min-width:44px;text-align:center;font-weight:700;font-size:16px;color:var(--acento)}
+  .marcador{min-width:46px;text-align:center;font-weight:700;font-size:17px;color:#fff;
+    border-radius:7px;padding:2px 6px}
+
+  /* ---------- lectura / resultado ---------- */
+  .lectura{border-left:5px solid var(--acento);background:linear-gradient(180deg,#f7fbfd,#fff)}
+  .lectura .nombre{font-size:22px;font-weight:700;margin:2px 0}
+  .lectura .metafora{font-size:15px;color:var(--tinta-suave);font-style:italic;margin:0 0 14px}
+  .campo{margin-bottom:12px}
+  .campo .etq{font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--acento);
+    font-weight:700;margin-bottom:3px}
+  .campo p{margin:0;font-size:14.5px}
+  .pregunta{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f}
+  .bandera{background:var(--alerta-fondo);border:1px solid var(--alerta-linea);border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--alerta);margin-top:12px}
+  .logro{background:var(--logro-fondo);border:1px solid #cfe4d8;border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--logro);margin-top:12px}
+  .pistas{background:#f6f9fb;border-left:3px solid var(--linea);border-radius:0 6px 6px 0;
+    padding:9px 13px;margin:9px 0;font-size:13.5px;color:#3f5163}
+  .pistas b{color:var(--acento)}
+  .pistas ul{margin:5px 0 0;padding-left:19px}
+  .pistas li{margin-bottom:3px}
+  .velo{color:var(--tinta-suave);font-size:14.5px;text-align:center;padding:26px 14px;
+    border:1px dashed var(--linea);border-radius:9px;line-height:1.6}
+
+  /* ---------- lectura condensada: cuadro + su indicacion al lado ---------- */
+  .combinaciones{display:grid;gap:8px;margin-top:12px}
+  .combi{display:grid;grid-template-columns:minmax(150px,34%) 1fr;gap:0;
+    border:1px solid var(--linea);border-radius:9px;overflow:hidden;font-size:13px}
+  .combi .cual{padding:9px 13px;background:#f6f9fb;border-right:1px solid var(--linea)}
+  .combi .cual b{display:block;font-size:13.5px;color:var(--tinta);margin-bottom:1px}
+  .combi .cual span{color:var(--tinta-suave);font-size:12px;line-height:1.4}
+  .combi .quehacer{padding:9px 13px;color:var(--tinta-suave);line-height:1.45}
+  .combi.activo{border-color:var(--acento);box-shadow:0 0 0 2px var(--acento-claro)}
+  .combi.activo .cual{background:var(--acento-claro)}
+  .combi.activo .cual b,.combi.activo .quehacer{color:var(--tinta)}
+  @media (max-width:620px){.combi{grid-template-columns:1fr}
+    .combi .cual{border-right:0;border-bottom:1px solid var(--linea)}}
+
+  details.catalogo{margin-top:14px;border-top:1px dashed var(--linea);padding-top:12px}
+  details.catalogo summary{cursor:pointer;font-size:13.5px;color:var(--acento);font-weight:600}
+  .lista-perfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:8px;margin-top:11px}
+  .mini{border:1px solid var(--linea);border-radius:8px;padding:9px 12px;font-size:12.5px;
+    color:var(--tinta-suave)}
+  .mini.activo{border-color:var(--acento);background:var(--acento-claro);color:var(--tinta)}
+  .mini b{display:block;color:var(--tinta);font-size:13.5px;margin-bottom:2px}
+
+  /* ---------- tablas ---------- */
+  .tabla{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tabla th,.tabla td{border:1px solid var(--linea);padding:7px 9px;text-align:left;
+    vertical-align:top}
+  .tabla th{background:var(--acento-claro);color:#23404f;font-size:12.5px;font-weight:700}
+  .desliza{overflow-x:auto}
+
+  /* ---------- notas del profesional, plegadas ---------- */
+  details.notas-pro{background:linear-gradient(180deg,#faf8fd,#fff);border:1px solid var(--linea);
+    border-left:5px solid #7a6a9c;border-radius:var(--radio);padding:14px 20px;margin-bottom:16px}
+  details.notas-pro summary{cursor:pointer;font-size:15px;font-weight:700;color:#5b4d7a;
+    list-style:none;display:flex;align-items:center;gap:10px}
+  details.notas-pro summary::-webkit-details-marker{display:none}
+  details.notas-pro summary::before{content:"\270E";display:inline-flex;align-items:center;
+    justify-content:center;width:27px;height:27px;border-radius:50%;background:#efeaf7;
+    font-size:14px}
+  details.notas-pro[open] summary{margin-bottom:4px}
+
+  /* ---------- modo lámina: hojas para exponer ----------
+     Menos texto por bloque, letra más grande y todo en fichas del mismo
+     tamaño, para que se lea proyectado y no parezca un formulario. */
+  body.lamina{font-size:17px}
+  body.lamina .envoltura{max-width:1080px}
+  body.lamina h1{font-size:28px}
+  body.lamina .sub{font-size:15.5px;max-width:70ch}
+  body.lamina section.paso h2,body.lamina section.bloque h2{font-size:21px}
+  body.lamina .ayuda{font-size:14.5px}
+  body.lamina .chip{font-size:14.5px;padding:7px 16px}
+  body.lamina .opcion b{font-size:15px}
+  body.lamina .opcion span{font-size:13.5px}
+  body.lamina label.etiqueta{font-size:15px}
+  body.lamina .pregunta{font-size:16.5px}
+
+  .rejilla-fichas{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));
+    gap:11px;margin-top:12px}
+  .ficha-l{border:1px solid var(--linea);border-top:4px solid var(--acento);border-radius:10px;
+    padding:13px 15px;background:#fff}
+  .ficha-l .t{font-size:15.5px;font-weight:700;margin-bottom:4px;line-height:1.3}
+  .ficha-l .d{font-size:13.5px;color:var(--tinta-suave);line-height:1.45}
+  .ficha-l .chips{margin-top:9px}
+
+  /* el rótulo pequeño que ubica de qué ficha del manual viene cada cosa */
+  .procedencia{font-size:11.5px;color:var(--tinta-suave);letter-spacing:.3px;margin:2px 0 0}
+
+  /* ---------- escenas que se mueven ----------
+     Las hojas en las que la metáfora ocurre en tiempo real: el escenario, los
+     marcadores debajo, los mandos al pie y la pregunta sola al final. */
+  .escenario{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 12px 10px;margin-bottom:16px;overflow:hidden}
+  .escenario > svg,.escenario .lienzo > svg{display:block;width:100%;height:auto;margin:0 auto}
+  .escenario .lienzo{position:relative;max-width:700px;margin:0 auto}
+  .marcas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:11px}
+  .marcas div{text-align:center;min-width:92px}
+  .marcas .n{font-size:23px;font-weight:700;display:block;line-height:1.15;
+    font-variant-numeric:tabular-nums}
+  .marcas .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave)}
+  .mandos{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px;
+    padding-top:12px;border-top:1px dashed var(--linea)}
+  .duracion{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .duracion .chip{font-size:14px;padding:8px 18px}
+  /* la pregunta que abre la conversación, sin rótulo ni informe alrededor */
+  .pregunta-sola{border-left:5px solid var(--acento);
+    background:linear-gradient(180deg,#f7fbfd,#fff);transition:border-color .4s,background .4s}
+  .pregunta-sola .pregunta{background:transparent;padding:0;font-size:17px;line-height:1.5}
+  @media print{.mandos,.duracion{display:none !important}}
+
+  /* ---------- barra al final de la hoja ---------- */
+  .barra{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 20px;margin-top:22px}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button:hover{border-color:var(--acento)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .brindis{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    background:var(--tinta);color:#fff;font-size:13.5px;padding:8px 16px;border-radius:8px;
+    z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+  .brindis.visible{opacity:.94}
+
+  @media (max-width:820px){
+    .envoltura{padding:16px 12px 32px}
+    header.tapa,section.bloque,section.paso{padding:16px 15px}
+  }
+  @media print{
+    body{background:#fff}
+    .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
+    .opcion:not(.activa),.borrar{display:none !important}
+    header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
+    details.notas-pro,details.apunte,details.notas-pro > .cuerpo{display:block}
+    details.notas-pro summary{list-style:none}
+    .envoltura{padding:0;max-width:100%}
+    textarea{min-height:0;height:auto}
+  }
+
+  .escalera{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 12px;margin-bottom:16px}
+  .peldano{border:1px solid var(--linea);border-left-width:5px;border-radius:10px;
+    padding:13px 16px;margin-bottom:11px;background:#fdfefe;position:relative}
+  .peldano.dormido{opacity:.4}
+  .peldano .cabeza{display:flex;align-items:center;gap:11px;margin-bottom:7px}
+  .peldano .nivel{width:26px;height:26px;border-radius:50%;color:#fff;display:flex;
+    align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex:0 0 auto}
+  .peldano .pregunta-p{font-size:14.5px;font-weight:600}
+  .peldano .chip{font-size:12.5px;padding:5px 12px}
+  .flecha-abajo{text-align:center;color:var(--linea);font-size:20px;line-height:1;margin:-4px 0 7px}
+
+  .nucleo{border-radius:11px;padding:18px 22px;margin:16px 0;border:1px solid}
+  .nucleo.cap{background:#eef4f9;border-color:#c3d8e6}
+  .nucleo.quer{background:#fdf3f6;border-color:#ebcdd8}
+  .nucleo.val{background:#fbf6ee;border-color:#e8dcc4}
+  .nucleo.sin{background:#f6f9fb;border-color:var(--linea)}
+  .nucleo .rot{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .nucleo .frase{font-size:24px;font-weight:700;line-height:1.25;margin-bottom:8px}
+  .nucleo p{margin:0;font-size:14.5px;line-height:1.55}
+
+  .continuo{margin-top:6px}
+  .regla{position:relative;height:56px;margin:22px 0 8px}
+  .regla .via{position:absolute;top:24px;left:0;right:0;height:8px;border-radius:4px;
+    background:linear-gradient(90deg,#c26a4e,#c9962f,#4aa070)}
+  .regla .hito{position:absolute;top:12px;width:3px;height:32px;background:var(--tinta-suave);
+    opacity:.35}
+  .regla .quien{position:absolute;top:-4px;transform:translateX(-50%);font-size:11.5px;
+    font-weight:700;white-space:nowrap;background:#fff;padding:1px 6px;border-radius:5px;
+    border:1px solid var(--linea)}
+  .regla .yo{position:absolute;top:44px;transform:translateX(-50%);font-size:12px;
+    font-weight:700;color:var(--acento);white-space:nowrap}
+  .regla .marcaYo{position:absolute;top:18px;width:5px;height:20px;border-radius:3px;
+    background:var(--acento);box-shadow:0 0 0 3px #fff;transition:left .2s}
+  .extremos-c{display:flex;justify-content:space-between;font-size:12px;color:var(--tinta-suave)}
+  .referente{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+    border:1px solid var(--linea);border-radius:9px;padding:9px 13px;margin-bottom:7px;
+    background:#fdfefe}
+  .referente .mando{display:flex;align-items:center;gap:9px;min-width:170px}
+  .referente input[type=range]{flex:1;min-width:100px;height:20px}
+  .referente .v{font-weight:700;min-width:24px;text-align:right}
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>La flecha descendente</h1>
+  <p class="sub">Debajo de cada pensamiento automático hay otro, y debajo de ese otro más, hasta llegar a una frase corta y absoluta sobre uno mismo. Esta hoja baja esa escalera eligiendo, no escribiendo: en cada peldaño se pregunta qué significaría eso si fuera cierto, y se toca la respuesta que más pese.</p>
+  <p class="fuente">Técnica de la flecha descendente y trabajo con creencias nucleares, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 8, Terapia Cognitiva.</p>
+
+</header>
+
+<section class="paso">
+  <h2><span class="num">1</span>El pensamiento de arriba</h2>
+  <p class="ayuda">El que apareció en la situación concreta. Si vienes del registro de
+  pensamientos, es el pensamiento caliente que ya identificaste ahí.</p>
+  <div class="cuerpo">
+    <div class="chips" id="automatico"></div>
+    <details class="apunte">
+      <summary>Otro pensamiento</summary>
+      <div style="display:flex;gap:8px;margin-top:7px">
+        <input type="text" id="propio" placeholder="Tal como sonó en tu cabeza">
+        <button type="button" onclick="agregarPropio()">Poner</button>
+      </div>
+    </details>
+    <div class="medidor" style="margin-top:14px">
+      <label for="credencia">¿Cuánto te lo crees?</label>
+      <input type="range" id="credencia" min="0" max="100" value="80">
+      <span class="valor" id="vCredencia">80</span>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Bajar la escalera</h2>
+  <p class="ayuda">En cada peldaño la pregunta es la misma: <b>si eso fuera cierto, ¿qué
+  significaría para ti?</b> No se discute si es verdad —eso viene después—; se acepta por un
+  momento y se mira qué hay debajo. Toca la respuesta que más pese; si ninguna encaja, hay un
+  espacio para la tuya.</p>
+  <div class="cuerpo"><div id="peldanos"></div></div>
+</section>
+
+<div class="nucleo sin" id="nucleo">
+  <div class="rot">La creencia del fondo</div>
+  <div class="frase" id="nucleoFrase">Todavía sin llegar abajo</div>
+  <p id="nucleoTexto">Baja al menos tres peldaños para que la hoja pueda nombrar qué categoría de
+  creencia nuclear está apareciendo.</p>
+</div>
+
+<section class="paso" id="pasoContinuo" hidden>
+  <h2><span class="num">3</span>El continuo</h2>
+  <p class="ayuda">Una creencia nuclear funciona porque es de todo o nada: se es capaz o no se es,
+  se vale o no se vale. El continuo la rompe sin discutirla. Primero te ubicas tú; después ubicas
+  a otras personas, y ahí es donde la escala deja de tener solo dos puntos.</p>
+  <div class="cuerpo continuo">
+    <div class="regla" id="regla"></div>
+    <div class="extremos-c"><span id="extIzq">—</span><span id="extDer">—</span></div>
+
+    <div class="medidor" style="margin-top:18px">
+      <label for="yoEstoy">¿Dónde te pones tú?</label>
+      <input type="range" id="yoEstoy" min="0" max="100" value="10">
+      <span class="valor" id="vYoEstoy">10</span>
+    </div>
+
+    <label class="etiqueta" style="margin-top:18px">Ahora ubica a otras personas</label>
+    <p class="ayuda" style="margin-bottom:9px">Personas reales, no ideales. Al ponerlas en la regla
+    casi siempre pasa lo mismo: nadie queda en los extremos, y el propio lugar se mueve solo.</p>
+    <div id="referentes"></div>
+
+    <div id="lecturaContinuo"></div>
+  </div>
+</section>
+
+<section class="paso" id="pasoEvidencia" hidden>
+  <h2><span class="num">4</span>Lo que no encaja con la creencia</h2>
+  <p class="ayuda">Una creencia nuclear filtra: deja pasar lo que la confirma y descarta lo demás.
+  Este registro se llena al revés, buscando a propósito lo que no encaja. No se trata de negar la
+  creencia, sino de que deje de ser la única lectura posible.</p>
+  <div class="cuerpo">
+    <div class="chips" id="contraevidencia"></div>
+    <details class="apunte">
+      <summary>Anotar un hecho concreto (opcional)</summary>
+      <textarea id="hechoConcreto" placeholder="Algo verificable que pasó y que la creencia no explica."></textarea>
+    </details>
+    <div class="medidor" style="margin-top:16px">
+      <label for="credenciaFinal">¿Cuánto te crees ahora la creencia del fondo?</label>
+      <input type="range" id="credenciaFinal" min="0" max="100" value="80">
+      <span class="valor" id="vCredenciaFinal">80</span>
+    </div>
+    <div id="lecturaFinal"></div>
+  </div>
+</section>
+
+<details class="notas-pro">
+  <summary>Notas del profesional</summary>
+  <div class="cuerpo">
+    <label class="etiqueta">Observaciones del proceso</label>
+    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+    <label class="etiqueta">Hipótesis de trabajo</label>
+    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+    <label class="etiqueta">Tarea acordada</label>
+    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+    <label class="etiqueta">Para la próxima sesión</label>
+    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+    <p class="ayuda" style="margin-top:12px">
+      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+      No incluir estas notas al imprimir</label>
+    </p>
+  </div>
+</details>
+
+<div class="barra">
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="Kit.copiar()">Copiar resumen</button>
+  <button onclick="Kit.guardar(true)">Guardar</button>
+  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
+
+</div>
+<div class="brindis" id="brindis"></div>
+
+<script>
+/* ============================================================
+   Kit común de las herramientas.
+   Se inserta completo en cada archivo: no hay dependencias externas
+   y todo funciona abriendo el HTML con doble clic, sin internet.
+   ============================================================ */
+var Kit = (function(){
+
+  var CLAVE = "herramienta";
+  var ganchos = {};            // extra, restaurar, alCambiar, resumen
+  var listo = false;
+
+  /* ---------- utilidades ---------- */
+  function $(id){ return document.getElementById(id); }
+  function crearEl(tag, clase, texto){
+    var e = document.createElement(tag);
+    if(clase) e.className = clase;
+    if(texto !== undefined) e.textContent = texto;
+    return e;
+  }
+  function svg(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  /* mezcla dos colores hex; t=0 devuelve a, t=1 devuelve b */
+  function mezcla(a, b, t){
+    t = Math.max(0, Math.min(1, t));
+    function n(c, i){ return parseInt(c.substr(1 + i*2, 2), 16); }
+    var r = Math.round(n(a,0) + (n(b,0) - n(a,0)) * t),
+        g = Math.round(n(a,1) + (n(b,1) - n(a,1)) * t),
+        z = Math.round(n(a,2) + (n(b,2) - n(a,2)) * t);
+    return "#" + [r,g,z].map(function(v){ return ("0"+v.toString(16)).slice(-2); }).join("");
+  }
+  function escapar(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  /* Se conserva por compatibilidad: estas hojas son de uso clínico. */
+  function modo(){ return "clinica"; }
+
+  /* ---------- fichas ----------
+     Pocas fichas, las más frecuentes, y un "+" para que la persona ponga la
+     suya. Lo que agrega se guarda con la hoja y vuelve al recargar.        */
+  var LIBRES = {};      // contenedorId -> [texto, ...]
+  var REG = {};         // contenedorId -> {lista, alCambiar, sinMas}
+
+  function unChip(contId, txt, id, alCambiar, libre){
+    var b = crearEl("button", "chip" + (libre ? " libre" : ""));
+    b.type = "button";
+    b.id = id;
+    b.setAttribute("data-txt", txt);
+    b.appendChild(document.createTextNode(txt));
+    if(libre){
+      var x = crearEl("span", "quitarChip", "×");
+      x.title = "Quitar";
+      x.onclick = function(ev){
+        ev.stopPropagation();
+        var l = LIBRES[contId] || [], i = l.indexOf(txt);
+        if(i >= 0) l.splice(i, 1);
+        redibujar(contId);
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      b.appendChild(x);
+    }
+    b.onclick = function(){
+      b.classList.toggle("activa");
+      if(alCambiar) alCambiar();
+      guardar();
+    };
+    return b;
+  }
+
+  function botonMas(contId, alCambiar){
+    var mas = crearEl("button", "chip mas", "+");
+    mas.type = "button";
+    mas.title = "Agregar una tuya";
+    mas.onclick = function(){
+      var caja = mas.parentElement;
+      var campo = document.createElement("input");
+      campo.type = "text";
+      campo.className = "chipNuevo";
+      campo.placeholder = "En tus palabras…";
+      caja.insertBefore(campo, mas);
+      mas.style.display = "none";
+      var cerrado = false;
+      function cerrar(guardarlo){
+        if(cerrado) return;
+        cerrado = true;
+        var txt = campo.value.trim();
+        campo.remove();
+        mas.style.display = "";
+        if(guardarlo && txt){
+          agregarLibre(contId, txt);
+          if(alCambiar) alCambiar();
+        }
+      }
+      campo.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter"){ ev.preventDefault(); cerrar(true); }
+        if(ev.key === "Escape"){ ev.preventDefault(); cerrar(false); }
+      });
+      campo.addEventListener("blur", function(){ cerrar(true); });
+      campo.focus();
+    };
+    return mas;
+  }
+
+  /* Agrega una ficha propia ya marcada. */
+  function agregarLibre(contId, txt){
+    if(!LIBRES[contId]) LIBRES[contId] = [];
+    if(LIBRES[contId].indexOf(txt) < 0) LIBRES[contId].push(txt);
+    redibujar(contId);
+    var l = LIBRES[contId], id = contId + "-libre-" + l.indexOf(txt);
+    if($(id)) $(id).classList.add("activa");
+    guardar();
+  }
+
+  function redibujar(contId){
+    var r = REG[contId];
+    if(r) chips(contId, r.lista, r.alCambiar, r.sinMas);
+  }
+
+  /* chips("miCaja", ["Una","Otra"], alCambiar)  -> con boton "+"
+     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"          */
+  function chips(contenedorId, lista, alCambiar, sinMas){
+    var c = $(contenedorId);
+    if(!c) return;
+    REG[contenedorId] = {lista:lista, alCambiar:alCambiar, sinMas:sinMas};
+    var marcadas = {};
+    for(var k = 0; k < c.children.length; k++)
+      if(c.children[k].classList.contains("activa"))
+        marcadas[c.children[k].getAttribute("data-txt")] = 1;
+
+    c.innerHTML = "";
+    c.classList.add("chips");
+    lista.forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-" + i, alCambiar);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    (LIBRES[contenedorId] || []).forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, alCambiar, true);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    if(!sinMas) c.appendChild(botonMas(contenedorId, alCambiar));
+  }
+
+  /* Tarjetas con título y descripción. lista: [["Título","Descripción"], ...] */
+  function opciones(contenedorId, lista, alCambiar, unica){
+    var c = $(contenedorId);
+    if(!c) return;
+    c.innerHTML = "";
+    c.classList.add("tarjetas");
+    lista.forEach(function(par, i){
+      var e = crearEl("div", "opcion");
+      e.id = contenedorId + "-" + i;
+      e.setAttribute("data-txt", par[0]);
+      e.innerHTML = "<b>" + escapar(par[0]) + "</b><span>" + escapar(par[1] || "") + "</span>";
+      e.onclick = function(){
+        if(unica) for(var j=0;j<c.children.length;j++)
+          if(c.children[j] !== e) c.children[j].classList.remove("activa");
+        e.classList.toggle("activa");
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      c.appendChild(e);
+    });
+  }
+
+  /* ---------- mostrador con ranuras ----------
+     El patrón de arrastrar-o-tocar: un mostrador de piezas y unas ranuras que
+     las reciben. Se arrastra en escritorio y se toca en celular.
+
+     cfg = {bancoId, ranurasId, cupo, items:[{id,titulo,desc,grupo,color}],
+            etiquetas:[...], alCambiar}                                     */
+  function mostrador(cfg){
+    var banco = $(cfg.bancoId), ranuras = $(cfg.ranurasId);
+    var puestas = [];                       // ids colocados, en orden
+    var porId = {};
+    cfg.items.forEach(function(it){ porId[it.id] = it; });
+
+    function pintarBanco(){
+      var grupos = [], vistos = {};
+      cfg.items.forEach(function(it){
+        var g = it.grupo || "";
+        if(!vistos[g]){ vistos[g] = []; grupos.push(g); }
+        vistos[g].push(it);
+      });
+      banco.innerHTML = "";
+      banco.classList.add("mostrador");
+      grupos.forEach(function(g){
+        var caja = crearEl("div", "grupo");
+        var col = vistos[g][0] && vistos[g][0].color;
+        if(g){
+          var tit = crearEl("div", "titulin", g);
+          if(col) tit.style.color = col;
+          caja.appendChild(tit);
+        }
+        var rejilla = crearEl("div", "tarjetas");
+        vistos[g].forEach(function(it){
+          var e = crearEl("div", "pieza" + (puestas.indexOf(it.id) >= 0 ? " usada" : ""));
+          e.draggable = true;
+          if(it.color){
+            e.style.borderLeft = "4px solid " + it.color;
+            e.style.background = it.color + "0f";
+          }
+          e.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          e.addEventListener("dragstart", function(ev){
+            ev.dataTransfer.setData("text/plain", it.id);
+            e.classList.add("arrastrando");
+          });
+          e.addEventListener("dragend", function(){ e.classList.remove("arrastrando"); });
+          e.addEventListener("click", function(){ poner(it.id); });
+          rejilla.appendChild(e);
+        });
+        caja.appendChild(rejilla);
+        banco.appendChild(caja);
+      });
+    }
+
+    function pintarRanuras(){
+      ranuras.innerHTML = "";
+      ranuras.classList.add("ranuras");
+      for(var i = 0; i < cfg.cupo; i++)(function(i){
+        var id = puestas[i], it = id ? porId[id] : null;
+        var r = crearEl("div", "ranura" + (it ? " llena" : ""));
+        if(it && it.color){
+          r.style.borderColor = it.color;
+          r.style.background = it.color + "0f";
+        }
+        r.appendChild(crearEl("span", "orden", i + 1));
+        if(it){
+          if(it.color) r.lastChild.style.background = it.color + "26";
+          var p = crearEl("div", "puesto");
+          p.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          r.appendChild(p);
+          var x = crearEl("button", "sacar", "×");
+          x.type = "button";
+          x.title = "Sacar";
+          x.onclick = function(){ sacar(i); };
+          r.appendChild(x);
+        } else {
+          r.appendChild(crearEl("span", "hueco",
+            (cfg.etiquetas && cfg.etiquetas[i]) || "Arrastra aquí, o toca una del mostrador"));
+        }
+        r.addEventListener("dragover", function(ev){
+          ev.preventDefault();
+          r.classList.add("encima");
+        });
+        r.addEventListener("dragleave", function(){ r.classList.remove("encima"); });
+        r.addEventListener("drop", function(ev){
+          ev.preventDefault();
+          r.classList.remove("encima");
+          poner(ev.dataTransfer.getData("text/plain"), i);
+        });
+        ranuras.appendChild(r);
+      })(i);
+    }
+
+    function poner(id, i){
+      if(!porId[id] || puestas.indexOf(id) >= 0) return;
+      if(i === undefined || puestas.length < i){
+        if(puestas.length >= cfg.cupo){ brindis("Las ranuras están llenas"); return; }
+        puestas.push(id);
+      } else {
+        puestas[i] = id;
+      }
+      refrescar();
+    }
+    function sacar(i){
+      puestas.splice(i, 1);
+      refrescar();
+    }
+    function refrescar(){
+      puestas = puestas.filter(function(x){ return x; });
+      pintarBanco();
+      pintarRanuras();
+      if(cfg.alCambiar) cfg.alCambiar();
+      guardar();
+    }
+
+    refrescar();
+    return {
+      elegidas: function(){ return puestas.map(function(id){ return porId[id]; }); },
+      ids: function(){ return puestas.slice(); },
+      cargar: function(lista){ puestas = (lista || []).filter(function(x){ return porId[x]; }); refrescar(); },
+      poner: poner,
+      refrescar: refrescar
+    };
+  }
+
+  /* Devuelve los textos marcados dentro de un contenedor de chips u opciones */
+  function activas(contenedorId){
+    var c = $(contenedorId), fuera = [];
+    if(!c) return fuera;
+    for(var i=0;i<c.children.length;i++){
+      var h = c.children[i];
+      if(!h.classList.contains("activa")) continue;
+      var t = h.getAttribute("data-txt");
+      if(t == null) t = h.tagName === "DIV" ? h.querySelector("b").textContent : h.textContent;
+      fuera.push(t);
+    }
+    return fuera;
+  }
+  /* Enlaza un input range con su etiqueta de valor */
+  function medidor(idRango, idSalida, alCambiar){
+    var r = $(idRango), s = $(idSalida);
+    if(!r) return;
+    function act(){
+      if(s) s.textContent = r.value;
+      if(alCambiar) alCambiar();
+    }
+    r.addEventListener("input", function(){ act(); guardar(); });
+    act();
+  }
+
+  /* Gota que se llena según el nivel: 0 vacía, 10 rebosando. */
+  function gota(nivel, tam){
+    var n = Math.max(0, Math.min(10, nivel)) / 10;
+    var t = tam || 26, uid = "g" + Math.random().toString(36).slice(2, 8);
+    var col = mezcla("#c9b48a", "#2f8fbf", n);
+    return '<svg class="gota" width="' + t + '" height="' + t * 1.18 + '" viewBox="0 0 24 28">' +
+      '<clipPath id="' + uid + '"><path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z"/></clipPath>' +
+      '<path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z" fill="#f2f5f8" ' +
+      'stroke="' + col + '" stroke-width="1.6"/>' +
+      '<rect x="0" y="' + (28 - 27 * n) + '" width="24" height="28" fill="' + col +
+      '" clip-path="url(#' + uid + ')" opacity="0.9"/></svg>';
+  }
+
+  /* ---------- reloj de escena ----------
+     Un solo latido para las hojas que se mueven. Llama a fn(dt) unas 25 veces
+     por segundo mientras esté andando, con dt en segundos. Se para sola cuando
+     la pestaña se va al fondo, para no gastar batería con una escena que nadie
+     está mirando, y retoma sin saltos al volver.                            */
+  function reloj(fn){
+    var id = null, previo = 0, deuda = 0, PASO = 0.04, dormida = false;
+    function latir(t){
+      id = requestAnimationFrame(latir);
+      if(!previo){ previo = t; return; }
+      var dt = Math.min(.25, (t - previo) / 1000);
+      previo = t;
+      deuda += dt;
+      if(deuda < PASO) return;
+      fn(deuda);
+      deuda = 0;
+    }
+    var r = {
+      andar: function(){ if(!id){ previo = 0; deuda = 0; id = requestAnimationFrame(latir); } },
+      parar: function(){ if(id){ cancelAnimationFrame(id); id = null; previo = 0; deuda = 0; } },
+      anda:  function(){ return !!id; }
+    };
+    document.addEventListener("visibilitychange", function(){
+      if(document.hidden && r.anda()){ dormida = true; r.parar(); }
+      else if(!document.hidden && dormida){ dormida = false; r.andar(); }
+    });
+    return r;
+  }
+
+  /* ---------- persistencia ---------- */
+  function camposGuardables(){
+    var fuera = [], t = document.querySelectorAll("input,textarea,select");
+    for(var i=0;i<t.length;i++) if(t[i].id) fuera.push(t[i]);
+    return fuera;
+  }
+  function marcablesGuardables(){
+    var fuera = [], t = document.querySelectorAll(".chip[id],.opcion[id]");
+    for(var i=0;i<t.length;i++) fuera.push(t[i]);
+    return fuera;
+  }
+  function guardar(avisar){
+    if(!listo) return;
+    var d = { _campos:{}, _marcas:{}, _libres: LIBRES };
+    camposGuardables().forEach(function(e){
+      d._campos[e.id] = (e.type === "checkbox" || e.type === "radio") ? e.checked : e.value;
+    });
+    marcablesGuardables().forEach(function(e){
+      if(e.classList.contains("activa")) d._marcas[e.id] = 1;
+    });
+    if(ganchos.extra) d._extra = ganchos.extra();
+    try{ localStorage.setItem(CLAVE, JSON.stringify(d)); }catch(e){}
+    if(avisar) brindis("Guardado en este equipo");
+  }
+  function cargar(){
+    var d = null;
+    try{ d = JSON.parse(localStorage.getItem(CLAVE) || "null"); }catch(e){}
+    if(!d) return false;
+    if(d._extra && ganchos.restaurar) ganchos.restaurar(d._extra);
+    LIBRES = d._libres || {};
+    Object.keys(LIBRES).forEach(redibujar);
+    camposGuardables().forEach(function(e){
+      if(!(e.id in (d._campos||{}))) return;
+      var v = d._campos[e.id];
+      if(e.type === "checkbox" || e.type === "radio") e.checked = !!v; else e.value = v;
+    });
+    marcablesGuardables().forEach(function(e){
+      if((d._marcas||{})[e.id]) e.classList.add("activa");
+    });
+    return true;
+  }
+  function limpiar(){
+    if(!confirm("¿Empezar de nuevo? Se borrará lo que está en pantalla en este equipo.")) return;
+    try{ localStorage.removeItem(CLAVE); }catch(e){}
+    location.reload();
+  }
+
+  /* ---------- copiar resumen para la historia clínica ---------- */
+  function encabezadoResumen(){
+    var l = [], t = document.querySelector("h1");
+    l.push((t ? t.textContent : "Herramienta").toUpperCase());
+    var pares = [["nombre","Consultante"],["fecha","Fecha"],["sesion","Sesión"],
+                 ["profesional","Profesional"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1] + ": " + e.value.trim());
+    });
+    return l.join("\n");
+  }
+  function notasProResumen(){
+    var l = [], pares = [["proObservaciones","Observaciones"],["proHipotesis","Hipótesis de trabajo"],
+                         ["proTarea","Tarea acordada"],["proProxima","Para la próxima sesión"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1].toUpperCase() + "\n" + e.value.trim());
+    });
+    return l.length ? "\n\n--- NOTAS DEL PROFESIONAL ---\n" + l.join("\n\n") : "";
+  }
+  function textoResumen(){
+    var cuerpo = ganchos.resumen ? ganchos.resumen() : "";
+    return encabezadoResumen() + "\n\n" + cuerpo + notasProResumen();
+  }
+  function copiar(){
+    var txt = textoResumen();
+    function viejo(){
+      var a = document.createElement("textarea");
+      a.value = txt;
+      a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(a);
+      brindis(ok ? "Resumen copiado al portapapeles" : "No se pudo copiar: revise el resumen impreso");
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(function(){
+        brindis("Resumen copiado al portapapeles");
+      }, viejo);
+    } else viejo();
+  }
+  /* ---------- impresión ----------
+     Los desplegables cerrados no salen en el papel. Antes de imprimir se
+     abren, y al terminar vuelven a como estaban, para que la hoja impresa
+     lleve lo que se trabajó aunque esté plegado en pantalla. */
+  var abiertosAlImprimir = [];
+  function antesDeImprimir(){
+    abiertosAlImprimir = [];
+    var ds = document.querySelectorAll("details");
+    for(var i = 0; i < ds.length; i++){
+      if(ds[i].classList.contains("catalogo")) continue;
+      if(ds[i].classList.contains("borrar")) continue;
+      if(!ds[i].open){ ds[i].open = true; abiertosAlImprimir.push(ds[i]); }
+    }
+  }
+  function despuesDeImprimir(){
+    abiertosAlImprimir.forEach(function(d){ d.open = false; });
+    abiertosAlImprimir = [];
+  }
+  if(window.addEventListener){
+    window.addEventListener("beforeprint", antesDeImprimir);
+    window.addEventListener("afterprint", despuesDeImprimir);
+    if(window.matchMedia){
+      var mq = window.matchMedia("print");
+      if(mq.addEventListener)
+        mq.addEventListener("change", function(e){
+          if(e.matches) antesDeImprimir(); else despuesDeImprimir();
+        });
+    }
+  }
+
+  function brindis(msg){
+    var b = $("brindis");
+    if(!b) return;
+    b.textContent = msg;
+    b.classList.add("visible");
+    clearTimeout(b._t);
+    b._t = setTimeout(function(){ b.classList.remove("visible"); }, 2200);
+  }
+
+  /* ---------- arranque ---------- */
+  function iniciar(cfg){
+    CLAVE = cfg.clave || "herramienta";
+    ganchos = cfg;
+
+    var ni = $("proNoImprimir"), sincNotas = null;
+    if(ni){
+      sincNotas = function(){
+        var s = document.querySelector("details.notas-pro");
+        if(s) s.classList.toggle("borrar", ni.checked);
+      };
+      ni.addEventListener("change", sincNotas);
+    }
+
+    listo = true;
+    cargar();
+    if(sincNotas) sincNotas();
+    if($("fecha") && !$("fecha").value)
+      $("fecha").value = new Date().toLocaleDateString("es-CO");
+
+    document.querySelectorAll("input,textarea,select").forEach(function(e){
+      if(!e.id) return;
+      e.addEventListener("input", function(){ guardar(); });
+      e.addEventListener("change", function(){ guardar(); });
+    });
+
+    if(ganchos.alCambiar) ganchos.alCambiar();
+  }
+
+  /* ---------- arranque reducido ----------
+     Para las hojas que ya traían su propio motor y su propia persistencia:
+     cablea el botón de copiar y no toca nada más. */
+  function soloModo(){
+    var ni = $("proNoImprimir");
+    if(ni) ni.addEventListener("change", function(){
+      var s = document.querySelector("details.notas-pro");
+      if(s) s.classList.toggle("borrar", ni.checked);
+    });
+    ganchos = { resumen: resumenGenerico };
+  }
+
+  /* Recorre las secciones y arma un texto con lo que esté diligenciado. */
+  function resumenGenerico(){
+    var fuera = [], secciones = document.querySelectorAll("section,header");
+    for(var i = 0; i < secciones.length; i++){
+      var s = secciones[i];
+      if(s.classList.contains("notas-pro")) continue;
+      var titulo = s.querySelector("h1,h2,h3");
+      var lineas = [];
+      var campos = s.querySelectorAll("input,textarea,select");
+      for(var j = 0; j < campos.length; j++){
+        var e = campos[j];
+        if(e.type === "checkbox" || e.type === "radio" || !e.id) continue;
+        if(!String(e.value).trim()) continue;
+        var et = s.querySelector('label[for="' + e.id + '"]');
+        lineas.push("  " + (et ? et.textContent.trim() + ": " : "") + e.value.trim());
+      }
+      var marcas = s.querySelectorAll(".activa,.llena,.activo,.on");
+      var nombres = [];
+      for(var k = 0; k < marcas.length; k++){
+        var m = marcas[k];
+        if(m.classList.contains("mini")) continue;   /* catálogo, no elección */
+        var b = m.querySelector("b");
+        var txt = (b ? b.textContent : m.textContent).replace(/\s+/g, " ").trim();
+        if(txt && nombres.indexOf(txt) < 0) nombres.push(txt);
+      }
+      if(nombres.length) lineas.push("  Marcado: " + nombres.join(", "));
+      if(lineas.length){
+        if(titulo) fuera.push(titulo.textContent.trim().toUpperCase());
+        fuera.push(lineas.join("\n"));
+      }
+    }
+    return fuera.join("\n");
+  }
+
+  return {
+    iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
+    chips: chips, opciones: opciones, activas: activas, medidor: medidor,
+    agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
+    $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
+    reloj: reloj,
+    brindis: brindis, modo: modo, texto: textoResumen
+  };
+})();
+
+</script>
+<script>
+const $ = Kit.$;
+
+const AUTOMATICOS = ["Me va a salir mal", "No me contestó el mensaje", "Me equivoqué delante de todos", "No me invitaron"];
+
+/* Cada peldaño ofrece significados progresivamente más absolutos y personales.
+   La categoría (cap / quer / val) es la de Beck y sirve para clasificar el fondo. */
+const NIVELES = [
+ {pregunta:"Si eso pasara, ¿qué significaría?", color:"#5f77b8",
+  opciones:[["Que no voy a llegar a donde quiero","cap"],["Que no le importo","quer"],
+    ["Que soy un desastre","val"],["Que todo el mundo se dio cuenta","quer"],
+    ["Que no puedo con esto","cap"],["Que voy a decepcionar a alguien","val"]]},
+
+ {pregunta:"Y si eso fuera cierto, ¿qué significaría para ti?", color:"#5b7db0",
+  opciones:[["Que no sirvo para esto","cap"],["Que van a dejar de quererme","quer"],
+    ["Que no merezco estar aquí","val"],["Que soy menos que los demás","val"],
+    ["Que nunca voy a poder","cap"],["Que se van a alejar de mí","quer"]]},
+
+ {pregunta:"¿Y qué tendría eso de malo, para ti?", color:"#5783a8",
+  opciones:[["Que soy incapaz","cap"],["Que voy a terminar solo","quer"],
+    ["Que soy un fraude","val"],["Que no valgo nada","val"],
+    ["Que estoy roto","cap"],["Que nadie me va a querer así","quer"]]},
+
+ {pregunta:"Si eso fuera verdad, ¿qué diría de ti como persona?", color:"#4f88a0",
+  opciones:[["Soy incapaz","cap"],["No soy querible","quer"],["No valgo","val"],
+    ["Soy un fracaso","cap"],["Soy una carga","quer"],["Soy defectuoso","val"]]},
+
+ {pregunta:"Y en el fondo del fondo: ¿qué es lo peor que dice de ti?", color:"#478d98",
+  opciones:[["No soy suficiente","val"],["No puedo con la vida","cap"],
+    ["Nadie me va a querer","quer"],["Estoy mal hecho","val"],
+    ["Soy débil","cap"],["Sobro","quer"]]}
+];
+
+const CATEGORIAS = {
+ cap: {clase:"cap", nombre:"Incapacidad y desamparo",
+  texto:"El fondo es sobre poder: la persona se experimenta como incapaz, sin recursos o a merced de lo que pase. Beck la agrupa con las creencias de desamparo. Suele sostener evitación, procrastinación y una necesidad alta de aprobación técnica —«dime si lo estoy haciendo bien»—. Se trabaja mejor con experimentos conductuales que con discusión verbal: lo que la mueve es la evidencia de que sí pudo.",
+  izq:"Totalmente incapaz", der:"Completamente capaz"},
+ quer: {clase:"quer", nombre:"No ser querible",
+  texto:"El fondo es sobre vínculo: la persona cree que si la conocen de verdad, se van. Sostiene complacencia, dificultad para poner límites, celos y lecturas de rechazo donde no las hay. Ojo con reasegurar: la tranquilización alivia y refuerza la creencia. Se trabaja con exposición gradual a mostrarse y con la observación de qué pasa después.",
+  izq:"Nadie podría quererme", der:"Completamente querible"},
+ val: {clase:"val", nombre:"Desvalorización",
+  texto:"El fondo es sobre valor: no es que no pueda ni que no la quieran, es que no vale. Es la categoría más rígida de las tres y la que más se defiende con perfeccionismo y autocrítica. Suele venir de mensajes tempranos muy repetidos. El continuo es especialmente útil aquí, porque la creencia vive entera del todo o nada.",
+  izq:"No valgo nada", der:"Valgo completamente"}
+};
+
+const REFERENTES = ["Mi mejor amigo","Alguien que admiro","Mi mamá o mi papá","Alguien que apenas conozco",
+  "Alguien que me cae mal","Alguien que la está pasando mal","Alguien a quien respeto","Yo hace cinco años"];
+
+const CONTRAEVIDENCIA = ["Alguien confió en mí", "Terminé algo difícil", "Alguien me buscó", "Me pidieron ayuda"];
+
+let extras = [];
+
+function agregarPropio(){
+  const t = $("propio").value.trim();
+  if(!t) return;
+  extras.push(t); $("propio").value = "";
+  Kit.chips("automatico", AUTOMATICOS.concat(extras), refrescar);
+  refrescar();
+}
+
+/* ====================== PELDAÑOS ====================== */
+$("peldanos").innerHTML = NIVELES.map((n, i) => `
+  ${i ? '<div class="flecha-abajo">&#9660;</div>' : ""}
+  <div class="peldano" id="pel-${i}" style="border-left-color:${n.color}">
+    <div class="cabeza">
+      <span class="nivel" style="background:${n.color}">${i + 1}</span>
+      <span class="pregunta-p">${n.pregunta}</span>
+    </div>
+    <div class="chips" id="niv-${i}"></div>
+    <details class="apunte">
+      <summary>Su respuesta, en sus palabras</summary>
+      <input type="text" id="nivTexto-${i}" placeholder="Si ninguna de arriba es la suya.">
+    </details>
+  </div>`).join("");
+NIVELES.forEach((n, i) => Kit.chips("niv-" + i, n.opciones.map(o => o[0]), refrescar));
+
+const bajados = () => NIVELES.filter((n, i) =>
+  Kit.activas("niv-" + i).length || $("nivTexto-" + i).value.trim()).length;
+
+function categoriaDominante(){
+  const cuenta = {cap:0, quer:0, val:0};
+  NIVELES.forEach((n, i) => {
+    Kit.activas("niv-" + i).forEach(txt => {
+      const o = n.opciones.find(o => o[0] === txt);
+      if(o) cuenta[o[1]] += (i + 1);      /* los peldaños de abajo pesan más */
+    });
+  });
+  const total = cuenta.cap + cuenta.quer + cuenta.val;
+  if(!total) return null;
+  const max = Math.max(cuenta.cap, cuenta.quer, cuenta.val);
+  return Object.keys(cuenta).find(k => cuenta[k] === max);
+}
+
+function fraseDelFondo(){
+  for(let i = NIVELES.length - 1; i >= 0; i--){
+    const t = $("nivTexto-" + i).value.trim();
+    if(t) return t;
+    const a = Kit.activas("niv-" + i);
+    if(a.length) return a[a.length - 1];
+  }
+  return null;
+}
+
+/* ====================== CONTINUO ====================== */
+let refValores = {};
+function pintarReferentes(){
+  $("referentes").innerHTML = REFERENTES.map((r, i) => `
+    <div class="referente">
+      <span style="font-size:14px">${r}</span>
+      <div class="mando">
+        <input type="range" min="0" max="100" value="${refValores[i] === undefined ? 50 : refValores[i]}"
+          data-r="${i}">
+        <span class="v">${refValores[i] === undefined ? 50 : refValores[i]}</span>
+      </div>
+    </div>`).join("");
+  $("referentes").querySelectorAll("input[data-r]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      refValores[inp.dataset.r] = +inp.value;
+      inp.parentElement.querySelector(".v").textContent = inp.value;
+      dibujarRegla();
+      leerContinuo();
+      Kit.guardar();
+    });
+  });
+}
+
+function dibujarRegla(){
+  const cat = categoriaDominante();
+  if(!cat) return;
+  const usados = Object.keys(refValores);
+  $("regla").innerHTML = `<div class="via"></div>` +
+    [0, 25, 50, 75, 100].map(p => `<div class="hito" style="left:${p}%"></div>`).join("") +
+    usados.map(i => `<div class="quien" style="left:${refValores[i]}%">${REFERENTES[i]}</div>`).join("") +
+    `<div class="marcaYo" style="left:calc(${$("yoEstoy").value}% - 2px)"></div>
+     <div class="yo" style="left:${$("yoEstoy").value}%">yo</div>`;
+  $("extIzq").textContent = CATEGORIAS[cat].izq;
+  $("extDer").textContent = CATEGORIAS[cat].der;
+}
+
+function leerContinuo(){
+  const usados = Object.keys(refValores).map(k => refValores[k]);
+  const yo = +$("yoEstoy").value;
+  if(usados.length < 3){
+    $("lecturaContinuo").innerHTML = `<div class="pistas" style="margin-top:14px">Ubica al menos
+      tres personas para que la regla haga su trabajo. Con una sola, la creencia sigue teniendo
+      dos puntos.</div>`;
+    return;
+  }
+  const min = Math.min(...usados), max = Math.max(...usados);
+  const nadieExtremo = min > 8 && max < 92;
+  $("lecturaContinuo").innerHTML = `<div class="${yo < min ? "pistas" : "logro"}"
+    style="margin-top:14px">
+    ${nadieExtremo
+      ? "<b>Nadie quedó en los extremos.</b> Es lo que suele pasar, y es justamente el punto: la creencia se sostiene en una escala de dos posiciones que ninguna persona real ocupa. "
+      : ""}
+    ${yo < min
+      ? `Te ubicaste por debajo de todas las personas que pusiste, en ${yo}. Vale la pena
+         preguntar en voz alta qué tendría que hacer alguien para estar ahí abajo, y si de verdad
+         cumples eso o si el criterio que usas contigo es distinto del que usas con los demás.`
+      : `Te ubicaste en ${yo}, dentro del rango de las demás personas. Que la creencia diga
+         «${CATEGORIAS[categoriaDominante()].izq.toLowerCase()}» y la regla diga ${yo} es
+         exactamente la contradicción que se busca dejar visible.`}
+    </div>`;
+}
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  $("vCredencia").textContent = $("credencia").value;
+  $("vCredenciaFinal").textContent = $("credenciaFinal").value;
+  $("vYoEstoy").textContent = $("yoEstoy").value;
+
+  NIVELES.forEach((n, i) => {
+    const previo = i === 0 || Kit.activas("niv-" + (i - 1)).length ||
+                   $("nivTexto-" + (i - 1)).value.trim();
+    $("pel-" + i).classList.toggle("dormido", !previo);
+  });
+
+  const cat = categoriaDominante(), n = bajados(), frase = fraseDelFondo();
+  const caja = $("nucleo");
+  if(!cat || n < 3){
+    caja.className = "nucleo sin";
+    $("nucleoFrase").textContent = n ? "Todavía bajando" : "Todavía sin llegar abajo";
+    $("nucleoTexto").textContent = "Baja al menos tres peldaños para que la hoja pueda nombrar " +
+      "qué categoría de creencia nuclear está apareciendo.";
+    $("pasoContinuo").hidden = true;
+    $("pasoEvidencia").hidden = true;
+  } else {
+    const c = CATEGORIAS[cat];
+    caja.className = "nucleo " + c.clase;
+    $("nucleoFrase").textContent = frase ? `«${frase}»` : c.nombre;
+    $("nucleoTexto").innerHTML = `<b>${c.nombre}.</b> ${c.texto}`;
+    $("pasoContinuo").hidden = false;
+    $("pasoEvidencia").hidden = false;
+    dibujarRegla();
+    leerContinuo();
+  }
+  leerFinal();
+}
+
+function leerFinal(){
+  if($("pasoEvidencia").hidden){ $("lecturaFinal").innerHTML = ""; return; }
+  const a = +$("credencia").value, d = +$("credenciaFinal").value, dif = a - d;
+  const hechos = Kit.activas("contraevidencia").length;
+  $("lecturaFinal").innerHTML = dif >= 15
+    ? `<div class="logro">Bajó ${dif} puntos en una sesión. Conviene decir explícitamente que una
+       creencia nuclear no se desmonta en una hoja: lo que se logró es abrirle una grieta, y eso
+       se sostiene con registro de contraevidencia entre sesiones.</div>`
+    : hechos >= 3
+    ? `<div class="pistas"><b>Poco movimiento, con evidencia acumulada.</b> Es lo esperable: las
+       creencias nucleares llevan años y no ceden por argumentos. Lo que las mueve es la
+       repetición del registro y los experimentos conductuales, no la conversación de hoy.</div>`
+    : `<div class="pistas"><b>Sin movimiento todavía.</b> Antes de insistir con la discusión,
+       conviene reunir contraevidencia concreta. Discutir una creencia nuclear con lógica suele
+       endurecerla; lo que la erosiona son hechos que no encajan, anotados en el momento.</div>`;
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const l = [];
+  const aut = Kit.activas("automatico");
+  l.push("PENSAMIENTO AUTOMÁTICO: " + (aut.length ? aut.join(", ") : "sin marcar"));
+  l.push(`Credibilidad inicial: ${$("credencia").value}/100`);
+
+  l.push("", "DESCENSO");
+  NIVELES.forEach((n, i) => {
+    const a = Kit.activas("niv-" + i), t = $("nivTexto-" + i).value.trim();
+    if(!a.length && !t) return;
+    l.push(`${i + 1}. ${n.pregunta}\n   → ${[a.join(" / "), t].filter(Boolean).join(" / ")}`);
+  });
+
+  const cat = categoriaDominante();
+  if(cat && bajados() >= 3){
+    l.push("", "CREENCIA NUCLEAR: " + (fraseDelFondo() || "") +
+              `\nCategoría: ${CATEGORIAS[cat].nombre}`);
+    const usados = Object.keys(refValores);
+    if(usados.length){
+      l.push("", `CONTINUO (${CATEGORIAS[cat].izq} ↔ ${CATEGORIAS[cat].der})`);
+      l.push(`  Yo: ${$("yoEstoy").value}`);
+      usados.forEach(i => l.push(`  ${REFERENTES[i]}: ${refValores[i]}`));
+    }
+    const ce = Kit.activas("contraevidencia");
+    if(ce.length) l.push("", "CONTRAEVIDENCIA: " + ce.join(", "));
+    if($("hechoConcreto").value.trim()) l.push("Hecho concreto: " + $("hechoConcreto").value.trim());
+    l.push("", `Credibilidad de la creencia: ${$("credencia").value} → ${$("credenciaFinal").value}`);
+  }
+  return l.join("\n");
+}
+
+Kit.chips("automatico", AUTOMATICOS, refrescar);
+Kit.chips("contraevidencia", CONTRAEVIDENCIA, leerFinal);
+NIVELES.forEach((n, i) => $("nivTexto-" + i).addEventListener("input", refrescar));
+["credencia","credenciaFinal"].forEach(id => $(id).addEventListener("input", refrescar));
+$("yoEstoy").addEventListener("input", () => { $("vYoEstoy").textContent = $("yoEstoy").value;
+  dibujarRegla(); leerContinuo(); });
+pintarReferentes();
+
+Kit.iniciar({
+  clave: "tcc-flecha-descendente",
+  extra: () => ({extras, refValores}),
+  restaurar: d => {
+    extras = d.extras || []; refValores = d.refValores || {};
+    if(extras.length) Kit.chips("automatico", AUTOMATICOS.concat(extras), refrescar);
+    pintarReferentes();
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});
+</script>
+</body>
+</html>

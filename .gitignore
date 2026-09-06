@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+_fuente/_prueba.txt
+
+# Nada de datos de consulta en este repositorio.
+*.xlsx
+*.docx
+*.csv

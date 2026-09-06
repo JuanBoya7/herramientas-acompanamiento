@@ -1,0 +1,345 @@
+@@meta
+archivo: act-por-donde-entrar.html
+titulo: Por dónde entrar
+orden: 03
+enfoque: ACT
+etiqueta: Formulación
+sub: Esta hoja no es para el consultante: es el mapa con el que se decide por dónde empezar. Se ubican los seis procesos del modelo hexagonal como continuos, el hexágono se deforma, y lo que devuelve es una sola cosa útil: cuál es la puerta de entrada y con qué hoja de estas seguir.
+fuente: Modelo hexagonal de la flexibilidad psicológica y estilos de respuesta, en Díaz Corbobés, MANUAL ACT §1.3 y §1.3.2.
+resumen: Seis continuos que deforman un hexágono y señalan la puerta de entrada. Mapa de formulación para decidir con qué herramienta seguir, no hoja para el consultante.
+campo3: Momento
+campo3ph: Ej. Formulación inicial
+@@css
+  .tablero{display:grid;grid-template-columns:minmax(310px,42%) 1fr;gap:18px;align-items:start}
+  .panel-hex{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 12px;position:sticky;top:14px}
+  .hex{display:block;width:100%;height:auto}
+  .estilos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;
+    padding-top:11px;border-top:1px dashed var(--linea)}
+  .estilos div{text-align:center;border-radius:8px;padding:7px 4px}
+  .estilos .n{font-size:19px;font-weight:700;display:block}
+  .estilos .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px}
+
+  .procesos{display:flex;flex-direction:column;gap:10px}
+  .proceso{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
+    border-radius:var(--radio);padding:13px 16px}
+  .proceso .cabeza{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .proceso h3{margin:0;font-size:15.5px}
+  .proceso .estilo{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave);white-space:nowrap}
+  .proceso .def{margin:5px 0 10px;font-size:13px;color:var(--tinta-suave)}
+  .polos{display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;
+    margin-bottom:2px}
+  .polos .izq{color:var(--alerta)}
+  .polos .der{color:var(--logro)}
+  .fila{display:flex;align-items:center;gap:11px}
+  .fila input[type=range]{flex:1;min-width:110px;height:22px}
+  .sonda{font-size:13px;color:#3f5163;background:#f6f9fb;border-left:3px solid var(--linea);
+    border-radius:0 6px 6px 0;padding:7px 11px;margin-top:9px}
+  .sonda b{color:var(--acento)}
+  @media (max-width:900px){
+    .tablero{grid-template-columns:1fr}
+    .panel-hex{position:static}
+  }
+  @media print{
+    .tablero{grid-template-columns:1fr}
+    .panel-hex{position:static;break-inside:avoid}
+  }
+@@html
+<section class="bloque">
+  <h2><span class="num">1</span>Los seis procesos</h2>
+  <p class="ayuda">Continuos, no casillas: a la izquierda el polo rígido, a la derecha el flexible.
+  Se ubica dónde está esta persona hoy, con este problema.</p>
+</section>
+
+<div class="tablero">
+  <div class="panel-hex">
+    <svg class="hex" id="hex" viewBox="0 0 500 400" role="img"
+      aria-label="Hexágono de flexibilidad psicológica"></svg>
+    <div class="estilos" id="estilos"></div>
+  </div>
+  <div class="procesos" id="procesos"></div>
+</div>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Puerta de entrada</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Por dónde empezar</div><p id="lFoco"></p></div>
+  <div class="campo"><div class="etq">Con qué hoja seguir</div><p id="lSigue"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+  <div id="lBandera"></div>
+  <div class="combinaciones" id="combinaciones"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+/* Los seis procesos, agrupados en los tres estilos de respuesta que describe
+   el MANUAL ACT §1.3.2. Cada uno va de su polo rígido a su polo flexible.  */
+const PROCESOS = [
+ {id:"ace", corto:"Aceptación", estilo:"abierto", nombre:"Aceptación", color:"#c26a4e",
+  rigido:"Evitación experiencial", flexible:"Aceptación",
+  def:"Qué tanto puede tener lo que siente sin tener que sacárselo de encima antes de poder vivir.",
+  sondas:["Todo el repertorio está montado para no sentir. Aquí entra desesperanza creativa antes que cualquier técnica.",
+          "Acepta algunas cosas y con otras sigue peleando. Vale identificar cuál es la que no se puede tocar.",
+          "Puede sostener el malestar sin que le organice el día. Se puede trabajar exposición y acción."]},
+
+ {id:"def", corto:"Defusión", estilo:"abierto", nombre:"Defusión", color:"#c05c78",
+  rigido:"Fusión cognitiva", flexible:"Defusión",
+  def:"Qué tanto los pensamientos funcionan como hechos literales que hay que obedecer o discutir.",
+  sondas:["Los pensamientos se viven como verdades. Discutir el contenido aquí refuerza la fusión: hay que trabajar el proceso.",
+          "A veces logra mirar el pensamiento en lugar de mirar desde él.",
+          "Reconoce sus pensamientos como productos de la mente. Se puede avanzar a valores y acción."]},
+
+ {id:"pre", corto:"Presente", estilo:"centrado", nombre:"Momento presente", color:"#5f77b8",
+  rigido:"Pasado y futuro", flexible:"Contacto con el presente",
+  def:"Dónde vive la atención: rumiando lo que pasó, anticipando lo que viene, o en lo que está ocurriendo.",
+  sondas:["Vive en la rumia o en la anticipación. Conviene empezar por prácticas breves y muy concretas de contacto con el presente.",
+          "Se ancla a ratos y se va a ratos. Sirve entrenar el darse cuenta de cuándo se fue.",
+          "Puede volver al presente cuando lo necesita. Es un recurso disponible para las demás áreas."]},
+
+ {id:"yo", corto:"Yo observador", estilo:"centrado", nombre:"Yo como contexto", color:"#3f83a6",
+  rigido:"Yo conceptualizado", flexible:"Yo observador",
+  def:"Qué tanto la persona es su historia sobre sí misma, y qué tanto puede ser quien la observa.",
+  sondas:["Está fundido con una historia sobre quién es. Cuestionar esa historia de frente suele endurecerla; el camino es el ejercicio del observador.",
+          "Sostiene su historia pero puede tomar distancia si se le acompaña.",
+          "Distingue entre lo que le pasa y quien lo está viviendo. Base sólida para trabajar aceptación."]},
+
+ {id:"val", corto:"Valores", estilo:"comprometido", nombre:"Valores", color:"#3f9b86",
+  rigido:"Falta de claridad en valores", flexible:"Valores propios",
+  def:"Si sabe hacia dónde quiere caminar, y si esa dirección es suya o le fue puesta.",
+  sondas:["No hay dirección declarada, o la que hay es prestada. Antes de programar conductas hay que clarificar.",
+          "Tiene direcciones, todavía mezcladas con metas y con expectativas ajenas.",
+          "Sabe qué le importa y por qué. Se puede trabajar directamente acción comprometida."]},
+
+ {id:"acc", corto:"Acción", estilo:"comprometido", nombre:"Acción comprometida", color:"#6ea24f",
+  rigido:"Inacción o impulsividad", flexible:"Acción con dirección",
+  def:"Si la conducta se mueve en la dirección que dice valorar, de forma sostenida y no a golpes.",
+  sondas:["O no arranca, o arranca de golpe y se cae. En ambos casos el paso está mal dimensionado.",
+          "Actúa a rachas: sostiene mientras hay ánimo y suelta cuando aparece el malestar.",
+          "Sostiene conducta con dirección aunque aparezca el malestar. Es el objetivo del modelo."]}
+];
+
+const ESTILOS = {
+  abierto:     {nombre:"Abierto",     color:"#c05c78", que:"aceptación y defusión"},
+  centrado:    {nombre:"Centrado",    color:"#3f83a6", que:"presente y yo observador"},
+  comprometido:{nombre:"Comprometido",color:"#6ea24f", que:"valores y acción"}
+};
+
+const v = p => +$("r-" + p.id).value;
+const NIVEL = n => n <= 3 ? 0 : n <= 6 ? 1 : 2;
+const promEstilo = e => {
+  const ps = PROCESOS.filter(p => p.estilo === e);
+  return ps.reduce((s, p) => s + v(p), 0) / ps.length;
+};
+
+/* ====================== TARJETAS ====================== */
+$("procesos").innerHTML = PROCESOS.map(p => `
+  <div class="proceso" id="tar-${p.id}" style="border-left-color:${p.color}">
+    <div class="cabeza">
+      <h3>${p.nombre}</h3>
+      <span class="estilo">Estilo ${ESTILOS[p.estilo].nombre.toLowerCase()}</span>
+    </div>
+    <p class="def">${p.def}</p>
+    <div class="polos"><span class="izq">${p.rigido}</span><span class="der">${p.flexible}</span></div>
+    <div class="fila">
+      <input type="range" id="r-${p.id}" min="0" max="10" value="5">
+      <span class="marcador" id="m-${p.id}">5</span>
+    </div>
+    <div class="sonda" id="s-${p.id}"></div>
+  </div>`).join("");
+
+$("estilos").innerHTML = Object.keys(ESTILOS).map(k => `
+  <div id="e-${k}" style="background:${ESTILOS[k].color}12">
+    <span class="n" id="en-${k}" style="color:${ESTILOS[k].color}">5.0</span>
+    <span class="r" style="color:${ESTILOS[k].color}">${ESTILOS[k].nombre}</span>
+  </div>`).join("");
+
+/* ====================== HEXÁGONO ====================== */
+const CX = 250, CY = 190, R = 128, RETQ = 148;
+const ang = i => (-90 + i * 60) * Math.PI / 180;
+const pt = (i, r) => [CX + Math.cos(ang(i)) * r, CY + Math.sin(ang(i)) * r];
+
+function dibujar(){
+  const svg = $("hex");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+
+  /* silueta completa: lo que sería flexibilidad plena */
+  g("polygon", {points: PROCESOS.map((p, i) => pt(i, R).join(",")).join(" "),
+    fill:"none", stroke:"#dde5ec", "stroke-width":1.4, "stroke-dasharray":"5 5"});
+  for(let n = 2; n <= 8; n += 2)
+    g("polygon", {points: PROCESOS.map((p, i) => pt(i, R*n/10).join(",")).join(" "),
+      fill:"none", stroke:"#eef2f6", "stroke-width":1});
+  PROCESOS.forEach((p, i) => {
+    const [x, y] = pt(i, R);
+    g("line", {x1:CX, y1:CY, x2:x, y2:y, stroke:"#eef2f6", "stroke-width":1});
+  });
+
+  /* la forma actual: el vértice rígido se hunde hacia el centro */
+  const forma = PROCESOS.map((p, i) => pt(i, Math.max(R * v(p) / 10, 10)).join(",")).join(" ");
+  g("polygon", {points:forma, fill:"#2f6f8f", "fill-opacity":.17, stroke:"#2f6f8f",
+    "stroke-width":2.2, "stroke-linejoin":"round"});
+
+  PROCESOS.forEach((p, i) => {
+    const [x, y] = pt(i, Math.max(R * v(p) / 10, 10));
+    g("circle", {cx:x, cy:y, r:4.2, fill:p.color, stroke:"#fff", "stroke-width":1.5});
+
+    const [ex, ey] = pt(i, RETQ);
+    const cos = Math.cos(ang(i));
+    const t = Kit.svg("text", {x:ex, y:ey + 4,
+      "text-anchor": cos > .25 ? "start" : cos < -.25 ? "end" : "middle",
+      fill:p.color, style:"font:600 12.5px system-ui,sans-serif"});
+    t.textContent = p.corto + " · " + v(p);
+    t.style.cursor = "pointer";
+    t.onclick = () => $("tar-" + p.id).scrollIntoView({behavior:"smooth", block:"center"});
+    svg.appendChild(t);
+  });
+
+  g("circle", {cx:CX, cy:CY, r:4, fill:"#8fa2b3"});
+}
+
+/* ====================== PERFILES ====================== */
+const bajo = p => v(p) <= 3;
+const proc = id => PROCESOS.find(p => p.id === id);
+const bajosDe = e => PROCESOS.filter(p => p.estilo === e && bajo(p)).length;
+
+const PERFILES = [
+{clave:"flexible", nombre:"Flexibilidad sostenida",
+ resumen:"Los seis procesos en 7 o más.",
+ condicion: () => PROCESOS.every(p => v(p) >= 7),
+ metafora:"El hexágono está abierto en las seis puntas.",
+ consulta:"Funcionamiento flexible. Aparece en cierres de proceso y en consultas por un problema acotado. Conviene confirmar que no sea un perfil de deseabilidad: el hexágono se llena fácil cuando la persona quiere quedar bien.",
+ foco:"Consolidar. Hacer explícito qué procesos están sosteniendo el resto para que se puedan recuperar en una recaída.",
+ sigue:"La brújula de valores, para verificar que la acción siga teniendo dirección.",
+ pregunta:"¿Qué de todo esto quieres que siga igual dentro de seis meses?"},
+
+{clave:"rigidez", nombre:"Rigidez global",
+ resumen:"Cinco o seis procesos en 3 o menos.",
+ condicion: () => PROCESOS.filter(bajo).length >= 5,
+ metafora:"El hexágono colapsó hacia el centro.",
+ consulta:"Inflexibilidad en todos los frentes. Suele coincidir con episodios agudos, crisis vitales y cuadros de larga evolución. En este punto el modelo no se aplica proceso por proceso: primero hay que estabilizar y construir vínculo.",
+ foco:"No repartir intervención en seis frentes. Contacto con el presente y trabajo de aceptación en dosis mínimas, sostenidos por la relación terapéutica.",
+ sigue:"El costo de la lucha, que no exige recursos previos y abre la conversación sin pedir cambio.",
+ pregunta:"¿Qué es lo que más pesa hoy, si solo pudieras trabajar una cosa?",
+ bandera:"Perfil de alerta: conviene tamizar sintomatología, indagar riesgo autolesivo y valorar la intensidad del encuadre."},
+
+{clave:"cerrado", nombre:"Estilo abierto hundido",
+ resumen:"Aceptación y defusión bajas, con el resto en pie.",
+ condicion: () => bajosDe("abierto") === 2,
+ metafora:"Sabe hacia dónde va y no puede con lo que aparece en el camino.",
+ consulta:"El patrón de evitación experiencial clásico. La persona tiene dirección y capacidad de acción, pero todo se detiene cuando aparecen la emoción o el pensamiento temidos. Es frecuente en ansiedad, en evitación social y en quien pospone lo que le importa por miedo a sentir.",
+ foco:"Trabajo de apertura antes que de acción. Desesperanza creativa para retirar la agenda de control, y después defusión y aceptación.",
+ sigue:"El costo de la lucha primero, y después soltar el anzuelo.",
+ pregunta:"Cuando aparece eso que no quieres sentir, ¿qué es lo que dejas de hacer?"},
+
+{clave:"disperso", nombre:"Estilo centrado hundido",
+ resumen:"Presente y yo observador bajos.",
+ condicion: () => bajosDe("centrado") === 2,
+ metafora:"Hay dirección y hay apertura, pero nadie está en la sala.",
+ consulta:"La atención vive en la rumia o en la anticipación, y la persona está fundida con una historia sobre quién es. Aparece en rumiación depresiva, en preocupación crónica y en quienes se definen enteramente por un rótulo, sea diagnóstico, rol o fracaso.",
+ foco:"Anclaje al presente con prácticas breves y frecuentes, y ejercicio del observador para abrir distancia con la historia personal.",
+ sigue:"Soltar el anzuelo para la fusión, y prácticas de atención plena para el presente.",
+ pregunta:"Cuando dices «yo soy así», ¿quién es el que se da cuenta de que eres así?"},
+
+{clave:"sabeynohace", nombre:"Sabe y no hace",
+ resumen:"Valores y acción bajos, con apertura y presente en pie.",
+ condicion: () => bajosDe("comprometido") === 2 && bajosDe("abierto") === 0,
+ metafora:"El hexágono está abierto por arriba y hundido por abajo.",
+ consulta:"Puede sostener lo que siente y está presente, pero no hay dirección clara o la conducta no se mueve. Es el perfil que suele confundirse con pereza o desmotivación, y en el que más se falla programando tareas: sin valores propios la conducta no se sostiene más de dos semanas.",
+ foco:"Clarificación de valores antes que programación de conductas. Y cuando haya dirección, pasos tan pequeños que no admitan discusión.",
+ sigue:"La brújula de valores, y después activación conductual si lo que falla es arrancar.",
+ pregunta:"Si dejaras de preguntarte si tienes ganas: ¿qué harías igual, porque importa?"},
+
+{clave:"accion", nombre:"Acción sin dirección",
+ resumen:"Valores bajo con acción sostenida.",
+ condicion: () => bajo(proc("val")) && v(proc("acc")) >= 6,
+ metafora:"Camina rápido sin haber mirado la brújula.",
+ consulta:"Alta capacidad de acción puesta al servicio de metas que no eligió o que ya no le importan. Se ve en alto rendimiento sostenido con sensación de vacío, y en quien cumple para no decepcionar. El motor funciona; falta el timón.",
+ foco:"No tocar la capacidad de acción: es un recurso. Todo el trabajo es de clarificación, y muy probablemente de reglas ajenas.",
+ sigue:"La brújula de valores, mirando de cerca la casilla de si la dirección es propia.",
+ pregunta:"Todo eso que estás haciendo tan bien, ¿para qué lo estás haciendo?"},
+
+{clave:"fusion", nombre:"Fusión con la historia",
+ resumen:"Yo conceptualizado como el proceso más rígido.",
+ condicion: () => bajo(proc("yo")) && v(proc("yo")) < Math.min(...PROCESOS.filter(p => p.id !== "yo").map(v)),
+ metafora:"La historia sobre quién es ocupa todo el hexágono.",
+ consulta:"La persona no tiene un problema: es el problema. «Soy ansioso», «soy el que arruina las cosas». Cuestionar el contenido de esa historia suele endurecerla, porque la discusión confirma que la historia es lo que está en juego.",
+ foco:"Ejercicio del observador y metáforas de contexto, como el tablero de ajedrez. Se trabaja el marco, nunca el contenido.",
+ sigue:"Soltar el anzuelo, empezando por nombrar la historia en lugar de discutirla.",
+ pregunta:"Esa historia sobre ti, ¿desde cuándo la tienes? ¿Y quién estaba ahí antes de que apareciera?"},
+
+{clave:"mixto", nombre:"Perfil mixto",
+ resumen:"Sin un estilo dominante: se lee por el proceso más rígido.",
+ condicion: () => true,
+ metafora:"Se lee por su punta más hundida.",
+ consulta:"No hay un patrón de estilo claro. La información útil está en el proceso concreto que quedó más abajo y en la distancia con el más alto.",
+ foco:"Entrar por el proceso más rígido, apoyándose en el más flexible como recurso.",
+ sigue:"Depende del proceso más bajo; la ficha de ese proceso dice con qué seguir.",
+ pregunta:"¿Cuál de estas seis casillas te resultó más incómoda de calificar?"}
+];
+
+$("combinaciones").innerHTML = PERFILES.map(p =>
+  `<div class="combi" data-k="${p.clave}">
+     <div class="cual"><b>${p.nombre}</b><span>${p.resumen}</span></div>
+     <div class="quehacer">${p.sigue}</div>
+   </div>`).join("");
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  PROCESOS.forEach(p => {
+    const n = v(p), niv = NIVEL(n);
+    const color = Kit.mezcla("#a89a92", p.color, Math.pow(n / 10, .7));
+    $("m-" + p.id).textContent = n;
+    $("m-" + p.id).style.background = color;
+    $("s-" + p.id).innerHTML = "<b>Lectura:</b> " + p.sondas[niv];
+    $("tar-" + p.id).style.borderLeftColor = color;
+  });
+  Object.keys(ESTILOS).forEach(k => {
+    $("en-" + k).textContent = promEstilo(k).toFixed(1);
+  });
+  dibujar();
+  leer();
+}
+
+function leer(){
+  const p = PERFILES.find(p => p.condicion());
+  const masBajo = PROCESOS.slice().sort((a, b) => v(a) - v(b))[0];
+  const masAlto = PROCESOS.slice().sort((a, b) => v(b) - v(a))[0];
+
+  $("lNombre").textContent   = p.nombre;
+  $("lMetafora").textContent = p.metafora;
+  $("lFoco").textContent     = p.foco;
+  $("lSigue").textContent    = p.sigue;
+  $("lPregunta").textContent = p.pregunta;
+  $("lBandera").innerHTML    = p.bandera ? `<div class="bandera">${p.bandera}</div>` : "";
+
+  if(p.clave === "mixto")
+    $("lMetafora").textContent =
+      `Se hunde en ${masBajo.nombre.toLowerCase()} y se sostiene en ${masAlto.nombre.toLowerCase()}.`;
+
+  document.querySelectorAll(".combi").forEach(m =>
+    m.classList.toggle("activo", m.dataset.k === p.clave));
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const l = ["PROCESOS (0 rígido — 10 flexible)"];
+  PROCESOS.forEach(p => l.push(`- ${p.nombre}: ${v(p)}/10   [${p.rigido} ↔ ${p.flexible}]`));
+  l.push("", "ESTILOS DE RESPUESTA");
+  Object.keys(ESTILOS).forEach(k =>
+    l.push(`- ${ESTILOS[k].nombre} (${ESTILOS[k].que}): ${promEstilo(k).toFixed(1)}`));
+  l.push("", "PERFIL: " + $("lNombre").textContent,
+         "Puerta de entrada: " + $("lFoco").textContent,
+         "Continuar con: " + $("lSigue").textContent);
+  if($("lBandera").textContent.trim()) l.push("Alerta: " + $("lBandera").textContent.trim());
+  return l.join("\n");
+}
+
+PROCESOS.forEach(p => $("r-" + p.id).addEventListener("input", refrescar));
+
+Kit.iniciar({
+  clave: "act-por-donde-entrar",
+  alCambiar: refrescar,
+  resumen: resumen
+});

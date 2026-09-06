@@ -1,0 +1,267 @@
+@@meta
+archivo: act-soltar-el-anzuelo.html
+titulo: Soltar el anzuelo
+orden: 04
+enfoque: ACT
+etiqueta: Defusión
+sub: Un pensamiento pegajoso y cinco maneras de cambiar la relación con él sin discutir si es verdad. Se prueban en sesión, una por una, y después de cada una se vuelve a mover un solo calibrador: cuánto agarra. Al final la hoja ordena cuáles le sirven a esta persona.
+fuente: Defusión cognitiva y desliteralización del lenguaje, en Díaz Corbobés, MANUAL ACT §3.4, con la teoría del marco relacional de §1.2 como fundamento.
+resumen: Un pensamiento pegajoso pasa por cinco ejercicios cortos de defusión con una sola medida: cuánto agarra antes y después de cada uno. Termina eligiendo el que se lleva a la semana.
+campo3: Sesión
+campo3ph: Ej. Sesión 5
+@@css
+  .elGancho{background:#f8fafc;border-radius:10px;padding:14px 17px;margin-top:14px}
+  .elGancho label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave);margin-bottom:6px}
+  .elGancho .fila{display:flex;align-items:center;gap:12px}
+  .elGancho input[type=range]{flex:1;height:24px;accent-color:#8a3d3d}
+  .elGancho .v{font-weight:700;font-size:26px;min-width:38px;text-align:right;color:#8a3d3d}
+
+  .ejercicio{border:1px solid var(--linea);border-left-width:5px;border-radius:10px;
+    padding:13px 16px;margin-bottom:10px;background:#fdfefe;transition:border-color .15s}
+  .ejercicio.hecho{border-left-color:var(--acento);background:#fbfdfe}
+  .ejercicio .cabeza{display:flex;align-items:center;gap:11px}
+  .ejercicio h3{margin:0;font-size:15.5px;flex:1}
+  .ejercicio .hacer{flex:0 0 auto;font-size:12.5px;padding:5px 13px;border-radius:999px}
+  .ejercicio.hecho .hacer{background:var(--acento);border-color:var(--acento);color:#fff}
+  .ejercicio .comose{margin:7px 0 0;font-size:13.5px;color:#3f5163;line-height:1.5}
+  .despues{display:none;grid-template-columns:1fr auto;gap:12px;align-items:center;
+    margin-top:11px;padding-top:11px;border-top:1px dashed var(--linea)}
+  .ejercicio.hecho .despues{display:grid}
+  .despues .mini{border:0;padding:0;background:none}
+  .despues label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave);margin-bottom:2px}
+  .despues .fila{display:flex;align-items:center;gap:10px}
+  .despues input[type=range]{flex:1;min-width:120px;height:22px}
+  .despues .v{font-weight:700;font-size:17px;min-width:24px;text-align:right}
+  .efecto{font-size:12.5px;font-weight:700;border-radius:7px;padding:5px 11px;white-space:nowrap}
+
+  .ranking .puesto{display:flex;align-items:center;gap:12px;padding:9px 12px;
+    border-bottom:1px solid var(--linea);font-size:14px}
+  .ranking .puesto:last-child{border-bottom:0}
+  .ranking .medalla{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:flex;
+    align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff}
+  .ranking .baja{flex:0 0 auto;font-size:12.5px;font-weight:700}
+  .barrita{flex:1;height:7px;border-radius:4px;background:#eef2f6;overflow:hidden}
+  .barrita span{display:block;height:100%;border-radius:4px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>El pensamiento que engancha</h2>
+  <p class="ayuda">Uno solo, el que más pesa, tal como aparece en tu cabeza. Si viene en forma de
+  frase corta y fea, mejor: así es como funciona.</p>
+  <div class="cuerpo">
+    <textarea id="pensamiento" placeholder="Ej. «No sirvo para esto.»"></textarea>
+    <div class="elGancho">
+      <label for="agarre0">Cuánto te agarra ahora mismo</label>
+      <div class="fila">
+        <input type="range" id="agarre0" min="0" max="10" value="8">
+        <span class="v" id="vAgarre0">8</span>
+      </div>
+    </div>
+    <div class="pistas" style="margin-top:12px">Esto no sirve para que el pensamiento se vaya ni
+    para demostrar que es falso. La pregunta no es si es verdad, sino si sirve hacerle caso.</div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Los ejercicios</h2>
+  <p class="ayuda">Se hacen aquí, uno por uno, con el pensamiento de arriba. Al terminar cada uno
+  se vuelve a calibrar sin pensarlo mucho.</p>
+  <div class="cuerpo"><div id="ejercicios"></div></div>
+</section>
+
+<section class="bloque lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Qué le funcionó a esta persona</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="ranking" id="ranking"></div>
+  <div class="pregunta" id="lPregunta" style="margin-top:14px"></div>
+  <div id="lBandera"></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El que se lleva</h2>
+  <p class="ayuda">Uno solo, el que quepa en diez segundos y de pie.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Ejercicio elegido</label>
+    <div class="chips" id="elegido"></div>
+    <label class="etiqueta">¿Cuándo lo va a usar?</label>
+    <div class="chips" id="cuando"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+/* Cinco, los que caben en menos de un minuto y se pueden hacer de pie.
+   Los largos —el arroyo y el tablero— tienen hoja propia. */
+const EJERCICIOS = [
+ {id:"marco", nombre:"«Estoy teniendo el pensamiento de que…»",
+  como:"Di la frase tal cual. Después con «estoy teniendo el pensamiento de que…» delante. Y una " +
+       "tercera vez: «me doy cuenta de que estoy teniendo el pensamiento de que…»."},
+
+ {id:"gracias", nombre:"Gracias, mente",
+  como:"Cuando aparezca, contéstale «gracias, mente». Sin ironía y sin pelea, como quien recibe " +
+       "un aviso que ya conocía."},
+
+ {id:"voz", nombre:"Ponerle otra voz",
+  como:"Dilo con voz de dibujo animado, de locutor de fútbol, o cantado. En serio y en voz alta, " +
+       "aunque dé pena."},
+
+ {id:"historia", nombre:"Ponerle nombre a la historia",
+  como:"Titúlala como una película: «ahí está otra vez La historia de que no doy la talla». Y " +
+       "anúnciala por su título cada vez que vuelva."},
+
+ {id:"repetir", nombre:"Repetir la palabra hasta vaciarla",
+  como:"Toma la palabra más cargada —«inútil», «fracaso»— y repítela rápido y sin parar cuarenta " +
+       "y cinco segundos, hasta que suene a ruido."}
+];
+
+const a0 = () => +$("agarre0").value;
+const ad = e => +$("a-" + e.id).value;
+const hecho = e => $("ej-" + e.id).classList.contains("hecho");
+const baja = e => a0() - ad(e);
+
+$("ejercicios").innerHTML = EJERCICIOS.map((e, i) => `
+  <div class="ejercicio" id="ej-${e.id}">
+    <div class="cabeza">
+      <h3>${i + 1}. ${e.nombre}</h3>
+      <button type="button" class="hacer" id="h-${e.id}">Lo hicimos</button>
+    </div>
+    <p class="comose">${e.como}</p>
+    <div class="despues">
+      <div class="mini">
+        <label for="a-${e.id}">Cuánto agarra después</label>
+        <div class="fila"><input type="range" id="a-${e.id}" min="0" max="10" value="8">
+          <span class="v" id="va-${e.id}">8</span></div>
+      </div>
+      <span class="efecto" id="ef-${e.id}"></span>
+    </div>
+  </div>`).join("");
+
+Kit.chips("elegido", EJERCICIOS.map(e => e.nombre), refrescar, true);
+Kit.chips("cuando", ["Cuando empiece la rumia","Antes de dormir","Antes de algo que me da miedo"]);
+
+function refrescar(){
+  $("vAgarre0").textContent = a0();
+
+  EJERCICIOS.forEach(e => {
+    $("va-" + e.id).textContent = ad(e);
+    const et = $("ef-" + e.id), b = baja(e);
+    if(!hecho(e)){ et.textContent = ""; return; }
+    if(b >= 3){
+      et.textContent = `soltó ${b}`;
+      et.style.background = "var(--logro-fondo)"; et.style.color = "var(--logro)";
+    } else if(b >= 1){
+      et.textContent = `movió ${b}`;
+      et.style.background = "#fdf6e8"; et.style.color = "#8a6a2c";
+    } else if(b === 0){
+      et.textContent = "no movió";
+      et.style.background = "#f1f4f7"; et.style.color = "#7d8994";
+    } else {
+      et.textContent = `subió ${-b}`;
+      et.style.background = "var(--alerta-fondo)"; et.style.color = "var(--alerta)";
+    }
+  });
+
+  leer();
+}
+
+function leer(){
+  const hechos = EJERCICIOS.filter(hecho);
+  const orden  = hechos.slice().sort((x, y) => baja(y) - baja(x));
+  const buenos = hechos.filter(e => baja(e) >= 1);
+  const subio  = hechos.filter(e => baja(e) < 0);
+
+  if(!hechos.length){
+    $("lNombre").textContent   = "Todavía sin probar";
+    $("lMetafora").textContent = "Marca «lo hicimos» en cada ejercicio que trabajen en sesión.";
+    $("ranking").innerHTML     = `<div class="velo">Con tres en una misma sesión ya se ve
+      cuál le sirve a esta persona.</div>`;
+    $("lPregunta").textContent = "¿Cuál de estos te da más pena hacer?";
+    $("lBandera").innerHTML    = "";
+    return;
+  }
+
+  const mejor = orden[0];
+  $("lNombre").textContent = buenos.length
+    ? `Le funcionan ${buenos.length} de ${hechos.length}`
+    : `Ninguno de los ${hechos.length} movió el agarre`;
+  $("lMetafora").textContent = buenos.length
+    ? `El que más soltó fue «${mejor.nombre}».`
+    : "El anzuelo sigue clavado, y eso también dice algo.";
+
+  const tope = Math.max(3, ...orden.map(e => Math.abs(baja(e))));
+  $("ranking").innerHTML = orden.map((e, i) => {
+    const b = baja(e);
+    const color = b >= 3 ? "#3f7d5a" : b >= 1 ? "#c9962f" : b === 0 ? "#9aa8b5" : "#c26a4e";
+    return `<div class="puesto">
+      <span class="medalla" style="background:${color}">${i + 1}</span>
+      <span style="flex:0 0 auto;min-width:0">${Kit.escapar(e.nombre)}</span>
+      <span class="barrita"><span style="width:${Math.min(100, Math.abs(b) / tope * 100)}%;
+        background:${color}"></span></span>
+      <span class="baja" style="color:${color}">${b > 0 ? "−" : b < 0 ? "+" : ""}${Math.abs(b)}</span>
+    </div>`;
+  }).join("");
+
+  $("lPregunta").textContent = buenos.length
+    ? "Con ese pensamiento todavía ahí y menos agarrado: ¿qué podrías hacer hoy que no estabas haciendo?"
+    : "Cuando hacías los ejercicios, ¿esperabas que el pensamiento desapareciera?";
+
+  $("lBandera").innerHTML = subio.length
+    ? `<div class="bandera">En ${subio.length} ejercicio${subio.length > 1 ? "s" : ""} el agarre
+       subió. A veces mirar de frente algo que se evitaba lo hace más visible antes de hacerlo más
+       llevadero.</div>`
+    : "";
+}
+
+function resumen(){
+  const l = [];
+  l.push("PENSAMIENTO TRABAJADO");
+  l.push($("pensamiento").value.trim() || "(sin registrar)");
+  l.push(`Agarre de partida: ${a0()}/10`);
+
+  const hechos = EJERCICIOS.filter(hecho);
+  l.push("", `EJERCICIOS APLICADOS (${hechos.length} de ${EJERCICIOS.length})`);
+  if(!hechos.length) l.push("(ninguno marcado como hecho)");
+  hechos.slice().sort((x, y) => baja(y) - baja(x)).forEach((e, i) => {
+    l.push(`${i + 1}. ${e.nombre} — agarre después ${ad(e)}/10 ` +
+           `(${baja(e) > 0 ? "−" : baja(e) < 0 ? "+" : "="}${Math.abs(baja(e))})`);
+  });
+
+  l.push("", "LECTURA: " + $("lNombre").textContent);
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("Nota: " + band.textContent.trim());
+
+  const sel = Kit.activas("elegido"), cu = Kit.activas("cuando");
+  if(sel.length || cu.length)
+    l.push("", "PARA LA SEMANA",
+      "Ejercicio: " + (sel.join(", ") || "sin elegir"),
+      "Momento: " + (cu.join(", ") || "sin marcar"));
+  return l.join("\n");
+}
+
+$("agarre0").addEventListener("input", () => {
+  /* mientras no se haya hecho, el "después" acompaña al "antes" */
+  EJERCICIOS.forEach(e => { if(!hecho(e)) $("a-" + e.id).value = a0(); });
+  refrescar();
+});
+EJERCICIOS.forEach(e => {
+  $("a-" + e.id).addEventListener("input", refrescar);
+  $("h-" + e.id).addEventListener("click", () => {
+    const caja = $("ej-" + e.id);
+    caja.classList.toggle("hecho");
+    if(caja.classList.contains("hecho")) $("a-" + e.id).value = a0();
+    refrescar();
+    Kit.guardar();
+  });
+});
+
+Kit.iniciar({
+  clave: "act-soltar-el-anzuelo",
+  extra: () => ({hechos: EJERCICIOS.filter(hecho).map(e => e.id)}),
+  restaurar: d => (d.hechos || []).forEach(id => {
+    if($("ej-" + id)) $("ej-" + id).classList.add("hecho");
+  }),
+  alCambiar: refrescar,
+  resumen: resumen
+});

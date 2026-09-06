@@ -1,0 +1,448 @@
+@@meta
+archivo: dbt-tarjeta-de-crisis.html
+titulo: Tarjeta de crisis
+orden: 02
+enfoque: DBT
+etiqueta: Tolerancia al malestar
+lamina: si
+sub: Las habilidades de crisis no sirven para sentirse mejor: sirven para que el tiempo pase sin empeorar las cosas. El termómetro decide qué se puede usar, porque pedir pros y contras en 95 es pedir algo que el cuerpo no puede hacer. Al final se arma una tarjeta del tamaño de un carné.
+fuente: Habilidades de supervivencia a la crisis, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 10, fichas de tolerancia al malestar 3 a 9.
+resumen: Un termómetro decide qué habilidades se ofrecen: STOP y TIP arriba, ACEPTAS y los cinco sentidos en medio, pros y contras abajo. Con lo elegido arma una tarjeta imprimible.
+@@css
+  .termometro{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:18px 22px;margin-bottom:16px}
+  .termometro .barra{position:relative;height:34px;border-radius:17px;margin:14px 0 8px;
+    background:linear-gradient(90deg,#5f9e7a 0%,#c9962f 42%,#c26a4e 72%,#8a3d3d 100%)}
+  .termometro .aguja{position:absolute;top:-7px;width:6px;height:48px;border-radius:3px;
+    background:var(--tinta);box-shadow:0 0 0 3px #fff;transition:left .18s}
+  .termometro input[type=range]{width:100%;height:26px;accent-color:var(--tinta)}
+  .franjas{display:flex;font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave)}
+  .franjas span{flex:1;text-align:center}
+  .franjas span.viva{color:var(--tinta);font-weight:700}
+  .cifra-crisis{text-align:center;font-size:44px;font-weight:700;line-height:1;
+    font-variant-numeric:tabular-nums}
+  .dictamen{text-align:center;font-size:15px;margin-top:6px;font-weight:600}
+
+  .nivel{border:1px solid var(--linea);border-radius:11px;padding:16px 18px;margin-bottom:13px;
+    background:#fdfefe;transition:opacity .25s,border-color .25s}
+  .nivel.dormido{opacity:.36}
+  .nivel.viva{border-color:var(--acento);box-shadow:0 0 0 2px var(--acento-claro)}
+  .nivel .rotulo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .nivel .rango{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+    border-radius:999px;padding:3px 11px;color:#fff}
+  .nivel h3{margin:0;font-size:17px}
+  .nivel .paraque{margin:5px 0 13px;font-size:13.5px;color:var(--tinta-suave);line-height:1.5}
+  .hab{border-top:1px dashed var(--linea);padding-top:12px;margin-top:12px}
+  .hab:first-of-type{border-top:0;padding-top:0;margin-top:0}
+  .hab .titulo{font-size:14.5px;font-weight:700;margin-bottom:2px}
+  .hab .sigla{font-size:12px;color:var(--tinta-suave);margin-bottom:8px}
+  .pasos-stop{display:grid;gap:8px}
+  .paso-stop{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;
+    border:1px solid var(--linea);border-radius:9px;padding:10px 13px;background:#fff;
+    cursor:pointer}
+  .paso-stop.hecho{border-color:#8fbfa4;background:#f6fbf8}
+  .paso-stop .letra{width:26px;height:26px;border-radius:7px;background:#8a3d3d;color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+  .paso-stop.hecho .letra{background:#3f7d5a}
+  .paso-stop b{display:block;font-size:14px}
+  .paso-stop span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
+  .sentido{margin-bottom:10px}
+  .sentido .cual{font-size:12.5px;font-weight:700;color:var(--acento);margin-bottom:5px}
+
+  .tarjeta{border:2px solid var(--tinta);border-radius:12px;padding:16px 18px;background:#fff;
+    max-width:520px;margin:0 auto}
+  .tarjeta .cab{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:2px solid var(--tinta);padding-bottom:7px;margin-bottom:11px}
+  .tarjeta .cab b{font-size:15px;letter-spacing:.3px}
+  .tarjeta .cab span{font-size:11px;color:var(--tinta-suave)}
+  .tarjeta .franja{margin-bottom:11px}
+  .tarjeta .franja .t{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;
+    font-weight:700;margin-bottom:3px}
+  .tarjeta .franja ul{margin:0;padding-left:17px;font-size:13px;line-height:1.5}
+  .tarjeta .pie{border-top:1px dashed var(--linea);padding-top:8px;margin-top:11px;
+    font-size:11.5px;color:var(--tinta-suave);line-height:1.45}
+  @media print{
+    .nivel.dormido{display:none}
+    .tarjeta{break-inside:avoid}
+  }
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Esto es una crisis?</h2>
+  <p class="ayuda">Para un problema hay que resolver; para una crisis, sobrevivir. Se cumplen las
+  cuatro o no es crisis.</p>
+  <div class="cuerpo">
+    <div class="tarjetas" id="criterios"></div>
+    <div id="lecturaCriterios"></div>
+  </div>
+</section>
+
+<div class="termometro">
+  <div class="cifra-crisis" id="cifraCrisis">70</div>
+  <div class="dictamen" id="dictamen"></div>
+  <div class="barra"><div class="aguja" id="aguja"></div></div>
+  <input type="range" id="nivelCrisis" min="0" max="100" value="70">
+  <div class="franjas">
+    <span id="f-baja">0 – 39 · se puede pensar</span>
+    <span id="f-media">40 – 79 · cuesta pensar</span>
+    <span id="f-alta">80 – 100 · no se puede pensar</span>
+  </div>
+  <p class="ayuda" style="text-align:center;margin-top:10px">Abajo se abren solo las habilidades
+  que funcionan con ese nivel de activación.</p>
+</div>
+
+<section class="nivel" id="nivelAlto">
+  <div class="rotulo">
+    <span class="rango" style="background:#8a3d3d">80 – 100</span>
+    <h3>Primero el cuerpo</h3>
+  </div>
+  <p class="paraque">Aquí no funciona ninguna habilidad cognitiva. Primero baja la química del
+  cuerpo. Son segundos, no conversaciones.</p>
+
+  <div class="hab">
+    <div class="titulo">STOP</div>
+    <div class="sigla">Detener la conducta problemática de inmediato · Ficha TM 4</div>
+    <div class="pasos-stop" id="pasosStop"></div>
+  </div>
+
+  <div class="hab">
+    <div class="titulo">TIP</div>
+    <div class="sigla">Temperatura · Intenso ejercicio · respiración Pausada · Fichas TM 6 a 6c</div>
+    <div class="chips" id="tip"></div>
+    <div class="bandera" style="margin-top:11px">El agua fría baja el ritmo cardíaco de golpe.
+    No usarla, o consultarlo antes, si hay problema cardíaco, presión baja, trastorno alimentario,
+    embarazo o medicación betabloqueante. Es la única habilidad de este conjunto con contraindicación
+    médica.</div>
+  </div>
+</section>
+
+<section class="nivel" id="nivelMedio">
+  <div class="rotulo">
+    <span class="rango" style="background:#c9962f">40 – 79</span>
+    <h3>Distraerse y calmarse</h3>
+  </div>
+  <p class="paraque">Se puede hacer algo, todavía no razonar. La meta es dejar pasar la ola sin
+  hacer nada que haya que reparar después.</p>
+
+  <div class="hab">
+    <div class="titulo">ACEPTAS</div>
+    <div class="sigla">Actividades · Contribuciones · Emociones opuestas · otros Pensamientos ·
+      Tomar distancia · Analogías · Sensaciones · Ficha TM 7</div>
+    <div id="aceptas"></div>
+  </div>
+
+  <div class="hab">
+    <div class="titulo">Cálmate con los cinco sentidos</div>
+    <div class="sigla">Ficha TM 8. Lo que calma a esta persona, no lo que suele decirse que calma.</div>
+    <div id="sentidos"></div>
+  </div>
+</section>
+
+<section class="nivel" id="nivelBajo">
+  <div class="rotulo">
+    <span class="rango" style="background:#5f9e7a">0 – 39</span>
+    <h3>Decidir y aceptar</h3>
+  </div>
+  <p class="paraque">Ya se puede pensar. Es el momento de preparar la próxima crisis en lugar de
+  improvisarla.</p>
+
+  <div class="hab">
+    <div class="titulo">Pros y contras</div>
+    <div class="sigla">Ficha TM 5. Se llena en frío y se relee en caliente.</div>
+    <label class="etiqueta">¿Cuál es el impulso?</label>
+    <div class="chips" id="impulso"></div>
+    <p class="procedencia" id="pcAviso"></p>
+    <div class="desliza" style="margin-top:12px">
+      <table class="tabla">
+        <tr><th></th><th>A favor</th><th>En contra</th></tr>
+        <tr><th>Actuar sobre el impulso</th>
+          <td><textarea id="pcActuarPro"></textarea></td>
+          <td><textarea id="pcActuarCon"></textarea></td></tr>
+        <tr><th>Resistir el impulso</th>
+          <td><textarea id="pcResistirPro"></textarea></td>
+          <td><textarea id="pcResistirCon"></textarea></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="hab">
+    <div class="titulo">SALVARA · mejorar el momento</div>
+    <div class="sigla">Significado · Aliento y repensar · Lugar seguro · una cosa a la Vez ·
+      un Alto o vacaciones · Rezar · Acciones relajantes · Ficha TM 9</div>
+    <div class="chips" id="salvara"></div>
+  </div>
+
+  <div class="hab">
+    <div class="titulo">Aceptación radical</div>
+    <div class="sigla">Ficha TM 11. No es aprobar: es dejar de pelear con lo que ya pasó.</div>
+    <div class="chips" id="radical"></div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">2</span>Cómo saber si está funcionando</h2>
+  <div class="cuerpo">
+    <div class="pistas" style="font-size:14.5px">
+      <b>Lo más importante:</b> las habilidades están funcionando cuando pasa el tiempo y no has
+      hecho nada para empeorar las cosas. <b>Eso vale incluso si no te sientes mejor.</b>
+      <ul>
+        <li>Después: funcionan cuando te sientes más capaz de tolerar el problema mientras usas
+        las demás habilidades.</li>
+        <li>Al final: pueden hacerte sentir mejor. Si pasa, bien. Si no pasa, el objetivo sigue
+        siendo el mismo: sobrevivir a la crisis.</li>
+      </ul>
+    </div>
+    <div class="medidor" style="margin-top:14px">
+      <label for="tolerancia">Ahora mismo, ¿cuánto puedo tolerar esto? (0 = nada, 100 = duele y lo aguanto)</label>
+      <input type="range" id="tolerancia" min="0" max="100" value="40">
+      <span class="valor" id="vTolerancia">40</span>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">3</span>La tarjeta</h2>
+  <p class="ayuda">Se arma sola con lo que marcaste arriba. Se imprime, se recorta y se lleva en la
+  billetera o en el forro del celular. En crisis nadie recuerda una lista: por eso la lista se
+  guarda por fuera de la cabeza.</p>
+  <div class="cuerpo">
+    <div class="tarjeta" id="tarjeta"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const CRITERIOS = [
+  ["Es de corto plazo", "Va a pasar. No es una situación permanente."],
+  ["Duele mucho", "El malestar es intenso, no una molestia de fondo."],
+  ["Presiona a resolver ya", "Hay un impulso urgente de hacer algo inmediatamente."],
+  ["No se puede resolver ahora", "En este momento no está en tus manos arreglarlo."]
+];
+
+const TIP = ["Agua muy fría en la cara","Hielo en las manos","Correr o saltar 10 minutos",
+  "Exhalar más largo que inhalar"];
+
+const ACEPTAS = [
+  ["Actividades", ["Ver una serie","Salir a caminar","Cocinar","Ordenar el cuarto","Jugar algo",
+    "Escuchar música fuerte","Bañarme","Dibujar"]],
+  ["Contribuciones", ["Escribirle a alguien que la esté pasando mal","Ayudar en la casa",
+    "Hacerle un favor a alguien","Dar algo que no uso"]],
+  ["Emociones opuestas", ["Ver algo que dé risa","Música alegre","Ver videos de animales",
+    "Leer algo que emocione"]],
+  ["Otros pensamientos", ["Contar de 7 en 7 hacia atrás","Nombrar países por letra",
+    "Recitar una canción","Describir el cuarto en detalle"]],
+  ["Tomar distancia", ["Salir del lugar","Guardar el celular","Poner la situación en una caja mental",
+    "Aplazarlo hasta mañana a las 10"]],
+  ["Analogías", ["Pensar en alguien que la pasa peor","Recordar una crisis que sí pasó",
+    "Verlo desde dentro de un año"]],
+  ["Sensaciones", ["Hielo en la mano","Ducha caliente","Música muy alta","Sabor fuerte",
+    "Apretar una pelota","Oler algo intenso"]]
+];
+
+const SENTIDOS = [
+  ["Vista", ["Fotos que me gustan","Mirar por la ventana","Un lugar bonito","Videos de naturaleza"]],
+  ["Oído", ["Mi canción","Sonido de lluvia","Un pódcast conocido","Silencio"]],
+  ["Olfato", ["Café","Crema o perfume","Ropa limpia","Comida cocinándose"]],
+  ["Gusto", ["Té caliente","Algo dulce","Chicle de menta","Comida que me gusta"]],
+  ["Tacto", ["Cobija suave","Baño caliente","Abrazar la almohada","Acariciar a mi mascota"]]
+];
+
+const IMPULSOS = ["Consumir","Autolesionarme","Escribirle","Irme"];
+const SALVARA = ["Darme ánimo como a un amigo","Imaginar un lugar seguro",
+  "Hacer una sola cosa a la vez","Tomarme un alto"];
+const RADICAL = ["Esto ya pasó y no lo puedo cambiar","Puedo estar mal y seguir",
+  "Aceptar no es aprobar","Esta situación es temporal"];
+
+/* Ejemplos plausibles para las cuatro casillas. No son la respuesta: son la
+   referencia de qué clase de cosa va en cada una. */
+const EJEMPLOS = {
+  "Consumir": ["Se me apaga todo por un rato y dejo de sentir",
+               "Al día siguiente amanezco peor y con culpa",
+               "Me despierto sin resaca y sin nada que explicar",
+               "Tengo que aguantar la ansiedad entera, despierto"],
+  "Autolesionarme": ["Me devuelve una sensación de control y alivio inmediato",
+               "Quedan marcas, hay que esconderlas y después viene la vergüenza",
+               "Mañana no tengo nada que tapar ni que explicar",
+               "El malestar se queda entero y hay que atravesarlo"],
+  "Escribirle": ["Se me quita la incertidumbre de no saber qué piensa",
+               "Suelo mandar cosas que después quisiera borrar",
+               "No pierdo terreno y mañana decido con la cabeza fría",
+               "Me quedo toda la noche con las ganas de escribir"],
+  "Irme": ["Salgo de la situación y respiro de inmediato",
+               "Después queda la conversación pendiente y todos molestos",
+               "Puedo cerrar el tema hoy en vez de arrastrarlo",
+               "Aguantar estando ahí me cuesta un esfuerzo enorme"]
+};
+const EJEMPLO_BASE = ["Lo que gano en el momento","Lo que me cuesta después",
+  "Lo que gano si aguanto","Lo que me cuesta aguantar"];
+
+const PASOS_STOP = [
+  ["S", "Stop", "Para. No muevas ni un músculo. No reacciones. Quedarte quieto un momento evita que hagas lo que la emoción quiere."],
+  ["T", "Toma un paso atrás", "Aléjate de la situación, física o mentalmente. Respira. Nadie te obliga a responder ya."],
+  ["O", "Observa", "Qué pasa afuera y qué pasa adentro. Los hechos, no las interpretaciones."],
+  ["P", "Procede con mindfulness", "Pregúntate qué quieres de esta situación, y qué haría la mente sabia. Después actúa."]
+];
+
+const nivel = () => +$("nivelCrisis").value;
+
+/* ====================== ARMADO ====================== */
+Kit.opciones("criterios", CRITERIOS, () => refrescar());
+Kit.chips("tip", TIP, refrescar);
+Kit.chips("impulso", IMPULSOS, refrescar);
+Kit.chips("salvara", SALVARA, refrescar);
+Kit.chips("radical", RADICAL, refrescar);
+
+$("pasosStop").innerHTML = PASOS_STOP.map(([l, t, d], i) =>
+  `<div class="paso-stop" id="stop-${i}">
+     <span class="letra">${l}</span>
+     <span><b>${t}</b><span>${d}</span></span>
+   </div>`).join("");
+PASOS_STOP.forEach((p, i) => {
+  const e = $("stop-" + i);
+  e.onclick = () => { e.classList.toggle("hecho"); refrescar(); Kit.guardar(); };
+});
+
+$("aceptas").innerHTML = ACEPTAS.map(([cat], i) =>
+  `<div class="sentido"><div class="cual">${cat}</div><div class="chips" id="ace-${i}"></div></div>`).join("");
+ACEPTAS.forEach(([cat, ops], i) => Kit.chips("ace-" + i, ops, refrescar));
+
+$("sentidos").innerHTML = SENTIDOS.map(([cual], i) =>
+  `<div class="sentido"><div class="cual">${cual}</div><div class="chips" id="sen-${i}"></div></div>`).join("");
+SENTIDOS.forEach(([cual, ops], i) => Kit.chips("sen-" + i, ops, refrescar));
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  const n = nivel();
+  $("cifraCrisis").textContent = n;
+  $("aguja").style.left = `calc(${n}% - 3px)`;
+  $("vTolerancia").textContent = $("tolerancia").value;
+
+  const alto = n >= 80, medio = n >= 40 && n < 80, bajo = n < 40;
+  const color = alto ? "#8a3d3d" : medio ? "#c9962f" : "#5f9e7a";
+  $("cifraCrisis").style.color = color;
+  $("dictamen").style.color = color;
+  $("dictamen").textContent = alto
+    ? "Aquí el cuerpo manda. Solo STOP y TIP."
+    : medio
+    ? "Se puede hacer, todavía no razonar. Distraerse y calmarse."
+    : "Se puede pensar. Momento de decidir y de preparar la próxima.";
+
+  $("f-baja").classList.toggle("viva", bajo);
+  $("f-media").classList.toggle("viva", medio);
+  $("f-alta").classList.toggle("viva", alto);
+
+  /* Los niveles por encima del actual siguen disponibles: si el malestar es
+     bajo, se puede preparar todo. Lo que se apaga es lo que no funcionaría. */
+  $("nivelAlto").classList.toggle("dormido", !alto);
+  $("nivelAlto").classList.toggle("viva", alto);
+  $("nivelMedio").classList.toggle("dormido", alto);
+  $("nivelMedio").classList.toggle("viva", medio);
+  $("nivelBajo").classList.toggle("dormido", !bajo);
+  $("nivelBajo").classList.toggle("viva", bajo);
+
+  const marcados = Kit.activas("criterios").length;
+  $("lecturaCriterios").innerHTML = marcados === 0 ? ""
+    : marcados === 4
+    ? `<div class="logro" style="margin-top:12px">Las cuatro. Es una crisis: el trabajo es
+       sobrevivirla, no resolverla. Las habilidades de abajo son para eso.</div>`
+    : `<div class="pistas" style="margin-top:12px"><b>${marcados} de 4.</b> Puede que esto sea un
+       problema y no una crisis. Si se puede resolver ahora, o si no va a pasar solo, lo que
+       corresponde es resolución de problemas —o DEAR MAN si depende de otra persona— y no
+       supervivencia a la crisis. Vale la pena revisarlo antes de seguir.</div>`;
+
+  ponerEjemplos();
+  armarTarjeta();
+}
+
+/* Las casillas traen, como referencia gris, un ejemplo del impulso elegido. */
+function ponerEjemplos(){
+  const imp = Kit.activas("impulso");
+  const ej = (imp.length && EJEMPLOS[imp[0]]) ? EJEMPLOS[imp[0]] : EJEMPLO_BASE;
+  ["pcActuarPro","pcActuarCon","pcResistirPro","pcResistirCon"]
+    .forEach((id, i) => { $(id).placeholder = "Ej. " + ej[i]; });
+  $("pcAviso").textContent = imp.length
+    ? "Las casillas traen un ejemplo de lo que suele ir en cada una. Se reemplaza por lo suyo."
+    : "Elige un impulso y las cuatro casillas mostrarán ejemplos de lo que va en cada una.";
+}
+
+function elegidasDe(prefijo, lista){
+  return lista.map((x, i) => [x[0], Kit.activas(prefijo + i)])
+              .filter(([, v]) => v.length);
+}
+
+function armarTarjeta(){
+  const stop = PASOS_STOP.filter((p, i) => $("stop-" + i).classList.contains("hecho"));
+  const tip = Kit.activas("tip");
+  const ace = elegidasDe("ace-", ACEPTAS);
+  const sen = elegidasDe("sen-", SENTIDOS);
+  const sal = Kit.activas("salvara");
+  const rad = Kit.activas("radical");
+  const imp = Kit.activas("impulso");
+
+  const franja = (titulo, color, items) => items.length
+    ? `<div class="franja"><div class="t" style="color:${color}">${titulo}</div>
+       <ul>${items.map(i => `<li>${Kit.escapar(i)}</li>`).join("")}</ul></div>` : "";
+
+  const cuerpo =
+    franja("Si estoy por encima de 80 — primero el cuerpo", "#8a3d3d",
+      ["STOP: para, toma distancia, observa, procede"].concat(tip)) +
+    franja("Entre 40 y 80 — distraerme", "#c9962f",
+      ace.map(([cat, v]) => `${cat}: ${v.join(", ")}`)) +
+    franja("Entre 40 y 80 — calmarme", "#c9962f",
+      sen.map(([cual, v]) => `${cual}: ${v.join(", ")}`)) +
+    franja("Por debajo de 40 — pensar", "#3f7d5a", sal.concat(rad)) +
+    (imp.length ? franja("Mi impulso de crisis", "#5a6a7d", imp) : "");
+
+  $("tarjeta").innerHTML = `
+    <div class="cab"><b>MI TARJETA DE CRISIS</b><span>Recortar y llevar encima</span></div>
+    ${cuerpo || '<div class="velo">Marca opciones arriba y la tarjeta se arma sola.</div>'}
+    <div class="pie"><b>Está funcionando</b> si pasa el tiempo y no hago nada que tenga que
+    reparar después, aunque no me sienta mejor.<br>
+    Si aparece la idea de hacerme daño: llamar a alguien antes de decidir nada.</div>`;
+}
+
+function resumen(){
+  const l = [];
+  const cr = Kit.activas("criterios");
+  l.push(`CRITERIOS DE CRISIS: ${cr.length} de 4` + (cr.length ? ` — ${cr.join(", ")}` : ""));
+  l.push(`Nivel de malestar: ${nivel()}/100`);
+  l.push(`Tolerancia declarada: ${$("tolerancia").value}/100`);
+
+  const stop = PASOS_STOP.filter((p, i) => $("stop-" + i).classList.contains("hecho"))
+                         .map(p => p[1]);
+  if(stop.length) l.push("", "STOP practicado en sesión: " + stop.join(", "));
+  const tip = Kit.activas("tip");
+  if(tip.length) l.push("TIP elegidas: " + tip.join(", "));
+
+  const ace = elegidasDe("ace-", ACEPTAS);
+  if(ace.length) l.push("", "ACEPTAS: " + ace.map(([c, v]) => `${c} (${v.join(", ")})`).join(" | "));
+  const sen = elegidasDe("sen-", SENTIDOS);
+  if(sen.length) l.push("CINCO SENTIDOS: " + sen.map(([c, v]) => `${c} (${v.join(", ")})`).join(" | "));
+
+  const imp = Kit.activas("impulso");
+  if(imp.length) l.push("", "IMPULSO DE CRISIS: " + imp.join(", "));
+  const pc = [["pcActuarPro","Actuar / a favor"],["pcActuarCon","Actuar / en contra"],
+              ["pcResistirPro","Resistir / a favor"],["pcResistirCon","Resistir / en contra"]]
+             .filter(p => $(p[0]).value.trim());
+  if(pc.length){
+    l.push("PROS Y CONTRAS");
+    pc.forEach(p => l.push("  " + p[1] + ": " + $(p[0]).value.trim()));
+  }
+  const sal = Kit.activas("salvara"), rad = Kit.activas("radical");
+  if(sal.length) l.push("", "SALVARA: " + sal.join(", "));
+  if(rad.length) l.push("ACEPTACIÓN RADICAL: " + rad.join(", "));
+  return l.join("\n");
+}
+
+$("nivelCrisis").addEventListener("input", refrescar);
+$("tolerancia").addEventListener("input", refrescar);
+
+Kit.iniciar({
+  clave: "dbt-tarjeta-de-crisis",
+  extra: () => ({stop: PASOS_STOP.map((p, i) => $("stop-" + i).classList.contains("hecho"))}),
+  restaurar: d => (d.stop || []).forEach((v, i) => {
+    if(v && $("stop-" + i)) $("stop-" + i).classList.add("hecho");
+  }),
+  alCambiar: refrescar,
+  resumen: resumen
+});

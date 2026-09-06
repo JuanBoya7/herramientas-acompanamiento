@@ -1,0 +1,380 @@
+@@meta
+archivo: tcc-escalera-de-exposicion.html
+titulo: La escalera de exposición
+orden: 03
+enfoque: Cognitivo-conductual
+etiqueta: Exposición
+identificacion: si
+campo3: Semana
+campo3ph: Ej. Semana 4
+sub: La evitación funciona: por eso se sostiene. Alivia en segundos y le enseña al cuerpo que el peligro era real, así que la próxima vez cuesta más. La escalera revierte eso por peldaños: se ordenan las situaciones por cuánta ansiedad dan, se sube de a una, y se registra qué pasó de verdad con la ansiedad al quedarse.
+fuente: Terapias y técnicas de exposición, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 4, con el uso de unidades subjetivas de ansiedad y el control de conductas de seguridad.
+resumen: Jerarquía ordenada sola por USAs y registro de ensayos con curva de habituación. Avisa de los dos errores clásicos: ensayo demasiado corto y ensayo apuntalado en conductas de seguridad.
+@@css
+  .panel-escalera{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 12px;margin-bottom:16px}
+  .grada{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+    border:1px solid var(--linea);border-left-width:6px;border-radius:10px;padding:11px 14px;
+    margin-bottom:8px;background:#fdfefe}
+  .grada .num-g{width:28px;height:28px;border-radius:8px;color:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:13px}
+  .grada .qué{font-size:14.5px}
+  .grada .mando{display:flex;align-items:center;gap:9px;min-width:200px}
+  .grada input[type=range]{flex:1;min-width:110px;height:20px}
+  .grada .usa{font-weight:700;font-size:17px;min-width:34px;text-align:right}
+  .grada .sacar{border:0;background:transparent;color:var(--tinta-suave);font-size:18px;
+    cursor:pointer;padding:2px 7px;border-radius:6px;line-height:1}
+  .grada .sacar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .grada.activa{box-shadow:0 0 0 2px var(--acento-claro)}
+
+  .ensayo{border:1px solid var(--linea);border-radius:10px;padding:13px 16px;margin-bottom:9px;
+    background:#fdfefe}
+  .ensayo .arriba{display:flex;gap:11px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+  .ensayo .cual{font-weight:700;font-size:14.5px;flex:1}
+  .tres{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .tres .caja{background:#f8fafc;border-radius:8px;padding:7px 10px}
+  .tres .caja label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave);margin-bottom:2px}
+  .tres .caja .fila{display:flex;align-items:center;gap:7px}
+  .tres .caja input[type=range]{flex:1;min-width:44px;height:20px}
+  .tres .caja .v{font-weight:700;font-size:14px;min-width:24px;text-align:right}
+  .curva{display:block;width:100%;height:auto;max-width:300px;margin-top:10px}
+  .dictamen-e{margin-top:10px;font-size:13px;border-radius:8px;padding:8px 12px}
+  @media (max-width:640px){
+    .grada{grid-template-columns:auto 1fr}
+    .grada .mando{grid-column:1 / -1}
+    .tres{grid-template-columns:1fr}
+  }
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Qué se está evitando?</h2>
+  <p class="ayuda">El mapa completo de la evitación, que casi siempre es más grande de lo que la
+  persona cree.</p>
+  <div class="cuerpo">
+    <div class="chips" id="queEvita"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Armar la escalera</h2>
+  <p class="ayuda">Toca situaciones del banco para agregarlas y calibra cuánta ansiedad da cada
+  una, de 0 a 100 (unidades subjetivas de ansiedad). La escalera se ordena sola. Una buena
+  jerarquía tiene entre ocho y doce peldaños, con saltos parejos: si entre dos hay más de 20
+  puntos, falta uno en medio.</p>
+  <div class="cuerpo">
+    <div id="bancoSituaciones"></div>
+    <details class="apunte" style="margin-top:12px">
+      <summary>Agregar una situación propia</summary>
+      <div style="display:flex;gap:8px;margin-top:7px">
+        <input type="text" id="nuevaSit" placeholder="La situación, concreta">
+        <button type="button" onclick="agregarSituacion()">Agregar</button>
+      </div>
+    </details>
+  </div>
+</section>
+
+<div class="panel-escalera">
+  <div id="escalera"></div>
+  <div class="velo" id="veloEscalera">La escalera está vacía. Toca situaciones del banco de arriba.</div>
+  <div id="dictamenEscalera"></div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">3</span>Los ensayos</h2>
+  <p class="ayuda">Se sube un peldaño a la vez y se repite hasta que deje de dar ansiedad, no
+  hasta que se aguante. Cada ensayo se registra apenas termina, no de memoria en la sesión
+  siguiente.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">¿Qué peldaño se trabajó?</label>
+    <select id="peldanoEnsayo"></select>
+    <button type="button" style="margin-top:10px" onclick="agregarEnsayo()">Registrar un ensayo</button>
+    <div id="ensayos" style="margin-top:14px"></div>
+    <div class="velo" id="veloEnsayos">Todavía no hay ensayos registrados.</div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const EVITACIONES = ["Hablar en público", "Hablar delante de un grupo", "Preguntar delante de otros", "Llamar por teléfono"];
+
+const BANCO = [
+ {g:"Social", ops:["Saludar a un conocido","Preguntar la hora a un desconocido",
+   "Hacer una pregunta delante de otros","Hablar en un grupo pequeño","Almorzar con gente nueva",
+   "Ir a un evento solo","Hablar delante de un grupo","Hablar en una reunión grande",
+   "Dar una opinión que no todos comparten"]},
+ {g:"Que me evalúen", ops:["Revisar el material","Ensayar a solas","Ensayar delante de alguien",
+   "Entregar un borrador","Presentar ante una persona","Presentar ante el grupo",
+   "Que revisen mi trabajo","Pedir que me digan qué tal lo hice"]},
+ {g:"Cuerpo y salud", ops:["Leer sobre síntomas","Tomarme el pulso una sola vez",
+   "Hacer ejercicio hasta agitarme","Subir escaleras rápido","Tomar café",
+   "Ir a la sala de espera del médico","Sacarme sangre","Quedarme sin revisar síntomas un día"]},
+ {g:"Lugares", ops:["Salir a la esquina","Ir al supermercado en hora baja",
+   "Ir al supermercado lleno","Tomar un bus dos paradas","Tomar un bus lleno",
+   "Ir a un centro comercial","Usar el ascensor una parada","Ir al cine"]},
+ {g:"Relaciones", ops:["Escribirle a alguien primero","Pedir un favor pequeño","Decir que no a algo menor",
+   "Expresar un desacuerdo","Pedir disculpas","Terminar una conversación",
+   "Decir que algo me molestó"]}
+];
+
+let situaciones = [];   // {id, texto, usa}
+let ensayos = [];       // {sit, fecha, ini, max, fin, minutos, seguridad:[]}
+let contador = 0;
+
+const SEGURIDAD = ["Ir acompañado","Llevar medicación por si acaso","Distraerme con el celular",
+  "Ensayar mentalmente todo el tiempo","Sentarme cerca de la salida","Tomar algo antes",
+  "Revisar que todo esté bien","Irme antes de tiempo","Evitar el contacto visual",
+  "Hablar poco","Llevar agua o algo en la mano"];
+
+function agregarSituacion(texto){
+  const t = (typeof texto === "string" ? texto : $("nuevaSit").value).trim();
+  if(!t) return;
+  if(situaciones.some(s => s.texto.toLowerCase() === t.toLowerCase())){
+    Kit.brindis("Esa ya está en la escalera"); return;
+  }
+  situaciones.push({id:"s" + (++contador), texto:t, usa:50});
+  if(typeof texto !== "string") $("nuevaSit").value = "";
+  refrescar();
+  Kit.guardar();
+}
+function quitarSituacion(id){
+  situaciones = situaciones.filter(s => s.id !== id);
+  ensayos = ensayos.filter(e => e.sit !== id);
+  refrescar();
+  Kit.guardar();
+}
+
+const ordenadas = () => situaciones.slice().sort((a, b) => a.usa - b.usa);
+const colorUsa = u => Kit.mezcla("#4aa070", "#8a3d3d", u / 100);
+
+/* ====================== BANCO ====================== */
+$("bancoSituaciones").innerHTML = BANCO.map((b, i) =>
+  `<div style="margin-bottom:12px">
+     <div style="font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
+       color:var(--tinta-suave);margin-bottom:6px">${b.g}</div>
+     <div class="chips" id="banco-${i}"></div>
+   </div>`).join("");
+BANCO.forEach((b, i) => {
+  Kit.chips("banco-" + i, b.ops, null);
+  $("banco-" + i).querySelectorAll(".chip").forEach(c => {
+    c.onclick = () => { agregarSituacion(c.textContent); c.classList.remove("activa"); };
+  });
+});
+
+/* ====================== ESCALERA ====================== */
+function pintarEscalera(){
+  const lista = ordenadas();
+  $("veloEscalera").style.display = lista.length ? "none" : "block";
+  $("escalera").innerHTML = lista.map((s, i) => {
+    const col = colorUsa(s.usa);
+    return `<div class="grada" style="border-left-color:${col}">
+      <span class="num-g" style="background:${col}">${i + 1}</span>
+      <span class="qué">${Kit.escapar(s.texto)}</span>
+      <span class="mando">
+        <input type="range" min="0" max="100" value="${s.usa}" data-s="${s.id}">
+        <span class="usa" style="color:${col}">${s.usa}</span>
+        <button type="button" class="sacar" data-q="${s.id}" title="Quitar">&times;</button>
+      </span>
+    </div>`;
+  }).join("");
+
+  $("escalera").querySelectorAll("input[data-s]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const s = situaciones.find(s => s.id === inp.dataset.s);
+      s.usa = +inp.value;
+      refrescar();
+      Kit.guardar();
+    });
+    inp.addEventListener("input", () => {
+      inp.parentElement.querySelector(".usa").textContent = inp.value;
+    });
+  });
+  $("escalera").querySelectorAll("button[data-q]").forEach(b =>
+    b.onclick = () => quitarSituacion(b.dataset.q));
+}
+
+function dictamenEscalera(){
+  const lista = ordenadas();
+  if(lista.length < 3){ $("dictamenEscalera").innerHTML = ""; return; }
+  const saltos = lista.slice(1).map((s, i) => s.usa - lista[i].usa);
+  const grandes = saltos.filter(x => x > 20).length;
+  const bajos = lista.filter(s => s.usa <= 30).length;
+  let html = "";
+  if(lista.length < 6)
+    html += `<div class="pistas">La escalera tiene ${lista.length} peldaños. Con menos de ocho los
+      saltos suelen quedar grandes, y un salto grande es la vía más rápida a un ensayo fallido.</div>`;
+  if(grandes)
+    html += `<div class="pistas"><b>${grandes} salto${grandes > 1 ? "s" : ""} de más de 20
+      puntos.</b> Ahí falta un peldaño intermedio: conviene inventarlo antes de empezar, porque
+      en caliente no se inventa.</div>`;
+  if(!bajos)
+    html += `<div class="bandera">No hay ningún peldaño por debajo de 30. La escalera empieza
+      demasiado arriba: hace falta al menos uno que la persona pueda hacer hoy mismo con
+      seguridad, para que el primer ensayo sea un éxito.</div>`;
+  $("dictamenEscalera").innerHTML = html;
+}
+
+/* ====================== ENSAYOS ====================== */
+function agregarEnsayo(){
+  const sit = $("peldanoEnsayo").value;
+  if(!sit){ Kit.brindis("Elige primero qué peldaño se trabajó"); return; }
+  const s = situaciones.find(s => s.id === sit);
+  ensayos.unshift({sit, fecha:new Date().toLocaleDateString("es-CO"),
+    ini:s ? s.usa : 60, max:s ? s.usa : 60, fin:Math.round((s ? s.usa : 60) * .6),
+    minutos:20, seguridad:[]});
+  refrescar();
+  Kit.guardar();
+}
+function quitarEnsayo(i){ ensayos.splice(i, 1); refrescar(); Kit.guardar(); }
+
+function pintarEnsayos(){
+  $("veloEnsayos").style.display = ensayos.length ? "none" : "block";
+  $("ensayos").innerHTML = ensayos.map((e, i) => {
+    const s = situaciones.find(s => s.id === e.sit);
+    return `<div class="ensayo">
+      <div class="arriba">
+        <span class="cual">${s ? Kit.escapar(s.texto) : "(peldaño eliminado)"}</span>
+        <input type="text" value="${Kit.escapar(e.fecha)}" data-e="${i}" data-c="fecha"
+          style="width:auto;flex:0 0 130px;font-size:13px;padding:5px 9px">
+        <button type="button" class="sacar" data-qe="${i}" title="Quitar">&times;</button>
+      </div>
+      <div class="tres">
+        <div class="caja"><label>USAs al empezar</label>
+          <div class="fila"><input type="range" min="0" max="100" value="${e.ini}"
+            data-e="${i}" data-c="ini"><span class="v">${e.ini}</span></div></div>
+        <div class="caja"><label>USAs más altas</label>
+          <div class="fila"><input type="range" min="0" max="100" value="${e.max}"
+            data-e="${i}" data-c="max"><span class="v">${e.max}</span></div></div>
+        <div class="caja"><label>USAs al terminar</label>
+          <div class="fila"><input type="range" min="0" max="100" value="${e.fin}"
+            data-e="${i}" data-c="fin"><span class="v">${e.fin}</span></div></div>
+      </div>
+      <div class="caja" style="background:#f8fafc;border-radius:8px;padding:7px 10px;margin-top:9px">
+        <label style="display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;
+          color:var(--tinta-suave);margin-bottom:2px">Duración, en minutos</label>
+        <div class="fila" style="display:flex;align-items:center;gap:9px">
+          <input type="range" min="0" max="90" value="${e.minutos}" data-e="${i}" data-c="minutos"
+            style="flex:1"><span class="v" style="font-weight:700;min-width:44px;text-align:right">${e.minutos} min</span></div>
+      </div>
+      <div style="margin-top:10px">
+        <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;
+          color:var(--tinta-suave);margin-bottom:5px">Conductas de seguridad usadas</div>
+        <div class="chips">${SEGURIDAD.map(sg =>
+          `<button type="button" class="chip ${e.seguridad.indexOf(sg) >= 0 ? "activa" : ""}"
+            data-e="${i}" data-sg="${Kit.escapar(sg)}" style="font-size:12px;padding:4px 11px"
+            >${sg}</button>`).join("")}</div>
+      </div>
+      ${curva(e)}
+      ${dictamenEnsayo(e)}
+    </div>`;
+  }).join("");
+
+  $("ensayos").querySelectorAll("[data-c]").forEach(inp => {
+    const i = +inp.dataset.e, c = inp.dataset.c;
+    inp.addEventListener(c === "fecha" ? "input" : "change", () => {
+      ensayos[i][c] = c === "fecha" ? inp.value : +inp.value;
+      if(c !== "fecha") pintarEnsayos();
+      Kit.guardar();
+    });
+    if(c !== "fecha") inp.addEventListener("input", () => {
+      const v = inp.parentElement.querySelector(".v");
+      if(v) v.textContent = c === "minutos" ? inp.value + " min" : inp.value;
+    });
+  });
+  $("ensayos").querySelectorAll("button[data-sg]").forEach(b => {
+    const i = +b.dataset.e, sg = b.dataset.sg;
+    b.onclick = () => {
+      const l = ensayos[i].seguridad, p = l.indexOf(sg);
+      if(p >= 0) l.splice(p, 1); else l.push(sg);
+      pintarEnsayos();
+      Kit.guardar();
+    };
+  });
+  $("ensayos").querySelectorAll("button[data-qe]").forEach(b =>
+    b.onclick = () => quitarEnsayo(+b.dataset.qe));
+}
+
+function curva(e){
+  const px = v => 14 + v * 2.6;
+  const py = v => 84 - v * .68;
+  const pts = [[0, e.ini], [1, e.max], [2, e.fin]]
+    .map(([i, v]) => `${px(i * 12)},${py(v)}`).join(" ");
+  return `<svg class="curva" viewBox="0 0 120 100" role="img" aria-label="Curva del ensayo">
+    <line x1="14" y1="84" x2="112" y2="84" stroke="#dfe5e9"/>
+    <line x1="14" y1="16" x2="14" y2="84" stroke="#dfe5e9"/>
+    <polyline points="${pts}" fill="none" stroke="${colorUsa(e.max)}" stroke-width="2.5"
+      stroke-linejoin="round"/>
+    ${[[0, e.ini], [1, e.max], [2, e.fin]].map(([i, v]) =>
+      `<circle cx="${px(i * 12)}" cy="${py(v)}" r="3.4" fill="${colorUsa(v)}"/>`).join("")}
+    <text x="14" y="96" style="font:8px system-ui;fill:#9aa8b5">inicio</text>
+    <text x="52" y="96" style="font:8px system-ui;fill:#9aa8b5">pico</text>
+    <text x="92" y="96" style="font:8px system-ui;fill:#9aa8b5">final</text>
+  </svg>`;
+}
+
+function dictamenEnsayo(e){
+  const bajo = e.max - e.fin;
+  const proporcion = e.max ? bajo / e.max : 0;
+  if(e.seguridad.length >= 2)
+    return `<div class="dictamen-e" style="background:var(--alerta-fondo);color:var(--alerta)">
+      <b>${e.seguridad.length} conductas de seguridad.</b> Con ellas puestas, lo que el cuerpo
+      aprende no es que la situación era segura, sino que se sobrevivió <i>gracias a</i> ellas.
+      La ansiedad baja en el momento y la creencia queda intacta. Conviene repetir el mismo
+      peldaño retirando una sola por vez.</div>`;
+  if(e.minutos < 15)
+    return `<div class="dictamen-e" style="background:#fdf6e8;color:#8a6a2c">
+      <b>Ensayo corto (${e.minutos} min).</b> Salir antes de que la ansiedad baje sola refuerza la
+      evitación: el alivio de irse queda asociado a irse. El criterio no es el reloj sino la curva,
+      y conviene sostener hasta que las USAs bajen al menos a la mitad del pico.</div>`;
+  if(proporcion >= .4)
+    return `<div class="dictamen-e" style="background:var(--logro-fondo);color:var(--logro)">
+      <b>Habituación clara:</b> bajó ${bajo} puntos desde el pico sin conductas de seguridad. Este
+      peldaño se repite hasta que empiece por debajo de 30, y ahí se sube al siguiente.</div>`;
+  return `<div class="dictamen-e" style="background:#f6f9fb;color:#3f5163">
+    Bajó ${bajo} puntos desde el pico. Todavía no es habituación: conviene repetir el mismo
+    peldaño antes de subir, porque subir con este resultado suele terminar en abandono.</div>`;
+}
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  pintarEscalera();
+  dictamenEscalera();
+  const actual = $("peldanoEnsayo").value;
+  $("peldanoEnsayo").innerHTML = '<option value="">— elige un peldaño —</option>' +
+    ordenadas().map((s, i) => `<option value="${s.id}">${i + 1}. ${Kit.escapar(s.texto)} (${s.usa})</option>`).join("");
+  if(situaciones.some(s => s.id === actual)) $("peldanoEnsayo").value = actual;
+  pintarEnsayos();
+}
+
+function resumen(){
+  const l = [];
+  const ev = Kit.activas("queEvita");
+  if(ev.length) l.push("EVITACIÓN: " + ev.join(", "));
+  l.push("", `JERARQUÍA (${situaciones.length} peldaños)`);
+  ordenadas().forEach((s, i) => l.push(`${i + 1}. [${s.usa}] ${s.texto}`));
+
+  if(ensayos.length){
+    l.push("", `ENSAYOS (${ensayos.length})`);
+    ensayos.forEach(e => {
+      const s = situaciones.find(s => s.id === e.sit);
+      l.push(`- ${e.fecha} · ${s ? s.texto : "(peldaño eliminado)"}` +
+        `\n  USAs ${e.ini} → pico ${e.max} → ${e.fin}   ·   ${e.minutos} min` +
+        (e.seguridad.length ? `\n  Conductas de seguridad: ${e.seguridad.join(", ")}` : "\n  Sin conductas de seguridad"));
+    });
+  }
+  return l.join("\n");
+}
+
+Kit.chips("queEvita", EVITACIONES);
+$("nuevaSit").addEventListener("keydown", e => {
+  if(e.key === "Enter"){ e.preventDefault(); agregarSituacion(); }
+});
+
+Kit.iniciar({
+  clave: "tcc-escalera-de-exposicion",
+  extra: () => ({situaciones, ensayos, contador}),
+  restaurar: d => {
+    situaciones = d.situaciones || []; ensayos = d.ensayos || []; contador = d.contador || 0;
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});

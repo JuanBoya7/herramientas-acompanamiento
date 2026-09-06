@@ -1,0 +1,344 @@
+@@meta
+archivo: met-la-radio.html
+titulo: La radio que no se apaga
+orden: 09
+enfoque: Metáforas vivas
+etiqueta: Defusión
+sub: Hay una emisora que lleva años transmitiendo y no tiene botón de apagado. Aquí transmite de verdad, en voz de la pantalla, mientras hay que hacer una tarea sencilla al lado. El dial baja pero nunca llega a cero, y cuanto más se baja, más seguido habla. Lo que la hoja mide no es el silencio: es si la tarea se terminó con la radio encendida.
+fuente: Metáfora de la radio que no se apaga y del vecino indeseable, en Díaz Corbobés, MANUAL ACT §3.4 y §3.7, dentro del trabajo de defusión y disposición.
+resumen: La emisora habla sola mientras se hace una tarea de doce pasos al lado. Bajarle el volumen la vuelve más frecuente y apagarla la devuelve más fuerte. El marcador es la tarea terminada, no el silencio.
+campo3: Sesión
+campo3ph: Ej. Sesión 6
+@@css
+  button.arranque{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
+  button.arranque:hover{background:#28607c;border-color:#28607c}
+  button.apagar{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600}
+  button.apagar:hover{background:#763333;border-color:#763333}
+  .escenario > svg{max-width:660px}
+  .marcas div{min-width:96px}
+
+  .transmision{max-width:660px;margin:10px auto 0;height:104px;overflow:hidden;
+    border:1px solid var(--linea);border-radius:9px;background:#fbfcfd;padding:8px 12px;
+    display:flex;flex-direction:column;justify-content:flex-end}
+  .transmision .linea{color:#8a3d3d;line-height:1.4;margin:1px 0;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
+  .transmision .vacia{color:var(--tinta-suave);font-style:italic;font-size:13px}
+
+  .tarea{max-width:660px;margin:14px auto 0;border-top:1px dashed var(--linea);padding-top:13px}
+  .tarea .quehago{font-size:13.5px;color:var(--tinta-suave);margin-bottom:9px;text-align:center}
+  .tarea .quehago b{color:var(--tinta)}
+  .piedras{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  .piedra{border:1px solid var(--linea);border-radius:9px;background:#fdfefe;font:inherit;
+    font-size:15px;font-weight:700;color:var(--tinta-suave);padding:12px 0;cursor:pointer;
+    transition:background .12s,color .12s,border-color .12s,transform .12s}
+  .piedra:hover{border-color:var(--acento)}
+  .piedra.dada{background:#3f7d5a;border-color:#3f7d5a;color:#fff}
+  .piedra.toca{border-color:var(--acento);box-shadow:0 0 0 3px var(--acento-claro)}
+  .piedra.mal{animation:sacudida .3s}
+  @keyframes sacudida{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}
+    75%{transform:translateX(4px)}}
+  @media (max-width:560px){.piedras{grid-template-columns:repeat(4,1fr)}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Qué transmite tu emisora?</h2>
+  <p class="ayuda">Lo que suena todo el día de fondo, no lo más grave que se te ocurra.</p>
+  <div class="cuerpo">
+    <div class="chips" id="emisora"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>¿Qué ibas a hacer mientras tanto?</h2>
+  <div class="cuerpo">
+    <div class="chips" id="tarea"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="aparato" viewBox="0 0 660 150" role="img"
+    aria-label="Una radio encendida con su dial de volumen"></svg>
+  <div class="transmision" id="transmision"></div>
+
+  <div class="tarea">
+    <p class="quehago" id="quehago">Doce pasos, en orden, con la radio encendida.</p>
+    <div class="piedras" id="piedras"></div>
+  </div>
+
+  <div class="marcas">
+    <div><span class="n" id="mPasos" style="color:#3f7d5a">0/12</span><span class="r">pasos dados</span></div>
+    <div><span class="n" id="mReloj" style="color:#2f6f8f">0:00</span><span class="r">de tarea</span></div>
+    <div><span class="n" id="mApagones" style="color:#8a3d3d">0</span><span class="r">intentos de apagarla</span></div>
+    <div><span class="n" id="mDesvios" style="color:#c9962f">0</span><span class="r">veces que te desviaste</span></div>
+  </div>
+
+  <div class="medidor" style="max-width:420px;margin:14px auto 0">
+    <label for="volumen">Volumen</label>
+    <input type="range" id="volumen" min="3" max="10" value="6">
+    <span class="valor" id="vVolumen">6</span>
+  </div>
+
+  <div class="mandos">
+    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Encender y empezar</button>
+    <button type="button" class="apagar" id="btnApagar" onclick="apagar()">Apagar la radio</button>
+    <button type="button" onclick="reiniciar()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="cajaPregunta" hidden>
+  <div class="pregunta" id="pregunta"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const EMISORA = ["«No vas a poder»","«Esto no sirve de nada»","«Y si sale mal»",
+                 "«Mira cómo te está yendo»"];
+const TAREAS = ["Estudiar una hora","Mandar el correo","Salir a caminar","Hacer la llamada"];
+const PASOS = 12;
+
+let orden = [], siguiente = 1, apagones = 0, desvios = 0, tiempo = 0;
+let lineas = [], proxima = 0, silencio = 0, corriendo = false, termino = false;
+
+const emisora = () => Kit.activas("emisora");
+const laTarea = () => Kit.activas("tarea")[0] || "";
+const vol     = () => +$("volumen").value;
+/* Cuanto más se le baja, más seguido habla: el volumen no es la frecuencia. */
+const intervalo = () => 1.5 + (vol() - 3) * .23 + Math.random() * .9;
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  if(corriendo && !termino) tiempo += dt;
+
+  if(silencio > 0){
+    silencio -= dt;
+    if(silencio <= 0){
+      silencio = 0;
+      $("volumen").value = Math.min(10, vol() + 1);
+      valores();
+      Kit.brindis("Volvió sola, y un punto más fuerte.");
+      Kit.guardar();
+    }
+  } else if(corriendo && !termino){
+    proxima -= dt;
+    if(proxima <= 0){
+      const l = emisora();
+      if(l.length){
+        lineas.push({texto:l[Math.floor(Math.random() * l.length)], vol:vol()});
+        if(lineas.length > 14) lineas.shift();
+        pintarTransmision();
+      }
+      proxima = intervalo();
+    }
+  }
+
+  marcas();
+  dibujar();
+}
+
+/* ====================== EL APARATO ====================== */
+function dibujar(){
+  const svg = $("aparato");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t); return t;
+  };
+
+  g("rect", {x:0, y:0, width:660, height:150, fill:"#f6f8fa"});
+
+  /* la caja de la radio */
+  g("rect", {x:40, y:24, width:250, height:104, rx:12, fill:"#c9b291", stroke:"#a8916f",
+    "stroke-width":2});
+  g("rect", {x:54, y:38, width:104, height:44, rx:6, fill:"#3f4348"});
+  /* la aguja del dial, siempre corriendo por la banda */
+  const ax = 60 + ((tiempo * 9) % 92);
+  g("path", {d:`M${ax} 40 L${ax} 80`, stroke:"#e8c15a", "stroke-width":2.5});
+  for(let k = 0; k < 8; k++)
+    g("path", {d:`M${62 + k * 12} 74 L${62 + k * 12} 80`, stroke:"#7d858c", "stroke-width":1.4});
+  texto(106, 96, emisora().length ? "transmitiendo" : "sin emisora",
+    "font:600 10.5px system-ui;fill:#5a4a33");
+  /* la rejilla del parlante */
+  for(let f = 0; f < 5; f++)
+    for(let c = 0; c < 5; c++)
+      g("circle", {cx:186 + c * 18, cy:44 + f * 16, r:4, fill:"#a8916f"});
+  /* la perilla, girada según el volumen */
+  const ang = -130 + (vol() / 10) * 260;
+  g("circle", {cx:265, cy:104, r:15, fill:"#8a7457"});
+  g("path", {d:"M0 0 L0 -11", stroke:"#f6f8fa", "stroke-width":2.6,
+    transform:`translate(265,104) rotate(${ang})`, "stroke-linecap":"round"});
+  texto(265, 134, "vol " + vol(), "font:600 10.5px system-ui;fill:#8a7f74");
+
+  /* las ondas: más anchas con más volumen, y ninguna en el silencio */
+  const mudo = silencio > 0;
+  if(!mudo && corriendo)
+    for(let k = 1; k <= 4; k++){
+      const r = 26 + k * 22 + Math.sin(tiempo * 3 + k) * 3;
+      g("path", {d:`M${300} ${76 - r * .62} A ${r} ${r} 0 0 1 ${300} ${76 + r * .62}`,
+        stroke:"#8a3d3d", "stroke-width":2.4, fill:"none", "stroke-linecap":"round",
+        opacity:(Math.max(0, (vol() / 10) - (k - 1) * .2) * .8).toFixed(2)});
+    }
+  if(mudo)
+    texto(470, 80, "silencio…", "font:italic 15px system-ui;fill:#8a7f74");
+  else if(!corriendo)
+    texto(470, 80, "la radio está apagada, todavía",
+      "font:italic 14px system-ui;fill:#8a7f74");
+}
+
+function pintarTransmision(){
+  const caja = $("transmision");
+  if(!lineas.length){
+    caja.innerHTML = `<div class="vacia">La emisora todavía no ha empezado a transmitir.</div>`;
+    return;
+  }
+  caja.innerHTML = lineas.map((l, i) => {
+    const viejo = lineas.length - 1 - i;
+    const op = Math.max(.22, 1 - viejo * .16);
+    const tam = 11.5 + l.vol * .85;
+    return `<div class="linea" style="opacity:${op.toFixed(2)};font-size:${tam.toFixed(1)}px">` +
+           Kit.escapar(l.texto) + `</div>`;
+  }).join("");
+}
+
+/* ====================== LA TAREA ====================== */
+function barajar(){
+  orden = [];
+  for(let i = 1; i <= PASOS; i++) orden.push(i);
+  for(let i = orden.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [orden[i], orden[j]] = [orden[j], orden[i]];
+  }
+}
+
+function pintarPiedras(){
+  $("piedras").innerHTML = orden.map(n =>
+    `<button type="button" class="piedra${n < siguiente ? " dada" : ""}` +
+    `${n === siguiente && corriendo ? " toca" : ""}" data-n="${n}">${n}</button>`).join("");
+  $("piedras").querySelectorAll("button[data-n]").forEach(b => {
+    b.addEventListener("click", () => pisar(+b.getAttribute("data-n"), b));
+  });
+  const t = laTarea();
+  $("quehago").innerHTML = t
+    ? `Doce pasos de <b>${Kit.escapar(t)}</b>, en orden, con la radio encendida.`
+    : "Doce pasos, en orden, con la radio encendida.";
+}
+
+function pisar(n, boton){
+  if(!corriendo || termino) return;
+  if(n === siguiente){
+    siguiente++;
+    if(siguiente > PASOS) terminar();
+    pintarPiedras();
+  } else if(n > siguiente){
+    desvios++;
+    boton.classList.add("mal");
+    setTimeout(() => boton.classList.remove("mal"), 320);
+  }
+  marcas();
+  Kit.guardar();
+}
+
+/* ====================== ACCIONES ====================== */
+function arrancar(){
+  if(!emisora().length){ Kit.brindis("Marca primero qué transmite tu emisora"); return; }
+  if(termino){ Kit.brindis("Ya terminaste. Reinicia si quieres repetirlo."); return; }
+  corriendo = true;
+  proxima = .6;
+  escena.andar();
+  pintarPiedras();
+  botones();
+  Kit.guardar();
+}
+
+/* No apaga: la silencia dos segundos y vuelve un punto más fuerte. */
+function apagar(){
+  if(!corriendo){ Kit.brindis("Enciéndela primero"); return; }
+  apagones++;
+  silencio = 2;
+  marcas();
+  Kit.guardar();
+}
+
+function terminar(){
+  termino = true;
+  corriendo = false;
+  escena.parar();
+  botones();
+  Kit.brindis("Terminaste, y la radio nunca se apagó.");
+  preguntar();
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  siguiente = 1; apagones = 0; desvios = 0; tiempo = 0;
+  lineas = []; proxima = 0; silencio = 0; corriendo = false; termino = false;
+  barajar();
+  refrescar();
+  Kit.guardar();
+}
+
+function botones(){
+  $("btnArrancar").disabled = corriendo || termino;
+  $("btnApagar").disabled = !corriendo;
+}
+
+function valores(){ $("vVolumen").textContent = vol(); }
+
+function marcas(){
+  $("mPasos").textContent    = (siguiente - 1) + "/" + PASOS;
+  $("mReloj").textContent    = Math.floor(tiempo / 60) + ":" +
+                               String(Math.floor(tiempo % 60)).padStart(2, "0");
+  $("mApagones").textContent = apagones;
+  $("mDesvios").textContent  = desvios;
+}
+
+function refrescar(){
+  if(!orden.length) barajar();
+  valores();
+  botones();
+  marcas();
+  pintarPiedras();
+  pintarTransmision();
+  dibujar();
+  preguntar();
+}
+
+function preguntar(){
+  $("cajaPregunta").hidden = !termino;
+  if(!termino) return;
+  $("pregunta").textContent = apagones > 0
+    ? `La apagaste ${apagones} ${apagones === 1 ? "vez" : "veces"} y volvió más fuerte, y aun así terminaste los doce pasos. ¿Qué de esto ya lo has vivido?`
+    : "Terminaste los doce con la radio encendida todo el tiempo. ¿Qué estabas esperando que pasara primero, allá afuera?";
+}
+
+function resumen(){
+  const l = [];
+  l.push("LA EMISORA");
+  l.push(emisora().length ? emisora().join(" · ") : "(sin marcar)");
+  l.push("LA TAREA: " + (laTarea() || "(sin elegir)"));
+  l.push("", `CON LA RADIO ENCENDIDA: ${siguiente - 1} de ${PASOS} pasos en ` +
+             `${Math.floor(tiempo / 60)}:${String(Math.floor(tiempo % 60)).padStart(2, "0")}, ` +
+             `${apagones} intentos de apagarla, ${desvios} desvíos.`);
+  l.push("Volumen final: " + vol() + " de 10 (el mínimo posible es 3).");
+  l.push("Terminó la tarea: " + (termino ? "sí" : "no"));
+  if(termino) l.push("", "PREGUNTA QUE QUEDÓ ABIERTA", $("pregunta").textContent);
+  return l.join("\n");
+}
+
+Kit.chips("emisora", EMISORA, refrescar);
+Kit.chips("tarea", TAREAS, pintarPiedras);
+$("volumen").addEventListener("input", () => { valores(); dibujar(); });
+
+Kit.iniciar({
+  clave: "met-la-radio",
+  extra: () => ({orden, siguiente, apagones, desvios, tiempo, termino}),
+  restaurar: d => {
+    orden = (d.orden && d.orden.length === PASOS) ? d.orden : [];
+    siguiente = d.siguiente || 1; apagones = d.apagones || 0;
+    desvios = d.desvios || 0; tiempo = d.tiempo || 0; termino = !!d.termino;
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});

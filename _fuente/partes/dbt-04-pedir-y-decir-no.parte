@@ -1,0 +1,417 @@
+@@meta
+archivo: dbt-pedir-y-decir-no.html
+titulo: Pedir y decir que no
+orden: 04
+enfoque: DBT
+etiqueta: Efectividad interpersonal
+lamina: si
+sub: Toda conversación difícil pone en juego tres cosas: el objetivo, la relación y el autorrespeto. Rara vez se pueden las tres, y de cuál va primero depende qué habilidad manda. Se ordenan, se calibra cuán fuerte pedir, y sale un guion para ensayar.
+fuente: Habilidades de efectividad interpersonal, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 8, fichas de efectividad interpersonal 4 a 8.
+resumen: Se ordenan objetivo, relación y autorrespeto, se calibra la intensidad con los diez factores de la ficha EI 8 y se arma un guion DEAR MAN imprimible con capas de AVES y VIDA.
+@@css
+  .modo-conv{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+  .modo-conv button{font-size:14.5px;padding:9px 20px;border-radius:9px;border:1px solid var(--linea);
+    background:#fdfefe;cursor:pointer}
+  .modo-conv button.activo{background:var(--acento);border-color:var(--acento);color:#fff;
+    font-weight:600}
+
+  .factor{border:1px solid var(--linea);border-radius:9px;padding:10px 13px;background:#fdfefe;
+    display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-bottom:7px}
+  .factor .q{font-size:13.5px;line-height:1.45}
+  .factor .q b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--acento);margin-bottom:2px}
+  .siono{display:flex;gap:6px;flex:0 0 auto}
+  .siono button{font-size:12.5px;padding:5px 16px;border-radius:999px;border:1px solid var(--linea);
+    background:#fdfefe;color:var(--tinta-suave);cursor:pointer}
+  .siono button.marcado{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+
+  .dial{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:18px 22px;margin:16px 0}
+  .dial .cifra{text-align:center;font-size:46px;font-weight:700;line-height:1;color:var(--acento);
+    font-variant-numeric:tabular-nums}
+  .dial .quehacer{text-align:center;font-size:16px;font-weight:600;margin-top:6px}
+  .dial .barra{height:12px;border-radius:6px;background:linear-gradient(90deg,#b9c6d2,#2f6f8f);
+    margin:14px 0 6px;position:relative}
+  .dial .marca{position:absolute;top:-5px;width:5px;height:22px;border-radius:3px;
+    background:var(--tinta);box-shadow:0 0 0 3px #fff;transition:left .2s}
+  .dial .extremos{display:flex;justify-content:space-between;font-size:11.5px;
+    color:var(--tinta-suave)}
+
+  .letra-guion{border:1px solid var(--linea);border-left-width:5px;border-radius:9px;
+    padding:12px 15px;margin-bottom:9px;background:#fdfefe}
+  .letra-guion .cabeza{display:flex;align-items:baseline;gap:11px;margin-bottom:3px}
+  .letra-guion .l{width:27px;height:27px;border-radius:7px;color:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:0 0 auto}
+  .letra-guion h4{margin:0;font-size:15px}
+  .letra-guion .comose{margin:4px 0 9px;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
+  .letra-guion .chip{font-size:12.5px;padding:5px 12px}
+
+  .capa{border:1px solid var(--linea);border-radius:10px;padding:13px 16px;margin-bottom:11px}
+  .capa.aves{border-left:5px solid #4aa070}
+  .capa.vida{border-left:5px solid #8171b4}
+  .capa h4{margin:0 0 3px;font-size:15px}
+  .capa .sigla{font-size:12px;color:var(--tinta-suave);margin-bottom:9px}
+
+  .guion-final{border:2px solid var(--tinta);border-radius:12px;padding:18px 22px;background:#fff}
+  .guion-final .cab{border-bottom:2px solid var(--tinta);padding-bottom:7px;margin-bottom:12px;
+    font-size:15px;font-weight:700;letter-spacing:.3px}
+  .guion-final .linea{margin-bottom:10px;font-size:14.5px;line-height:1.55}
+  .guion-final .linea b{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;
+    color:var(--acento);margin-bottom:2px}
+  .guion-final .pie{border-top:1px dashed var(--linea);padding-top:9px;margin-top:12px;
+    font-size:12px;color:var(--tinta-suave);line-height:1.5}
+  @media (max-width:620px){.factor{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Qué conversación es?</h2>
+  <div class="cuerpo">
+    <div class="modo-conv" id="modoConv">
+      <button type="button" data-m="pedir" class="activo">Voy a pedir algo</button>
+      <button type="button" data-m="negar">Voy a decir que no</button>
+    </div>
+    <label class="etiqueta">La situación</label>
+    <div class="chips" id="situacion"></div>
+    <details class="apunte">
+      <summary>Apuntarla en una línea (opcional)</summary>
+      <input type="text" id="situacionNota" placeholder="Con quién y sobre qué.">
+    </details>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>¿Qué va primero?</h2>
+  <p class="ayuda">El orden decide qué habilidad manda: DEAR MAN si va primero el objetivo, AVES
+  si va la relación, VIDA si va el autorrespeto.</p>
+  <p class="pista-arrastre">Arrastra cada una a su lugar. En el celular, tócala.</p>
+  <div class="cuerpo">
+    <div class="ranuras" id="prioridades"></div>
+    <div style="margin-top:14px"><div id="bancoPrioridades"></div></div>
+    <div id="lecturaPrioridad"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Cuán intensamente</h2>
+  <p class="ayuda">Los diez factores de la ficha EI 8. Cada sí empuja hacia pedir con más fuerza;
+  cada no, hacia ceder. No es tener razón: es calibrar cuánta insistencia corresponde.</p>
+  <div class="cuerpo">
+    <div id="factores"></div>
+  </div>
+</section>
+
+<div class="dial">
+  <div class="cifra" id="cifraDial">5</div>
+  <div class="quehacer" id="queHacer"></div>
+  <div class="barra"><div class="marca" id="marcaDial"></div></div>
+  <div class="extremos">
+    <span id="extIzq">No pedir nada</span>
+    <span id="extDer">Insistir con firmeza</span>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">4</span>El guion: DEAR MAN</h2>
+  <p class="ayuda">Describir · Expresar · ser Asertivo · Reforzar · Mantener tu posición ·
+  Aparentar estar seguro · Negociar. Una plantilla por letra, para ensayar, no para leer.</p>
+  <div class="cuerpo"><div id="dearman"></div></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">5</span>Las dos capas</h2>
+  <div class="cuerpo">
+    <div class="capa aves">
+      <h4>AVES · para cuidar la relación</h4>
+      <div class="sigla">Amable · Validar · Estilo relajado · Suave. Ficha EI 6.</div>
+      <div class="chips" id="aves"></div>
+    </div>
+    <div class="capa vida">
+      <h4>VIDA · para cuidar el autorrespeto</h4>
+      <div class="sigla">Ser Válido para ti · sin Interpretar de más · Directo con tus valores ·
+        Auténtico, sin disculpas de más. Ficha EI 7.</div>
+      <div class="chips" id="vida"></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">6</span>El guion para ensayar</h2>
+  <p class="ayuda">Se arma con lo elegido. Conviene ensayarlo dos veces antes de cerrar, y una de
+  ellas con la peor respuesta posible enfrente.</p>
+  <div class="cuerpo">
+    <div class="guion-final" id="guionFinal"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+let modo = "pedir";
+
+const SITUACIONES_PEDIR = ["Pedir más plazo","Pedir ayuda con algo que no sé hacer",
+  "Pedir que me devuelvan algo","Pedir un cambio de horario","Pedir plata prestada",
+  "Pedir que me escuchen","Pedir tiempo a solas","Pedir una cita","Pedir que cumplan un acuerdo"];
+const SITUACIONES_NEGAR = ["Decir que no a hacerme cargo de algo","Decir que no a un favor",
+  "Decir que no a salir","Decir que no a prestar plata","Decir que no a más responsabilidades",
+  "Decir que no a una relación","Decir que no a un plan familiar","Poner un límite en la casa"];
+
+const PRIORIDADES = [
+ {id:"obj", titulo:"El objetivo",     desc:"Conseguir lo que pido o sostener mi negativa. Manda DEAR MAN."},
+ {id:"rel", titulo:"La relación",     desc:"Que la otra persona quede bien conmigo después. Manda AVES."},
+ {id:"aut", titulo:"El autorrespeto", desc:"Sentirme bien conmigo por cómo actué. Manda VIDA."}
+];
+
+/* Los diez factores de la ficha EI 8. El texto cambia según se pida o se niegue. */
+const FACTORES = [
+ {id:"f1", t:"Capacidad",   pedir:"¿La otra persona tiene lo que necesito?",
+                            negar:"¿No tengo lo que me están pidiendo?"},
+ {id:"f2", t:"Prioridades", pedir:"¿Mi objetivo es más importante que la relación en este caso?",
+                            negar:"¿Mi objetivo es más importante que la relación en este caso?"},
+ {id:"f3", t:"Autorrespeto",pedir:"¿Pedirlo me hace sentir competente y no mendigando?",
+                            negar:"¿Negarme me hace sentir bien conmigo y no culpable?"},
+ {id:"f4", t:"Derechos",    pedir:"¿Tengo derecho a esto por norma, ley o acuerdo?",
+                            negar:"¿Tengo derecho a negarme por norma, ley o acuerdo?"},
+ {id:"f5", t:"Autoridad",   pedir:"¿Es esta persona la responsable de decidirlo?",
+                            negar:"¿Esta persona no tiene autoridad para exigírmelo?"},
+ {id:"f6", t:"Relación",    pedir:"¿Lo que pido es apropiado para el tipo de relación que tenemos?",
+                            negar:"¿Negarme es apropiado para el tipo de relación que tenemos?"},
+ {id:"f7", t:"Largo plazo", pedir:"A la larga, ¿es mejor pedir que quedarme callado?",
+                            negar:"A la larga, ¿es mejor negarme que ceder otra vez?"},
+ {id:"f8", t:"Dar y recibir",pedir:"¿He dado lo suficiente en esta relación como para pedir?",
+                            negar:"¿Le debo algo a esta persona que me obligue a decir que sí?",
+                            invertido:true},
+ {id:"f9", t:"Preparación", pedir:"¿Tengo claros los hechos y sé qué voy a pedir exactamente?",
+                            negar:"¿Tengo claro lo que puedo y lo que no puedo hacer?"},
+ {id:"f10",t:"Momento",     pedir:"¿Es un buen momento para pedirlo?",
+                            negar:"¿Es un buen momento para decirlo?"}
+];
+
+const DEARMAN = [
+ {l:"D", n:"Describir", color:"#5f77b8",
+  como:"Los hechos, sin interpretación y sin adjetivos. Nada que la otra persona pueda discutir.",
+  plantillas:["«Esta es la tercera vez que…»","«Quedamos en que… y no pasó»",
+    "«El viernes te pedí… y todavía no…»","«El otro día dijiste que…»"]},
+ {l:"E", n:"Expresar", color:"#c05c78",
+  como:"Cómo te sientes o qué opinas, en primera persona. No asumas que el otro lo sabe.",
+  plantillas:["«Me preocupa que…»","«Me siento incómodo cuando…»","«Para mí es importante que…»",
+    "«Me da rabia, y prefiero decirlo antes de que crezca»"]},
+ {l:"A", n:"ser Asertivo", color:"#c9962f",
+  como:"Pide lo que quieres, o di que no, claramente. Sin rodeos y sin esperar que lo adivinen.",
+  plantillas:["«Te pido que…»","«Necesito que…»","«No voy a poder hacerlo»",
+    "«Prefiero que no»","«¿Podrías…?»"]},
+ {l:"R", n:"Reforzar", color:"#4aa070",
+  como:"Explica qué gana la otra persona, o agradece de antemano. Que ceder le convenga.",
+  plantillas:["«Si lo hacemos así, los dos…»","«Te lo agradecería mucho»",
+    "«Así no tenemos que volver sobre esto»","«Me ayudarías bastante»"]},
+ {l:"M", n:"Mantener tu posición", color:"#8171b4",
+  como:"El disco rayado: repetir lo mismo, con las mismas palabras, sin subir el tono.",
+  plantillas:["«Entiendo, y sigo necesitando…»","«Puede ser, y aun así no voy a poder»",
+    "«Ya lo pensé, y mi respuesta es la misma»"]},
+ {l:"A", n:"Aparentar estar seguro", color:"#3f83a6",
+  como:"Voz firme, contacto visual, sin susurrar y sin disculparse por existir. Aunque por dentro tiemble.",
+  plantillas:["Voz a volumen normal, sin acelerarme","Mirar a los ojos al decirlo",
+    "No empezar con «perdón que moleste»","No terminar la frase hacia arriba"]},
+ {l:"N", n:"Negociar", color:"#a8834e",
+  como:"Ofrece alternativas, o pregúntale al otro qué propone. Estar dispuesto a dar para recibir.",
+  plantillas:["«¿Qué te parecería si…?»","«¿Cómo lo resolvemos?»","«Puedo hacer esto otro a cambio»",
+    "«¿Qué se te ocurre a ti?»"]}
+];
+
+const AVES = ["Ser amable: sin ataques ni amenazas","Validar lo que el otro siente o necesita",
+  "Estilo relajado: sonreír, aflojar el cuerpo","Ser suave: sin exigir, sin juzgar"];
+const VIDA = ["Ser válido para mí: no ceder para caer bien","No interpretar de más lo que el otro dice",
+  "Ser directo con lo que valoro","No disculparme de más por pedir o negarme"];
+
+let respF = {}, prioridad;
+
+/* ====================== ARMADO ====================== */
+function pintarSituaciones(){
+  Kit.chips("situacion", modo === "pedir" ? SITUACIONES_PEDIR : SITUACIONES_NEGAR);
+}
+function pintarFactores(){
+  $("factores").innerHTML = FACTORES.map(f => `
+    <div class="factor">
+      <div class="q"><b>${f.t}</b>${f[modo]}</div>
+      <div class="siono">
+        <button type="button" data-f="${f.id}" data-r="si">Sí</button>
+        <button type="button" data-f="${f.id}" data-r="no">No</button>
+      </div>
+    </div>`).join("");
+  $("factores").querySelectorAll("button[data-f]").forEach(b => {
+    b.onclick = () => {
+      const id = b.dataset.f;
+      respF[id] = respF[id] === b.dataset.r ? null : b.dataset.r;
+      pintarRespF();
+      refrescar();
+      Kit.guardar();
+    };
+  });
+  pintarRespF();
+}
+function pintarRespF(){
+  $("factores").querySelectorAll("button[data-f]").forEach(b =>
+    b.classList.toggle("marcado", respF[b.dataset.f] === b.dataset.r));
+}
+
+$("dearman").innerHTML = DEARMAN.map((d, i) => `
+  <div class="letra-guion" style="border-left-color:${d.color}">
+    <div class="cabeza">
+      <span class="l" style="background:${d.color}">${d.l}</span>
+      <h4>${d.n}</h4>
+    </div>
+    <p class="comose">${d.como}</p>
+    <div class="chips" id="dm-${i}"></div>
+    <details class="apunte">
+      <summary>Completar la frase (opcional)</summary>
+      <input type="text" id="dmTexto-${i}" placeholder="Lo que va después de la plantilla.">
+    </details>
+  </div>`).join("");
+DEARMAN.forEach((d, i) => Kit.chips("dm-" + i, d.plantillas, armarGuion));
+
+Kit.chips("aves", AVES, armarGuion);
+Kit.chips("vida", VIDA, armarGuion);
+
+$("modoConv").querySelectorAll("button").forEach(b => {
+  b.onclick = () => {
+    modo = b.dataset.m;
+    $("modoConv").querySelectorAll("button").forEach(x => x.classList.toggle("activo", x === b));
+    pintarSituaciones();
+    pintarFactores();
+    refrescar();
+    Kit.guardar();
+  };
+});
+
+prioridad = Kit.mostrador({
+  bancoId:"bancoPrioridades", ranurasId:"prioridades", cupo:3, items:PRIORIDADES,
+  etiquetas:["Lo que más importa aquí","Lo segundo","Lo que puedo ceder"],
+  alCambiar: refrescar
+});
+
+/* ====================== DIAL ====================== */
+function intensidad(){
+  let n = 0, contestados = 0;
+  FACTORES.forEach(f => {
+    if(!respF[f.id]) return;
+    contestados++;
+    const favorable = f.invertido ? respF[f.id] === "no" : respF[f.id] === "si";
+    if(favorable) n++;
+  });
+  return {n, contestados};
+}
+
+const QUE_HACER = {
+  pedir: ["No pedir. Dejarlo pasar por ahora.","Insinuarlo indirectamente; aceptar un no.",
+    "Preguntar con delicadeza; aceptar un no.","Preguntar con tacto; aceptar un no.",
+    "Pedirlo con claridad; aceptar un no.","Pedirlo con claridad; insistir un poco.",
+    "Pedirlo con firmeza; resistir un no.","Pedirlo con firmeza; insistir.",
+    "Insistir con firmeza; negociar.","Insistir, negociar, no aceptar un no fácil.",
+    "Pedirlo con toda la firmeza. No aceptar un no."],
+  negar: ["Hacerlo de buena gana. No decir que no.","Hacerlo aunque no tenga ganas.",
+    "Hacerlo, dejando ver que cuesta.","Aceptar a regañadientes; mostrar reservas.",
+    "Decir que preferiría no; hacerlo si insisten.","Decir que no, pero ceder si insisten.",
+    "Decir que no con claridad; ceder solo si hay buen argumento.",
+    "Decir que no con firmeza; resistir la insistencia.",
+    "Decir que no con firmeza; no negociar el fondo.",
+    "Decir que no rotundamente; no ceder.","No hacerlo. No ceder de ninguna manera."]
+};
+
+function refrescar(){
+  const {n, contestados} = intensidad();
+  $("cifraDial").textContent = contestados ? n : "—";
+  $("marcaDial").style.left = `calc(${n * 10}% - 2px)`;
+  $("queHacer").textContent = contestados < 4
+    ? "Contesta al menos cuatro factores para que el dial signifique algo."
+    : QUE_HACER[modo][n];
+  $("extIzq").textContent = modo === "pedir" ? "No pedir nada" : "Hacerlo de buena gana";
+  $("extDer").textContent = modo === "pedir" ? "Insistir con firmeza" : "No ceder de ninguna manera";
+
+  const orden = prioridad ? prioridad.elegidas() : [];
+  $("lecturaPrioridad").innerHTML = orden.length < 3
+    ? `<div class="velo" style="margin-top:12px">Coloca las tres para saber qué habilidad manda.</div>`
+    : (() => {
+        const primera = orden[0].id;
+        const texto = {
+          obj: "Manda <b>DEAR MAN</b>. El guion tiene que ser claro y sostenido; AVES y VIDA entran como capas, no como el eje. Ojo: cuando el objetivo va primero de forma sostenida en relaciones importantes, conviene revisar el costo relacional que se está aceptando.",
+          rel: "Manda <b>AVES</b>. Aquí el guion se suaviza y se valida más de lo que se pide. Es la elección correcta cuando la relación vale más que el asunto concreto, y la incorrecta cuando se elige por miedo a la reacción del otro. La diferencia se conversa, no se deduce.",
+          aut: "Manda <b>VIDA</b>. Lo que está en juego es cómo va a quedar la persona consigo misma. Suele ser la prioridad correcta cuando hay historia de ceder sistemáticamente, y ahí el objetivo concreto importa menos que el precedente que se sienta."
+        }[primera];
+        return `<div class="pistas" style="margin-top:12px">${texto}</div>`;
+      })();
+
+  armarGuion();
+}
+
+/* ====================== GUION ====================== */
+function armarGuion(){
+  const lineas = DEARMAN.map((d, i) => {
+    const pl = Kit.activas("dm-" + i), tx = $("dmTexto-" + i).value.trim();
+    if(!pl.length && !tx) return "";
+    return `<div class="linea"><b>${d.l} · ${d.n}</b>${Kit.escapar(
+      [pl.join(" / "), tx].filter(Boolean).join(" "))}</div>`;
+  }).filter(Boolean).join("");
+
+  const av = Kit.activas("aves"), vi = Kit.activas("vida");
+  const capas = (av.length || vi.length)
+    ? `<div class="pie">
+        ${av.length ? `<b>Cuidando la relación:</b> ${Kit.escapar(av.join(" · "))}<br>` : ""}
+        ${vi.length ? `<b>Cuidando el autorrespeto:</b> ${Kit.escapar(vi.join(" · "))}` : ""}
+       </div>` : "";
+
+  const {n, contestados} = intensidad();
+  const sit = Kit.activas("situacion");
+  $("guionFinal").innerHTML = lineas
+    ? `<div class="cab">${modo === "pedir" ? "GUION PARA PEDIR" : "GUION PARA DECIR QUE NO"}${
+        sit.length ? " — " + Kit.escapar(sit[0]) : ""}</div>
+       ${lineas}
+       ${contestados >= 4 ? `<div class="linea"><b>Intensidad calibrada</b>${n}/10 · ${
+         QUE_HACER[modo][n]}</div>` : ""}
+       ${capas}`
+    : `<div class="velo">Elige plantillas en el paso 4 y el guion se arma solo.</div>`;
+}
+
+function resumen(){
+  const l = [];
+  l.push("CONVERSACIÓN: " + (modo === "pedir" ? "pedir algo" : "decir que no"));
+  const sit = Kit.activas("situacion");
+  if(sit.length) l.push("Situación: " + sit.join(", "));
+  if($("situacionNota").value.trim()) l.push("  " + $("situacionNota").value.trim());
+
+  const orden = prioridad ? prioridad.elegidas() : [];
+  if(orden.length) l.push("", "PRIORIDADES: " + orden.map((p, i) => `${i + 1}. ${p.titulo}`).join("  "));
+
+  const {n, contestados} = intensidad();
+  l.push("", `DIAL DE INTENSIDAD: ${n}/10 con ${contestados} factores contestados`);
+  if(contestados >= 4) l.push("Recomendación: " + QUE_HACER[modo][n]);
+  FACTORES.forEach(f => {
+    if(respF[f.id]) l.push(`  - ${f.t}: ${respF[f.id] === "si" ? "sí" : "no"}`);
+  });
+
+  l.push("", "GUION DEAR MAN");
+  DEARMAN.forEach((d, i) => {
+    const pl = Kit.activas("dm-" + i), tx = $("dmTexto-" + i).value.trim();
+    if(pl.length || tx) l.push(`${d.l} · ${d.n}: ${[pl.join(" / "), tx].filter(Boolean).join(" ")}`);
+  });
+  const av = Kit.activas("aves"), vi = Kit.activas("vida");
+  if(av.length) l.push("", "AVES: " + av.join(" · "));
+  if(vi.length) l.push("VIDA: " + vi.join(" · "));
+  return l.join("\n");
+}
+
+pintarSituaciones();
+pintarFactores();
+DEARMAN.forEach((d, i) => $("dmTexto-" + i).addEventListener("input", armarGuion));
+
+Kit.iniciar({
+  clave: "dbt-pedir-y-decir-no",
+  extra: () => ({modo, respF, prioridades: prioridad ? prioridad.ids() : []}),
+  restaurar: d => {
+    modo = d.modo || "pedir";
+    respF = d.respF || {};
+    $("modoConv").querySelectorAll("button").forEach(b =>
+      b.classList.toggle("activo", b.dataset.m === modo));
+    pintarSituaciones();
+    pintarFactores();
+    if(d.prioridades && prioridad) prioridad.cargar(d.prioridades);
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});

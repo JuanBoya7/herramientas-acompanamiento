@@ -1,0 +1,309 @@
+@@meta
+archivo: met-la-palabra-repetida.html
+titulo: La palabra repetida
+orden: 08
+enfoque: Metáforas vivas
+etiqueta: Defusión
+sub: Una palabra dicha en voz alta, una y otra vez, cada vez más rápido, durante cuarenta y cinco segundos. Al final deja de significar y queda solo el sonido. Primero se prueba con una palabra cualquiera, para ver el efecto donde no duele. Después con la que pesa, y se compara cuánto pesaba antes y cuánto pesa al terminar.
+fuente: Ejercicio clásico de repetición de Titchener, usado en defusión cognitiva; en Díaz Corbobés, MANUAL ACT §3.4, dentro de las técnicas para desliteralizar el lenguaje.
+resumen: La palabra se repite en pantalla acelerando hasta perder el significado. Se calibra antes y después cuánto pesa y cuánto suena a verdad, y la diferencia queda a la vista sin que nadie la explique.
+campo3: Sesión
+campo3ph: Ej. Sesión 6
+@@css
+  button.arranque{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
+  button.arranque:hover{background:#28607c;border-color:#28607c}
+  .escenario > svg{max-width:660px}
+  .marcas div{min-width:100px}
+  .guion p{margin:0 0 9px;font-size:14.5px;line-height:1.55}
+  .antesDespues{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+  .antesDespues .caja{border:1px solid var(--linea);border-radius:10px;padding:13px 15px}
+  .antesDespues .caja.antes{border-left:5px solid #8a3d3d;background:#fdfaf9}
+  .antesDespues .caja.despues{border-left:5px solid #3f7d5a;background:#f7fbf9}
+  .antesDespues h3{margin:0 0 10px;font-size:14.5px}
+  .antesDespues .medidor{margin-bottom:10px}
+  .antesDespues .medidor:last-child{margin-bottom:0}
+  .antesDespues .medidor label{flex:1 1 130px}
+  .caja.despues .valor{color:#3f7d5a}
+  @media (max-width:620px){.antesDespues{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La palabra</h2>
+  <p class="ayuda">Una sola, y corta. La que aparece cuando te describes a ti mismo en el peor
+  momento del día.</p>
+  <div class="cuerpo">
+    <div class="chips" id="palabra"></div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">2</span>Cómo se hace</h2>
+  <div class="cuerpo guion">
+    <p>Se dice en voz alta, al ritmo que marca la pantalla, sin parar, hasta que se acabe el
+    tiempo. En voz alta de verdad: si se dice por dentro no ocurre.</p>
+    <p>El primer turno es con una palabra cualquiera, para ver qué pasa donde no duele. El segundo
+    es con la tuya.</p>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="lienzo" viewBox="0 0 660 230" role="img"
+    aria-label="La palabra repitiéndose cada vez más rápido"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#2f6f8f">0:45</span><span class="r">quedan</span></div>
+    <div><span class="n" id="mVeces" style="color:#3f7d5a">0</span><span class="r">veces dicha</span></div>
+    <div><span class="n" id="mRitmo" style="color:#c9962f">0</span><span class="r">por segundo</span></div>
+  </div>
+  <div class="duracion" id="turnos">
+    <button type="button" class="chip activa" id="tEnsayo">Turno con «limón»</button>
+    <button type="button" class="chip" id="tPropia">Turno con mi palabra</button>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" onclick="reiniciar()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">3</span>Cuánto pesa</h2>
+  <p class="ayuda">Lo de la derecha se llena al terminar el turno con tu palabra.</p>
+  <div class="cuerpo">
+    <div class="antesDespues">
+      <div class="caja antes">
+        <h3>Antes</h3>
+        <div class="medidor">
+          <label for="pesaAntes">Cuánto te pesa</label>
+          <input type="range" id="pesaAntes" min="0" max="10" value="7">
+          <span class="valor" id="vPesaAntes">7</span>
+        </div>
+        <div class="medidor">
+          <label for="verdadAntes">Cuánto suena a verdad</label>
+          <input type="range" id="verdadAntes" min="0" max="10" value="7">
+          <span class="valor" id="vVerdadAntes">7</span>
+        </div>
+      </div>
+      <div class="caja despues" id="cajaDespues" hidden>
+        <h3>Al terminar</h3>
+        <div class="medidor">
+          <label for="pesaDespues">Cuánto te pesa</label>
+          <input type="range" id="pesaDespues" min="0" max="10" value="7">
+          <span class="valor" id="vPesaDespues">7</span>
+        </div>
+        <div class="medidor">
+          <label for="verdadDespues">Cuánto suena a verdad</label>
+          <input type="range" id="verdadDespues" min="0" max="10" value="7">
+          <span class="valor" id="vVerdadDespues">7</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola" id="cajaPregunta" hidden>
+  <div class="pregunta" id="pregunta"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const PALABRAS = ["Inútil","Débil","Fracasado","Insuficiente"];
+const NEUTRA = "limón";
+const DUR = 45;
+const LENTO = 1.3, RAPIDO = 4;   /* veces por segundo, al principio y al final */
+
+let ronda = "ensayo", t = 0, veces = 0, pulso = 0, acumula = 0;
+let ecos = [], corriendo = false, hechaLaPropia = false;
+
+const marcada = () => Kit.activas("palabra")[0] || "";
+const palabra = () => ronda === "ensayo" ? NEUTRA : (marcada() || "tu palabra");
+const ritmo   = () => LENTO + (RAPIDO - LENTO) * Math.min(1, t / DUR);
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  if(corriendo){
+    t = Math.min(DUR, t + dt);
+    acumula += ritmo() * dt;
+    while(acumula >= 1){
+      acumula -= 1;
+      veces++;
+      pulso = 1;
+      /* cada vez que se dice, queda un eco que se va */
+      ecos.push({x:120 + Math.random() * 420, y:40 + Math.random() * 150,
+                 vx:(Math.random() - .5) * 70, vy:(Math.random() - .5) * 50,
+                 rot:(Math.random() - .5) * 26, t:0,
+                 esc:.42 + Math.random() * .34});
+    }
+    if(t >= DUR) terminar();
+  }
+  pulso = Math.max(0, pulso - dt * 4.5);
+  ecos.forEach(e => { e.t += dt; e.x += e.vx * dt; e.y += e.vy * dt; });
+  ecos = ecos.filter(e => e.t < 1.5);
+
+  marcas();
+  dibujar();
+}
+
+/* ====================== LA PANTALLA ====================== */
+function dibujar(){
+  const svg = $("lienzo");
+  svg.innerHTML = "";
+  const g = (tg, a) => svg.appendChild(Kit.svg(tg, a));
+
+  g("rect", {x:0, y:0, width:660, height:230, fill:"#f6f8fa"});
+
+  const pal = palabra();
+  const propia = ronda === "propia";
+  const col = propia ? "#8a3d3d" : "#3f5163";
+
+  /* los ecos de las veces anteriores, desvaneciéndose */
+  ecos.forEach(e => {
+    const op = Math.max(0, 1 - e.t / 1.5) * .3;
+    const et = Kit.svg("text", {x:e.x.toFixed(1), y:e.y.toFixed(1), "text-anchor":"middle",
+      transform:`rotate(${e.rot.toFixed(1)} ${e.x.toFixed(1)} ${e.y.toFixed(1)})`,
+      style:`font:600 ${(30 * e.esc).toFixed(1)}px system-ui,sans-serif;fill:${col};` +
+            `opacity:${op.toFixed(3)}`});
+    et.textContent = pal;
+    svg.appendChild(et);
+  });
+
+  /* el pulso del ritmo, para decirla encima */
+  const r = 16 + pulso * 13;
+  g("circle", {cx:330, cy:196, r:r.toFixed(1), fill:col, opacity:(.12 + pulso * .3).toFixed(2)});
+  g("circle", {cx:330, cy:196, r:9, fill:col, opacity:(.35 + pulso * .5).toFixed(2)});
+
+  /* la palabra, en el centro, latiendo con cada repetición */
+  const esc = 1 + pulso * .22;
+  const et = Kit.svg("text", {x:330, y:112, "text-anchor":"middle",
+    transform:`translate(330,112) scale(${esc.toFixed(3)}) translate(-330,-112)`,
+    style:`font:700 54px system-ui,sans-serif;fill:${col};letter-spacing:-.5px`});
+  et.textContent = pal;
+  svg.appendChild(et);
+
+  const rotulo = Kit.svg("text", {x:330, y:44, "text-anchor":"middle",
+    style:"font:600 12px system-ui,sans-serif;fill:#7b8288;letter-spacing:.6px;" +
+          "text-transform:uppercase"});
+  rotulo.textContent = corriendo ? "en voz alta, al ritmo del punto"
+    : propia ? "turno con tu palabra" : "turno de ensayo";
+  svg.appendChild(rotulo);
+}
+
+/* ====================== TURNOS ====================== */
+function ponerRonda(cual){
+  if(corriendo){ Kit.brindis("Espera a que termine el turno"); return; }
+  if(cual === "propia" && !marcada()){ Kit.brindis("Marca primero tu palabra"); return; }
+  ronda = cual;
+  t = 0; veces = 0; acumula = 0; ecos = []; pulso = 0;
+  $("tEnsayo").classList.toggle("activa", ronda === "ensayo");
+  $("tPropia").classList.toggle("activa", ronda === "propia");
+  refrescar();
+  Kit.guardar();
+}
+
+function arrancar(){
+  if(corriendo) return;
+  if(ronda === "propia" && !marcada()){ Kit.brindis("Marca primero tu palabra"); return; }
+  t = 0; veces = 0; acumula = 0; ecos = [];
+  corriendo = true;
+  $("btnArrancar").disabled = true;
+  escena.andar();
+  Kit.guardar();
+}
+
+function terminar(){
+  corriendo = false;
+  escena.parar();
+  $("btnArrancar").disabled = false;
+  if(ronda === "propia"){
+    hechaLaPropia = true;
+    $("cajaDespues").hidden = false;
+    /* arranca donde estaba el "antes": lo que se mueva lo mueve la persona */
+    $("pesaDespues").value = $("pesaAntes").value;
+    $("verdadDespues").value = $("verdadAntes").value;
+    valores();
+    setTimeout(() => $("cajaDespues").scrollIntoView({behavior:"smooth", block:"center"}), 300);
+    Kit.brindis("Ahora vuelve a calibrarla");
+  } else {
+    Kit.brindis("Ese era el ensayo. Ahora con la tuya.");
+  }
+  marcas();
+  dibujar();
+  preguntar();
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  corriendo = false; t = 0; veces = 0; acumula = 0; ecos = []; pulso = 0;
+  hechaLaPropia = false;
+  $("btnArrancar").disabled = false;
+  $("cajaDespues").hidden = true;
+  refrescar();
+  Kit.guardar();
+}
+
+function valores(){
+  [["pesaAntes","vPesaAntes"],["verdadAntes","vVerdadAntes"],
+   ["pesaDespues","vPesaDespues"],["verdadDespues","vVerdadDespues"]].forEach(p => {
+    if($(p[0])) $(p[1]).textContent = $(p[0]).value;
+  });
+}
+
+function marcas(){
+  const queda = Math.ceil(DUR - t);
+  $("mReloj").textContent = Math.floor(queda / 60) + ":" + String(queda % 60).padStart(2, "0");
+  $("mVeces").textContent = veces;
+  $("mRitmo").textContent = ritmo().toFixed(1);
+}
+
+function refrescar(){
+  valores();
+  marcas();
+  dibujar();
+  preguntar();
+}
+
+function preguntar(){
+  const visible = hechaLaPropia;
+  $("cajaPregunta").hidden = !visible;
+  if(!visible) return;
+  const dPesa = +$("pesaAntes").value - +$("pesaDespues").value;
+  $("pregunta").textContent = dPesa > 0
+    ? "La palabra no cambió y lo que dice sigue siendo lo mismo. ¿Qué fue lo que cambió?"
+    : "¿Qué escuchaste hacia el final: una palabra, o un sonido?";
+}
+
+function resumen(){
+  const l = [];
+  l.push("LA PALABRA: " + (marcada() || "(sin marcar)"));
+  l.push("", `REPETICIÓN (45 segundos, de ${LENTO} a ${RAPIDO} veces por segundo)`);
+  l.push("Turno de ensayo con «" + NEUTRA + "»: " + (hechaLaPropia ? "hecho" : "por hacer"));
+  l.push("Turno con la palabra propia: " + (hechaLaPropia ? `hecho, ${veces} repeticiones` : "por hacer"));
+  if(hechaLaPropia){
+    l.push("", `CUÁNTO PESA:        antes ${$("pesaAntes").value}/10 → después ${$("pesaDespues").value}/10`);
+    l.push(`CUÁNTO SUENA A VERDAD: antes ${$("verdadAntes").value}/10 → después ${$("verdadDespues").value}/10`);
+    l.push("", "PREGUNTA QUE QUEDÓ ABIERTA", $("pregunta").textContent);
+  }
+  return l.join("\n");
+}
+
+Kit.chips("palabra", PALABRAS, refrescar);
+$("tEnsayo").onclick = () => ponerRonda("ensayo");
+$("tPropia").onclick = () => ponerRonda("propia");
+["pesaAntes","verdadAntes","pesaDespues","verdadDespues"].forEach(id =>
+  $(id).addEventListener("input", () => { valores(); preguntar(); }));
+
+Kit.iniciar({
+  clave: "met-la-palabra-repetida",
+  extra: () => ({ronda, veces, hechaLaPropia}),
+  restaurar: d => {
+    ronda = d.ronda || "ensayo"; veces = d.veces || 0;
+    hechaLaPropia = !!d.hechaLaPropia;
+    if(hechaLaPropia) $("cajaDespues").hidden = false;
+  },
+  alCambiar: () => {
+    $("tEnsayo").classList.toggle("activa", ronda === "ensayo");
+    $("tPropia").classList.toggle("activa", ronda === "propia");
+    refrescar();
+  },
+  resumen: resumen
+});

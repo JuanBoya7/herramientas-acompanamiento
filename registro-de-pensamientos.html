@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro de pensamientos</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6;
+    --alerta:#b5651d; --ok:#3d7a5a; --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif;}
+  .envoltura{max-width:940px;margin:0 auto;padding:28px 20px 80px}
+  header.tapa{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:24px 26px;margin-bottom:22px}
+  h1{margin:0 0 6px;font-size:26px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px}
+  .credito{margin-top:14px;padding-top:12px;border-top:1px dashed var(--linea);
+    font-size:13px;color:var(--tinta-suave)}
+  .campos-id{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+  .campos-id label{flex:1 1 180px;font-size:13px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px}
+
+  section.paso{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:20px 24px;margin-bottom:16px}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
+    border-radius:50%;background:var(--acento);color:#fff;font-size:14px;font-weight:600;margin-right:10px}
+  h2{font-size:18px;margin:0 0 4px;display:flex;align-items:center}
+  .ayuda{margin:0 0 14px 38px;color:var(--tinta-suave);font-size:14px}
+  .cuerpo{margin-left:38px}
+  textarea,input[type=text]{width:100%;font:inherit;font-size:15px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:10px 12px;background:#fdfefe;resize:vertical}
+  textarea:focus,input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+  textarea{min-height:80px}
+
+  .medidor{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .medidor input[type=range]{flex:1 1 260px;accent-color:var(--acento)}
+  .valor{min-width:64px;text-align:center;font-weight:700;font-size:18px;
+    background:var(--acento-claro);color:var(--acento);border-radius:8px;padding:4px 8px}
+
+  .emociones{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .emo{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:6px 14px;
+    font-size:14px;cursor:pointer;color:var(--tinta-suave)}
+  .emo.activa{background:var(--acento);border-color:var(--acento);color:#fff}
+
+  .distorsiones{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .dist{border:1px solid var(--linea);border-radius:8px;padding:10px 12px;cursor:pointer;background:#fff}
+  .dist.activa{border-color:var(--alerta);background:#fdf4ec}
+  .dist b{display:block;font-size:14.5px}
+  .dist span{font-size:13px;color:var(--tinta-suave)}
+
+  .pistas{background:var(--acento-claro);border-left:3px solid var(--acento);
+    border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:12px;font-size:14px;color:#274b5c}
+  .pistas ul{margin:6px 0 0;padding-left:18px} .pistas li{margin:3px 0}
+
+  .cierre{background:#f0f7f3;border:1px solid #cbe3d7}
+  .comparacion{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}
+  .comparacion div{flex:1 1 200px;background:#fff;border:1px solid var(--linea);
+    border-radius:8px;padding:12px;text-align:center}
+  .comparacion .etiqueta{font-size:13px;color:var(--tinta-suave)}
+  .comparacion .cifra{font-size:26px;font-weight:700;color:var(--acento)}
+  .delta{font-size:14px;margin-top:10px;color:var(--ok);font-weight:600;text-align:center}
+
+  .barra{position:fixed;bottom:0;left:0;right:0;background:var(--papel);
+    border-top:1px solid var(--linea);padding:12px 20px;display:flex;gap:10px;
+    justify-content:center;flex-wrap:wrap}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff}
+  button:hover{filter:brightness(.97)}
+  .aviso{font-size:12.5px;color:var(--tinta-suave);text-align:center;margin-top:22px}
+
+  @media print{
+    body{background:#fff}
+    .barra,.emo:not(.activa),.dist:not(.activa){display:none}
+    section.paso,header.tapa{border-color:#bbb;break-inside:avoid;page-break-inside:avoid}
+    textarea{border-color:#ccc}
+    .envoltura{padding:0;max-width:none}
+  }
+
+  /* --- añadido al armonizar con el resto de las hojas --- */
+  details.notas-pro{background:linear-gradient(180deg,#faf8fd,#fff);border:1px solid var(--linea);
+    border-left:5px solid #7a6a9c;border-radius:var(--radio);padding:14px 20px;margin-bottom:16px}
+  details.notas-pro summary{cursor:pointer;font-size:15px;font-weight:700;color:#5b4d7a;
+    list-style:none;display:flex;align-items:center;gap:10px}
+  details.notas-pro summary::-webkit-details-marker{display:none}
+  details.notas-pro summary::before{content:"\270E";display:inline-flex;align-items:center;
+    justify-content:center;width:27px;height:27px;border-radius:50%;background:#efeaf7;font-size:14px}
+  details.notas-pro label.etiqueta{font-size:13.5px;font-weight:600;display:block;margin:14px 0 5px}
+  details.notas-pro textarea{width:100%;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:9px 11px;background:#fdfefe;
+    min-height:70px;resize:vertical}
+  details.notas-pro .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave)}
+  .barra{position:static;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 20px;margin-top:22px;box-shadow:none}
+  .brindis{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    background:var(--tinta);color:#fff;font-size:13.5px;padding:8px 16px;border-radius:8px;
+    z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+  .brindis.visible{opacity:.94}
+  /* la lectura condensada: el cuadro y su indicación al lado */
+  .combinaciones{display:grid;gap:8px;margin-top:12px}
+  .combi{display:grid;grid-template-columns:minmax(150px,34%) 1fr;
+    border:1px solid var(--linea);border-radius:9px;overflow:hidden;font-size:13px}
+  .combi .cual{padding:9px 13px;background:#f6f9fb;border-right:1px solid var(--linea)}
+  .combi .cual b{display:block;font-size:13.5px;color:var(--tinta);margin-bottom:1px}
+  .combi .cual span{color:var(--tinta-suave);font-size:12px;line-height:1.4}
+  .combi .quehacer{padding:9px 13px;color:var(--tinta-suave);line-height:1.45}
+  .combi.activo{border-color:var(--acento);box-shadow:0 0 0 2px var(--acento-claro)}
+  .combi.activo .cual{background:var(--acento-claro)}
+  .combi.activo .cual b,.combi.activo .quehacer{color:var(--tinta)}
+  @media (max-width:620px){.combi{grid-template-columns:1fr}
+    .combi .cual{border-right:0;border-bottom:1px solid var(--linea)}}
+  @media print{ .brindis,.borrar{display:none !important} }
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>Registro de pensamientos</h1>
+  <p class="sub">Herramienta de reestructuración cognitiva. Sirve para revisar, en frío, un momento
+  en que te sentiste mal, y comprobar si el pensamiento que lo disparó resiste la evidencia.</p>
+  <input type="hidden" id="nombre"><input type="hidden" id="fecha"><input type="hidden" id="sesion">
+
+  
+</header>
+
+<section class="paso">
+  <h2><span class="num">1</span>La situación</h2>
+  <p class="ayuda">Qué pasó, sin interpretar todavía. Como si lo describiera una cámara: dónde estabas,
+  con quién, qué se dijo o qué ocurrió.</p>
+  <div class="cuerpo"><textarea id="situacion" placeholder="Ej. Ayer 4:00 p.m., salí de una reunión. Repasé lo que dije y me pareció que había quedado mal."></textarea></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>La emoción</h2>
+  <p class="ayuda">Elige una o varias, y califica qué tan intensa fue en ese momento (0 = nada, 100 = lo más intenso que has sentido).</p>
+  <div class="cuerpo">
+    <div class="emociones" id="emociones"></div>
+    <input type="text" id="otraEmocion" placeholder="Otra emoción (opcional)">
+    <div class="medidor" style="margin-top:14px">
+      <label for="intensidad" style="font-size:14px;color:var(--tinta-suave)">Intensidad</label>
+      <input type="range" id="intensidad" min="0" max="100" value="70">
+      <span class="valor" id="vIntensidad">70</span>
+    </div>
+    <div class="medidor" style="margin-top:10px">
+      <label for="corporal" style="font-size:14px;color:var(--tinta-suave);flex:0 0 100%">¿Dónde lo sentiste en el cuerpo?</label>
+      <input type="text" id="corporal" placeholder="Ej. presión en el pecho, mandíbula apretada, insomnio esa noche">
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El pensamiento automático</h2>
+  <p class="ayuda">La frase exacta que te cruzó por la cabeza. En tus palabras, sin suavizarla.
+  Si hubo varias, quédate con la que más pesó ("el pensamiento caliente").</p>
+  <div class="cuerpo">
+    <textarea id="pensamiento" placeholder="Ej. 'Me salió mal, no sirvo para esto.'"></textarea>
+    <div class="medidor" style="margin-top:12px">
+      <label for="creencia" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo creíste, de 0 a 100?</label>
+      <input type="range" id="creencia" min="0" max="100" value="80">
+      <span class="valor" id="vCreencia">80</span>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>¿Qué trampa del pensamiento reconoces?</h2>
+  <p class="ayuda">Marca las que apliquen. No se trata de que el pensamiento sea "falso": se trata de
+  ver si la mente tomó un atajo.</p>
+  <div class="cuerpo"><div class="distorsiones" id="distorsiones"></div></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">5</span>La evidencia</h2>
+  <p class="ayuda">Aquí es donde el registro hace su trabajo. Sé tan honesto en la columna de la izquierda
+  como en la de la derecha.</p>
+  <div class="cuerpo">
+    <label style="font-size:14px;font-weight:600">Hechos que APOYAN el pensamiento</label>
+    <textarea id="aFavor" placeholder="Solo hechos verificables, no interpretaciones."></textarea>
+    <label style="font-size:14px;font-weight:600;display:block;margin-top:14px">Hechos que NO lo apoyan</label>
+    <div class="pistas">
+      <b>Si te cuesta encontrarlos, pregúntate:</b>
+      <ul>
+        <li>¿Qué le diría a un amigo que me contara exactamente esto?</li>
+        <li>¿Ha pasado antes algo parecido? ¿Cómo terminó realmente?</li>
+        <li>¿Estoy tomando un momento como si fuera toda la historia?</li>
+        <li>Dentro de un año, ¿qué tanto va a pesar esto?</li>
+        <li>¿Qué información me falta todavía?</li>
+      </ul>
+    </div>
+    <textarea id="enContra"></textarea>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">6</span>Un pensamiento alternativo</h2>
+  <p class="ayuda">No un pensamiento positivo: uno <em>más completo</em>, que incluya toda la evidencia
+  de arriba. Debe ser algo que puedas creerte de verdad.</p>
+  <div class="cuerpo">
+    <textarea id="alternativo" placeholder="Ej. 'Salió peor de lo que esperaba. Eso me preocupa y tiene solución: puedo hablarlo y todavía hay margen.'"></textarea>
+    <div class="medidor" style="margin-top:12px">
+      <label for="creenciaAlt" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo crees?</label>
+      <input type="range" id="creenciaAlt" min="0" max="100" value="50">
+      <span class="valor" id="vCreenciaAlt">50</span>
+    </div>
+  </div>
+</section>
+
+<section class="paso cierre">
+  <h2><span class="num">7</span>Cómo quedé</h2>
+  <p class="ayuda">Vuelve a calificar la emoción del paso 2, ahora, después de haber escrito todo esto.</p>
+  <div class="cuerpo">
+    <div class="medidor">
+      <label for="intensidadFinal" style="font-size:14px;color:var(--tinta-suave)">Intensidad ahora</label>
+      <input type="range" id="intensidadFinal" min="0" max="100" value="70">
+      <span class="valor" id="vIntensidadFinal">70</span>
+    </div>
+    <div class="comparacion">
+      <div><div class="etiqueta">Emoción antes</div><div class="cifra" id="cAntes">70</div></div>
+      <div><div class="etiqueta">Emoción después</div><div class="cifra" id="cDespues">70</div></div>
+      <div><div class="etiqueta">Creencia en el pensamiento</div><div class="cifra" id="cCreencia">80 → 50</div></div>
+    </div>
+    <div class="delta" id="delta"></div>
+    <label style="font-size:14px;font-weight:600;display:block;margin-top:16px">Un paso concreto para esta semana</label>
+    <textarea id="paso" placeholder="Pequeño, observable y con fecha. Ej. 'El martes le escribo para pedir una reunión corta.'"></textarea>
+  </div>
+</section>
+
+<details class="notas-pro">
+  <summary>Notas del profesional</summary>
+  <div class="cuerpo">
+    <label class="etiqueta">Observaciones del proceso</label>
+    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+    <label class="etiqueta">Hipótesis de trabajo</label>
+    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+    <label class="etiqueta">Tarea acordada</label>
+    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+    <label class="etiqueta">Para la próxima sesión</label>
+    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+    <p class="ayuda" style="margin-top:12px">
+      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+      No incluir estas notas al imprimir</label>
+    </p>
+  </div>
+</details>
+
+<div class="barra">
+  <button onclick="Kit.copiar()">Copiar resumen</button>
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="guardar()">Guardar en este equipo</button>
+  <button onclick="limpiar()">Registro nuevo</button>
+</div>
+</div>
+<div class="brindis" id="brindis"></div>
+
+<script>
+const EMOCIONES = ["Ansiedad","Tristeza","Rabia","Culpa","Vergüenza","Miedo","Frustración","Soledad","Desánimo","Angustia"];
+const DISTORSIONES = [
+  ["Catastrofismo","Salto directo al peor escenario posible."],
+  ["Todo o nada","O es perfecto o es un fracaso; no hay grises."],
+  ["Sobregeneralización","Un hecho aislado se vuelve 'siempre' o 'nunca'."],
+  ["Lectura de mente","Doy por hecho lo que el otro está pensando de mí."],
+  ["Adivinar el futuro","Predigo el desenlace como si ya hubiera pasado."],
+  ["Filtro negativo","Solo veo lo que salió mal e ignoro el resto."],
+  ["Razonamiento emocional","Si lo siento así, entonces es así."],
+  ["Debería / tengo que","Reglas rígidas sobre cómo debo ser o actuar."],
+  ["Etiquetarme","Me pongo un rótulo global: 'soy un inútil'."],
+  ["Personalización","Me echo la culpa de algo que no controlo del todo."],
+  ["Descalificar lo positivo","Lo bueno 'no cuenta' o 'fue suerte'."],
+  ["Comparación constante","Me mido contra los demás y siempre pierdo."]
+];
+
+const $ = id => document.getElementById(id);
+const CAMPOS = ["nombre","fecha","sesion","situacion","otraEmocion","corporal","pensamiento",
+  "aFavor","enContra","alternativo","paso","intensidad","creencia","creenciaAlt","intensidadFinal"];
+
+// --- construcción de listas ---
+EMOCIONES.forEach(e=>{
+  const b=document.createElement("button");
+  b.className="emo"; b.type="button"; b.textContent=e;
+  b.onclick=()=>{b.classList.toggle("activa");guardar()};
+  $("emociones").appendChild(b);
+});
+DISTORSIONES.forEach(([t,d])=>{
+  const el=document.createElement("div");
+  el.className="dist"; el.innerHTML=`<b>${t}</b><span>${d}</span>`;
+  el.onclick=()=>{el.classList.toggle("activa");guardar()};
+  $("distorsiones").appendChild(el);
+});
+
+// --- medidores ---
+function enlazar(rango,salida,alCambiar){
+  const r=$(rango), s=$(salida);
+  const act=()=>{s.textContent=r.value; if(alCambiar)alCambiar(); guardar()};
+  r.addEventListener("input",act); act();
+}
+function resumen(){
+  const a=+$("intensidad").value, d=+$("intensidadFinal").value;
+  $("cAntes").textContent=a; $("cDespues").textContent=d;
+  $("cCreencia").textContent=$("creencia").value+" → "+$("creenciaAlt").value;
+  const dif=a-d;
+  $("delta").textContent = dif>0 ? `La intensidad bajó ${dif} puntos.`
+    : dif<0 ? `La intensidad subió ${-dif} puntos. Vale la pena revisarlo en sesión.` : "";
+}
+enlazar("intensidad","vIntensidad",resumen);
+enlazar("creencia","vCreencia",resumen);
+enlazar("creenciaAlt","vCreenciaAlt",resumen);
+enlazar("intensidadFinal","vIntensidadFinal",resumen);
+
+// --- persistencia local ---
+const CLAVE="registro-pensamientos";
+function guardar(){
+  const d={};
+  CAMPOS.forEach(c=>d[c]=$(c).value);
+  d._emo=[...document.querySelectorAll(".emo")].map(b=>b.classList.contains("activa"));
+  d._dist=[...document.querySelectorAll(".dist")].map(b=>b.classList.contains("activa"));
+  try{localStorage.setItem(CLAVE,JSON.stringify(d))}catch(e){}
+}
+function cargar(){
+  let d; try{d=JSON.parse(localStorage.getItem(CLAVE)||"null")}catch(e){}
+  if(!d) return;
+  CAMPOS.forEach(c=>{if(d[c]!==undefined)$(c).value=d[c]});
+  (d._emo||[]).forEach((v,i)=>{if(v)document.querySelectorAll(".emo")[i].classList.add("activa")});
+  (d._dist||[]).forEach((v,i)=>{if(v)document.querySelectorAll(".dist")[i].classList.add("activa")});
+  ["intensidad","creencia","creenciaAlt","intensidadFinal"].forEach(r=>$(r).dispatchEvent(new Event("input")));
+}
+function limpiar(){
+  if(!confirm("¿Empezar un registro nuevo? Se borrará lo que está en pantalla.")) return;
+  try{localStorage.removeItem(CLAVE)}catch(e){}
+  location.reload();
+}
+CAMPOS.forEach(c=>$(c).addEventListener("input",guardar));
+cargar();
+if(!$("fecha").value) $("fecha").value=new Date().toLocaleDateString("es-CO");
+resumen();
+</script>
+<script>
+/* ============================================================
+   Kit común de las herramientas.
+   Se inserta completo en cada archivo: no hay dependencias externas
+   y todo funciona abriendo el HTML con doble clic, sin internet.
+   ============================================================ */
+var Kit = (function(){
+
+  var CLAVE = "herramienta";
+  var ganchos = {};            // extra, restaurar, alCambiar, resumen
+  var listo = false;
+
+  /* ---------- utilidades ---------- */
+  function $(id){ return document.getElementById(id); }
+  function crearEl(tag, clase, texto){
+    var e = document.createElement(tag);
+    if(clase) e.className = clase;
+    if(texto !== undefined) e.textContent = texto;
+    return e;
+  }
+  function svg(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  /* mezcla dos colores hex; t=0 devuelve a, t=1 devuelve b */
+  function mezcla(a, b, t){
+    t = Math.max(0, Math.min(1, t));
+    function n(c, i){ return parseInt(c.substr(1 + i*2, 2), 16); }
+    var r = Math.round(n(a,0) + (n(b,0) - n(a,0)) * t),
+        g = Math.round(n(a,1) + (n(b,1) - n(a,1)) * t),
+        z = Math.round(n(a,2) + (n(b,2) - n(a,2)) * t);
+    return "#" + [r,g,z].map(function(v){ return ("0"+v.toString(16)).slice(-2); }).join("");
+  }
+  function escapar(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  /* Se conserva por compatibilidad: estas hojas son de uso clínico. */
+  function modo(){ return "clinica"; }
+
+  /* ---------- fichas ----------
+     Pocas fichas, las más frecuentes, y un "+" para que la persona ponga la
+     suya. Lo que agrega se guarda con la hoja y vuelve al recargar.        */
+  var LIBRES = {};      // contenedorId -> [texto, ...]
+  var REG = {};         // contenedorId -> {lista, alCambiar, sinMas}
+
+  function unChip(contId, txt, id, alCambiar, libre){
+    var b = crearEl("button", "chip" + (libre ? " libre" : ""));
+    b.type = "button";
+    b.id = id;
+    b.setAttribute("data-txt", txt);
+    b.appendChild(document.createTextNode(txt));
+    if(libre){
+      var x = crearEl("span", "quitarChip", "×");
+      x.title = "Quitar";
+      x.onclick = function(ev){
+        ev.stopPropagation();
+        var l = LIBRES[contId] || [], i = l.indexOf(txt);
+        if(i >= 0) l.splice(i, 1);
+        redibujar(contId);
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      b.appendChild(x);
+    }
+    b.onclick = function(){
+      b.classList.toggle("activa");
+      if(alCambiar) alCambiar();
+      guardar();
+    };
+    return b;
+  }
+
+  function botonMas(contId, alCambiar){
+    var mas = crearEl("button", "chip mas", "+");
+    mas.type = "button";
+    mas.title = "Agregar una tuya";
+    mas.onclick = function(){
+      var caja = mas.parentElement;
+      var campo = document.createElement("input");
+      campo.type = "text";
+      campo.className = "chipNuevo";
+      campo.placeholder = "En tus palabras…";
+      caja.insertBefore(campo, mas);
+      mas.style.display = "none";
+      var cerrado = false;
+      function cerrar(guardarlo){
+        if(cerrado) return;
+        cerrado = true;
+        var txt = campo.value.trim();
+        campo.remove();
+        mas.style.display = "";
+        if(guardarlo && txt){
+          agregarLibre(contId, txt);
+          if(alCambiar) alCambiar();
+        }
+      }
+      campo.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter"){ ev.preventDefault(); cerrar(true); }
+        if(ev.key === "Escape"){ ev.preventDefault(); cerrar(false); }
+      });
+      campo.addEventListener("blur", function(){ cerrar(true); });
+      campo.focus();
+    };
+    return mas;
+  }
+
+  /* Agrega una ficha propia ya marcada. */
+  function agregarLibre(contId, txt){
+    if(!LIBRES[contId]) LIBRES[contId] = [];
+    if(LIBRES[contId].indexOf(txt) < 0) LIBRES[contId].push(txt);
+    redibujar(contId);
+    var l = LIBRES[contId], id = contId + "-libre-" + l.indexOf(txt);
+    if($(id)) $(id).classList.add("activa");
+    guardar();
+  }
+
+  function redibujar(contId){
+    var r = REG[contId];
+    if(r) chips(contId, r.lista, r.alCambiar, r.sinMas);
+  }
+
+  /* chips("miCaja", ["Una","Otra"], alCambiar)  -> con boton "+"
+     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"          */
+  function chips(contenedorId, lista, alCambiar, sinMas){
+    var c = $(contenedorId);
+    if(!c) return;
+    REG[contenedorId] = {lista:lista, alCambiar:alCambiar, sinMas:sinMas};
+    var marcadas = {};
+    for(var k = 0; k < c.children.length; k++)
+      if(c.children[k].classList.contains("activa"))
+        marcadas[c.children[k].getAttribute("data-txt")] = 1;
+
+    c.innerHTML = "";
+    c.classList.add("chips");
+    lista.forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-" + i, alCambiar);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    (LIBRES[contenedorId] || []).forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, alCambiar, true);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    if(!sinMas) c.appendChild(botonMas(contenedorId, alCambiar));
+  }
+
+  /* Tarjetas con título y descripción. lista: [["Título","Descripción"], ...] */
+  function opciones(contenedorId, lista, alCambiar, unica){
+    var c = $(contenedorId);
+    if(!c) return;
+    c.innerHTML = "";
+    c.classList.add("tarjetas");
+    lista.forEach(function(par, i){
+      var e = crearEl("div", "opcion");
+      e.id = contenedorId + "-" + i;
+      e.setAttribute("data-txt", par[0]);
+      e.innerHTML = "<b>" + escapar(par[0]) + "</b><span>" + escapar(par[1] || "") + "</span>";
+      e.onclick = function(){
+        if(unica) for(var j=0;j<c.children.length;j++)
+          if(c.children[j] !== e) c.children[j].classList.remove("activa");
+        e.classList.toggle("activa");
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      c.appendChild(e);
+    });
+  }
+
+  /* ---------- mostrador con ranuras ----------
+     El patrón de arrastrar-o-tocar: un mostrador de piezas y unas ranuras que
+     las reciben. Se arrastra en escritorio y se toca en celular.
+
+     cfg = {bancoId, ranurasId, cupo, items:[{id,titulo,desc,grupo,color}],
+            etiquetas:[...], alCambiar}                                     */
+  function mostrador(cfg){
+    var banco = $(cfg.bancoId), ranuras = $(cfg.ranurasId);
+    var puestas = [];                       // ids colocados, en orden
+    var porId = {};
+    cfg.items.forEach(function(it){ porId[it.id] = it; });
+
+    function pintarBanco(){
+      var grupos = [], vistos = {};
+      cfg.items.forEach(function(it){
+        var g = it.grupo || "";
+        if(!vistos[g]){ vistos[g] = []; grupos.push(g); }
+        vistos[g].push(it);
+      });
+      banco.innerHTML = "";
+      banco.classList.add("mostrador");
+      grupos.forEach(function(g){
+        var caja = crearEl("div", "grupo");
+        var col = vistos[g][0] && vistos[g][0].color;
+        if(g){
+          var tit = crearEl("div", "titulin", g);
+          if(col) tit.style.color = col;
+          caja.appendChild(tit);
+        }
+        var rejilla = crearEl("div", "tarjetas");
+        vistos[g].forEach(function(it){
+          var e = crearEl("div", "pieza" + (puestas.indexOf(it.id) >= 0 ? " usada" : ""));
+          e.draggable = true;
+          if(it.color){
+            e.style.borderLeft = "4px solid " + it.color;
+            e.style.background = it.color + "0f";
+          }
+          e.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          e.addEventListener("dragstart", function(ev){
+            ev.dataTransfer.setData("text/plain", it.id);
+            e.classList.add("arrastrando");
+          });
+          e.addEventListener("dragend", function(){ e.classList.remove("arrastrando"); });
+          e.addEventListener("click", function(){ poner(it.id); });
+          rejilla.appendChild(e);
+        });
+        caja.appendChild(rejilla);
+        banco.appendChild(caja);
+      });
+    }
+
+    function pintarRanuras(){
+      ranuras.innerHTML = "";
+      ranuras.classList.add("ranuras");
+      for(var i = 0; i < cfg.cupo; i++)(function(i){
+        var id = puestas[i], it = id ? porId[id] : null;
+        var r = crearEl("div", "ranura" + (it ? " llena" : ""));
+        if(it && it.color){
+          r.style.borderColor = it.color;
+          r.style.background = it.color + "0f";
+        }
+        r.appendChild(crearEl("span", "orden", i + 1));
+        if(it){
+          if(it.color) r.lastChild.style.background = it.color + "26";
+          var p = crearEl("div", "puesto");
+          p.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          r.appendChild(p);
+          var x = crearEl("button", "sacar", "×");
+          x.type = "button";
+          x.title = "Sacar";
+          x.onclick = function(){ sacar(i); };
+          r.appendChild(x);
+        } else {
+          r.appendChild(crearEl("span", "hueco",
+            (cfg.etiquetas && cfg.etiquetas[i]) || "Arrastra aquí, o toca una del mostrador"));
+        }
+        r.addEventListener("dragover", function(ev){
+          ev.preventDefault();
+          r.classList.add("encima");
+        });
+        r.addEventListener("dragleave", function(){ r.classList.remove("encima"); });
+        r.addEventListener("drop", function(ev){
+          ev.preventDefault();
+          r.classList.remove("encima");
+          poner(ev.dataTransfer.getData("text/plain"), i);
+        });
+        ranuras.appendChild(r);
+      })(i);
+    }
+
+    function poner(id, i){
+      if(!porId[id] || puestas.indexOf(id) >= 0) return;
+      if(i === undefined || puestas.length < i){
+        if(puestas.length >= cfg.cupo){ brindis("Las ranuras están llenas"); return; }
+        puestas.push(id);
+      } else {
+        puestas[i] = id;
+      }
+      refrescar();
+    }
+    function sacar(i){
+      puestas.splice(i, 1);
+      refrescar();
+    }
+    function refrescar(){
+      puestas = puestas.filter(function(x){ return x; });
+      pintarBanco();
+      pintarRanuras();
+      if(cfg.alCambiar) cfg.alCambiar();
+      guardar();
+    }
+
+    refrescar();
+    return {
+      elegidas: function(){ return puestas.map(function(id){ return porId[id]; }); },
+      ids: function(){ return puestas.slice(); },
+      cargar: function(lista){ puestas = (lista || []).filter(function(x){ return porId[x]; }); refrescar(); },
+      poner: poner,
+      refrescar: refrescar
+    };
+  }
+
+  /* Devuelve los textos marcados dentro de un contenedor de chips u opciones */
+  function activas(contenedorId){
+    var c = $(contenedorId), fuera = [];
+    if(!c) return fuera;
+    for(var i=0;i<c.children.length;i++){
+      var h = c.children[i];
+      if(!h.classList.contains("activa")) continue;
+      var t = h.getAttribute("data-txt");
+      if(t == null) t = h.tagName === "DIV" ? h.querySelector("b").textContent : h.textContent;
+      fuera.push(t);
+    }
+    return fuera;
+  }
+  /* Enlaza un input range con su etiqueta de valor */
+  function medidor(idRango, idSalida, alCambiar){
+    var r = $(idRango), s = $(idSalida);
+    if(!r) return;
+    function act(){
+      if(s) s.textContent = r.value;
+      if(alCambiar) alCambiar();
+    }
+    r.addEventListener("input", function(){ act(); guardar(); });
+    act();
+  }
+
+  /* Gota que se llena según el nivel: 0 vacía, 10 rebosando. */
+  function gota(nivel, tam){
+    var n = Math.max(0, Math.min(10, nivel)) / 10;
+    var t = tam || 26, uid = "g" + Math.random().toString(36).slice(2, 8);
+    var col = mezcla("#c9b48a", "#2f8fbf", n);
+    return '<svg class="gota" width="' + t + '" height="' + t * 1.18 + '" viewBox="0 0 24 28">' +
+      '<clipPath id="' + uid + '"><path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z"/></clipPath>' +
+      '<path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z" fill="#f2f5f8" ' +
+      'stroke="' + col + '" stroke-width="1.6"/>' +
+      '<rect x="0" y="' + (28 - 27 * n) + '" width="24" height="28" fill="' + col +
+      '" clip-path="url(#' + uid + ')" opacity="0.9"/></svg>';
+  }
+
+  /* ---------- persistencia ---------- */
+  function camposGuardables(){
+    var fuera = [], t = document.querySelectorAll("input,textarea,select");
+    for(var i=0;i<t.length;i++) if(t[i].id) fuera.push(t[i]);
+    return fuera;
+  }
+  function marcablesGuardables(){
+    var fuera = [], t = document.querySelectorAll(".chip[id],.opcion[id]");
+    for(var i=0;i<t.length;i++) fuera.push(t[i]);
+    return fuera;
+  }
+  function guardar(avisar){
+    if(!listo) return;
+    var d = { _campos:{}, _marcas:{}, _libres: LIBRES };
+    camposGuardables().forEach(function(e){
+      d._campos[e.id] = (e.type === "checkbox" || e.type === "radio") ? e.checked : e.value;
+    });
+    marcablesGuardables().forEach(function(e){
+      if(e.classList.contains("activa")) d._marcas[e.id] = 1;
+    });
+    if(ganchos.extra) d._extra = ganchos.extra();
+    try{ localStorage.setItem(CLAVE, JSON.stringify(d)); }catch(e){}
+    if(avisar) brindis("Guardado en este equipo");
+  }
+  function cargar(){
+    var d = null;
+    try{ d = JSON.parse(localStorage.getItem(CLAVE) || "null"); }catch(e){}
+    if(!d) return false;
+    if(d._extra && ganchos.restaurar) ganchos.restaurar(d._extra);
+    LIBRES = d._libres || {};
+    Object.keys(LIBRES).forEach(redibujar);
+    camposGuardables().forEach(function(e){
+      if(!(e.id in (d._campos||{}))) return;
+      var v = d._campos[e.id];
+      if(e.type === "checkbox" || e.type === "radio") e.checked = !!v; else e.value = v;
+    });
+    marcablesGuardables().forEach(function(e){
+      if((d._marcas||{})[e.id]) e.classList.add("activa");
+    });
+    return true;
+  }
+  function limpiar(){
+    if(!confirm("¿Empezar de nuevo? Se borrará lo que está en pantalla en este equipo.")) return;
+    try{ localStorage.removeItem(CLAVE); }catch(e){}
+    location.reload();
+  }
+
+  /* ---------- copiar resumen para la historia clínica ---------- */
+  function encabezadoResumen(){
+    var l = [], t = document.querySelector("h1");
+    l.push((t ? t.textContent : "Herramienta").toUpperCase());
+    var pares = [["nombre","Consultante"],["fecha","Fecha"],["sesion","Sesión"],
+                 ["profesional","Profesional"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1] + ": " + e.value.trim());
+    });
+    return l.join("\n");
+  }
+  function notasProResumen(){
+    var l = [], pares = [["proObservaciones","Observaciones"],["proHipotesis","Hipótesis de trabajo"],
+                         ["proTarea","Tarea acordada"],["proProxima","Para la próxima sesión"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1].toUpperCase() + "\n" + e.value.trim());
+    });
+    return l.length ? "\n\n--- NOTAS DEL PROFESIONAL ---\n" + l.join("\n\n") : "";
+  }
+  function textoResumen(){
+    var cuerpo = ganchos.resumen ? ganchos.resumen() : "";
+    return encabezadoResumen() + "\n\n" + cuerpo + notasProResumen();
+  }
+  function copiar(){
+    var txt = textoResumen();
+    function viejo(){
+      var a = document.createElement("textarea");
+      a.value = txt;
+      a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(a);
+      brindis(ok ? "Resumen copiado al portapapeles" : "No se pudo copiar: revise el resumen impreso");
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(function(){
+        brindis("Resumen copiado al portapapeles");
+      }, viejo);
+    } else viejo();
+  }
+  /* ---------- impresión ----------
+     Los desplegables cerrados no salen en el papel. Antes de imprimir se
+     abren, y al terminar vuelven a como estaban, para que la hoja impresa
+     lleve lo que se trabajó aunque esté plegado en pantalla. */
+  var abiertosAlImprimir = [];
+  function antesDeImprimir(){
+    abiertosAlImprimir = [];
+    var ds = document.querySelectorAll("details");
+    for(var i = 0; i < ds.length; i++){
+      if(ds[i].classList.contains("catalogo")) continue;
+      if(ds[i].classList.contains("borrar")) continue;
+      if(!ds[i].open){ ds[i].open = true; abiertosAlImprimir.push(ds[i]); }
+    }
+  }
+  function despuesDeImprimir(){
+    abiertosAlImprimir.forEach(function(d){ d.open = false; });
+    abiertosAlImprimir = [];
+  }
+  if(window.addEventListener){
+    window.addEventListener("beforeprint", antesDeImprimir);
+    window.addEventListener("afterprint", despuesDeImprimir);
+    if(window.matchMedia){
+      var mq = window.matchMedia("print");
+      if(mq.addEventListener)
+        mq.addEventListener("change", function(e){
+          if(e.matches) antesDeImprimir(); else despuesDeImprimir();
+        });
+    }
+  }
+
+  function brindis(msg){
+    var b = $("brindis");
+    if(!b) return;
+    b.textContent = msg;
+    b.classList.add("visible");
+    clearTimeout(b._t);
+    b._t = setTimeout(function(){ b.classList.remove("visible"); }, 2200);
+  }
+
+  /* ---------- arranque ---------- */
+  function iniciar(cfg){
+    CLAVE = cfg.clave || "herramienta";
+    ganchos = cfg;
+
+    var ni = $("proNoImprimir"), sincNotas = null;
+    if(ni){
+      sincNotas = function(){
+        var s = document.querySelector("details.notas-pro");
+        if(s) s.classList.toggle("borrar", ni.checked);
+      };
+      ni.addEventListener("change", sincNotas);
+    }
+
+    listo = true;
+    cargar();
+    if(sincNotas) sincNotas();
+    if($("fecha") && !$("fecha").value)
+      $("fecha").value = new Date().toLocaleDateString("es-CO");
+
+    document.querySelectorAll("input,textarea,select").forEach(function(e){
+      if(!e.id) return;
+      e.addEventListener("input", function(){ guardar(); });
+      e.addEventListener("change", function(){ guardar(); });
+    });
+
+    if(ganchos.alCambiar) ganchos.alCambiar();
+  }
+
+  /* ---------- arranque reducido ----------
+     Para las hojas que ya traían su propio motor y su propia persistencia:
+     cablea el botón de copiar y no toca nada más. */
+  function soloModo(){
+    var ni = $("proNoImprimir");
+    if(ni) ni.addEventListener("change", function(){
+      var s = document.querySelector("details.notas-pro");
+      if(s) s.classList.toggle("borrar", ni.checked);
+    });
+    ganchos = { resumen: resumenGenerico };
+  }
+
+  /* Recorre las secciones y arma un texto con lo que esté diligenciado. */
+  function resumenGenerico(){
+    var fuera = [], secciones = document.querySelectorAll("section,header");
+    for(var i = 0; i < secciones.length; i++){
+      var s = secciones[i];
+      if(s.classList.contains("notas-pro")) continue;
+      var titulo = s.querySelector("h1,h2,h3");
+      var lineas = [];
+      var campos = s.querySelectorAll("input,textarea,select");
+      for(var j = 0; j < campos.length; j++){
+        var e = campos[j];
+        if(e.type === "checkbox" || e.type === "radio" || !e.id) continue;
+        if(!String(e.value).trim()) continue;
+        var et = s.querySelector('label[for="' + e.id + '"]');
+        lineas.push("  " + (et ? et.textContent.trim() + ": " : "") + e.value.trim());
+      }
+      var marcas = s.querySelectorAll(".activa,.llena,.activo,.on");
+      var nombres = [];
+      for(var k = 0; k < marcas.length; k++){
+        var m = marcas[k];
+        if(m.classList.contains("mini")) continue;   /* catálogo, no elección */
+        var b = m.querySelector("b");
+        var txt = (b ? b.textContent : m.textContent).replace(/\s+/g, " ").trim();
+        if(txt && nombres.indexOf(txt) < 0) nombres.push(txt);
+      }
+      if(nombres.length) lineas.push("  Marcado: " + nombres.join(", "));
+      if(lineas.length){
+        if(titulo) fuera.push(titulo.textContent.trim().toUpperCase());
+        fuera.push(lineas.join("\n"));
+      }
+    }
+    return fuera.join("\n");
+  }
+
+  return {
+    iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
+    chips: chips, opciones: opciones, activas: activas, medidor: medidor,
+    agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
+    $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
+    brindis: brindis, modo: modo, texto: textoResumen
+  };
+})();
+
+Kit.soloModo();
+</script>
+</body>
+</html>

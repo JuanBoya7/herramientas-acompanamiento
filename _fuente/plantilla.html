@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITULO}}</title>
+<style>
+{{KIT_CSS}}
+{{CSS_PROPIO}}
+</style>
+</head>
+<body{{LAMINA}}>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>{{TITULO}}</h1>
+  <p class="sub">{{SUB}}</p>
+  <p class="fuente">{{FUENTE}}</p>
+{{IDENTIFICACION}}
+</header>
+
+{{CONTENIDO}}
+
+<details class="notas-pro">
+  <summary>Notas del profesional</summary>
+  <div class="cuerpo">
+    <label class="etiqueta">Observaciones del proceso</label>
+    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+    <label class="etiqueta">Hipótesis de trabajo</label>
+    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+    <label class="etiqueta">Tarea acordada</label>
+    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+    <label class="etiqueta">Para la próxima sesión</label>
+    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+    <p class="ayuda" style="margin-top:12px">
+      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+      No incluir estas notas al imprimir</label>
+    </p>
+  </div>
+</details>
+
+<div class="barra">
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="Kit.copiar()">Copiar resumen</button>
+  <button onclick="Kit.guardar(true)">Guardar</button>
+  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
+
+</div>
+<div class="brindis" id="brindis"></div>
+
+<script>
+{{KIT_JS}}
+</script>
+<script>
+{{JS_PROPIO}}
+</script>
+</body>
+</html>

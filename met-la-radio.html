@@ -1,0 +1,1226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La radio que no se apaga</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6;
+    --alerta:#8a4a2c; --alerta-fondo:#fdf3ef; --alerta-linea:#f0d3c6;
+    --logro:#3f7d5a; --logro-fondo:#eef6f1;
+    --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+
+  /* ---------- cabecera ---------- */
+  header.tapa,section.bloque,section.paso{background:var(--papel);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:74ch}
+  .fuente{margin:10px 0 0;font-size:12.5px;color:var(--tinta-suave);font-style:italic}
+  .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--linea)}
+  .campos-id label{flex:1 1 160px;font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fdfefe}
+  .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+
+  /* ---------- pasos y bloques ---------- */
+  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;display:flex;
+    align-items:center;gap:11px}
+  .num{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);font-size:14px;font-weight:700}
+  .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+  .cuerpo{margin-top:14px}
+  textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
+    font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
+    padding:9px 11px;background:#fdfefe}
+  textarea{min-height:78px;resize:vertical;line-height:1.5}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--acento-claro);
+    border-color:var(--acento)}
+  label.etiqueta{font-size:13.5px;font-weight:600;display:block;margin:14px 0 5px}
+  label.etiqueta:first-child{margin-top:0}
+
+  /* ---------- fichas de opcion ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{font:inherit;font-size:13.5px;border:1px solid var(--linea);border-radius:999px;
+    padding:6px 14px;cursor:pointer;background:#fdfefe;color:var(--tinta-suave);
+    transition:background .12s,color .12s,border-color .12s}
+  .chip:hover{border-color:var(--acento)}
+  .chip.activa{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  /* ficha añadida por la persona: lleva su aspa para quitarla */
+  .chip.libre{padding-right:8px;display:inline-flex;align-items:center;gap:7px}
+  .chip.libre .quitarChip{display:inline-flex;align-items:center;justify-content:center;
+    width:16px;height:16px;border-radius:50%;font-size:13px;line-height:1;opacity:.55}
+  .chip.libre .quitarChip:hover{opacity:1;background:#ffffff40}
+  /* el boton de agregar: mismo tamaño, sin peso visual */
+  .chip.mas{border-style:dashed;color:var(--acento);font-weight:700;padding:6px 13px;
+    line-height:1}
+  .chip.mas:hover{background:var(--acento-claro)}
+  input.chipNuevo{font:inherit;font-size:13.5px;border:1px solid var(--acento);
+    border-radius:999px;padding:6px 14px;background:#fff;width:auto;min-width:190px}
+
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px}
+  .opcion{border:1px solid var(--linea);border-radius:9px;padding:10px 13px;cursor:pointer;
+    background:#fdfefe;transition:border-color .12s,background .12s}
+  .opcion:hover{border-color:var(--acento)}
+  .opcion.activa{border-color:var(--acento);background:var(--acento-claro)}
+  .opcion b{display:block;font-size:14px;margin-bottom:2px}
+  .opcion span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+
+  /* ---------- lo que se deja abierto ----------
+     Sin rotulo ni instruccion: una pregunta puesta en la hoja para que el
+     profesional la use cuando corresponda. */
+  .hablado{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f;margin:12px 0}
+  .hablado b{color:#16303d}
+  details.apunte{margin-top:9px}
+  details.apunte summary{cursor:pointer;font-size:12px;color:var(--tinta-suave);
+    list-style:none;display:inline-flex;align-items:center;gap:5px}
+  details.apunte summary::-webkit-details-marker{display:none}
+  details.apunte summary::before{content:"+";display:inline-flex;align-items:center;
+    justify-content:center;width:15px;height:15px;border:1px solid var(--linea);
+    border-radius:4px;font-size:12px;line-height:1}
+  details.apunte[open] summary::before{content:"\2212"}
+  details.apunte summary:hover{color:var(--acento)}
+  details.apunte textarea,details.apunte input{margin-top:7px;font-size:14px}
+  details.apunte textarea{min-height:52px}
+
+  /* ---------- mostrador y ranuras (arrastrar o tocar) ---------- */
+  .mostrador{margin-top:6px}
+  .mostrador .grupo{margin-bottom:13px}
+  .mostrador .grupo > .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.7px;
+    color:var(--tinta-suave);font-weight:700;margin-bottom:6px}
+  .pieza{border:1px solid var(--linea);border-radius:9px;padding:9px 12px;background:#fdfefe;
+    cursor:grab;transition:border-color .12s,transform .12s,opacity .12s;user-select:none}
+  .pieza:hover{border-color:var(--acento);transform:translateY(-1px)}
+  .pieza.usada{opacity:.32;cursor:default;pointer-events:none}
+  .pieza.arrastrando{opacity:.5}
+  .pieza b{display:block;font-size:13.5px;margin-bottom:2px}
+  .pieza span{display:block;font-size:12px;color:var(--tinta-suave);line-height:1.42}
+  .ranuras{display:grid;gap:10px}
+  .ranura{border:2px dashed var(--linea);border-radius:10px;padding:13px 15px;min-height:64px;
+    display:flex;align-items:center;gap:11px;background:#fbfcfd;transition:border-color .12s,
+    background .12s}
+  .ranura.encima{border-color:var(--acento);background:var(--acento-claro)}
+  .ranura.llena{border-style:solid;background:var(--papel)}
+  .ranura .hueco{color:#adb9c4;font-size:13.5px;font-style:italic}
+  .ranura .puesto{flex:1}
+  .ranura .puesto b{display:block;font-size:14.5px}
+  .ranura .puesto span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+  .ranura .orden{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);display:flex;align-items:center;justify-content:center;font-size:13px;
+    font-weight:700}
+  .ranura .sacar{flex:0 0 auto;border:0;background:transparent;color:var(--tinta-suave);
+    font-size:18px;cursor:pointer;padding:2px 7px;border-radius:6px;line-height:1}
+  .ranura .sacar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .pista-arrastre{font-size:12.5px;color:var(--tinta-suave);margin:0 0 9px}
+
+  /* ---------- medidores ---------- */
+  .medidor{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .medidor label{font-size:13.5px;color:var(--tinta-suave)}
+  .medidor input[type=range]{flex:1;min-width:130px;height:22px;accent-color:var(--acento)}
+  .valor{min-width:44px;text-align:center;font-weight:700;font-size:16px;color:var(--acento)}
+  .marcador{min-width:46px;text-align:center;font-weight:700;font-size:17px;color:#fff;
+    border-radius:7px;padding:2px 6px}
+
+  /* ---------- lectura / resultado ---------- */
+  .lectura{border-left:5px solid var(--acento);background:linear-gradient(180deg,#f7fbfd,#fff)}
+  .lectura .nombre{font-size:22px;font-weight:700;margin:2px 0}
+  .lectura .metafora{font-size:15px;color:var(--tinta-suave);font-style:italic;margin:0 0 14px}
+  .campo{margin-bottom:12px}
+  .campo .etq{font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--acento);
+    font-weight:700;margin-bottom:3px}
+  .campo p{margin:0;font-size:14.5px}
+  .pregunta{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f}
+  .bandera{background:var(--alerta-fondo);border:1px solid var(--alerta-linea);border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--alerta);margin-top:12px}
+  .logro{background:var(--logro-fondo);border:1px solid #cfe4d8;border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--logro);margin-top:12px}
+  .pistas{background:#f6f9fb;border-left:3px solid var(--linea);border-radius:0 6px 6px 0;
+    padding:9px 13px;margin:9px 0;font-size:13.5px;color:#3f5163}
+  .pistas b{color:var(--acento)}
+  .pistas ul{margin:5px 0 0;padding-left:19px}
+  .pistas li{margin-bottom:3px}
+  .velo{color:var(--tinta-suave);font-size:14.5px;text-align:center;padding:26px 14px;
+    border:1px dashed var(--linea);border-radius:9px;line-height:1.6}
+
+  /* ---------- lectura condensada: cuadro + su indicacion al lado ---------- */
+  .combinaciones{display:grid;gap:8px;margin-top:12px}
+  .combi{display:grid;grid-template-columns:minmax(150px,34%) 1fr;gap:0;
+    border:1px solid var(--linea);border-radius:9px;overflow:hidden;font-size:13px}
+  .combi .cual{padding:9px 13px;background:#f6f9fb;border-right:1px solid var(--linea)}
+  .combi .cual b{display:block;font-size:13.5px;color:var(--tinta);margin-bottom:1px}
+  .combi .cual span{color:var(--tinta-suave);font-size:12px;line-height:1.4}
+  .combi .quehacer{padding:9px 13px;color:var(--tinta-suave);line-height:1.45}
+  .combi.activo{border-color:var(--acento);box-shadow:0 0 0 2px var(--acento-claro)}
+  .combi.activo .cual{background:var(--acento-claro)}
+  .combi.activo .cual b,.combi.activo .quehacer{color:var(--tinta)}
+  @media (max-width:620px){.combi{grid-template-columns:1fr}
+    .combi .cual{border-right:0;border-bottom:1px solid var(--linea)}}
+
+  details.catalogo{margin-top:14px;border-top:1px dashed var(--linea);padding-top:12px}
+  details.catalogo summary{cursor:pointer;font-size:13.5px;color:var(--acento);font-weight:600}
+  .lista-perfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:8px;margin-top:11px}
+  .mini{border:1px solid var(--linea);border-radius:8px;padding:9px 12px;font-size:12.5px;
+    color:var(--tinta-suave)}
+  .mini.activo{border-color:var(--acento);background:var(--acento-claro);color:var(--tinta)}
+  .mini b{display:block;color:var(--tinta);font-size:13.5px;margin-bottom:2px}
+
+  /* ---------- tablas ---------- */
+  .tabla{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tabla th,.tabla td{border:1px solid var(--linea);padding:7px 9px;text-align:left;
+    vertical-align:top}
+  .tabla th{background:var(--acento-claro);color:#23404f;font-size:12.5px;font-weight:700}
+  .desliza{overflow-x:auto}
+
+  /* ---------- notas del profesional, plegadas ---------- */
+  details.notas-pro{background:linear-gradient(180deg,#faf8fd,#fff);border:1px solid var(--linea);
+    border-left:5px solid #7a6a9c;border-radius:var(--radio);padding:14px 20px;margin-bottom:16px}
+  details.notas-pro summary{cursor:pointer;font-size:15px;font-weight:700;color:#5b4d7a;
+    list-style:none;display:flex;align-items:center;gap:10px}
+  details.notas-pro summary::-webkit-details-marker{display:none}
+  details.notas-pro summary::before{content:"\270E";display:inline-flex;align-items:center;
+    justify-content:center;width:27px;height:27px;border-radius:50%;background:#efeaf7;
+    font-size:14px}
+  details.notas-pro[open] summary{margin-bottom:4px}
+
+  /* ---------- modo lámina: hojas para exponer ----------
+     Menos texto por bloque, letra más grande y todo en fichas del mismo
+     tamaño, para que se lea proyectado y no parezca un formulario. */
+  body.lamina{font-size:17px}
+  body.lamina .envoltura{max-width:1080px}
+  body.lamina h1{font-size:28px}
+  body.lamina .sub{font-size:15.5px;max-width:70ch}
+  body.lamina section.paso h2,body.lamina section.bloque h2{font-size:21px}
+  body.lamina .ayuda{font-size:14.5px}
+  body.lamina .chip{font-size:14.5px;padding:7px 16px}
+  body.lamina .opcion b{font-size:15px}
+  body.lamina .opcion span{font-size:13.5px}
+  body.lamina label.etiqueta{font-size:15px}
+  body.lamina .pregunta{font-size:16.5px}
+
+  .rejilla-fichas{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));
+    gap:11px;margin-top:12px}
+  .ficha-l{border:1px solid var(--linea);border-top:4px solid var(--acento);border-radius:10px;
+    padding:13px 15px;background:#fff}
+  .ficha-l .t{font-size:15.5px;font-weight:700;margin-bottom:4px;line-height:1.3}
+  .ficha-l .d{font-size:13.5px;color:var(--tinta-suave);line-height:1.45}
+  .ficha-l .chips{margin-top:9px}
+
+  /* el rótulo pequeño que ubica de qué ficha del manual viene cada cosa */
+  .procedencia{font-size:11.5px;color:var(--tinta-suave);letter-spacing:.3px;margin:2px 0 0}
+
+  /* ---------- escenas que se mueven ----------
+     Las hojas en las que la metáfora ocurre en tiempo real: el escenario, los
+     marcadores debajo, los mandos al pie y la pregunta sola al final. */
+  .escenario{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 12px 10px;margin-bottom:16px;overflow:hidden}
+  .escenario > svg,.escenario .lienzo > svg{display:block;width:100%;height:auto;margin:0 auto}
+  .escenario .lienzo{position:relative;max-width:700px;margin:0 auto}
+  .marcas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:11px}
+  .marcas div{text-align:center;min-width:92px}
+  .marcas .n{font-size:23px;font-weight:700;display:block;line-height:1.15;
+    font-variant-numeric:tabular-nums}
+  .marcas .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave)}
+  .mandos{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px;
+    padding-top:12px;border-top:1px dashed var(--linea)}
+  .duracion{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .duracion .chip{font-size:14px;padding:8px 18px}
+  /* la pregunta que abre la conversación, sin rótulo ni informe alrededor */
+  .pregunta-sola{border-left:5px solid var(--acento);
+    background:linear-gradient(180deg,#f7fbfd,#fff);transition:border-color .4s,background .4s}
+  .pregunta-sola .pregunta{background:transparent;padding:0;font-size:17px;line-height:1.5}
+  @media print{.mandos,.duracion{display:none !important}}
+
+  /* ---------- barra al final de la hoja ---------- */
+  .barra{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 20px;margin-top:22px}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button:hover{border-color:var(--acento)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .brindis{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    background:var(--tinta);color:#fff;font-size:13.5px;padding:8px 16px;border-radius:8px;
+    z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+  .brindis.visible{opacity:.94}
+
+  @media (max-width:820px){
+    .envoltura{padding:16px 12px 32px}
+    header.tapa,section.bloque,section.paso{padding:16px 15px}
+  }
+  @media print{
+    body{background:#fff}
+    .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
+    .opcion:not(.activa),.borrar{display:none !important}
+    header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
+    details.notas-pro,details.apunte,details.notas-pro > .cuerpo{display:block}
+    details.notas-pro summary{list-style:none}
+    .envoltura{padding:0;max-width:100%}
+    textarea{min-height:0;height:auto}
+  }
+
+  button.arranque{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
+  button.arranque:hover{background:#28607c;border-color:#28607c}
+  button.apagar{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600}
+  button.apagar:hover{background:#763333;border-color:#763333}
+  .escenario > svg{max-width:660px}
+  .marcas div{min-width:96px}
+
+  .transmision{max-width:660px;margin:10px auto 0;height:104px;overflow:hidden;
+    border:1px solid var(--linea);border-radius:9px;background:#fbfcfd;padding:8px 12px;
+    display:flex;flex-direction:column;justify-content:flex-end}
+  .transmision .linea{color:#8a3d3d;line-height:1.4;margin:1px 0;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
+  .transmision .vacia{color:var(--tinta-suave);font-style:italic;font-size:13px}
+
+  .tarea{max-width:660px;margin:14px auto 0;border-top:1px dashed var(--linea);padding-top:13px}
+  .tarea .quehago{font-size:13.5px;color:var(--tinta-suave);margin-bottom:9px;text-align:center}
+  .tarea .quehago b{color:var(--tinta)}
+  .piedras{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  .piedra{border:1px solid var(--linea);border-radius:9px;background:#fdfefe;font:inherit;
+    font-size:15px;font-weight:700;color:var(--tinta-suave);padding:12px 0;cursor:pointer;
+    transition:background .12s,color .12s,border-color .12s,transform .12s}
+  .piedra:hover{border-color:var(--acento)}
+  .piedra.dada{background:#3f7d5a;border-color:#3f7d5a;color:#fff}
+  .piedra.toca{border-color:var(--acento);box-shadow:0 0 0 3px var(--acento-claro)}
+  .piedra.mal{animation:sacudida .3s}
+  @keyframes sacudida{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}
+    75%{transform:translateX(4px)}}
+  @media (max-width:560px){.piedras{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>La radio que no se apaga</h1>
+  <p class="sub">Hay una emisora que lleva años transmitiendo y no tiene botón de apagado. Aquí transmite de verdad, en voz de la pantalla, mientras hay que hacer una tarea sencilla al lado. El dial baja pero nunca llega a cero, y cuanto más se baja, más seguido habla. Lo que la hoja mide no es el silencio: es si la tarea se terminó con la radio encendida.</p>
+  <p class="fuente">Metáfora de la radio que no se apaga y del vecino indeseable, en Díaz Corbobés, MANUAL ACT §3.4 y §3.7, dentro del trabajo de defusión y disposición.</p>
+
+</header>
+
+<section class="paso">
+  <h2><span class="num">1</span>¿Qué transmite tu emisora?</h2>
+  <p class="ayuda">Lo que suena todo el día de fondo, no lo más grave que se te ocurra.</p>
+  <div class="cuerpo">
+    <div class="chips" id="emisora"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>¿Qué ibas a hacer mientras tanto?</h2>
+  <div class="cuerpo">
+    <div class="chips" id="tarea"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="aparato" viewBox="0 0 660 150" role="img"
+    aria-label="Una radio encendida con su dial de volumen"></svg>
+  <div class="transmision" id="transmision"></div>
+
+  <div class="tarea">
+    <p class="quehago" id="quehago">Doce pasos, en orden, con la radio encendida.</p>
+    <div class="piedras" id="piedras"></div>
+  </div>
+
+  <div class="marcas">
+    <div><span class="n" id="mPasos" style="color:#3f7d5a">0/12</span><span class="r">pasos dados</span></div>
+    <div><span class="n" id="mReloj" style="color:#2f6f8f">0:00</span><span class="r">de tarea</span></div>
+    <div><span class="n" id="mApagones" style="color:#8a3d3d">0</span><span class="r">intentos de apagarla</span></div>
+    <div><span class="n" id="mDesvios" style="color:#c9962f">0</span><span class="r">veces que te desviaste</span></div>
+  </div>
+
+  <div class="medidor" style="max-width:420px;margin:14px auto 0">
+    <label for="volumen">Volumen</label>
+    <input type="range" id="volumen" min="3" max="10" value="6">
+    <span class="valor" id="vVolumen">6</span>
+  </div>
+
+  <div class="mandos">
+    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Encender y empezar</button>
+    <button type="button" class="apagar" id="btnApagar" onclick="apagar()">Apagar la radio</button>
+    <button type="button" onclick="reiniciar()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="cajaPregunta" hidden>
+  <div class="pregunta" id="pregunta"></div>
+</section>
+
+<details class="notas-pro">
+  <summary>Notas del profesional</summary>
+  <div class="cuerpo">
+    <label class="etiqueta">Observaciones del proceso</label>
+    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+    <label class="etiqueta">Hipótesis de trabajo</label>
+    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+    <label class="etiqueta">Tarea acordada</label>
+    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+    <label class="etiqueta">Para la próxima sesión</label>
+    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+    <p class="ayuda" style="margin-top:12px">
+      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+      No incluir estas notas al imprimir</label>
+    </p>
+  </div>
+</details>
+
+<div class="barra">
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="Kit.copiar()">Copiar resumen</button>
+  <button onclick="Kit.guardar(true)">Guardar</button>
+  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
+
+</div>
+<div class="brindis" id="brindis"></div>
+
+<script>
+/* ============================================================
+   Kit común de las herramientas.
+   Se inserta completo en cada archivo: no hay dependencias externas
+   y todo funciona abriendo el HTML con doble clic, sin internet.
+   ============================================================ */
+var Kit = (function(){
+
+  var CLAVE = "herramienta";
+  var ganchos = {};            // extra, restaurar, alCambiar, resumen
+  var listo = false;
+
+  /* ---------- utilidades ---------- */
+  function $(id){ return document.getElementById(id); }
+  function crearEl(tag, clase, texto){
+    var e = document.createElement(tag);
+    if(clase) e.className = clase;
+    if(texto !== undefined) e.textContent = texto;
+    return e;
+  }
+  function svg(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  /* mezcla dos colores hex; t=0 devuelve a, t=1 devuelve b */
+  function mezcla(a, b, t){
+    t = Math.max(0, Math.min(1, t));
+    function n(c, i){ return parseInt(c.substr(1 + i*2, 2), 16); }
+    var r = Math.round(n(a,0) + (n(b,0) - n(a,0)) * t),
+        g = Math.round(n(a,1) + (n(b,1) - n(a,1)) * t),
+        z = Math.round(n(a,2) + (n(b,2) - n(a,2)) * t);
+    return "#" + [r,g,z].map(function(v){ return ("0"+v.toString(16)).slice(-2); }).join("");
+  }
+  function escapar(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  /* Se conserva por compatibilidad: estas hojas son de uso clínico. */
+  function modo(){ return "clinica"; }
+
+  /* ---------- fichas ----------
+     Pocas fichas, las más frecuentes, y un "+" para que la persona ponga la
+     suya. Lo que agrega se guarda con la hoja y vuelve al recargar.        */
+  var LIBRES = {};      // contenedorId -> [texto, ...]
+  var REG = {};         // contenedorId -> {lista, alCambiar, sinMas}
+
+  function unChip(contId, txt, id, alCambiar, libre){
+    var b = crearEl("button", "chip" + (libre ? " libre" : ""));
+    b.type = "button";
+    b.id = id;
+    b.setAttribute("data-txt", txt);
+    b.appendChild(document.createTextNode(txt));
+    if(libre){
+      var x = crearEl("span", "quitarChip", "×");
+      x.title = "Quitar";
+      x.onclick = function(ev){
+        ev.stopPropagation();
+        var l = LIBRES[contId] || [], i = l.indexOf(txt);
+        if(i >= 0) l.splice(i, 1);
+        redibujar(contId);
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      b.appendChild(x);
+    }
+    b.onclick = function(){
+      b.classList.toggle("activa");
+      if(alCambiar) alCambiar();
+      guardar();
+    };
+    return b;
+  }
+
+  function botonMas(contId, alCambiar){
+    var mas = crearEl("button", "chip mas", "+");
+    mas.type = "button";
+    mas.title = "Agregar una tuya";
+    mas.onclick = function(){
+      var caja = mas.parentElement;
+      var campo = document.createElement("input");
+      campo.type = "text";
+      campo.className = "chipNuevo";
+      campo.placeholder = "En tus palabras…";
+      caja.insertBefore(campo, mas);
+      mas.style.display = "none";
+      var cerrado = false;
+      function cerrar(guardarlo){
+        if(cerrado) return;
+        cerrado = true;
+        var txt = campo.value.trim();
+        campo.remove();
+        mas.style.display = "";
+        if(guardarlo && txt){
+          agregarLibre(contId, txt);
+          if(alCambiar) alCambiar();
+        }
+      }
+      campo.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter"){ ev.preventDefault(); cerrar(true); }
+        if(ev.key === "Escape"){ ev.preventDefault(); cerrar(false); }
+      });
+      campo.addEventListener("blur", function(){ cerrar(true); });
+      campo.focus();
+    };
+    return mas;
+  }
+
+  /* Agrega una ficha propia ya marcada. */
+  function agregarLibre(contId, txt){
+    if(!LIBRES[contId]) LIBRES[contId] = [];
+    if(LIBRES[contId].indexOf(txt) < 0) LIBRES[contId].push(txt);
+    redibujar(contId);
+    var l = LIBRES[contId], id = contId + "-libre-" + l.indexOf(txt);
+    if($(id)) $(id).classList.add("activa");
+    guardar();
+  }
+
+  function redibujar(contId){
+    var r = REG[contId];
+    if(r) chips(contId, r.lista, r.alCambiar, r.sinMas);
+  }
+
+  /* chips("miCaja", ["Una","Otra"], alCambiar)  -> con boton "+"
+     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"          */
+  function chips(contenedorId, lista, alCambiar, sinMas){
+    var c = $(contenedorId);
+    if(!c) return;
+    REG[contenedorId] = {lista:lista, alCambiar:alCambiar, sinMas:sinMas};
+    var marcadas = {};
+    for(var k = 0; k < c.children.length; k++)
+      if(c.children[k].classList.contains("activa"))
+        marcadas[c.children[k].getAttribute("data-txt")] = 1;
+
+    c.innerHTML = "";
+    c.classList.add("chips");
+    lista.forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-" + i, alCambiar);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    (LIBRES[contenedorId] || []).forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, alCambiar, true);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    if(!sinMas) c.appendChild(botonMas(contenedorId, alCambiar));
+  }
+
+  /* Tarjetas con título y descripción. lista: [["Título","Descripción"], ...] */
+  function opciones(contenedorId, lista, alCambiar, unica){
+    var c = $(contenedorId);
+    if(!c) return;
+    c.innerHTML = "";
+    c.classList.add("tarjetas");
+    lista.forEach(function(par, i){
+      var e = crearEl("div", "opcion");
+      e.id = contenedorId + "-" + i;
+      e.setAttribute("data-txt", par[0]);
+      e.innerHTML = "<b>" + escapar(par[0]) + "</b><span>" + escapar(par[1] || "") + "</span>";
+      e.onclick = function(){
+        if(unica) for(var j=0;j<c.children.length;j++)
+          if(c.children[j] !== e) c.children[j].classList.remove("activa");
+        e.classList.toggle("activa");
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      c.appendChild(e);
+    });
+  }
+
+  /* ---------- mostrador con ranuras ----------
+     El patrón de arrastrar-o-tocar: un mostrador de piezas y unas ranuras que
+     las reciben. Se arrastra en escritorio y se toca en celular.
+
+     cfg = {bancoId, ranurasId, cupo, items:[{id,titulo,desc,grupo,color}],
+            etiquetas:[...], alCambiar}                                     */
+  function mostrador(cfg){
+    var banco = $(cfg.bancoId), ranuras = $(cfg.ranurasId);
+    var puestas = [];                       // ids colocados, en orden
+    var porId = {};
+    cfg.items.forEach(function(it){ porId[it.id] = it; });
+
+    function pintarBanco(){
+      var grupos = [], vistos = {};
+      cfg.items.forEach(function(it){
+        var g = it.grupo || "";
+        if(!vistos[g]){ vistos[g] = []; grupos.push(g); }
+        vistos[g].push(it);
+      });
+      banco.innerHTML = "";
+      banco.classList.add("mostrador");
+      grupos.forEach(function(g){
+        var caja = crearEl("div", "grupo");
+        var col = vistos[g][0] && vistos[g][0].color;
+        if(g){
+          var tit = crearEl("div", "titulin", g);
+          if(col) tit.style.color = col;
+          caja.appendChild(tit);
+        }
+        var rejilla = crearEl("div", "tarjetas");
+        vistos[g].forEach(function(it){
+          var e = crearEl("div", "pieza" + (puestas.indexOf(it.id) >= 0 ? " usada" : ""));
+          e.draggable = true;
+          if(it.color){
+            e.style.borderLeft = "4px solid " + it.color;
+            e.style.background = it.color + "0f";
+          }
+          e.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          e.addEventListener("dragstart", function(ev){
+            ev.dataTransfer.setData("text/plain", it.id);
+            e.classList.add("arrastrando");
+          });
+          e.addEventListener("dragend", function(){ e.classList.remove("arrastrando"); });
+          e.addEventListener("click", function(){ poner(it.id); });
+          rejilla.appendChild(e);
+        });
+        caja.appendChild(rejilla);
+        banco.appendChild(caja);
+      });
+    }
+
+    function pintarRanuras(){
+      ranuras.innerHTML = "";
+      ranuras.classList.add("ranuras");
+      for(var i = 0; i < cfg.cupo; i++)(function(i){
+        var id = puestas[i], it = id ? porId[id] : null;
+        var r = crearEl("div", "ranura" + (it ? " llena" : ""));
+        if(it && it.color){
+          r.style.borderColor = it.color;
+          r.style.background = it.color + "0f";
+        }
+        r.appendChild(crearEl("span", "orden", i + 1));
+        if(it){
+          if(it.color) r.lastChild.style.background = it.color + "26";
+          var p = crearEl("div", "puesto");
+          p.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          r.appendChild(p);
+          var x = crearEl("button", "sacar", "×");
+          x.type = "button";
+          x.title = "Sacar";
+          x.onclick = function(){ sacar(i); };
+          r.appendChild(x);
+        } else {
+          r.appendChild(crearEl("span", "hueco",
+            (cfg.etiquetas && cfg.etiquetas[i]) || "Arrastra aquí, o toca una del mostrador"));
+        }
+        r.addEventListener("dragover", function(ev){
+          ev.preventDefault();
+          r.classList.add("encima");
+        });
+        r.addEventListener("dragleave", function(){ r.classList.remove("encima"); });
+        r.addEventListener("drop", function(ev){
+          ev.preventDefault();
+          r.classList.remove("encima");
+          poner(ev.dataTransfer.getData("text/plain"), i);
+        });
+        ranuras.appendChild(r);
+      })(i);
+    }
+
+    function poner(id, i){
+      if(!porId[id] || puestas.indexOf(id) >= 0) return;
+      if(i === undefined || puestas.length < i){
+        if(puestas.length >= cfg.cupo){ brindis("Las ranuras están llenas"); return; }
+        puestas.push(id);
+      } else {
+        puestas[i] = id;
+      }
+      refrescar();
+    }
+    function sacar(i){
+      puestas.splice(i, 1);
+      refrescar();
+    }
+    function refrescar(){
+      puestas = puestas.filter(function(x){ return x; });
+      pintarBanco();
+      pintarRanuras();
+      if(cfg.alCambiar) cfg.alCambiar();
+      guardar();
+    }
+
+    refrescar();
+    return {
+      elegidas: function(){ return puestas.map(function(id){ return porId[id]; }); },
+      ids: function(){ return puestas.slice(); },
+      cargar: function(lista){ puestas = (lista || []).filter(function(x){ return porId[x]; }); refrescar(); },
+      poner: poner,
+      refrescar: refrescar
+    };
+  }
+
+  /* Devuelve los textos marcados dentro de un contenedor de chips u opciones */
+  function activas(contenedorId){
+    var c = $(contenedorId), fuera = [];
+    if(!c) return fuera;
+    for(var i=0;i<c.children.length;i++){
+      var h = c.children[i];
+      if(!h.classList.contains("activa")) continue;
+      var t = h.getAttribute("data-txt");
+      if(t == null) t = h.tagName === "DIV" ? h.querySelector("b").textContent : h.textContent;
+      fuera.push(t);
+    }
+    return fuera;
+  }
+  /* Enlaza un input range con su etiqueta de valor */
+  function medidor(idRango, idSalida, alCambiar){
+    var r = $(idRango), s = $(idSalida);
+    if(!r) return;
+    function act(){
+      if(s) s.textContent = r.value;
+      if(alCambiar) alCambiar();
+    }
+    r.addEventListener("input", function(){ act(); guardar(); });
+    act();
+  }
+
+  /* Gota que se llena según el nivel: 0 vacía, 10 rebosando. */
+  function gota(nivel, tam){
+    var n = Math.max(0, Math.min(10, nivel)) / 10;
+    var t = tam || 26, uid = "g" + Math.random().toString(36).slice(2, 8);
+    var col = mezcla("#c9b48a", "#2f8fbf", n);
+    return '<svg class="gota" width="' + t + '" height="' + t * 1.18 + '" viewBox="0 0 24 28">' +
+      '<clipPath id="' + uid + '"><path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z"/></clipPath>' +
+      '<path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z" fill="#f2f5f8" ' +
+      'stroke="' + col + '" stroke-width="1.6"/>' +
+      '<rect x="0" y="' + (28 - 27 * n) + '" width="24" height="28" fill="' + col +
+      '" clip-path="url(#' + uid + ')" opacity="0.9"/></svg>';
+  }
+
+  /* ---------- reloj de escena ----------
+     Un solo latido para las hojas que se mueven. Llama a fn(dt) unas 25 veces
+     por segundo mientras esté andando, con dt en segundos. Se para sola cuando
+     la pestaña se va al fondo, para no gastar batería con una escena que nadie
+     está mirando, y retoma sin saltos al volver.                            */
+  function reloj(fn){
+    var id = null, previo = 0, deuda = 0, PASO = 0.04, dormida = false;
+    function latir(t){
+      id = requestAnimationFrame(latir);
+      if(!previo){ previo = t; return; }
+      var dt = Math.min(.25, (t - previo) / 1000);
+      previo = t;
+      deuda += dt;
+      if(deuda < PASO) return;
+      fn(deuda);
+      deuda = 0;
+    }
+    var r = {
+      andar: function(){ if(!id){ previo = 0; deuda = 0; id = requestAnimationFrame(latir); } },
+      parar: function(){ if(id){ cancelAnimationFrame(id); id = null; previo = 0; deuda = 0; } },
+      anda:  function(){ return !!id; }
+    };
+    document.addEventListener("visibilitychange", function(){
+      if(document.hidden && r.anda()){ dormida = true; r.parar(); }
+      else if(!document.hidden && dormida){ dormida = false; r.andar(); }
+    });
+    return r;
+  }
+
+  /* ---------- persistencia ---------- */
+  function camposGuardables(){
+    var fuera = [], t = document.querySelectorAll("input,textarea,select");
+    for(var i=0;i<t.length;i++) if(t[i].id) fuera.push(t[i]);
+    return fuera;
+  }
+  function marcablesGuardables(){
+    var fuera = [], t = document.querySelectorAll(".chip[id],.opcion[id]");
+    for(var i=0;i<t.length;i++) fuera.push(t[i]);
+    return fuera;
+  }
+  function guardar(avisar){
+    if(!listo) return;
+    var d = { _campos:{}, _marcas:{}, _libres: LIBRES };
+    camposGuardables().forEach(function(e){
+      d._campos[e.id] = (e.type === "checkbox" || e.type === "radio") ? e.checked : e.value;
+    });
+    marcablesGuardables().forEach(function(e){
+      if(e.classList.contains("activa")) d._marcas[e.id] = 1;
+    });
+    if(ganchos.extra) d._extra = ganchos.extra();
+    try{ localStorage.setItem(CLAVE, JSON.stringify(d)); }catch(e){}
+    if(avisar) brindis("Guardado en este equipo");
+  }
+  function cargar(){
+    var d = null;
+    try{ d = JSON.parse(localStorage.getItem(CLAVE) || "null"); }catch(e){}
+    if(!d) return false;
+    if(d._extra && ganchos.restaurar) ganchos.restaurar(d._extra);
+    LIBRES = d._libres || {};
+    Object.keys(LIBRES).forEach(redibujar);
+    camposGuardables().forEach(function(e){
+      if(!(e.id in (d._campos||{}))) return;
+      var v = d._campos[e.id];
+      if(e.type === "checkbox" || e.type === "radio") e.checked = !!v; else e.value = v;
+    });
+    marcablesGuardables().forEach(function(e){
+      if((d._marcas||{})[e.id]) e.classList.add("activa");
+    });
+    return true;
+  }
+  function limpiar(){
+    if(!confirm("¿Empezar de nuevo? Se borrará lo que está en pantalla en este equipo.")) return;
+    try{ localStorage.removeItem(CLAVE); }catch(e){}
+    location.reload();
+  }
+
+  /* ---------- copiar resumen para la historia clínica ---------- */
+  function encabezadoResumen(){
+    var l = [], t = document.querySelector("h1");
+    l.push((t ? t.textContent : "Herramienta").toUpperCase());
+    var pares = [["nombre","Consultante"],["fecha","Fecha"],["sesion","Sesión"],
+                 ["profesional","Profesional"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1] + ": " + e.value.trim());
+    });
+    return l.join("\n");
+  }
+  function notasProResumen(){
+    var l = [], pares = [["proObservaciones","Observaciones"],["proHipotesis","Hipótesis de trabajo"],
+                         ["proTarea","Tarea acordada"],["proProxima","Para la próxima sesión"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1].toUpperCase() + "\n" + e.value.trim());
+    });
+    return l.length ? "\n\n--- NOTAS DEL PROFESIONAL ---\n" + l.join("\n\n") : "";
+  }
+  function textoResumen(){
+    var cuerpo = ganchos.resumen ? ganchos.resumen() : "";
+    return encabezadoResumen() + "\n\n" + cuerpo + notasProResumen();
+  }
+  function copiar(){
+    var txt = textoResumen();
+    function viejo(){
+      var a = document.createElement("textarea");
+      a.value = txt;
+      a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(a);
+      brindis(ok ? "Resumen copiado al portapapeles" : "No se pudo copiar: revise el resumen impreso");
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(function(){
+        brindis("Resumen copiado al portapapeles");
+      }, viejo);
+    } else viejo();
+  }
+  /* ---------- impresión ----------
+     Los desplegables cerrados no salen en el papel. Antes de imprimir se
+     abren, y al terminar vuelven a como estaban, para que la hoja impresa
+     lleve lo que se trabajó aunque esté plegado en pantalla. */
+  var abiertosAlImprimir = [];
+  function antesDeImprimir(){
+    abiertosAlImprimir = [];
+    var ds = document.querySelectorAll("details");
+    for(var i = 0; i < ds.length; i++){
+      if(ds[i].classList.contains("catalogo")) continue;
+      if(ds[i].classList.contains("borrar")) continue;
+      if(!ds[i].open){ ds[i].open = true; abiertosAlImprimir.push(ds[i]); }
+    }
+  }
+  function despuesDeImprimir(){
+    abiertosAlImprimir.forEach(function(d){ d.open = false; });
+    abiertosAlImprimir = [];
+  }
+  if(window.addEventListener){
+    window.addEventListener("beforeprint", antesDeImprimir);
+    window.addEventListener("afterprint", despuesDeImprimir);
+    if(window.matchMedia){
+      var mq = window.matchMedia("print");
+      if(mq.addEventListener)
+        mq.addEventListener("change", function(e){
+          if(e.matches) antesDeImprimir(); else despuesDeImprimir();
+        });
+    }
+  }
+
+  function brindis(msg){
+    var b = $("brindis");
+    if(!b) return;
+    b.textContent = msg;
+    b.classList.add("visible");
+    clearTimeout(b._t);
+    b._t = setTimeout(function(){ b.classList.remove("visible"); }, 2200);
+  }
+
+  /* ---------- arranque ---------- */
+  function iniciar(cfg){
+    CLAVE = cfg.clave || "herramienta";
+    ganchos = cfg;
+
+    var ni = $("proNoImprimir"), sincNotas = null;
+    if(ni){
+      sincNotas = function(){
+        var s = document.querySelector("details.notas-pro");
+        if(s) s.classList.toggle("borrar", ni.checked);
+      };
+      ni.addEventListener("change", sincNotas);
+    }
+
+    listo = true;
+    cargar();
+    if(sincNotas) sincNotas();
+    if($("fecha") && !$("fecha").value)
+      $("fecha").value = new Date().toLocaleDateString("es-CO");
+
+    document.querySelectorAll("input,textarea,select").forEach(function(e){
+      if(!e.id) return;
+      e.addEventListener("input", function(){ guardar(); });
+      e.addEventListener("change", function(){ guardar(); });
+    });
+
+    if(ganchos.alCambiar) ganchos.alCambiar();
+  }
+
+  /* ---------- arranque reducido ----------
+     Para las hojas que ya traían su propio motor y su propia persistencia:
+     cablea el botón de copiar y no toca nada más. */
+  function soloModo(){
+    var ni = $("proNoImprimir");
+    if(ni) ni.addEventListener("change", function(){
+      var s = document.querySelector("details.notas-pro");
+      if(s) s.classList.toggle("borrar", ni.checked);
+    });
+    ganchos = { resumen: resumenGenerico };
+  }
+
+  /* Recorre las secciones y arma un texto con lo que esté diligenciado. */
+  function resumenGenerico(){
+    var fuera = [], secciones = document.querySelectorAll("section,header");
+    for(var i = 0; i < secciones.length; i++){
+      var s = secciones[i];
+      if(s.classList.contains("notas-pro")) continue;
+      var titulo = s.querySelector("h1,h2,h3");
+      var lineas = [];
+      var campos = s.querySelectorAll("input,textarea,select");
+      for(var j = 0; j < campos.length; j++){
+        var e = campos[j];
+        if(e.type === "checkbox" || e.type === "radio" || !e.id) continue;
+        if(!String(e.value).trim()) continue;
+        var et = s.querySelector('label[for="' + e.id + '"]');
+        lineas.push("  " + (et ? et.textContent.trim() + ": " : "") + e.value.trim());
+      }
+      var marcas = s.querySelectorAll(".activa,.llena,.activo,.on");
+      var nombres = [];
+      for(var k = 0; k < marcas.length; k++){
+        var m = marcas[k];
+        if(m.classList.contains("mini")) continue;   /* catálogo, no elección */
+        var b = m.querySelector("b");
+        var txt = (b ? b.textContent : m.textContent).replace(/\s+/g, " ").trim();
+        if(txt && nombres.indexOf(txt) < 0) nombres.push(txt);
+      }
+      if(nombres.length) lineas.push("  Marcado: " + nombres.join(", "));
+      if(lineas.length){
+        if(titulo) fuera.push(titulo.textContent.trim().toUpperCase());
+        fuera.push(lineas.join("\n"));
+      }
+    }
+    return fuera.join("\n");
+  }
+
+  return {
+    iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
+    chips: chips, opciones: opciones, activas: activas, medidor: medidor,
+    agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
+    $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
+    reloj: reloj,
+    brindis: brindis, modo: modo, texto: textoResumen
+  };
+})();
+
+</script>
+<script>
+const $ = Kit.$;
+
+const EMISORA = ["«No vas a poder»","«Esto no sirve de nada»","«Y si sale mal»",
+                 "«Mira cómo te está yendo»"];
+const TAREAS = ["Estudiar una hora","Mandar el correo","Salir a caminar","Hacer la llamada"];
+const PASOS = 12;
+
+let orden = [], siguiente = 1, apagones = 0, desvios = 0, tiempo = 0;
+let lineas = [], proxima = 0, silencio = 0, corriendo = false, termino = false;
+
+const emisora = () => Kit.activas("emisora");
+const laTarea = () => Kit.activas("tarea")[0] || "";
+const vol     = () => +$("volumen").value;
+/* Cuanto más se le baja, más seguido habla: el volumen no es la frecuencia. */
+const intervalo = () => 1.5 + (vol() - 3) * .23 + Math.random() * .9;
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  if(corriendo && !termino) tiempo += dt;
+
+  if(silencio > 0){
+    silencio -= dt;
+    if(silencio <= 0){
+      silencio = 0;
+      $("volumen").value = Math.min(10, vol() + 1);
+      valores();
+      Kit.brindis("Volvió sola, y un punto más fuerte.");
+      Kit.guardar();
+    }
+  } else if(corriendo && !termino){
+    proxima -= dt;
+    if(proxima <= 0){
+      const l = emisora();
+      if(l.length){
+        lineas.push({texto:l[Math.floor(Math.random() * l.length)], vol:vol()});
+        if(lineas.length > 14) lineas.shift();
+        pintarTransmision();
+      }
+      proxima = intervalo();
+    }
+  }
+
+  marcas();
+  dibujar();
+}
+
+/* ====================== EL APARATO ====================== */
+function dibujar(){
+  const svg = $("aparato");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t); return t;
+  };
+
+  g("rect", {x:0, y:0, width:660, height:150, fill:"#f6f8fa"});
+
+  /* la caja de la radio */
+  g("rect", {x:40, y:24, width:250, height:104, rx:12, fill:"#c9b291", stroke:"#a8916f",
+    "stroke-width":2});
+  g("rect", {x:54, y:38, width:104, height:44, rx:6, fill:"#3f4348"});
+  /* la aguja del dial, siempre corriendo por la banda */
+  const ax = 60 + ((tiempo * 9) % 92);
+  g("path", {d:`M${ax} 40 L${ax} 80`, stroke:"#e8c15a", "stroke-width":2.5});
+  for(let k = 0; k < 8; k++)
+    g("path", {d:`M${62 + k * 12} 74 L${62 + k * 12} 80`, stroke:"#7d858c", "stroke-width":1.4});
+  texto(106, 96, emisora().length ? "transmitiendo" : "sin emisora",
+    "font:600 10.5px system-ui;fill:#5a4a33");
+  /* la rejilla del parlante */
+  for(let f = 0; f < 5; f++)
+    for(let c = 0; c < 5; c++)
+      g("circle", {cx:186 + c * 18, cy:44 + f * 16, r:4, fill:"#a8916f"});
+  /* la perilla, girada según el volumen */
+  const ang = -130 + (vol() / 10) * 260;
+  g("circle", {cx:265, cy:104, r:15, fill:"#8a7457"});
+  g("path", {d:"M0 0 L0 -11", stroke:"#f6f8fa", "stroke-width":2.6,
+    transform:`translate(265,104) rotate(${ang})`, "stroke-linecap":"round"});
+  texto(265, 134, "vol " + vol(), "font:600 10.5px system-ui;fill:#8a7f74");
+
+  /* las ondas: más anchas con más volumen, y ninguna en el silencio */
+  const mudo = silencio > 0;
+  if(!mudo && corriendo)
+    for(let k = 1; k <= 4; k++){
+      const r = 26 + k * 22 + Math.sin(tiempo * 3 + k) * 3;
+      g("path", {d:`M${300} ${76 - r * .62} A ${r} ${r} 0 0 1 ${300} ${76 + r * .62}`,
+        stroke:"#8a3d3d", "stroke-width":2.4, fill:"none", "stroke-linecap":"round",
+        opacity:(Math.max(0, (vol() / 10) - (k - 1) * .2) * .8).toFixed(2)});
+    }
+  if(mudo)
+    texto(470, 80, "silencio…", "font:italic 15px system-ui;fill:#8a7f74");
+  else if(!corriendo)
+    texto(470, 80, "la radio está apagada, todavía",
+      "font:italic 14px system-ui;fill:#8a7f74");
+}
+
+function pintarTransmision(){
+  const caja = $("transmision");
+  if(!lineas.length){
+    caja.innerHTML = `<div class="vacia">La emisora todavía no ha empezado a transmitir.</div>`;
+    return;
+  }
+  caja.innerHTML = lineas.map((l, i) => {
+    const viejo = lineas.length - 1 - i;
+    const op = Math.max(.22, 1 - viejo * .16);
+    const tam = 11.5 + l.vol * .85;
+    return `<div class="linea" style="opacity:${op.toFixed(2)};font-size:${tam.toFixed(1)}px">` +
+           Kit.escapar(l.texto) + `</div>`;
+  }).join("");
+}
+
+/* ====================== LA TAREA ====================== */
+function barajar(){
+  orden = [];
+  for(let i = 1; i <= PASOS; i++) orden.push(i);
+  for(let i = orden.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [orden[i], orden[j]] = [orden[j], orden[i]];
+  }
+}
+
+function pintarPiedras(){
+  $("piedras").innerHTML = orden.map(n =>
+    `<button type="button" class="piedra${n < siguiente ? " dada" : ""}` +
+    `${n === siguiente && corriendo ? " toca" : ""}" data-n="${n}">${n}</button>`).join("");
+  $("piedras").querySelectorAll("button[data-n]").forEach(b => {
+    b.addEventListener("click", () => pisar(+b.getAttribute("data-n"), b));
+  });
+  const t = laTarea();
+  $("quehago").innerHTML = t
+    ? `Doce pasos de <b>${Kit.escapar(t)}</b>, en orden, con la radio encendida.`
+    : "Doce pasos, en orden, con la radio encendida.";
+}
+
+function pisar(n, boton){
+  if(!corriendo || termino) return;
+  if(n === siguiente){
+    siguiente++;
+    if(siguiente > PASOS) terminar();
+    pintarPiedras();
+  } else if(n > siguiente){
+    desvios++;
+    boton.classList.add("mal");
+    setTimeout(() => boton.classList.remove("mal"), 320);
+  }
+  marcas();
+  Kit.guardar();
+}
+
+/* ====================== ACCIONES ====================== */
+function arrancar(){
+  if(!emisora().length){ Kit.brindis("Marca primero qué transmite tu emisora"); return; }
+  if(termino){ Kit.brindis("Ya terminaste. Reinicia si quieres repetirlo."); return; }
+  corriendo = true;
+  proxima = .6;
+  escena.andar();
+  pintarPiedras();
+  botones();
+  Kit.guardar();
+}
+
+/* No apaga: la silencia dos segundos y vuelve un punto más fuerte. */
+function apagar(){
+  if(!corriendo){ Kit.brindis("Enciéndela primero"); return; }
+  apagones++;
+  silencio = 2;
+  marcas();
+  Kit.guardar();
+}
+
+function terminar(){
+  termino = true;
+  corriendo = false;
+  escena.parar();
+  botones();
+  Kit.brindis("Terminaste, y la radio nunca se apagó.");
+  preguntar();
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  siguiente = 1; apagones = 0; desvios = 0; tiempo = 0;
+  lineas = []; proxima = 0; silencio = 0; corriendo = false; termino = false;
+  barajar();
+  refrescar();
+  Kit.guardar();
+}
+
+function botones(){
+  $("btnArrancar").disabled = corriendo || termino;
+  $("btnApagar").disabled = !corriendo;
+}
+
+function valores(){ $("vVolumen").textContent = vol(); }
+
+function marcas(){
+  $("mPasos").textContent    = (siguiente - 1) + "/" + PASOS;
+  $("mReloj").textContent    = Math.floor(tiempo / 60) + ":" +
+                               String(Math.floor(tiempo % 60)).padStart(2, "0");
+  $("mApagones").textContent = apagones;
+  $("mDesvios").textContent  = desvios;
+}
+
+function refrescar(){
+  if(!orden.length) barajar();
+  valores();
+  botones();
+  marcas();
+  pintarPiedras();
+  pintarTransmision();
+  dibujar();
+  preguntar();
+}
+
+function preguntar(){
+  $("cajaPregunta").hidden = !termino;
+  if(!termino) return;
+  $("pregunta").textContent = apagones > 0
+    ? `La apagaste ${apagones} ${apagones === 1 ? "vez" : "veces"} y volvió más fuerte, y aun así terminaste los doce pasos. ¿Qué de esto ya lo has vivido?`
+    : "Terminaste los doce con la radio encendida todo el tiempo. ¿Qué estabas esperando que pasara primero, allá afuera?";
+}
+
+function resumen(){
+  const l = [];
+  l.push("LA EMISORA");
+  l.push(emisora().length ? emisora().join(" · ") : "(sin marcar)");
+  l.push("LA TAREA: " + (laTarea() || "(sin elegir)"));
+  l.push("", `CON LA RADIO ENCENDIDA: ${siguiente - 1} de ${PASOS} pasos en ` +
+             `${Math.floor(tiempo / 60)}:${String(Math.floor(tiempo % 60)).padStart(2, "0")}, ` +
+             `${apagones} intentos de apagarla, ${desvios} desvíos.`);
+  l.push("Volumen final: " + vol() + " de 10 (el mínimo posible es 3).");
+  l.push("Terminó la tarea: " + (termino ? "sí" : "no"));
+  if(termino) l.push("", "PREGUNTA QUE QUEDÓ ABIERTA", $("pregunta").textContent);
+  return l.join("\n");
+}
+
+Kit.chips("emisora", EMISORA, refrescar);
+Kit.chips("tarea", TAREAS, pintarPiedras);
+$("volumen").addEventListener("input", () => { valores(); dibujar(); });
+
+Kit.iniciar({
+  clave: "met-la-radio",
+  extra: () => ({orden, siguiente, apagones, desvios, tiempo, termino}),
+  restaurar: d => {
+    orden = (d.orden && d.orden.length === PASOS) ? d.orden : [];
+    siguiente = d.siguiente || 1; apagones = d.apagones || 0;
+    desvios = d.desvios || 0; tiempo = d.tiempo || 0; termino = !!d.termino;
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});
+</script>
+</body>
+</html>

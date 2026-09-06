@@ -1,0 +1,315 @@
+@@meta
+archivo: met-los-ochenta-anos.html
+titulo: Los ochenta años
+orden: 06
+enfoque: Metáforas vivas
+etiqueta: Valores
+sub: Cumples ochenta años. Hay una mesa larga y tres personas que se levantan a decir quién fuiste con ellas. Eliges qué te gustaría que dijeran, y después mueves un solo calibrador: cuánto se pareció a eso el último mes. Lo que no se parece se apaga en la mesa, y ahí queda a la vista la distancia.
+fuente: Ejercicio del funeral y clarificación de valores, en Díaz Corbobés, MANUAL ACT §3.6, adaptado de Hayes, Strosahl y Wilson.
+resumen: Tres invitados, dos frases cada uno y un calibrador por frase. Las frases que no se parecen al último mes se apagan sobre la mesa: la distancia se ve, no se explica.
+@@css
+  .panel-mesa{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 12px 10px;margin-bottom:16px}
+  .mesa{display:block;width:100%;height:auto;max-width:720px;margin:0 auto}
+
+  .invitado{border:1px solid var(--linea);border-left-width:5px;border-radius:11px;
+    padding:14px 17px;margin-bottom:11px;background:#fdfefe}
+  .invitado .quien{font-size:15.5px;font-weight:700;margin-bottom:9px}
+  .invitado .chip{font-size:13px;padding:6px 13px}
+  .frase-med{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+    background:#f8fafc;border-radius:9px;padding:9px 13px;margin-top:8px}
+  .frase-med .texto{font-size:13.5px;font-style:italic}
+  .frase-med .mando{display:flex;align-items:center;gap:9px;min-width:210px}
+  .frase-med input[type=range]{flex:1;min-width:100px;height:20px}
+  .frase-med .v{font-weight:700;font-size:15px;min-width:24px;text-align:right}
+  .frase-med .comose{font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave);white-space:nowrap}
+
+  .distancias{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:10px;
+    padding-top:11px;border-top:1px dashed var(--linea)}
+  .distancias div{text-align:center;min-width:92px}
+  .distancias .n{font-size:21px;font-weight:700;display:block}
+  .distancias .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave)}
+
+  .pregunta-sola{border-left:5px solid var(--acento);
+    background:linear-gradient(180deg,#f7fbfd,#fff)}
+  .pregunta-sola .pregunta{background:transparent;padding:0;font-size:17px;line-height:1.5}
+  @media (max-width:620px){.frase-med{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Quién se sienta a la mesa</h2>
+  <p class="ayuda">Tres personas reales, que te conocen y que estarían ahí.</p>
+  <p class="pista-arrastre">Arrastra a cada uno a su silla. En el celular, tócalo.</p>
+  <div class="cuerpo">
+    <div class="ranuras" id="sillas"></div>
+    <div style="margin-top:15px"><div id="bancoInvitados"></div></div>
+  </div>
+</section>
+
+<section class="paso" id="pasoFrases">
+  <h2><span class="num">2</span>Qué te gustaría que dijeran</h2>
+  <p class="ayuda">Una o dos por persona. No lo que dirían hoy: lo que querrías que dijeran si
+  vivieras el resto de tu vida orientado hacia eso. Después, cuánto se pareció el último mes.</p>
+  <div class="cuerpo">
+    <div id="invitados"></div>
+    <div class="velo" id="veloInvitados">Siéntalos primero en las sillas de arriba.</div>
+  </div>
+</section>
+
+<div class="panel-mesa">
+  <svg class="mesa" id="mesa" viewBox="0 0 720 420" role="img"
+    aria-label="La mesa de los ochenta años con los invitados y lo que dicen"></svg>
+  <div class="distancias">
+    <div><span class="n" id="dFrases">0</span><span class="r">frases elegidas</span></div>
+    <div><span class="n" id="dParecido" style="color:#3f7d5a">0.0</span><span class="r">parecido medio</span></div>
+    <div><span class="n" id="dApagadas" style="color:#a8834e">0</span><span class="r">apagadas</span></div>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta" id="lPregunta"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const COLORES = {"Familia":"#c26a4e", "Cercanos":"#5f77b8", "Alrededor":"#4aa070"};
+
+const INVITADOS = [
+ {id:"i1", grupo:"Familia",  titulo:"Mi mamá o mi papá",   desc:"Quien te crió."},
+ {id:"i2", grupo:"Familia",  titulo:"Mi hermano o hermana", desc:"Quien creció contigo."},
+ {id:"i3", grupo:"Familia",  titulo:"Mi hijo o hija",       desc:"Hoy o en el futuro."},
+ {id:"i4", grupo:"Cercanos", titulo:"Mi pareja",            desc:"Quien comparte la vida contigo."},
+ {id:"i5", grupo:"Cercanos", titulo:"Mi mejor amigo",       desc:"El que te conoce de verdad."},
+ {id:"i6", grupo:"Cercanos", titulo:"Alguien a quien ayudé", desc:"Que estuvo mal y tú apareciste."},
+ {id:"i7", grupo:"Alrededor", titulo:"Un colega",           desc:"Quien trabajó contigo."},
+ {id:"i8", grupo:"Alrededor", titulo:"Un vecino",           desc:"Quien te vio en lo cotidiano."},
+ {id:"i9", grupo:"Alrededor", titulo:"Alguien de mi comunidad", desc:"Del barrio, del grupo, de la causa."}
+].map(i => Object.assign(i, {color: COLORES[i.grupo]}));
+
+/* Cuatro frases, las que más se repiten. El resto lo pone la persona. */
+const FRASES = [
+ "Siempre estuvo cuando lo necesité",
+ "Me escuchaba de verdad",
+ "Conmigo era paciente",
+ "Hacía lo que decía que iba a hacer"
+];
+
+const CUPO = 3;
+let sillas, parecido = {};   // clave "idInvitado|frase" -> 0..10
+
+const sentados = () => sillas ? sillas.elegidas() : [];
+const frasesDe = inv => Kit.activas("fr-" + inv.id);
+const clave = (inv, f) => inv.id + "|" + f;
+const valorDe = (inv, f) => parecido[clave(inv, f)] === undefined ? 5 : parecido[clave(inv, f)];
+
+function todasLasFrases(){
+  const fuera = [];
+  sentados().forEach(inv => frasesDe(inv).forEach(f =>
+    fuera.push({inv, frase:f, v:valorDe(inv, f)})));
+  return fuera;
+}
+
+const comoFue = v => v >= 8 ? "igualito" : v >= 6 ? "se pareció" : v >= 4 ? "a medias"
+                    : v >= 2 ? "casi nada" : "nada";
+
+/* ====================== INVITADOS ====================== */
+function pintarInvitados(){
+  const lista = sentados();
+  $("veloInvitados").style.display = lista.length ? "none" : "block";
+  $("invitados").innerHTML = lista.map(inv => `
+    <div class="invitado" style="border-left-color:${inv.color}">
+      <div class="quien">${Kit.escapar(inv.titulo)}</div>
+      <div class="chips" id="fr-${inv.id}"></div>
+      <div id="med-${inv.id}"></div>
+    </div>`).join("");
+  lista.forEach(inv => {
+    Kit.chips("fr-" + inv.id, FRASES, () => { pintarMedidores(); refrescar(); });
+  });
+  pintarMedidores();
+}
+
+function pintarMedidores(){
+  sentados().forEach(inv => {
+    const caja = $("med-" + inv.id);
+    if(!caja) return;
+    const fs = frasesDe(inv);
+    caja.innerHTML = fs.map(f => {
+      const v = valorDe(inv, f);
+      const col = Kit.mezcla("#a8834e", "#3f7d5a", v / 10);
+      return `<div class="frase-med">
+        <span class="texto">«${Kit.escapar(f)}»</span>
+        <span class="mando">
+          <span class="comose">el último mes</span>
+          <input type="range" min="0" max="10" value="${v}" data-i="${inv.id}"
+            data-f="${Kit.escapar(f)}" style="accent-color:${col}">
+          <span class="v" style="color:${col}">${v}</span>
+        </span>
+      </div>`;
+    }).join("");
+    if(fs.length > 2)
+      caja.innerHTML += `<div class="pistas" style="margin-top:9px">Con dos alcanza: elegir menos
+        obliga a decidir qué es lo más importante.</div>`;
+    caja.querySelectorAll("input[data-f]").forEach(inp => {
+      inp.addEventListener("input", () => {
+        inp.parentElement.querySelector(".v").textContent = inp.value;
+      });
+      inp.addEventListener("change", () => {
+        parecido[inp.dataset.i + "|" + inp.dataset.f] = +inp.value;
+        pintarMedidores();
+        refrescar();
+        Kit.guardar();
+      });
+    });
+  });
+}
+
+/* ====================== LA MESA ====================== */
+/* Una persona de pie detrás de la mesa. Se apaga cuando lo que dice no se
+   parece a como se vivió el último mes. */
+function invitadoDePie(svg, x, suelo, col, vivo){
+  const g = Kit.svg("g", {opacity: (.28 + .72 * vivo).toFixed(2),
+    style:"transition:opacity .4s"});
+  svg.appendChild(g);
+  const p = (t, a) => g.appendChild(Kit.svg(t, a));
+  const cad = suelo - 30, hom = suelo - 62, cab = suelo - 76;
+  p("path", {d:`M${x - 7} ${cad} L${x - 9} ${suelo}`, stroke:col, "stroke-width":6,
+    "stroke-linecap":"round"});
+  p("path", {d:`M${x + 7} ${cad} L${x + 9} ${suelo}`, stroke:col, "stroke-width":6,
+    "stroke-linecap":"round"});
+  p("path", {d:`M${x} ${cad} L${x} ${hom}`, stroke:col, "stroke-width":15,
+    "stroke-linecap":"round"});
+  /* un brazo levantado, como quien está hablando */
+  p("path", {d:`M${x - 2} ${hom + 4} q -14 8 -16 20`, stroke:col, "stroke-width":5,
+    fill:"none", "stroke-linecap":"round"});
+  p("path", {d:`M${x + 2} ${hom + 4} q 15 -4 17 -16`, stroke:col, "stroke-width":5,
+    fill:"none", "stroke-linecap":"round"});
+  p("circle", {cx:x, cy:cab, r:11, fill:col});
+  p("path", {d:`M${x - 11} ${cab - 2} q 3 -12 11 -11 q 8 -1 11 11 q -5 -6 -11 -5 q -6 0 -11 5 Z`,
+    fill:Kit.mezcla(col, "#241c2b", .5)});
+  return cab;
+}
+
+function dibujar(){
+  const svg = $("mesa");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":"middle", style:estilo});
+    t.textContent = s; svg.appendChild(t); return t;
+  };
+
+  g("rect", {x:0, y:0, width:720, height:420, fill:"#faf7f2"});
+
+  const lista = sentados();
+  if(!lista.length){
+    texto(360, 200, "La mesa está puesta y no hay nadie sentado todavía.",
+      "font:14.5px system-ui;fill:#b8ab98");
+    return;
+  }
+
+  const SUELO = 296;
+  lista.forEach((inv, i) => {
+    const cx = 720 / lista.length * (i + .5);
+    const fs = frasesDe(inv).slice(0, 2);
+    const media = fs.length ? fs.reduce((s, f) => s + valorDe(inv, f), 0) / fs.length : .5 * 10;
+    const vivo = media / 10;
+    const col = Kit.mezcla("#b0a596", inv.color, Math.pow(vivo, .7));
+
+    invitadoDePie(svg, cx, SUELO, col, vivo);
+
+    /* lo que dice, en globos que se apagan */
+    fs.forEach((f, k) => {
+      const v = valorDe(inv, f), op = .2 + .8 * (v / 10);
+      const y = 190 - k * 66;
+      const txt = f.length > 26 ? f.slice(0, 25) + "…" : f;
+      const ancho = Math.min(210, 18 + txt.length * 6.4);
+      const borde = Kit.mezcla("#c9bda9", "#3f7d5a", v / 10);
+      const bur = Kit.svg("g", {transform:`translate(${cx - ancho / 2},${y - 26})`,
+        style:"transition:opacity .4s", opacity:op});
+      svg.appendChild(bur);
+      bur.appendChild(Kit.svg("rect", {x:0, y:0, width:ancho, height:28, rx:14,
+        fill:"#fff", stroke:borde, "stroke-width":1.6}));
+      bur.appendChild(Kit.svg("path", {d:`M${ancho / 2 - 5} 28 l 5 9 l 6 -9 Z`, fill:"#fff",
+        stroke:borde, "stroke-width":1.6}));
+      const t = Kit.svg("text", {x:ancho / 2, y:18.5, "text-anchor":"middle",
+        style:`font:italic 11.5px system-ui;fill:${Kit.mezcla("#8a8073", "#2f6b4c", v / 10)}`});
+      t.textContent = "«" + txt + "»";
+      bur.appendChild(t);
+      const nota = Kit.svg("text", {x:ancho / 2, y:-6, "text-anchor":"middle",
+        style:`font:600 10px system-ui;fill:${borde};letter-spacing:.4px`});
+      nota.textContent = comoFue(v).toUpperCase();
+      bur.appendChild(nota);
+    });
+
+    texto(cx, SUELO + 58, inv.titulo.length > 22 ? inv.titulo.slice(0, 21) + "…" : inv.titulo,
+      `font:600 12.5px system-ui;fill:${col};paint-order:stroke;stroke:#faf7f2;` +
+      `stroke-width:4;stroke-linejoin:round`);
+  });
+
+  /* la mesa larga, delante de todos */
+  g("rect", {x:52, y:SUELO + 4, width:616, height:24, rx:6, fill:"#c9a97f"});
+  g("rect", {x:52, y:SUELO + 28, width:616, height:9, rx:4, fill:"#a8875f"});
+  g("rect", {x:92, y:SUELO + 37, width:12, height:44, fill:"#a8875f"});
+  g("rect", {x:616, y:SUELO + 37, width:12, height:44, fill:"#a8875f"});
+  texto(360, 412, "ochenta años", "font:italic 13px system-ui;fill:#a89a86");
+}
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  const todas = todasLasFrases();
+  const apagadas = todas.filter(x => x.v <= 3);
+  const media = todas.length ? todas.reduce((s, x) => s + x.v, 0) / todas.length : 0;
+
+  $("dFrases").textContent   = todas.length;
+  $("dParecido").textContent = media.toFixed(1);
+  $("dApagadas").textContent = apagadas.length;
+
+  dibujar();
+
+  const peor = todas.slice().sort((a, b) => a.v - b.v)[0];
+  $("lPregunta").textContent = !todas.length
+    ? "Si tuvieras que quedarte con una sola frase para toda tu vida, ¿cuál sería?"
+    : media >= 7
+    ? "Dame un ejemplo del último mes de cada una de esas frases."
+    : apagadas.length >= todas.length * .6
+    ? "De todo lo que se apagó, ¿qué es lo que más te dolió ver apagado?"
+    : `«${peor.frase}» es la que más se aleja. ¿Desde cuándo está así?`;
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const l = [];
+  l.push("LA MESA");
+  sentados().forEach(inv => {
+    l.push(`- ${inv.titulo}`);
+    frasesDe(inv).forEach(f =>
+      l.push(`    «${f}» — el último mes: ${valorDe(inv, f)}/10 (${comoFue(valorDe(inv, f))})`));
+  });
+  const todas = todasLasFrases();
+  if(todas.length){
+    const media = todas.reduce((s, x) => s + x.v, 0) / todas.length;
+    l.push("", `${todas.length} frases · parecido medio ${media.toFixed(1)} · ` +
+              `${todas.filter(x => x.v <= 3).length} apagadas`);
+    const peor = todas.slice().sort((a, b) => a.v - b.v)[0];
+    l.push(`La que más se aleja: «${peor.frase}», de ${peor.inv.titulo.toLowerCase()}.`);
+  }
+  return l.join("\n");
+}
+
+sillas = Kit.mostrador({
+  bancoId:"bancoInvitados", ranurasId:"sillas", cupo:CUPO, items:INVITADOS,
+  etiquetas:["Primera silla","Segunda silla","Tercera silla"],
+  alCambiar: () => { pintarInvitados(); refrescar(); }
+});
+
+Kit.iniciar({
+  clave: "met-los-ochenta-anos",
+  extra: () => ({sillas: sillas.ids(), parecido}),
+  restaurar: d => {
+    parecido = d.parecido || {};
+    if(d.sillas) sillas.cargar(d.sillas);
+  },
+  alCambiar: () => { pintarInvitados(); refrescar(); },
+  resumen: resumen
+});

@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi flor PERMAH</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6; --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 90px}
+  header.tapa,section.bloque{background:var(--papel);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:70ch}
+  .credito{margin-top:12px;padding-top:10px;border-top:1px dashed var(--linea);
+    font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .campos-id label{flex:1 1 160px;font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fdfefe}
+  .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+
+  /* --- disposición principal --- */
+  .tablero{display:grid;grid-template-columns:minmax(320px,44%) 1fr;gap:18px;align-items:start}
+  .panel-flor{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 10px;position:sticky;top:14px}
+  .flor{display:block;width:100%;height:auto}
+  .promedio-pie{text-align:center;font-size:13px;color:var(--tinta-suave);margin:2px 0 6px}
+  .promedio-pie b{color:var(--tinta);font-size:15px}
+
+  .petalos{display:flex;flex-direction:column;gap:10px}
+  .tarjeta{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
+    border-radius:var(--radio);padding:13px 16px;transition:box-shadow .15s,transform .15s}
+  .tarjeta.enfoque{box-shadow:0 0 0 2px var(--acento-claro);transform:translateX(2px)}
+  .cabeza{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .cabeza h3{margin:0;font-size:16px}
+  .cabeza .en{font-size:11.5px;color:var(--tinta-suave);text-transform:uppercase;letter-spacing:.6px}
+  .def{margin:5px 0 10px;font-size:13.5px;color:var(--tinta-suave)}
+  .fila{display:flex;align-items:center;gap:12px}
+  .fila input[type=range]{flex:1;min-width:120px;height:22px}
+  .marcador{min-width:46px;text-align:center;font-weight:700;font-size:17px;color:#fff;
+    border-radius:7px;padding:2px 6px}
+  .estado{font-size:12.5px;font-weight:600;margin-top:7px}
+  .sonda{font-size:13px;color:#3f5163;background:#f6f9fb;border-left:3px solid var(--linea);
+    border-radius:0 6px 6px 0;padding:7px 11px;margin-top:9px}
+  .sonda b{color:var(--acento)}
+
+  /* --- lectura del perfil --- */
+  .perfil{border-left:5px solid var(--acento);background:linear-gradient(180deg,#f7fbfd,#fff)}
+  .perfil .nombre{font-size:22px;font-weight:700;margin:2px 0 2px}
+  .perfil .metafora{font-size:15px;color:var(--tinta-suave);font-style:italic;margin:0 0 14px}
+  .campo{margin-bottom:12px}
+  .campo .etq{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:var(--acento);
+    font-weight:700;margin-bottom:3px}
+  .campo p{margin:0;font-size:14.5px}
+  .pregunta{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f}
+  .pregunta::before{content:"Para abrir en sesión";display:block;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.7px;color:var(--acento);font-weight:700;margin-bottom:4px}
+  .bandera{background:#fdf3ef;border:1px solid #f0d3c6;border-radius:8px;padding:11px 14px;
+    font-size:14px;color:#8a4a2c;margin-top:12px}
+
+  details.catalogo{margin-top:14px;border-top:1px dashed var(--linea);padding-top:12px}
+  details.catalogo summary{cursor:pointer;font-size:14px;color:var(--acento);font-weight:600}
+  .lista-perfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:9px;margin-top:12px}
+  .mini{border:1px solid var(--linea);border-radius:8px;padding:10px 12px;font-size:13px;
+    background:#fcfdfe}
+  .mini.activo{border-color:var(--acento);background:var(--acento-claro)}
+  .mini b{display:block;font-size:14px;margin-bottom:2px}
+  .mini span{color:var(--tinta-suave)}
+
+  .barra{position:fixed;bottom:0;left:0;right:0;background:var(--papel);border-top:1px solid var(--linea);
+    padding:11px 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;z-index:20}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff}
+  .aviso{font-size:12.5px;color:var(--tinta-suave);text-align:center;margin-top:20px}
+
+  @media (max-width:860px){
+    .tablero{grid-template-columns:1fr}
+    .panel-flor{position:static}
+    .envoltura{padding:16px 12px 90px}
+    .cabeza h3{font-size:17px}
+    .fila input[type=range]{height:30px}
+  }
+  @media print{
+    body{background:#fff}
+    .barra,.sonda,details.catalogo{display:none}
+    .tablero{grid-template-columns:40% 1fr}
+    .panel-flor{position:static}
+    header.tapa,section.bloque,.tarjeta{border-color:#bbb;break-inside:avoid;page-break-inside:avoid}
+    .envoltura{padding:0;max-width:none}
+  }
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>Mi flor PERMAH</h1>
+  <p class="sub">Seis áreas sostienen el bienestar. Nadie las tiene todas al máximo, y no se trata de
+  eso: se trata de mirar cómo está cada pétalo hoy y decidir a cuál darle agua primero.
+  Mueve cada calibrador y observa qué le pasa a la flor.</p>
+  <div class="campos-id">
+    <label>Nombre <input type="text" id="nombre" placeholder="Opcional"></label>
+    <label>Fecha <input type="text" id="fecha"></label>
+    <label>Momento <input type="text" id="momento" placeholder="Ej. Sesión inicial / Cierre"></label>
+  </div>
+  <p class="credito">Modelo PERMAH (Seligman) &middot; Adaptación digital del taller Flourish
+  &middot; Ruta de Atención Clínica, FUAA</p>
+</header>
+
+<div class="tablero">
+  <div class="panel-flor">
+    <svg class="flor" id="flor" viewBox="4 30 436 337" role="img" aria-label="Flor PERMAH"></svg>
+    <p class="promedio-pie">Promedio general <b id="promedio">5.0</b> / 10</p>
+  </div>
+  <div class="petalos" id="petalos"></div>
+</div>
+
+<section class="bloque perfil" id="perfil">
+  <div class="campo" style="margin-bottom:6px">
+    <div class="etq">Lectura del perfil</div>
+  </div>
+  <div class="nombre" id="pNombre">—</div>
+  <p class="metafora" id="pMetafora"></p>
+  <div class="campo"><div class="etq">Qué suele verse así en consulta</div><p id="pConsulta"></p></div>
+  <div class="campo"><div class="etq">Por dónde empezar</div><p id="pFoco"></p></div>
+  <div class="pregunta" id="pPregunta"></div>
+  <div id="pBandera"></div>
+
+  <details class="catalogo">
+    <summary>Ver las combinaciones posibles del PERMAH</summary>
+    <div class="lista-perfiles" id="catalogo"></div>
+  </details>
+</section>
+
+<p class="aviso">Material psicoeducativo de acompañamiento. Las lecturas de perfil son hipótesis para
+orientar la conversación, no diagnósticos ni resultados de una prueba psicométrica. Los datos se
+guardan solo en este equipo.</p>
+</div>
+
+<div class="barra">
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="guardar()">Guardar</button>
+  <button onclick="limpiar()">Empezar de nuevo</button>
+</div>
+
+<script>
+/* ============ ÁREAS ============ */
+const AREAS = [
+ {id:"P", corto:"Emoción positiva", es:"Emociones positivas", en:"Positive emotions",
+  sano:"#e8863c", marchito:"#a08a72",
+  def:"Qué tanto aparecen en tu día la alegría, la calma, la gratitud, el disfrute. No es estar bien todo el tiempo: es que esas emociones tengan lugar.",
+  sondas:["¿Hace cuánto no sientes algo parecido al disfrute? ¿Qué se llevó eso?",
+          "¿Qué cosas todavía te hacen sentir bien, aunque sea un rato?",
+          "¿Qué estás haciendo para que esto se mantenga así?"]},
+ {id:"E", corto:"Compromiso", es:"Compromiso", en:"Engagement",
+  sano:"#d1a52c", marchito:"#a3937a",
+  def:"Actividades que te absorben, en las que el tiempo se te pasa sin sentirlo. Lo que haces por gusto y no por obligación.",
+  sondas:["¿Qué actividades dejaste de hacer y antes te llenaban?",
+          "¿En qué se te va el tiempo sin darte cuenta?",
+          "¿Qué te da esa actividad que no te da nada más?"]},
+ {id:"R", corto:"Relaciones", es:"Relaciones", en:"Relationships",
+  sano:"#4aa070", marchito:"#8f9a8b",
+  def:"Los vínculos que te sostienen: familia, amistades, pareja, compañeros. Contar con alguien y que alguien cuente contigo.",
+  sondas:["Si esta noche te sintieras muy mal, ¿a quién podrías llamar?",
+          "¿Con quién cuentas de verdad y con quién te gustaría contar más?",
+          "¿Quiénes son tu gente y qué hacen por ti?"]},
+ {id:"M", corto:"Significado", es:"Significado", en:"Meaning",
+  sano:"#3f83a6", marchito:"#8494a0",
+  def:"Sentir que lo que haces tiene un propósito y que aportas a algo más grande que tú.",
+  sondas:["¿Para qué estás estudiando esto? ¿Sigue siendo tuya esa respuesta?",
+          "¿Qué le da sentido a tus días difíciles?",
+          "¿A quién le sirve lo que estás construyendo?"]},
+ {id:"A", corto:"Logro", es:"Logro", en:"Accomplishment",
+  sano:"#8171b4", marchito:"#948e9f",
+  def:"Metas que persigues y avances que reconoces. Incluye los pequeños: terminar algo, cumplir lo que te propusiste.",
+  sondas:["¿Qué te impide avanzar: no poder, no saber cómo, o no arrancar?",
+          "¿Qué has logrado este semestre, aunque te parezca poco?",
+          "¿Lo que logras te alcanza para sentirte bien, o siempre falta?"]},
+ {id:"H", corto:"Salud", es:"Salud", en:"Health",
+  sano:"#c0656f", marchito:"#a1898b",
+  def:"El cuerpo como base de todo lo demás: sueño, alimentación, movimiento, consumo de sustancias.",
+  sondas:["¿Cómo estás durmiendo y comiendo en estas semanas?",
+          "¿Qué es lo primero que se te desordena cuando estás mal: el sueño o la comida?",
+          "¿Qué haces por tu cuerpo que te esté funcionando?"]}
+];
+
+const NIVEL = n => n<=3 ? 0 : n<=6 ? 1 : 2;   // 0 marchito, 1 sostenido, 2 floreciendo
+const ETIQUETA_NIVEL = ["Pétalo marchito","Pétalo sostenido","Pétalo floreciendo"];
+
+/* ============ COMBINACIONES POSIBLES ============ */
+/* Se evalúan en orden: la primera que cumple, manda. */
+const alto = v => v>=7, bajo = v => v<=3, medio = v => v>3 && v<7;
+const PERFILES = [
+{clave:"plena", nombre:"Floración plena",
+ resumen:"Las seis áreas sostenidas o altas.",
+ condicion: s => AREAS.every(a=>s[a.id]>=7),
+ metafora:"La flor está abierta. No perfecta: abierta.",
+ consulta:"Un momento de buen funcionamiento general. Suele aparecer en cierres de proceso, o al inicio en estudiantes que consultan por una preocupación puntual y no por malestar global.",
+ foco:"Conservar. Identificar qué está haciendo bien para que pueda repetirlo cuando vengan las semanas difíciles.",
+ pregunta:"¿Qué estás haciendo hoy que quisieras seguir haciendo cuando lleguen los parciales?"},
+
+{clave:"marchita", nombre:"Flor marchita",
+ resumen:"Todas o casi todas las áreas en rojo.",
+ condicion: s => AREAS.filter(a=>bajo(s[a.id])).length>=5,
+ metafora:"No es un pétalo caído: es la planta entera pidiendo agua.",
+ consulta:"Malestar generalizado. Es frecuente en episodios depresivos, duelos recientes y crisis vitales. Aquí la flor no es la herramienta principal, es la puerta de entrada a la conversación.",
+ foco:"No repartir tareas en seis frentes. Elegir el pétalo más movible —casi siempre Salud o Relaciones— y sostener el vínculo terapéutico.",
+ pregunta:"De todo esto, ¿qué es lo que más pesa hoy?",
+ bandera:"Perfil de alerta: conviene aplicar tamizaje, indagar riesgo autolesivo y valorar derivación a atención terapéutica formal."},
+
+{clave:"rendimiento", nombre:"Rendimiento sin raíz",
+ resumen:"Logro alto, Salud baja.",
+ condicion: s => alto(s.A) && bajo(s.H),
+ metafora:"La flor sostiene el pétalo más grande sobre un tallo que ya no la aguanta.",
+ consulta:"El estudiante que cumple con todo y lo paga con el cuerpo: dormir poco, comer mal, ansiedad sostenida. Suele consultar tarde, cuando el cuerpo ya falló. Es el perfil clásico previo al burnout académico.",
+ foco:"Salud, sin negociar el rendimiento de entrada. Empezar por el sueño, que es lo que más rápido devuelve capacidad.",
+ pregunta:"¿Cuánto te está costando, en horas de sueño, sostener las notas que tienes?",
+ bandera:"Vale la pena preguntar por consumo de energizantes, automedicación y dolor físico persistente."},
+
+{clave:"soledad", nombre:"Soledad productiva",
+ resumen:"Relaciones bajas, con Logro o Compromiso altos.",
+ condicion: s => bajo(s.R) && (alto(s.A)||alto(s.E)),
+ metafora:"Una flor que crece hacia arriba pero sin nada al lado.",
+ consulta:"Funciona bien y está solo. Es muy común en estudiantes que migraron de ciudad para estudiar, y en quienes usan la productividad para no sentir el aislamiento. El buen rendimiento hace que nadie lo detecte.",
+ foco:"Relaciones, con acciones muy pequeñas y concretas. La meta no es 'hacer amigos', es un contacto agendado esta semana.",
+ pregunta:"Si mañana te enfermaras, ¿quién se daría cuenta?"},
+
+{clave:"sostenido", nombre:"Sostenido por otros",
+ resumen:"Relaciones altas mientras el resto flaquea.",
+ condicion: s => alto(s.R) && AREAS.filter(a=>a.id!=="R"&&bajo(s[a.id])).length>=3,
+ metafora:"La flor está caída, pero alguien la está sosteniendo.",
+ consulta:"Atraviesa un mal momento y tiene red. Pronóstico favorable: hay con quién trabajar. El riesgo es que la red se agote o que él evite pedir por no 'molestar'.",
+ foco:"Usar el vínculo como palanca: apoyarse en esa red para reactivar un segundo pétalo, y cuidar que la red no se sobrecargue.",
+ pregunta:"¿Quién te está sosteniendo ahora, y qué le has podido contar de todo esto?"},
+
+{clave:"sentido", nombre:"Sentido sin combustible",
+ resumen:"Significado alto, con Emoción positiva y Salud bajas.",
+ condicion: s => alto(s.M) && bajo(s.P) && bajo(s.H),
+ metafora:"Sabe hacia dónde va la flor, pero no le queda savia.",
+ consulta:"Tiene claro su propósito y no le alcanza la energía para sostenerlo. Aparece en estudiantes muy vocacionados, cuidadores familiares y quienes trabajan y estudian a la vez. La culpa es frecuente: 'sé para qué lo hago, no entiendo por qué no puedo'.",
+ foco:"Recuperar energía antes que motivación. Salud y emociones positivas: el propósito ya está, no hay que construirlo.",
+ pregunta:"Tienes claro el para qué. ¿Qué tendría que pasar para que el cuerpo te acompañe?"},
+
+{clave:"deriva", nombre:"Deriva sin brújula",
+ resumen:"Significado bajo, con Logro bajo o medio.",
+ condicion: s => bajo(s.M) && !alto(s.A),
+ metafora:"La flor está entera, pero ninguna raíz agarra tierra.",
+ consulta:"Cumple sin saber para qué. Es el perfil que antecede a la deserción y a los cambios de programa, y a menudo se disfraza de pereza o desmotivación. Frecuente en quienes eligieron carrera por otros.",
+ foco:"Significado. Vale más una conversación vocacional honesta que un plan de estudio o de hábitos.",
+ pregunta:"Si nadie más opinara, ¿seguirías en esto?"},
+
+{clave:"placer", nombre:"Placer sin propósito",
+ resumen:"Emoción positiva o Compromiso altos, con Significado y Logro bajos.",
+ condicion: s => (alto(s.P)||alto(s.E)) && bajo(s.M) && bajo(s.A),
+ metafora:"Pétalos vistosos que no alimentan a la planta.",
+ consulta:"La pasa bien y no avanza. Ojo: puede ser una etapa sana de la vida universitaria, o una evitación bien montada —pantallas, fiesta, consumo— frente a algo que duele mirar. La diferencia se ve en la conversación, no en el gráfico.",
+ foco:"Explorar primero si el disfrute es descanso o es escape. Solo después, trabajar propósito y metas.",
+ pregunta:"Cuando paras y te quedas solo, ¿qué aparece?"},
+
+{clave:"anhedonia", nombre:"Funciona pero no disfruta",
+ resumen:"Emoción positiva baja mientras Logro o Compromiso se sostienen.",
+ condicion: s => bajo(s.P) && !bajo(s.A) && !bajo(s.E),
+ metafora:"La flor cumple su forma, pero perdió el color.",
+ consulta:"Sigue rindiendo y dejó de sentir. Nadie a su alrededor lo nota porque las notas están bien. Es una señal temprana que conviene no dejar pasar.",
+ foco:"Activación conductual: recuperar actividades placenteras aunque no haya ganas, sin esperar a que las ganas vuelvan solas.",
+ pregunta:"¿Cuándo fue la última vez que algo te causó gusto de verdad?",
+ bandera:"Anhedonia con funcionamiento conservado: conviene tamizar sintomatología depresiva."},
+
+{clave:"cuerpo", nombre:"El cuerpo primero",
+ resumen:"Salud baja con el resto sostenido.",
+ condicion: s => bajo(s.H) && AREAS.filter(a=>a.id!=="H"&&!bajo(s[a.id])).length>=4,
+ metafora:"La flor está bien: es la tierra la que está seca.",
+ consulta:"La vida funciona y los hábitos no. Suele venir de desorden de horarios, trasnocho sostenido y alimentación de cafetería. Es el perfil más fácil de mover y el que más rápido mejora el resto.",
+ foco:"Salud, con una sola conducta a la vez. Empezar por la hora de acostarse, no por el gimnasio.",
+ pregunta:"¿Qué hora de dormir sería realista para ti esta semana, no la ideal?"},
+
+{clave:"cerrada", nombre:"Base sana, flor cerrada",
+ resumen:"Salud y Relaciones bien, con Compromiso y Logro bajos.",
+ condicion: s => !bajo(s.H) && !bajo(s.R) && bajo(s.E) && bajo(s.A),
+ metafora:"Tiene agua y tiene sol; todavía no abre.",
+ consulta:"Los recursos están, falta activación. Frecuente tras una pérdida, una ruptura o un semestre perdido: se cuidó lo básico y se soltó lo demás. También en procrastinación instalada.",
+ foco:"Activación y metas mínimas. Una acción por semana, observable, con día y hora.",
+ pregunta:"¿Qué es lo más pequeño que podrías hacer esta semana y que te haría sentir que arrancaste?"},
+
+{clave:"mixto", nombre:"Perfil mixto",
+ resumen:"Sin un patrón dominante: se lee por el contraste entre el pétalo más fuerte y el más débil.",
+ condicion: () => true,
+ metafora:"Cada flor tiene su forma; esta pide leerse por sus extremos.",
+ consulta:"No hay un patrón típico. La información útil está en la distancia entre lo que sostiene y lo que falla.",
+ foco:"Trabajar desde el pétalo más fuerte hacia el más débil: usar lo que ya funciona como recurso.",
+ pregunta:"¿Cómo podría {fuerte}, que hoy es lo que mejor tienes, ayudarte con {debil}?"}
+];
+
+/* ============ ESTADO ============ */
+const $ = id => document.getElementById(id);
+const CLAVE = "flor-permah-v2";
+const CAMPOS = ["nombre","fecha","momento"];
+const puntajes = {}; AREAS.forEach(a=>puntajes[a.id]=5);
+
+/* ============ TARJETAS ============ */
+$("petalos").innerHTML = AREAS.map(a=>`
+  <div class="tarjeta" id="tar-${a.id}" style="border-left-color:${a.sano}">
+    <div class="cabeza"><h3>${a.es}</h3><span class="en">${a.en}</span></div>
+    <p class="def">${a.def}</p>
+    <div class="fila">
+      <input type="range" id="r-${a.id}" min="0" max="10" value="5"
+             aria-label="${a.es}" style="accent-color:${a.sano}">
+      <span class="marcador" id="m-${a.id}" style="background:${a.sano}">5</span>
+    </div>
+    <div class="estado" id="e-${a.id}"></div>
+    <div class="sonda" id="s-${a.id}"></div>
+  </div>`).join("");
+
+AREAS.forEach(a=>{
+  const r=$("r-"+a.id);
+  const act=()=>{
+    puntajes[a.id]=+r.value;
+    $("tar-"+a.id).classList.add("enfoque");
+    clearTimeout(r._t); r._t=setTimeout(()=>$("tar-"+a.id).classList.remove("enfoque"),1200);
+    refrescar(); guardar();
+  };
+  r.addEventListener("input",act);
+});
+
+/* ============ COLOR ============ */
+const hex2rgb = h => [1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const mezcla = (a,b,t) => {
+  const A=hex2rgb(a), B=hex2rgb(b);
+  return "#"+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,"0")).join("");
+};
+
+/* ============ FLOR ============ */
+const CX=200, CY=200, LMIN=62, LMAX=134, RADIO_ETQ=152;
+const ns="http://www.w3.org/2000/svg";
+const crear=(t,at)=>{const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;};
+
+// pétalo unitario: nace en (0,0) y su punta está en (0,-1)
+function trazoPetalo(L,W,curvatura){
+  const w=W, c=curvatura;
+  return `M0 0 C${-w} ${-L*0.30} ${-w*c} ${-L*0.82} 0 ${-L}`
+       + ` C${w*c} ${-L*0.82} ${w} ${-L*0.30} 0 0 Z`;
+}
+
+function dibujar(){
+  const svg=$("flor"); svg.innerHTML="";
+
+  // halo suave cuando la flor está en buen estado general
+  const prom=promedio();
+  if(prom>=7) svg.appendChild(crear("circle",{cx:CX,cy:CY,r:LMAX+8,fill:"#f0f7ef"}));
+
+  // geometría de cada pétalo
+  const petalos = AREAS.map((a,i)=>{
+    const n=puntajes[a.id], t=n/10;
+    return {a, n, t,
+      L: LMIN+(LMAX-LMIN)*t,        // largo
+      W: 34+30*t,                    // ancho
+      curva: 0.55+0.45*t,            // lleno cuando está sano, encogido cuando no
+      caida: (1-t)*20,               // se vence hacia un lado al marchitarse
+      color: mezcla(a.marchito,a.sano,Math.pow(t,0.75)),
+      ang: -90+i*60};
+  });
+
+  // se dibujan de mayor a menor para que los pétalos pequeños no queden ocultos
+  [...petalos].sort((x,y)=>y.L-x.L).forEach(p=>{
+    const {a,n,t,L,W,curva,caida,color,ang}=p;
+    const g=crear("g",{transform:`translate(${CX} ${CY}) rotate(${ang+90+caida})`});
+
+    // silueta de lo que este pétalo podría llegar a ser
+    if(n<10) g.appendChild(crear("path",{d:trazoPetalo(LMAX,64,1),fill:"none",
+      stroke:a.sano,"stroke-width":1,"stroke-dasharray":"3 5",opacity:.28}));
+
+    // el pétalo
+    g.appendChild(crear("path",{d:trazoPetalo(L,W,curva),fill:color,
+      opacity:.42+.46*t, stroke:color,"stroke-width":1.5,"stroke-linejoin":"round"}));
+
+    // nervadura central: nítida si está sano, quebrada si está marchito
+    g.appendChild(crear("path",{d:`M0 -6 L0 ${-L*0.8}`,stroke:"#fff",
+      "stroke-width":1.2, opacity:.15+.35*t, "stroke-dasharray": n<=3?"2 4":"none"}));
+
+    // punta partida cuando el pétalo está marchito
+    if(n<=3){
+      g.appendChild(crear("path",{fill:"#fff",
+        d:`M0 ${-L} L${-W*0.20} ${-L*0.70} L0 ${-L*0.80} L${W*0.20} ${-L*0.70} Z`}));
+    }
+    // brillo cuando está floreciendo
+    if(n>=8){
+      g.appendChild(crear("ellipse",{cx:-W*0.22,cy:-L*0.55,rx:W*0.16,ry:L*0.20,
+        fill:"#fff",opacity:.30,transform:"rotate(-8)"}));
+    }
+
+    g.style.cursor="pointer";
+    g.onclick=()=>$("tar-"+a.id).scrollIntoView({behavior:"smooth",block:"center"});
+    svg.appendChild(g);
+  });
+
+  // etiquetas, siempre por encima de los pétalos
+  petalos.forEach(({a,n,color,ang})=>{
+    const rad=ang*Math.PI/180, cos=Math.cos(rad), sin=Math.sin(rad);
+    const anclaje = cos>.2?"start" : cos<-.2?"end" : "middle";
+    const et=crear("text",{x:CX+cos*RADIO_ETQ, y:CY+sin*RADIO_ETQ+4,
+      "text-anchor":anclaje, fill:color, style:"font:600 13px system-ui,sans-serif"});
+    et.textContent=`${a.corto} · ${n}`;
+    svg.appendChild(et);
+  });
+
+  // centro
+  const cc=mezcla("#b9a98c","#e8c15a",Math.pow(prom/10,0.8));
+  svg.appendChild(crear("circle",{cx:CX,cy:CY,r:25,fill:cc,stroke:"#fff","stroke-width":3}));
+  for(let k=0;k<8;k++){
+    const b=k*45*Math.PI/180;
+    svg.appendChild(crear("circle",{cx:CX+Math.cos(b)*11,cy:CY+Math.sin(b)*11,r:2.6,
+      fill:"#fff",opacity:.25+.35*(prom/10)}));
+  }
+}
+
+/* ============ LECTURA ============ */
+const promedio = () => AREAS.reduce((s,a)=>s+puntajes[a.id],0)/AREAS.length;
+const extremos = () => {
+  const o=[...AREAS].sort((x,y)=>puntajes[y.id]-puntajes[x.id]);
+  return {fuerte:o[0], debil:o[o.length-1],
+          plano: puntajes[o[0].id]-puntajes[o[o.length-1].id] <= 1};
+};
+
+function refrescar(){
+  AREAS.forEach(a=>{
+    const n=puntajes[a.id], niv=NIVEL(n);
+    const color=mezcla(a.marchito,a.sano,Math.pow(n/10,0.75));
+    $("m-"+a.id).textContent=n; $("m-"+a.id).style.background=color;
+    $("e-"+a.id).textContent=ETIQUETA_NIVEL[niv]; $("e-"+a.id).style.color=color;
+    $("s-"+a.id).innerHTML="<b>Preguntar:</b> "+a.sondas[niv];
+  });
+  $("promedio").textContent=promedio().toFixed(1);
+  dibujar();
+  leerPerfil();
+}
+
+function leerPerfil(){
+  const p = PERFILES.find(p=>p.condicion(puntajes));
+  const {fuerte,debil,plano} = extremos();
+  const rellenar = txt => txt.replace("{fuerte}",fuerte.es.toLowerCase())
+                             .replace("{debil}",debil.es.toLowerCase());
+  $("pNombre").textContent=p.nombre;
+  $("pMetafora").textContent=p.metafora;
+  $("pConsulta").textContent=p.consulta;
+  $("pFoco").textContent=rellenar(p.foco);
+  $("pPregunta").textContent=rellenar(p.pregunta);
+  $("pBandera").innerHTML = p.bandera ? `<div class="bandera">${p.bandera}</div>` : "";
+
+  if(p.clave==="mixto" && !plano){
+    $("pMetafora").textContent =
+      `Sostiene desde ${fuerte.es.toLowerCase()} y cede en ${debil.es.toLowerCase()}.`;
+  }
+  document.querySelectorAll(".mini").forEach(m=>
+    m.classList.toggle("activo", m.dataset.k===p.clave));
+}
+
+$("catalogo").innerHTML = PERFILES.map(p=>
+  `<div class="mini" data-k="${p.clave}"><b>${p.nombre}</b><span>${p.resumen}</span></div>`).join("");
+
+/* ============ PERSISTENCIA ============ */
+function guardar(){
+  const d={puntajes}; CAMPOS.forEach(c=>d[c]=$(c).value);
+  try{localStorage.setItem(CLAVE,JSON.stringify(d))}catch(e){}
+}
+function cargar(){
+  let d; try{d=JSON.parse(localStorage.getItem(CLAVE)||"null")}catch(e){}
+  if(!d) return;
+  CAMPOS.forEach(c=>{if(d[c]!==undefined)$(c).value=d[c]});
+  AREAS.forEach(a=>{
+    if(d.puntajes && d.puntajes[a.id]!==undefined){
+      puntajes[a.id]=d.puntajes[a.id]; $("r-"+a.id).value=puntajes[a.id];
+    }
+  });
+}
+function limpiar(){
+  if(!confirm("¿Empezar de nuevo? Se borrarán los puntajes.")) return;
+  try{localStorage.removeItem(CLAVE)}catch(e){}
+  location.reload();
+}
+CAMPOS.forEach(c=>$(c).addEventListener("input",guardar));
+cargar();
+if(!$("fecha").value) $("fecha").value=new Date().toLocaleDateString("es-CO");
+refrescar();
+</script>
+</body>
+</html>

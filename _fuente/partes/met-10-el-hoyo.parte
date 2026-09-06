@@ -1,0 +1,352 @@
+@@meta
+archivo: met-el-hoyo.html
+titulo: El hombre en el hoyo
+orden: 10
+enfoque: Metáforas vivas
+etiqueta: Desesperanza creativa
+sub: Estás dentro de un hoyo y lo único que te dieron es una pala. El botón de cavar se mantiene apretado, y mientras se cava la barra de «voy avanzando» se llena de verdad. En cuanto se suelta, esa barra se vacía sola en un segundo. La profundidad, en cambio, se queda donde quedó. Esa es toda la hoja.
+fuente: Metáfora del hombre en el hoyo y desesperanza creativa, en Díaz Corbobés, MANUAL ACT §3.1, sobre la formulación de Hayes, Strosahl y Wilson.
+resumen: Se cava manteniendo el botón y la sensación de avance se llena mientras dura el esfuerzo; al soltar se vacía y solo queda la profundidad acumulada. Soltar la pala no saca a nadie del hoyo, y deja las manos libres.
+campo3: Sesión
+campo3ph: Ej. Sesión 1
+@@css
+  button.cavar{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600;
+    touch-action:none;user-select:none}
+  button.cavar:hover{background:#763333;border-color:#763333}
+  button.cavar:active{background:#5f2828;border-color:#5f2828}
+  button.cavar:disabled{background:#d3bdbd;border-color:#d3bdbd}
+  button.soltar{background:#3f7d5a;border-color:#3f7d5a;color:#fff;font-weight:600}
+  button.soltar:hover{background:#356b4d;border-color:#356b4d}
+  .marcas div{min-width:104px}
+  .pregunta-sola{border-left-color:#8a3d3d;background:linear-gradient(180deg,#fdf7f5,#fff)}
+  .pregunta-sola.libre{border-left-color:#3f7d5a;background:linear-gradient(180deg,#f4faf6,#fff)}
+  .pregunta-sola.libre .pregunta{color:#2c5a44}
+  .manos{max-width:520px;margin:14px auto 0;border:2px solid #3f7d5a;border-radius:14px;
+    padding:13px 16px;background:#f4faf6}
+  .manos .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
+    color:#3f7d5a;margin-bottom:8px}
+  .manos .chip.activa{background:#3f7d5a;border-color:#3f7d5a}
+  .manos .chip.mas{color:#3f7d5a}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Con qué has estado cavando?</h2>
+  <p class="ayuda">Lo que haces cuando aparece, y que en el momento se siente como estar haciendo
+  algo por resolverlo.</p>
+  <div class="cuerpo">
+    <div class="chips" id="pala"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="corte" viewBox="0 0 700 330" role="img"
+    aria-label="Corte de un hoyo con una persona adentro y una pala"></svg>
+
+  <div class="manos" id="manos" hidden>
+    <div class="titulin">Con las manos libres</div>
+    <div class="chips" id="manosLibres"></div>
+  </div>
+
+  <div class="marcas">
+    <div><span class="n" id="mCavado" style="color:#8a3d3d">0</span><span class="r">seg. cavando</span></div>
+    <div><span class="n" id="mProf" style="color:#8a3d3d">1,2</span><span class="r">metros de hondo</span></div>
+    <div><span class="n" id="mSaco" style="color:#8a3d3d">0</span><span class="r">veces que la pala te sacó</span></div>
+    <div><span class="n" id="mSuelo" style="color:#3f7d5a">0</span><span class="r">seg. con la pala en el suelo</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="cavar" id="btnCavar">Cavar (mantener apretado)</button>
+    <button type="button" class="soltar" id="btnSoltar" onclick="soltarPala()">Soltar la pala</button>
+    <button type="button" id="btnRetomar" onclick="retomarPala()" hidden>Volver a agarrarla</button>
+    <button type="button" onclick="reiniciar()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="relato">
+  <div class="pregunta" id="pregunta"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const PALAS = ["Distraerme","Darle vueltas en la cabeza","Evitar salir","Buscar en internet"];
+const MANOS = ["Mirar dónde estoy parado","Pedir que me tiren algo"];
+
+const PXM = 26;                 /* píxeles por metro de profundidad */
+const SUELO_FIG = 300;          /* dónde tiene los pies la figura */
+
+let prof = 1.2, cavado = 0, avance = 0;
+let cavando = false, soltada = false, suelo = 0, mejorSuelo = 0;
+let tierra = [], fase = 0, ultimaPregunta = "";
+
+const conQue = () => Kit.activas("pala");
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  fase += dt;
+
+  if(cavando && !soltada){
+    prof += .34 * dt;
+    cavado += dt;
+    /* la sensación de estar avanzando sube mientras dura el esfuerzo */
+    avance = Math.min(1, avance + dt * 1.1);
+    /* y sale tierra, que es lo único que la pala produce */
+    if(Math.random() < dt * 22)
+      tierra.push({x:352 + Math.random() * 26, y:SUELO_FIG - 34,
+                   vx:30 + Math.random() * 70, vy:-110 - Math.random() * 70, t:0});
+  } else {
+    /* al soltar el botón se vacía sola, en menos de un segundo */
+    avance = Math.max(0, avance - dt * 1.9);
+  }
+
+  if(soltada){
+    suelo += dt;
+    if(suelo > mejorSuelo) mejorSuelo = suelo;
+  }
+
+  tierra.forEach(p => { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 320 * dt; });
+  tierra = tierra.filter(p => p.t < 1.4);
+
+  marcas();
+  dibujar();
+  preguntar();
+}
+
+/* ====================== EL CORTE ====================== */
+function dibujar(){
+  const svg = $("corte");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t); return t;
+  };
+
+  const HX0 = 250, HX1 = 450;
+  const crudo = 210 - (prof - 1.2) * PXM;
+  const clavada = crudo < 16;               /* la superficie ya se salió de cuadro */
+  const ySup = Math.max(16, crudo);
+
+  /* cielo y tierra */
+  g("rect", {x:0, y:0, width:700, height:330, fill:"#e8f0f4"});
+  g("rect", {x:0, y:ySup, width:HX0, height:330 - ySup, fill:"#c9b291"});
+  g("rect", {x:HX1, y:ySup, width:700 - HX1, height:330 - ySup, fill:"#c9b291"});
+  /* las vetas del terreno */
+  for(let k = 1; k * 34 < 330 - ySup; k++){
+    const y = ySup + k * 34;
+    g("path", {d:`M0 ${y} L${HX0} ${y}`, stroke:"#b9a184", "stroke-width":1.4});
+    g("path", {d:`M${HX1} ${y} L700 ${y}`, stroke:"#b9a184", "stroke-width":1.4});
+  }
+  /* el fondo del hoyo */
+  g("rect", {x:HX0, y:ySup, width:HX1 - HX0, height:330 - ySup, fill:"#7d674f"});
+  g("rect", {x:HX0, y:SUELO_FIG, width:HX1 - HX0, height:330 - SUELO_FIG, fill:"#5f4d3a"});
+  g("path", {d:`M${HX0} ${ySup} L${HX0} 330 M${HX1} ${ySup} L${HX1} 330`, stroke:"#8a7357",
+    "stroke-width":3});
+
+  /* el montón de tierra sacada, que crece con lo cavado */
+  const monton = Math.min(46, 8 + cavado * 1.9);
+  g("path", {d:`M${HX1 + 6} ${ySup} q ${monton} ${-monton * .95} ${monton * 2} 0 Z`,
+    fill:"#a8916f"});
+
+  /* la superficie: si ya no cabe, se rotula a cuánto quedó */
+  if(clavada){
+    g("path", {d:`M${HX0 - 26} 30 L${HX0 - 26} 12 M${HX0 - 32} 20 L${HX0 - 26} 12 L${HX0 - 20} 20`,
+      stroke:"#3f5163", "stroke-width":2.4, fill:"none", "stroke-linecap":"round"});
+    texto(HX0 - 26, 46, `la superficie, a ${prof.toFixed(1).replace(".", ",")} m`,
+      "font:600 12px system-ui;fill:#3f5163");
+  } else {
+    texto(HX0 - 76, ySup - 10, "la superficie", "font:600 12px system-ui;fill:#3f5163");
+  }
+
+  /* la persona, dentro del hoyo */
+  const golpe = cavando && !soltada ? Math.sin(fase * 9) : 0;
+  persona(svg, 350, SUELO_FIG, golpe);
+
+  /* la tierra que salta */
+  tierra.forEach(p => {
+    const op = Math.max(0, 1 - p.t / 1.4);
+    g("circle", {cx:p.x.toFixed(1), cy:p.y.toFixed(1), r:(2 + Math.random()).toFixed(1),
+      fill:"#8a7357", opacity:op.toFixed(2)});
+  });
+
+  /* la barra de la sensación de avance, dentro de la escena */
+  const bx = 60, bw = 170;
+  g("rect", {x:bx, y:290, width:bw, height:11, rx:5.5, fill:"#ffffffaa", stroke:"#b9a184",
+    "stroke-width":1.2});
+  g("rect", {x:bx + 1.5, y:291.5, width:(bw - 3) * avance, height:8, rx:4, fill:"#c9962f"});
+  texto(bx + bw / 2, 283, "voy avanzando",
+    "font:600 11px system-ui;fill:#8a6d1f;paint-order:stroke;stroke:#c9b291;stroke-width:3", "middle");
+
+  const et = conQue().length ? conQue().join(" · ") : "la pala";
+  texto(350, ySup + 26 > SUELO_FIG - 70 ? 40 : ySup + 26,
+    et.length > 40 ? et.slice(0, 39) + "…" : et,
+    "font:600 12.5px system-ui;fill:#f3ece2");
+}
+
+/* La figura: en el hoyo, con la pala en las manos o tirada en el suelo. */
+function persona(svg, x, base, golpe){
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const col = soltada ? "#3f7d5a" : "#3f5163";
+  const cad = base - 40, hom = base - 72, cab = base - 86;
+
+  g("path", {d:`M${x} ${cad} L${x - 11} ${base - 2}`, stroke:col, "stroke-width":6,
+    "stroke-linecap":"round"});
+  g("path", {d:`M${x} ${cad} L${x + 13} ${base - 2}`, stroke:col, "stroke-width":6,
+    "stroke-linecap":"round"});
+  const inc = soltada ? 0 : -5 + golpe * 3;
+  g("path", {d:`M${x} ${cad} L${x + inc} ${hom}`, stroke:col, "stroke-width":8,
+    "stroke-linecap":"round"});
+  g("circle", {cx:x + inc, cy:cab, r:11, fill:col});
+  g("path", {d:`M${x + inc - 11} ${cab - 3} q 4 -12 11 -11 q 8 0 11 11 q -6 -5 -11 -4 q -6 1 -11 4 Z`,
+    fill:"#2c3a48"});
+
+  if(soltada){
+    /* los brazos sueltos, y la pala en el piso */
+    g("path", {d:`M${x} ${hom + 5} q -12 12 -13 22`, stroke:col, "stroke-width":5,
+      fill:"none", "stroke-linecap":"round"});
+    g("path", {d:`M${x} ${hom + 5} q 13 11 14 22`, stroke:col, "stroke-width":5,
+      fill:"none", "stroke-linecap":"round"});
+    g("path", {d:`M${x + 26} ${base - 5} L${x + 62} ${base - 5}`, stroke:"#8a7357",
+      "stroke-width":4, "stroke-linecap":"round"});
+    g("rect", {x:x + 60, y:base - 13, width:15, height:17, rx:3, fill:"#9aa0a6"});
+  } else {
+    /* las dos manos en el mango, y la pala clavada abajo */
+    const ang = -46 + golpe * 22;
+    const mango = Kit.svg("g", {transform:`translate(${x + 8},${hom + 6}) rotate(${ang})`});
+    svg.appendChild(mango);
+    mango.appendChild(Kit.svg("path", {d:"M0 0 L0 44", stroke:"#8a7357", "stroke-width":4,
+      "stroke-linecap":"round"}));
+    mango.appendChild(Kit.svg("rect", {x:-8, y:42, width:16, height:18, rx:3, fill:"#9aa0a6"}));
+    g("path", {d:`M${x + inc} ${hom + 4} L${x + 8} ${hom + 4}`, stroke:col, "stroke-width":5,
+      "stroke-linecap":"round"});
+    g("path", {d:`M${x + inc} ${hom + 12} L${x + 12} ${hom + 20}`, stroke:col, "stroke-width":5,
+      "stroke-linecap":"round"});
+  }
+}
+
+/* ====================== ACCIONES ====================== */
+function empezarCavar(ev){
+  if(ev) ev.preventDefault();
+  if(soltada) return;
+  if(!conQue().length){ Kit.brindis("Primero di con qué has estado cavando"); return; }
+  cavando = true;
+  escena.andar();
+}
+function pararCavar(){
+  cavando = false;
+}
+
+function soltarPala(){
+  if(!conQue().length){ Kit.brindis("Primero di con qué has estado cavando"); return; }
+  soltada = true;
+  cavando = false;
+  suelo = 0;
+  escena.andar();
+  $("manos").hidden = false;
+  $("btnRetomar").hidden = false;
+  botones();
+  Kit.guardar();
+  setTimeout(() => $("manos").scrollIntoView({behavior:"smooth", block:"center"}), 350);
+}
+
+function retomarPala(){
+  soltada = false;
+  suelo = 0;
+  $("manos").hidden = true;
+  $("btnRetomar").hidden = true;
+  botones();
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  prof = 1.2; cavado = 0; avance = 0; cavando = false; soltada = false;
+  suelo = 0; mejorSuelo = 0; tierra = [];
+  $("manos").hidden = true;
+  $("btnRetomar").hidden = true;
+  refrescar();
+  Kit.guardar();
+}
+
+function botones(){
+  $("btnCavar").disabled = soltada;
+}
+
+function marcas(){
+  $("mCavado").textContent = Math.floor(cavado);
+  $("mProf").textContent   = prof.toFixed(1).replace(".", ",");
+  $("mSaco").textContent   = 0;
+  $("mSuelo").textContent  = Math.floor(suelo);
+}
+
+function refrescar(){
+  botones();
+  marcas();
+  dibujar();
+  preguntar();
+}
+
+function preguntar(){
+  const rel = $("relato");
+  rel.classList.toggle("libre", soltada);
+  let q;
+  if(!conQue().length)
+    q = "¿Qué es lo que haces, una y otra vez, para salir de esto?";
+  else if(soltada && suelo >= 15)
+    q = `Llevas ${Math.floor(suelo)} segundos con la pala en el suelo y sigues a ${prof.toFixed(1).replace(".", ",")} m. ¿Qué necesitarías, que no sea una pala?`;
+  else if(soltada)
+    q = "Soltar la pala no te sacó del hoyo. ¿Para qué serviría entonces?";
+  else if(cavado < 1)
+    q = "¿Cuánto llevas cavando, fuera de aquí?";
+  else if(cavado < 6)
+    q = "Mientras cavabas, ¿la barra decía la verdad?";
+  else
+    q = `${Math.floor(cavado)} segundos de esfuerzo y ${prof.toFixed(1).replace(".", ",")} m de hondo. ¿Qué pasaría si la pala no fuera la herramienta?`;
+  if(q !== ultimaPregunta){
+    $("pregunta").textContent = q;
+    ultimaPregunta = q;
+  }
+}
+
+function resumen(){
+  const l = [];
+  l.push("CON QUÉ HA ESTADO CAVANDO");
+  l.push(conQue().length ? conQue().join(" · ") : "(sin marcar)");
+  l.push("", `EN EL HOYO: ${Math.floor(cavado)} segundos cavando, ` +
+             `${prof.toFixed(1).replace(".", ",")} m de profundidad, ` +
+             `0 veces que la pala lo sacó.`);
+  l.push("Soltó la pala en sesión: " + (soltada ? "sí" : "no"));
+  l.push(`Racha más larga con la pala en el suelo: ${Math.floor(mejorSuelo)} segundos.`);
+  const m = Kit.activas("manosLibres");
+  if(m.length) l.push("", "QUÉ HARÁ CON LAS MANOS LIBRES", m.join(", "));
+  l.push("", "PREGUNTA QUE QUEDÓ ABIERTA", $("pregunta").textContent);
+  return l.join("\n");
+}
+
+/* Mantener apretado: con ratón, con dedo y con teclado. */
+const bc = $("btnCavar");
+bc.addEventListener("pointerdown", empezarCavar);
+bc.addEventListener("pointerup", pararCavar);
+bc.addEventListener("pointerleave", pararCavar);
+bc.addEventListener("pointercancel", pararCavar);
+bc.addEventListener("keydown", ev => {
+  if(ev.key === " " || ev.key === "Enter"){ ev.preventDefault(); empezarCavar(); }
+});
+bc.addEventListener("keyup", ev => {
+  if(ev.key === " " || ev.key === "Enter") pararCavar();
+});
+window.addEventListener("blur", pararCavar);
+
+Kit.chips("pala", PALAS, refrescar);
+Kit.chips("manosLibres", MANOS, refrescar);
+
+Kit.iniciar({
+  clave: "met-el-hoyo",
+  extra: () => ({prof, cavado, soltada, mejorSuelo}),
+  restaurar: d => {
+    prof = d.prof === undefined ? 1.2 : d.prof;
+    cavado = d.cavado || 0; soltada = !!d.soltada; mejorSuelo = d.mejorSuelo || 0;
+    if(soltada){ $("manos").hidden = false; $("btnRetomar").hidden = false; }
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});

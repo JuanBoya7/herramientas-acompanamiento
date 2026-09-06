@@ -1,0 +1,414 @@
+@@meta
+archivo: tcc-activacion-conductual.html
+titulo: Activación conductual
+orden: 04
+enfoque: Cognitivo-conductual
+etiqueta: Activación
+sub: Cuando alguien está mal, deja de hacer; y cuando deja de hacer, se pone peor. Esta hoja rompe ese círculo por el lado de la conducta y no del ánimo: se registran las actividades de la semana calificando dos cosas distintas —cuánto se disfrutó y cuánto se logró— y se programa la siguiente sin esperar a tener ganas.
+fuente: Técnicas operantes y programación de actividades con registro de dominio y agrado, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, caps. 3 y 8.
+resumen: Actividades de la semana calificadas en agrado y dominio, repartidas en cuatro cuadrantes. La lectura distingue al que hace sin disfrutar del que disfruta sin logro y del que tiene la semana vacía.
+@@css
+  .panel-mapa{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 10px;margin-bottom:16px}
+  .mapa{display:block;width:100%;height:auto;max-width:560px;margin:0 auto}
+  .cuentas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;
+    padding-top:10px;border-top:1px dashed var(--linea)}
+  .cuentas div{text-align:center;min-width:84px}
+  .cuentas .n{font-size:20px;font-weight:700;display:block}
+  .cuentas .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--tinta-suave)}
+
+  .actividad{border:1px solid var(--linea);border-left-width:5px;border-radius:10px;
+    padding:11px 14px;margin-bottom:9px;background:#fdfefe}
+  .actividad .arriba{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+  .actividad .qué{flex:1;font-size:14.5px;font-weight:600}
+  .actividad .sacar{border:0;background:transparent;color:var(--tinta-suave);font-size:18px;
+    cursor:pointer;padding:2px 7px;border-radius:6px;line-height:1}
+  .actividad .sacar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .dosejes{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .dosejes .uno{background:#f8fafc;border-radius:8px;padding:6px 10px}
+  .dosejes .uno label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave);margin-bottom:1px}
+  .dosejes .fila{display:flex;align-items:center;gap:8px}
+  .dosejes input[type=range]{flex:1;min-width:60px;height:20px}
+  .dosejes .v{font-weight:700;font-size:15px;min-width:20px;text-align:right}
+  .dias-mini{margin-top:8px}
+  .dias-mini .chip{font-size:11.5px;padding:3px 10px}
+  .cuadrante{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;
+    padding:2px 10px;margin-top:8px}
+  @media (max-width:560px){.dosejes{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué pasó esta semana</h2>
+  <p class="ayuda">Toca lo que hiciste. Vale todo: lo bueno, lo obligatorio y lo que te da pena
+  contar. Si la semana estuvo casi vacía, marca poco: una semana vacía también es un dato, y de
+  los más útiles.</p>
+  <div class="cuerpo">
+    <div id="bancoActividades"></div>
+    <details class="apunte" style="margin-top:12px">
+      <summary>Agregar una actividad propia</summary>
+      <div style="display:flex;gap:8px;margin-top:7px">
+        <input type="text" id="nuevaAct" placeholder="Lo que hiciste">
+        <button type="button" onclick="agregarActividad()">Agregar</button>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Calificar cada una</h2>
+  <p class="ayuda">Dos cosas distintas, y hay que resistirse a mezclarlas. <b>Agrado</b> es cuánto
+  lo disfrutaste mientras lo hacías. <b>Dominio</b> es cuánto sentiste que lograste algo, aunque no
+  te haya gustado nada. Lavar los platos puede ser dominio 7 y agrado 1.</p>
+  <div class="cuerpo">
+    <div id="actividades"></div>
+    <div class="velo" id="veloActividades">Todavía no has marcado ninguna actividad.</div>
+  </div>
+</section>
+
+<div class="panel-mapa">
+  <svg class="mapa" id="mapa" viewBox="0 0 540 420" role="img"
+    aria-label="Actividades de la semana según agrado y dominio"></svg>
+  <div class="cuentas">
+    <div><span class="n" id="cTotal">0</span><span class="r">actividades</span></div>
+    <div><span class="n" id="cAgrado" style="color:#c9962f">0.0</span><span class="r">agrado medio</span></div>
+    <div><span class="n" id="cDominio" style="color:#3f83a6">0.0</span><span class="r">dominio medio</span></div>
+    <div><span class="n" id="cDias">0</span><span class="r">días con algo</span></div>
+  </div>
+</div>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Lectura de la semana</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Qué suele verse así</div><p id="lConsulta"></p></div>
+  <div class="campo"><div class="etq">Qué programar</div><p id="lFoco"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+  <div id="lBandera"></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>La semana que viene</h2>
+  <p class="ayuda">Tres actividades, no diez, y cada una con día. La regla que hace funcionar esto
+  es una sola: <b>se hace por horario, no por ganas</b>. Las ganas llegan después de empezar, no
+  antes; esperar a tenerlas es lo que mantiene el círculo.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Lo que se programa</label>
+    <div class="chips" id="programa"></div>
+    <p class="ayuda" id="sugerenciaPrograma" style="margin-top:8px"></p>
+
+    <label class="etiqueta">Qué días</label>
+    <div class="chips" id="programaDias"></div>
+
+    <div id="lecturaProb"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const BANCO = [
+ {g:"Cuerpo", ops:["Dormir a la hora","Desayunar","Caminar","Hacer ejercicio","Bañarme",
+   "Salir a tomar aire","Cocinar algo"]},
+ {g:"Vínculos", ops:["Hablar con alguien","Llamar a mi familia","Salir con amigos",
+   "Almorzar acompañado","Escribirle a alguien","Ver a alguien en persona","Jugar con mi mascota"]},
+ {g:"Trabajo y obligaciones", ops:["Ir a trabajar","Entregar algo","Adelantar un pendiente",
+   "Hacer un trámite","Aprender algo","Pedir ayuda con algo"]},
+ {g:"Casa y orden", ops:["Ordenar el cuarto","Lavar la ropa","Lavar los platos","Hacer mercado",
+   "Pagar algo pendiente","Arreglar algo"]},
+ {g:"Gozo", ops:["Escuchar música","Ver una serie","Leer por gusto","Dibujar o escribir",
+   "Jugar videojuegos","Salir a caminar sin rumbo","Ver algo que me haga reír"]},
+ {g:"Cuidado", ops:["Meditar o respirar","Ir a terapia","Tomar la medicación","Ir al médico",
+   "Descansar sin pantalla","Escribir cómo me sentí"]}
+];
+const DIAS = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+
+let actividades = [];   // {id, texto, agrado, dominio, dias:[]}
+let contador = 0;
+
+function agregarActividad(texto){
+  const t = (typeof texto === "string" ? texto : $("nuevaAct").value).trim();
+  if(!t) return;
+  if(actividades.some(a => a.texto.toLowerCase() === t.toLowerCase())){
+    Kit.brindis("Esa ya está en la lista"); return;
+  }
+  actividades.push({id:"a" + (++contador), texto:t, agrado:5, dominio:5, dias:[]});
+  if(typeof texto !== "string") $("nuevaAct").value = "";
+  refrescar();
+  Kit.guardar();
+}
+function quitarActividad(id){
+  actividades = actividades.filter(a => a.id !== id);
+  refrescar();
+  Kit.guardar();
+}
+
+function cuadrante(a){
+  const alto = v => v >= 6;
+  if(alto(a.agrado) && alto(a.dominio)) return {c:"ambos", t:"Disfruto y logro", col:"#3f7d5a"};
+  if(!alto(a.agrado) && alto(a.dominio)) return {c:"solod", t:"Logro sin disfrutar", col:"#3f83a6"};
+  if(alto(a.agrado) && !alto(a.dominio)) return {c:"soloa", t:"Disfruto sin logro", col:"#c9962f"};
+  return {c:"ninguno", t:"Ni disfruto ni logro", col:"#8a7f76"};
+}
+
+/* ====================== BANCO ====================== */
+$("bancoActividades").innerHTML = BANCO.map((b, i) =>
+  `<div style="margin-bottom:12px">
+     <div style="font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
+       color:var(--tinta-suave);margin-bottom:6px">${b.g}</div>
+     <div class="chips" id="banco-${i}"></div>
+   </div>`).join("");
+BANCO.forEach((b, i) => {
+  Kit.chips("banco-" + i, b.ops, null);
+  $("banco-" + i).querySelectorAll(".chip").forEach(c => {
+    c.onclick = () => { agregarActividad(c.textContent); c.classList.remove("activa"); };
+  });
+});
+
+/* ====================== TARJETAS ====================== */
+function pintarActividades(){
+  $("veloActividades").style.display = actividades.length ? "none" : "block";
+  $("actividades").innerHTML = actividades.map(a => {
+    const q = cuadrante(a);
+    return `<div class="actividad" style="border-left-color:${q.col}">
+      <div class="arriba">
+        <span class="qué">${Kit.escapar(a.texto)}</span>
+        <button type="button" class="sacar" data-q="${a.id}" title="Quitar">&times;</button>
+      </div>
+      <div class="dosejes">
+        <div class="uno"><label>Agrado — cuánto lo disfruté</label>
+          <div class="fila"><input type="range" min="0" max="10" value="${a.agrado}"
+            data-a="${a.id}" data-c="agrado"><span class="v">${a.agrado}</span></div></div>
+        <div class="uno"><label>Dominio — cuánto logré</label>
+          <div class="fila"><input type="range" min="0" max="10" value="${a.dominio}"
+            data-a="${a.id}" data-c="dominio"><span class="v">${a.dominio}</span></div></div>
+      </div>
+      <div class="dias-mini"><div class="chips">${DIAS.map(d =>
+        `<button type="button" class="chip ${a.dias.indexOf(d) >= 0 ? "activa" : ""}"
+          data-a="${a.id}" data-d="${d}">${d}</button>`).join("")}</div></div>
+      <span class="cuadrante" style="background:${q.col}1f;color:${q.col}">${q.t}</span>
+    </div>`;
+  }).join("");
+
+  $("actividades").querySelectorAll("input[data-c]").forEach(inp => {
+    const a = actividades.find(x => x.id === inp.dataset.a);
+    inp.addEventListener("input", () => {
+      inp.parentElement.querySelector(".v").textContent = inp.value;
+    });
+    inp.addEventListener("change", () => {
+      a[inp.dataset.c] = +inp.value;
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  $("actividades").querySelectorAll("button[data-d]").forEach(b => {
+    const a = actividades.find(x => x.id === b.dataset.a);
+    b.onclick = () => {
+      const p = a.dias.indexOf(b.dataset.d);
+      if(p >= 0) a.dias.splice(p, 1); else a.dias.push(b.dataset.d);
+      b.classList.toggle("activa");
+      refrescar();
+      Kit.guardar();
+    };
+  });
+  $("actividades").querySelectorAll("button[data-q]").forEach(b =>
+    b.onclick = () => quitarActividad(b.dataset.q));
+}
+
+/* ====================== MAPA ====================== */
+const X0 = 62, X1 = 490, Y0 = 34, Y1 = 336;
+const px = v => X0 + (X1 - X0) * v / 10;
+const py = v => Y1 - (Y1 - Y0) * v / 10;
+
+function dibujar(){
+  const svg = $("mapa");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t);
+  };
+
+  const mx = px(6), my = py(6);
+  g("rect", {x:mx, y:Y0, width:X1-mx, height:my-Y0, fill:"#3f7d5a", opacity:.07});
+  g("rect", {x:X0, y:Y0, width:mx-X0, height:my-Y0, fill:"#3f83a6", opacity:.07});
+  g("rect", {x:mx, y:my, width:X1-mx, height:Y1-my, fill:"#c9962f", opacity:.07});
+  g("rect", {x:X0, y:Y0, width:X1-X0, height:Y1-Y0, fill:"none", stroke:"#e6ecf2"});
+  g("line", {x1:mx, y1:Y0, x2:mx, y2:Y1, stroke:"#dde5ec", "stroke-dasharray":"4 4"});
+  g("line", {x1:X0, y1:my, x2:X1, y2:my, stroke:"#dde5ec", "stroke-dasharray":"4 4"});
+
+  const halo = "paint-order:stroke;stroke:#fff;stroke-width:3.5;stroke-linejoin:round;";
+  texto((mx+X1)/2, Y0+18, "DISFRUTO Y LOGRO", halo+"font:700 11.5px system-ui;fill:#3f7d5a;letter-spacing:.8px");
+  texto((X0+mx)/2, Y0+18, "logro sin disfrutar", halo+"font:11.5px system-ui;fill:#3f83a6");
+  texto((mx+X1)/2, Y1-12, "disfruto sin logro", halo+"font:11.5px system-ui;fill:#c9962f");
+  texto((X0+mx)/2, Y1-12, "ni disfruto ni logro", halo+"font:11.5px system-ui;fill:#9aa8b5");
+  texto((X0+X1)/2, Y1+34, "Agrado  →", "font:600 12.5px system-ui;fill:#5a6a7d");
+  const et = Kit.svg("text", {x:22, y:(Y0+Y1)/2, "text-anchor":"middle",
+    style:"font:600 12.5px system-ui;fill:#5a6a7d",
+    transform:`rotate(-90 22 ${(Y0+Y1)/2})`});
+  et.textContent = "Dominio  →";
+  svg.appendChild(et);
+  [0, 5, 10].forEach(v => {
+    texto(px(v), Y1+16, v, "font:11px system-ui;fill:#9aa8b5");
+    texto(X0-11, py(v)+4, v, "font:11px system-ui;fill:#9aa8b5", "end");
+  });
+
+  if(!actividades.length){
+    texto((X0+X1)/2, (Y0+Y1)/2, "Marca actividades y aparecerán aquí",
+      "font:13.5px system-ui;fill:#b3bfca");
+    return;
+  }
+  actividades.forEach((a, i) => {
+    const q = cuadrante(a);
+    g("circle", {cx:px(a.agrado), cy:py(a.dominio), r:11, fill:q.col, "fill-opacity":.3,
+      stroke:q.col, "stroke-width":1.8});
+    texto(px(a.agrado), py(a.dominio) + 4, i + 1, `font:700 11.5px system-ui;fill:${q.col}`);
+  });
+  texto(X1, Y0-14, "cada número es una actividad de la lista",
+    "font:11px system-ui;fill:#a8b3bd", "end");
+}
+
+/* ====================== LECTURA ====================== */
+const enCuad = c => actividades.filter(a => cuadrante(a).c === c);
+const media = campo => actividades.length
+  ? actividades.reduce((s, a) => s + a[campo], 0) / actividades.length : 0;
+const diasConAlgo = () => {
+  const d = {};
+  actividades.forEach(a => a.dias.forEach(x => d[x] = 1));
+  return Object.keys(d).length;
+};
+
+const CASOS = [
+{clave:"vacia", nombre:"Semana vacía",
+ resumen:"Muy pocas actividades registradas.",
+ condicion: () => actividades.length < 4,
+ metafora:"Casi no hay semana que mirar.",
+ consulta:"Puede ser que la hoja esté sin llenar, o que de verdad la semana haya estado así. Lo segundo es el hallazgo central de la activación conductual: no es pereza, es que el repertorio se fue estrechando hasta que quedó lo mínimo. Suele acompañar episodios depresivos y semanas posteriores a una pérdida.",
+ foco:"Empezar por lo más pequeño y lo más seguro: una actividad, un día, quince minutos. Programar mucho aquí garantiza el fracaso y confirma la creencia de que no se puede.",
+ pregunta:"¿Qué hacías hace seis meses que hoy no estés haciendo?",
+ bandera:"Semana casi vacía sostenida merece tamizar sintomatología depresiva y revisar sueño, alimentación y riesgo."},
+
+{clave:"sinagrado", nombre:"Funciona y no disfruta",
+ resumen:"Dominio alto con agrado bajo en casi todo.",
+ condicion: () => media("dominio") >= 5.5 && media("agrado") <= 3.5,
+ metafora:"La semana está llena y no hubo un solo momento bueno.",
+ consulta:"Cumple con todo y no siente nada. Es anhedonia con funcionamiento conservado, y por eso nadie alrededor lo detecta: por fuera todo sigue saliendo. La persona suele llegar diciendo «no sé qué me pasa, si todo está bien».",
+ foco:"Agregar agrado, no quitar obligaciones. Actividades placenteras programadas por horario, sin esperar tener ganas, y observando el placer que aparece durante y no antes.",
+ pregunta:"¿Cuándo fue la última vez que algo te causó gusto de verdad?",
+ bandera:"Anhedonia con funcionamiento conservado: conviene tamizar sintomatología depresiva."},
+
+{clave:"sindominio", nombre:"Disfruta y no avanza",
+ resumen:"Agrado alto con dominio bajo en casi todo.",
+ condicion: () => media("agrado") >= 5.5 && media("dominio") <= 3.5,
+ metafora:"La semana se pasó bien y no quedó nada hecho.",
+ consulta:"Hay actividades placenteras y ninguna produce sensación de logro. A veces es una etapa sana; otras veces es evitación bien montada —pantallas, salidas, consumo— frente a algo que hay que enfrentar. La diferencia se ve en qué se está aplazando, no en el gráfico.",
+ foco:"Agregar dominio con tareas pequeñas y terminables, del tipo que se puede tachar. Y revisar con calma qué es lo que el disfrute está sirviendo para no mirar.",
+ pregunta:"Cuando paras y no hay nada que te distraiga, ¿qué aparece?"},
+
+{clave:"ninguno", nombre:"Ni una cosa ni la otra",
+ resumen:"La mayoría de las actividades quedan en el cuadrante bajo.",
+ condicion: () => enCuad("ninguno").length >= Math.ceil(actividades.length * .6),
+ metafora:"Se hizo todo y no sirvió para nada.",
+ consulta:"La semana está ocupada y nada produce placer ni logro. Es el perfil más costoso y el que más se confunde con falta de voluntad. Antes de programar más conviene mirar dos cosas: si las calificaciones están aplanadas por el estado de ánimo, y si lo que se está haciendo tiene algo que ver con lo que a la persona le importa.",
+ foco:"No agregar actividades: cambiar las que hay. Buscar una sola que en otro momento haya dado agrado o dominio, y recuperarla antes que inventar nuevas.",
+ pregunta:"De todo lo que hiciste esta semana, ¿algo lo habrías hecho aunque nadie te lo pidiera?",
+ bandera:"Aplanamiento en los dos ejes es un indicador a contrastar con tamizaje del estado de ánimo."},
+
+{clave:"equilibrio", nombre:"Semana equilibrada",
+ resumen:"Hay actividades en el cuadrante alto de los dos ejes.",
+ condicion: () => enCuad("ambos").length >= 2 && media("agrado") >= 4.5 && media("dominio") >= 4.5,
+ metafora:"La semana tuvo de las dos cosas.",
+ consulta:"Buen reparto entre lo que sostiene y lo que gratifica. Conviene hacer explícito qué lo está permitiendo, porque es exactamente lo que se pierde primero cuando llega una mala racha.",
+ foco:"Sostener y anotar la receta. Identificar las dos o tres actividades que están haciendo el trabajo, para poder volver a ellas cuando la semana se complique.",
+ pregunta:"Si el otro mes se te complica, ¿cuál de estas actividades vas a defender primero?"},
+
+{clave:"mixto", nombre:"Semana desigual",
+ resumen:"Reparto sin un patrón claro.",
+ condicion: () => true,
+ metafora:"Se lee por lo que falta más que por lo que hay.",
+ consulta:"Sin patrón dominante. La información útil está en qué cuadrante quedó más vacío y en cuántos días de la semana tuvieron alguna actividad registrada.",
+ foco:"Programar hacia el cuadrante más vacío, y repartir en días distintos antes que acumular todo en uno.",
+ pregunta:"Mirando el mapa, ¿qué esquina te gustaría llenar la semana que viene?"}
+];
+
+function refrescar(){
+  pintarActividades();
+  $("cTotal").textContent   = actividades.length;
+  $("cAgrado").textContent  = media("agrado").toFixed(1);
+  $("cDominio").textContent = media("dominio").toFixed(1);
+  $("cDias").textContent    = diasConAlgo();
+  dibujar();
+  leer();
+  sugerir();
+  leerProb();
+}
+
+function leer(){
+  const c = CASOS.find(c => c.condicion());
+  $("lNombre").textContent   = c.nombre;
+  $("lMetafora").textContent = c.metafora;
+  $("lConsulta").textContent = c.consulta;
+  $("lFoco").textContent     = c.foco;
+  $("lPregunta").textContent = c.pregunta;
+  let band = c.bandera ? `<div class="bandera">${c.bandera}</div>` : "";
+  if(actividades.length >= 4 && diasConAlgo() <= 2)
+    band += `<div class="pistas">Todo lo registrado cae en ${diasConAlgo()} día${diasConAlgo() === 1 ? "" : "s"}
+      de la semana. Repartir importa tanto como la cantidad: cuatro actividades en un solo día
+      dejan seis días vacíos.</div>`;
+  $("lBandera").innerHTML = band;
+}
+
+function sugerir(){
+  const faltante = ["ambos","solod","soloa"].map(c => [c, enCuad(c).length])
+    .sort((a, b) => a[1] - b[1])[0];
+  const nombres = {ambos:"que den disfrute y logro a la vez", solod:"que den sensación de logro",
+    soloa:"que den disfrute"};
+  $("sugerenciaPrograma").textContent = actividades.length
+    ? `El mapa sugiere programar actividades ${nombres[faltante[0]]}: es el cuadrante más vacío de la semana.`
+    : "Cuando registres la semana, aquí aparecerá qué conviene programar.";
+}
+
+function leerProb(){
+  const n = Kit.activas("programa").length;
+  if(!n){ $("lecturaProb").innerHTML = ""; return; }
+  let html = "";
+  if(n > 4) html += `<div class="pistas"><b>${n} actividades programadas.</b> Son demasiadas para
+    una semana. Tres es el techo razonable: programar de más produce incumplimiento, y el
+    incumplimiento confirma la creencia de que no se puede.</div>`;
+  $("lecturaProb").innerHTML = html;
+}
+
+function resumen(){
+  const l = [];
+  l.push(`SEMANA REGISTRADA (${actividades.length} actividades, ${diasConAlgo()} días con algo)`);
+  actividades.forEach((a, i) => {
+    const q = cuadrante(a);
+    l.push(`${i + 1}. ${a.texto} — agrado ${a.agrado}, dominio ${a.dominio} — ${q.t}` +
+           (a.dias.length ? `  [${a.dias.join(" ")}]` : ""));
+  });
+  l.push("", `Agrado medio: ${media("agrado").toFixed(1)}   Dominio medio: ${media("dominio").toFixed(1)}`);
+  l.push("", "LECTURA: " + $("lNombre").textContent, $("lConsulta").textContent,
+         "Qué programar: " + $("lFoco").textContent);
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("Alerta: " + band.textContent.trim());
+
+  const pr = Kit.activas("programa"), dias = Kit.activas("programaDias");
+  if(pr.length){
+    l.push("", "PROGRAMACIÓN DE LA SEMANA",
+      pr.join(", "),
+      "Días: " + (dias.join(", ") || "sin marcar"));
+  }
+  return l.join("\n");
+}
+
+Kit.chips("programa", BANCO.reduce((s, b) => s.concat(b.ops), []).slice(0, 24), leerProb);
+Kit.chips("programaDias", DIAS);
+$("nuevaAct").addEventListener("keydown", e => {
+  if(e.key === "Enter"){ e.preventDefault(); agregarActividad(); }
+});
+
+Kit.iniciar({
+  clave: "tcc-activacion-conductual",
+  extra: () => ({actividades, contador}),
+  restaurar: d => { actividades = d.actividades || []; contador = d.contador || 0; },
+  alCambiar: refrescar,
+  resumen: resumen
+});

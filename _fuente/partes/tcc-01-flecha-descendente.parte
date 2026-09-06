@@ -1,0 +1,400 @@
+@@meta
+archivo: tcc-flecha-descendente.html
+titulo: La flecha descendente
+orden: 02
+enfoque: Cognitivo-conductual
+etiqueta: Creencias nucleares
+sub: Debajo de cada pensamiento automático hay otro, y debajo de ese otro más, hasta llegar a una frase corta y absoluta sobre uno mismo. Esta hoja baja esa escalera eligiendo, no escribiendo: en cada peldaño se pregunta qué significaría eso si fuera cierto, y se toca la respuesta que más pese.
+fuente: Técnica de la flecha descendente y trabajo con creencias nucleares, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 8, Terapia Cognitiva.
+resumen: Cinco peldaños desde el pensamiento automático hasta la creencia nuclear, clasificada en las tres categorías de Beck. Cierra con el continuo, que es lo que rompe el todo o nada.
+@@css
+  .escalera{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 12px;margin-bottom:16px}
+  .peldano{border:1px solid var(--linea);border-left-width:5px;border-radius:10px;
+    padding:13px 16px;margin-bottom:11px;background:#fdfefe;position:relative}
+  .peldano.dormido{opacity:.4}
+  .peldano .cabeza{display:flex;align-items:center;gap:11px;margin-bottom:7px}
+  .peldano .nivel{width:26px;height:26px;border-radius:50%;color:#fff;display:flex;
+    align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex:0 0 auto}
+  .peldano .pregunta-p{font-size:14.5px;font-weight:600}
+  .peldano .chip{font-size:12.5px;padding:5px 12px}
+  .flecha-abajo{text-align:center;color:var(--linea);font-size:20px;line-height:1;margin:-4px 0 7px}
+
+  .nucleo{border-radius:11px;padding:18px 22px;margin:16px 0;border:1px solid}
+  .nucleo.cap{background:#eef4f9;border-color:#c3d8e6}
+  .nucleo.quer{background:#fdf3f6;border-color:#ebcdd8}
+  .nucleo.val{background:#fbf6ee;border-color:#e8dcc4}
+  .nucleo.sin{background:#f6f9fb;border-color:var(--linea)}
+  .nucleo .rot{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .nucleo .frase{font-size:24px;font-weight:700;line-height:1.25;margin-bottom:8px}
+  .nucleo p{margin:0;font-size:14.5px;line-height:1.55}
+
+  .continuo{margin-top:6px}
+  .regla{position:relative;height:56px;margin:22px 0 8px}
+  .regla .via{position:absolute;top:24px;left:0;right:0;height:8px;border-radius:4px;
+    background:linear-gradient(90deg,#c26a4e,#c9962f,#4aa070)}
+  .regla .hito{position:absolute;top:12px;width:3px;height:32px;background:var(--tinta-suave);
+    opacity:.35}
+  .regla .quien{position:absolute;top:-4px;transform:translateX(-50%);font-size:11.5px;
+    font-weight:700;white-space:nowrap;background:#fff;padding:1px 6px;border-radius:5px;
+    border:1px solid var(--linea)}
+  .regla .yo{position:absolute;top:44px;transform:translateX(-50%);font-size:12px;
+    font-weight:700;color:var(--acento);white-space:nowrap}
+  .regla .marcaYo{position:absolute;top:18px;width:5px;height:20px;border-radius:3px;
+    background:var(--acento);box-shadow:0 0 0 3px #fff;transition:left .2s}
+  .extremos-c{display:flex;justify-content:space-between;font-size:12px;color:var(--tinta-suave)}
+  .referente{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+    border:1px solid var(--linea);border-radius:9px;padding:9px 13px;margin-bottom:7px;
+    background:#fdfefe}
+  .referente .mando{display:flex;align-items:center;gap:9px;min-width:170px}
+  .referente input[type=range]{flex:1;min-width:100px;height:20px}
+  .referente .v{font-weight:700;min-width:24px;text-align:right}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>El pensamiento de arriba</h2>
+  <p class="ayuda">El que apareció en la situación concreta. Si vienes del registro de
+  pensamientos, es el pensamiento caliente que ya identificaste ahí.</p>
+  <div class="cuerpo">
+    <div class="chips" id="automatico"></div>
+    <details class="apunte">
+      <summary>Otro pensamiento</summary>
+      <div style="display:flex;gap:8px;margin-top:7px">
+        <input type="text" id="propio" placeholder="Tal como sonó en tu cabeza">
+        <button type="button" onclick="agregarPropio()">Poner</button>
+      </div>
+    </details>
+    <div class="medidor" style="margin-top:14px">
+      <label for="credencia">¿Cuánto te lo crees?</label>
+      <input type="range" id="credencia" min="0" max="100" value="80">
+      <span class="valor" id="vCredencia">80</span>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Bajar la escalera</h2>
+  <p class="ayuda">En cada peldaño la pregunta es la misma: <b>si eso fuera cierto, ¿qué
+  significaría para ti?</b> No se discute si es verdad —eso viene después—; se acepta por un
+  momento y se mira qué hay debajo. Toca la respuesta que más pese; si ninguna encaja, hay un
+  espacio para la tuya.</p>
+  <div class="cuerpo"><div id="peldanos"></div></div>
+</section>
+
+<div class="nucleo sin" id="nucleo">
+  <div class="rot">La creencia del fondo</div>
+  <div class="frase" id="nucleoFrase">Todavía sin llegar abajo</div>
+  <p id="nucleoTexto">Baja al menos tres peldaños para que la hoja pueda nombrar qué categoría de
+  creencia nuclear está apareciendo.</p>
+</div>
+
+<section class="paso" id="pasoContinuo" hidden>
+  <h2><span class="num">3</span>El continuo</h2>
+  <p class="ayuda">Una creencia nuclear funciona porque es de todo o nada: se es capaz o no se es,
+  se vale o no se vale. El continuo la rompe sin discutirla. Primero te ubicas tú; después ubicas
+  a otras personas, y ahí es donde la escala deja de tener solo dos puntos.</p>
+  <div class="cuerpo continuo">
+    <div class="regla" id="regla"></div>
+    <div class="extremos-c"><span id="extIzq">—</span><span id="extDer">—</span></div>
+
+    <div class="medidor" style="margin-top:18px">
+      <label for="yoEstoy">¿Dónde te pones tú?</label>
+      <input type="range" id="yoEstoy" min="0" max="100" value="10">
+      <span class="valor" id="vYoEstoy">10</span>
+    </div>
+
+    <label class="etiqueta" style="margin-top:18px">Ahora ubica a otras personas</label>
+    <p class="ayuda" style="margin-bottom:9px">Personas reales, no ideales. Al ponerlas en la regla
+    casi siempre pasa lo mismo: nadie queda en los extremos, y el propio lugar se mueve solo.</p>
+    <div id="referentes"></div>
+
+    <div id="lecturaContinuo"></div>
+  </div>
+</section>
+
+<section class="paso" id="pasoEvidencia" hidden>
+  <h2><span class="num">4</span>Lo que no encaja con la creencia</h2>
+  <p class="ayuda">Una creencia nuclear filtra: deja pasar lo que la confirma y descarta lo demás.
+  Este registro se llena al revés, buscando a propósito lo que no encaja. No se trata de negar la
+  creencia, sino de que deje de ser la única lectura posible.</p>
+  <div class="cuerpo">
+    <div class="chips" id="contraevidencia"></div>
+    <details class="apunte">
+      <summary>Anotar un hecho concreto (opcional)</summary>
+      <textarea id="hechoConcreto" placeholder="Algo verificable que pasó y que la creencia no explica."></textarea>
+    </details>
+    <div class="medidor" style="margin-top:16px">
+      <label for="credenciaFinal">¿Cuánto te crees ahora la creencia del fondo?</label>
+      <input type="range" id="credenciaFinal" min="0" max="100" value="80">
+      <span class="valor" id="vCredenciaFinal">80</span>
+    </div>
+    <div id="lecturaFinal"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const AUTOMATICOS = ["Me va a salir mal", "No me contestó el mensaje", "Me equivoqué delante de todos", "No me invitaron"];
+
+/* Cada peldaño ofrece significados progresivamente más absolutos y personales.
+   La categoría (cap / quer / val) es la de Beck y sirve para clasificar el fondo. */
+const NIVELES = [
+ {pregunta:"Si eso pasara, ¿qué significaría?", color:"#5f77b8",
+  opciones:[["Que no voy a llegar a donde quiero","cap"],["Que no le importo","quer"],
+    ["Que soy un desastre","val"],["Que todo el mundo se dio cuenta","quer"],
+    ["Que no puedo con esto","cap"],["Que voy a decepcionar a alguien","val"]]},
+
+ {pregunta:"Y si eso fuera cierto, ¿qué significaría para ti?", color:"#5b7db0",
+  opciones:[["Que no sirvo para esto","cap"],["Que van a dejar de quererme","quer"],
+    ["Que no merezco estar aquí","val"],["Que soy menos que los demás","val"],
+    ["Que nunca voy a poder","cap"],["Que se van a alejar de mí","quer"]]},
+
+ {pregunta:"¿Y qué tendría eso de malo, para ti?", color:"#5783a8",
+  opciones:[["Que soy incapaz","cap"],["Que voy a terminar solo","quer"],
+    ["Que soy un fraude","val"],["Que no valgo nada","val"],
+    ["Que estoy roto","cap"],["Que nadie me va a querer así","quer"]]},
+
+ {pregunta:"Si eso fuera verdad, ¿qué diría de ti como persona?", color:"#4f88a0",
+  opciones:[["Soy incapaz","cap"],["No soy querible","quer"],["No valgo","val"],
+    ["Soy un fracaso","cap"],["Soy una carga","quer"],["Soy defectuoso","val"]]},
+
+ {pregunta:"Y en el fondo del fondo: ¿qué es lo peor que dice de ti?", color:"#478d98",
+  opciones:[["No soy suficiente","val"],["No puedo con la vida","cap"],
+    ["Nadie me va a querer","quer"],["Estoy mal hecho","val"],
+    ["Soy débil","cap"],["Sobro","quer"]]}
+];
+
+const CATEGORIAS = {
+ cap: {clase:"cap", nombre:"Incapacidad y desamparo",
+  texto:"El fondo es sobre poder: la persona se experimenta como incapaz, sin recursos o a merced de lo que pase. Beck la agrupa con las creencias de desamparo. Suele sostener evitación, procrastinación y una necesidad alta de aprobación técnica —«dime si lo estoy haciendo bien»—. Se trabaja mejor con experimentos conductuales que con discusión verbal: lo que la mueve es la evidencia de que sí pudo.",
+  izq:"Totalmente incapaz", der:"Completamente capaz"},
+ quer: {clase:"quer", nombre:"No ser querible",
+  texto:"El fondo es sobre vínculo: la persona cree que si la conocen de verdad, se van. Sostiene complacencia, dificultad para poner límites, celos y lecturas de rechazo donde no las hay. Ojo con reasegurar: la tranquilización alivia y refuerza la creencia. Se trabaja con exposición gradual a mostrarse y con la observación de qué pasa después.",
+  izq:"Nadie podría quererme", der:"Completamente querible"},
+ val: {clase:"val", nombre:"Desvalorización",
+  texto:"El fondo es sobre valor: no es que no pueda ni que no la quieran, es que no vale. Es la categoría más rígida de las tres y la que más se defiende con perfeccionismo y autocrítica. Suele venir de mensajes tempranos muy repetidos. El continuo es especialmente útil aquí, porque la creencia vive entera del todo o nada.",
+  izq:"No valgo nada", der:"Valgo completamente"}
+};
+
+const REFERENTES = ["Mi mejor amigo","Alguien que admiro","Mi mamá o mi papá","Alguien que apenas conozco",
+  "Alguien que me cae mal","Alguien que la está pasando mal","Alguien a quien respeto","Yo hace cinco años"];
+
+const CONTRAEVIDENCIA = ["Alguien confió en mí", "Terminé algo difícil", "Alguien me buscó", "Me pidieron ayuda"];
+
+let extras = [];
+
+function agregarPropio(){
+  const t = $("propio").value.trim();
+  if(!t) return;
+  extras.push(t); $("propio").value = "";
+  Kit.chips("automatico", AUTOMATICOS.concat(extras), refrescar);
+  refrescar();
+}
+
+/* ====================== PELDAÑOS ====================== */
+$("peldanos").innerHTML = NIVELES.map((n, i) => `
+  ${i ? '<div class="flecha-abajo">&#9660;</div>' : ""}
+  <div class="peldano" id="pel-${i}" style="border-left-color:${n.color}">
+    <div class="cabeza">
+      <span class="nivel" style="background:${n.color}">${i + 1}</span>
+      <span class="pregunta-p">${n.pregunta}</span>
+    </div>
+    <div class="chips" id="niv-${i}"></div>
+    <details class="apunte">
+      <summary>Su respuesta, en sus palabras</summary>
+      <input type="text" id="nivTexto-${i}" placeholder="Si ninguna de arriba es la suya.">
+    </details>
+  </div>`).join("");
+NIVELES.forEach((n, i) => Kit.chips("niv-" + i, n.opciones.map(o => o[0]), refrescar));
+
+const bajados = () => NIVELES.filter((n, i) =>
+  Kit.activas("niv-" + i).length || $("nivTexto-" + i).value.trim()).length;
+
+function categoriaDominante(){
+  const cuenta = {cap:0, quer:0, val:0};
+  NIVELES.forEach((n, i) => {
+    Kit.activas("niv-" + i).forEach(txt => {
+      const o = n.opciones.find(o => o[0] === txt);
+      if(o) cuenta[o[1]] += (i + 1);      /* los peldaños de abajo pesan más */
+    });
+  });
+  const total = cuenta.cap + cuenta.quer + cuenta.val;
+  if(!total) return null;
+  const max = Math.max(cuenta.cap, cuenta.quer, cuenta.val);
+  return Object.keys(cuenta).find(k => cuenta[k] === max);
+}
+
+function fraseDelFondo(){
+  for(let i = NIVELES.length - 1; i >= 0; i--){
+    const t = $("nivTexto-" + i).value.trim();
+    if(t) return t;
+    const a = Kit.activas("niv-" + i);
+    if(a.length) return a[a.length - 1];
+  }
+  return null;
+}
+
+/* ====================== CONTINUO ====================== */
+let refValores = {};
+function pintarReferentes(){
+  $("referentes").innerHTML = REFERENTES.map((r, i) => `
+    <div class="referente">
+      <span style="font-size:14px">${r}</span>
+      <div class="mando">
+        <input type="range" min="0" max="100" value="${refValores[i] === undefined ? 50 : refValores[i]}"
+          data-r="${i}">
+        <span class="v">${refValores[i] === undefined ? 50 : refValores[i]}</span>
+      </div>
+    </div>`).join("");
+  $("referentes").querySelectorAll("input[data-r]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      refValores[inp.dataset.r] = +inp.value;
+      inp.parentElement.querySelector(".v").textContent = inp.value;
+      dibujarRegla();
+      leerContinuo();
+      Kit.guardar();
+    });
+  });
+}
+
+function dibujarRegla(){
+  const cat = categoriaDominante();
+  if(!cat) return;
+  const usados = Object.keys(refValores);
+  $("regla").innerHTML = `<div class="via"></div>` +
+    [0, 25, 50, 75, 100].map(p => `<div class="hito" style="left:${p}%"></div>`).join("") +
+    usados.map(i => `<div class="quien" style="left:${refValores[i]}%">${REFERENTES[i]}</div>`).join("") +
+    `<div class="marcaYo" style="left:calc(${$("yoEstoy").value}% - 2px)"></div>
+     <div class="yo" style="left:${$("yoEstoy").value}%">yo</div>`;
+  $("extIzq").textContent = CATEGORIAS[cat].izq;
+  $("extDer").textContent = CATEGORIAS[cat].der;
+}
+
+function leerContinuo(){
+  const usados = Object.keys(refValores).map(k => refValores[k]);
+  const yo = +$("yoEstoy").value;
+  if(usados.length < 3){
+    $("lecturaContinuo").innerHTML = `<div class="pistas" style="margin-top:14px">Ubica al menos
+      tres personas para que la regla haga su trabajo. Con una sola, la creencia sigue teniendo
+      dos puntos.</div>`;
+    return;
+  }
+  const min = Math.min(...usados), max = Math.max(...usados);
+  const nadieExtremo = min > 8 && max < 92;
+  $("lecturaContinuo").innerHTML = `<div class="${yo < min ? "pistas" : "logro"}"
+    style="margin-top:14px">
+    ${nadieExtremo
+      ? "<b>Nadie quedó en los extremos.</b> Es lo que suele pasar, y es justamente el punto: la creencia se sostiene en una escala de dos posiciones que ninguna persona real ocupa. "
+      : ""}
+    ${yo < min
+      ? `Te ubicaste por debajo de todas las personas que pusiste, en ${yo}. Vale la pena
+         preguntar en voz alta qué tendría que hacer alguien para estar ahí abajo, y si de verdad
+         cumples eso o si el criterio que usas contigo es distinto del que usas con los demás.`
+      : `Te ubicaste en ${yo}, dentro del rango de las demás personas. Que la creencia diga
+         «${CATEGORIAS[categoriaDominante()].izq.toLowerCase()}» y la regla diga ${yo} es
+         exactamente la contradicción que se busca dejar visible.`}
+    </div>`;
+}
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  $("vCredencia").textContent = $("credencia").value;
+  $("vCredenciaFinal").textContent = $("credenciaFinal").value;
+  $("vYoEstoy").textContent = $("yoEstoy").value;
+
+  NIVELES.forEach((n, i) => {
+    const previo = i === 0 || Kit.activas("niv-" + (i - 1)).length ||
+                   $("nivTexto-" + (i - 1)).value.trim();
+    $("pel-" + i).classList.toggle("dormido", !previo);
+  });
+
+  const cat = categoriaDominante(), n = bajados(), frase = fraseDelFondo();
+  const caja = $("nucleo");
+  if(!cat || n < 3){
+    caja.className = "nucleo sin";
+    $("nucleoFrase").textContent = n ? "Todavía bajando" : "Todavía sin llegar abajo";
+    $("nucleoTexto").textContent = "Baja al menos tres peldaños para que la hoja pueda nombrar " +
+      "qué categoría de creencia nuclear está apareciendo.";
+    $("pasoContinuo").hidden = true;
+    $("pasoEvidencia").hidden = true;
+  } else {
+    const c = CATEGORIAS[cat];
+    caja.className = "nucleo " + c.clase;
+    $("nucleoFrase").textContent = frase ? `«${frase}»` : c.nombre;
+    $("nucleoTexto").innerHTML = `<b>${c.nombre}.</b> ${c.texto}`;
+    $("pasoContinuo").hidden = false;
+    $("pasoEvidencia").hidden = false;
+    dibujarRegla();
+    leerContinuo();
+  }
+  leerFinal();
+}
+
+function leerFinal(){
+  if($("pasoEvidencia").hidden){ $("lecturaFinal").innerHTML = ""; return; }
+  const a = +$("credencia").value, d = +$("credenciaFinal").value, dif = a - d;
+  const hechos = Kit.activas("contraevidencia").length;
+  $("lecturaFinal").innerHTML = dif >= 15
+    ? `<div class="logro">Bajó ${dif} puntos en una sesión. Conviene decir explícitamente que una
+       creencia nuclear no se desmonta en una hoja: lo que se logró es abrirle una grieta, y eso
+       se sostiene con registro de contraevidencia entre sesiones.</div>`
+    : hechos >= 3
+    ? `<div class="pistas"><b>Poco movimiento, con evidencia acumulada.</b> Es lo esperable: las
+       creencias nucleares llevan años y no ceden por argumentos. Lo que las mueve es la
+       repetición del registro y los experimentos conductuales, no la conversación de hoy.</div>`
+    : `<div class="pistas"><b>Sin movimiento todavía.</b> Antes de insistir con la discusión,
+       conviene reunir contraevidencia concreta. Discutir una creencia nuclear con lógica suele
+       endurecerla; lo que la erosiona son hechos que no encajan, anotados en el momento.</div>`;
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const l = [];
+  const aut = Kit.activas("automatico");
+  l.push("PENSAMIENTO AUTOMÁTICO: " + (aut.length ? aut.join(", ") : "sin marcar"));
+  l.push(`Credibilidad inicial: ${$("credencia").value}/100`);
+
+  l.push("", "DESCENSO");
+  NIVELES.forEach((n, i) => {
+    const a = Kit.activas("niv-" + i), t = $("nivTexto-" + i).value.trim();
+    if(!a.length && !t) return;
+    l.push(`${i + 1}. ${n.pregunta}\n   → ${[a.join(" / "), t].filter(Boolean).join(" / ")}`);
+  });
+
+  const cat = categoriaDominante();
+  if(cat && bajados() >= 3){
+    l.push("", "CREENCIA NUCLEAR: " + (fraseDelFondo() || "") +
+              `\nCategoría: ${CATEGORIAS[cat].nombre}`);
+    const usados = Object.keys(refValores);
+    if(usados.length){
+      l.push("", `CONTINUO (${CATEGORIAS[cat].izq} ↔ ${CATEGORIAS[cat].der})`);
+      l.push(`  Yo: ${$("yoEstoy").value}`);
+      usados.forEach(i => l.push(`  ${REFERENTES[i]}: ${refValores[i]}`));
+    }
+    const ce = Kit.activas("contraevidencia");
+    if(ce.length) l.push("", "CONTRAEVIDENCIA: " + ce.join(", "));
+    if($("hechoConcreto").value.trim()) l.push("Hecho concreto: " + $("hechoConcreto").value.trim());
+    l.push("", `Credibilidad de la creencia: ${$("credencia").value} → ${$("credenciaFinal").value}`);
+  }
+  return l.join("\n");
+}
+
+Kit.chips("automatico", AUTOMATICOS, refrescar);
+Kit.chips("contraevidencia", CONTRAEVIDENCIA, leerFinal);
+NIVELES.forEach((n, i) => $("nivTexto-" + i).addEventListener("input", refrescar));
+["credencia","credenciaFinal"].forEach(id => $(id).addEventListener("input", refrescar));
+$("yoEstoy").addEventListener("input", () => { $("vYoEstoy").textContent = $("yoEstoy").value;
+  dibujarRegla(); leerContinuo(); });
+pintarReferentes();
+
+Kit.iniciar({
+  clave: "tcc-flecha-descendente",
+  extra: () => ({extras, refValores}),
+  restaurar: d => {
+    extras = d.extras || []; refValores = d.refValores || {};
+    if(extras.length) Kit.chips("automatico", AUTOMATICOS.concat(extras), refrescar);
+    pintarReferentes();
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});

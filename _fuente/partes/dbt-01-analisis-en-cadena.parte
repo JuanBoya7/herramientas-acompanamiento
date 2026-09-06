@@ -1,0 +1,487 @@
+@@meta
+archivo: dbt-analisis-en-cadena.html
+titulo: Análisis en cadena
+orden: 01
+enfoque: DBT
+etiqueta: Análisis conductual
+lamina: si
+sub: Una conducta problema aparece al final de una cadena, y cada eslabón es un punto donde se pudo haber roto. Se arma en tres movimientos: qué venía cargado antes, la cadena eslabón por eslabón, y qué la mantiene. En cada eslabón, una sola pregunta: qué habilidad cabía ahí.
+fuente: Análisis conductual en cadena, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 6: habilidades generales, orientación y análisis conductual.
+resumen: Reconstruye la cadena que lleva a una conducta problema y ubica en cada eslabón la habilidad DBT que cabía. Sirve para trabajar con el consultante y para enseñar a analizar.
+identificacion: si
+campo3: Sesión
+campo3ph: Ej. Sesión 6
+@@css
+  .marco{border:1px solid var(--linea);border-radius:10px;padding:13px 16px;background:#fdfefe}
+  .marco.disparo{border-left:5px solid #c9962f}
+  .marco.problema{border-left:5px solid #c26a4e}
+  .marco.vulnera{border-left:5px solid #8171b4}
+
+  .cadena{margin-top:14px}
+  .eslabon{display:grid;grid-template-columns:auto 1fr;gap:13px;align-items:start;
+    position:relative;padding-bottom:13px}
+  .eslabon::before{content:"";position:absolute;left:15px;top:32px;bottom:-2px;width:2px;
+    background:var(--linea)}
+  .eslabon:last-child::before{display:none}
+  .nodo{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:12.5px;font-weight:700;color:#fff;z-index:1;flex:0 0 auto}
+  .caja{border:1px solid var(--linea);border-radius:9px;padding:11px 13px;background:#fdfefe}
+  .caja.rompe{border-color:#8fbfa4;background:#f6fbf8}
+  .caja .arriba{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  .caja select.tipo{flex:0 0 auto;width:auto;min-width:132px;font-size:12.5px;padding:5px 8px}
+  .caja textarea{min-height:52px;font-size:14px}
+  .caja .habilidad{margin-top:9px}
+  .caja .habilidad label{display:block;font-size:11px;text-transform:uppercase;
+    letter-spacing:.5px;color:var(--tinta-suave);margin-bottom:3px}
+  .caja .habilidad select{font-size:13.5px;padding:7px 9px}
+  .marca-rompe{display:inline-block;font-size:11.5px;font-weight:700;color:var(--logro);
+    background:var(--logro-fondo);border-radius:999px;padding:2px 10px;margin-top:8px}
+  .mover{border:0;background:transparent;color:var(--tinta-suave);cursor:pointer;
+    font-size:14px;padding:3px 6px;border-radius:6px;line-height:1}
+  .mover:hover{background:var(--acento-claro);color:var(--acento)}
+  .mover:disabled{opacity:.28;cursor:default}
+  .mover:disabled:hover{background:transparent}
+
+  .consec{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+  .consec .celda label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
+  .consec .celda.corto label{color:#c26a4e}
+  .consec .celda.largo label{color:var(--acento)}
+  .resumen-cadena{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+  .resumen-cadena div{text-align:center;min-width:92px}
+  .resumen-cadena .n{font-size:21px;font-weight:700;display:block;color:var(--acento)}
+  .resumen-cadena .r{font-size:11px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave)}
+  @media (max-width:700px){.consec{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Antes de la conducta</h2>
+  <p class="ayuda">Una sola conducta, definida con precisión: «me sentí mal» no lo es; «el jueves a
+  las once me tomé media botella» sí.</p>
+  <div class="cuerpo">
+    <div class="marco problema">
+      <label class="etiqueta">La conducta</label>
+      <div class="chips" id="conducta"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px">
+        <div><label class="etiqueta">¿Cuándo ocurrió?</label>
+          <div class="chips" id="cuando"></div></div>
+        <div><label class="etiqueta">¿Cuántas veces esta semana?</label>
+          <div class="chips" id="frecuencia"></div></div>
+      </div>
+      <details class="apunte">
+        <summary>Definirla con precisión (recomendado)</summary>
+        <input type="text" id="conductaNota" placeholder="Qué hizo exactamente, cuánto y por cuánto tiempo.">
+      </details>
+    </div>
+
+    <div class="marco vulnera" style="margin-top:14px">
+      <label class="etiqueta">Lo que ya venía cargado</label>
+      <p class="ayuda" style="margin-bottom:8px">No causa la conducta: baja el umbral. Suele ser lo
+      primero que se puede cambiar y lo último en lo que se piensa.</p>
+      <div class="chips" id="vulnerabilidades"></div>
+      <details class="apunte">
+        <summary>Apuntar cómo venía esa semana (opcional)</summary>
+        <input type="text" id="vulneraTexto" placeholder="Solo si hay algo que las fichas no recogen.">
+      </details>
+    </div>
+
+    <div class="marco disparo" style="margin-top:14px">
+      <label class="etiqueta">El hecho que la disparó</label>
+      <p class="ayuda" style="margin-bottom:8px">Lo que habría grabado una cámara. No «me sentí
+      rechazado», sino «no me contestó en toda la tarde».</p>
+      <div class="chips" id="disparador"></div>
+      <details class="apunte">
+        <summary>Apuntar el hecho exacto (recomendado)</summary>
+        <input type="text" id="disparadorNota" placeholder="Lo que habría grabado una cámara.">
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>La cadena, eslabón por eslabón</h2>
+  <p class="ayuda">Del disparador a la conducta, sin saltos. Si entre dos eslabones falta algo,
+  la pregunta es «¿y entre eso y eso, qué pasó?». En cada uno: qué habilidad cabía ahí.</p>
+  <div class="cuerpo">
+    <button type="button" onclick="agregarEslabon()">Agregar eslabón</button>
+    <div class="cadena" id="cadena"></div>
+    <div class="velo" id="veloCadena" style="margin-top:12px">Todavía no hay eslabones.<br>
+      Empieza por el primero: justo después del disparador, ¿qué fue lo primero que pensaste o sentiste?</div>
+    <div class="resumen-cadena" id="resumenCadena" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Las consecuencias</h2>
+  <p class="ayuda">Lo inmediato es lo que la mantiene; lo de largo plazo es por lo que consulta.
+  La distancia entre las dos filas es la trampa completa.</p>
+  <div class="cuerpo">
+    <div class="consec">
+      <div class="celda corto">
+        <label>Inmediatas, en mí</label>
+        <div class="chips" id="cInmMi"></div>
+      </div>
+      <div class="celda corto">
+        <label>Inmediatas, en los demás</label>
+        <div class="chips" id="cInmOtros"></div>
+      </div>
+      <div class="celda largo">
+        <label>A largo plazo, en mí</label>
+        <div class="chips" id="cLarMi"></div>
+      </div>
+      <div class="celda largo">
+        <label>A largo plazo, en los demás</label>
+        <div class="chips" id="cLarOtros"></div>
+      </div>
+    </div>
+    <div id="lecturaFuncion"></div>
+  </div>
+</section>
+
+<section class="bloque lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Lectura de la cadena</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Dónde romperla</div><p id="lRomper"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+  <div id="lBandera"></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>El plan</h2>
+  <p class="ayuda">Tres frentes: que no vuelva a cargarse, dónde se rompe la cadena, y qué se
+  repara. Sin reparación, la culpa alimenta la cadena siguiente.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Prevención: qué cambia en la vulnerabilidad</label>
+    <div class="chips" id="planPrevenir"></div>
+
+    <label class="etiqueta">Sustitución: en qué eslabón se rompe</label>
+    <select id="planEslabon"></select>
+    <p class="ayuda" id="sugerenciaEslabon" style="margin-top:6px"></p>
+
+    <label class="etiqueta">Reparación: qué se repara de lo que ya pasó</label>
+    <div class="chips" id="planReparar"></div>
+
+    <details class="apunte">
+      <summary>Apuntar el plan en una línea (opcional)</summary>
+      <input type="text" id="planNota" placeholder="Lo que conviene tener escrito para revisarlo la próxima vez.">
+    </details>
+
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const VULNERABILIDADES = ["Dormí mal", "No comí bien", "Consumí algo", "Estaba enfermo"];
+
+const CONDUCTAS = ["Consumí", "Me autolesioné", "Me aislé", "Discutí fuerte"];
+const CUANDO = ["En la mañana", "En la tarde", "En la noche", "De madrugada"];
+const FRECUENCIA = ["Primera vez","Dos o tres veces","Casi todos los días","Varias veces al día"];
+
+const DISPARADORES = ["Me criticaron", "No me contestó", "Me dejaron por fuera", "Me fue mal en algo"];
+
+const CONS_INM_MI = ["Me alivió", "Se me quitó la ansiedad", "Sentí control", "Dejé de sentir"];
+const CONS_INM_OTROS = ["Alguien me buscó", "Se acabó la discusión", "Me dejaron en paz", "Alguien se preocupó"];
+const CONS_LAR_MI = ["Culpa", "Vergüenza", "Me sentí peor", "Perdí algo que me importaba"];
+const CONS_LAR_OTROS = ["Se deterioró la relación", "Se alejaron", "Perdí la confianza de alguien", "Hubo consecuencias afuera"];
+
+const PREVENIR = ["Dormir a la hora", "Comer bien", "No consumir", "Bajar la carga de la semana"];
+const REPARAR = ["Pedir disculpas una vez", "Hablar con la persona", "Rehacer lo que dañé", "Retomar lo que abandoné"];
+
+const TIPOS = [
+  {v:"pensamiento", t:"Pensamiento", color:"#5f77b8"},
+  {v:"emocion",     t:"Emoción",     color:"#c05c78"},
+  {v:"sensacion",   t:"Sensación",   color:"#c9962f"},
+  {v:"accion",      t:"Lo que hice", color:"#c26a4e"},
+  {v:"externo",     t:"Algo de afuera", color:"#5a6a7d"}
+];
+const colorTipo = v => (TIPOS.find(t => t.v === v) || TIPOS[0]).color;
+
+/* Contenidos frecuentes por tipo de eslabón, para que la cadena se arme
+   tocando y no escribiendo. El texto libre queda como detalle opcional. */
+const CONTENIDOS = {
+ pensamiento: ["«No lo voy a soportar»","«Siempre me pasa lo mismo»","«Me van a dejar»",
+   "«No sirvo para nada»","«Se están burlando»","«Nadie me quiere»","«Tengo que hacer algo ya»",
+   "«Es mi culpa»","«Da igual»","«Nunca va a cambiar»"],
+ emocion: ["Ansiedad","Tristeza","Rabia","Vergüenza","Culpa","Miedo","Vacío","Desesperación",
+   "Soledad","Alivio"],
+ sensacion: ["Presión en el pecho","Nudo en la garganta","Taquicardia","Temblor","Calor en la cara",
+   "Ganas de llorar","Náusea","Tensión en la mandíbula","Cansancio de golpe","No sentir nada"],
+ accion: ["Cerré la conversación","Me encerré","Miré el celular","Empecé a escribir","Salí",
+   "Busqué a alguien","Me acosté","Dejé de responder","Empecé a tomar","Revisé una y otra vez"],
+ externo: ["No me respondieron","Alguien entró","Sonó una notificación","Se acabó la reunión",
+   "Alguien dijo algo","Me quedé sin batería","Empezó a llover","Se fue la persona"]
+};
+
+/* Habilidades por módulo, con la nomenclatura de la traducción de Gagliesi. */
+const HABILIDADES = {
+ "Mindfulness": ["Mente sabia","Observar","Describir","Participar","No juzgar",
+   "Una cosa a la vez","Siendo efectivo"],
+ "Tolerancia al malestar": ["STOP","Pros y contras","TIP: cambiar la fisiología",
+   "ACEPTAS: distraerse","Cálmate con los cinco sentidos","SALVARA: mejorar el momento",
+   "Aceptación radical","Redireccionar la mente","Disposición abierta",
+   "Media sonrisa y manos dispuestas"],
+ "Regulación emocional": ["Verificar los hechos","Acción opuesta","Resolución de problemas",
+   "Acumular positivos a corto plazo","Acumular positivos a largo plazo","Construir competencia",
+   "Anticiparse a la situación","Cuidar el cuerpo","Mindfulness de la emoción actual"],
+ "Efectividad interpersonal": ["DEAR MAN: pedir o decir no","AVES: cuidar la relación",
+   "VIDA: cuidar el autorrespeto","Evaluar cuán intensamente pedir","Validación",
+   "Mindfulness de los otros"]
+};
+
+let eslabones = [];
+
+function agregarEslabon(){
+  eslabones.push({tipo:"pensamiento", texto:"", habilidad:"", marcas:[]});
+  pintarCadena();
+  refrescar();
+  Kit.guardar();
+}
+function quitarEslabon(i){ eslabones.splice(i, 1); pintarCadena(); refrescar(); Kit.guardar(); }
+function moverEslabon(i, d){
+  const j = i + d;
+  if(j < 0 || j >= eslabones.length) return;
+  const t = eslabones[i]; eslabones[i] = eslabones[j]; eslabones[j] = t;
+  pintarCadena(); refrescar(); Kit.guardar();
+}
+
+function opcionesHabilidad(sel){
+  let h = '<option value="">— ninguna todavía —</option>';
+  Object.keys(HABILIDADES).forEach(mod => {
+    h += `<optgroup label="${mod}">` + HABILIDADES[mod].map(s =>
+      `<option value="${Kit.escapar(s)}" ${s === sel ? "selected" : ""}>${Kit.escapar(s)}</option>`
+    ).join("") + "</optgroup>";
+  });
+  return h;
+}
+
+function pintarCadena(){
+  $("veloCadena").style.display = eslabones.length ? "none" : "block";
+  $("cadena").innerHTML = eslabones.map((e, i) => {
+    const col = colorTipo(e.tipo);
+    return `
+    <div class="eslabon">
+      <div class="nodo" style="background:${col}">${i + 1}</div>
+      <div class="caja ${e.habilidad ? "rompe" : ""}">
+        <div class="arriba">
+          <select class="tipo" data-i="${i}" data-c="tipo">
+            ${TIPOS.map(t => `<option value="${t.v}" ${t.v === e.tipo ? "selected" : ""}>${t.t}</option>`).join("")}
+          </select>
+          <span style="flex:1"></span>
+          <button type="button" class="mover" title="Subir" data-i="${i}" data-mv="-1"
+            ${i === 0 ? "disabled" : ""}>&#9650;</button>
+          <button type="button" class="mover" title="Bajar" data-i="${i}" data-mv="1"
+            ${i === eslabones.length - 1 ? "disabled" : ""}>&#9660;</button>
+          <button type="button" class="quitar mover" title="Quitar" data-i="${i}" data-q="1"
+            style="font-size:18px">&times;</button>
+        </div>
+        <div class="chips">${(CONTENIDOS[e.tipo] || []).map(c =>
+          `<button type="button" class="chip ${(e.marcas || []).indexOf(c) >= 0 ? "activa" : ""}"
+            data-i="${i}" data-m="${Kit.escapar(c)}"
+            style="font-size:12.5px;padding:5px 11px">${Kit.escapar(c)}</button>`).join("")}</div>
+        <details class="apunte">
+          <summary>Detallarlo en una línea (opcional)</summary>
+          <input type="text" data-i="${i}" data-c="texto" value="${Kit.escapar(e.texto)}"
+            placeholder="Solo si las fichas no lo recogen.">
+        </details>
+        <div class="habilidad">
+          <label>¿Qué habilidad cabía aquí?</label>
+          <select data-i="${i}" data-c="habilidad">${opcionesHabilidad(e.habilidad)}</select>
+        </div>
+        ${e.habilidad ? '<span class="marca-rompe">Aquí se puede romper la cadena</span>' : ""}
+      </div>
+    </div>`;
+  }).join("");
+
+  $("cadena").querySelectorAll("[data-c]").forEach(el => {
+    const i = +el.dataset.i, c = el.dataset.c;
+    el.addEventListener(c === "texto" ? "input" : "change", () => {
+      if(c === "tipo" && eslabones[i].tipo !== el.value) eslabones[i].marcas = [];
+      eslabones[i][c] = el.value;
+      if(c === "texto"){ Kit.guardar(); return; }
+      pintarCadena();
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  $("cadena").querySelectorAll("button[data-m]").forEach(b => {
+    const i = +b.dataset.i, c = b.dataset.m;
+    b.addEventListener("click", () => {
+      const l = eslabones[i].marcas || (eslabones[i].marcas = []), pos = l.indexOf(c);
+      if(pos >= 0) l.splice(pos, 1); else l.push(c);
+      b.classList.toggle("activa");
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  $("cadena").querySelectorAll("button[data-mv]").forEach(b =>
+    b.addEventListener("click", () => moverEslabon(+b.dataset.i, +b.dataset.mv)));
+  $("cadena").querySelectorAll("[data-q]").forEach(b =>
+    b.addEventListener("click", () => quitarEslabon(+b.dataset.i)));
+}
+
+/* ====================== LECTURA ====================== */
+const conHabilidad = () => eslabones.filter(e => e.habilidad);
+const cuentaTipo = v => eslabones.filter(e => e.tipo === v).length;
+
+function refrescar(){
+  const rotos = conHabilidad().length;
+  $("resumenCadena").innerHTML = eslabones.length ? `
+    <div><span class="n">${eslabones.length}</span><span class="r">eslabones</span></div>
+    <div><span class="n" style="color:var(--logro)">${rotos}</span><span class="r">con habilidad</span></div>
+    <div><span class="n">${cuentaTipo("pensamiento")}</span><span class="r">pensamientos</span></div>
+    <div><span class="n">${cuentaTipo("emocion")}</span><span class="r">emociones</span></div>` : "";
+
+  const actual = $("planEslabon").value;
+  $("planEslabon").innerHTML = '<option value="">— elige un eslabón —</option>' +
+    eslabones.map((e, i) => {
+      const et = (TIPOS.find(t => t.v === e.tipo) || {}).t || e.tipo;
+      const q = (e.marcas || []).join(", ") || e.texto.trim() || "sin describir";
+      return `<option value="${i}">${i + 1}. [${et}] ${Kit.escapar(q.slice(0, 46))}` +
+             `${e.habilidad ? " → " + Kit.escapar(e.habilidad) : ""}</option>`;
+    }).join("");
+  if(actual && +actual < eslabones.length) $("planEslabon").value = actual;
+
+  const primero = eslabones.findIndex(e => e.habilidad);
+  $("sugerenciaEslabon").textContent = primero >= 0
+    ? `La cadena sugiere el eslabón ${primero + 1}: es el más temprano con una habilidad ubicada, ` +
+      "y mientras más temprano se rompa, menos activación hay que manejar."
+    : "Cuando ubiques habilidades en los eslabones, aquí aparecerá por dónde conviene romper.";
+
+  leerFuncion();
+  leer();
+
+}
+
+function leerFuncion(){
+  const inm = Kit.activas("cInmMi").concat(Kit.activas("cInmOtros")).join("");
+  const lar = Kit.activas("cLarMi").concat(Kit.activas("cLarOtros")).join("");
+  $("lecturaFuncion").innerHTML = (inm && lar)
+    ? `<div class="pistas" style="margin-top:14px"><b>Lo que se ve aquí:</b> la columna de arriba
+       explica por qué la conducta se repite y la de abajo explica por qué la persona quiere que
+       pare. La conducta no es irracional: está haciendo un trabajo. Cualquier habilidad que se
+       proponga en su lugar tiene que hacer ese mismo trabajo, o no se va a usar.</div>`
+    : "";
+}
+
+function leer(){
+  const n = eslabones.length, rotos = conHabilidad().length;
+  let nombre, metafora, romper, pregunta, bandera = "";
+
+  if(n === 0){
+    nombre = "Cadena sin construir";
+    metafora = "Todavía no hay eslabones que mirar.";
+    romper = "Antes de buscar dónde romper hay que tener la cadena completa. Conviene ir despacio: " +
+      "una cadena bien hecha suele tener entre ocho y veinte eslabones, y casi siempre aparecen al " +
+      "preguntar «¿y entre eso y eso, qué pasó?».";
+    pregunta = "Justo después del disparador, ¿qué fue lo primero que se te cruzó por la cabeza?";
+  } else if(n < 5){
+    nombre = "Cadena demasiado corta";
+    metafora = `${n} eslabón${n > 1 ? "es" : ""} para llegar hasta la conducta.`;
+    romper = "Con tan pocos eslabones la cadena todavía tiene saltos, y en los saltos es donde " +
+      "están los puntos de ruptura. Vale la pena volver sobre cada paso y preguntar qué hubo en " +
+      "medio: un pensamiento suelto casi nunca lleva directo a la conducta.";
+    pregunta = "Entre el disparador y lo que hiciste, ¿de verdad no pasó nada más por dentro?";
+  } else if(rotos === 0){
+    nombre = "Cadena completa, sin puntos de ruptura";
+    metafora = `${n} eslabones y ninguna habilidad ubicada todavía.`;
+    romper = "La cadena está reconstruida y falta la mitad del trabajo. Conviene recorrerla de " +
+      "nuevo desde el principio: cuanto más temprano en la cadena, más fácil es romperla, porque " +
+      "la activación todavía es baja. Los eslabones finales suelen necesitar habilidades de " +
+      "supervivencia a la crisis; los primeros, casi cualquier otra cosa.";
+    pregunta = "De todos estos eslabones, ¿en cuál todavía habrías podido hacer algo distinto?";
+  } else if(rotos >= 3){
+    nombre = "Cadena con varios puntos de ruptura";
+    metafora = `${rotos} de ${n} eslabones tienen una habilidad ubicada.`;
+    romper = "Hay varias salidas identificadas, y eso es más de lo que se puede practicar. Para la " +
+      "semana conviene quedarse con una sola: la más temprana de las que la persona crea que " +
+      "puede usar de verdad. Las demás quedan en la hoja para más adelante.";
+    pregunta = "De todas estas salidas, ¿cuál es la que sí ves usando el martes a las once de la noche?";
+  } else {
+    nombre = "Cadena con un punto de ruptura";
+    metafora = `Eslabón ${eslabones.findIndex(e => e.habilidad) + 1} de ${n}: ` +
+      `${conHabilidad()[0].habilidad}.`;
+    romper = "Hay una salida ubicada. Antes de darla por buena conviene mirar si hay otra más " +
+      "temprana: mientras más avanzada esté la cadena, más difícil es que la habilidad alcance, " +
+      "porque la activación ya es alta.";
+    pregunta = "¿Qué tendría que pasar para que en ese punto exacto te acuerdes de que tienes esa opción?";
+  }
+
+  const texto = (Kit.activas("conducta").join(" ") + " " +
+                 $("conductaNota").value + " " +
+                 eslabones.map(e => (e.marcas || []).join(" ") + " " + e.texto).join(" ")).toLowerCase();
+  if(/suicid|matarme|morir|no despertar|cortar|cortes|autolesi|quitarme la vida|sobredosis/.test(texto))
+    bandera = "Aparecen contenidos de riesgo en la cadena. El análisis no reemplaza la valoración " +
+      "de riesgo: conviene detenerse aquí, evaluar ideación, plan y medios, revisar el plan de " +
+      "crisis y dejar registro de lo actuado antes de continuar con la hoja.";
+
+  $("lNombre").textContent   = nombre;
+  $("lMetafora").textContent = metafora;
+  $("lRomper").textContent   = romper;
+  $("lPregunta").textContent = pregunta;
+  $("lBandera").innerHTML    = bandera ? `<div class="bandera">${bandera}</div>` : "";
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const l = [];
+  l.push("CONDUCTA PROBLEMA");
+  l.push(Kit.activas("conducta").join(", ") || "(sin marcar)");
+  if($("conductaNota").value.trim()) l.push("  " + $("conductaNota").value.trim());
+  if(Kit.activas("cuando").length) l.push("Cuándo: " + Kit.activas("cuando").join(", "));
+  if(Kit.activas("frecuencia").length) l.push("Frecuencia: " + Kit.activas("frecuencia").join(", "));
+
+  const vs = Kit.activas("vulnerabilidades");
+  l.push("", "VULNERABILIDAD");
+  if(vs.length) l.push(vs.join(", "));
+  if($("vulneraTexto").value.trim()) l.push($("vulneraTexto").value.trim());
+
+  l.push("", "EVENTO DESENCADENANTE");
+  l.push(Kit.activas("disparador").join(", ") || "(sin marcar)");
+  if($("disparadorNota").value.trim()) l.push("  " + $("disparadorNota").value.trim());
+
+  l.push("", `CADENA (${eslabones.length} eslabones)`);
+  eslabones.forEach((e, i) => {
+    const t = (TIPOS.find(t => t.v === e.tipo) || {}).t || e.tipo;
+    l.push(`${i + 1}. [${t}] ${e.texto.trim() || "(sin describir)"}` +
+           (e.habilidad ? `\n    → habilidad que cabía: ${e.habilidad}` : ""));
+  });
+
+  l.push("", "CONSECUENCIAS",
+    "Inmediatas en la persona: " + (Kit.activas("cInmMi").join(", ") || "—"),
+    "Inmediatas en otros: " + (Kit.activas("cInmOtros").join(", ") || "—"),
+    "A largo plazo en la persona: " + (Kit.activas("cLarMi").join(", ") || "—"),
+    "A largo plazo en otros: " + (Kit.activas("cLarOtros").join(", ") || "—"));
+
+  l.push("", "LECTURA: " + $("lNombre").textContent, $("lRomper").textContent);
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("ALERTA: " + band.textContent.trim());
+
+  const iEsl = $("planEslabon").value;
+  const esl = iEsl === "" ? null : eslabones[+iEsl];
+  l.push("", "PLAN",
+    "Prevención: " + (Kit.activas("planPrevenir").join(", ") || "—"),
+    "Sustitución: " + (esl
+      ? `eslabón ${+iEsl + 1}${esl.habilidad ? " con " + esl.habilidad : ""}`
+      : "—"),
+    "Reparación: " + (Kit.activas("planReparar").join(", ") || "—"),
+    ($("planNota").value.trim() ? "Nota: " + $("planNota").value.trim() : ""));
+  return l.join("\n");
+}
+
+[["vulnerabilidades",VULNERABILIDADES],["conducta",CONDUCTAS],["cuando",CUANDO],
+ ["frecuencia",FRECUENCIA],["disparador",DISPARADORES],
+ ["cInmMi",CONS_INM_MI],["cInmOtros",CONS_INM_OTROS],
+ ["cLarMi",CONS_LAR_MI],["cLarOtros",CONS_LAR_OTROS],
+ ["planPrevenir",PREVENIR],["planReparar",REPARAR]
+].forEach(([id, lista]) => Kit.chips(id, lista, refrescar));
+["conductaNota","disparadorNota"].forEach(id => $(id).addEventListener("input", refrescar));
+
+Kit.iniciar({
+  clave: "dbt-analisis-en-cadena",
+  extra: () => ({eslabones: eslabones}),
+  restaurar: d => { eslabones = d.eslabones || []; pintarCadena(); },
+  alCambiar: refrescar,
+  resumen: resumen
+});
+pintarCadena();
+refrescar();

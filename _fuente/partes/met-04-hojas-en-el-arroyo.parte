@@ -1,0 +1,296 @@
+@@meta
+archivo: met-hojas-en-el-arroyo.html
+titulo: Hojas en el arroyo
+orden: 04
+enfoque: Metáforas vivas
+etiqueta: Defusión
+sub: Un arroyo que baja, hojas que pasan solas y un pensamiento sobre cada hoja. No hay que producirlas: llegan sin avisar, se repiten, a veces vienen dos juntas. El ejercicio no consiste en que dejen de venir ni en mirar para otro lado: consiste en verlas pasar sin subirse a ninguna. Y cuando notes que te fuiste con la corriente, marcarlo. Darse cuenta es el ejercicio, no el error.
+fuente: Defusión cognitiva y meditación para desliteralizar el lenguaje, en Díaz Corbobés, MANUAL ACT §3.4, dentro del estilo abierto de respuesta.
+resumen: Práctica de defusión guiada y cronometrada, de minuto y medio o de tres minutos. La corriente trae los pensamientos sola, encadenados y barajados, y se marca cada enganche. Cuenta enganches, no fallos.
+campo3: Sesión
+campo3ph: Ej. Sesión 5
+@@css
+  button.soltar{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
+  button.soltar:hover{background:#28607c;border-color:#28607c}
+  button.enganche{background:#c9962f;border-color:#c9962f;color:#fff;font-weight:600}
+  button.enganche:hover{background:#b0821f;border-color:#b0821f}
+  .marcas div{min-width:96px}
+  .marcas .n{font-size:24px}
+  .guion{counter-reset:paso}
+  .guion p{position:relative;padding-left:30px;margin:0 0 11px;font-size:14.5px;line-height:1.55}
+  .guion p::before{counter-increment:paso;content:counter(paso);position:absolute;left:0;top:1px;
+    width:21px;height:21px;border-radius:50%;background:var(--acento-claro);color:var(--acento);
+    font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué va a bajar por el agua</h2>
+  <p class="ayuda">Los que aparecen todos los días sirven mejor que los más graves. La corriente
+  los trae sola, los repite y los baraja.</p>
+  <div class="cuerpo">
+    <div class="chips" id="pensamientos"></div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">2</span>El guion</h2>
+  <div class="cuerpo guion">
+    <p>Imagina que estás sentado junto a un arroyo que baja despacio. El agua es clara y arrastra
+    hojas que caen de los árboles. No tienes que hacer nada con el agua.</p>
+    <p>Sobre cada hoja viene un pensamiento. No los eliges tú: llegan solos, y a veces vuelve el
+    mismo. Míralo, léelo, y deja que la corriente se lo lleve.</p>
+    <p>No empujes las hojas, no las retengas y tampoco mires el agua para no verlas. Se trata de
+    mirarlas de frente y dejarlas ir igual: los feos, los aburridos y también este de «lo estoy
+    haciendo bien».</p>
+    <p>En algún momento vas a notar que dejaste de mirar el arroyo, que te fuiste con una hoja
+    corriente abajo. <b>Eso va a pasar, y no es una falla.</b> Cuando lo notes, marca el botón
+    naranja, vuelve a sentarte junto al arroyo y sigue.</p>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="arroyo" viewBox="0 0 700 300" role="img"
+    aria-label="Arroyo con hojas que llevan pensamientos corriente abajo"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#2f6f8f">3:00</span><span class="r">quedan</span></div>
+    <div><span class="n" id="mHojas" style="color:#3f7d5a">0</span><span class="r">hojas que pasaron</span></div>
+    <div><span class="n" id="mEnganches" style="color:#c9962f">0</span><span class="r">veces que volví</span></div>
+  </div>
+  <div class="duracion" id="duracion">
+    <button type="button" class="chip" id="d90">Minuto y medio</button>
+    <button type="button" class="chip activa" id="d180">Tres minutos</button>
+    <button type="button" class="chip" id="vLento">Corriente lenta</button>
+    <button type="button" class="chip activa" id="vNormal">Corriente normal</button>
+  </div>
+  <div class="mandos">
+    <button type="button" class="soltar" id="btnArrancar" onclick="arrancar()">Empezar la práctica</button>
+    <button type="button" class="enganche" onclick="engancharse()">Me enganché</button>
+    <button type="button" onclick="ponerLaMia()">Poner una hoja ahora</button>
+    <button type="button" onclick="reiniciar()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="cajaPregunta" hidden>
+  <div class="pregunta" id="pregunta"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const PENSAMIENTOS = ["No sirvo para esto","Voy a fallar","No soy suficiente","¿Y si me pasa algo?"];
+
+let hojas = [], pasadas = 0, enganches = 0;
+let total = 180, restante = 180;
+let corriendo = false, animacion = null;
+let baraja = [], proxima = 0, lenta = false;
+
+const elegidos = () => Kit.activas("pensamientos");
+
+/* ====================== EL RITMO DE LA CORRIENTE ======================
+   Una hoja nueva cada cuatro segundos y pico. Con ese intervalo caben dos o
+   tres hojas a la vez en el agua, cada una da tiempo a leerse, y el
+   solapamiento ocurre por azar y no por regla: parece corriente, no fila. */
+const INTERVALO = () => (lenta ? 6.2 : 4.1) + Math.random() * (lenta ? 2.2 : 1.6);
+
+/* Se sirven barajados y no en orden fijo: un ciclo predecible se vuelve
+   mueble y deja de notarse. Cada vuelta se remezcla. */
+function siguientePensamiento(){
+  const lista = elegidos();
+  if(!lista.length) return null;
+  if(!baraja.length){
+    baraja = lista.slice();
+    for(let i = baraja.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [baraja[i], baraja[j]] = [baraja[j], baraja[i]];
+    }
+    /* con un solo pensamiento la baraja es él mismo: vuelve una y otra vez,
+       que es exactamente lo que hacen los pensamientos que pesan */
+  }
+  return baraja.shift();
+}
+
+function nuevaHoja(texto){
+  hojas.push({texto, x:-90, y:104 + Math.random() * 96, giro:-10 + Math.random() * 20,
+    vel:(lenta ? .38 : .55) + Math.random() * (lenta ? .22 : .35)});
+}
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+let sobrante = 0;
+
+function latido(dt){
+  /* el agua trae hojas sola mientras la práctica está corriendo */
+  if(corriendo){
+    proxima -= dt;
+    if(proxima <= 0){
+      const t = siguientePensamiento();
+      if(t){ nuevaHoja(t); }
+      proxima = INTERVALO();
+    }
+    sobrante += dt;
+    while(sobrante >= 1){
+      sobrante -= 1;
+      restante--;
+      if(restante <= 0){ terminar(); break; }
+    }
+  }
+
+  const antes = hojas.length;
+  hojas.forEach(h => { h.x += h.vel * 100 * dt; h.giro += h.vel * 7 * dt; });
+  hojas = hojas.filter(h => h.x < 760);
+  pasadas += antes - hojas.length;
+
+  marcar();
+  dibujar();
+}
+
+/* ====================== DURACIÓN Y RITMO ====================== */
+function ponerDuracion(seg){
+  if(corriendo) return;
+  total = seg;
+  restante = seg;
+  $("d90").classList.toggle("activa", seg === 90);
+  $("d180").classList.toggle("activa", seg === 180);
+  marcar();
+  Kit.guardar();
+}
+
+function ponerRitmo(esLenta){
+  lenta = esLenta;
+  $("vLento").classList.toggle("activa", lenta);
+  $("vNormal").classList.toggle("activa", !lenta);
+  Kit.guardar();
+}
+
+/* ====================== EL ARROYO ====================== */
+function dibujar(){
+  const svg = $("arroyo");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+
+  g("rect", {x:0, y:0, width:700, height:300, fill:"#eef4f7"});
+  g("path", {d:"M0 0 L700 0 L700 62 Q 520 82 330 74 Q 150 66 0 88 Z", fill:"#dbe6d8"});
+  g("path", {d:"M0 300 L700 300 L700 236 Q 520 214 330 224 Q 150 234 0 210 Z", fill:"#dbe6d8"});
+  g("path", {d:"M0 88 Q 150 66 330 74 Q 520 82 700 62 L700 236 Q 520 214 330 224 Q 150 234 0 210 Z",
+    fill:"#bcd8e6"});
+  for(let k = 0; k < 5; k++)
+    g("path", {d:`M0 ${118 + k * 22} Q 175 ${106 + k * 22} 350 ${118 + k * 22} ` +
+      `T 700 ${118 + k * 22}`, stroke:"#a9cddd", "stroke-width":1.5, fill:"none", opacity:.7});
+
+  hojas.forEach(h => {
+    const gr = Kit.svg("g", {transform:`translate(${h.x},${h.y}) rotate(${h.giro})`});
+    svg.appendChild(gr);
+    gr.appendChild(Kit.svg("path", {d:"M0 0 Q 20 -14 40 0 Q 20 14 0 0 Z", fill:"#7fa86a",
+      stroke:"#5f8a4d", "stroke-width":1.2}));
+    gr.appendChild(Kit.svg("path", {d:"M2 0 L38 0", stroke:"#5f8a4d", "stroke-width":1}));
+    const t = Kit.svg("text", {x:20, y:-20, "text-anchor":"middle",
+      style:"font:600 11.5px system-ui,sans-serif;fill:#3f5163;" +
+            "paint-order:stroke;stroke:#eef4f7;stroke-width:3;stroke-linejoin:round"});
+    t.textContent = h.texto.length > 30 ? h.texto.slice(0, 29) + "…" : h.texto;
+    gr.appendChild(t);
+  });
+
+  if(!hojas.length && !corriendo){
+    const t = Kit.svg("text", {x:350, y:158, "text-anchor":"middle",
+      style:"font:14.5px system-ui,sans-serif;fill:#7fa0b2"});
+    t.textContent = "El agua baja. Las hojas empiezan a llegar cuando arranques.";
+    svg.appendChild(t);
+  }
+}
+
+/* ====================== PRÁCTICA ====================== */
+/* La corriente trae los pensamientos sola. Este botón es para el que aparece
+   en plena práctica y no estaba en la lista: se pone en una hoja y se va. */
+function ponerLaMia(){
+  const lista = elegidos();
+  if(!lista.length){ Kit.brindis("Marca primero al menos un pensamiento"); return; }
+  nuevaHoja(lista[Math.floor(Math.random() * lista.length)]);
+  escena.andar();
+  Kit.guardar();
+}
+
+function engancharse(){
+  enganches++;
+  marcar();
+  Kit.brindis("Lo notaste. Vuelve al arroyo y sigue.");
+  Kit.guardar();
+}
+
+function arrancar(){
+  if(corriendo) return;
+  if(!elegidos().length){ Kit.brindis("Marca primero al menos un pensamiento"); return; }
+  corriendo = true;
+  sobrante = 0;
+  proxima = .8;                 /* la primera llega casi enseguida */
+  baraja = [];
+  $("btnArrancar").disabled = true;
+  escena.andar();
+  marcar();
+}
+
+function terminar(){
+  corriendo = false;
+  restante = 0;
+  $("btnArrancar").disabled = false;
+  Kit.brindis("Se cumplió el tiempo");
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  corriendo = false; restante = total; pasadas = 0; enganches = 0;
+  hojas = []; baraja = []; proxima = 0; sobrante = 0;
+  $("btnArrancar").disabled = false;
+  marcar(); dibujar();
+  Kit.guardar();
+}
+
+function marcar(){
+  const m = Math.floor(restante / 60), s = restante % 60;
+  $("mReloj").textContent = m + ":" + String(s).padStart(2, "0");
+  $("mHojas").textContent = pasadas;
+  $("mEnganches").textContent = enganches;
+  pregunta();
+}
+
+/* La pregunta para abrir la sesión aparece pasada la mitad del tiempo, por si
+   conviene cortar antes de que se cumpla el reloj. */
+function pregunta(){
+  const pasada = total - restante;
+  const visible = pasada >= total / 2 && (pasadas > 0 || enganches > 0);
+  $("cajaPregunta").hidden = !visible;
+  if(!visible) return;
+  $("pregunta").textContent = enganches === 0
+    ? "Durante este rato, ¿en algún momento dejaste de ver el arroyo?"
+    : "Cada vez que marcaste el botón, ¿qué te hizo darte cuenta?";
+}
+
+function resumen(){
+  const l = [];
+  l.push("PENSAMIENTOS QUE BAJARON POR EL AGUA");
+  l.push(elegidos().length ? elegidos().join(" · ") : "(ninguno marcado)");
+  l.push("", `PRÁCTICA (${total === 90 ? "minuto y medio" : "tres minutos"}, ` +
+             `corriente ${lenta ? "lenta" : "normal"}): ${pasadas} hojas pasaron, ` +
+             `${enganches} veces que se enganchó y volvió, ` +
+             `${total - restante} segundos practicados.`);
+  return l.join("\n");
+}
+
+Kit.chips("pensamientos", PENSAMIENTOS);
+$("d90").onclick = () => ponerDuracion(90);
+$("d180").onclick = () => ponerDuracion(180);
+$("vLento").onclick = () => ponerRitmo(true);
+$("vNormal").onclick = () => ponerRitmo(false);
+
+Kit.iniciar({
+  clave: "met-hojas-en-el-arroyo",
+  extra: () => ({pasadas, enganches, total, lenta}),
+  restaurar: d => {
+    pasadas = d.pasadas || 0; enganches = d.enganches || 0;
+    total = d.total || 180; restante = total; lenta = !!d.lenta;
+  },
+  alCambiar: () => { $("d90").classList.toggle("activa", total === 90);
+                     $("d180").classList.toggle("activa", total === 180);
+                     $("vLento").classList.toggle("activa", lenta);
+                     $("vNormal").classList.toggle("activa", !lenta);
+                     marcar(); dibujar(); },
+  resumen: resumen
+});

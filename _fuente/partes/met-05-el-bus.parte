@@ -1,0 +1,457 @@
+@@meta
+archivo: met-el-bus.html
+titulo: El bus y los pasajeros
+orden: 05
+enfoque: Metáforas vivas
+etiqueta: Acción comprometida
+sub: Tú manejas el bus. Los pasajeros son los pensamientos, las emociones y los recuerdos que se subieron sin permiso. El bus avanza solo mientras conduces: no hay botón de avanzar. Ellos gritan cuando quieren, y en ese momento aparece encima del bus la opción de parar a discutir, unos segundos y se va. Parar detiene los kilómetros; el reloj del viaje no se detiene con nada.
+fuente: Compromiso y acción, y metáfora del vecino indeseable, en Díaz Corbobés, MANUAL ACT §3.7, sobre la metáfora clásica de los pasajeros del autobús de Hayes, Strosahl y Wilson.
+resumen: El viaje ocurre en tiempo real: el bus avanza, los pasajeros gritan cuando quieren y la única decisión es si se para a discutir. Discutir congela los kilómetros pero no el reloj, y eso lo dice el tablero.
+campo3: Sesión
+campo3ph: Ej. Sesión 8
+@@css
+  /* el reto aparece sobre el bus: la decisión se toma dentro de la escena, y
+     dura unos segundos. Si no se toca, se va sola. */
+  .reto{position:absolute;transform:translateX(-50%);z-index:3}
+  .reto button{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600;
+    font-size:13.5px;padding:8px 15px;white-space:nowrap;
+    box-shadow:0 3px 10px rgba(138,61,61,.3);animation:latido 1.2s ease-in-out infinite}
+  .reto::after{content:"";position:absolute;left:50%;margin-left:-7px;bottom:-7px;width:0;height:0;
+    border-left:7px solid transparent;border-right:7px solid transparent;
+    border-top:8px solid #8a3d3d}
+  @keyframes latido{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  button.arranque{background:#3f7d5a;border-color:#3f7d5a;color:#fff;font-weight:600}
+  button.arranque:hover{background:#356b4d;border-color:#356b4d}
+  button.arranque:disabled{background:#b9cec2;border-color:#b9cec2}
+
+  .bitacora{max-height:190px;overflow-y:auto;margin-top:6px}
+  .tramo{display:flex;gap:11px;align-items:baseline;font-size:13.5px;padding:6px 10px;
+    border-bottom:1px solid var(--linea)}
+  .tramo:last-child{border-bottom:0}
+  .tramo .cual{flex:0 0 42px;font-weight:700;color:var(--tinta-suave);font-size:12px;
+    font-variant-numeric:tabular-nums}
+  .tramo.avanzo{background:#f4faf6}
+  .tramo.paro{background:#fdf6f4}
+  .tramo .que{flex:1}
+  .tramo .km{font-weight:700;font-size:12.5px;white-space:nowrap}
+  @media print{.reto{display:none}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Hacia dónde va el bus?</h2>
+  <p class="ayuda">Una dirección valiosa, no una meta terminable: a una meta se llega y de una
+  dirección no te bajas nunca.</p>
+  <div class="cuerpo">
+    <div class="chips" id="destino"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>¿Quiénes se subieron?</h2>
+  <p class="ayuda">No los elegiste y no se bajan en la próxima esquina.</p>
+  <div class="cuerpo">
+    <div class="chips" id="pasajeros"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <div class="lienzo">
+    <svg id="ruta" viewBox="0 0 700 330" role="img"
+      aria-label="El bus avanzando hacia el destino con los pasajeros a bordo"></svg>
+    <div class="reto" id="reto" hidden>
+      <button type="button" onclick="discutir()">Parar a discutir con ellos</button>
+    </div>
+  </div>
+  <div class="marcas">
+    <div><span class="n" id="mKm" style="color:#3f7d5a">0</span><span class="r">km recorridos</span></div>
+    <div><span class="n" id="mReloj" style="color:#2f6f8f">0:00</span><span class="r">del viaje</span></div>
+    <div><span class="n" id="mParadas" style="color:#8a3d3d">0</span><span class="r">paradas a discutir</span></div>
+    <div><span class="n" id="mEnergia" style="color:#2f6f8f">100</span><span class="r">energía</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Arrancar el bus</button>
+    <button type="button" id="btnPausa" onclick="pausar()">Pausa</button>
+    <button type="button" onclick="reiniciarViaje()">Empezar el viaje de nuevo</button>
+  </div>
+</div>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">El viaje</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Qué muestra el tablero</div><p id="lComo"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+  <div id="lBandera"></div>
+
+  <details class="catalogo" open>
+    <summary>Bitácora del viaje</summary>
+    <div class="bitacora" id="bitacora"></div>
+  </details>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El primer tramo de verdad</h2>
+  <p class="ayuda">Fuera de la pantalla. Un tramo corto, con los pasajeros gritando igual.</p>
+  <div class="cuerpo">
+    <div class="chips" id="tramoReal"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const DESTINOS = ["Ser alguien que termina lo que empieza","Estar presente con mi gente",
+  "Cuidar mi cuerpo","Vivir según lo que creo"];
+const PASAJEROS = ["«No sirves para esto»","«Y si sale mal»","«Mejor mañana»","La ansiedad"];
+const TRAMOS = ["Escribir el primer párrafo","Mandar el correo","Llamar a alguien",
+  "Salir a caminar"];
+
+const VELOCIDAD = 2.7;        /* km por segundo: el destino queda a unos 37 s */
+const DISCUSION = 5;          /* lo que dura una parada a discutir, en segundos */
+const VENTANA = 4;            /* lo que el botón de discutir permanece encima   */
+
+let km = 0, paradas = 0, energia = 100, bitacora = [], tiempo = 0;
+let discutiendo = 0, ventana = 0, proximoGrito = 2.2, globos = [], llego = false;
+
+const destinos  = () => Kit.activas("destino");
+const pasajeros = () => Kit.activas("pasajeros");
+const grito     = () => Math.round(Math.min(24, 4 + km * .2));
+const parado    = () => discutiendo > 0;
+const reloj     = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  tiempo += dt;                     /* el reloj del viaje no se detiene con nada */
+
+  if(parado()){
+    discutiendo -= dt;
+    energia = Math.max(0, energia - 4 * dt);   /* discutir sale caro */
+    if(discutiendo <= 0){
+      discutiendo = 0;
+      Kit.brindis("La discusión terminó donde empezó. El bus sigue.");
+    }
+  } else if(!llego){
+    km = Math.min(100, km + VELOCIDAD * dt);
+    energia = Math.max(0, energia - .8 * dt);
+    if(km >= 100){
+      llego = true;
+      escena.parar();
+      Kit.brindis("Llegaste con todos ellos adentro.");
+      Kit.guardar();
+    }
+  }
+
+  /* gritan cuando quieren, y gritan más cerca del destino */
+  proximoGrito -= dt;
+  if(proximoGrito <= 0 && !llego){
+    const l = pasajeros();
+    if(l.length){
+      globos.push({texto:l[Math.floor(Math.random() * l.length)], t:0,
+                   fila:Math.floor(Math.random() * 3)});
+      ventana = VENTANA;
+    }
+    proximoGrito = Math.max(1.6, 3.4 - km * .012) + Math.random() * 1.8;
+  }
+  globos.forEach(g => { g.t += dt; });
+  globos = globos.filter(g => g.t < 3);
+
+  /* si la ventana se cierra sin que se toque el botón, es un tramo hecho con
+     ellos gritando: eso es lo que queda anotado */
+  if(ventana > 0){
+    ventana -= dt;
+    if(ventana <= 0){
+      ventana = 0;
+      bitacora.push({tipo:"avanzo", seg:tiempo, km:km});
+      pintarBitacora();
+    }
+  }
+
+  marcas();
+  dibujar();
+  ponerReto();
+  leer();
+}
+
+/* ====================== LA RUTA ====================== */
+function dibujar(){
+  const svg = $("ruta");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t); return t;
+  };
+
+  const CARRIL = 232;
+  g("rect", {x:0, y:0, width:700, height:CARRIL - 30, fill:"#eef4f7"});
+  g("rect", {x:0, y:CARRIL - 30, width:700, height:330 - CARRIL + 30, fill:"#cfd6da"});
+  g("rect", {x:0, y:CARRIL - 30, width:700, height:5, fill:"#b6bec3"});
+  /* las rayas del asfalto corren hacia atrás: así se ve que el bus avanza */
+  const corrida = parado() ? 0 : (tiempo * 150) % 54;
+  for(let x = -54; x < 700; x += 54)
+    g("rect", {x:x + 54 - corrida, y:CARRIL + 40, width:30, height:4, fill:"#fff", opacity:.85});
+
+  /* el destino, al final del camino */
+  const dx = 640;
+  g("rect", {x:dx - 3, y:CARRIL - 96, width:5, height:96, fill:"#8a7f74"});
+  g("path", {d:`M${dx + 2} ${CARRIL - 96} l 44 13 l -44 13 Z`, fill:"#3f7d5a"});
+  const nomD = destinos().length ? destinos()[0] : "sin destino";
+  texto(dx + 24, CARRIL - 108, nomD.length > 26 ? nomD.slice(0, 25) + "…" : nomD,
+    "font:600 12px system-ui;fill:#3f7d5a", "end");
+
+  /* el bus, en el punto exacto del recorrido */
+  const bx = 60 + (km / 100) * 500;
+  const brinco = parado() || llego ? 0 : Math.sin(tiempo * 24) * .9;
+  const bus = Kit.svg("g", {transform:`translate(${bx},${CARRIL - 62 + brinco})`});
+  svg.appendChild(bus);
+  g("rect", {x:0, y:0, width:132, height:56, rx:9, fill:"#e8c15a", stroke:"#c9a03a",
+    "stroke-width":2}, bus);
+  g("rect", {x:96, y:9, width:28, height:21, rx:4, fill:"#bcd8e6"}, bus);
+  for(let v = 0; v < 3; v++)
+    g("rect", {x:12 + v * 27, y:9, width:21, height:21, rx:4, fill:"#bcd8e6"}, bus);
+  /* un pasajero asomado en cada ventana */
+  const lista = pasajeros();
+  for(let v = 0; v < Math.min(3, lista.length); v++)
+    g("circle", {cx:22 + v * 27, cy:24, r:6.5, fill:"#a4756f"}, bus);
+  /* el conductor */
+  if(lista.length || destinos().length)
+    g("circle", {cx:110, cy:24, r:6.5, fill:"#3f5163"}, bus);
+  /* ruedas que giran solo cuando el bus se mueve */
+  const giro = parado() || llego ? 0 : km * 26;
+  [28, 104].forEach(cx => {
+    g("circle", {cx:cx, cy:60, r:11, fill:"#3f4348"}, bus);
+    g("path", {d:"M-7 0 L7 0 M0 -7 L0 7", stroke:"#7d858c", "stroke-width":2,
+      transform:`translate(${cx},60) rotate(${giro})`}, bus);
+  });
+  /* humo del escape mientras anda */
+  if(!parado() && !llego && escena.anda())
+    for(let k = 0; k < 3; k++){
+      const f = ((tiempo * 1.6 + k * .33) % 1);
+      g("circle", {cx:-6 - f * 26, cy:48 - f * 12, r:3 + f * 6, fill:"#b6bec3",
+        opacity:(.35 * (1 - f)).toFixed(2)}, bus);
+    }
+
+  /* los gritos salen del techo y se van apagando */
+  const escala = .85 + Math.min(.5, grito() / 24);
+  globos.forEach(gl => {
+    const op = gl.t < .25 ? gl.t / .25 : Math.max(0, 1 - (gl.t - .25) / 2.4);
+    const gx = bx + 16 + gl.fila * 40, gy = CARRIL - 84 - gl.fila * 24 - gl.t * 22;
+    const burbuja = Kit.svg("g", {transform:`translate(${gx},${gy}) scale(${escala})`,
+      opacity:op.toFixed(2)});
+    svg.appendChild(burbuja);
+    const txt = gl.texto.length > 22 ? gl.texto.slice(0, 21) + "…" : gl.texto;
+    const ancho = 9 + txt.length * 6.1;
+    burbuja.appendChild(Kit.svg("rect", {x:0, y:0, width:ancho, height:23, rx:11,
+      fill:"#fff", stroke:"#c9a9a9", "stroke-width":1.4}));
+    burbuja.appendChild(Kit.svg("path", {d:"M14 23 l 5 8 l 7 -8 Z", fill:"#fff",
+      stroke:"#c9a9a9", "stroke-width":1.4}));
+    const t = Kit.svg("text", {x:ancho / 2, y:15.5, "text-anchor":"middle",
+      style:"font:600 11px system-ui,sans-serif;fill:#8a3d3d"});
+    t.textContent = txt;
+    burbuja.appendChild(t);
+  });
+  if(lista.length > 3)
+    texto(bx + 66, CARRIL - 4, `y ${lista.length - 3} más adentro`,
+      "font:11px system-ui;fill:#7b8288");
+
+  /* mientras se discute, el bus está detenido y se nota */
+  if(parado()){
+    texto(bx + 66, CARRIL - 118, "discutiendo…",
+      "font:600 13px system-ui;fill:#8a3d3d;paint-order:stroke;stroke:#eef4f7;stroke-width:3");
+    g("rect", {x:bx + 16, y:CARRIL + 62, width:100, height:6, rx:3, fill:"#f0d3c6"});
+    g("rect", {x:bx + 16, y:CARRIL + 62, width:100 * (discutiendo / DISCUSION), height:6, rx:3,
+      fill:"#8a3d3d"});
+  }
+
+  /* barra de avance */
+  g("rect", {x:60, y:308, width:560, height:7, rx:4, fill:"#dfe5e9"});
+  g("rect", {x:60, y:308, width:560 * (km / 100), height:7, rx:4, fill:"#3f7d5a"});
+}
+
+/* ====================== EL VIAJE ====================== */
+function listo(){
+  if(!destinos().length){ Kit.brindis("Elige primero hacia dónde va el bus"); return false; }
+  if(!pasajeros().length){ Kit.brindis("Sube al menos un pasajero"); return false; }
+  return true;
+}
+
+function arrancar(){
+  if(!listo()) return;
+  if(llego){ Kit.brindis("Ya llegaste. Empieza el viaje de nuevo si quieres repetirlo."); return; }
+  escena.andar();
+  botones();
+  Kit.guardar();
+}
+
+function pausar(){
+  escena.parar();
+  botones();
+  ponerReto();
+  Kit.guardar();
+}
+
+/* La única decisión del viaje, y solo mientras el botón está encima del bus. */
+function discutir(){
+  if(!listo()) return;
+  paradas++;
+  discutiendo = DISCUSION;
+  energia = Math.max(0, energia - 10);
+  ventana = 0;
+  bitacora.push({tipo:"paro", seg:tiempo, km:km});
+  pintarBitacora();
+  ponerReto();
+  Kit.guardar();
+}
+
+function reiniciarViaje(){
+  escena.parar();
+  km = 0; paradas = 0; energia = 100; bitacora = []; tiempo = 0;
+  discutiendo = 0; ventana = 0; proximoGrito = 2.2; globos = []; llego = false;
+  refrescar();
+  Kit.guardar();
+}
+
+function botones(){
+  $("btnArrancar").disabled = escena.anda() || llego;
+  $("btnPausa").disabled = !escena.anda();
+}
+
+/* El reto se ancla al bus: la posición del viewBox se traduce a porcentaje del
+   lienzo, así sigue encima del bus aunque cambie el tamaño de la ventana. */
+function ponerReto(){
+  const visible = ventana > 0 && !parado() && escena.anda() && !llego;
+  $("reto").hidden = !visible;
+  if(!visible) return;
+  const bx = 60 + (km / 100) * 500;
+  $("reto").style.left = ((bx + 66) / 700 * 100) + "%";
+  $("reto").style.top  = (10 / 330 * 100) + "%";
+}
+
+function pintarBitacora(){
+  $("bitacora").innerHTML = bitacora.length
+    ? bitacora.slice().reverse().map(t => {
+        return `<div class="tramo ${t.tipo}">
+          <span class="cual">${reloj(t.seg)}</span>
+          <span class="que">${t.tipo === "avanzo"
+            ? "Gritaron y seguiste manejando"
+            : "Paraste a discutir con los pasajeros"}</span>
+          <span class="km" style="color:${t.tipo === "avanzo" ? "#3f7d5a" : "#8a3d3d"}">
+            ${t.tipo === "avanzo" ? "seguía avanzando" : "0 km en 5 s"}</span>
+        </div>`;
+      }).join("")
+    : `<div class="velo">Todavía no has arrancado.</div>`;
+}
+
+function marcas(){
+  $("mKm").textContent      = Math.round(km);
+  $("mReloj").textContent   = reloj(tiempo);
+  $("mParadas").textContent = paradas;
+  $("mEnergia").textContent = Math.round(energia);
+}
+
+function refrescar(){
+  botones();
+  marcas();
+  dibujar();
+  ponerReto();
+  pintarBitacora();
+  leer();
+}
+
+function leer(){
+  const seguidos = bitacora.filter(t => t.tipo === "avanzo").length;
+  let nombre, metafora, como, pregunta, bandera = "";
+
+  if(!destinos().length || !pasajeros().length){
+    nombre = "El bus está parado";
+    metafora = "Falta el destino, o falta saber quién va a bordo.";
+    como = "Sin destino no hay viaje, y sin pasajeros no hay ejercicio: el bus vacío avanza solo " +
+      "y eso no le pasa a nadie.";
+    pregunta = "¿Hacia dónde querrías ir si los pasajeros no tuvieran voto?";
+  } else if(!escena.anda() && tiempo === 0){
+    nombre = "Con el motor encendido";
+    metafora = "Los pasajeros ya están arriba y el destino está señalado.";
+    como = "No hay botón de avanzar: el bus anda solo mientras lo dejes andar. Lo único que se " +
+      "puede tocar es el freno, y aparece cuando ellos gritan.";
+    pregunta = "¿Qué sueles hacer en la vida real cuando empiezan a gritar?";
+  } else if(paradas > 0 && km < 12){
+    nombre = "Todas las paradas, ningún kilómetro";
+    metafora = `${paradas} paradas. ${Math.round(km)} km en ${reloj(tiempo)}.`;
+    como = "Discutir con los pasajeros se siente como estar haciendo algo. Y el tablero dice lo " +
+      "que dice: el reloj corrió, la energía se gastó y el bus está donde estaba.";
+    pregunta = "¿Cuánto tiempo de tu vida real has pasado en esa discusión?";
+    bandera = "Vale la pena mirar si esa discusión es rumia sostenida: cuando lo es, se trabaja " +
+      "primero defusión y no argumentación.";
+  } else if(paradas >= 3 && paradas * DISCUSION > tiempo * .35){
+    nombre = "Más discusión que camino";
+    metafora = `${paradas} paradas, unos ${Math.round(paradas * DISCUSION)} segundos discutiendo ` +
+      `de ${reloj(tiempo)} de viaje.`;
+    como = "Se avanza, pero buena parte del viaje se fue en negociar. Fíjate en cuándo gritan: " +
+      "aprietan más cerca del destino, y eso no es señal de que vayas mal.";
+    pregunta = "¿Qué pasa contigo justo cuando estás a punto de conseguir algo que te importa?";
+  } else if(llego){
+    nombre = "Llegaste con ellos adentro";
+    metafora = `100 km en ${reloj(tiempo)}, con ${pasajeros().length} pasajeros a bordo.`;
+    como = "El bus llegó y no se bajó ni un pasajero. La meta nunca fue vaciar el bus. Fíjate en " +
+      "la energía que queda: manejar con ellos gritando cuesta, y cuesta mucho menos que discutir.";
+    pregunta = "Si esto se puede hacer así, ¿qué viaje llevas aplazando hasta que se bajen?";
+  } else if(paradas === 0 && seguidos >= 2){
+    nombre = "Gritaron y no frenaste";
+    metafora = `${seguidos} veces gritaron y el bus siguió. ${Math.round(km)} km.`;
+    como = "Ninguna de esas veces necesitó que se callaran primero. El ruido y el movimiento " +
+      "ocurrieron a la vez, y solo uno de los dos dependía de ti.";
+    pregunta = "¿Qué hiciste con las ganas de tocar ese botón?";
+  } else {
+    nombre = "El bus avanza";
+    metafora = `${Math.round(km)} km en ${reloj(tiempo)}, ${paradas} parada${paradas === 1 ? "" : "s"}.`;
+    como = "Cada vez que te acercas suben el volumen, y aun así el bus se movió. El botón rojo " +
+      "solo está unos segundos: si no lo tocas, se va solo y el viaje sigue.";
+    pregunta = "¿Cuál de los pasajeros es el que casi logra que pares?";
+  }
+
+  if(energia <= 30 && paradas >= 3)
+    bandera = "La energía está por el piso y la mayor parte se fue en paradas. Conviene nombrarlo: " +
+      "el agotamiento que trae la persona puede venir menos de su vida y más de la discusión interna.";
+
+  $("lNombre").textContent   = nombre;
+  $("lMetafora").textContent = metafora;
+  $("lComo").textContent     = como;
+  $("lPregunta").textContent = pregunta;
+  $("lBandera").innerHTML    = bandera ? `<div class="bandera">${bandera}</div>` : "";
+}
+
+function resumen(){
+  const seguidos = bitacora.filter(t => t.tipo === "avanzo").length;
+  const l = [];
+  l.push("DESTINO: " + (destinos().length ? destinos().join(" · ") : "sin elegir"));
+  l.push("PASAJEROS: " + (pasajeros().length ? pasajeros().join(" · ") : "ninguno"));
+  l.push("", `VIAJE: ${Math.round(km)} km de 100 en ${reloj(tiempo)} de reloj, ` +
+             `${paradas} paradas a discutir, ${seguidos} veces que gritaron y siguió, ` +
+             `energía ${Math.round(energia)}/100.`);
+  l.push("Llegó al destino: " + (llego ? "sí" : "no"));
+  l.push("", "LECTURA: " + $("lNombre").textContent, $("lComo").textContent);
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("Alerta: " + band.textContent.trim());
+
+  const tr = Kit.activas("tramoReal");
+  if(tr.length) l.push("", "TRAMO REAL DE LA SEMANA: " + tr.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("destino", DESTINOS, refrescar);
+Kit.chips("pasajeros", PASAJEROS, refrescar);
+Kit.chips("tramoReal", TRAMOS);
+window.addEventListener("resize", ponerReto);
+
+Kit.iniciar({
+  clave: "met-el-bus",
+  extra: () => ({km, paradas, energia, bitacora, tiempo, llego}),
+  restaurar: d => {
+    km = d.km || 0; paradas = d.paradas || 0;
+    energia = d.energia === undefined ? 100 : d.energia;
+    bitacora = d.bitacora || []; tiempo = d.tiempo || 0; llego = !!d.llego;
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});

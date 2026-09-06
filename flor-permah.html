@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi flor PERMAH</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6; --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 90px}
+  header.tapa,section.bloque{background:var(--papel);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:70ch}
+  .credito{margin-top:12px;padding-top:10px;border-top:1px dashed var(--linea);
+    font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .campos-id label{flex:1 1 160px;font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fdfefe}
+  .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+
+  /* --- disposición principal --- */
+  .tablero{display:grid;grid-template-columns:minmax(320px,44%) 1fr;gap:18px;align-items:start}
+  .panel-flor{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 10px;position:sticky;top:14px}
+  .flor{display:block;width:100%;height:auto}
+  .promedio-pie{text-align:center;font-size:13px;color:var(--tinta-suave);margin:2px 0 6px}
+  .promedio-pie b{color:var(--tinta);font-size:15px}
+
+  .petalos{display:flex;flex-direction:column;gap:10px}
+  .tarjeta{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
+    border-radius:var(--radio);padding:13px 16px;transition:box-shadow .15s,transform .15s}
+  .tarjeta.enfoque{box-shadow:0 0 0 2px var(--acento-claro);transform:translateX(2px)}
+  .cabeza{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .cabeza h3{margin:0;font-size:16px}
+  .cabeza .en{font-size:11.5px;color:var(--tinta-suave);text-transform:uppercase;letter-spacing:.6px}
+  .def{margin:5px 0 10px;font-size:13.5px;color:var(--tinta-suave)}
+  .fila{display:flex;align-items:center;gap:12px}
+  .fila input[type=range]{flex:1;min-width:120px;height:22px}
+  .marcador{min-width:46px;text-align:center;font-weight:700;font-size:17px;color:#fff;
+    border-radius:7px;padding:2px 6px}
+  .estado{font-size:12.5px;font-weight:600;margin-top:7px}
+  .sonda{font-size:13px;color:#3f5163;background:#f6f9fb;border-left:3px solid var(--linea);
+    border-radius:0 6px 6px 0;padding:7px 11px;margin-top:9px}
+  .sonda b{color:var(--acento)}
+
+  /* --- lectura del perfil --- */
+  .perfil{border-left:5px solid var(--acento);background:linear-gradient(180deg,#f7fbfd,#fff)}
+  .perfil .nombre{font-size:22px;font-weight:700;margin:2px 0 2px}
+  .perfil .metafora{font-size:15px;color:var(--tinta-suave);font-style:italic;margin:0 0 14px}
+  .campo{margin-bottom:12px}
+  .campo .etq{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:var(--acento);
+    font-weight:700;margin-bottom:3px}
+  .campo p{margin:0;font-size:14.5px}
+  .pregunta{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f}
+  .pregunta::before{content:"Para abrir en sesión";display:block;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.7px;color:var(--acento);font-weight:700;margin-bottom:4px}
+  .bandera{background:#fdf3ef;border:1px solid #f0d3c6;border-radius:8px;padding:11px 14px;
+    font-size:14px;color:#8a4a2c;margin-top:12px}
+
+  details.catalogo{margin-top:14px;border-top:1px dashed var(--linea);padding-top:12px}
+  details.catalogo summary{cursor:pointer;font-size:14px;color:var(--acento);font-weight:600}
+  .lista-perfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:9px;margin-top:12px}
+  .mini{border:1px solid var(--linea);border-radius:8px;padding:10px 12px;font-size:13px;
+    background:#fcfdfe}
+  .mini.activo{border-color:var(--acento);background:var(--acento-claro)}
+  .mini b{display:block;font-size:14px;margin-bottom:2px}
+  .mini span{color:var(--tinta-suave)}
+
+  .barra{position:fixed;bottom:0;left:0;right:0;background:var(--papel);border-top:1px solid var(--linea);
+    padding:11px 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;z-index:20}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff}
+  .aviso{font-size:12.5px;color:var(--tinta-suave);text-align:center;margin-top:20px}
+
+  @media (max-width:860px){
+    .tablero{grid-template-columns:1fr}
+    .panel-flor{position:static}
+    .envoltura{padding:16px 12px 90px}
+    .cabeza h3{font-size:17px}
+    .fila input[type=range]{height:30px}
+  }
+  @media print{
+    body{background:#fff}
+    .barra,.sonda,details.catalogo{display:none}
+    .tablero{grid-template-columns:40% 1fr}
+    .panel-flor{position:static}
+    header.tapa,section.bloque,.tarjeta{border-color:#bbb;break-inside:avoid;page-break-inside:avoid}
+    .envoltura{padding:0;max-width:none}
+  }
+
+  /* --- añadido al armonizar con el resto de las hojas --- */
+  details.notas-pro{background:linear-gradient(180deg,#faf8fd,#fff);border:1px solid var(--linea);
+    border-left:5px solid #7a6a9c;border-radius:var(--radio);padding:14px 20px;margin-bottom:16px}
+  details.notas-pro summary{cursor:pointer;font-size:15px;font-weight:700;color:#5b4d7a;
+    list-style:none;display:flex;align-items:center;gap:10px}
+  details.notas-pro summary::-webkit-details-marker{display:none}
+  details.notas-pro summary::before{content:"\270E";display:inline-flex;align-items:center;
+    justify-content:center;width:27px;height:27px;border-radius:50%;background:#efeaf7;font-size:14px}
+  details.notas-pro label.etiqueta{font-size:13.5px;font-weight:600;display:block;margin:14px 0 5px}
+  details.notas-pro textarea{width:100%;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:9px 11px;background:#fdfefe;
+    min-height:70px;resize:vertical}
+  details.notas-pro .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave)}
+  .barra{position:static;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 20px;margin-top:22px;box-shadow:none}
+  .brindis{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    background:var(--tinta);color:#fff;font-size:13.5px;padding:8px 16px;border-radius:8px;
+    z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+  .brindis.visible{opacity:.94}
+  /* la lectura condensada: el cuadro y su indicación al lado */
+  .combinaciones{display:grid;gap:8px;margin-top:12px}
+  .combi{display:grid;grid-template-columns:minmax(150px,34%) 1fr;
+    border:1px solid var(--linea);border-radius:9px;overflow:hidden;font-size:13px}
+  .combi .cual{padding:9px 13px;background:#f6f9fb;border-right:1px solid var(--linea)}
+  .combi .cual b{display:block;font-size:13.5px;color:var(--tinta);margin-bottom:1px}
+  .combi .cual span{color:var(--tinta-suave);font-size:12px;line-height:1.4}
+  .combi .quehacer{padding:9px 13px;color:var(--tinta-suave);line-height:1.45}
+  .combi.activo{border-color:var(--acento);box-shadow:0 0 0 2px var(--acento-claro)}
+  .combi.activo .cual{background:var(--acento-claro)}
+  .combi.activo .cual b,.combi.activo .quehacer{color:var(--tinta)}
+  @media (max-width:620px){.combi{grid-template-columns:1fr}
+    .combi .cual{border-right:0;border-bottom:1px solid var(--linea)}}
+  @media print{ .brindis,.borrar{display:none !important} }
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>Mi flor PERMAH</h1>
+  <p class="sub">Seis áreas sostienen el bienestar. Nadie las tiene todas al máximo, y no se trata de
+  eso: se trata de mirar cómo está cada pétalo hoy y decidir a cuál darle agua primero.
+  Mueve cada calibrador y observa qué le pasa a la flor.</p>
+  <input type="hidden" id="nombre"><input type="hidden" id="fecha"><input type="hidden" id="momento">
+
+  <p class="fuente">Modelo PERMAH (Seligman) &middot; Adaptación digital del taller Flourish</p>
+</header>
+
+<div class="tablero">
+  <div class="panel-flor">
+    <svg class="flor" id="flor" viewBox="4 30 436 337" role="img" aria-label="Flor PERMAH"></svg>
+    <p class="promedio-pie">Promedio general <b id="promedio">5.0</b> / 10</p>
+  </div>
+  <div class="petalos" id="petalos"></div>
+</div>
+
+<section class="bloque perfil" id="perfil">
+  <div class="campo" style="margin-bottom:6px">
+    <div class="etq">Combinaciones del PERMAH</div>
+  </div>
+  <div class="nombre" id="pNombre">—</div>
+  <p class="metafora" id="pMetafora"></p>
+  <div class="combinaciones" id="combinaciones"></div>
+  <div id="pBandera"></div>
+</section>
+<details class="notas-pro">
+  <summary>Notas del profesional</summary>
+  <div class="cuerpo">
+    <label class="etiqueta">Observaciones del proceso</label>
+    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+    <label class="etiqueta">Hipótesis de trabajo</label>
+    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+    <label class="etiqueta">Tarea acordada</label>
+    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+    <label class="etiqueta">Para la próxima sesión</label>
+    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+    <p class="ayuda" style="margin-top:12px">
+      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+      No incluir estas notas al imprimir</label>
+    </p>
+  </div>
+</details>
+
+<div class="barra">
+  <button onclick="Kit.copiar()">Copiar resumen</button>
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="guardar()">Guardar</button>
+  <button onclick="limpiar()">Empezar de nuevo</button>
+</div>
+</div>
+<div class="brindis" id="brindis"></div>
+
+<script>
+/* ============ ÁREAS ============ */
+const AREAS = [
+ {id:"P", corto:"Emoción positiva", es:"Emociones positivas", en:"Positive emotions",
+  sano:"#e8863c", marchito:"#a08a72",
+  def:"Qué tanto aparecen en tu día la alegría, la calma, la gratitud, el disfrute. No es estar bien todo el tiempo: es que esas emociones tengan lugar.",
+  sondas:["¿Hace cuánto no sientes algo parecido al disfrute? ¿Qué se llevó eso?",
+          "¿Qué cosas todavía te hacen sentir bien, aunque sea un rato?",
+          "¿Qué estás haciendo para que esto se mantenga así?"]},
+ {id:"E", corto:"Compromiso", es:"Compromiso", en:"Engagement",
+  sano:"#d1a52c", marchito:"#a3937a",
+  def:"Actividades que te absorben, en las que el tiempo se te pasa sin sentirlo. Lo que haces por gusto y no por obligación.",
+  sondas:["¿Qué actividades dejaste de hacer y antes te llenaban?",
+          "¿En qué se te va el tiempo sin darte cuenta?",
+          "¿Qué te da esa actividad que no te da nada más?"]},
+ {id:"R", corto:"Relaciones", es:"Relaciones", en:"Relationships",
+  sano:"#4aa070", marchito:"#8f9a8b",
+  def:"Los vínculos que te sostienen: familia, amistades, pareja, compañeros. Contar con alguien y que alguien cuente contigo.",
+  sondas:["Si esta noche te sintieras muy mal, ¿a quién podrías llamar?",
+          "¿Con quién cuentas de verdad y con quién te gustaría contar más?",
+          "¿Quiénes son tu gente y qué hacen por ti?"]},
+ {id:"M", corto:"Significado", es:"Significado", en:"Meaning",
+  sano:"#3f83a6", marchito:"#8494a0",
+  def:"Sentir que lo que haces tiene un propósito y que aportas a algo más grande que tú.",
+  sondas:["¿Para qué estás haciendo lo que haces? ¿Sigue siendo tuya esa respuesta?",
+          "¿Qué le da sentido a tus días difíciles?",
+          "¿A quién le sirve lo que estás construyendo?"]},
+ {id:"A", corto:"Logro", es:"Logro", en:"Accomplishment",
+  sano:"#8171b4", marchito:"#948e9f",
+  def:"Metas que persigues y avances que reconoces. Incluye los pequeños: terminar algo, cumplir lo que te propusiste.",
+  sondas:["¿Qué te impide avanzar: no poder, no saber cómo, o no arrancar?",
+          "¿Qué has sacado adelante últimamente, aunque te parezca poco?",
+          "¿Lo que logras te alcanza para sentirte bien, o siempre falta?"]},
+ {id:"H", corto:"Salud", es:"Salud", en:"Health",
+  sano:"#c0656f", marchito:"#a1898b",
+  def:"El cuerpo como base de todo lo demás: sueño, alimentación, movimiento, consumo de sustancias.",
+  sondas:["¿Cómo estás durmiendo y comiendo en estas semanas?",
+          "¿Qué es lo primero que se te desordena cuando estás mal: el sueño o la comida?",
+          "¿Qué haces por tu cuerpo que te esté funcionando?"]}
+];
+
+const NIVEL = n => n<=3 ? 0 : n<=6 ? 1 : 2;   // 0 marchito, 1 sostenido, 2 floreciendo
+const ETIQUETA_NIVEL = ["Pétalo marchito","Pétalo sostenido","Pétalo floreciendo"];
+
+/* ============ COMBINACIONES POSIBLES ============ */
+/* Se evalúan en orden: la primera que cumple, manda. */
+const alto = v => v>=7, bajo = v => v<=3, medio = v => v>3 && v<7;
+const PERFILES = [
+{clave:"plena", nombre:"Floración plena",
+ resumen:"Las seis áreas sostenidas o altas.",
+ condicion: s => AREAS.every(a=>s[a.id]>=7),
+ metafora:"La flor está abierta. No perfecta: abierta.",
+ consulta:"Un momento de buen funcionamiento general. Suele aparecer en cierres de proceso, o al inicio en quien consulta por una preocupación puntual y no por malestar global.",
+ foco:"Conservar. Identificar qué está haciendo bien para que pueda repetirlo cuando vengan las semanas difíciles.",
+ pregunta:"¿Qué estás haciendo hoy que quisieras seguir haciendo cuando vengan las semanas difíciles?"},
+
+{clave:"marchita", nombre:"Flor marchita",
+ resumen:"Todas o casi todas las áreas en rojo.",
+ condicion: s => AREAS.filter(a=>bajo(s[a.id])).length>=5,
+ metafora:"No es un pétalo caído: es la planta entera pidiendo agua.",
+ consulta:"Malestar generalizado. Es frecuente en episodios depresivos, duelos recientes y crisis vitales. Aquí la flor no es la herramienta principal, es la puerta de entrada a la conversación.",
+ foco:"No repartir tareas en seis frentes. Elegir el pétalo más movible —casi siempre Salud o Relaciones— y sostener el vínculo terapéutico.",
+ pregunta:"De todo esto, ¿qué es lo que más pesa hoy?",
+ bandera:"Perfil de alerta: conviene aplicar tamizaje, indagar riesgo autolesivo y valorar derivación a atención terapéutica formal."},
+
+{clave:"rendimiento", nombre:"Rendimiento sin raíz",
+ resumen:"Logro alto, Salud baja.",
+ condicion: s => alto(s.A) && bajo(s.H),
+ metafora:"La flor sostiene el pétalo más grande sobre un tallo que ya no la aguanta.",
+ consulta:"Cumple con todo y lo paga con el cuerpo: dormir poco, comer mal, ansiedad sostenida. Suele consultar tarde, cuando el cuerpo ya falló. Es el perfil clásico previo al agotamiento.",
+ foco:"Salud, sin negociar el rendimiento de entrada. Empezar por el sueño, que es lo que más rápido devuelve capacidad.",
+ pregunta:"¿Cuánto te está costando, en horas de sueño, sostener el ritmo que llevas?",
+ bandera:"Vale la pena preguntar por consumo de energizantes, automedicación y dolor físico persistente."},
+
+{clave:"soledad", nombre:"Soledad productiva",
+ resumen:"Relaciones bajas, con Logro o Compromiso altos.",
+ condicion: s => bajo(s.R) && (alto(s.A)||alto(s.E)),
+ metafora:"Una flor que crece hacia arriba pero sin nada al lado.",
+ consulta:"Funciona bien y está solo. Muy común en quien cambió de ciudad, y en quien usa la productividad para no sentir el aislamiento. El buen rendimiento hace que nadie lo detecte.",
+ foco:"Relaciones, con acciones muy pequeñas y concretas. La meta no es 'hacer amigos', es un contacto agendado esta semana.",
+ pregunta:"Si mañana te enfermaras, ¿quién se daría cuenta?"},
+
+{clave:"sostenido", nombre:"Sostenido por otros",
+ resumen:"Relaciones altas mientras el resto flaquea.",
+ condicion: s => alto(s.R) && AREAS.filter(a=>a.id!=="R"&&bajo(s[a.id])).length>=3,
+ metafora:"La flor está caída, pero alguien la está sosteniendo.",
+ consulta:"Atraviesa un mal momento y tiene red. Pronóstico favorable: hay con quién trabajar. El riesgo es que la red se agote o que él evite pedir por no 'molestar'.",
+ foco:"Usar el vínculo como palanca: apoyarse en esa red para reactivar un segundo pétalo, y cuidar que la red no se sobrecargue.",
+ pregunta:"¿Quién te está sosteniendo ahora, y qué le has podido contar de todo esto?"},
+
+{clave:"sentido", nombre:"Sentido sin combustible",
+ resumen:"Significado alto, con Emoción positiva y Salud bajas.",
+ condicion: s => alto(s.M) && bajo(s.P) && bajo(s.H),
+ metafora:"Sabe hacia dónde va la flor, pero no le queda savia.",
+ consulta:"Tiene claro su propósito y no le alcanza la energía para sostenerlo. Aparece en gente muy vocacionada, en cuidadores familiares y en quienes sostienen dos frentes a la vez. La culpa es frecuente: 'sé para qué lo hago, no entiendo por qué no puedo'.",
+ foco:"Recuperar energía antes que motivación. Salud y emociones positivas: el propósito ya está, no hay que construirlo.",
+ pregunta:"Tienes claro el para qué. ¿Qué tendría que pasar para que el cuerpo te acompañe?"},
+
+{clave:"deriva", nombre:"Deriva sin brújula",
+ resumen:"Significado bajo, con Logro bajo o medio.",
+ condicion: s => bajo(s.M) && !alto(s.A),
+ metafora:"La flor está entera, pero ninguna raíz agarra tierra.",
+ consulta:"Cumple sin saber para qué. Es el perfil que antecede a dejarlo todo o a cambiar de rumbo, y a menudo se disfraza de pereza o desmotivación. Frecuente en quienes eligieron su camino para complacer a otros.",
+ foco:"Significado. Vale más una conversación honesta sobre el rumbo que un plan de hábitos.",
+ pregunta:"Si nadie más opinara, ¿seguirías en esto?"},
+
+{clave:"placer", nombre:"Placer sin propósito",
+ resumen:"Emoción positiva o Compromiso altos, con Significado y Logro bajos.",
+ condicion: s => (alto(s.P)||alto(s.E)) && bajo(s.M) && bajo(s.A),
+ metafora:"Pétalos vistosos que no alimentan a la planta.",
+ consulta:"La pasa bien y no avanza. Ojo: puede ser una etapa sana de la vida, o una evitación bien montada —pantallas, fiesta, consumo— frente a algo que duele mirar. La diferencia se ve en la conversación, no en el gráfico.",
+ foco:"Explorar primero si el disfrute es descanso o es escape. Solo después, trabajar propósito y metas.",
+ pregunta:"Cuando paras y te quedas solo, ¿qué aparece?"},
+
+{clave:"anhedonia", nombre:"Funciona pero no disfruta",
+ resumen:"Emoción positiva baja mientras Logro o Compromiso se sostienen.",
+ condicion: s => bajo(s.P) && !bajo(s.A) && !bajo(s.E),
+ metafora:"La flor cumple su forma, pero perdió el color.",
+ consulta:"Sigue rindiendo y dejó de sentir. Nadie a su alrededor lo nota porque por fuera todo sigue funcionando. Es una señal temprana que conviene no dejar pasar.",
+ foco:"Activación conductual: recuperar actividades placenteras aunque no haya ganas, sin esperar a que las ganas vuelvan solas.",
+ pregunta:"¿Cuándo fue la última vez que algo te causó gusto de verdad?",
+ bandera:"Anhedonia con funcionamiento conservado: conviene tamizar sintomatología depresiva."},
+
+{clave:"cuerpo", nombre:"El cuerpo primero",
+ resumen:"Salud baja con el resto sostenido.",
+ condicion: s => bajo(s.H) && AREAS.filter(a=>a.id!=="H"&&!bajo(s[a.id])).length>=4,
+ metafora:"La flor está bien: es la tierra la que está seca.",
+ consulta:"La vida funciona y los hábitos no. Suele venir de desorden de horarios, trasnocho sostenido y alimentación de cafetería. Es el perfil más fácil de mover y el que más rápido mejora el resto.",
+ foco:"Salud, con una sola conducta a la vez. Empezar por la hora de acostarse, no por el gimnasio.",
+ pregunta:"¿Qué hora de dormir sería realista para ti esta semana, no la ideal?"},
+
+{clave:"cerrada", nombre:"Base sana, flor cerrada",
+ resumen:"Salud y Relaciones bien, con Compromiso y Logro bajos.",
+ condicion: s => !bajo(s.H) && !bajo(s.R) && bajo(s.E) && bajo(s.A),
+ metafora:"Tiene agua y tiene sol; todavía no abre.",
+ consulta:"Los recursos están, falta activación. Frecuente tras una pérdida, una ruptura o una temporada en blanco: se cuidó lo básico y se soltó lo demás. También en procrastinación instalada.",
+ foco:"Activación y metas mínimas. Una acción por semana, observable, con día y hora.",
+ pregunta:"¿Qué es lo más pequeño que podrías hacer esta semana y que te haría sentir que arrancaste?"},
+
+{clave:"mixto", nombre:"Perfil mixto",
+ resumen:"Sin un patrón dominante: se lee por el contraste entre el pétalo más fuerte y el más débil.",
+ condicion: () => true,
+ metafora:"Cada flor tiene su forma; esta pide leerse por sus extremos.",
+ consulta:"No hay un patrón típico. La información útil está en la distancia entre lo que sostiene y lo que falla.",
+ foco:"Trabajar desde el pétalo más fuerte hacia el más débil: usar lo que ya funciona como recurso.",
+ pregunta:"¿Cómo podría {fuerte}, que hoy es lo que mejor tienes, ayudarte con {debil}?"}
+];
+
+/* ============ ESTADO ============ */
+const $ = id => document.getElementById(id);
+const CLAVE = "flor-permah-v2";
+const CAMPOS = ["nombre","fecha","momento"];
+const puntajes = {}; AREAS.forEach(a=>puntajes[a.id]=5);
+
+/* ============ TARJETAS ============ */
+$("petalos").innerHTML = AREAS.map(a=>`
+  <div class="tarjeta" id="tar-${a.id}" style="border-left-color:${a.sano}">
+    <div class="cabeza"><h3>${a.es}</h3><span class="en">${a.en}</span></div>
+    <p class="def">${a.def}</p>
+    <div class="fila">
+      <input type="range" id="r-${a.id}" min="0" max="10" value="5"
+             aria-label="${a.es}" style="accent-color:${a.sano}">
+      <span class="marcador" id="m-${a.id}" style="background:${a.sano}">5</span>
+    </div>
+    <div class="estado" id="e-${a.id}"></div>
+    <div class="sonda" id="s-${a.id}"></div>
+  </div>`).join("");
+
+AREAS.forEach(a=>{
+  const r=$("r-"+a.id);
+  const act=()=>{
+    puntajes[a.id]=+r.value;
+    $("tar-"+a.id).classList.add("enfoque");
+    clearTimeout(r._t); r._t=setTimeout(()=>$("tar-"+a.id).classList.remove("enfoque"),1200);
+    refrescar(); guardar();
+  };
+  r.addEventListener("input",act);
+});
+
+/* ============ COLOR ============ */
+const hex2rgb = h => [1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const mezcla = (a,b,t) => {
+  const A=hex2rgb(a), B=hex2rgb(b);
+  return "#"+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,"0")).join("");
+};
+
+/* ============ FLOR ============ */
+const CX=200, CY=200, LMIN=62, LMAX=134, RADIO_ETQ=152;
+const ns="http://www.w3.org/2000/svg";
+const crear=(t,at)=>{const e=document.createElementNS(ns,t);for(const k in at)e.setAttribute(k,at[k]);return e;};
+
+// pétalo unitario: nace en (0,0) y su punta está en (0,-1)
+function trazoPetalo(L,W,curvatura){
+  const w=W, c=curvatura;
+  return `M0 0 C${-w} ${-L*0.30} ${-w*c} ${-L*0.82} 0 ${-L}`
+       + ` C${w*c} ${-L*0.82} ${w} ${-L*0.30} 0 0 Z`;
+}
+
+function dibujar(){
+  const svg=$("flor"); svg.innerHTML="";
+
+  // halo suave cuando la flor está en buen estado general
+  const prom=promedio();
+  if(prom>=7) svg.appendChild(crear("circle",{cx:CX,cy:CY,r:LMAX+8,fill:"#f0f7ef"}));
+
+  // geometría de cada pétalo
+  const petalos = AREAS.map((a,i)=>{
+    const n=puntajes[a.id], t=n/10;
+    return {a, n, t,
+      L: LMIN+(LMAX-LMIN)*t,        // largo
+      W: 34+30*t,                    // ancho
+      curva: 0.55+0.45*t,            // lleno cuando está sano, encogido cuando no
+      caida: (1-t)*20,               // se vence hacia un lado al marchitarse
+      color: mezcla(a.marchito,a.sano,Math.pow(t,0.75)),
+      ang: -90+i*60};
+  });
+
+  // se dibujan de mayor a menor para que los pétalos pequeños no queden ocultos
+  [...petalos].sort((x,y)=>y.L-x.L).forEach(p=>{
+    const {a,n,t,L,W,curva,caida,color,ang}=p;
+    const g=crear("g",{transform:`translate(${CX} ${CY}) rotate(${ang+90+caida})`});
+
+    // silueta de lo que este pétalo podría llegar a ser
+    if(n<10) g.appendChild(crear("path",{d:trazoPetalo(LMAX,64,1),fill:"none",
+      stroke:a.sano,"stroke-width":1,"stroke-dasharray":"3 5",opacity:.28}));
+
+    // el pétalo
+    g.appendChild(crear("path",{d:trazoPetalo(L,W,curva),fill:color,
+      opacity:.42+.46*t, stroke:color,"stroke-width":1.5,"stroke-linejoin":"round"}));
+
+    // nervadura central: nítida si está sano, quebrada si está marchito
+    g.appendChild(crear("path",{d:`M0 -6 L0 ${-L*0.8}`,stroke:"#fff",
+      "stroke-width":1.2, opacity:.15+.35*t, "stroke-dasharray": n<=3?"2 4":"none"}));
+
+    // punta partida cuando el pétalo está marchito
+    if(n<=3){
+      g.appendChild(crear("path",{fill:"#fff",
+        d:`M0 ${-L} L${-W*0.20} ${-L*0.70} L0 ${-L*0.80} L${W*0.20} ${-L*0.70} Z`}));
+    }
+    // brillo cuando está floreciendo
+    if(n>=8){
+      g.appendChild(crear("ellipse",{cx:-W*0.22,cy:-L*0.55,rx:W*0.16,ry:L*0.20,
+        fill:"#fff",opacity:.30,transform:"rotate(-8)"}));
+    }
+
+    g.style.cursor="pointer";
+    g.onclick=()=>$("tar-"+a.id).scrollIntoView({behavior:"smooth",block:"center"});
+    svg.appendChild(g);
+  });
+
+  // etiquetas, siempre por encima de los pétalos
+  petalos.forEach(({a,n,color,ang})=>{
+    const rad=ang*Math.PI/180, cos=Math.cos(rad), sin=Math.sin(rad);
+    const anclaje = cos>.2?"start" : cos<-.2?"end" : "middle";
+    const et=crear("text",{x:CX+cos*RADIO_ETQ, y:CY+sin*RADIO_ETQ+4,
+      "text-anchor":anclaje, fill:color, style:"font:600 13px system-ui,sans-serif"});
+    et.textContent=`${a.corto} · ${n}`;
+    svg.appendChild(et);
+  });
+
+  // centro
+  const cc=mezcla("#b9a98c","#e8c15a",Math.pow(prom/10,0.8));
+  svg.appendChild(crear("circle",{cx:CX,cy:CY,r:25,fill:cc,stroke:"#fff","stroke-width":3}));
+  for(let k=0;k<8;k++){
+    const b=k*45*Math.PI/180;
+    svg.appendChild(crear("circle",{cx:CX+Math.cos(b)*11,cy:CY+Math.sin(b)*11,r:2.6,
+      fill:"#fff",opacity:.25+.35*(prom/10)}));
+  }
+}
+
+/* ============ LECTURA ============ */
+const promedio = () => AREAS.reduce((s,a)=>s+puntajes[a.id],0)/AREAS.length;
+const extremos = () => {
+  const o=[...AREAS].sort((x,y)=>puntajes[y.id]-puntajes[x.id]);
+  return {fuerte:o[0], debil:o[o.length-1],
+          plano: puntajes[o[0].id]-puntajes[o[o.length-1].id] <= 1};
+};
+
+function refrescar(){
+  AREAS.forEach(a=>{
+    const n=puntajes[a.id], niv=NIVEL(n);
+    const color=mezcla(a.marchito,a.sano,Math.pow(n/10,0.75));
+    $("m-"+a.id).textContent=n; $("m-"+a.id).style.background=color;
+    $("e-"+a.id).textContent=ETIQUETA_NIVEL[niv]; $("e-"+a.id).style.color=color;
+    $("s-"+a.id).innerHTML="<b>Preguntar:</b> "+a.sondas[niv];
+  });
+  $("promedio").textContent=promedio().toFixed(1);
+  dibujar();
+  leerPerfil();
+}
+
+function leerPerfil(){
+  const p = PERFILES.find(p=>p.condicion(puntajes));
+  const {fuerte,debil,plano} = extremos();
+  const rellenar = txt => txt.replace("{fuerte}",fuerte.es.toLowerCase())
+                             .replace("{debil}",debil.es.toLowerCase());
+  $("pNombre").textContent=p.nombre;
+  $("pMetafora").textContent=p.metafora;
+  $("pBandera").innerHTML = p.bandera ? `<div class="bandera">${p.bandera}</div>` : "";
+
+  if(p.clave==="mixto" && !plano){
+    $("pMetafora").textContent =
+      `Sostiene desde ${fuerte.es.toLowerCase()} y cede en ${debil.es.toLowerCase()}.`;
+  }
+  // la combinación vigente queda encendida entre todas las posibles, con su
+  // indicación al lado derecho: se ve de un vistazo dónde cae esta persona
+  document.querySelectorAll(".combi").forEach(m=>{
+    const suya = m.dataset.k===p.clave;
+    m.classList.toggle("activo", suya);
+    if(suya) m.querySelector(".quehacer").textContent = rellenar(p.foco);
+  });
+}
+
+$("combinaciones").innerHTML = PERFILES.map(p=>
+  `<div class="combi" data-k="${p.clave}">
+     <div class="cual"><b>${p.nombre}</b><span>${p.resumen}</span></div>
+     <div class="quehacer">${p.foco.replace("{fuerte}","el área más alta").replace("{debil}","la más baja")}</div>
+   </div>`).join("");
+
+/* ============ PERSISTENCIA ============ */
+function guardar(){
+  const d={puntajes}; CAMPOS.forEach(c=>d[c]=$(c).value);
+  try{localStorage.setItem(CLAVE,JSON.stringify(d))}catch(e){}
+}
+function cargar(){
+  let d; try{d=JSON.parse(localStorage.getItem(CLAVE)||"null")}catch(e){}
+  if(!d) return;
+  CAMPOS.forEach(c=>{if(d[c]!==undefined)$(c).value=d[c]});
+  AREAS.forEach(a=>{
+    if(d.puntajes && d.puntajes[a.id]!==undefined){
+      puntajes[a.id]=d.puntajes[a.id]; $("r-"+a.id).value=puntajes[a.id];
+    }
+  });
+}
+function limpiar(){
+  if(!confirm("¿Empezar de nuevo? Se borrarán los puntajes.")) return;
+  try{localStorage.removeItem(CLAVE)}catch(e){}
+  location.reload();
+}
+CAMPOS.forEach(c=>$(c).addEventListener("input",guardar));
+cargar();
+if(!$("fecha").value) $("fecha").value=new Date().toLocaleDateString("es-CO");
+refrescar();
+</script>
+<script>
+/* ============================================================
+   Kit común de las herramientas.
+   Se inserta completo en cada archivo: no hay dependencias externas
+   y todo funciona abriendo el HTML con doble clic, sin internet.
+   ============================================================ */
+var Kit = (function(){
+
+  var CLAVE = "herramienta";
+  var ganchos = {};            // extra, restaurar, alCambiar, resumen
+  var listo = false;
+
+  /* ---------- utilidades ---------- */
+  function $(id){ return document.getElementById(id); }
+  function crearEl(tag, clase, texto){
+    var e = document.createElement(tag);
+    if(clase) e.className = clase;
+    if(texto !== undefined) e.textContent = texto;
+    return e;
+  }
+  function svg(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  /* mezcla dos colores hex; t=0 devuelve a, t=1 devuelve b */
+  function mezcla(a, b, t){
+    t = Math.max(0, Math.min(1, t));
+    function n(c, i){ return parseInt(c.substr(1 + i*2, 2), 16); }
+    var r = Math.round(n(a,0) + (n(b,0) - n(a,0)) * t),
+        g = Math.round(n(a,1) + (n(b,1) - n(a,1)) * t),
+        z = Math.round(n(a,2) + (n(b,2) - n(a,2)) * t);
+    return "#" + [r,g,z].map(function(v){ return ("0"+v.toString(16)).slice(-2); }).join("");
+  }
+  function escapar(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  /* Se conserva por compatibilidad: estas hojas son de uso clínico. */
+  function modo(){ return "clinica"; }
+
+  /* ---------- fichas ----------
+     Pocas fichas, las más frecuentes, y un "+" para que la persona ponga la
+     suya. Lo que agrega se guarda con la hoja y vuelve al recargar.        */
+  var LIBRES = {};      // contenedorId -> [texto, ...]
+  var REG = {};         // contenedorId -> {lista, alCambiar, sinMas}
+
+  function unChip(contId, txt, id, alCambiar, libre){
+    var b = crearEl("button", "chip" + (libre ? " libre" : ""));
+    b.type = "button";
+    b.id = id;
+    b.setAttribute("data-txt", txt);
+    b.appendChild(document.createTextNode(txt));
+    if(libre){
+      var x = crearEl("span", "quitarChip", "×");
+      x.title = "Quitar";
+      x.onclick = function(ev){
+        ev.stopPropagation();
+        var l = LIBRES[contId] || [], i = l.indexOf(txt);
+        if(i >= 0) l.splice(i, 1);
+        redibujar(contId);
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      b.appendChild(x);
+    }
+    b.onclick = function(){
+      b.classList.toggle("activa");
+      if(alCambiar) alCambiar();
+      guardar();
+    };
+    return b;
+  }
+
+  function botonMas(contId, alCambiar){
+    var mas = crearEl("button", "chip mas", "+");
+    mas.type = "button";
+    mas.title = "Agregar una tuya";
+    mas.onclick = function(){
+      var caja = mas.parentElement;
+      var campo = document.createElement("input");
+      campo.type = "text";
+      campo.className = "chipNuevo";
+      campo.placeholder = "En tus palabras…";
+      caja.insertBefore(campo, mas);
+      mas.style.display = "none";
+      var cerrado = false;
+      function cerrar(guardarlo){
+        if(cerrado) return;
+        cerrado = true;
+        var txt = campo.value.trim();
+        campo.remove();
+        mas.style.display = "";
+        if(guardarlo && txt){
+          agregarLibre(contId, txt);
+          if(alCambiar) alCambiar();
+        }
+      }
+      campo.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter"){ ev.preventDefault(); cerrar(true); }
+        if(ev.key === "Escape"){ ev.preventDefault(); cerrar(false); }
+      });
+      campo.addEventListener("blur", function(){ cerrar(true); });
+      campo.focus();
+    };
+    return mas;
+  }
+
+  /* Agrega una ficha propia ya marcada. */
+  function agregarLibre(contId, txt){
+    if(!LIBRES[contId]) LIBRES[contId] = [];
+    if(LIBRES[contId].indexOf(txt) < 0) LIBRES[contId].push(txt);
+    redibujar(contId);
+    var l = LIBRES[contId], id = contId + "-libre-" + l.indexOf(txt);
+    if($(id)) $(id).classList.add("activa");
+    guardar();
+  }
+
+  function redibujar(contId){
+    var r = REG[contId];
+    if(r) chips(contId, r.lista, r.alCambiar, r.sinMas);
+  }
+
+  /* chips("miCaja", ["Una","Otra"], alCambiar)  -> con boton "+"
+     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"          */
+  function chips(contenedorId, lista, alCambiar, sinMas){
+    var c = $(contenedorId);
+    if(!c) return;
+    REG[contenedorId] = {lista:lista, alCambiar:alCambiar, sinMas:sinMas};
+    var marcadas = {};
+    for(var k = 0; k < c.children.length; k++)
+      if(c.children[k].classList.contains("activa"))
+        marcadas[c.children[k].getAttribute("data-txt")] = 1;
+
+    c.innerHTML = "";
+    c.classList.add("chips");
+    lista.forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-" + i, alCambiar);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    (LIBRES[contenedorId] || []).forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, alCambiar, true);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    if(!sinMas) c.appendChild(botonMas(contenedorId, alCambiar));
+  }
+
+  /* Tarjetas con título y descripción. lista: [["Título","Descripción"], ...] */
+  function opciones(contenedorId, lista, alCambiar, unica){
+    var c = $(contenedorId);
+    if(!c) return;
+    c.innerHTML = "";
+    c.classList.add("tarjetas");
+    lista.forEach(function(par, i){
+      var e = crearEl("div", "opcion");
+      e.id = contenedorId + "-" + i;
+      e.setAttribute("data-txt", par[0]);
+      e.innerHTML = "<b>" + escapar(par[0]) + "</b><span>" + escapar(par[1] || "") + "</span>";
+      e.onclick = function(){
+        if(unica) for(var j=0;j<c.children.length;j++)
+          if(c.children[j] !== e) c.children[j].classList.remove("activa");
+        e.classList.toggle("activa");
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      c.appendChild(e);
+    });
+  }
+
+  /* ---------- mostrador con ranuras ----------
+     El patrón de arrastrar-o-tocar: un mostrador de piezas y unas ranuras que
+     las reciben. Se arrastra en escritorio y se toca en celular.
+
+     cfg = {bancoId, ranurasId, cupo, items:[{id,titulo,desc,grupo,color}],
+            etiquetas:[...], alCambiar}                                     */
+  function mostrador(cfg){
+    var banco = $(cfg.bancoId), ranuras = $(cfg.ranurasId);
+    var puestas = [];                       // ids colocados, en orden
+    var porId = {};
+    cfg.items.forEach(function(it){ porId[it.id] = it; });
+
+    function pintarBanco(){
+      var grupos = [], vistos = {};
+      cfg.items.forEach(function(it){
+        var g = it.grupo || "";
+        if(!vistos[g]){ vistos[g] = []; grupos.push(g); }
+        vistos[g].push(it);
+      });
+      banco.innerHTML = "";
+      banco.classList.add("mostrador");
+      grupos.forEach(function(g){
+        var caja = crearEl("div", "grupo");
+        var col = vistos[g][0] && vistos[g][0].color;
+        if(g){
+          var tit = crearEl("div", "titulin", g);
+          if(col) tit.style.color = col;
+          caja.appendChild(tit);
+        }
+        var rejilla = crearEl("div", "tarjetas");
+        vistos[g].forEach(function(it){
+          var e = crearEl("div", "pieza" + (puestas.indexOf(it.id) >= 0 ? " usada" : ""));
+          e.draggable = true;
+          if(it.color){
+            e.style.borderLeft = "4px solid " + it.color;
+            e.style.background = it.color + "0f";
+          }
+          e.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          e.addEventListener("dragstart", function(ev){
+            ev.dataTransfer.setData("text/plain", it.id);
+            e.classList.add("arrastrando");
+          });
+          e.addEventListener("dragend", function(){ e.classList.remove("arrastrando"); });
+          e.addEventListener("click", function(){ poner(it.id); });
+          rejilla.appendChild(e);
+        });
+        caja.appendChild(rejilla);
+        banco.appendChild(caja);
+      });
+    }
+
+    function pintarRanuras(){
+      ranuras.innerHTML = "";
+      ranuras.classList.add("ranuras");
+      for(var i = 0; i < cfg.cupo; i++)(function(i){
+        var id = puestas[i], it = id ? porId[id] : null;
+        var r = crearEl("div", "ranura" + (it ? " llena" : ""));
+        if(it && it.color){
+          r.style.borderColor = it.color;
+          r.style.background = it.color + "0f";
+        }
+        r.appendChild(crearEl("span", "orden", i + 1));
+        if(it){
+          if(it.color) r.lastChild.style.background = it.color + "26";
+          var p = crearEl("div", "puesto");
+          p.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          r.appendChild(p);
+          var x = crearEl("button", "sacar", "×");
+          x.type = "button";
+          x.title = "Sacar";
+          x.onclick = function(){ sacar(i); };
+          r.appendChild(x);
+        } else {
+          r.appendChild(crearEl("span", "hueco",
+            (cfg.etiquetas && cfg.etiquetas[i]) || "Arrastra aquí, o toca una del mostrador"));
+        }
+        r.addEventListener("dragover", function(ev){
+          ev.preventDefault();
+          r.classList.add("encima");
+        });
+        r.addEventListener("dragleave", function(){ r.classList.remove("encima"); });
+        r.addEventListener("drop", function(ev){
+          ev.preventDefault();
+          r.classList.remove("encima");
+          poner(ev.dataTransfer.getData("text/plain"), i);
+        });
+        ranuras.appendChild(r);
+      })(i);
+    }
+
+    function poner(id, i){
+      if(!porId[id] || puestas.indexOf(id) >= 0) return;
+      if(i === undefined || puestas.length < i){
+        if(puestas.length >= cfg.cupo){ brindis("Las ranuras están llenas"); return; }
+        puestas.push(id);
+      } else {
+        puestas[i] = id;
+      }
+      refrescar();
+    }
+    function sacar(i){
+      puestas.splice(i, 1);
+      refrescar();
+    }
+    function refrescar(){
+      puestas = puestas.filter(function(x){ return x; });
+      pintarBanco();
+      pintarRanuras();
+      if(cfg.alCambiar) cfg.alCambiar();
+      guardar();
+    }
+
+    refrescar();
+    return {
+      elegidas: function(){ return puestas.map(function(id){ return porId[id]; }); },
+      ids: function(){ return puestas.slice(); },
+      cargar: function(lista){ puestas = (lista || []).filter(function(x){ return porId[x]; }); refrescar(); },
+      poner: poner,
+      refrescar: refrescar
+    };
+  }
+
+  /* Devuelve los textos marcados dentro de un contenedor de chips u opciones */
+  function activas(contenedorId){
+    var c = $(contenedorId), fuera = [];
+    if(!c) return fuera;
+    for(var i=0;i<c.children.length;i++){
+      var h = c.children[i];
+      if(!h.classList.contains("activa")) continue;
+      var t = h.getAttribute("data-txt");
+      if(t == null) t = h.tagName === "DIV" ? h.querySelector("b").textContent : h.textContent;
+      fuera.push(t);
+    }
+    return fuera;
+  }
+  /* Enlaza un input range con su etiqueta de valor */
+  function medidor(idRango, idSalida, alCambiar){
+    var r = $(idRango), s = $(idSalida);
+    if(!r) return;
+    function act(){
+      if(s) s.textContent = r.value;
+      if(alCambiar) alCambiar();
+    }
+    r.addEventListener("input", function(){ act(); guardar(); });
+    act();
+  }
+
+  /* Gota que se llena según el nivel: 0 vacía, 10 rebosando. */
+  function gota(nivel, tam){
+    var n = Math.max(0, Math.min(10, nivel)) / 10;
+    var t = tam || 26, uid = "g" + Math.random().toString(36).slice(2, 8);
+    var col = mezcla("#c9b48a", "#2f8fbf", n);
+    return '<svg class="gota" width="' + t + '" height="' + t * 1.18 + '" viewBox="0 0 24 28">' +
+      '<clipPath id="' + uid + '"><path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z"/></clipPath>' +
+      '<path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z" fill="#f2f5f8" ' +
+      'stroke="' + col + '" stroke-width="1.6"/>' +
+      '<rect x="0" y="' + (28 - 27 * n) + '" width="24" height="28" fill="' + col +
+      '" clip-path="url(#' + uid + ')" opacity="0.9"/></svg>';
+  }
+
+  /* ---------- persistencia ---------- */
+  function camposGuardables(){
+    var fuera = [], t = document.querySelectorAll("input,textarea,select");
+    for(var i=0;i<t.length;i++) if(t[i].id) fuera.push(t[i]);
+    return fuera;
+  }
+  function marcablesGuardables(){
+    var fuera = [], t = document.querySelectorAll(".chip[id],.opcion[id]");
+    for(var i=0;i<t.length;i++) fuera.push(t[i]);
+    return fuera;
+  }
+  function guardar(avisar){
+    if(!listo) return;
+    var d = { _campos:{}, _marcas:{}, _libres: LIBRES };
+    camposGuardables().forEach(function(e){
+      d._campos[e.id] = (e.type === "checkbox" || e.type === "radio") ? e.checked : e.value;
+    });
+    marcablesGuardables().forEach(function(e){
+      if(e.classList.contains("activa")) d._marcas[e.id] = 1;
+    });
+    if(ganchos.extra) d._extra = ganchos.extra();
+    try{ localStorage.setItem(CLAVE, JSON.stringify(d)); }catch(e){}
+    if(avisar) brindis("Guardado en este equipo");
+  }
+  function cargar(){
+    var d = null;
+    try{ d = JSON.parse(localStorage.getItem(CLAVE) || "null"); }catch(e){}
+    if(!d) return false;
+    if(d._extra && ganchos.restaurar) ganchos.restaurar(d._extra);
+    LIBRES = d._libres || {};
+    Object.keys(LIBRES).forEach(redibujar);
+    camposGuardables().forEach(function(e){
+      if(!(e.id in (d._campos||{}))) return;
+      var v = d._campos[e.id];
+      if(e.type === "checkbox" || e.type === "radio") e.checked = !!v; else e.value = v;
+    });
+    marcablesGuardables().forEach(function(e){
+      if((d._marcas||{})[e.id]) e.classList.add("activa");
+    });
+    return true;
+  }
+  function limpiar(){
+    if(!confirm("¿Empezar de nuevo? Se borrará lo que está en pantalla en este equipo.")) return;
+    try{ localStorage.removeItem(CLAVE); }catch(e){}
+    location.reload();
+  }
+
+  /* ---------- copiar resumen para la historia clínica ---------- */
+  function encabezadoResumen(){
+    var l = [], t = document.querySelector("h1");
+    l.push((t ? t.textContent : "Herramienta").toUpperCase());
+    var pares = [["nombre","Consultante"],["fecha","Fecha"],["sesion","Sesión"],
+                 ["profesional","Profesional"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1] + ": " + e.value.trim());
+    });
+    return l.join("\n");
+  }
+  function notasProResumen(){
+    var l = [], pares = [["proObservaciones","Observaciones"],["proHipotesis","Hipótesis de trabajo"],
+                         ["proTarea","Tarea acordada"],["proProxima","Para la próxima sesión"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1].toUpperCase() + "\n" + e.value.trim());
+    });
+    return l.length ? "\n\n--- NOTAS DEL PROFESIONAL ---\n" + l.join("\n\n") : "";
+  }
+  function textoResumen(){
+    var cuerpo = ganchos.resumen ? ganchos.resumen() : "";
+    return encabezadoResumen() + "\n\n" + cuerpo + notasProResumen();
+  }
+  function copiar(){
+    var txt = textoResumen();
+    function viejo(){
+      var a = document.createElement("textarea");
+      a.value = txt;
+      a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(a);
+      brindis(ok ? "Resumen copiado al portapapeles" : "No se pudo copiar: revise el resumen impreso");
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(function(){
+        brindis("Resumen copiado al portapapeles");
+      }, viejo);
+    } else viejo();
+  }
+  /* ---------- impresión ----------
+     Los desplegables cerrados no salen en el papel. Antes de imprimir se
+     abren, y al terminar vuelven a como estaban, para que la hoja impresa
+     lleve lo que se trabajó aunque esté plegado en pantalla. */
+  var abiertosAlImprimir = [];
+  function antesDeImprimir(){
+    abiertosAlImprimir = [];
+    var ds = document.querySelectorAll("details");
+    for(var i = 0; i < ds.length; i++){
+      if(ds[i].classList.contains("catalogo")) continue;
+      if(ds[i].classList.contains("borrar")) continue;
+      if(!ds[i].open){ ds[i].open = true; abiertosAlImprimir.push(ds[i]); }
+    }
+  }
+  function despuesDeImprimir(){
+    abiertosAlImprimir.forEach(function(d){ d.open = false; });
+    abiertosAlImprimir = [];
+  }
+  if(window.addEventListener){
+    window.addEventListener("beforeprint", antesDeImprimir);
+    window.addEventListener("afterprint", despuesDeImprimir);
+    if(window.matchMedia){
+      var mq = window.matchMedia("print");
+      if(mq.addEventListener)
+        mq.addEventListener("change", function(e){
+          if(e.matches) antesDeImprimir(); else despuesDeImprimir();
+        });
+    }
+  }
+
+  function brindis(msg){
+    var b = $("brindis");
+    if(!b) return;
+    b.textContent = msg;
+    b.classList.add("visible");
+    clearTimeout(b._t);
+    b._t = setTimeout(function(){ b.classList.remove("visible"); }, 2200);
+  }
+
+  /* ---------- arranque ---------- */
+  function iniciar(cfg){
+    CLAVE = cfg.clave || "herramienta";
+    ganchos = cfg;
+
+    var ni = $("proNoImprimir"), sincNotas = null;
+    if(ni){
+      sincNotas = function(){
+        var s = document.querySelector("details.notas-pro");
+        if(s) s.classList.toggle("borrar", ni.checked);
+      };
+      ni.addEventListener("change", sincNotas);
+    }
+
+    listo = true;
+    cargar();
+    if(sincNotas) sincNotas();
+    if($("fecha") && !$("fecha").value)
+      $("fecha").value = new Date().toLocaleDateString("es-CO");
+
+    document.querySelectorAll("input,textarea,select").forEach(function(e){
+      if(!e.id) return;
+      e.addEventListener("input", function(){ guardar(); });
+      e.addEventListener("change", function(){ guardar(); });
+    });
+
+    if(ganchos.alCambiar) ganchos.alCambiar();
+  }
+
+  /* ---------- arranque reducido ----------
+     Para las hojas que ya traían su propio motor y su propia persistencia:
+     cablea el botón de copiar y no toca nada más. */
+  function soloModo(){
+    var ni = $("proNoImprimir");
+    if(ni) ni.addEventListener("change", function(){
+      var s = document.querySelector("details.notas-pro");
+      if(s) s.classList.toggle("borrar", ni.checked);
+    });
+    ganchos = { resumen: resumenGenerico };
+  }
+
+  /* Recorre las secciones y arma un texto con lo que esté diligenciado. */
+  function resumenGenerico(){
+    var fuera = [], secciones = document.querySelectorAll("section,header");
+    for(var i = 0; i < secciones.length; i++){
+      var s = secciones[i];
+      if(s.classList.contains("notas-pro")) continue;
+      var titulo = s.querySelector("h1,h2,h3");
+      var lineas = [];
+      var campos = s.querySelectorAll("input,textarea,select");
+      for(var j = 0; j < campos.length; j++){
+        var e = campos[j];
+        if(e.type === "checkbox" || e.type === "radio" || !e.id) continue;
+        if(!String(e.value).trim()) continue;
+        var et = s.querySelector('label[for="' + e.id + '"]');
+        lineas.push("  " + (et ? et.textContent.trim() + ": " : "") + e.value.trim());
+      }
+      var marcas = s.querySelectorAll(".activa,.llena,.activo,.on");
+      var nombres = [];
+      for(var k = 0; k < marcas.length; k++){
+        var m = marcas[k];
+        if(m.classList.contains("mini")) continue;   /* catálogo, no elección */
+        var b = m.querySelector("b");
+        var txt = (b ? b.textContent : m.textContent).replace(/\s+/g, " ").trim();
+        if(txt && nombres.indexOf(txt) < 0) nombres.push(txt);
+      }
+      if(nombres.length) lineas.push("  Marcado: " + nombres.join(", "));
+      if(lineas.length){
+        if(titulo) fuera.push(titulo.textContent.trim().toUpperCase());
+        fuera.push(lineas.join("\n"));
+      }
+    }
+    return fuera.join("\n");
+  }
+
+  return {
+    iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
+    chips: chips, opciones: opciones, activas: activas, medidor: medidor,
+    agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
+    $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
+    brindis: brindis, modo: modo, texto: textoResumen
+  };
+})();
+
+Kit.soloModo();
+</script>
+</body>
+</html>

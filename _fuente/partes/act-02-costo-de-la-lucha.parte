@@ -1,0 +1,478 @@
+@@meta
+archivo: act-costo-de-la-lucha.html
+titulo: El costo de la lucha
+orden: 02
+enfoque: ACT
+etiqueta: Desesperanza creativa
+sub: Esta hoja no pregunta si has luchado con lo que sientes. Da por hecho que sí, y que lo has intentado con todo. Lo que hace es poner cada intento sobre la mesa y mirar dos cosas por separado: si alivió en el momento y si lo resolvió a la larga. La diferencia entre esas dos columnas es toda la conversación.
+fuente: Desesperanza creativa y el control como problema, en Díaz Corbobés, MANUAL ACT §3.1 y §3.2, con las metáforas del campo de hoyos, la lucha con el monstruo y el polígrafo.
+resumen: Cada estrategia de control se califica por alivio inmediato, resultado a largo plazo y costo. El mapa las ubica y deja ver la trampa sin que haya que nombrarla.
+campo3: Momento
+campo3ph: Ej. Sesión 2
+@@css
+  .agrega{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .agrega input{flex:1 1 260px}
+  .sugeridas{margin-top:11px}
+  .sugeridas .titulin{font-size:12px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave);margin-bottom:7px}
+
+  .estrategia{border:1px solid var(--linea);border-left-width:5px;border-radius:10px;
+    padding:12px 15px;margin-bottom:10px;background:#fdfefe}
+  .estrategia .cabeza{display:flex;align-items:center;gap:10px}
+  .estrategia .indice{flex:0 0 auto;width:25px;height:25px;border-radius:50%;color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  .estrategia .cabeza input{flex:1;font-size:14.5px;font-weight:600;border:0;background:transparent;
+    padding:4px 0}
+  .estrategia .cabeza input:focus{outline:0;border-bottom:1px solid var(--acento)}
+  .quitar{flex:0 0 auto;border:0;background:transparent;color:var(--tinta-suave);
+    font-size:19px;line-height:1;padding:2px 7px;cursor:pointer;border-radius:6px}
+  .quitar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .ejes{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+  .eje{background:#f8fafc;border-radius:8px;padding:6px 10px}
+  .eje label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave);margin-bottom:1px}
+  .eje .fila{display:flex;align-items:center;gap:8px}
+  .eje input[type=range]{flex:1;min-width:60px;height:20px;accent-color:var(--acento)}
+  .eje .v{font-weight:700;font-size:15px;min-width:20px;text-align:right}
+  .costos{margin-top:9px}
+  .costos .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--tinta-suave);margin-bottom:5px}
+  .veredicto{margin-top:9px;font-size:12.5px;font-weight:600;padding:5px 11px;
+    border-radius:7px;display:inline-block}
+
+  .panel-mapa{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 10px;margin-bottom:16px}
+  .mapa{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
+  .contadores{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;
+    padding-top:10px;border-top:1px dashed var(--linea)}
+  .contadores div{text-align:center;min-width:86px}
+  .contadores .n{font-size:20px;font-weight:700;display:block}
+  .contadores .r{font-size:11px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave)}
+  .cierre .pregunta{margin-bottom:13px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Lo que llevas tiempo intentando no sentir</h2>
+  <p class="ayuda">No lo que te pasa por fuera: lo de adentro. La ansiedad antes de hablar en
+  público, el recuerdo que vuelve, la sensación de vacío del domingo en la tarde, las ganas de
+  consumir. Toca lo que aplique; lo demás se cuenta hablando.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Marca lo que aplique</label>
+    <div class="chips" id="quePelea"></div>
+
+    <label class="etiqueta">¿Cuándo aparece con más fuerza?</label>
+    <div class="chips" id="cuandoAparece"></div>
+
+    <details class="apunte">
+      <summary>Apuntarlo en una línea (opcional)</summary>
+      <input type="text" id="loQuePelea" placeholder="Ej. «la ansiedad de los domingos en la noche»">
+    </details>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Todo lo que has hecho para que no esté</h2>
+  <p class="ayuda">Vale todo: lo que te recomendaron, lo que se te ocurrió, lo que te da vergüenza
+  contar, lo que funcionó por un rato. No estamos juzgando ninguna. Estamos haciendo el inventario
+  completo, porque sin el inventario completo la conversación que sigue no sirve.</p>
+  <div class="cuerpo">
+    <div class="sugeridas">
+      <div class="titulin">Toca las que hayas usado. Se van sumando a la lista de abajo.</div>
+      <div class="chips" id="sugeridas"></div>
+    </div>
+    <details class="apunte">
+      <summary>Agregar una que no esté en la lista</summary>
+      <div class="agrega">
+        <input type="text" id="nuevaEstrategia" placeholder="Nómbrala y presiona Agregar">
+        <button type="button" onclick="agregar()">Agregar</button>
+      </div>
+    </details>
+    <div id="listaEstrategias" style="margin-top:16px"></div>
+    <div class="velo" id="veloLista">Todavía no hay ninguna estrategia en la lista.<br>
+      Empieza por la más obvia: ¿qué es lo primero que haces cuando eso aparece?</div>
+  </div>
+</section>
+
+<div class="panel-mapa">
+  <svg class="mapa" id="mapa" viewBox="0 0 560 420" role="img"
+    aria-label="Mapa de estrategias: alivio inmediato frente a resultado a largo plazo"></svg>
+  <div class="contadores">
+    <div><span class="n" id="cTotal">0</span><span class="r">estrategias</span></div>
+    <div><span class="n" id="cTrampa">0</span><span class="r">en la trampa</span></div>
+    <div><span class="n" id="cSirven">0</span><span class="r">sirven a la larga</span></div>
+    <div><span class="n" id="cCosto">0</span><span class="r">costos marcados</span></div>
+  </div>
+</div>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Lectura del inventario</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Qué suele verse así</div><p id="lConsulta"></p></div>
+  <div class="campo"><div class="etq">Hacia dónde lleva esto</div><p id="lFoco"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+  <div id="lBandera"></div>
+
+  <details class="catalogo">
+    <summary>Ver las lecturas posibles del inventario</summary>
+    <div class="lista-perfiles" id="catalogo"></div>
+  </details>
+</section>
+
+<section class="paso cierre">
+  <h2><span class="num">3</span>Para cerrar</h2>
+  <div class="cuerpo">
+    <div class="pregunta">Sumando todo lo de arriba: ¿cuánto tiempo de tu vida llevas en esto?</div>
+    <div class="pregunta" style="margin-top:11px">Si tuvieras que apostar tu propio dinero:
+    ¿esto va a funcionar en los próximos diez años?</div>
+    <div class="pregunta" style="margin-top:11px">¿Y si el problema no fuera lo que sientes, sino
+    todo lo que has tenido que hacer para no sentirlo?</div>
+  </div>
+</section>
+
+@@js
+const $ = Kit.$;
+
+const PELEAS = ["Ansiedad","Tristeza","Culpa","Recuerdos"];
+
+const SUGERIDAS = ["Evitar la situación", "Distraerme con el celular", "Darle vueltas hasta resolverlo", "Preguntar si todo está bien"];
+
+/* Fuente de verdad: el arreglo. El DOM escribe aquí en cada cambio y solo se
+   vuelve a dibujar al agregar o quitar, para no perder el foco al escribir. */
+let estrategias = [];
+
+const COSTOS = ["Tiempo","Vínculos","Salud","Oportunidades","Autoestima"];
+
+/* Un cuadrante por combinación de alivio inmediato y resultado a largo plazo. */
+function cuadrante(e){
+  const alivia = e.alivio >= 6, sirve = e.largo >= 6;
+  if(alivia && !sirve) return {clave:"trampa", texto:"Alivia y no resuelve", color:"#c26a4e"};
+  if(alivia && sirve)  return {clave:"sirve",  texto:"Alivia y resuelve",   color:"#3f7d5a"};
+  if(!alivia && sirve) return {clave:"cuesta", texto:"Cuesta pero resuelve", color:"#3f83a6"};
+  return {clave:"nada", texto:"Ni alivia ni resuelve", color:"#8a7f76"};
+}
+
+/* ====================== LISTA ====================== */
+function agregar(nombre){
+  const txt = (typeof nombre === "string" ? nombre : $("nuevaEstrategia").value).trim();
+  if(!txt) return;
+  if(estrategias.some(e => e.nombre.toLowerCase() === txt.toLowerCase())){
+    Kit.brindis("Esa ya está en la lista");
+    return;
+  }
+  estrategias.push({nombre:txt, alivio:7, largo:3, costos:[]});
+  if(typeof nombre !== "string") $("nuevaEstrategia").value = "";
+  pintarLista();
+  refrescar();
+  Kit.guardar();
+}
+function quitar(i){
+  estrategias.splice(i, 1);
+  pintarLista();
+  refrescar();
+  Kit.guardar();
+}
+
+function pintarLista(){
+  $("veloLista").style.display = estrategias.length ? "none" : "block";
+  $("listaEstrategias").innerHTML = estrategias.map((e, i) => {
+    const q = cuadrante(e);
+    return `
+    <div class="estrategia" style="border-left-color:${q.color}">
+      <div class="cabeza">
+        <span class="indice" style="background:${q.color}">${i + 1}</span>
+        <input type="text" value="${Kit.escapar(e.nombre)}" data-i="${i}" data-c="nombre">
+        <button type="button" class="quitar" title="Quitar" onclick="quitar(${i})">&times;</button>
+      </div>
+      <div class="ejes">
+        <div class="eje">
+          <label>Alivió en el momento</label>
+          <div class="fila">
+            <input type="range" min="0" max="10" value="${e.alivio}" data-i="${i}" data-c="alivio">
+            <span class="v">${e.alivio}</span>
+          </div>
+        </div>
+        <div class="eje">
+          <label>Lo resolvió a la larga</label>
+          <div class="fila">
+            <input type="range" min="0" max="10" value="${e.largo}" data-i="${i}" data-c="largo">
+            <span class="v">${e.largo}</span>
+          </div>
+        </div>
+      </div>
+      <div class="costos">
+        <div class="titulin">¿Qué te ha costado usarla?</div>
+        <div class="chips">${COSTOS.concat(e.propios || []).map(c =>
+          `<button type="button" class="chip ${e.costos.indexOf(c) >= 0 ? "activa" : ""}"
+            data-i="${i}" data-costo="${Kit.escapar(c)}">${Kit.escapar(c)}</button>`).join("")}<button
+            type="button" class="chip mas" data-mas="${i}" title="Agregar un costo">+</button></div>
+      </div>
+      <span class="veredicto" style="background:${q.color}1f;color:${q.color}">${q.texto}</span>
+    </div>`;
+  }).join("");
+
+  /* cableado de los controles recién dibujados */
+  $("listaEstrategias").querySelectorAll("input[data-c]").forEach(inp => {
+    const i = +inp.dataset.i, c = inp.dataset.c;
+    inp.addEventListener("input", () => {
+      estrategias[i][c] = (c === "nombre") ? inp.value : +inp.value;
+      if(c !== "nombre"){
+        inp.parentElement.querySelector(".v").textContent = inp.value;
+        const caja = inp.closest(".estrategia"), q = cuadrante(estrategias[i]);
+        caja.style.borderLeftColor = q.color;
+        caja.querySelector(".indice").style.background = q.color;
+        const ver = caja.querySelector(".veredicto");
+        ver.textContent = q.texto;
+        ver.style.background = q.color + "1f";
+        ver.style.color = q.color;
+      }
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  /* el "+" agrega un costo con las palabras de la persona */
+  $("listaEstrategias").querySelectorAll("button[data-mas]").forEach(b => {
+    b.addEventListener("click", () => {
+      const i = +b.dataset.mas;
+      const campo = document.createElement("input");
+      campo.type = "text";
+      campo.className = "chipNuevo";
+      campo.placeholder = "¿Qué más te ha costado?";
+      b.parentElement.insertBefore(campo, b);
+      b.style.display = "none";
+      let cerrado = false;
+      const cerrar = ok => {
+        if(cerrado) return;
+        cerrado = true;
+        const txt = campo.value.trim();
+        if(ok && txt){
+          if(!estrategias[i].propios) estrategias[i].propios = [];
+          if(estrategias[i].propios.indexOf(txt) < 0) estrategias[i].propios.push(txt);
+          if(estrategias[i].costos.indexOf(txt) < 0) estrategias[i].costos.push(txt);
+          pintarLista();
+          refrescar();
+          Kit.guardar();
+        } else {
+          campo.remove();
+          b.style.display = "";
+        }
+      };
+      campo.addEventListener("keydown", ev => {
+        if(ev.key === "Enter"){ ev.preventDefault(); cerrar(true); }
+        if(ev.key === "Escape"){ ev.preventDefault(); cerrar(false); }
+      });
+      campo.addEventListener("blur", () => cerrar(true));
+      campo.focus();
+    });
+  });
+  $("listaEstrategias").querySelectorAll("button[data-costo]").forEach(b => {
+    const i = +b.dataset.i, c = b.dataset.costo;
+    b.addEventListener("click", () => {
+      const lista = estrategias[i].costos, pos = lista.indexOf(c);
+      if(pos >= 0) lista.splice(pos, 1); else lista.push(c);
+      b.classList.toggle("activa");
+      refrescar();
+      Kit.guardar();
+    });
+  });
+}
+
+/* ====================== MAPA ====================== */
+const X0 = 68, X1 = 500, Y0 = 46, Y1 = 336;
+const px = v => X0 + (X1 - X0) * v / 10;
+const py = v => Y1 - (Y1 - Y0) * v / 10;
+
+function dibujar(){
+  const svg = $("mapa");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x:x, y:y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s;
+    svg.appendChild(t);
+  };
+
+  const mx = px(6), my = py(6);
+  /* la trampa: mucho alivio, poco resultado */
+  g("rect", {x:mx, y:my, width:X1-mx, height:Y1-my, fill:"#c26a4e", opacity:.07});
+  g("rect", {x:mx, y:Y0, width:X1-mx, height:my-Y0, fill:"#3f7d5a", opacity:.07});
+
+  g("rect", {x:X0, y:Y0, width:X1-X0, height:Y1-Y0, fill:"none", stroke:"#e6ecf2"});
+  g("line", {x1:mx, y1:Y0, x2:mx, y2:Y1, stroke:"#dde5ec", "stroke-dasharray":"4 4"});
+  g("line", {x1:X0, y1:my, x2:X1, y2:my, stroke:"#dde5ec", "stroke-dasharray":"4 4"});
+
+  /* halo blanco: las etiquetas de cuadrante siguen legibles cuando un círculo
+     cae encima, que es justo lo que pasa en la zona de la trampa */
+  const halo = "paint-order:stroke;stroke:#fff;stroke-width:3.5;stroke-linejoin:round;";
+  texto((mx+X1)/2, Y1-12, "LA TRAMPA", halo+"font:700 12px system-ui;fill:#c26a4e;letter-spacing:1px");
+  texto((mx+X1)/2, Y0+18, "LO QUE SÍ SIRVE", halo+"font:700 12px system-ui;fill:#3f7d5a;letter-spacing:1px");
+  texto((X0+mx)/2, Y1-12, "ni alivia ni resuelve", halo+"font:11.5px system-ui;fill:#a8b3bd");
+  texto((X0+mx)/2, Y0+18, "cuesta, pero resuelve", halo+"font:11.5px system-ui;fill:#a8b3bd");
+
+  texto((X0+X1)/2, Y1+34, "Cuánto alivió en el momento  →", "font:600 12.5px system-ui;fill:#5a6a7d");
+  const et = Kit.svg("text", {x:24, y:(Y0+Y1)/2, "text-anchor":"middle",
+    style:"font:600 12.5px system-ui;fill:#5a6a7d",
+    transform:`rotate(-90 24 ${(Y0+Y1)/2})`});
+  et.textContent = "Cuánto lo resolvió a la larga  →";
+  svg.appendChild(et);
+
+  [0,5,10].forEach(v => {
+    texto(px(v), Y1+16, v, "font:11px system-ui;fill:#9aa8b5");
+    texto(X0-11, py(v)+4, v, "font:11px system-ui;fill:#9aa8b5", "end");
+  });
+
+  if(!estrategias.length){
+    texto((X0+X1)/2, (Y0+Y1)/2, "Agrega estrategias y aparecerán aquí",
+      "font:13.5px system-ui;fill:#b3bfca");
+    return;
+  }
+
+  estrategias.forEach((e, i) => {
+    const q = cuadrante(e), r = 9 + e.costos.length * 2.1;
+    g("circle", {cx:px(e.alivio), cy:py(e.largo), r:r, fill:q.color, "fill-opacity":.30,
+      stroke:q.color, "stroke-width":1.8});
+    texto(px(e.alivio), py(e.largo) + 4.5, i + 1,
+      `font:700 12px system-ui;fill:${q.color}`);
+  });
+  texto(X1, Y0-18, "el tamaño del círculo es el costo", "font:11.5px system-ui;fill:#a8b3bd", "end");
+}
+
+/* ====================== LECTURAS ====================== */
+const enTrampa = () => estrategias.filter(e => cuadrante(e).clave === "trampa");
+const sirven   = () => estrategias.filter(e => cuadrante(e).clave === "sirve");
+const costoTotal = () => estrategias.reduce((s, e) => s + e.costos.length, 0);
+
+const CASOS = [
+{clave:"vacio", nombre:"Inventario sin abrir",
+ resumen:"Menos de dos estrategias registradas.",
+ condicion: () => estrategias.length < 2,
+ metafora:"Todavía no hay nada que mirar.",
+ consulta:"Casi nadie llega con dos estrategias: llega con quince y no las ha contado nunca juntas. Si la lista se queda corta, suele ser por vergüenza o porque la persona no considera «estrategia» lo que hace de forma automática.",
+ foco:"Ampliar el inventario antes de leer nada. Ayuda preguntar por lo que hace en los primeros cinco minutos, y por lo que hace a las tres de la mañana.",
+ pregunta:"¿Qué es lo primero que haces, sin pensarlo, apenas eso aparece?"},
+
+{clave:"trampa", nombre:"La trampa completa",
+ resumen:"Tres o más estrategias que alivian rápido y no resuelven nada.",
+ condicion: () => enTrampa().length >= 3 && sirven().length === 0,
+ metafora:"Cada palada saca tierra y hace el hoyo más hondo.",
+ consulta:"El patrón central de la evitación experiencial. Todo lo que se ha intentado funciona a corto plazo, y por eso se repite; y como no resuelve, hay que repetirlo cada vez más. La persona no ha fallado por falta de esfuerzo: ha fallado porque estaba usando una pala para salir de un hoyo.",
+ foco:"Aquí es donde ACT no propone otra estrategia mejor. Lo que se abre es la posibilidad de dejar de cavar, que no es lo mismo que resignarse: es dejar de gastar la vida en una pelea que la propia experiencia ya calificó.",
+ pregunta:"Todo esto lo has intentado con ganas y con inteligencia. Si nada de esto funcionó, ¿de quién es la culpa: tuya, o de la herramienta?",
+ bandera:"Antes de pasar a aceptación conviene revisar si alguna de estas estrategias es de riesgo (consumo, autolesión, restricción alimentaria) y atenderla por su propia vía."},
+
+{clave:"caro", nombre:"Alivio caro",
+ resumen:"La trampa, con muchos costos marcados.",
+ condicion: () => enTrampa().length >= 2 && costoTotal() >= 6,
+ metafora:"El monstruo suelta la cuerda solo si le pagas, y cada vez cobra más.",
+ consulta:"Lo que alivia está saliendo caro en tiempo, vínculos, salud u oportunidades, y aun así se sostiene porque el alivio llega rápido y la factura llega después. Es la forma en que se instalan el consumo, el aislamiento y la postergación crónica.",
+ foco:"Poner el costo sobre la mesa sin discutir la estrategia. No se trata de quitarle a la persona lo único que le alivia, sino de que pueda ver el precio completo antes de decidir.",
+ pregunta:"Si esto siguiera igual cinco años más, ¿qué te habría costado para entonces?",
+ bandera:"Costo alto sostenido merece explorar riesgo, red de apoyo y necesidad de derivación."},
+
+{clave:"esteril", nombre:"Ni siquiera alivia",
+ resumen:"La mayoría no alivia en el momento ni resuelve después.",
+ condicion: () => estrategias.filter(e => cuadrante(e).clave === "nada").length >= Math.ceil(estrategias.length / 2),
+ metafora:"Se sigue cavando aunque hace rato dejó de salir tierra.",
+ consulta:"Se hace por costumbre, no por resultado. Suele aparecer cuando el malestar lleva años y las estrategias se volvieron rituales: ya no alivian, pero soltarlas da más miedo que sostenerlas. También aparece en cuadros depresivos, donde nada produce alivio.",
+ foco:"Explorar qué sostiene la conducta si ya no da alivio. Muchas veces lo que sostiene no es el alivio sino la sensación de estar haciendo algo.",
+ pregunta:"Esto que haces ya ni siquiera te calma. ¿Qué pasaría si simplemente dejaras de hacerlo?",
+ bandera:"Ausencia de alivio con cualquier estrategia es un dato que conviene contrastar con tamizaje de sintomatología depresiva."},
+
+{clave:"hayalgo", nombre:"Hay algo que sí funciona",
+ resumen:"Al menos una estrategia alivia y además resuelve.",
+ condicion: () => sirven().length >= 1,
+ metafora:"Entre todas las palas hay una escalera.",
+ consulta:"Buena noticia y hay que tratarla con cuidado: la persona ya tiene al menos un recurso que sostiene resultados, casi siempre uno que le cuesta más y le alivia menos rápido. Suele estar subvalorado justamente por eso.",
+ foco:"Empezar por ahí, no por lo nuevo. Antes de introducir habilidades, ampliar y hacer explícito lo que ya funciona, y mirar qué lo hace distinto de las demás.",
+ pregunta:"De toda esta lista, esa es la que sí te sostiene. ¿Qué tiene esa que no tienen las otras?"},
+
+{clave:"mixto", nombre:"Inventario mixto",
+ resumen:"Estrategias repartidas, sin un patrón claro todavía.",
+ condicion: () => true,
+ metafora:"Se lee por el contraste entre lo que alivia y lo que sostiene.",
+ consulta:"No hay un patrón dominante. Con pocas estrategias registradas, lo más probable es que el inventario todavía esté incompleto.",
+ foco:"Seguir ampliando la lista y volver a mirar. La lectura se vuelve nítida cuando están todas.",
+ pregunta:"¿Qué estrategia no anotaste porque te da pena, o porque no te parecía que contara?"}
+];
+
+$("catalogo").innerHTML = CASOS.map(c =>
+  `<div class="mini" data-k="${c.clave}"><b>${c.nombre}</b><span>${c.resumen}</span></div>`).join("");
+
+function refrescar(){
+  $("cTotal").textContent  = estrategias.length;
+  $("cTrampa").textContent = enTrampa().length;
+  $("cSirven").textContent = sirven().length;
+  $("cCosto").textContent  = costoTotal();
+  $("cTrampa").style.color = enTrampa().length ? "#c26a4e" : "var(--acento)";
+  $("cSirven").style.color = sirven().length ? "#3f7d5a" : "var(--acento)";
+
+  dibujar();
+
+  const c = CASOS.find(c => c.condicion());
+  $("lNombre").textContent   = c.nombre;
+  $("lMetafora").textContent = c.metafora;
+  $("lConsulta").textContent = c.consulta;
+  $("lFoco").textContent     = c.foco;
+  $("lPregunta").textContent = c.pregunta;
+  $("lBandera").innerHTML    = c.bandera ? `<div class="bandera">${c.bandera}</div>` : "";
+
+  /* Que haya un recurso que sí sostiene resultados es un hallazgo demasiado
+     útil para perderlo cuando gana otra lectura más urgente. */
+  const utiles = sirven();
+  if(c.clave !== "hayalgo" && utiles.length)
+    $("lBandera").innerHTML += `<div class="logro">Aun así, hay algo que sí funciona:
+      <b>${Kit.escapar(utiles.map(e => e.nombre).join(", "))}</b>. Vale la pena empezar por ahí
+      antes de introducir nada nuevo, y mirar qué tiene eso que no tienen las demás.</div>`;
+
+  document.querySelectorAll(".mini").forEach(m =>
+    m.classList.toggle("activo", m.dataset.k === c.clave));
+}
+
+/* ====================== ARRANQUE ====================== */
+Kit.chips("quePelea", PELEAS);
+Kit.chips("cuandoAparece", ["Al despertar","Cuando estoy solo","En la noche","Los domingos"]);
+Kit.chips("sugeridas", SUGERIDAS, null, true);
+/* las sugeridas no se marcan: agregan a la lista y se limpian */
+$("sugeridas").querySelectorAll(".chip").forEach(b => {
+  b.onclick = () => { agregar(b.textContent); b.classList.remove("activa"); };
+});
+$("nuevaEstrategia").addEventListener("keydown", e => {
+  if(e.key === "Enter"){ e.preventDefault(); agregar(); }
+});
+function resumen(){
+  const l = [];
+  const pelea = $("loQuePelea").value.trim(), marcadas = Kit.activas("quePelea");
+  l.push("LO QUE SE INTENTA NO SENTIR");
+  if(marcadas.length) l.push("Etiquetas: " + marcadas.join(", "));
+  if(pelea) l.push(pelea);
+  const momentos = Kit.activas("cuandoAparece");
+  if(momentos.length) l.push("Aparece sobre todo: " + momentos.join(", "));
+
+  l.push("", `INVENTARIO DE ESTRATEGIAS (${estrategias.length})`);
+  estrategias.forEach((e, i) => {
+    const q = cuadrante(e);
+    l.push(`${i + 1}. ${e.nombre} — alivio ${e.alivio}/10, resultado ${e.largo}/10 — ${q.texto}` +
+      (e.costos.length ? `\n   Costos: ${e.costos.join(", ")}` : ""));
+  });
+  l.push("", `En la trampa: ${enTrampa().length}   Sirven a la larga: ${sirven().length}` +
+             `   Costos marcados: ${costoTotal()}`);
+
+  l.push("", "LECTURA: " + $("lNombre").textContent, $("lConsulta").textContent,
+         "Hacia dónde lleva: " + $("lFoco").textContent);
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("Alerta: " + band.textContent.trim());
+  if(sirven().length)
+    l.push("Recurso ya disponible: " + sirven().map(e => e.nombre).join(", "));
+
+  return l.join("\n");
+}
+
+Kit.iniciar({
+  clave: "act-costo-de-la-lucha",
+  extra: () => ({estrategias: estrategias}),
+  restaurar: d => { estrategias = d.estrategias || []; pintarLista(); },
+  alCambiar: refrescar,
+  resumen: resumen
+});
+pintarLista();
+refrescar();

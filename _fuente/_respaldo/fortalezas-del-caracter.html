@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mis fortalezas del carácter</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6;
+    --oro:#b98a2e; --oro-claro:#fdf6e6; --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+  .envoltura{max-width:1200px;margin:0 auto;padding:24px 18px 92px}
+  header.tapa,section.bloque{background:var(--papel);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:72ch}
+  .credito{margin-top:12px;padding-top:10px;border-top:1px dashed var(--linea);
+    font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;align-items:flex-end}
+  .campos-id label{flex:1 1 150px;font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fdfefe}
+  .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+  .cuantas{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--tinta-suave)}
+  .cuantas button{padding:7px 14px;font-size:14px}
+  .cuantas button.on{background:var(--acento);border-color:var(--acento);color:#fff}
+
+  /* --- disposición --- */
+  .tablero{display:grid;grid-template-columns:minmax(300px,38%) 1fr;gap:18px;align-items:start}
+  .panel-casillas{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 18px;position:sticky;top:14px}
+  .panel-casillas h2{margin:0 0 3px;font-size:17px}
+  .panel-casillas .pista{margin:0 0 14px;font-size:13px;color:var(--tinta-suave)}
+
+  .casilla{border:2px dashed var(--linea);border-radius:10px;min-height:74px;margin-bottom:10px;
+    padding:10px 12px;display:flex;align-items:center;gap:11px;background:#fbfcfd;
+    transition:border-color .15s,background .15s}
+  .casilla.encima{border-color:var(--oro);background:var(--oro-claro)}
+  .casilla.llena{border-style:solid;border-color:var(--oro);background:var(--oro-claro);cursor:pointer}
+  .casilla .indice{flex:0 0 26px;height:26px;border-radius:50%;background:var(--linea);color:#fff;
+    font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .casilla.llena .indice{background:var(--oro)}
+  .casilla .hueco{color:#9aa8b6;font-size:13.5px;font-style:italic}
+  .casilla .puesta b{display:block;font-size:15.5px}
+  .casilla .puesta small{color:var(--tinta-suave);font-size:12px}
+  .casilla .quitar{margin-left:auto;border:none;background:none;color:var(--tinta-suave);
+    font-size:19px;line-height:1;cursor:pointer;padding:2px 4px}
+
+  .sonda{background:#f6f9fb;border-left:3px solid var(--acento);border-radius:0 6px 6px 0;
+    padding:9px 12px;margin:-4px 0 12px;font-size:13px;color:#3f5163}
+  .sonda b{color:var(--acento)}
+
+  /* --- mostrador --- */
+  .mostrador{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 20px}
+  .mostrador > h2{margin:0 0 3px;font-size:17px}
+  .mostrador > .pista{margin:0 0 14px;font-size:13px;color:var(--tinta-suave)}
+  .virtud{margin-bottom:18px}
+  .virtud h3{margin:0 0 1px;font-size:13.5px;color:var(--acento);letter-spacing:.4px;
+    text-transform:uppercase}
+  .virtud p{margin:0 0 9px;font-size:12.5px;color:var(--tinta-suave)}
+  .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+  .chip{border:1px solid var(--linea);border-radius:8px;padding:9px 12px;background:#fff;
+    cursor:grab;transition:border-color .12s,box-shadow .12s,opacity .12s}
+  .chip:hover{border-color:var(--oro);box-shadow:0 1px 5px rgba(0,0,0,.06)}
+  .chip.arrastrando{opacity:.4}
+  .chip.tomada{border-color:var(--oro);box-shadow:0 0 0 2px var(--oro-claro)}
+  .chip.usada{opacity:.34;cursor:default;pointer-events:none}
+  .chip b{display:block;font-size:14.5px;margin-bottom:2px}
+  .chip span{font-size:12.5px;color:var(--tinta-suave)}
+
+  /* --- perfil --- */
+  .perfil{border-left:5px solid var(--oro);background:linear-gradient(180deg,#fffdf7,#fff)}
+  .perfil .nombre{font-size:22px;font-weight:700;margin:2px 0}
+  .perfil .metafora{font-size:15px;color:var(--tinta-suave);font-style:italic;margin:0 0 14px}
+  .campo{margin-bottom:12px}
+  .campo .etq{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:var(--oro);
+    font-weight:700;margin-bottom:3px}
+  .campo p{margin:0;font-size:14.5px}
+  .pregunta{background:var(--oro-claro);border-radius:8px;padding:12px 15px;font-size:15px;color:#6d5314}
+  .pregunta::before{content:"Para abrir en sesión";display:block;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.7px;color:var(--oro);font-weight:700;margin-bottom:4px}
+  .reparto{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}
+  .reparto span{border:1px solid var(--linea);border-radius:999px;padding:3px 11px;font-size:12.5px;
+    background:#fff;color:var(--tinta-suave)}
+  .reparto span.pesa{border-color:var(--oro);background:var(--oro-claro);color:#7a5a13;font-weight:600}
+  .velo{text-align:center;padding:26px 10px;color:var(--tinta-suave);font-size:14.5px}
+  details.catalogo{margin-top:14px;border-top:1px dashed var(--linea);padding-top:12px}
+  details.catalogo summary{cursor:pointer;font-size:14px;color:var(--acento);font-weight:600}
+  .lista-perfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:9px;margin-top:12px}
+  .mini{border:1px solid var(--linea);border-radius:8px;padding:10px 12px;font-size:13px;background:#fcfdfe}
+  .mini.activo{border-color:var(--oro);background:var(--oro-claro)}
+  .mini b{display:block;font-size:14px;margin-bottom:2px}
+  .mini span{color:var(--tinta-suave)}
+
+  .barra{position:fixed;bottom:0;left:0;right:0;background:var(--papel);border-top:1px solid var(--linea);
+    padding:11px 20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;z-index:30}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff}
+  button.oro{background:var(--oro);border-color:var(--oro);color:#fff}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .aviso{font-size:12.5px;color:var(--tinta-suave);text-align:center;margin-top:20px}
+
+  @media (max-width:880px){
+    .tablero{grid-template-columns:1fr}
+    .panel-casillas{position:sticky;top:0;z-index:10;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+    .chips{grid-template-columns:1fr}
+    .chip{cursor:pointer}
+  }
+  @media print{
+    body{background:#fff}
+    .barra,.mostrador,.sonda,details.catalogo,.cuantas{display:none}
+    .tablero{grid-template-columns:1fr}
+    .panel-casillas{position:static}
+    header.tapa,section.bloque{border-color:#bbb;break-inside:avoid;page-break-inside:avoid}
+    .envoltura{padding:0;max-width:none}
+  }
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>Mis fortalezas del carácter</h1>
+  <p class="sub">Las fortalezas del carácter son rasgos positivos de personalidad: no se trata de
+  descubrir cuáles te faltan, sino de reconocer las que ya usas. Arrastra desde el mostrador hasta
+  las casillas las que más te representan. Cada una que elijas, cuéntala.</p>
+  <div class="campos-id">
+    <label>Nombre <input type="text" id="nombre" placeholder="Opcional"></label>
+    <label>Fecha <input type="text" id="fecha"></label>
+    <label>Programa / semestre <input type="text" id="programa"></label>
+    <div class="cuantas">Casillas
+      <button id="b3" onclick="cambiarCupo(3)">3</button>
+      <button id="b5" onclick="cambiarCupo(5)">5</button>
+    </div>
+  </div>
+  <p class="credito">Adaptación digital del material elaborado por Andrés Cabezas Corcione, Ph.D.
+  &middot; Clasificación VIA de fortalezas y virtudes (Peterson &amp; Seligman)
+  &middot; Ruta de Atención Clínica, FUAA</p>
+</header>
+
+<div class="tablero">
+  <div class="panel-casillas">
+    <h2>Mis fortalezas</h2>
+    <p class="pista" id="pista">Arrastra una fortaleza hasta una casilla. En el celular, tócala.</p>
+    <div id="casillas"></div>
+  </div>
+
+  <div class="mostrador">
+    <h2>Mostrador de las 24 fortalezas</h2>
+    <p class="pista">Agrupadas en las seis virtudes. Léelas con calma antes de decidir; también
+    puedes preguntarle a tu familia cuáles ven en ti.</p>
+    <div id="virtudes"></div>
+  </div>
+</div>
+
+<section class="bloque perfil" id="perfil">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Lectura del perfil</div></div>
+  <div id="cuerpoPerfil">
+    <div class="velo" id="velo">
+      Completa las casillas y conversa cada elección.<br>
+      El perfil se revela al final, con el botón de abajo.
+    </div>
+  </div>
+  <details class="catalogo" id="detCatalogo" hidden>
+    <summary>Ver las combinaciones posibles</summary>
+    <div class="lista-perfiles" id="catalogo"></div>
+  </details>
+</section>
+
+<p class="aviso">Material psicoeducativo de acompañamiento. Las lecturas de perfil son hipótesis para
+orientar la conversación, no diagnósticos ni resultados de una prueba psicométrica. Los datos se
+guardan solo en este equipo.</p>
+</div>
+
+<div class="barra">
+  <button class="oro" id="btnRevelar" onclick="revelar()" disabled>Revelar el perfil</button>
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="limpiar()">Empezar de nuevo</button>
+</div>
+
+<script>
+/* ============ LAS 24 FORTALEZAS ============ */
+const VIRTUDES = [
+{id:"S", titulo:"I. Sabiduría y conocimiento",
+ desc:"Fortalezas cognitivas que implican la adquisición y el uso del conocimiento.",
+ fortalezas:[
+ {n:"Creatividad", d:"Originalidad, ingenio. Pensar en caminos nuevos y productivos para hacer las cosas.",
+  q:"¿Dónde se te ocurren soluciones que a otros no se les ocurren?"},
+ {n:"Curiosidad", d:"Interés por lo que sucede, gusto por explorar y descubrir cosas nuevas.",
+  q:"¿Qué es lo último que te dieron ganas de averiguar por tu cuenta?"},
+ {n:"Apertura de mente", d:"Pensamiento crítico. Examinar los matices y cambiar de idea con la evidencia.",
+  q:"¿Cuándo cambiaste de opinión porque los hechos te lo pidieron?"},
+ {n:"Deseo de aprender", d:"Amor por el conocimiento; tendencia continua a dominar cosas nuevas.",
+  q:"¿Qué estás aprendiendo por fuera de lo que te exigen?"},
+ {n:"Perspectiva", d:"Sabiduría. Dar consejos adecuados y ayudar a otros a comprender el mundo.",
+  q:"¿Quién te busca cuando necesita un consejo, y por qué crees que te busca a ti?"}]},
+
+{id:"C", titulo:"II. Coraje",
+ desc:"Fortalezas emocionales para alcanzar metas ante la dificultad, externa o interna.",
+ fortalezas:[
+ {n:"Valentía", d:"No dejarse intimidar por la amenaza o el dolor; defender lo que uno cree correcto.",
+  q:"¿Cuándo dijiste algo que sabías que te iba a costar?"},
+ {n:"Persistencia", d:"Terminar lo que uno empieza y seguir aunque aparezcan obstáculos.",
+  q:"¿Qué terminaste aunque tuviste muchas ganas de soltarlo?"},
+ {n:"Integridad", d:"Autenticidad y honestidad; asumir la responsabilidad de lo que uno siente y hace.",
+  q:"¿En qué no estás dispuesto a ceder, aunque te convenga?"},
+ {n:"Vitalidad", d:"Entusiasmo y energía; hacer las cosas con convicción, sintiéndose vivo.",
+  q:"¿Qué te enciende? ¿Cuándo fue la última vez que lo sentiste?"}]},
+
+{id:"H", titulo:"III. Humanidad",
+ desc:"Fortalezas interpersonales que implican cuidar y ofrecer cariño a los demás.",
+ fortalezas:[
+ {n:"Amor", d:"Tener vínculos valiosos donde el afecto y el cuidado son mutuos.",
+  q:"¿Con quién puedes ser tú, sin actuar?"},
+ {n:"Amabilidad", d:"Generosidad y compasión; hacer cosas por los demás, ayudar y cuidar.",
+  q:"¿A quién ayudaste esta semana sin que te lo pidieran?"},
+ {n:"Inteligencia social", d:"Reconocer las emociones propias y ajenas; saber estar en cada situación.",
+  q:"¿Cómo te das cuenta de que alguien está mal antes de que lo diga?"}]},
+
+{id:"J", titulo:"IV. Justicia",
+ desc:"Fortalezas cívicas que conllevan una vida en comunidad saludable.",
+ fortalezas:[
+ {n:"Ciudadanía", d:"Trabajo en equipo y lealtad; ser fiel al grupo y sentirse parte de él.",
+  q:"¿De qué grupo te sientes parte de verdad?"},
+ {n:"Justicia", d:"Equidad. Tratar a todos como iguales y dar las mismas oportunidades.",
+  q:"¿Cuándo te dolió una injusticia que no era contra ti?"},
+ {n:"Liderazgo", d:"Animar al grupo, organizar actividades y llevarlas a buen término.",
+  q:"¿Qué has puesto a andar que no se habría movido sin ti?"}]},
+
+{id:"M", titulo:"V. Moderación",
+ desc:"Fortalezas que nos protegen contra los excesos.",
+ fortalezas:[
+ {n:"Perdón y compasión", d:"Perdonar a quien actuó mal, sin ser vengativo ni rencoroso.",
+  q:"¿A quién le diste una segunda oportunidad, y qué te costó?"},
+ {n:"Humildad", d:"Modestia. No buscar ser el centro ni creerse más especial que los demás.",
+  q:"¿Cómo reaccionas cuando te reconocen algo?"},
+ {n:"Prudencia", d:"Cautela al decidir, sin asumir riesgos innecesarios de los que uno se arrepienta.",
+  q:"¿Qué decisión te alegra haber pensado dos veces?"},
+ {n:"Autorregulación", d:"Autocontrol. Disciplina y manejo de los propios impulsos y emociones.",
+  q:"¿Qué impulso logras frenar que a otros se les escapa?"}]},
+
+{id:"T", titulo:"VI. Trascendencia",
+ desc:"Fortalezas que forjan conexiones con lo grande y dan significado a la vida.",
+ fortalezas:[
+ {n:"Aprecio de la belleza", d:"Asombro y admiración por lo cotidiano, la naturaleza, el arte, la ciencia.",
+  q:"¿Qué fue lo último que te hizo detenerte a mirar?"},
+ {n:"Gratitud", d:"Ser consciente de lo bueno que a uno le pasa y saber dar las gracias.",
+  q:"¿A quién le debes algo que nunca le has dicho?"},
+ {n:"Esperanza", d:"Optimismo y visión de futuro; esperar lo mejor y trabajar para conseguirlo.",
+  q:"¿Qué esperas de este semestre, en concreto?"},
+ {n:"Sentido del humor", d:"Gusto por la risa, hacer sonreír a otros, ver el lado ligero de la vida.",
+  q:"¿De qué eres capaz de reírte, incluso cuando está difícil?"},
+ {n:"Espiritualidad", d:"Fe o propósito; creer que hay un significado en lo que ocurre y en la propia vida.",
+  q:"¿Qué te sostiene cuando nada tiene explicación?"}]}
+];
+
+/* ============ PERFILES POR VIRTUD ============ */
+const PERFILES = {
+S:{nombre:"La mente que busca", resumen:"Predominan Sabiduría y conocimiento.",
+ metafora:"Entiende antes de moverse; su seguridad viene de comprender.",
+ consulta:"Estudiantes que procesan el malestar pensándolo. Suelen llegar con el problema muy bien analizado y poco sentido. Responden bien a la psicoeducación y a las tareas que tienen lógica explícita.",
+ sombra:"El análisis puede volverse rumiación, y entender un problema puede sustituir el hacer algo con él. Ojo con la parálisis por análisis y con intelectualizar la emoción.",
+ palanca:"Darle marco teórico a lo que le pasa y luego exigirle un experimento conductual: que ponga a prueba lo que comprendió.",
+ pregunta:"Ya entendiste lo que te pasa. ¿Qué vas a hacer distinto esta semana con eso que entendiste?"},
+
+C:{nombre:"La fuerza que sostiene", resumen:"Predomina el Coraje.",
+ metafora:"Aguanta. Su identidad está en no soltar.",
+ consulta:"Los que resisten hasta que el cuerpo cede. Piden ayuda tarde y con culpa por pedirla. Frecuente en quienes trabajan y estudian, o sostienen a su familia.",
+ sombra:"La persistencia se vuelve terquedad y la valentía, temeridad. El riesgo aquí es el agotamiento: aguantan lo que no deberían estar aguantando solos.",
+ palanca:"Reencuadrar el pedir ayuda y el descansar como actos de valentía, no como rendirse. Es el reencuadre que suele abrirles la puerta.",
+ pregunta:"Has aguantado mucho. ¿Qué haría falta para que aguantar no sea lo único que sabes hacer?"},
+
+H:{nombre:"El vínculo que cuida", resumen:"Predomina la Humanidad.",
+ metafora:"Está pendiente de todos. Con frecuencia, de todos menos de sí.",
+ consulta:"Los que sostienen al grupo, a la familia, a la pareja. Consultan por otro antes que por sí mismos y les cuesta nombrar lo propio sin justificarlo.",
+ sombra:"El cuidado sin límite se vuelve carga, y la empatía sin filtro los deja absorbiendo lo que no les corresponde. Ojo con las relaciones donde siempre dan.",
+ palanca:"Es un recurso enorme: ya tienen red y saben construirla. El trabajo está en girar ese cuidado hacia sí mismos y en poner límites sin sentir que traicionan.",
+ pregunta:"Cuidas muy bien a los demás. ¿Quién te cuida a ti, y se lo has dejado hacer?"},
+
+J:{nombre:"La voz del grupo", resumen:"Predomina la Justicia.",
+ metafora:"Piensa en plural. Lo colectivo le importa tanto como lo propio.",
+ consulta:"Representantes de curso, líderes de trabajo en grupo, los que alzan la voz por otros. Muy funcionales socialmente; su malestar suele venir de asumir responsabilidades que no eran suyas.",
+ sombra:"Cargar con el grupo hasta que el grupo pesa. La exigencia de coherencia puede volverse rigidez, y la indignación puede convertirse en desgaste crónico.",
+ palanca:"Usar su compromiso con lo colectivo como puerta: lo que no hace por sí mismo lo hace por otros, y desde ahí se puede negociar el autocuidado.",
+ pregunta:"Respondes por muchos. ¿Cuánto de lo que cargas hoy es tuyo de verdad?"},
+
+M:{nombre:"El freno sereno", resumen:"Predomina la Moderación.",
+ metafora:"Sabe contenerse. La pregunta es qué está conteniendo.",
+ consulta:"Estudiantes ordenados, cautelosos y poco expresivos. Buena regulación aparente. A veces esa contención es fortaleza y a veces es represión: la diferencia se ve en la conversación, no en la lista.",
+ sombra:"La prudencia puede volverse evitación, la humildad puede tapar una autoestima frágil, y el autocontrol sostenido tiene un costo emocional que no siempre reconocen.",
+ palanca:"Su disciplina hace que cumpla las tareas terapéuticas como pocos. Aprovecharla, y a la vez darle permiso explícito para expresar lo que frena.",
+ pregunta:"Te controlas muy bien. ¿Qué pasaría si por una vez no te controlaras?"},
+
+T:{nombre:"La raíz del sentido", resumen:"Predomina la Trascendencia.",
+ metafora:"Necesita que las cosas signifiquen algo para poder sostenerlas.",
+ consulta:"Encuentran sentido, agradecen, esperan. Es un perfil protector frente a la desesperanza y muy buen pronóstico. Aparece a menudo en estudiantes con vida espiritual o comunitaria activa.",
+ sombra:"El optimismo puede volverse negación de lo que duele, y la gratitud puede usarse para no tener derecho a quejarse: 'otros están peor'.",
+ palanca:"Anclar el trabajo terapéutico a su fuente de sentido; los cambios se sostienen mucho mejor cuando significan algo para ellos.",
+ pregunta:"Le encuentras sentido a casi todo. ¿Qué es lo que hoy no logras acomodar en ningún sentido?"},
+
+X:{nombre:"Perfil repartido", resumen:"Las fortalezas se distribuyen entre varias virtudes.",
+ metafora:"No un eje, sino un repertorio.",
+ consulta:"Se reconoce en frentes distintos y no depende de un solo recurso. Suele ser señal de flexibilidad, aunque a veces también de dificultad para saber en qué se apoya realmente.",
+ sombra:"Cuando todo sirve un poco, puede costar decidir a qué recurrir en la crisis. Vale la pena que identifique cuál de estas usa cuando de verdad está mal.",
+ palanca:"Convertir el repertorio en un orden: cuál usa primero, cuál guarda para lo difícil.",
+ pregunta:"De todas estas, ¿cuál es la que aparece cuando estás en tu peor momento?"}
+};
+
+/* ============ ESTADO ============ */
+const $ = id => document.getElementById(id);
+const CLAVE = "fortalezas-caracter-v2";
+const CAMPOS = ["nombre","fecha","programa"];
+const TODAS = {};                       // nombre -> {virtud, datos}
+VIRTUDES.forEach(v=>v.fortalezas.forEach(f=>TODAS[f.n]={virtud:v.id, ...f}));
+let cupo = 3;
+let elegidas = [];                      // nombres, en orden de elección
+let tomada = null;                      // selección por toque
+
+/* ============ MOSTRADOR ============ */
+$("virtudes").innerHTML = VIRTUDES.map(v=>`
+  <div class="virtud">
+    <h3>${v.titulo}</h3><p>${v.desc}</p>
+    <div class="chips">
+      ${v.fortalezas.map(f=>`
+        <div class="chip" draggable="true" data-n="${f.n}">
+          <b>${f.n}</b><span>${f.d}</span>
+        </div>`).join("")}
+    </div>
+  </div>`).join("");
+
+document.querySelectorAll(".chip").forEach(c=>{
+  c.addEventListener("dragstart",e=>{
+    e.dataTransfer.setData("text/plain",c.dataset.n);
+    e.dataTransfer.effectAllowed="copy";
+    c.classList.add("arrastrando");
+  });
+  c.addEventListener("dragend",()=>c.classList.remove("arrastrando"));
+  // toque / clic: si hay casilla libre, entra directo
+  c.addEventListener("click",()=>{
+    if(elegidas.includes(c.dataset.n)) return;
+    const libre = elegidas.length;
+    if(libre<cupo){ colocar(c.dataset.n, libre); }
+    else { alert(`Ya tienes ${cupo} fortalezas. Para cambiar una, tócala en su casilla para retirarla.`); }
+  });
+});
+
+/* ============ CASILLAS ============ */
+function pintarCasillas(){
+  $("casillas").innerHTML = Array.from({length:cupo},(_,i)=>{
+    const n = elegidas[i];
+    const f = n ? TODAS[n] : null;
+    return `<div class="casilla ${f?"llena":""}" data-i="${i}">
+        <div class="indice">${i+1}</div>
+        ${f ? `<div class="puesta"><b>${f.n}</b><small>${f.d}</small></div>
+               <button class="quitar" title="Retirar" data-q="${i}">&times;</button>`
+            : `<div class="hueco">Arrastra aquí una fortaleza</div>`}
+      </div>
+      ${f ? `<div class="sonda"><b>Preguntar:</b> ${f.q}</div>` : ""}`;
+  }).join("");
+
+  $("casillas").querySelectorAll(".casilla").forEach(c=>{
+    c.addEventListener("dragover",e=>{e.preventDefault();c.classList.add("encima")});
+    c.addEventListener("dragleave",()=>c.classList.remove("encima"));
+    c.addEventListener("drop",e=>{
+      e.preventDefault(); c.classList.remove("encima");
+      const n=e.dataTransfer.getData("text/plain");
+      if(n && !elegidas.includes(n)) colocar(n, +c.dataset.i);
+    });
+  });
+  $("casillas").querySelectorAll(".quitar").forEach(b=>{
+    b.addEventListener("click",e=>{e.stopPropagation(); quitar(+b.dataset.q)});
+  });
+
+  document.querySelectorAll(".chip").forEach(c=>
+    c.classList.toggle("usada", elegidas.includes(c.dataset.n)));
+
+  const faltan = cupo - elegidas.length;
+  $("pista").textContent = faltan>0
+    ? `Arrastra una fortaleza hasta una casilla. En el celular, tócala. Faltan ${faltan}.`
+    : "Listo. Cuando hayan conversado cada una, revela el perfil abajo.";
+  $("btnRevelar").disabled = faltan>0;
+  if(faltan>0) ocultarPerfil();
+  guardar();
+}
+
+function colocar(n, i){
+  if(elegidas.includes(n)) return;
+  elegidas[i] = n;
+  elegidas = elegidas.filter(Boolean).slice(0,cupo);   // sin huecos intermedios
+  pintarCasillas();
+}
+function quitar(i){ elegidas.splice(i,1); pintarCasillas(); }
+
+function cambiarCupo(c){
+  if(c<cupo && elegidas.length>c){
+    if(!confirm(`Vas a pasar a ${c} casillas y se descartarán las últimas elecciones. ¿Continuar?`)) return;
+    elegidas = elegidas.slice(0,c);
+  }
+  cupo=c;
+  $("b3").classList.toggle("on",c===3); $("b5").classList.toggle("on",c===5);
+  pintarCasillas();
+}
+
+/* ============ LECTURA DEL PERFIL ============ */
+function conteo(){
+  const c={}; VIRTUDES.forEach(v=>c[v.id]=0);
+  elegidas.forEach(n=>c[TODAS[n].virtud]++);
+  return c;
+}
+function dominante(){
+  const c=conteo();
+  const max=Math.max(...Object.values(c));
+  const lideres=Object.keys(c).filter(k=>c[k]===max);
+  // hace falta mayoría clara: 2 de 3, o 3 de 5
+  const umbral = cupo===3 ? 2 : 3;
+  if(lideres.length===1 && max>=umbral) return {clave:lideres[0], max, concentrado:max===cupo, c};
+  return {clave:"X", max, concentrado:false, c};
+}
+
+function revelar(){
+  const {clave, concentrado, c} = dominante();
+  const p = PERFILES[clave];
+  const vNombre = id => (VIRTUDES.find(v=>v.id===id)||{}).titulo.replace(/^[IVX]+\.\s*/,"") || "";
+
+  const fichas = VIRTUDES.map(v=>
+    `<span class="${c[v.id]>0?"pesa":""}">${vNombre(v.id)}: ${c[v.id]}</span>`).join("");
+
+  const extra = concentrado
+    ? `<div class="campo"><div class="etq">Un dato que vale la pena mirar</div><p>Las
+       ${cupo} fortalezas que eligió caen en la misma virtud. Eso hace el perfil muy nítido, y a la
+       vez estrecho: conviene preguntar si de verdad no se reconoce en ninguna otra, o si las demás
+       nunca se las han nombrado.</p></div>`
+    : "";
+
+  $("cuerpoPerfil").innerHTML = `
+    <div class="nombre">${p.nombre}</div>
+    <p class="metafora">${p.metafora}</p>
+    <div class="reparto">${fichas}</div>
+    <div class="campo"><div class="etq">Fortalezas elegidas</div>
+      <p>${elegidas.map((n,i)=>`${i+1}. ${n}`).join(" &middot; ")}</p></div>
+    <div class="campo"><div class="etq">Qué suele verse así en consulta</div><p>${p.consulta}</p></div>
+    <div class="campo"><div class="etq">La sombra de esta fortaleza</div><p>${p.sombra}</p></div>
+    <div class="campo"><div class="etq">Cómo apalancarlo</div><p>${p.palanca}</p></div>
+    <div class="pregunta">${p.pregunta}</div>
+    ${extra}`;
+  $("detCatalogo").hidden = false;
+  document.querySelectorAll(".mini").forEach(m=>m.classList.toggle("activo", m.dataset.k===clave));
+  $("perfil").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function ocultarPerfil(){
+  $("cuerpoPerfil").innerHTML =
+    `<div class="velo" id="velo">Completa las casillas y conversa cada elección.<br>
+     El perfil se revela al final, con el botón de abajo.</div>`;
+  $("detCatalogo").hidden = true;
+}
+
+$("catalogo").innerHTML = Object.entries(PERFILES).map(([k,p])=>
+  `<div class="mini" data-k="${k}"><b>${p.nombre}</b><span>${p.resumen}</span></div>`).join("");
+
+/* ============ PERSISTENCIA ============ */
+function guardar(){
+  const d={cupo,elegidas}; CAMPOS.forEach(c=>d[c]=$(c).value);
+  try{localStorage.setItem(CLAVE,JSON.stringify(d))}catch(e){}
+}
+function cargar(){
+  let d; try{d=JSON.parse(localStorage.getItem(CLAVE)||"null")}catch(e){}
+  if(!d) return;
+  CAMPOS.forEach(c=>{if(d[c]!==undefined)$(c).value=d[c]});
+  if(d.cupo) cupo=d.cupo;
+  if(Array.isArray(d.elegidas)) elegidas=d.elegidas.filter(n=>TODAS[n]).slice(0,cupo);
+}
+function limpiar(){
+  if(!confirm("¿Empezar de nuevo? Se borrarán las fortalezas elegidas.")) return;
+  try{localStorage.removeItem(CLAVE)}catch(e){}
+  location.reload();
+}
+CAMPOS.forEach(c=>$(c).addEventListener("input",guardar));
+cargar();
+if(!$("fecha").value) $("fecha").value=new Date().toLocaleDateString("es-CO");
+$("b3").classList.toggle("on",cupo===3); $("b5").classList.toggle("on",cupo===5);
+pintarCasillas();
+</script>
+</body>
+</html>

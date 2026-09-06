@@ -1,0 +1,443 @@
+@@meta
+archivo: act-brujula-de-valores.html
+titulo: La brújula de valores
+orden: 01
+enfoque: ACT
+etiqueta: Valores
+sub: Un valor no es una meta: no se cumple, se camina. Esta hoja separa lo que dices que te importa de lo que efectivamente hiciste esta semana, y mide la distancia entre las dos cosas. Esa distancia es la información útil.
+fuente: Hoja de asesoramiento de valores y Cuestionario de vida basada en valores (VLQ-2), en Díaz Corbobés, MANUAL ACT §3.6 y §3.7, adaptados de Hayes, Strosahl y Wilson (2014).
+resumen: Doce ámbitos vitales: se eligen direcciones de un mostrador y se calibran importancia y acción. La brújula dibuja las dos siluetas y la lectura nombra dónde duele la distancia.
+campo3: Momento
+campo3ph: Ej. Sesión 4 / Revisión
+@@css
+  .tablero{display:grid;grid-template-columns:minmax(330px,46%) 1fr;gap:18px;align-items:start}
+  .panel-brujula{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:16px 14px 12px;position:sticky;top:14px}
+  .brujula{display:block;width:100%;height:auto}
+  .leyenda{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:12.5px;
+    color:var(--tinta-suave);margin-top:4px}
+  .leyenda i{display:inline-block;width:22px;height:3px;vertical-align:middle;margin-right:5px}
+  .cifras{display:flex;gap:14px;justify-content:center;margin-top:10px;padding-top:10px;
+    border-top:1px dashed var(--linea);flex-wrap:wrap}
+  .cifras div{text-align:center;min-width:74px}
+  .cifras .n{font-size:20px;font-weight:700;color:var(--acento);display:block}
+  .cifras .r{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--tinta-suave)}
+
+  .ambitos{display:flex;flex-direction:column;gap:10px}
+  .ambito{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
+    border-radius:var(--radio);padding:12px 15px}
+  .ambito.apagado{opacity:.6}
+  .ambito .cabeza{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .ambito h3{margin:0;font-size:15.5px}
+  .ambito .brecha{font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;
+    white-space:nowrap}
+  .ambito .pide{margin:4px 0 9px;font-size:12.5px;color:var(--tinta-suave)}
+  .ambito .chips{gap:6px}
+  .ambito .chip{font-size:12.5px;padding:5px 12px}
+  .dosmedidores{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+  .dosmedidores .uno{background:#f8fafc;border-radius:8px;padding:6px 10px}
+  .dosmedidores .uno label{display:block;font-size:11px;text-transform:uppercase;
+    letter-spacing:.5px;color:var(--tinta-suave);margin-bottom:1px}
+  .dosmedidores .fila{display:flex;align-items:center;gap:8px}
+  .dosmedidores input[type=range]{flex:1;min-width:60px;height:20px;accent-color:var(--acento)}
+  .dosmedidores .v{font-weight:700;font-size:15px;min-width:20px;text-align:right}
+  .deQuien{margin-top:9px;display:flex;gap:7px;align-items:center;flex-wrap:wrap;
+    font-size:12px;color:var(--tinta-suave)}
+  .deQuien .chip{font-size:12px;padding:4px 11px}
+
+  /* el recordatorio de cierre: una sola pregunta grande con sus ámbitos */
+  .recordatorio{border:2px solid var(--acento);border-radius:16px;padding:22px 26px;
+    background:linear-gradient(180deg,#f2f8fb,#fff)}
+  .recordatorio h3{margin:0 0 4px;font-size:24px;letter-spacing:-.3px;color:#23404f}
+  .recordatorio .paraque{margin:0 0 15px;font-size:13.5px;color:var(--tinta-suave)}
+  .recordatorio .chip{font-size:13.5px;padding:7px 15px}
+  @media (max-width:900px){
+    .tablero{grid-template-columns:1fr}
+    .panel-brujula{position:static}
+  }
+  @media print{
+    .tablero{grid-template-columns:1fr}
+    .panel-brujula{position:static;break-inside:avoid}
+    .ambito.apagado{display:none}
+  }
+@@html
+<section class="bloque">
+  <h2><span class="num">1</span>Los doce ámbitos</h2>
+  <p class="ayuda">Direcciones, no metas: «casarme» se cumple y se acaba, «ser una pareja
+  cariñosa» se puede caminar siempre. Toca una o dos tuyas de verdad. Después, dos calibradores:
+  cuánto te importa, y cuánto actuaste en esa dirección <b>la última semana</b>. Lo que no aplica
+  se queda en cero y desaparece de la lectura.</p>
+</section>
+
+<div class="tablero">
+  <div class="panel-brujula">
+    <svg class="brujula" id="brujula" viewBox="0 0 520 470" role="img"
+      aria-label="Brújula de valores: importancia frente a acción en doce ámbitos"></svg>
+    <div class="leyenda">
+      <span><i style="background:#b9c6d2"></i>Lo que dices que importa</span>
+      <span><i style="background:#2f6f8f"></i>Lo que hiciste esta semana</span>
+    </div>
+    <div class="cifras">
+      <div><span class="n" id="cAmbitos">0</span><span class="r">ámbitos vivos</span></div>
+      <div><span class="n" id="cBrecha">0.0</span><span class="r">brecha media</span></div>
+      <div><span class="n" id="cAccion">0.0</span><span class="r">acción media</span></div>
+    </div>
+  </div>
+  <div class="ambitos" id="ambitos"></div>
+</div>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Lectura de la brújula</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="combinaciones" id="combinaciones"></div>
+  <div class="pregunta" id="lPregunta" style="margin-top:14px"></div>
+  <div id="lBandera"></div>
+</section>
+
+<section class="bloque recordatorio">
+  <h3>¿Una acción comprometida?</h3>
+  <p class="paraque">En qué ámbito.</p>
+  <div class="chips" id="ambitoAccion"></div>
+  <p class="ayuda" id="accSugerido" style="margin-top:11px"></p>
+</section>
+
+@@js
+/* ====================== ÁMBITOS ======================
+   Los doce ámbitos de la Hoja de asesoramiento de valores (Hayes, Strosahl y
+   Wilson), con un mostrador de direcciones por ámbito para que la persona
+   elija en vez de redactar.                                                */
+const AMBITOS = [
+ {id:"fam", corto:"Familia", nombre:"Relaciones familiares", color:"#c26a4e",
+  pide:"Qué clase de hijo, hermano o nieto quieres ser.",
+  dirs:["Estar presente cuando estoy","Escuchar sin corregir","Poner límites sin romper el vínculo"]},
+
+ {id:"par", corto:"Pareja", nombre:"Pareja y relaciones íntimas", color:"#c05c78",
+  pide:"Qué clase de persona quieres ser dentro de una relación. Tu papel, no el del otro.",
+  dirs:["Ser alguien con quien se puede hablar","Cuidar sin controlar","Decir lo que necesito a tiempo"]},
+
+ {id:"cri", corto:"Crianza", nombre:"Ser padre o madre", color:"#b06a9c",
+  pide:"Hoy o más adelante. Si no aplica, déjalo en cero.",
+  dirs:["Estar disponible de verdad","Poner límites con calma","No repetir lo que me dolió"]},
+
+ {id:"ami", corto:"Amistades", nombre:"Amistades y vida social", color:"#8171b4",
+  pide:"Qué significa para ti ser un buen amigo.",
+  dirs:["Buscar yo también, no solo esperar","Aparecer cuando hace falta","Decir la verdad con cuidado"]},
+
+ {id:"tra", corto:"Trabajo", nombre:"Trabajo y carrera", color:"#5f77b8",
+  pide:"Qué clase de trabajador quieres ser, y para qué.",
+  dirs:["Hacer bien lo que me toca","Trabajar sin dejarme la vida","Decir que no cuando no puedo"]},
+
+ {id:"est", corto:"Estudio", nombre:"Educación y crecimiento personal", color:"#3f83a6",
+  pide:"Qué quieres aprender, más allá del título.",
+  dirs:["Entender, no solo pasar","Sostener el ritmo sin ahogarme","Preguntar cuando no entiendo"]},
+
+ {id:"oci", corto:"Ocio", nombre:"Esparcimiento y diversión", color:"#2f9099",
+  pide:"Lo que haces por gusto, sin que tenga que rendir para nada.",
+  dirs:["Hacer algo solo porque me gusta","Recuperar algo que dejé","Jugar sin que tenga que servir"]},
+
+ {id:"esp", corto:"Espiritualidad", nombre:"Espiritualidad", color:"#3f9b86",
+  pide:"No hace falta que sea religión: es lo que te conecta con algo más grande.",
+  dirs:["Parar y estar en silencio","Estar en contacto con la naturaleza","Pertenecer a algo más grande"]},
+
+ {id:"com", corto:"Comunidad", nombre:"Vida en comunidad", color:"#4aa070",
+  pide:"Qué le quieres aportar a gente que no conoces.",
+  dirs:["Aportar donde vivo","Ayudar a alguien que no me conoce","Sostener una causa"]},
+
+ {id:"sal", corto:"Salud", nombre:"Salud y cuidado del cuerpo", color:"#6ea24f",
+  pide:"Cómo quieres tratar tu cuerpo. Sin metas de peso ni de talla.",
+  dirs:["Dormir como si importara","Comer de forma que me sostenga","Mover el cuerpo"]},
+
+ {id:"ent", corto:"Entorno", nombre:"Entorno y medio ambiente", color:"#a3a13f",
+  pide:"Qué relación quieres tener con el lugar donde vives.",
+  dirs:["Cuidar el lugar donde vivo","Consumir menos","No botar de más"]},
+
+ {id:"art", corto:"Arte", nombre:"Arte y belleza", color:"#d1a52c",
+  pide:"Lo que haces, escuchas o miras porque te hace bien.",
+  dirs:["Hacer algo con las manos","Escuchar música de verdad","Leer por gusto"]}
+];
+
+const $ = Kit.$;
+const imp = a => +$("imp-" + a.id).value;
+const acc = a => +$("acc-" + a.id).value;
+const mio = a => !$("aj-" + a.id).classList.contains("activa");
+const vivos = () => AMBITOS.filter(a => imp(a) >= 4);
+const dirsDe = a => Kit.activas("dir-" + a.id);
+
+/* ====================== TARJETAS ====================== */
+$("ambitos").innerHTML = AMBITOS.map(a => `
+  <div class="ambito" id="tar-${a.id}" style="border-left-color:${a.color}">
+    <div class="cabeza">
+      <h3>${a.nombre}</h3>
+      <span class="brecha" id="br-${a.id}"></span>
+    </div>
+    <p class="pide">${a.pide}</p>
+    <div class="chips" id="dir-${a.id}"></div>
+    <div class="dosmedidores">
+      <div class="uno">
+        <label for="imp-${a.id}">Cuánto me importa</label>
+        <div class="fila">
+          <input type="range" id="imp-${a.id}" min="0" max="10" value="5">
+          <span class="v" id="vimp-${a.id}">5</span>
+        </div>
+      </div>
+      <div class="uno">
+        <label for="acc-${a.id}">Cuánto actué esta semana</label>
+        <div class="fila">
+          <input type="range" id="acc-${a.id}" min="0" max="10" value="5">
+          <span class="v" id="vacc-${a.id}">5</span>
+        </div>
+      </div>
+    </div>
+    <div class="deQuien">
+      <span>¿De quién es esta dirección?</span>
+      <button type="button" class="chip" id="aj-${a.id}">Me la pusieron</button>
+    </div>
+  </div>`).join("");
+
+AMBITOS.forEach(a => Kit.chips("dir-" + a.id, a.dirs, refrescar));
+
+/* ====================== BRÚJULA ====================== */
+const CX = 260, CY = 218, R = 140, RETQ = 166;
+const angulo = i => (-90 + i * (360 / AMBITOS.length)) * Math.PI / 180;
+const punto = (i, r) => [CX + Math.cos(angulo(i)) * r, CY + Math.sin(angulo(i)) * r];
+
+function dibujar(){
+  const svg = $("brujula");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+
+  for(let n = 2; n <= 10; n += 2)
+    g("circle", {cx:CX, cy:CY, r:R*n/10, fill:"none", stroke:"#e6ecf2", "stroke-width":1});
+  AMBITOS.forEach((a, i) => {
+    const [x, y] = punto(i, R);
+    g("line", {x1:CX, y1:CY, x2:x, y2:y, stroke:"#eef2f6", "stroke-width":1});
+  });
+
+  const camino = f => AMBITOS.map((a, i) => punto(i, R * f(a) / 10).join(",")).join(" ");
+  g("polygon", {points:camino(imp), fill:"#b9c6d2", "fill-opacity":.16, stroke:"#b9c6d2",
+    "stroke-width":1.6, "stroke-dasharray":"4 4", "stroke-linejoin":"round"});
+  g("polygon", {points:camino(acc), fill:"#2f6f8f", "fill-opacity":.20, stroke:"#2f6f8f",
+    "stroke-width":2.2, "stroke-linejoin":"round"});
+
+  AMBITOS.forEach((a, i) => {
+    const [ax, ay] = punto(i, R * acc(a) / 10);
+    g("circle", {cx:ax, cy:ay, r:3.6, fill:a.color, stroke:"#fff", "stroke-width":1.4});
+
+    if(imp(a) - acc(a) >= 3 && imp(a) >= 4){
+      const [ix, iy] = punto(i, R * imp(a) / 10);
+      g("line", {x1:ax, y1:ay, x2:ix, y2:iy, stroke:a.color, "stroke-width":1.6,
+        "stroke-dasharray":"2 3", opacity:.85});
+      g("circle", {cx:ix, cy:iy, r:2.2, fill:"none", stroke:a.color, "stroke-width":1.4});
+    }
+
+    const [ex, ey] = punto(i, RETQ);
+    const cos = Math.cos(angulo(i));
+    const t = Kit.svg("text", {x:ex, y:ey + 4,
+      "text-anchor": cos > .25 ? "start" : cos < -.25 ? "end" : "middle",
+      fill: imp(a) >= 4 ? a.color : "#b3bfca",
+      style:"font:600 12.5px system-ui,sans-serif"});
+    t.textContent = a.corto;
+    t.style.cursor = "pointer";
+    t.onclick = () => $("tar-" + a.id).scrollIntoView({behavior:"smooth", block:"center"});
+    svg.appendChild(t);
+  });
+
+  g("circle", {cx:CX, cy:CY, r:4.5, fill:"#8fa2b3"});
+}
+
+/* ====================== LECTURAS ====================== */
+const CASOS = [
+{clave:"vacia", nombre:"Brújula sin declarar",
+ resumen:"Ningún ámbito llega a 4 en importancia.",
+ condicion: () => vivos().length === 0,
+ metafora:"Todavía no hay aguja que seguir.",
+ consulta:"O la hoja está sin trabajar, o la persona no logra nombrar qué le importa. Lo segundo es un dato clínico en sí mismo: aparece en episodios depresivos, en anhedonia sostenida y después de pérdidas grandes, donde todo se aplana por igual.",
+ foco:"No insistir con la hoja. Si de verdad nada llega a 4, la conversación es sobre el aplanamiento, no sobre valores.",
+ pregunta:"Si esto te lo hubiera preguntado hace dos años, ¿habrías contestado distinto?"},
+
+{clave:"alineada", nombre:"Vida alineada",
+ resumen:"Lo que importa y lo que se hace van casi a la par.",
+ condicion: () => vivos().every(a => imp(a) - acc(a) <= 2),
+ metafora:"Las dos siluetas casi se tocan.",
+ consulta:"Momento de coherencia. Suele verse en cierres de proceso, o al principio en quien consulta por algo puntual y no por un malestar general. También conviene mirarlo con cuidado: a veces significa que se bajó la importancia de lo que no se estaba pudiendo hacer.",
+ foco:"Conservar y hacer explícito qué está sosteniendo esa coherencia, para poder recuperarlo cuando venga una temporada difícil.",
+ pregunta:"¿Qué estás haciendo hoy que quieras seguir haciendo cuando venga una temporada difícil?"},
+
+{clave:"prestados", nombre:"Direcciones prestadas",
+ resumen:"Dos o más ámbitos importantes marcados como puestos por otros.",
+ condicion: () => vivos().filter(a => !mio(a) && imp(a) >= 7).length >= 2,
+ metafora:"La aguja apunta hacia donde otros la pusieron.",
+ consulta:"Cumplimiento por reglas ajenas, lo que ACT llama pliance: se actúa para quedar bien con quien mira, no porque la dirección importe. Es muy frecuente en caminos elegidos por la familia y en quien rinde sin saber para qué. El costo aparece como desmotivación crónica que no cede con técnicas de organización.",
+ foco:"Antes de trabajar acción comprometida hay que revisar de quién es la dirección. Si el valor es prestado, la conducta comprometida solo aprieta más la trampa.",
+ pregunta:"Si nadie se fuera a enterar nunca de lo que decidas aquí, ¿seguirías eligiendo esto?",
+ bandera:"Conviene explorar la historia de esas reglas y quién las sostiene hoy, antes de programar tareas."},
+
+{clave:"paralisis", nombre:"Todo importa, nada se mueve",
+ resumen:"Cinco o más ámbitos muy importantes con acción muy baja.",
+ condicion: () => AMBITOS.filter(a => imp(a) >= 7 && acc(a) <= 3).length >= 5,
+ metafora:"La silueta de lo que importa es enorme y la de lo que se hizo casi no existe.",
+ consulta:"Sobrecarga y parálisis. La persona no tiene un problema de valores sino de que todos pesan a la vez y ninguno arranca. Suele venir con culpa difusa y con la sensación de estar quedándole mal a todo el mundo.",
+ foco:"Reducir el frente. Un solo ámbito, una sola conducta, esta semana. Repartir tareas en cinco frentes reproduce exactamente el problema que trae.",
+ pregunta:"Si solo pudieras mover uno de estos ámbitos este mes y los demás siguieran igual, ¿cuál elegirías?",
+ bandera:"Cuando además la acción media está por debajo de 3, vale la pena tamizar sintomatología depresiva antes de programar conductas."},
+
+{clave:"automatico", nombre:"Piloto automático",
+ resumen:"Se actúa mucho en ámbitos que ya no importan tanto.",
+ condicion: () => AMBITOS.filter(a => acc(a) >= 7 && imp(a) <= 4).length >= 2,
+ metafora:"El cuerpo va rápido en una dirección que la brújula ya no señala.",
+ consulta:"La agenda quedó llena de lo que importaba antes. Se ve en quien sostiene un trabajo, una relación o una rutina por inercia, y después no entiende por qué está cansado si «no le está pasando nada malo». El vacío aquí no viene por falta de actividad sino por exceso de actividad sin dirección.",
+ foco:"Antes de agregar, restar. Qué de todo lo que se está haciendo dejó de tener sentido y se sostiene por costumbre o por evitar la conversación de soltarlo.",
+ pregunta:"¿Qué estás haciendo con mucha dedicación que hace rato dejó de importarte?"},
+
+{clave:"partida", nombre:"Vida partida en dos",
+ resumen:"Uno o dos ámbitos se llevan toda la acción mientras tres o más quedan abandonados.",
+ condicion: () => AMBITOS.filter(a => acc(a) >= 7).length <= 2 &&
+                  vivos().filter(a => acc(a) <= 3).length >= 3,
+ metafora:"Una punta larguísima y el resto de la brújula hundido.",
+ consulta:"Todo el combustible va a un solo frente, casi siempre trabajo o estudio, y lo demás se aplaza con la promesa de que después habrá tiempo. Es el patrón previo al agotamiento, y suele estar protegido por buenos resultados: mientras el rendimiento responda, nadie lo cuestiona.",
+ foco:"No negociar de entrada el ámbito fuerte: se trabaja recuperando uno de los abandonados, con una acción mínima que no compita con él.",
+ pregunta:"Lo que estás aplazando «para cuando pase esta temporada»: ¿cuántas temporadas lleva esperando?"},
+
+{clave:"unfrente", nombre:"Un solo frente descuidado",
+ resumen:"Un único ámbito con brecha grande y el resto en orden.",
+ condicion: () => vivos().filter(a => imp(a) - acc(a) >= 4).length === 1,
+ metafora:"La silueta se ve entera salvo por una muesca.",
+ consulta:"Buen pronóstico. La vida funciona y hay un frente concreto que quedó atrás, casi siempre por una razón identificable y reciente. La persona suele saber cuál es antes de terminar la hoja.",
+ foco:"Ir directo a ese ámbito con acción comprometida. No hace falta rodeo ni exploración larga.",
+ pregunta:"¿Qué pasó para que ese ámbito se quedara atrás, y qué haría falta para volver a él esta semana?"},
+
+{clave:"mixto", nombre:"Brecha repartida",
+ resumen:"Sin patrón dominante: se lee por el ámbito de mayor distancia y por el más vivo.",
+ condicion: () => true,
+ metafora:"Se lee por sus extremos.",
+ consulta:"No hay un patrón típico. La información está en la distancia concreta entre lo que se declara y lo que se hace, ámbito por ámbito.",
+ foco:"Trabajar desde el ámbito más vivo hacia el de mayor brecha: usar lo que ya funciona como palanca.",
+ pregunta:"De toda la hoja, ¿qué distancia te incomodó más al mirarla?"}
+];
+
+$("combinaciones").innerHTML = CASOS.map(c =>
+  `<div class="combi" data-k="${c.clave}">
+     <div class="cual"><b>${c.nombre}</b><span>${c.resumen}</span></div>
+     <div class="quehacer">${c.foco}</div>
+   </div>`).join("");
+
+function extremos(){
+  const v = vivos();
+  if(!v.length) return {mayor:null, vivo:null};
+  return {mayor: v.slice().sort((x, y) => (imp(y)-acc(y)) - (imp(x)-acc(x)))[0],
+          vivo:  v.slice().sort((x, y) => acc(y) - acc(x))[0]};
+}
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  AMBITOS.forEach(a => {
+    const i = imp(a), c = acc(a), b = i - c;
+    $("vimp-" + a.id).textContent = i;
+    $("vacc-" + a.id).textContent = c;
+    $("tar-" + a.id).classList.toggle("apagado", i < 4);
+
+    const et = $("br-" + a.id);
+    if(i < 4){ et.textContent = "no aplica"; et.style.background = "#f1f4f7";
+               et.style.color = "#9aa8b5"; }
+    else if(b <= 1){ et.textContent = "al día"; et.style.background = "var(--logro-fondo)";
+                     et.style.color = "var(--logro)"; }
+    else if(b <= 3){ et.textContent = "brecha " + b; et.style.background = "#fdf6e8";
+                     et.style.color = "#8a6a2c"; }
+    else { et.textContent = "brecha " + b; et.style.background = "var(--alerta-fondo)";
+           et.style.color = "var(--alerta)"; }
+  });
+
+  const v = vivos();
+  $("cAmbitos").textContent = v.length;
+  $("cBrecha").textContent = v.length
+    ? (v.reduce((s, a) => s + imp(a) - acc(a), 0) / v.length).toFixed(1) : "0.0";
+  $("cAccion").textContent = v.length
+    ? (v.reduce((s, a) => s + acc(a), 0) / v.length).toFixed(1) : "0.0";
+
+  dibujar();
+  leer();
+  sugerirAmbito();
+}
+
+function leer(){
+  const c = CASOS.find(c => c.condicion());
+  const {mayor, vivo} = extremos();
+  const rellenar = t => t
+    .replace("{mayor}", mayor ? mayor.nombre.toLowerCase() : "el ámbito con más distancia")
+    .replace("{vivo}",  vivo  ? vivo.nombre.toLowerCase()  : "el ámbito más activo");
+
+  $("lNombre").textContent   = c.nombre;
+  $("lMetafora").textContent = c.metafora;
+  $("lPregunta").textContent = rellenar(c.pregunta);
+  $("lBandera").innerHTML    = c.bandera ? `<div class="bandera">${c.bandera}</div>` : "";
+
+  if(c.clave === "mixto" && mayor && vivo)
+    $("lMetafora").textContent =
+      `Se sostiene en ${vivo.nombre.toLowerCase()} y se abre en ${mayor.nombre.toLowerCase()}.`;
+
+  /* la lectura vigente queda encendida dentro de todas las posibles: se ve
+     de un vistazo dónde cae esta persona y qué se hace con cada caso */
+  document.querySelectorAll(".combi").forEach(m => {
+    const suya = m.dataset.k === c.clave;
+    m.classList.toggle("activo", suya);
+    if(suya) m.querySelector(".quehacer").textContent = rellenar(c.foco);
+  });
+}
+
+/* ====================== ACCIÓN COMPROMETIDA ======================
+   La hoja no arma la acción: la conversación sí. Aquí solo queda el
+   recordatorio y el ámbito en el que se va a hacer. */
+Kit.chips("ambitoAccion", AMBITOS.map(a => a.nombre), refrescar, true);
+
+function sugerirAmbito(){
+  const {mayor} = extremos();
+  $("accSugerido").textContent = mayor
+    ? `La brújula señala ${mayor.nombre.toLowerCase()}: es donde hay más distancia entre lo que dices y lo que hiciste.`
+    : "Cuando algún ámbito llegue a 4 en importancia, la brújula señalará por dónde.";
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const l = [], v = vivos();
+  l.push("ÁMBITOS (importancia / acción / brecha)");
+  AMBITOS.forEach(a => {
+    if(imp(a) < 4 && acc(a) < 4) return;
+    const dirs = dirsDe(a);
+    const cierre = imp(a) >= 4
+      ? `${imp(a)}/${acc(a)}  brecha ${imp(a) - acc(a)}`
+      : `acción ${acc(a)} sin importancia declarada`;
+    l.push(`- ${a.nombre}: ${cierre}` +
+           (mio(a) || imp(a) < 4 ? "" : "  [dirección puesta por otros]") +
+           (dirs.length ? `\n  Direcciones: ${dirs.join(" · ")}` : ""));
+  });
+  if(v.length)
+    l.push("", `Ámbitos vivos: ${v.length}   Brecha media: ${$("cBrecha").textContent}` +
+              `   Acción media: ${$("cAccion").textContent}`);
+
+  const activa = document.querySelector(".combi.activo");
+  l.push("", "LECTURA: " + $("lNombre").textContent);
+  if(activa) l.push("Por dónde empezar: " + activa.querySelector(".quehacer").textContent.trim());
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("Alerta: " + band.textContent.trim());
+
+  const amb = Kit.activas("ambitoAccion");
+  if(amb.length) l.push("", "ACCIÓN COMPROMETIDA — ámbito: " + amb.join(", "));
+  return l.join("\n");
+}
+
+/* ====================== ARRANQUE ====================== */
+AMBITOS.forEach(a => {
+  $("imp-" + a.id).addEventListener("input", refrescar);
+  $("acc-" + a.id).addEventListener("input", refrescar);
+  $("aj-" + a.id).addEventListener("click", () => {
+    $("aj-" + a.id).classList.toggle("activa");
+    refrescar();
+    Kit.guardar();
+  });
+});
+Kit.iniciar({
+  clave: "act-brujula-de-valores",
+  alCambiar: refrescar,
+  resumen: resumen
+});

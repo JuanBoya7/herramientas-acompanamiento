@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro de pensamientos</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6;
+    --alerta:#b5651d; --ok:#3d7a5a; --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif;}
+  .envoltura{max-width:940px;margin:0 auto;padding:28px 20px 80px}
+  header.tapa{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:24px 26px;margin-bottom:22px}
+  h1{margin:0 0 6px;font-size:26px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px}
+  .credito{margin-top:14px;padding-top:12px;border-top:1px dashed var(--linea);
+    font-size:13px;color:var(--tinta-suave)}
+  .campos-id{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+  .campos-id label{flex:1 1 180px;font-size:13px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px}
+
+  section.paso{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:20px 24px;margin-bottom:16px}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
+    border-radius:50%;background:var(--acento);color:#fff;font-size:14px;font-weight:600;margin-right:10px}
+  h2{font-size:18px;margin:0 0 4px;display:flex;align-items:center}
+  .ayuda{margin:0 0 14px 38px;color:var(--tinta-suave);font-size:14px}
+  .cuerpo{margin-left:38px}
+  textarea,input[type=text]{width:100%;font:inherit;font-size:15px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:10px 12px;background:#fdfefe;resize:vertical}
+  textarea:focus,input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+  textarea{min-height:80px}
+
+  .medidor{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .medidor input[type=range]{flex:1 1 260px;accent-color:var(--acento)}
+  .valor{min-width:64px;text-align:center;font-weight:700;font-size:18px;
+    background:var(--acento-claro);color:var(--acento);border-radius:8px;padding:4px 8px}
+
+  .emociones{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .emo{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:6px 14px;
+    font-size:14px;cursor:pointer;color:var(--tinta-suave)}
+  .emo.activa{background:var(--acento);border-color:var(--acento);color:#fff}
+
+  .distorsiones{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .dist{border:1px solid var(--linea);border-radius:8px;padding:10px 12px;cursor:pointer;background:#fff}
+  .dist.activa{border-color:var(--alerta);background:#fdf4ec}
+  .dist b{display:block;font-size:14.5px}
+  .dist span{font-size:13px;color:var(--tinta-suave)}
+
+  .pistas{background:var(--acento-claro);border-left:3px solid var(--acento);
+    border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:12px;font-size:14px;color:#274b5c}
+  .pistas ul{margin:6px 0 0;padding-left:18px} .pistas li{margin:3px 0}
+
+  .cierre{background:#f0f7f3;border:1px solid #cbe3d7}
+  .comparacion{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}
+  .comparacion div{flex:1 1 200px;background:#fff;border:1px solid var(--linea);
+    border-radius:8px;padding:12px;text-align:center}
+  .comparacion .etiqueta{font-size:13px;color:var(--tinta-suave)}
+  .comparacion .cifra{font-size:26px;font-weight:700;color:var(--acento)}
+  .delta{font-size:14px;margin-top:10px;color:var(--ok);font-weight:600;text-align:center}
+
+  .barra{position:fixed;bottom:0;left:0;right:0;background:var(--papel);
+    border-top:1px solid var(--linea);padding:12px 20px;display:flex;gap:10px;
+    justify-content:center;flex-wrap:wrap}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff}
+  button:hover{filter:brightness(.97)}
+  .aviso{font-size:12.5px;color:var(--tinta-suave);text-align:center;margin-top:22px}
+
+  @media print{
+    body{background:#fff}
+    .barra,.emo:not(.activa),.dist:not(.activa){display:none}
+    section.paso,header.tapa{border-color:#bbb;break-inside:avoid;page-break-inside:avoid}
+    textarea{border-color:#ccc}
+    .envoltura{padding:0;max-width:none}
+  }
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>Registro de pensamientos</h1>
+  <p class="sub">Herramienta de reestructuración cognitiva. Sirve para revisar, en frío, un momento
+  en que te sentiste mal, y comprobar si el pensamiento que lo disparó resiste la evidencia.</p>
+  <div class="campos-id">
+    <label>Nombre <input type="text" id="nombre" placeholder="Opcional"></label>
+    <label>Fecha <input type="text" id="fecha"></label>
+    <label>Sesión / N.º de registro <input type="text" id="sesion" placeholder="Ej. Semana 3"></label>
+  </div>
+  <p class="credito">Ruta de Atención Clínica &middot; Espacio de consejería &middot; FUAA</p>
+</header>
+
+<section class="paso">
+  <h2><span class="num">1</span>La situación</h2>
+  <p class="ayuda">Qué pasó, sin interpretar todavía. Como si lo describiera una cámara: dónde estabas,
+  con quién, qué se dijo o qué ocurrió.</p>
+  <div class="cuerpo"><textarea id="situacion" placeholder="Ej. Ayer 4:00 p.m., salí del parcial de estadística. Comparé respuestas con dos compañeros y las mías no coincidían."></textarea></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>La emoción</h2>
+  <p class="ayuda">Elige una o varias, y califica qué tan intensa fue en ese momento (0 = nada, 100 = lo más intenso que has sentido).</p>
+  <div class="cuerpo">
+    <div class="emociones" id="emociones"></div>
+    <input type="text" id="otraEmocion" placeholder="Otra emoción (opcional)">
+    <div class="medidor" style="margin-top:14px">
+      <label for="intensidad" style="font-size:14px;color:var(--tinta-suave)">Intensidad</label>
+      <input type="range" id="intensidad" min="0" max="100" value="70">
+      <span class="valor" id="vIntensidad">70</span>
+    </div>
+    <div class="medidor" style="margin-top:10px">
+      <label for="corporal" style="font-size:14px;color:var(--tinta-suave);flex:0 0 100%">¿Dónde lo sentiste en el cuerpo?</label>
+      <input type="text" id="corporal" placeholder="Ej. presión en el pecho, mandíbula apretada, insomnio esa noche">
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El pensamiento automático</h2>
+  <p class="ayuda">La frase exacta que te cruzó por la cabeza. En tus palabras, sin suavizarla.
+  Si hubo varias, quédate con la que más pesó ("el pensamiento caliente").</p>
+  <div class="cuerpo">
+    <textarea id="pensamiento" placeholder="Ej. 'Perdí la materia, no sirvo para esta carrera.'"></textarea>
+    <div class="medidor" style="margin-top:12px">
+      <label for="creencia" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo creíste, de 0 a 100?</label>
+      <input type="range" id="creencia" min="0" max="100" value="80">
+      <span class="valor" id="vCreencia">80</span>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>¿Qué trampa del pensamiento reconoces?</h2>
+  <p class="ayuda">Marca las que apliquen. No se trata de que el pensamiento sea "falso": se trata de
+  ver si la mente tomó un atajo.</p>
+  <div class="cuerpo"><div class="distorsiones" id="distorsiones"></div></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">5</span>La evidencia</h2>
+  <p class="ayuda">Aquí es donde el registro hace su trabajo. Sé tan honesto en la columna de la izquierda
+  como en la de la derecha.</p>
+  <div class="cuerpo">
+    <label style="font-size:14px;font-weight:600">Hechos que APOYAN el pensamiento</label>
+    <textarea id="aFavor" placeholder="Solo hechos verificables, no interpretaciones."></textarea>
+    <label style="font-size:14px;font-weight:600;display:block;margin-top:14px">Hechos que NO lo apoyan</label>
+    <div class="pistas">
+      <b>Si te cuesta encontrarlos, pregúntate:</b>
+      <ul>
+        <li>¿Qué le diría a un amigo que me contara exactamente esto?</li>
+        <li>¿Ha pasado antes algo parecido? ¿Cómo terminó realmente?</li>
+        <li>¿Estoy tomando un momento como si fuera toda la historia?</li>
+        <li>Dentro de un año, ¿qué tanto va a pesar esto?</li>
+        <li>¿Qué información me falta todavía?</li>
+      </ul>
+    </div>
+    <textarea id="enContra"></textarea>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">6</span>Un pensamiento alternativo</h2>
+  <p class="ayuda">No un pensamiento positivo: uno <em>más completo</em>, que incluya toda la evidencia
+  de arriba. Debe ser algo que puedas creerte de verdad.</p>
+  <div class="cuerpo">
+    <textarea id="alternativo" placeholder="Ej. 'Me fue mal en un parcial de una materia difícil. Eso me preocupa y tiene solución: puedo revisar con el monitor y todavía quedan dos notas.'"></textarea>
+    <div class="medidor" style="margin-top:12px">
+      <label for="creenciaAlt" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo crees?</label>
+      <input type="range" id="creenciaAlt" min="0" max="100" value="50">
+      <span class="valor" id="vCreenciaAlt">50</span>
+    </div>
+  </div>
+</section>
+
+<section class="paso cierre">
+  <h2><span class="num">7</span>Cómo quedé</h2>
+  <p class="ayuda">Vuelve a calificar la emoción del paso 2, ahora, después de haber escrito todo esto.</p>
+  <div class="cuerpo">
+    <div class="medidor">
+      <label for="intensidadFinal" style="font-size:14px;color:var(--tinta-suave)">Intensidad ahora</label>
+      <input type="range" id="intensidadFinal" min="0" max="100" value="70">
+      <span class="valor" id="vIntensidadFinal">70</span>
+    </div>
+    <div class="comparacion">
+      <div><div class="etiqueta">Emoción antes</div><div class="cifra" id="cAntes">70</div></div>
+      <div><div class="etiqueta">Emoción después</div><div class="cifra" id="cDespues">70</div></div>
+      <div><div class="etiqueta">Creencia en el pensamiento</div><div class="cifra" id="cCreencia">80 → 50</div></div>
+    </div>
+    <div class="delta" id="delta"></div>
+    <label style="font-size:14px;font-weight:600;display:block;margin-top:16px">Un paso concreto para esta semana</label>
+    <textarea id="paso" placeholder="Pequeño, observable y con fecha. Ej. 'El martes le escribo al monitor para pedir asesoría antes del segundo parcial.'"></textarea>
+  </div>
+</section>
+
+<p class="aviso">Este material es apoyo psicoeducativo dentro de un espacio de consejería; no sustituye
+un proceso psicoterapéutico ni una valoración clínica. Lo que escribas se guarda únicamente en este
+equipo, en este navegador.</p>
+
+</div>
+
+<div class="barra">
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="guardar()">Guardar en este equipo</button>
+  <button onclick="limpiar()">Registro nuevo</button>
+</div>
+
+<script>
+const EMOCIONES = ["Ansiedad","Tristeza","Rabia","Culpa","Vergüenza","Miedo","Frustración","Soledad","Desánimo","Angustia"];
+const DISTORSIONES = [
+  ["Catastrofismo","Salto directo al peor escenario posible."],
+  ["Todo o nada","O es perfecto o es un fracaso; no hay grises."],
+  ["Sobregeneralización","Un hecho aislado se vuelve 'siempre' o 'nunca'."],
+  ["Lectura de mente","Doy por hecho lo que el otro está pensando de mí."],
+  ["Adivinar el futuro","Predigo el desenlace como si ya hubiera pasado."],
+  ["Filtro negativo","Solo veo lo que salió mal e ignoro el resto."],
+  ["Razonamiento emocional","Si lo siento así, entonces es así."],
+  ["Debería / tengo que","Reglas rígidas sobre cómo debo ser o actuar."],
+  ["Etiquetarme","Me pongo un rótulo global: 'soy un inútil'."],
+  ["Personalización","Me echo la culpa de algo que no controlo del todo."],
+  ["Descalificar lo positivo","Lo bueno 'no cuenta' o 'fue suerte'."],
+  ["Comparación constante","Me mido contra los demás y siempre pierdo."]
+];
+
+const $ = id => document.getElementById(id);
+const CAMPOS = ["nombre","fecha","sesion","situacion","otraEmocion","corporal","pensamiento",
+  "aFavor","enContra","alternativo","paso","intensidad","creencia","creenciaAlt","intensidadFinal"];
+
+// --- construcción de listas ---
+EMOCIONES.forEach(e=>{
+  const b=document.createElement("button");
+  b.className="emo"; b.type="button"; b.textContent=e;
+  b.onclick=()=>{b.classList.toggle("activa");guardar()};
+  $("emociones").appendChild(b);
+});
+DISTORSIONES.forEach(([t,d])=>{
+  const el=document.createElement("div");
+  el.className="dist"; el.innerHTML=`<b>${t}</b><span>${d}</span>`;
+  el.onclick=()=>{el.classList.toggle("activa");guardar()};
+  $("distorsiones").appendChild(el);
+});
+
+// --- medidores ---
+function enlazar(rango,salida,alCambiar){
+  const r=$(rango), s=$(salida);
+  const act=()=>{s.textContent=r.value; if(alCambiar)alCambiar(); guardar()};
+  r.addEventListener("input",act); act();
+}
+function resumen(){
+  const a=+$("intensidad").value, d=+$("intensidadFinal").value;
+  $("cAntes").textContent=a; $("cDespues").textContent=d;
+  $("cCreencia").textContent=$("creencia").value+" → "+$("creenciaAlt").value;
+  const dif=a-d;
+  $("delta").textContent = dif>0 ? `La intensidad bajó ${dif} puntos.`
+    : dif<0 ? `La intensidad subió ${-dif} puntos. Vale la pena revisarlo en sesión.` : "";
+}
+enlazar("intensidad","vIntensidad",resumen);
+enlazar("creencia","vCreencia",resumen);
+enlazar("creenciaAlt","vCreenciaAlt",resumen);
+enlazar("intensidadFinal","vIntensidadFinal",resumen);
+
+// --- persistencia local ---
+const CLAVE="registro-pensamientos";
+function guardar(){
+  const d={};
+  CAMPOS.forEach(c=>d[c]=$(c).value);
+  d._emo=[...document.querySelectorAll(".emo")].map(b=>b.classList.contains("activa"));
+  d._dist=[...document.querySelectorAll(".dist")].map(b=>b.classList.contains("activa"));
+  try{localStorage.setItem(CLAVE,JSON.stringify(d))}catch(e){}
+}
+function cargar(){
+  let d; try{d=JSON.parse(localStorage.getItem(CLAVE)||"null")}catch(e){}
+  if(!d) return;
+  CAMPOS.forEach(c=>{if(d[c]!==undefined)$(c).value=d[c]});
+  (d._emo||[]).forEach((v,i)=>{if(v)document.querySelectorAll(".emo")[i].classList.add("activa")});
+  (d._dist||[]).forEach((v,i)=>{if(v)document.querySelectorAll(".dist")[i].classList.add("activa")});
+  ["intensidad","creencia","creenciaAlt","intensidadFinal"].forEach(r=>$(r).dispatchEvent(new Event("input")));
+}
+function limpiar(){
+  if(!confirm("¿Empezar un registro nuevo? Se borrará lo que está en pantalla.")) return;
+  try{localStorage.removeItem(CLAVE)}catch(e){}
+  location.reload();
+}
+CAMPOS.forEach(c=>$(c).addEventListener("input",guardar));
+cargar();
+if(!$("fecha").value) $("fecha").value=new Date().toLocaleDateString("es-CO");
+resumen();
+</script>
+</body>
+</html>

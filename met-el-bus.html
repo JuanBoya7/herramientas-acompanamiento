@@ -1,0 +1,1339 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El bus y los pasajeros</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6;
+    --alerta:#8a4a2c; --alerta-fondo:#fdf3ef; --alerta-linea:#f0d3c6;
+    --logro:#3f7d5a; --logro-fondo:#eef6f1;
+    --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+
+  /* ---------- cabecera ---------- */
+  header.tapa,section.bloque,section.paso{background:var(--papel);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:74ch}
+  .fuente{margin:10px 0 0;font-size:12.5px;color:var(--tinta-suave);font-style:italic}
+  .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--linea)}
+  .campos-id label{flex:1 1 160px;font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fdfefe}
+  .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+
+  /* ---------- pasos y bloques ---------- */
+  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;display:flex;
+    align-items:center;gap:11px}
+  .num{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);font-size:14px;font-weight:700}
+  .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+  .cuerpo{margin-top:14px}
+  textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
+    font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
+    padding:9px 11px;background:#fdfefe}
+  textarea{min-height:78px;resize:vertical;line-height:1.5}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--acento-claro);
+    border-color:var(--acento)}
+  label.etiqueta{font-size:13.5px;font-weight:600;display:block;margin:14px 0 5px}
+  label.etiqueta:first-child{margin-top:0}
+
+  /* ---------- fichas de opcion ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{font:inherit;font-size:13.5px;border:1px solid var(--linea);border-radius:999px;
+    padding:6px 14px;cursor:pointer;background:#fdfefe;color:var(--tinta-suave);
+    transition:background .12s,color .12s,border-color .12s}
+  .chip:hover{border-color:var(--acento)}
+  .chip.activa{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  /* ficha añadida por la persona: lleva su aspa para quitarla */
+  .chip.libre{padding-right:8px;display:inline-flex;align-items:center;gap:7px}
+  .chip.libre .quitarChip{display:inline-flex;align-items:center;justify-content:center;
+    width:16px;height:16px;border-radius:50%;font-size:13px;line-height:1;opacity:.55}
+  .chip.libre .quitarChip:hover{opacity:1;background:#ffffff40}
+  /* el boton de agregar: mismo tamaño, sin peso visual */
+  .chip.mas{border-style:dashed;color:var(--acento);font-weight:700;padding:6px 13px;
+    line-height:1}
+  .chip.mas:hover{background:var(--acento-claro)}
+  input.chipNuevo{font:inherit;font-size:13.5px;border:1px solid var(--acento);
+    border-radius:999px;padding:6px 14px;background:#fff;width:auto;min-width:190px}
+
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px}
+  .opcion{border:1px solid var(--linea);border-radius:9px;padding:10px 13px;cursor:pointer;
+    background:#fdfefe;transition:border-color .12s,background .12s}
+  .opcion:hover{border-color:var(--acento)}
+  .opcion.activa{border-color:var(--acento);background:var(--acento-claro)}
+  .opcion b{display:block;font-size:14px;margin-bottom:2px}
+  .opcion span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+
+  /* ---------- lo que se deja abierto ----------
+     Sin rotulo ni instruccion: una pregunta puesta en la hoja para que el
+     profesional la use cuando corresponda. */
+  .hablado{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f;margin:12px 0}
+  .hablado b{color:#16303d}
+  details.apunte{margin-top:9px}
+  details.apunte summary{cursor:pointer;font-size:12px;color:var(--tinta-suave);
+    list-style:none;display:inline-flex;align-items:center;gap:5px}
+  details.apunte summary::-webkit-details-marker{display:none}
+  details.apunte summary::before{content:"+";display:inline-flex;align-items:center;
+    justify-content:center;width:15px;height:15px;border:1px solid var(--linea);
+    border-radius:4px;font-size:12px;line-height:1}
+  details.apunte[open] summary::before{content:"\2212"}
+  details.apunte summary:hover{color:var(--acento)}
+  details.apunte textarea,details.apunte input{margin-top:7px;font-size:14px}
+  details.apunte textarea{min-height:52px}
+
+  /* ---------- mostrador y ranuras (arrastrar o tocar) ---------- */
+  .mostrador{margin-top:6px}
+  .mostrador .grupo{margin-bottom:13px}
+  .mostrador .grupo > .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.7px;
+    color:var(--tinta-suave);font-weight:700;margin-bottom:6px}
+  .pieza{border:1px solid var(--linea);border-radius:9px;padding:9px 12px;background:#fdfefe;
+    cursor:grab;transition:border-color .12s,transform .12s,opacity .12s;user-select:none}
+  .pieza:hover{border-color:var(--acento);transform:translateY(-1px)}
+  .pieza.usada{opacity:.32;cursor:default;pointer-events:none}
+  .pieza.arrastrando{opacity:.5}
+  .pieza b{display:block;font-size:13.5px;margin-bottom:2px}
+  .pieza span{display:block;font-size:12px;color:var(--tinta-suave);line-height:1.42}
+  .ranuras{display:grid;gap:10px}
+  .ranura{border:2px dashed var(--linea);border-radius:10px;padding:13px 15px;min-height:64px;
+    display:flex;align-items:center;gap:11px;background:#fbfcfd;transition:border-color .12s,
+    background .12s}
+  .ranura.encima{border-color:var(--acento);background:var(--acento-claro)}
+  .ranura.llena{border-style:solid;background:var(--papel)}
+  .ranura .hueco{color:#adb9c4;font-size:13.5px;font-style:italic}
+  .ranura .puesto{flex:1}
+  .ranura .puesto b{display:block;font-size:14.5px}
+  .ranura .puesto span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+  .ranura .orden{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);display:flex;align-items:center;justify-content:center;font-size:13px;
+    font-weight:700}
+  .ranura .sacar{flex:0 0 auto;border:0;background:transparent;color:var(--tinta-suave);
+    font-size:18px;cursor:pointer;padding:2px 7px;border-radius:6px;line-height:1}
+  .ranura .sacar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .pista-arrastre{font-size:12.5px;color:var(--tinta-suave);margin:0 0 9px}
+
+  /* ---------- medidores ---------- */
+  .medidor{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .medidor label{font-size:13.5px;color:var(--tinta-suave)}
+  .medidor input[type=range]{flex:1;min-width:130px;height:22px;accent-color:var(--acento)}
+  .valor{min-width:44px;text-align:center;font-weight:700;font-size:16px;color:var(--acento)}
+  .marcador{min-width:46px;text-align:center;font-weight:700;font-size:17px;color:#fff;
+    border-radius:7px;padding:2px 6px}
+
+  /* ---------- lectura / resultado ---------- */
+  .lectura{border-left:5px solid var(--acento);background:linear-gradient(180deg,#f7fbfd,#fff)}
+  .lectura .nombre{font-size:22px;font-weight:700;margin:2px 0}
+  .lectura .metafora{font-size:15px;color:var(--tinta-suave);font-style:italic;margin:0 0 14px}
+  .campo{margin-bottom:12px}
+  .campo .etq{font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--acento);
+    font-weight:700;margin-bottom:3px}
+  .campo p{margin:0;font-size:14.5px}
+  .pregunta{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f}
+  .bandera{background:var(--alerta-fondo);border:1px solid var(--alerta-linea);border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--alerta);margin-top:12px}
+  .logro{background:var(--logro-fondo);border:1px solid #cfe4d8;border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--logro);margin-top:12px}
+  .pistas{background:#f6f9fb;border-left:3px solid var(--linea);border-radius:0 6px 6px 0;
+    padding:9px 13px;margin:9px 0;font-size:13.5px;color:#3f5163}
+  .pistas b{color:var(--acento)}
+  .pistas ul{margin:5px 0 0;padding-left:19px}
+  .pistas li{margin-bottom:3px}
+  .velo{color:var(--tinta-suave);font-size:14.5px;text-align:center;padding:26px 14px;
+    border:1px dashed var(--linea);border-radius:9px;line-height:1.6}
+
+  /* ---------- lectura condensada: cuadro + su indicacion al lado ---------- */
+  .combinaciones{display:grid;gap:8px;margin-top:12px}
+  .combi{display:grid;grid-template-columns:minmax(150px,34%) 1fr;gap:0;
+    border:1px solid var(--linea);border-radius:9px;overflow:hidden;font-size:13px}
+  .combi .cual{padding:9px 13px;background:#f6f9fb;border-right:1px solid var(--linea)}
+  .combi .cual b{display:block;font-size:13.5px;color:var(--tinta);margin-bottom:1px}
+  .combi .cual span{color:var(--tinta-suave);font-size:12px;line-height:1.4}
+  .combi .quehacer{padding:9px 13px;color:var(--tinta-suave);line-height:1.45}
+  .combi.activo{border-color:var(--acento);box-shadow:0 0 0 2px var(--acento-claro)}
+  .combi.activo .cual{background:var(--acento-claro)}
+  .combi.activo .cual b,.combi.activo .quehacer{color:var(--tinta)}
+  @media (max-width:620px){.combi{grid-template-columns:1fr}
+    .combi .cual{border-right:0;border-bottom:1px solid var(--linea)}}
+
+  details.catalogo{margin-top:14px;border-top:1px dashed var(--linea);padding-top:12px}
+  details.catalogo summary{cursor:pointer;font-size:13.5px;color:var(--acento);font-weight:600}
+  .lista-perfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:8px;margin-top:11px}
+  .mini{border:1px solid var(--linea);border-radius:8px;padding:9px 12px;font-size:12.5px;
+    color:var(--tinta-suave)}
+  .mini.activo{border-color:var(--acento);background:var(--acento-claro);color:var(--tinta)}
+  .mini b{display:block;color:var(--tinta);font-size:13.5px;margin-bottom:2px}
+
+  /* ---------- tablas ---------- */
+  .tabla{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tabla th,.tabla td{border:1px solid var(--linea);padding:7px 9px;text-align:left;
+    vertical-align:top}
+  .tabla th{background:var(--acento-claro);color:#23404f;font-size:12.5px;font-weight:700}
+  .desliza{overflow-x:auto}
+
+  /* ---------- notas del profesional, plegadas ---------- */
+  details.notas-pro{background:linear-gradient(180deg,#faf8fd,#fff);border:1px solid var(--linea);
+    border-left:5px solid #7a6a9c;border-radius:var(--radio);padding:14px 20px;margin-bottom:16px}
+  details.notas-pro summary{cursor:pointer;font-size:15px;font-weight:700;color:#5b4d7a;
+    list-style:none;display:flex;align-items:center;gap:10px}
+  details.notas-pro summary::-webkit-details-marker{display:none}
+  details.notas-pro summary::before{content:"\270E";display:inline-flex;align-items:center;
+    justify-content:center;width:27px;height:27px;border-radius:50%;background:#efeaf7;
+    font-size:14px}
+  details.notas-pro[open] summary{margin-bottom:4px}
+
+  /* ---------- modo lámina: hojas para exponer ----------
+     Menos texto por bloque, letra más grande y todo en fichas del mismo
+     tamaño, para que se lea proyectado y no parezca un formulario. */
+  body.lamina{font-size:17px}
+  body.lamina .envoltura{max-width:1080px}
+  body.lamina h1{font-size:28px}
+  body.lamina .sub{font-size:15.5px;max-width:70ch}
+  body.lamina section.paso h2,body.lamina section.bloque h2{font-size:21px}
+  body.lamina .ayuda{font-size:14.5px}
+  body.lamina .chip{font-size:14.5px;padding:7px 16px}
+  body.lamina .opcion b{font-size:15px}
+  body.lamina .opcion span{font-size:13.5px}
+  body.lamina label.etiqueta{font-size:15px}
+  body.lamina .pregunta{font-size:16.5px}
+
+  .rejilla-fichas{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));
+    gap:11px;margin-top:12px}
+  .ficha-l{border:1px solid var(--linea);border-top:4px solid var(--acento);border-radius:10px;
+    padding:13px 15px;background:#fff}
+  .ficha-l .t{font-size:15.5px;font-weight:700;margin-bottom:4px;line-height:1.3}
+  .ficha-l .d{font-size:13.5px;color:var(--tinta-suave);line-height:1.45}
+  .ficha-l .chips{margin-top:9px}
+
+  /* el rótulo pequeño que ubica de qué ficha del manual viene cada cosa */
+  .procedencia{font-size:11.5px;color:var(--tinta-suave);letter-spacing:.3px;margin:2px 0 0}
+
+  /* ---------- escenas que se mueven ----------
+     Las hojas en las que la metáfora ocurre en tiempo real: el escenario, los
+     marcadores debajo, los mandos al pie y la pregunta sola al final. */
+  .escenario{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 12px 10px;margin-bottom:16px;overflow:hidden}
+  .escenario > svg,.escenario .lienzo > svg{display:block;width:100%;height:auto;margin:0 auto}
+  .escenario .lienzo{position:relative;max-width:700px;margin:0 auto}
+  .marcas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:11px}
+  .marcas div{text-align:center;min-width:92px}
+  .marcas .n{font-size:23px;font-weight:700;display:block;line-height:1.15;
+    font-variant-numeric:tabular-nums}
+  .marcas .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave)}
+  .mandos{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px;
+    padding-top:12px;border-top:1px dashed var(--linea)}
+  .duracion{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .duracion .chip{font-size:14px;padding:8px 18px}
+  /* la pregunta que abre la conversación, sin rótulo ni informe alrededor */
+  .pregunta-sola{border-left:5px solid var(--acento);
+    background:linear-gradient(180deg,#f7fbfd,#fff);transition:border-color .4s,background .4s}
+  .pregunta-sola .pregunta{background:transparent;padding:0;font-size:17px;line-height:1.5}
+  @media print{.mandos,.duracion{display:none !important}}
+
+  /* ---------- barra al final de la hoja ---------- */
+  .barra{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 20px;margin-top:22px}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button:hover{border-color:var(--acento)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .brindis{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    background:var(--tinta);color:#fff;font-size:13.5px;padding:8px 16px;border-radius:8px;
+    z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+  .brindis.visible{opacity:.94}
+
+  @media (max-width:820px){
+    .envoltura{padding:16px 12px 32px}
+    header.tapa,section.bloque,section.paso{padding:16px 15px}
+  }
+  @media print{
+    body{background:#fff}
+    .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
+    .opcion:not(.activa),.borrar{display:none !important}
+    header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
+    details.notas-pro,details.apunte,details.notas-pro > .cuerpo{display:block}
+    details.notas-pro summary{list-style:none}
+    .envoltura{padding:0;max-width:100%}
+    textarea{min-height:0;height:auto}
+  }
+
+  /* el reto aparece sobre el bus: la decisión se toma dentro de la escena, y
+     dura unos segundos. Si no se toca, se va sola. */
+  .reto{position:absolute;transform:translateX(-50%);z-index:3}
+  .reto button{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600;
+    font-size:13.5px;padding:8px 15px;white-space:nowrap;
+    box-shadow:0 3px 10px rgba(138,61,61,.3);animation:latido 1.2s ease-in-out infinite}
+  .reto::after{content:"";position:absolute;left:50%;margin-left:-7px;bottom:-7px;width:0;height:0;
+    border-left:7px solid transparent;border-right:7px solid transparent;
+    border-top:8px solid #8a3d3d}
+  @keyframes latido{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  button.arranque{background:#3f7d5a;border-color:#3f7d5a;color:#fff;font-weight:600}
+  button.arranque:hover{background:#356b4d;border-color:#356b4d}
+  button.arranque:disabled{background:#b9cec2;border-color:#b9cec2}
+
+  .bitacora{max-height:190px;overflow-y:auto;margin-top:6px}
+  .tramo{display:flex;gap:11px;align-items:baseline;font-size:13.5px;padding:6px 10px;
+    border-bottom:1px solid var(--linea)}
+  .tramo:last-child{border-bottom:0}
+  .tramo .cual{flex:0 0 42px;font-weight:700;color:var(--tinta-suave);font-size:12px;
+    font-variant-numeric:tabular-nums}
+  .tramo.avanzo{background:#f4faf6}
+  .tramo.paro{background:#fdf6f4}
+  .tramo .que{flex:1}
+  .tramo .km{font-weight:700;font-size:12.5px;white-space:nowrap}
+  @media print{.reto{display:none}}
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>El bus y los pasajeros</h1>
+  <p class="sub">Tú manejas el bus. Los pasajeros son los pensamientos, las emociones y los recuerdos que se subieron sin permiso. El bus avanza solo mientras conduces: no hay botón de avanzar. Ellos gritan cuando quieren, y en ese momento aparece encima del bus la opción de parar a discutir, unos segundos y se va. Parar detiene los kilómetros; el reloj del viaje no se detiene con nada.</p>
+  <p class="fuente">Compromiso y acción, y metáfora del vecino indeseable, en Díaz Corbobés, MANUAL ACT §3.7, sobre la metáfora clásica de los pasajeros del autobús de Hayes, Strosahl y Wilson.</p>
+
+</header>
+
+<section class="paso">
+  <h2><span class="num">1</span>¿Hacia dónde va el bus?</h2>
+  <p class="ayuda">Una dirección valiosa, no una meta terminable: a una meta se llega y de una
+  dirección no te bajas nunca.</p>
+  <div class="cuerpo">
+    <div class="chips" id="destino"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>¿Quiénes se subieron?</h2>
+  <p class="ayuda">No los elegiste y no se bajan en la próxima esquina.</p>
+  <div class="cuerpo">
+    <div class="chips" id="pasajeros"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <div class="lienzo">
+    <svg id="ruta" viewBox="0 0 700 330" role="img"
+      aria-label="El bus avanzando hacia el destino con los pasajeros a bordo"></svg>
+    <div class="reto" id="reto" hidden>
+      <button type="button" onclick="discutir()">Parar a discutir con ellos</button>
+    </div>
+  </div>
+  <div class="marcas">
+    <div><span class="n" id="mKm" style="color:#3f7d5a">0</span><span class="r">km recorridos</span></div>
+    <div><span class="n" id="mReloj" style="color:#2f6f8f">0:00</span><span class="r">del viaje</span></div>
+    <div><span class="n" id="mParadas" style="color:#8a3d3d">0</span><span class="r">paradas a discutir</span></div>
+    <div><span class="n" id="mEnergia" style="color:#2f6f8f">100</span><span class="r">energía</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Arrancar el bus</button>
+    <button type="button" id="btnPausa" onclick="pausar()">Pausa</button>
+    <button type="button" onclick="reiniciarViaje()">Empezar el viaje de nuevo</button>
+  </div>
+</div>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">El viaje</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Qué muestra el tablero</div><p id="lComo"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+  <div id="lBandera"></div>
+
+  <details class="catalogo" open>
+    <summary>Bitácora del viaje</summary>
+    <div class="bitacora" id="bitacora"></div>
+  </details>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El primer tramo de verdad</h2>
+  <p class="ayuda">Fuera de la pantalla. Un tramo corto, con los pasajeros gritando igual.</p>
+  <div class="cuerpo">
+    <div class="chips" id="tramoReal"></div>
+  </div>
+</section>
+
+<details class="notas-pro">
+  <summary>Notas del profesional</summary>
+  <div class="cuerpo">
+    <label class="etiqueta">Observaciones del proceso</label>
+    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+    <label class="etiqueta">Hipótesis de trabajo</label>
+    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+    <label class="etiqueta">Tarea acordada</label>
+    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+    <label class="etiqueta">Para la próxima sesión</label>
+    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+    <p class="ayuda" style="margin-top:12px">
+      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+      No incluir estas notas al imprimir</label>
+    </p>
+  </div>
+</details>
+
+<div class="barra">
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="Kit.copiar()">Copiar resumen</button>
+  <button onclick="Kit.guardar(true)">Guardar</button>
+  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
+
+</div>
+<div class="brindis" id="brindis"></div>
+
+<script>
+/* ============================================================
+   Kit común de las herramientas.
+   Se inserta completo en cada archivo: no hay dependencias externas
+   y todo funciona abriendo el HTML con doble clic, sin internet.
+   ============================================================ */
+var Kit = (function(){
+
+  var CLAVE = "herramienta";
+  var ganchos = {};            // extra, restaurar, alCambiar, resumen
+  var listo = false;
+
+  /* ---------- utilidades ---------- */
+  function $(id){ return document.getElementById(id); }
+  function crearEl(tag, clase, texto){
+    var e = document.createElement(tag);
+    if(clase) e.className = clase;
+    if(texto !== undefined) e.textContent = texto;
+    return e;
+  }
+  function svg(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  /* mezcla dos colores hex; t=0 devuelve a, t=1 devuelve b */
+  function mezcla(a, b, t){
+    t = Math.max(0, Math.min(1, t));
+    function n(c, i){ return parseInt(c.substr(1 + i*2, 2), 16); }
+    var r = Math.round(n(a,0) + (n(b,0) - n(a,0)) * t),
+        g = Math.round(n(a,1) + (n(b,1) - n(a,1)) * t),
+        z = Math.round(n(a,2) + (n(b,2) - n(a,2)) * t);
+    return "#" + [r,g,z].map(function(v){ return ("0"+v.toString(16)).slice(-2); }).join("");
+  }
+  function escapar(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  /* Se conserva por compatibilidad: estas hojas son de uso clínico. */
+  function modo(){ return "clinica"; }
+
+  /* ---------- fichas ----------
+     Pocas fichas, las más frecuentes, y un "+" para que la persona ponga la
+     suya. Lo que agrega se guarda con la hoja y vuelve al recargar.        */
+  var LIBRES = {};      // contenedorId -> [texto, ...]
+  var REG = {};         // contenedorId -> {lista, alCambiar, sinMas}
+
+  function unChip(contId, txt, id, alCambiar, libre){
+    var b = crearEl("button", "chip" + (libre ? " libre" : ""));
+    b.type = "button";
+    b.id = id;
+    b.setAttribute("data-txt", txt);
+    b.appendChild(document.createTextNode(txt));
+    if(libre){
+      var x = crearEl("span", "quitarChip", "×");
+      x.title = "Quitar";
+      x.onclick = function(ev){
+        ev.stopPropagation();
+        var l = LIBRES[contId] || [], i = l.indexOf(txt);
+        if(i >= 0) l.splice(i, 1);
+        redibujar(contId);
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      b.appendChild(x);
+    }
+    b.onclick = function(){
+      b.classList.toggle("activa");
+      if(alCambiar) alCambiar();
+      guardar();
+    };
+    return b;
+  }
+
+  function botonMas(contId, alCambiar){
+    var mas = crearEl("button", "chip mas", "+");
+    mas.type = "button";
+    mas.title = "Agregar una tuya";
+    mas.onclick = function(){
+      var caja = mas.parentElement;
+      var campo = document.createElement("input");
+      campo.type = "text";
+      campo.className = "chipNuevo";
+      campo.placeholder = "En tus palabras…";
+      caja.insertBefore(campo, mas);
+      mas.style.display = "none";
+      var cerrado = false;
+      function cerrar(guardarlo){
+        if(cerrado) return;
+        cerrado = true;
+        var txt = campo.value.trim();
+        campo.remove();
+        mas.style.display = "";
+        if(guardarlo && txt){
+          agregarLibre(contId, txt);
+          if(alCambiar) alCambiar();
+        }
+      }
+      campo.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter"){ ev.preventDefault(); cerrar(true); }
+        if(ev.key === "Escape"){ ev.preventDefault(); cerrar(false); }
+      });
+      campo.addEventListener("blur", function(){ cerrar(true); });
+      campo.focus();
+    };
+    return mas;
+  }
+
+  /* Agrega una ficha propia ya marcada. */
+  function agregarLibre(contId, txt){
+    if(!LIBRES[contId]) LIBRES[contId] = [];
+    if(LIBRES[contId].indexOf(txt) < 0) LIBRES[contId].push(txt);
+    redibujar(contId);
+    var l = LIBRES[contId], id = contId + "-libre-" + l.indexOf(txt);
+    if($(id)) $(id).classList.add("activa");
+    guardar();
+  }
+
+  function redibujar(contId){
+    var r = REG[contId];
+    if(r) chips(contId, r.lista, r.alCambiar, r.sinMas);
+  }
+
+  /* chips("miCaja", ["Una","Otra"], alCambiar)  -> con boton "+"
+     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"          */
+  function chips(contenedorId, lista, alCambiar, sinMas){
+    var c = $(contenedorId);
+    if(!c) return;
+    REG[contenedorId] = {lista:lista, alCambiar:alCambiar, sinMas:sinMas};
+    var marcadas = {};
+    for(var k = 0; k < c.children.length; k++)
+      if(c.children[k].classList.contains("activa"))
+        marcadas[c.children[k].getAttribute("data-txt")] = 1;
+
+    c.innerHTML = "";
+    c.classList.add("chips");
+    lista.forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-" + i, alCambiar);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    (LIBRES[contenedorId] || []).forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, alCambiar, true);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    if(!sinMas) c.appendChild(botonMas(contenedorId, alCambiar));
+  }
+
+  /* Tarjetas con título y descripción. lista: [["Título","Descripción"], ...] */
+  function opciones(contenedorId, lista, alCambiar, unica){
+    var c = $(contenedorId);
+    if(!c) return;
+    c.innerHTML = "";
+    c.classList.add("tarjetas");
+    lista.forEach(function(par, i){
+      var e = crearEl("div", "opcion");
+      e.id = contenedorId + "-" + i;
+      e.setAttribute("data-txt", par[0]);
+      e.innerHTML = "<b>" + escapar(par[0]) + "</b><span>" + escapar(par[1] || "") + "</span>";
+      e.onclick = function(){
+        if(unica) for(var j=0;j<c.children.length;j++)
+          if(c.children[j] !== e) c.children[j].classList.remove("activa");
+        e.classList.toggle("activa");
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      c.appendChild(e);
+    });
+  }
+
+  /* ---------- mostrador con ranuras ----------
+     El patrón de arrastrar-o-tocar: un mostrador de piezas y unas ranuras que
+     las reciben. Se arrastra en escritorio y se toca en celular.
+
+     cfg = {bancoId, ranurasId, cupo, items:[{id,titulo,desc,grupo,color}],
+            etiquetas:[...], alCambiar}                                     */
+  function mostrador(cfg){
+    var banco = $(cfg.bancoId), ranuras = $(cfg.ranurasId);
+    var puestas = [];                       // ids colocados, en orden
+    var porId = {};
+    cfg.items.forEach(function(it){ porId[it.id] = it; });
+
+    function pintarBanco(){
+      var grupos = [], vistos = {};
+      cfg.items.forEach(function(it){
+        var g = it.grupo || "";
+        if(!vistos[g]){ vistos[g] = []; grupos.push(g); }
+        vistos[g].push(it);
+      });
+      banco.innerHTML = "";
+      banco.classList.add("mostrador");
+      grupos.forEach(function(g){
+        var caja = crearEl("div", "grupo");
+        var col = vistos[g][0] && vistos[g][0].color;
+        if(g){
+          var tit = crearEl("div", "titulin", g);
+          if(col) tit.style.color = col;
+          caja.appendChild(tit);
+        }
+        var rejilla = crearEl("div", "tarjetas");
+        vistos[g].forEach(function(it){
+          var e = crearEl("div", "pieza" + (puestas.indexOf(it.id) >= 0 ? " usada" : ""));
+          e.draggable = true;
+          if(it.color){
+            e.style.borderLeft = "4px solid " + it.color;
+            e.style.background = it.color + "0f";
+          }
+          e.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          e.addEventListener("dragstart", function(ev){
+            ev.dataTransfer.setData("text/plain", it.id);
+            e.classList.add("arrastrando");
+          });
+          e.addEventListener("dragend", function(){ e.classList.remove("arrastrando"); });
+          e.addEventListener("click", function(){ poner(it.id); });
+          rejilla.appendChild(e);
+        });
+        caja.appendChild(rejilla);
+        banco.appendChild(caja);
+      });
+    }
+
+    function pintarRanuras(){
+      ranuras.innerHTML = "";
+      ranuras.classList.add("ranuras");
+      for(var i = 0; i < cfg.cupo; i++)(function(i){
+        var id = puestas[i], it = id ? porId[id] : null;
+        var r = crearEl("div", "ranura" + (it ? " llena" : ""));
+        if(it && it.color){
+          r.style.borderColor = it.color;
+          r.style.background = it.color + "0f";
+        }
+        r.appendChild(crearEl("span", "orden", i + 1));
+        if(it){
+          if(it.color) r.lastChild.style.background = it.color + "26";
+          var p = crearEl("div", "puesto");
+          p.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          r.appendChild(p);
+          var x = crearEl("button", "sacar", "×");
+          x.type = "button";
+          x.title = "Sacar";
+          x.onclick = function(){ sacar(i); };
+          r.appendChild(x);
+        } else {
+          r.appendChild(crearEl("span", "hueco",
+            (cfg.etiquetas && cfg.etiquetas[i]) || "Arrastra aquí, o toca una del mostrador"));
+        }
+        r.addEventListener("dragover", function(ev){
+          ev.preventDefault();
+          r.classList.add("encima");
+        });
+        r.addEventListener("dragleave", function(){ r.classList.remove("encima"); });
+        r.addEventListener("drop", function(ev){
+          ev.preventDefault();
+          r.classList.remove("encima");
+          poner(ev.dataTransfer.getData("text/plain"), i);
+        });
+        ranuras.appendChild(r);
+      })(i);
+    }
+
+    function poner(id, i){
+      if(!porId[id] || puestas.indexOf(id) >= 0) return;
+      if(i === undefined || puestas.length < i){
+        if(puestas.length >= cfg.cupo){ brindis("Las ranuras están llenas"); return; }
+        puestas.push(id);
+      } else {
+        puestas[i] = id;
+      }
+      refrescar();
+    }
+    function sacar(i){
+      puestas.splice(i, 1);
+      refrescar();
+    }
+    function refrescar(){
+      puestas = puestas.filter(function(x){ return x; });
+      pintarBanco();
+      pintarRanuras();
+      if(cfg.alCambiar) cfg.alCambiar();
+      guardar();
+    }
+
+    refrescar();
+    return {
+      elegidas: function(){ return puestas.map(function(id){ return porId[id]; }); },
+      ids: function(){ return puestas.slice(); },
+      cargar: function(lista){ puestas = (lista || []).filter(function(x){ return porId[x]; }); refrescar(); },
+      poner: poner,
+      refrescar: refrescar
+    };
+  }
+
+  /* Devuelve los textos marcados dentro de un contenedor de chips u opciones */
+  function activas(contenedorId){
+    var c = $(contenedorId), fuera = [];
+    if(!c) return fuera;
+    for(var i=0;i<c.children.length;i++){
+      var h = c.children[i];
+      if(!h.classList.contains("activa")) continue;
+      var t = h.getAttribute("data-txt");
+      if(t == null) t = h.tagName === "DIV" ? h.querySelector("b").textContent : h.textContent;
+      fuera.push(t);
+    }
+    return fuera;
+  }
+  /* Enlaza un input range con su etiqueta de valor */
+  function medidor(idRango, idSalida, alCambiar){
+    var r = $(idRango), s = $(idSalida);
+    if(!r) return;
+    function act(){
+      if(s) s.textContent = r.value;
+      if(alCambiar) alCambiar();
+    }
+    r.addEventListener("input", function(){ act(); guardar(); });
+    act();
+  }
+
+  /* Gota que se llena según el nivel: 0 vacía, 10 rebosando. */
+  function gota(nivel, tam){
+    var n = Math.max(0, Math.min(10, nivel)) / 10;
+    var t = tam || 26, uid = "g" + Math.random().toString(36).slice(2, 8);
+    var col = mezcla("#c9b48a", "#2f8fbf", n);
+    return '<svg class="gota" width="' + t + '" height="' + t * 1.18 + '" viewBox="0 0 24 28">' +
+      '<clipPath id="' + uid + '"><path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z"/></clipPath>' +
+      '<path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z" fill="#f2f5f8" ' +
+      'stroke="' + col + '" stroke-width="1.6"/>' +
+      '<rect x="0" y="' + (28 - 27 * n) + '" width="24" height="28" fill="' + col +
+      '" clip-path="url(#' + uid + ')" opacity="0.9"/></svg>';
+  }
+
+  /* ---------- reloj de escena ----------
+     Un solo latido para las hojas que se mueven. Llama a fn(dt) unas 25 veces
+     por segundo mientras esté andando, con dt en segundos. Se para sola cuando
+     la pestaña se va al fondo, para no gastar batería con una escena que nadie
+     está mirando, y retoma sin saltos al volver.                            */
+  function reloj(fn){
+    var id = null, previo = 0, deuda = 0, PASO = 0.04, dormida = false;
+    function latir(t){
+      id = requestAnimationFrame(latir);
+      if(!previo){ previo = t; return; }
+      var dt = Math.min(.25, (t - previo) / 1000);
+      previo = t;
+      deuda += dt;
+      if(deuda < PASO) return;
+      fn(deuda);
+      deuda = 0;
+    }
+    var r = {
+      andar: function(){ if(!id){ previo = 0; deuda = 0; id = requestAnimationFrame(latir); } },
+      parar: function(){ if(id){ cancelAnimationFrame(id); id = null; previo = 0; deuda = 0; } },
+      anda:  function(){ return !!id; }
+    };
+    document.addEventListener("visibilitychange", function(){
+      if(document.hidden && r.anda()){ dormida = true; r.parar(); }
+      else if(!document.hidden && dormida){ dormida = false; r.andar(); }
+    });
+    return r;
+  }
+
+  /* ---------- persistencia ---------- */
+  function camposGuardables(){
+    var fuera = [], t = document.querySelectorAll("input,textarea,select");
+    for(var i=0;i<t.length;i++) if(t[i].id) fuera.push(t[i]);
+    return fuera;
+  }
+  function marcablesGuardables(){
+    var fuera = [], t = document.querySelectorAll(".chip[id],.opcion[id]");
+    for(var i=0;i<t.length;i++) fuera.push(t[i]);
+    return fuera;
+  }
+  function guardar(avisar){
+    if(!listo) return;
+    var d = { _campos:{}, _marcas:{}, _libres: LIBRES };
+    camposGuardables().forEach(function(e){
+      d._campos[e.id] = (e.type === "checkbox" || e.type === "radio") ? e.checked : e.value;
+    });
+    marcablesGuardables().forEach(function(e){
+      if(e.classList.contains("activa")) d._marcas[e.id] = 1;
+    });
+    if(ganchos.extra) d._extra = ganchos.extra();
+    try{ localStorage.setItem(CLAVE, JSON.stringify(d)); }catch(e){}
+    if(avisar) brindis("Guardado en este equipo");
+  }
+  function cargar(){
+    var d = null;
+    try{ d = JSON.parse(localStorage.getItem(CLAVE) || "null"); }catch(e){}
+    if(!d) return false;
+    if(d._extra && ganchos.restaurar) ganchos.restaurar(d._extra);
+    LIBRES = d._libres || {};
+    Object.keys(LIBRES).forEach(redibujar);
+    camposGuardables().forEach(function(e){
+      if(!(e.id in (d._campos||{}))) return;
+      var v = d._campos[e.id];
+      if(e.type === "checkbox" || e.type === "radio") e.checked = !!v; else e.value = v;
+    });
+    marcablesGuardables().forEach(function(e){
+      if((d._marcas||{})[e.id]) e.classList.add("activa");
+    });
+    return true;
+  }
+  function limpiar(){
+    if(!confirm("¿Empezar de nuevo? Se borrará lo que está en pantalla en este equipo.")) return;
+    try{ localStorage.removeItem(CLAVE); }catch(e){}
+    location.reload();
+  }
+
+  /* ---------- copiar resumen para la historia clínica ---------- */
+  function encabezadoResumen(){
+    var l = [], t = document.querySelector("h1");
+    l.push((t ? t.textContent : "Herramienta").toUpperCase());
+    var pares = [["nombre","Consultante"],["fecha","Fecha"],["sesion","Sesión"],
+                 ["profesional","Profesional"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1] + ": " + e.value.trim());
+    });
+    return l.join("\n");
+  }
+  function notasProResumen(){
+    var l = [], pares = [["proObservaciones","Observaciones"],["proHipotesis","Hipótesis de trabajo"],
+                         ["proTarea","Tarea acordada"],["proProxima","Para la próxima sesión"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1].toUpperCase() + "\n" + e.value.trim());
+    });
+    return l.length ? "\n\n--- NOTAS DEL PROFESIONAL ---\n" + l.join("\n\n") : "";
+  }
+  function textoResumen(){
+    var cuerpo = ganchos.resumen ? ganchos.resumen() : "";
+    return encabezadoResumen() + "\n\n" + cuerpo + notasProResumen();
+  }
+  function copiar(){
+    var txt = textoResumen();
+    function viejo(){
+      var a = document.createElement("textarea");
+      a.value = txt;
+      a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(a);
+      brindis(ok ? "Resumen copiado al portapapeles" : "No se pudo copiar: revise el resumen impreso");
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(function(){
+        brindis("Resumen copiado al portapapeles");
+      }, viejo);
+    } else viejo();
+  }
+  /* ---------- impresión ----------
+     Los desplegables cerrados no salen en el papel. Antes de imprimir se
+     abren, y al terminar vuelven a como estaban, para que la hoja impresa
+     lleve lo que se trabajó aunque esté plegado en pantalla. */
+  var abiertosAlImprimir = [];
+  function antesDeImprimir(){
+    abiertosAlImprimir = [];
+    var ds = document.querySelectorAll("details");
+    for(var i = 0; i < ds.length; i++){
+      if(ds[i].classList.contains("catalogo")) continue;
+      if(ds[i].classList.contains("borrar")) continue;
+      if(!ds[i].open){ ds[i].open = true; abiertosAlImprimir.push(ds[i]); }
+    }
+  }
+  function despuesDeImprimir(){
+    abiertosAlImprimir.forEach(function(d){ d.open = false; });
+    abiertosAlImprimir = [];
+  }
+  if(window.addEventListener){
+    window.addEventListener("beforeprint", antesDeImprimir);
+    window.addEventListener("afterprint", despuesDeImprimir);
+    if(window.matchMedia){
+      var mq = window.matchMedia("print");
+      if(mq.addEventListener)
+        mq.addEventListener("change", function(e){
+          if(e.matches) antesDeImprimir(); else despuesDeImprimir();
+        });
+    }
+  }
+
+  function brindis(msg){
+    var b = $("brindis");
+    if(!b) return;
+    b.textContent = msg;
+    b.classList.add("visible");
+    clearTimeout(b._t);
+    b._t = setTimeout(function(){ b.classList.remove("visible"); }, 2200);
+  }
+
+  /* ---------- arranque ---------- */
+  function iniciar(cfg){
+    CLAVE = cfg.clave || "herramienta";
+    ganchos = cfg;
+
+    var ni = $("proNoImprimir"), sincNotas = null;
+    if(ni){
+      sincNotas = function(){
+        var s = document.querySelector("details.notas-pro");
+        if(s) s.classList.toggle("borrar", ni.checked);
+      };
+      ni.addEventListener("change", sincNotas);
+    }
+
+    listo = true;
+    cargar();
+    if(sincNotas) sincNotas();
+    if($("fecha") && !$("fecha").value)
+      $("fecha").value = new Date().toLocaleDateString("es-CO");
+
+    document.querySelectorAll("input,textarea,select").forEach(function(e){
+      if(!e.id) return;
+      e.addEventListener("input", function(){ guardar(); });
+      e.addEventListener("change", function(){ guardar(); });
+    });
+
+    if(ganchos.alCambiar) ganchos.alCambiar();
+  }
+
+  /* ---------- arranque reducido ----------
+     Para las hojas que ya traían su propio motor y su propia persistencia:
+     cablea el botón de copiar y no toca nada más. */
+  function soloModo(){
+    var ni = $("proNoImprimir");
+    if(ni) ni.addEventListener("change", function(){
+      var s = document.querySelector("details.notas-pro");
+      if(s) s.classList.toggle("borrar", ni.checked);
+    });
+    ganchos = { resumen: resumenGenerico };
+  }
+
+  /* Recorre las secciones y arma un texto con lo que esté diligenciado. */
+  function resumenGenerico(){
+    var fuera = [], secciones = document.querySelectorAll("section,header");
+    for(var i = 0; i < secciones.length; i++){
+      var s = secciones[i];
+      if(s.classList.contains("notas-pro")) continue;
+      var titulo = s.querySelector("h1,h2,h3");
+      var lineas = [];
+      var campos = s.querySelectorAll("input,textarea,select");
+      for(var j = 0; j < campos.length; j++){
+        var e = campos[j];
+        if(e.type === "checkbox" || e.type === "radio" || !e.id) continue;
+        if(!String(e.value).trim()) continue;
+        var et = s.querySelector('label[for="' + e.id + '"]');
+        lineas.push("  " + (et ? et.textContent.trim() + ": " : "") + e.value.trim());
+      }
+      var marcas = s.querySelectorAll(".activa,.llena,.activo,.on");
+      var nombres = [];
+      for(var k = 0; k < marcas.length; k++){
+        var m = marcas[k];
+        if(m.classList.contains("mini")) continue;   /* catálogo, no elección */
+        var b = m.querySelector("b");
+        var txt = (b ? b.textContent : m.textContent).replace(/\s+/g, " ").trim();
+        if(txt && nombres.indexOf(txt) < 0) nombres.push(txt);
+      }
+      if(nombres.length) lineas.push("  Marcado: " + nombres.join(", "));
+      if(lineas.length){
+        if(titulo) fuera.push(titulo.textContent.trim().toUpperCase());
+        fuera.push(lineas.join("\n"));
+      }
+    }
+    return fuera.join("\n");
+  }
+
+  return {
+    iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
+    chips: chips, opciones: opciones, activas: activas, medidor: medidor,
+    agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
+    $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
+    reloj: reloj,
+    brindis: brindis, modo: modo, texto: textoResumen
+  };
+})();
+
+</script>
+<script>
+const $ = Kit.$;
+
+const DESTINOS = ["Ser alguien que termina lo que empieza","Estar presente con mi gente",
+  "Cuidar mi cuerpo","Vivir según lo que creo"];
+const PASAJEROS = ["«No sirves para esto»","«Y si sale mal»","«Mejor mañana»","La ansiedad"];
+const TRAMOS = ["Escribir el primer párrafo","Mandar el correo","Llamar a alguien",
+  "Salir a caminar"];
+
+const VELOCIDAD = 2.7;        /* km por segundo: el destino queda a unos 37 s */
+const DISCUSION = 5;          /* lo que dura una parada a discutir, en segundos */
+const VENTANA = 4;            /* lo que el botón de discutir permanece encima   */
+
+let km = 0, paradas = 0, energia = 100, bitacora = [], tiempo = 0;
+let discutiendo = 0, ventana = 0, proximoGrito = 2.2, globos = [], llego = false;
+
+const destinos  = () => Kit.activas("destino");
+const pasajeros = () => Kit.activas("pasajeros");
+const grito     = () => Math.round(Math.min(24, 4 + km * .2));
+const parado    = () => discutiendo > 0;
+const reloj     = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  tiempo += dt;                     /* el reloj del viaje no se detiene con nada */
+
+  if(parado()){
+    discutiendo -= dt;
+    energia = Math.max(0, energia - 4 * dt);   /* discutir sale caro */
+    if(discutiendo <= 0){
+      discutiendo = 0;
+      Kit.brindis("La discusión terminó donde empezó. El bus sigue.");
+    }
+  } else if(!llego){
+    km = Math.min(100, km + VELOCIDAD * dt);
+    energia = Math.max(0, energia - .8 * dt);
+    if(km >= 100){
+      llego = true;
+      escena.parar();
+      Kit.brindis("Llegaste con todos ellos adentro.");
+      Kit.guardar();
+    }
+  }
+
+  /* gritan cuando quieren, y gritan más cerca del destino */
+  proximoGrito -= dt;
+  if(proximoGrito <= 0 && !llego){
+    const l = pasajeros();
+    if(l.length){
+      globos.push({texto:l[Math.floor(Math.random() * l.length)], t:0,
+                   fila:Math.floor(Math.random() * 3)});
+      ventana = VENTANA;
+    }
+    proximoGrito = Math.max(1.6, 3.4 - km * .012) + Math.random() * 1.8;
+  }
+  globos.forEach(g => { g.t += dt; });
+  globos = globos.filter(g => g.t < 3);
+
+  /* si la ventana se cierra sin que se toque el botón, es un tramo hecho con
+     ellos gritando: eso es lo que queda anotado */
+  if(ventana > 0){
+    ventana -= dt;
+    if(ventana <= 0){
+      ventana = 0;
+      bitacora.push({tipo:"avanzo", seg:tiempo, km:km});
+      pintarBitacora();
+    }
+  }
+
+  marcas();
+  dibujar();
+  ponerReto();
+  leer();
+}
+
+/* ====================== LA RUTA ====================== */
+function dibujar(){
+  const svg = $("ruta");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t); return t;
+  };
+
+  const CARRIL = 232;
+  g("rect", {x:0, y:0, width:700, height:CARRIL - 30, fill:"#eef4f7"});
+  g("rect", {x:0, y:CARRIL - 30, width:700, height:330 - CARRIL + 30, fill:"#cfd6da"});
+  g("rect", {x:0, y:CARRIL - 30, width:700, height:5, fill:"#b6bec3"});
+  /* las rayas del asfalto corren hacia atrás: así se ve que el bus avanza */
+  const corrida = parado() ? 0 : (tiempo * 150) % 54;
+  for(let x = -54; x < 700; x += 54)
+    g("rect", {x:x + 54 - corrida, y:CARRIL + 40, width:30, height:4, fill:"#fff", opacity:.85});
+
+  /* el destino, al final del camino */
+  const dx = 640;
+  g("rect", {x:dx - 3, y:CARRIL - 96, width:5, height:96, fill:"#8a7f74"});
+  g("path", {d:`M${dx + 2} ${CARRIL - 96} l 44 13 l -44 13 Z`, fill:"#3f7d5a"});
+  const nomD = destinos().length ? destinos()[0] : "sin destino";
+  texto(dx + 24, CARRIL - 108, nomD.length > 26 ? nomD.slice(0, 25) + "…" : nomD,
+    "font:600 12px system-ui;fill:#3f7d5a", "end");
+
+  /* el bus, en el punto exacto del recorrido */
+  const bx = 60 + (km / 100) * 500;
+  const brinco = parado() || llego ? 0 : Math.sin(tiempo * 24) * .9;
+  const bus = Kit.svg("g", {transform:`translate(${bx},${CARRIL - 62 + brinco})`});
+  svg.appendChild(bus);
+  g("rect", {x:0, y:0, width:132, height:56, rx:9, fill:"#e8c15a", stroke:"#c9a03a",
+    "stroke-width":2}, bus);
+  g("rect", {x:96, y:9, width:28, height:21, rx:4, fill:"#bcd8e6"}, bus);
+  for(let v = 0; v < 3; v++)
+    g("rect", {x:12 + v * 27, y:9, width:21, height:21, rx:4, fill:"#bcd8e6"}, bus);
+  /* un pasajero asomado en cada ventana */
+  const lista = pasajeros();
+  for(let v = 0; v < Math.min(3, lista.length); v++)
+    g("circle", {cx:22 + v * 27, cy:24, r:6.5, fill:"#a4756f"}, bus);
+  /* el conductor */
+  if(lista.length || destinos().length)
+    g("circle", {cx:110, cy:24, r:6.5, fill:"#3f5163"}, bus);
+  /* ruedas que giran solo cuando el bus se mueve */
+  const giro = parado() || llego ? 0 : km * 26;
+  [28, 104].forEach(cx => {
+    g("circle", {cx:cx, cy:60, r:11, fill:"#3f4348"}, bus);
+    g("path", {d:"M-7 0 L7 0 M0 -7 L0 7", stroke:"#7d858c", "stroke-width":2,
+      transform:`translate(${cx},60) rotate(${giro})`}, bus);
+  });
+  /* humo del escape mientras anda */
+  if(!parado() && !llego && escena.anda())
+    for(let k = 0; k < 3; k++){
+      const f = ((tiempo * 1.6 + k * .33) % 1);
+      g("circle", {cx:-6 - f * 26, cy:48 - f * 12, r:3 + f * 6, fill:"#b6bec3",
+        opacity:(.35 * (1 - f)).toFixed(2)}, bus);
+    }
+
+  /* los gritos salen del techo y se van apagando */
+  const escala = .85 + Math.min(.5, grito() / 24);
+  globos.forEach(gl => {
+    const op = gl.t < .25 ? gl.t / .25 : Math.max(0, 1 - (gl.t - .25) / 2.4);
+    const gx = bx + 16 + gl.fila * 40, gy = CARRIL - 84 - gl.fila * 24 - gl.t * 22;
+    const burbuja = Kit.svg("g", {transform:`translate(${gx},${gy}) scale(${escala})`,
+      opacity:op.toFixed(2)});
+    svg.appendChild(burbuja);
+    const txt = gl.texto.length > 22 ? gl.texto.slice(0, 21) + "…" : gl.texto;
+    const ancho = 9 + txt.length * 6.1;
+    burbuja.appendChild(Kit.svg("rect", {x:0, y:0, width:ancho, height:23, rx:11,
+      fill:"#fff", stroke:"#c9a9a9", "stroke-width":1.4}));
+    burbuja.appendChild(Kit.svg("path", {d:"M14 23 l 5 8 l 7 -8 Z", fill:"#fff",
+      stroke:"#c9a9a9", "stroke-width":1.4}));
+    const t = Kit.svg("text", {x:ancho / 2, y:15.5, "text-anchor":"middle",
+      style:"font:600 11px system-ui,sans-serif;fill:#8a3d3d"});
+    t.textContent = txt;
+    burbuja.appendChild(t);
+  });
+  if(lista.length > 3)
+    texto(bx + 66, CARRIL - 4, `y ${lista.length - 3} más adentro`,
+      "font:11px system-ui;fill:#7b8288");
+
+  /* mientras se discute, el bus está detenido y se nota */
+  if(parado()){
+    texto(bx + 66, CARRIL - 118, "discutiendo…",
+      "font:600 13px system-ui;fill:#8a3d3d;paint-order:stroke;stroke:#eef4f7;stroke-width:3");
+    g("rect", {x:bx + 16, y:CARRIL + 62, width:100, height:6, rx:3, fill:"#f0d3c6"});
+    g("rect", {x:bx + 16, y:CARRIL + 62, width:100 * (discutiendo / DISCUSION), height:6, rx:3,
+      fill:"#8a3d3d"});
+  }
+
+  /* barra de avance */
+  g("rect", {x:60, y:308, width:560, height:7, rx:4, fill:"#dfe5e9"});
+  g("rect", {x:60, y:308, width:560 * (km / 100), height:7, rx:4, fill:"#3f7d5a"});
+}
+
+/* ====================== EL VIAJE ====================== */
+function listo(){
+  if(!destinos().length){ Kit.brindis("Elige primero hacia dónde va el bus"); return false; }
+  if(!pasajeros().length){ Kit.brindis("Sube al menos un pasajero"); return false; }
+  return true;
+}
+
+function arrancar(){
+  if(!listo()) return;
+  if(llego){ Kit.brindis("Ya llegaste. Empieza el viaje de nuevo si quieres repetirlo."); return; }
+  escena.andar();
+  botones();
+  Kit.guardar();
+}
+
+function pausar(){
+  escena.parar();
+  botones();
+  ponerReto();
+  Kit.guardar();
+}
+
+/* La única decisión del viaje, y solo mientras el botón está encima del bus. */
+function discutir(){
+  if(!listo()) return;
+  paradas++;
+  discutiendo = DISCUSION;
+  energia = Math.max(0, energia - 10);
+  ventana = 0;
+  bitacora.push({tipo:"paro", seg:tiempo, km:km});
+  pintarBitacora();
+  ponerReto();
+  Kit.guardar();
+}
+
+function reiniciarViaje(){
+  escena.parar();
+  km = 0; paradas = 0; energia = 100; bitacora = []; tiempo = 0;
+  discutiendo = 0; ventana = 0; proximoGrito = 2.2; globos = []; llego = false;
+  refrescar();
+  Kit.guardar();
+}
+
+function botones(){
+  $("btnArrancar").disabled = escena.anda() || llego;
+  $("btnPausa").disabled = !escena.anda();
+}
+
+/* El reto se ancla al bus: la posición del viewBox se traduce a porcentaje del
+   lienzo, así sigue encima del bus aunque cambie el tamaño de la ventana. */
+function ponerReto(){
+  const visible = ventana > 0 && !parado() && escena.anda() && !llego;
+  $("reto").hidden = !visible;
+  if(!visible) return;
+  const bx = 60 + (km / 100) * 500;
+  $("reto").style.left = ((bx + 66) / 700 * 100) + "%";
+  $("reto").style.top  = (10 / 330 * 100) + "%";
+}
+
+function pintarBitacora(){
+  $("bitacora").innerHTML = bitacora.length
+    ? bitacora.slice().reverse().map(t => {
+        return `<div class="tramo ${t.tipo}">
+          <span class="cual">${reloj(t.seg)}</span>
+          <span class="que">${t.tipo === "avanzo"
+            ? "Gritaron y seguiste manejando"
+            : "Paraste a discutir con los pasajeros"}</span>
+          <span class="km" style="color:${t.tipo === "avanzo" ? "#3f7d5a" : "#8a3d3d"}">
+            ${t.tipo === "avanzo" ? "seguía avanzando" : "0 km en 5 s"}</span>
+        </div>`;
+      }).join("")
+    : `<div class="velo">Todavía no has arrancado.</div>`;
+}
+
+function marcas(){
+  $("mKm").textContent      = Math.round(km);
+  $("mReloj").textContent   = reloj(tiempo);
+  $("mParadas").textContent = paradas;
+  $("mEnergia").textContent = Math.round(energia);
+}
+
+function refrescar(){
+  botones();
+  marcas();
+  dibujar();
+  ponerReto();
+  pintarBitacora();
+  leer();
+}
+
+function leer(){
+  const seguidos = bitacora.filter(t => t.tipo === "avanzo").length;
+  let nombre, metafora, como, pregunta, bandera = "";
+
+  if(!destinos().length || !pasajeros().length){
+    nombre = "El bus está parado";
+    metafora = "Falta el destino, o falta saber quién va a bordo.";
+    como = "Sin destino no hay viaje, y sin pasajeros no hay ejercicio: el bus vacío avanza solo " +
+      "y eso no le pasa a nadie.";
+    pregunta = "¿Hacia dónde querrías ir si los pasajeros no tuvieran voto?";
+  } else if(!escena.anda() && tiempo === 0){
+    nombre = "Con el motor encendido";
+    metafora = "Los pasajeros ya están arriba y el destino está señalado.";
+    como = "No hay botón de avanzar: el bus anda solo mientras lo dejes andar. Lo único que se " +
+      "puede tocar es el freno, y aparece cuando ellos gritan.";
+    pregunta = "¿Qué sueles hacer en la vida real cuando empiezan a gritar?";
+  } else if(paradas > 0 && km < 12){
+    nombre = "Todas las paradas, ningún kilómetro";
+    metafora = `${paradas} paradas. ${Math.round(km)} km en ${reloj(tiempo)}.`;
+    como = "Discutir con los pasajeros se siente como estar haciendo algo. Y el tablero dice lo " +
+      "que dice: el reloj corrió, la energía se gastó y el bus está donde estaba.";
+    pregunta = "¿Cuánto tiempo de tu vida real has pasado en esa discusión?";
+    bandera = "Vale la pena mirar si esa discusión es rumia sostenida: cuando lo es, se trabaja " +
+      "primero defusión y no argumentación.";
+  } else if(paradas >= 3 && paradas * DISCUSION > tiempo * .35){
+    nombre = "Más discusión que camino";
+    metafora = `${paradas} paradas, unos ${Math.round(paradas * DISCUSION)} segundos discutiendo ` +
+      `de ${reloj(tiempo)} de viaje.`;
+    como = "Se avanza, pero buena parte del viaje se fue en negociar. Fíjate en cuándo gritan: " +
+      "aprietan más cerca del destino, y eso no es señal de que vayas mal.";
+    pregunta = "¿Qué pasa contigo justo cuando estás a punto de conseguir algo que te importa?";
+  } else if(llego){
+    nombre = "Llegaste con ellos adentro";
+    metafora = `100 km en ${reloj(tiempo)}, con ${pasajeros().length} pasajeros a bordo.`;
+    como = "El bus llegó y no se bajó ni un pasajero. La meta nunca fue vaciar el bus. Fíjate en " +
+      "la energía que queda: manejar con ellos gritando cuesta, y cuesta mucho menos que discutir.";
+    pregunta = "Si esto se puede hacer así, ¿qué viaje llevas aplazando hasta que se bajen?";
+  } else if(paradas === 0 && seguidos >= 2){
+    nombre = "Gritaron y no frenaste";
+    metafora = `${seguidos} veces gritaron y el bus siguió. ${Math.round(km)} km.`;
+    como = "Ninguna de esas veces necesitó que se callaran primero. El ruido y el movimiento " +
+      "ocurrieron a la vez, y solo uno de los dos dependía de ti.";
+    pregunta = "¿Qué hiciste con las ganas de tocar ese botón?";
+  } else {
+    nombre = "El bus avanza";
+    metafora = `${Math.round(km)} km en ${reloj(tiempo)}, ${paradas} parada${paradas === 1 ? "" : "s"}.`;
+    como = "Cada vez que te acercas suben el volumen, y aun así el bus se movió. El botón rojo " +
+      "solo está unos segundos: si no lo tocas, se va solo y el viaje sigue.";
+    pregunta = "¿Cuál de los pasajeros es el que casi logra que pares?";
+  }
+
+  if(energia <= 30 && paradas >= 3)
+    bandera = "La energía está por el piso y la mayor parte se fue en paradas. Conviene nombrarlo: " +
+      "el agotamiento que trae la persona puede venir menos de su vida y más de la discusión interna.";
+
+  $("lNombre").textContent   = nombre;
+  $("lMetafora").textContent = metafora;
+  $("lComo").textContent     = como;
+  $("lPregunta").textContent = pregunta;
+  $("lBandera").innerHTML    = bandera ? `<div class="bandera">${bandera}</div>` : "";
+}
+
+function resumen(){
+  const seguidos = bitacora.filter(t => t.tipo === "avanzo").length;
+  const l = [];
+  l.push("DESTINO: " + (destinos().length ? destinos().join(" · ") : "sin elegir"));
+  l.push("PASAJEROS: " + (pasajeros().length ? pasajeros().join(" · ") : "ninguno"));
+  l.push("", `VIAJE: ${Math.round(km)} km de 100 en ${reloj(tiempo)} de reloj, ` +
+             `${paradas} paradas a discutir, ${seguidos} veces que gritaron y siguió, ` +
+             `energía ${Math.round(energia)}/100.`);
+  l.push("Llegó al destino: " + (llego ? "sí" : "no"));
+  l.push("", "LECTURA: " + $("lNombre").textContent, $("lComo").textContent);
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("Alerta: " + band.textContent.trim());
+
+  const tr = Kit.activas("tramoReal");
+  if(tr.length) l.push("", "TRAMO REAL DE LA SEMANA: " + tr.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("destino", DESTINOS, refrescar);
+Kit.chips("pasajeros", PASAJEROS, refrescar);
+Kit.chips("tramoReal", TRAMOS);
+window.addEventListener("resize", ponerReto);
+
+Kit.iniciar({
+  clave: "met-el-bus",
+  extra: () => ({km, paradas, energia, bitacora, tiempo, llego}),
+  restaurar: d => {
+    km = d.km || 0; paradas = d.paradas || 0;
+    energia = d.energia === undefined ? 100 : d.energia;
+    bitacora = d.bitacora || []; tiempo = d.tiempo || 0; llego = !!d.llego;
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});
+</script>
+</body>
+</html>

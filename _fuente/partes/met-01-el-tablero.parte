@@ -1,0 +1,399 @@
+@@meta
+archivo: met-el-tablero.html
+titulo: El tablero
+orden: 01
+enfoque: Metáforas vivas
+etiqueta: Yo observador
+sub: Hay una partida que llevas años jugando: de un lado las piezas que quieres que ganen, del otro las que quieres que desaparezcan. Empieza y verás que las negras siguen apareciendo aunque no hagas nada: no las pones tú. Empujar trae dos más de golpe y cuesta. Y después está la única jugada que la metáfora propone, que no detiene ninguna pieza: detiene el gasto.
+fuente: Metáfora del tablero de ajedrez y dimensiones del yo, en Díaz Corbobés, MANUAL ACT §3.3, con el ejercicio del observador.
+resumen: La partida corre sola: las piezas negras brotan con el tiempo, empujar trae más y gasta. Al pasar a ser el tablero las piezas siguen llegando y el marcador de energía se detiene.
+campo3: Sesión
+campo3ph: Ej. Sesión 7
+@@css
+  .escenario > svg{max-width:660px}
+  .mandos button{font-size:14px}
+  button.pelea{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600}
+  button.pelea:hover{background:#763333;border-color:#763333}
+  button.mesa{background:#3f7d5a;border-color:#3f7d5a;color:#fff;font-weight:600}
+  button.mesa:hover{background:#356b4d;border-color:#356b4d}
+  button.mesa:disabled{background:#b9cec2;border-color:#b9cec2}
+  button.arranque{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
+  button.arranque:hover{background:#28607c;border-color:#28607c}
+  .marcas div{min-width:88px}
+
+  .bandos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .bando{border:1px solid var(--linea);border-radius:10px;padding:13px 15px}
+  .bando.blancas{border-left:5px solid #b9a98c;background:#fdfcf9}
+  .bando.negras{border-left:5px solid #3a3f47;background:#f8f9fa}
+  .bando h3{margin:0 0 3px;font-size:15px}
+  .bando .quees{margin:0 0 10px;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
+  .bando .chip{font-size:12.5px;padding:5px 12px}
+  .bando.negras .chip.activa{background:#3a3f47;border-color:#3a3f47}
+  .bando.negras .chip.mas{color:#3a3f47}
+
+  .pregunta-sola.enMesa{border-left-color:#3f7d5a;background:linear-gradient(180deg,#f4faf6,#fff)}
+  .pregunta-sola.enMesa .pregunta{color:#2c5a44}
+
+  @media (max-width:640px){.bandos{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Carga tus piezas</h2>
+  <div class="cuerpo">
+    <div class="bandos">
+      <div class="bando blancas">
+        <h3>Las piezas blancas</h3>
+        <p class="quees">Lo que quieres que gane.</p>
+        <div class="chips" id="blancas"></div>
+      </div>
+      <div class="bando negras">
+        <h3>Las piezas negras</h3>
+        <p class="quees">Lo que quieres que desaparezca.</p>
+        <div class="chips" id="negras"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="escena" viewBox="0 0 660 480" role="img"
+    aria-label="Tablero con las piezas blancas y negras de la partida"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mRondas" style="color:#8a3d3d">0</span><span class="r">empujones</span></div>
+    <div><span class="n" id="mNegras" style="color:#3a3f47">0</span><span class="r">piezas negras</span></div>
+    <div><span class="n" id="mFuera" style="color:#8a3d3d">0</span><span class="r">negras sacadas</span></div>
+    <div><span class="n" id="mEnergia" style="color:#8a3d3d">0</span><span class="r">energía gastada</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Empezar la partida</button>
+    <button type="button" class="pelea" id="btnPelear" onclick="pelear()">Empujar más fuerte</button>
+    <button type="button" class="mesa" id="btnMesa" onclick="serElTablero()">Ser el tablero</button>
+    <button type="button" id="btnVolver" onclick="volverAJugar()" hidden>Volver a la partida</button>
+    <button type="button" onclick="reiniciar()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="relato">
+  <div class="pregunta" id="preguntaRelato"></div>
+</section>
+
+<section class="paso" id="pasoDespues" hidden>
+  <h2><span class="num">2</span>Desde el tablero</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Con todas las piezas todavía puestas, ¿qué podrías hacer?</label>
+    <div class="chips" id="ahoraQue"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+/* Pocas y las más frecuentes: lo demás lo pone la persona con el "+". */
+const BLANCAS = ["Soy capaz","Todo va a estar bien","Ya lo superé","Soy suficiente"];
+const NEGRAS  = ["No sirvo para esto","Voy a fallar","Me van a dejar","La ansiedad"];
+const ACCIONES = ["Presentar el trabajo igual","Salir de la casa","Decir que no","Pedir ayuda"];
+
+/* Lo que va apareciendo. Pelear con una pieza no devuelve la misma pieza:
+   convoca otras. Y algunas llegan solas, sin que nadie empuje. */
+const BROTES_NEGROS = [
+  "¿Y si me pasa algo?","Se van a dar cuenta","No debería sentirme así",
+  "Otra vez lo mismo","Nunca voy a poder","Soy una carga","Estoy solo",
+  "Y si esto no se me quita","Me está pasando algo grave","No lo estoy haciendo bien",
+  "Todos pueden menos yo","Se me va a notar","Y si empeora","No voy a aguantar",
+  "Debí haber hecho otra cosa","Lo voy a arruinar"
+];
+const BROTES_BLANCOS = [
+  "Tengo que poder","No pasa nada","Hay gente peor","Ya se me va a pasar",
+  "Solo tengo que esforzarme","Piensa positivo","Es cuestión de actitud","Respira y ya"
+];
+
+const SOLA = 3.4;                 /* cada cuánto brota una negra por su cuenta */
+
+let rondas = 0, energia = 0, vista = "partida";
+let brotesN = [], brotesB = [];   /* los pensamientos que fueron apareciendo   */
+let piezas = [];                  /* con posición propia, para que se muevan   */
+let mesa = 0;                     /* 0 en la partida, 1 siendo el tablero      */
+let proximaSola = SOLA, sobranN = 0, sobranB = 0, totalNegras = 0;
+let ultimaPregunta = "";
+
+const elegidas = () => ({b: Kit.activas("blancas"), n: Kit.activas("negras")});
+
+/* Trae un pensamiento nuevo. Una de cada cuatro veces repite uno que ya está,
+   porque eso también pasa. */
+function brote(pozo, yaPuestos){
+  const libres = pozo.filter(t => yaPuestos.indexOf(t) < 0);
+  if(yaPuestos.length && (!libres.length || Math.random() < .25))
+    return yaPuestos[Math.floor(Math.random() * yaPuestos.length)];
+  return libres[Math.floor(Math.random() * libres.length)];
+}
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  /* las negras siguen llegando: en la partida y también desde el tablero */
+  proximaSola -= dt;
+  if(proximaSola <= 0){
+    const {b, n} = elegidas();
+    const t = brote(BROTES_NEGROS, n.concat(brotesN));
+    if(t) brotesN.push(t);
+    proximaSola = SOLA + Math.random() * 2;
+    recomponer();
+  }
+
+  /* jugar cuesta; ser el tablero no. Ese contraste es toda la lectura. */
+  if(mesa < .5) energia += 1.5 * dt;
+
+  /* la vista se aleja o se acerca sin salto */
+  const meta = vista === "tablero" ? 1 : 0;
+  mesa += (meta - mesa) * Math.min(1, dt * 3.2);
+  if(Math.abs(meta - mesa) < .004) mesa = meta;
+
+  /* cada pieza va a su sitio, y el empujón se le va apagando */
+  piezas.forEach(p => {
+    p.ap = Math.min(1, p.ap + dt * 2.4);
+    p.x += (p.tx - p.x) * Math.min(1, dt * 5);
+    p.y += (p.ty - p.y) * Math.min(1, dt * 5);
+    p.jx -= p.jx * Math.min(1, dt * 4);
+    p.jy -= p.jy * Math.min(1, dt * 4);
+  });
+
+  marcas();
+  dibujar();
+  preguntar();
+}
+
+/* ====================== COLOCACIÓN ====================== */
+const CX = 330, CY = 250;
+const POR_FILA = 5, FILAS_MAX = 3, CUPO_LADO = POR_FILA * FILAS_MAX;
+
+function recomponer(){
+  const {b, n} = elegidas();
+  /* Cada copia lleva un sufijo invisible para tener identidad propia aunque
+     el texto se repita. */
+  const marcar = (lista, desde) => lista.map((t, i) => ({texto:t, cl:t + "​".repeat(desde + i)}));
+  const negras  = marcar(n, 0).concat(marcar(brotesN, n.length));
+  const blancas = marcar(b, 0).concat(marcar(brotesB, b.length));
+
+  const vivas = {};
+  const colocar = (lista, bando) => {
+    const arriba = bando === "blanca";
+    const vis = lista.slice(0, CUPO_LADO);
+    const filas = Math.max(1, Math.ceil(vis.length / POR_FILA));
+    vis.forEach((it, i) => {
+      const fila = Math.floor(i / POR_FILA);
+      const enFila = Math.min(POR_FILA, vis.length - fila * POR_FILA);
+      const col = i % POR_FILA;
+      const t = enFila === 1 ? .5 : col / (enFila - 1);
+      /* las filas de más se apilan hacia afuera; cada bando en su mitad */
+      const salto = filas > 2 ? 52 : 60;
+      const tx = 128 + t * 404;
+      const ty = CY + (arriba ? -1 : 1) * (44 + fila * salto);
+      const clave = bando + "|" + it.cl;
+      vivas[clave] = 1;
+      const ya = piezas.find(p => p.clave === clave);
+      if(ya){ ya.tx = tx; ya.ty = ty; ya.texto = it.texto; }
+      /* la nueva entra desde su lado del tablero, no aparece de la nada */
+      else piezas.push({clave, texto:it.texto, bando, tx, ty, x:tx,
+        y:ty + (arriba ? -60 : 60), jx:0, jy:0, ap:0});
+    });
+    return lista.length - vis.length;
+  };
+  sobranN = colocar(negras, "negra");
+  sobranB = colocar(blancas, "blanca");
+  piezas = piezas.filter(p => vivas[p.clave]);
+  totalNegras = negras.length;
+
+  if(!escena.anda()){ marcas(); dibujar(); preguntar(); }
+}
+
+/* ====================== ESCENA ====================== */
+function dibujar(){
+  const svg = $("escena");
+  svg.innerHTML = "";
+  const g = (t, a, padre) => (padre || svg).appendChild(Kit.svg(t, a));
+
+  const escala = 1 - .48 * mesa;
+  const mundo = Kit.svg("g", {
+    transform:`translate(${CX},${CY}) scale(${escala.toFixed(3)}) translate(${-CX},${-CY})`});
+  svg.appendChild(mundo);
+
+  const casilla = 55, lado = 8 * casilla, x0 = CX - lado / 2, y0 = CY - lado / 2;
+  for(let f = 0; f < 8; f++)
+    for(let c = 0; c < 8; c++)
+      g("rect", {x:x0 + c*casilla, y:y0 + f*casilla, width:casilla, height:casilla,
+        fill:(f + c) % 2 ? "#d8cfbe" : "#f2ede3"}, mundo);
+  g("rect", {x:x0, y:y0, width:lado, height:lado, fill:"none",
+    stroke: Kit.mezcla("#b6ab97", "#3f7d5a", mesa), "stroke-width": 2.5 + 1.5 * mesa}, mundo);
+
+  /* Las negras engordan con cada empujón; las blancas casi no. */
+  const rN = 15 + Math.min(8, rondas * 1.4);
+  const rB = 15 + Math.min(8, rondas * 1.4) * .35;
+
+  piezas.forEach(p => {
+    const negra = p.bando === "negra";
+    const r = (negra ? rN : rB) * p.ap;
+    if(r < .6) return;
+    const pieza = Kit.svg("g", {transform:`translate(${(p.x + p.jx).toFixed(1)},${(p.y + p.jy).toFixed(1)})`,
+      opacity:((1 - .55 * mesa) * p.ap).toFixed(2)});
+    mundo.appendChild(pieza);
+
+    g("circle", {cx:0, cy:1, r:r + 2, fill:"#00000018"}, pieza);
+    g("circle", {cx:0, cy:-2, r:r, fill: negra ? "#3a3f47" : "#faf6ee",
+      stroke: negra ? "#22262b" : "#c3b79f", "stroke-width":2}, pieza);
+
+    /* el rótulo siempre hacia afuera del centro: las blancas por arriba,
+       las negras por abajo. Así ninguna etiqueta invade el otro bando. */
+    const et = Kit.svg("text", {x:0, y: negra ? r + 14 : -r - 8, "text-anchor":"middle",
+      style:`font:600 ${(11 - 2 * mesa).toFixed(1)}px system-ui,sans-serif;` +
+            `paint-order:stroke;stroke:#f2ede3;stroke-width:3.5;stroke-linejoin:round;` +
+            `fill:${negra ? "#22262b" : "#7a6a4e"}`});
+    et.textContent = p.texto.length > 24 ? p.texto.slice(0, 23) + "…" : p.texto;
+    pieza.appendChild(et);
+  });
+
+  const rotulo = (x, y, s, color) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":"middle",
+      style:`font:600 12px system-ui,sans-serif;fill:${color};` +
+            `paint-order:stroke;stroke:#f2ede3;stroke-width:3.5;stroke-linejoin:round`});
+    t.textContent = s;
+    mundo.appendChild(t);
+  };
+  if(sobranN > 0) rotulo(CX, CY + 218, `y ${sobranN} más que ya no caben`, "#22262b");
+  if(sobranB > 0) rotulo(CX, CY - 214, `y ${sobranB} más`, "#7a6a4e");
+
+  if(mesa > .05){
+    g("circle", {cx:CX, cy:CY, r:198, fill:"none", stroke:"#3f7d5a",
+      "stroke-width":1.5, "stroke-dasharray":"6 7", opacity:(.55 * mesa).toFixed(2)});
+    const et = Kit.svg("text", {x:CX, y:CY + 222, "text-anchor":"middle",
+      style:`font:600 14px system-ui,sans-serif;fill:#3f7d5a;opacity:${mesa.toFixed(2)}`});
+    et.textContent = "Tú eres esto. No una de las piezas.";
+    svg.appendChild(et);
+  }
+}
+
+function marcas(){
+  $("mRondas").textContent  = rondas;
+  $("mNegras").textContent  = totalNegras;
+  $("mFuera").textContent   = 0;
+  $("mEnergia").textContent = Math.round(energia);
+  $("btnMesa").disabled = !elegidas().n.length;
+  $("btnArrancar").disabled = escena.anda();
+}
+
+/* ====================== LA PARTIDA ====================== */
+function arrancar(){
+  if(!elegidas().n.length){ Kit.brindis("Primero pon al menos una pieza negra"); return; }
+  proximaSola = SOLA;
+  escena.andar();
+  marcas();
+  Kit.guardar();
+}
+
+function pelear(){
+  const {b, n} = elegidas();
+  if(!n.length){ Kit.brindis("Primero pon al menos una pieza negra"); return; }
+  if(!escena.anda()) escena.andar();
+  rondas++;
+  energia += 10 + rondas * 5;
+  /* Dos pensamientos negros nuevos por empujón, y uno blanco de respuesta. */
+  const puestosN = n.concat(brotesN), puestosB = b.concat(brotesB);
+  for(let k = 0; k < 2; k++){
+    const t = brote(BROTES_NEGROS, puestosN);
+    if(t){ brotesN.push(t); puestosN.push(t); }
+  }
+  const tb = brote(BROTES_BLANCOS, puestosB);
+  if(tb) brotesB.push(tb);
+
+  vista = "partida";
+  $("btnVolver").hidden = true;
+  $("pasoDespues").hidden = true;
+  recomponer();
+  /* el empujón se ve: todas las piezas se sacuden y ninguna sale */
+  piezas.forEach(p => { p.jx = (Math.random() - .5) * 30; p.jy = (Math.random() - .5) * 30; });
+  Kit.guardar();
+}
+
+function serElTablero(){
+  vista = "tablero";
+  if(!escena.anda()) escena.andar();
+  $("btnVolver").hidden = false;
+  $("pasoDespues").hidden = false;
+  setTimeout(() => $("relato").scrollIntoView({behavior:"smooth", block:"center"}), 400);
+  Kit.guardar();
+}
+
+function volverAJugar(){
+  vista = "partida";
+  $("btnVolver").hidden = true;
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  rondas = 0; energia = 0; vista = "partida"; mesa = 0;
+  brotesN = []; brotesB = []; piezas = []; proximaSola = SOLA;
+  $("btnVolver").hidden = true;
+  $("pasoDespues").hidden = true;
+  recomponer();
+  Kit.guardar();
+}
+
+/* ====================== LA PREGUNTA ====================== */
+function preguntar(){
+  const {n} = elegidas();
+  const rel = $("relato");
+  rel.classList.toggle("enMesa", vista === "tablero");
+
+  let q;
+  if(vista === "tablero")
+    q = "Las piezas siguen llegando y el marcador de energía se detuvo. ¿Qué cosas de tu vida quedaron esperando a que ganaras esta partida?";
+  else if(!n.length)
+    q = "¿Cuál es la pieza que más quisieras que no estuviera ahí?";
+  else if(!escena.anda() && rondas === 0)
+    q = "¿Cómo has estado empujando hasta ahora, en la vida real?";
+  else if(rondas === 0)
+    q = "Están apareciendo solas y tú no has empujado nada. ¿Te suena?";
+  else if(rondas < 3)
+    q = "¿Salió alguna?";
+  else
+    q = "Si esta partida no se puede ganar, ¿cuánto tiempo más estás dispuesto a jugarla?";
+  if(q !== ultimaPregunta){
+    $("preguntaRelato").textContent = q;
+    ultimaPregunta = q;
+  }
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const {b, n} = elegidas();
+  const l = [];
+  l.push("PIEZAS BLANCAS (lo que quiere que gane)");
+  l.push(b.length ? b.join(" · ") : "(ninguna)");
+  l.push("", "PIEZAS NEGRAS (lo que quiere sacar del tablero)");
+  l.push(n.length ? n.join(" · ") : "(ninguna)");
+  if(brotesN.length) l.push("Aparecidas durante la partida: " + brotesN.join(" · "));
+  l.push("", `PARTIDA: ${rondas} empujones, ${Math.round(energia)} de energía gastada, ` +
+             `${totalNegras} negras en el tablero, 0 sacadas.`);
+  l.push("Cambio de perspectiva: " + (vista === "tablero" ? "realizado en sesión" : "no realizado"));
+
+  const acc = Kit.activas("ahoraQue");
+  if(acc.length) l.push("", "QUÉ PUEDE HACER CON LAS PIEZAS PUESTAS", acc.join(", "));
+  return l.join("\n");
+}
+
+/* ====================== ARRANQUE ====================== */
+Kit.chips("blancas", BLANCAS, recomponer);
+Kit.chips("negras",  NEGRAS,  recomponer);
+Kit.chips("ahoraQue", ACCIONES);
+
+Kit.iniciar({
+  clave: "met-el-tablero",
+  extra: () => ({rondas, energia, vista, brotesN, brotesB}),
+  restaurar: d => {
+    rondas = d.rondas || 0; energia = d.energia || 0; vista = d.vista || "partida";
+    brotesN = d.brotesN || []; brotesB = d.brotesB || [];
+    mesa = vista === "tablero" ? 1 : 0;
+    if(vista === "tablero"){ $("pasoDespues").hidden = false; $("btnVolver").hidden = false; }
+  },
+  alCambiar: recomponer,
+  resumen: resumen
+});

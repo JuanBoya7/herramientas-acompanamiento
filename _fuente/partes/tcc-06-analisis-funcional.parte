@@ -1,0 +1,304 @@
+@@meta
+archivo: tcc-analisis-funcional.html
+titulo: Análisis funcional
+orden: 07
+enfoque: Cognitivo-conductual
+etiqueta: Formación
+identificacion: si
+campo3: Caso
+campo3ph: Ej. Caso 3 / práctica
+sub: Esta hoja no es para el consultante: es para quien acompaña, y sobre todo para quien está aprendiendo a formular. La misma conducta puede tener funciones opuestas en dos personas distintas, y de eso —no de la topografía— depende toda la intervención. Aquí se arma la secuencia y la hoja propone la hipótesis funcional.
+fuente: El proceso en terapia de conducta y el análisis funcional en la evaluación conductual, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 2.
+resumen: Antecedentes, conducta en los tres sistemas de respuesta y consecuencias, con una hipótesis funcional generada a partir de lo marcado. Herramienta de formulación y de formación de practicantes.
+@@css
+  .columna-af{border:1px solid var(--linea);border-left-width:5px;border-radius:11px;
+    padding:15px 18px;margin-bottom:12px;background:#fdfefe}
+  .columna-af.ant{border-left-color:#c9962f}
+  .columna-af.con{border-left-color:#c26a4e}
+  .columna-af.cons{border-left-color:#3f83a6}
+  .columna-af h3{margin:0 0 3px;font-size:16px}
+  .columna-af .quees{margin:0 0 12px;font-size:13px;color:var(--tinta-suave);line-height:1.5}
+  .subbloque{margin-bottom:13px}
+  .subbloque .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.7px;
+    font-weight:700;color:var(--tinta-suave);margin-bottom:6px}
+  .subbloque .chip{font-size:12.5px;padding:5px 11px}
+
+  .hipotesis{border-radius:11px;padding:19px 23px;margin:16px 0;background:#f4f8fa;
+    border:1px solid #c9dce6}
+  .hipotesis .rot{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;
+    color:var(--acento);margin-bottom:6px}
+  .hipotesis .frase{font-size:17px;line-height:1.5;margin-bottom:10px}
+  .hipotesis .frase b{color:#1d4e66}
+  .hipotesis p{margin:0;font-size:14px;line-height:1.55;color:var(--tinta-suave)}
+  .etiqueta-fn{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;
+    padding:3px 12px;background:var(--acento);color:#fff;margin-bottom:9px}
+
+  .contingencia{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:600px){.contingencia{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La conducta a analizar</h2>
+  <p class="ayuda">Operativizada: qué hace, cuánto, con qué intensidad y cuánto dura. Si dos
+  observadores no pudieran ponerse de acuerdo en si ocurrió, no está bien definida.</p>
+  <div class="cuerpo">
+    <div class="chips" id="conductaTipo"></div>
+    <details class="apunte">
+      <summary>Definirla operativamente (recomendado)</summary>
+      <textarea id="conductaDef" placeholder="Qué hace exactamente, frecuencia, intensidad y duración."></textarea>
+    </details>
+    <div class="contingencia" style="margin-top:14px">
+      <div><label class="etiqueta">Frecuencia</label><div class="chips" id="frecuencia"></div></div>
+      <div><label class="etiqueta">Antigüedad</label><div class="chips" id="antiguedad"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="columna-af ant">
+  <h3>A · Antecedentes</h3>
+  <p class="quees">Lo que precede a la conducta y aumenta su probabilidad. Se distinguen los
+  estímulos discriminativos —lo que señala que ahora la conducta va a funcionar— de las variables
+  del organismo, que modulan sin desencadenar.</p>
+  <div class="subbloque">
+    <div class="titulin">Estímulo discriminativo · qué había justo antes</div>
+    <div class="chips" id="antE"></div>
+  </div>
+  <div class="subbloque">
+    <div class="titulin">Variables del organismo · con qué llegó la persona</div>
+    <div class="chips" id="antO"></div>
+  </div>
+  <div class="subbloque">
+    <div class="titulin">Contexto · dónde y con quién</div>
+    <div class="chips" id="antC"></div>
+  </div>
+</div>
+
+<div class="columna-af con">
+  <h3>B · Conducta, en los tres sistemas</h3>
+  <p class="quees">La respuesta rara vez es solo motora. Separar los tres sistemas evita el error
+  más común en formulación, que es tratar como una sola cosa lo que se piensa, lo que se siente en
+  el cuerpo y lo que se hace, cuando muchas veces no van sincronizados.</p>
+  <div class="subbloque">
+    <div class="titulin">Motor · lo observable</div>
+    <div class="chips" id="sisMotor"></div>
+  </div>
+  <div class="subbloque">
+    <div class="titulin">Cognitivo · lo que pasa por la cabeza</div>
+    <div class="chips" id="sisCog"></div>
+  </div>
+  <div class="subbloque">
+    <div class="titulin">Fisiológico · lo que hace el cuerpo</div>
+    <div class="chips" id="sisFis"></div>
+  </div>
+</div>
+
+<div class="columna-af cons">
+  <h3>C · Consecuencias</h3>
+  <p class="quees">Lo que ocurre después y explica por qué la conducta se mantiene. La clave está
+  en distinguir si algo <b>aparece</b> o algo <b>desaparece</b>, y si eso hace que la conducta
+  aumente o disminuya. De ahí sale la función.</p>
+  <div class="subbloque">
+    <div class="titulin">Aparece algo · después de la conducta</div>
+    <div class="chips" id="consAparece"></div>
+  </div>
+  <div class="subbloque">
+    <div class="titulin">Desaparece o se evita algo</div>
+    <div class="chips" id="consDesaparece"></div>
+  </div>
+  <div class="subbloque">
+    <div class="titulin">A largo plazo</div>
+    <div class="chips" id="consLargo"></div>
+  </div>
+  <div class="contingencia" style="margin-top:8px">
+    <div><label class="etiqueta">Demora de la consecuencia</label><div class="chips" id="demora"></div></div>
+    <div><label class="etiqueta">Regularidad</label><div class="chips" id="regularidad"></div></div>
+  </div>
+</div>
+
+<div class="hipotesis" id="hipotesis"></div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Hacia dónde va la intervención</h2>
+  <p class="ayuda">La función determina la técnica. Marcar aquí obliga a que el plan se derive del
+  análisis y no del repertorio favorito de quien lo hace.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Sobre los antecedentes</label>
+    <div class="chips" id="intAnt"></div>
+    <label class="etiqueta">Sobre la conducta</label>
+    <div class="chips" id="intCond"></div>
+    <label class="etiqueta">Sobre las consecuencias</label>
+    <div class="chips" id="intCons"></div>
+    <details class="apunte">
+      <summary>Notas del plan (opcional)</summary>
+      <textarea id="planNota" placeholder="Secuencia prevista y qué se mide para saber si funciona."></textarea>
+    </details>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+/* Estas listas van completas a propósito, al revés que en el resto de las
+   hojas. Esta no es una hoja de sesión: es el mapa con el que se formula, y
+   ahí un menú corto empobrece el análisis en vez de aligerarlo. No recortar. */
+const CONDUCTAS = ["Evitar una situación", "Consumir", "Autolesionarse", "Discutir",
+  "Aislarse", "Comprobar una y otra vez", "Posponer", "Atracón", "Restringir la comida",
+  "Buscar reaseguro", "Rumiar", "Dormir de más", "Abandonar lo empezado", "Romper algo",
+  "Gritar", "Dejar de contestar"];
+const FRECUENCIA = ["Varias veces al día", "Diaria", "Varias veces por semana", "Semanal",
+  "Quincenal", "Mensual", "Por rachas"];
+const ANTIGUEDAD = ["Días", "Semanas", "Meses", "Más de un año", "Varios años",
+  "Desde la adolescencia", "Desde que tiene memoria"];
+
+const ANT_E = ["Una crítica", "Un mensaje sin respuesta", "Una tarea pendiente",
+  "Una fecha límite cerca", "Quedarse solo", "Una discusión", "Un comentario sobre el cuerpo",
+  "Ver a cierta persona", "Un recuerdo o una fecha", "Una llamada", "Que le cambien el plan",
+  "Llegar a casa", "Revisar el celular", "Un lugar con mucha gente", "Un rato muerto",
+  "Que le pidan algo"];
+const ANT_O = ["Falta de sueño", "Hambre", "Consumo previo", "Enfermedad o dolor",
+  "Cansancio acumulado", "Resaca", "Cambio de medicación", "Sin medicación",
+  "Estrés sostenido", "Duelo reciente", "Ánimo bajo desde antes", "Dolor físico crónico"];
+const ANT_C = ["Solo en casa", "Con la familia", "Con la pareja", "En el trabajo",
+  "En la calle", "De noche", "De madrugada", "Fin de semana", "En reuniones sociales",
+  "Ante una figura de autoridad", "En espacios cerrados", "En el transporte"];
+
+const MOTOR = ["Se va del lugar", "No sale de la cama", "Consume", "Grita", "Se autolesiona",
+  "Llora", "Comprueba una y otra vez", "Come compulsivamente", "Deja de comer", "Se calla",
+  "Rompe algo", "Escribe mensajes en cadena", "Se queda inmóvil", "Aplaza y hace otra cosa",
+  "Pide que le confirmen", "Bebe"];
+const COG = ["«No puedo con esto»", "«Me van a dejar»", "«Soy un fracaso»", "Rumiación",
+  "Anticipación catastrófica", "«Se van a dar cuenta»", "«No lo merezco»", "«Es culpa mía»",
+  "«¿Y si me pasa algo?»", "Autocrítica", "Todo o nada", "Imágenes intrusivas",
+  "Se queda en blanco", "«Necesito que pare ya»"];
+const FIS = ["Taquicardia", "Falta de aire", "Tensión muscular", "Náusea", "Sudoración",
+  "Temblor", "Presión en el pecho", "Calor o sofoco", "Mareo", "Nudo en el estómago",
+  "Entumecimiento", "Sensación de irrealidad", "Insomnio", "Agotamiento"];
+
+const APARECE = ["Atención de otros", "Compañía", "Alivio inmediato", "Sensación de control",
+  "Que alguien lo tranquilice", "Que otro se haga cargo", "Sensación de castigo merecido",
+  "Placer o euforia", "Que la discusión se resuelva a su favor", "Reconocimiento",
+  "Dejar de aburrirse", "Que le pidan perdón"];
+const DESAPARECE = ["La ansiedad baja", "Se evita la situación", "Se acaba la discusión",
+  "Se posterga la tarea", "Deja de sentir", "Se va la culpa por un rato",
+  "Deja de pensar en eso", "Se evita el rechazo", "Se acaba la incertidumbre", "Baja la rabia",
+  "Deja de estar solo", "Se quita el malestar del cuerpo"];
+const LARGO = ["Culpa", "Vergüenza", "Se deteriora la relación", "Pierde oportunidades",
+  "Empeora la salud", "Se le estrecha la vida", "Aumenta el aislamiento",
+  "Deudas o pérdidas", "Baja el rendimiento", "Se confirma que no puede",
+  "La conducta se hace más frecuente", "Consecuencias legales o disciplinarias"];
+
+/* Estas dos son escalas cerradas y exhaustivas: la hipótesis funcional lee
+   «intermitente» y «Inmediata / minutos» de aquí. No cambiar los textos. */
+const DEMORA = ["Inmediata","En minutos","En horas","Al día siguiente"];
+const REGULARIDAD = ["Siempre ocurre","Casi siempre","A veces (intermitente)","Rara vez"];
+
+const INT_ANT = ["Control estimular", "Modificar el contexto", "Higiene del sueño",
+  "Reducir vulnerabilidad", "Psicoeducación sobre disparadores", "Anticipar y planificar",
+  "Retirar las señales de la conducta", "Programar actividad", "Acuerdos con el entorno"];
+const INT_COND = ["Entrenamiento en habilidades", "Conducta alternativa incompatible",
+  "Reestructuración cognitiva", "Relajación o respiración",
+  "Exposición con prevención de respuesta", "Activación conductual", "Entrenamiento asertivo",
+  "Solución de problemas", "Tolerancia al malestar", "Defusión", "Autoinstrucciones",
+  "Modelado y ensayo conductual"];
+const INT_CONS = ["Reforzamiento diferencial", "Extinción del refuerzo", "Retirar la evitación",
+  "Contrato conductual", "Economía de fichas", "Retirar el refuerzo del entorno",
+  "Adelantar la consecuencia demorada", "Coste de respuesta", "Autorregistro y autorrefuerzo"];
+
+/* ====================== HIPÓTESIS FUNCIONAL ====================== */
+function hipotesis(){
+  const cond = Kit.activas("conductaTipo");
+  const ap = Kit.activas("consAparece"), de = Kit.activas("consDesaparece");
+  const largo = Kit.activas("consLargo");
+  const reg = Kit.activas("regularidad")[0] || "";
+  const dem = Kit.activas("demora")[0] || "";
+
+  if(!cond.length || (!ap.length && !de.length)){
+    $("hipotesis").innerHTML = `<div class="rot">Hipótesis funcional</div>
+      <div class="frase">Falta información para formular.</div>
+      <p>Marca al menos la conducta y una consecuencia —lo que aparece o lo que desaparece— para
+      que la hoja pueda proponer una función. Sin la columna C no hay análisis funcional: hay
+      descripción.</p>`;
+    return;
+  }
+
+  /* Refuerzo negativo si lo que domina es la retirada de algo aversivo. */
+  const negativo = de.length >= ap.length;
+  const etiqueta = negativo ? "Reforzamiento negativo" : "Reforzamiento positivo";
+  const nombre = cond.join(" y ").toLowerCase();
+
+  const frase = negativo
+    ? `<b>${cond.join(" y ")}</b> se mantiene porque <b>hace desaparecer</b> algo desagradable: ` +
+      `${de.join(", ").toLowerCase()}.`
+    : `<b>${cond.join(" y ")}</b> se mantiene porque <b>produce</b> algo que la persona necesita: ` +
+      `${ap.join(", ").toLowerCase()}.`;
+
+  let comentario = negativo
+    ? "El refuerzo negativo es el más difícil de romper de los dos, porque el alivio llega rápido " +
+      "y es inmediatamente perceptible. Toda intervención que se limite a pedirle a la persona " +
+      "que deje de hacerlo le está quitando la única vía de alivio disponible sin ofrecer otra: " +
+      "hay que instalar la conducta alternativa antes de retirar la actual."
+    : "El refuerzo positivo permite trabajar con reforzamiento diferencial: identificar qué " +
+      "obtiene la persona y buscar una conducta alternativa que lo consiga con menor costo. " +
+      "Conviene revisar quién del entorno está administrando ese refuerzo, porque casi siempre " +
+      "hay alguien y casi siempre lo hace sin saberlo.";
+
+  if(/intermitente/i.test(reg))
+    comentario += " La consecuencia es intermitente, y eso es clínicamente relevante: los " +
+      "programas de razón variable producen las conductas más resistentes a la extinción. " +
+      "Hay que advertirle al entorno que al retirar el refuerzo la conducta va a aumentar antes " +
+      "de disminuir, o el plan se abandona en la primera semana.";
+  if(/Inmediata|minutos/i.test(dem) && largo.length)
+    comentario += " Hay además un desfase temporal clásico: la consecuencia que mantiene la " +
+      "conducta es inmediata y las que la harían disminuir son demoradas. Ese desfase, y no la " +
+      "falta de conciencia, explica por qué la persona sabe perfectamente que le hace daño y " +
+      "sigue haciéndolo.";
+
+  $("hipotesis").innerHTML = `<div class="rot">Hipótesis funcional</div>
+    <span class="etiqueta-fn">${etiqueta}</span>
+    <div class="frase">${frase}</div>
+    <p>${comentario}</p>`;
+}
+
+function resumen(){
+  const l = [];
+  const bloques = [
+    ["CONDUCTA", [["conductaTipo","Tipo"],["frecuencia","Frecuencia"],["antiguedad","Antigüedad"]]],
+    ["A · ANTECEDENTES", [["antE","Estímulo discriminativo"],["antO","Variables del organismo"],
+      ["antC","Contexto"]]],
+    ["B · CONDUCTA", [["sisMotor","Motor"],["sisCog","Cognitivo"],["sisFis","Fisiológico"]]],
+    ["C · CONSECUENCIAS", [["consAparece","Aparece"],["consDesaparece","Desaparece o se evita"],
+      ["consLargo","A largo plazo"],["demora","Demora"],["regularidad","Regularidad"]]],
+    ["PLAN", [["intAnt","Sobre antecedentes"],["intCond","Sobre la conducta"],
+      ["intCons","Sobre las consecuencias"]]]
+  ];
+  bloques.forEach(([titulo, campos]) => {
+    const lineas = campos.map(([id, et]) => {
+      const v = Kit.activas(id);
+      return v.length ? `  ${et}: ${v.join(", ")}` : "";
+    }).filter(Boolean);
+    if(lineas.length){ l.push("", titulo); l.push(...lineas); }
+  });
+  if($("conductaDef").value.trim())
+    l.push("", "DEFINICIÓN OPERATIVA: " + $("conductaDef").value.trim());
+
+  const h = $("hipotesis");
+  if(h.querySelector(".etiqueta-fn")){
+    l.push("", "HIPÓTESIS FUNCIONAL: " + h.querySelector(".etiqueta-fn").textContent,
+      h.querySelector(".frase").textContent.trim(),
+      h.querySelector("p").textContent.trim());
+  }
+  if($("planNota").value.trim()) l.push("", "NOTAS DEL PLAN: " + $("planNota").value.trim());
+  return l.join("\n").replace(/^\n/, "");
+}
+
+[["conductaTipo",CONDUCTAS],["frecuencia",FRECUENCIA],["antiguedad",ANTIGUEDAD],
+ ["antE",ANT_E],["antO",ANT_O],["antC",ANT_C],
+ ["sisMotor",MOTOR],["sisCog",COG],["sisFis",FIS],
+ ["consAparece",APARECE],["consDesaparece",DESAPARECE],["consLargo",LARGO],
+ ["demora",DEMORA],["regularidad",REGULARIDAD],
+ ["intAnt",INT_ANT],["intCond",INT_COND],["intCons",INT_CONS]
+].forEach(([id, lista]) => Kit.chips(id, lista, hipotesis));
+
+Kit.iniciar({
+  clave: "tcc-analisis-funcional",
+  alCambiar: hipotesis,
+  resumen: resumen
+});

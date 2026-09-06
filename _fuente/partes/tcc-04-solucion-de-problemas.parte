@@ -1,0 +1,358 @@
+@@meta
+archivo: tcc-solucion-de-problemas.html
+titulo: Solución de problemas
+orden: 05
+enfoque: Cognitivo-conductual
+etiqueta: Afrontamiento
+sub: La mayoría de las decisiones difíciles no se atascan por falta de opciones, sino porque se juzga cada opción mientras aparece y ninguna sobrevive. Esta hoja separa las dos cosas: primero se generan alternativas sin evaluarlas, y solo después se puntúan sus consecuencias en cuatro casillas. La matriz ordena sola.
+fuente: Terapia de solución de problemas de D'Zurilla y Nezu, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 9.
+resumen: Los cinco pasos clásicos, con generación sin censura y una matriz que puntúa consecuencias a corto y largo plazo, en uno mismo y en los demás, y ordena las alternativas.
+@@css
+  .orientacion .chip{font-size:13px}
+  .alternativa{border:1px solid var(--linea);border-left-width:5px;border-radius:10px;
+    padding:11px 14px;margin-bottom:9px;background:#fdfefe}
+  .alternativa .arriba{display:flex;gap:10px;align-items:center;margin-bottom:9px}
+  .alternativa .puesto{width:26px;height:26px;border-radius:8px;color:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:0 0 auto}
+  .alternativa .qué{flex:1;font-size:14.5px;font-weight:600}
+  .alternativa .marca{font-weight:700;font-size:16px;min-width:44px;text-align:right}
+  .alternativa .sacar{border:0;background:transparent;color:var(--tinta-suave);font-size:18px;
+    cursor:pointer;padding:2px 7px;border-radius:6px;line-height:1}
+  .alternativa .sacar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .cuatro{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .cuatro .casilla{background:#f8fafc;border-radius:8px;padding:6px 10px}
+  .cuatro .casilla label{display:block;font-size:10.5px;text-transform:uppercase;
+    letter-spacing:.5px;color:var(--tinta-suave);margin-bottom:1px}
+  .cuatro .fila{display:flex;align-items:center;gap:8px}
+  .cuatro input[type=range]{flex:1;min-width:54px;height:20px}
+  .cuatro .v{font-weight:700;font-size:14px;min-width:24px;text-align:right}
+  .contador-alt{text-align:center;font-size:13.5px;color:var(--tinta-suave);margin-top:10px}
+  .contador-alt b{font-size:20px;color:var(--acento);display:block}
+  @media (max-width:560px){.cuatro{grid-template-columns:1fr}}
+@@html
+<section class="paso orientacion">
+  <h2><span class="num">1</span>Cómo estás mirando el problema</h2>
+  <p class="ayuda">Quien mira el problema como una amenaza sin salida no genera alternativas, por
+  muchas técnicas que se le enseñen. Por eso se empieza aquí.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">¿Qué te dices cuando aparece este problema?</label>
+    <div class="chips" id="orientacion"></div>
+    <div class="medidor" style="margin-top:16px">
+      <label for="tieneSolucion">¿Qué tanto crees que esto tiene solución?</label>
+      <input type="range" id="tieneSolucion" min="0" max="10" value="5">
+      <span class="valor" id="vTieneSolucion">5</span>
+    </div>
+    <div id="lecturaOrientacion"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Definir el problema</h2>
+  <p class="ayuda">Un problema mal definido no tiene solución posible. «Todo me sale mal» no se
+  puede resolver; «no sé hacer esta parte y la entrega es en dos semanas» sí. Se define por
+  hechos, y separando lo que se puede cambiar de lo que no.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">¿De qué tipo es?</label>
+    <div class="chips" id="tipoProblema"></div>
+
+    <label class="etiqueta">¿Qué es lo que hace difícil resolverlo?</label>
+    <div class="chips" id="obstaculos"></div>
+
+    <details class="apunte">
+      <summary>Apuntar esa frase (opcional)</summary>
+      <input type="text" id="fraseProblema" placeholder="El problema es que…">
+    </details>
+
+    <label class="etiqueta">¿Qué quiero que sea distinto?</label>
+    <div class="chips" id="meta"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Todas las alternativas</h2>
+  <p class="ayuda">Aquí la regla es una y no se negocia: <b>no se juzga ninguna mientras se
+  generan</b>. Vale lo absurdo, lo imposible y lo que la persona nunca haría. Juzgar mientras se
+  genera es lo que hace que solo aparezcan dos opciones, y con dos opciones no hay decisión.</p>
+  <div class="cuerpo">
+    <div id="bancoAlternativas"></div>
+    <details class="apunte" style="margin-top:12px">
+      <summary>Agregar una alternativa propia</summary>
+      <div style="display:flex;gap:8px;margin-top:7px">
+        <input type="text" id="nuevaAlt" placeholder="Cualquiera, incluso las que no harías">
+        <button type="button" onclick="agregarAlternativa()">Agregar</button>
+      </div>
+    </details>
+    <div class="contador-alt"><b id="cuentaAlt">0</b>alternativas generadas</div>
+    <div id="lecturaCantidad"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>La matriz de decisión</h2>
+  <p class="ayuda">Ahora sí se juzga, y se juzga en cuatro casillas separadas para que lo inmediato
+  no se coma a lo importante. Cada casilla va de 0 —muy malo— a 10 —muy bueno—. El largo plazo
+  pesa el doble, porque es el que la mente descuenta cuando hay malestar.</p>
+  <div class="cuerpo">
+    <div id="alternativas"></div>
+    <div class="velo" id="veloAlt">Marca alternativas arriba y aparecerán aquí para puntuar.</div>
+  </div>
+</section>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Lo que dice la matriz</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Cómo leerlo</div><p id="lComo"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">5</span>Ponerlo en práctica y verificar</h2>
+  <p class="ayuda">Una solución elegida y no ejecutada no cierra el proceso. Y no basta con
+  hacerla: hay que volver a mirar si funcionó, porque de eso depende que la próxima vez la persona
+  confíe en el método y no solo en la suerte.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Alternativa elegida</label>
+    <select id="elegida"></select>
+
+    <label class="etiqueta">Primer paso concreto</label>
+    <div class="chips" id="primerPaso"></div>
+    <label class="etiqueta">¿Cuándo?</label>
+    <div class="chips" id="cuandoPaso"></div>
+
+    <label class="etiqueta">¿Cómo voy a saber si funcionó?</label>
+    <div class="chips" id="verificacion"></div>
+    <details class="apunte">
+      <summary>Apuntar el criterio (opcional)</summary>
+      <input type="text" id="criterioNota" placeholder="Algo observable, no «sentirme mejor».">
+    </details>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const ORIENTACION = ["«Esto no tiene salida»", "«Es culpa mía»", "«Ya lo intenté todo»", "«Debería poder solo»"];
+const TIPOS = ["Académico", "De dinero", "Con una persona", "Familiar"];
+const OBSTACULOS = ["No depende solo de mí", "No tengo la información", "No tengo plata", "No tengo tiempo"];
+const METAS = ["Que deje de pasar", "Poder cumplir con lo que debo", "Que la relación mejore", "Poder decidir tranquilo"];
+
+const BANCO_ALT = [
+ {g:"Actuar directo", ops:["Hablar con la persona","Pedir una prórroga","Pedir ayuda a alguien",
+   "Ir a la instancia que corresponde","Buscar información","Hacer un plan por escrito",
+   "Empezar por lo más pequeño"]},
+ {g:"Cambiar el marco", ops:["Cambiar el plazo","Cambiar la meta","Dividirlo en partes",
+   "Cancelar algo para hacer espacio","Aplazarlo con fecha","Delegar una parte"]},
+ {g:"Buscar recursos", ops:["Buscar asesoría","Buscar a alguien que sepa","Pedir plata prestada",
+   "Buscar otro trabajo","Ir al médico","Formarme en eso"]},
+ {g:"Lo que no haría", ops:["No hacer nada","Renunciar","Irme","Mentir","Dejar que otro decida",
+   "Aguantar como estoy"]}
+];
+
+const PRIMEROS = ["Escribir el mensaje", "Hacer la llamada", "Buscar la información", "Sacar la cita"];
+const CUANDO = ["Hoy", "Mañana", "Esta semana", "El lunes"];
+const VERIFICA = ["Que la situación cambie de hecho", "Que la otra persona responda", "Que se cumpla el plazo", "Que baje la preocupación"];
+
+let alternativas = [], contador = 0;
+
+function agregarAlternativa(texto){
+  const t = (typeof texto === "string" ? texto : $("nuevaAlt").value).trim();
+  if(!t) return;
+  if(alternativas.some(a => a.texto.toLowerCase() === t.toLowerCase())){
+    Kit.brindis("Esa ya está"); return;
+  }
+  alternativas.push({id:"x" + (++contador), texto:t, cm:5, lm:5, co:5, lo:5});
+  if(typeof texto !== "string") $("nuevaAlt").value = "";
+  refrescar();
+  Kit.guardar();
+}
+function quitarAlternativa(id){
+  alternativas = alternativas.filter(a => a.id !== id);
+  refrescar();
+  Kit.guardar();
+}
+
+/* El largo plazo pesa el doble: es lo que la mente descuenta bajo malestar. */
+const puntaje = a => (a.cm + a.co + a.lm * 2 + a.lo * 2) / 6;
+const ordenadas = () => alternativas.slice().sort((x, y) => puntaje(y) - puntaje(x));
+const colorP = p => Kit.mezcla("#c26a4e", "#3f7d5a", p / 10);
+
+/* ====================== BANCO ====================== */
+$("bancoAlternativas").innerHTML = BANCO_ALT.map((b, i) =>
+  `<div style="margin-bottom:12px">
+     <div style="font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
+       color:var(--tinta-suave);margin-bottom:6px">${b.g}</div>
+     <div class="chips" id="alt-${i}"></div>
+   </div>`).join("");
+BANCO_ALT.forEach((b, i) => {
+  Kit.chips("alt-" + i, b.ops, null);
+  $("alt-" + i).querySelectorAll(".chip").forEach(c => {
+    c.onclick = () => { agregarAlternativa(c.textContent); c.classList.remove("activa"); };
+  });
+});
+
+/* ====================== MATRIZ ====================== */
+function pintarAlternativas(){
+  const lista = ordenadas();
+  $("veloAlt").style.display = lista.length ? "none" : "block";
+  $("alternativas").innerHTML = lista.map((a, i) => {
+    const p = puntaje(a), col = colorP(p);
+    return `<div class="alternativa" style="border-left-color:${col}">
+      <div class="arriba">
+        <span class="puesto" style="background:${col}">${i + 1}</span>
+        <span class="qué">${Kit.escapar(a.texto)}</span>
+        <span class="marca" style="color:${col}">${p.toFixed(1)}</span>
+        <button type="button" class="sacar" data-q="${a.id}" title="Quitar">&times;</button>
+      </div>
+      <div class="cuatro">
+        ${[["cm","Corto plazo, en mí"],["co","Corto plazo, en otros"],
+           ["lm","Largo plazo, en mí ×2"],["lo","Largo plazo, en otros ×2"]].map(([c, et]) =>
+          `<div class="casilla"><label>${et}</label>
+            <div class="fila"><input type="range" min="0" max="10" value="${a[c]}"
+              data-a="${a.id}" data-c="${c}"><span class="v">${a[c]}</span></div></div>`).join("")}
+      </div>
+    </div>`;
+  }).join("");
+
+  $("alternativas").querySelectorAll("input[data-c]").forEach(inp => {
+    const a = alternativas.find(x => x.id === inp.dataset.a);
+    inp.addEventListener("input", () => {
+      inp.parentElement.querySelector(".v").textContent = inp.value;
+    });
+    inp.addEventListener("change", () => {
+      a[inp.dataset.c] = +inp.value;
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  $("alternativas").querySelectorAll("button[data-q]").forEach(b =>
+    b.onclick = () => quitarAlternativa(b.dataset.q));
+}
+
+/* ====================== LECTURAS ====================== */
+function leerOrientacion(){
+  const s = +$("tieneSolucion").value;
+  $("vTieneSolucion").textContent = s;
+  const negativas = Kit.activas("orientacion").filter(t =>
+    /no tiene salida|culpa mía|intenté todo|debería poder|se cae|prefiero no/.test(t)).length;
+  $("lecturaOrientacion").innerHTML = s <= 3 || negativas >= 3
+    ? `<div class="bandera">La orientación al problema está en contra. Con esta postura, generar
+       alternativas se vuelve un trámite: la persona las escribe y las descarta antes de
+       terminarlas. Conviene trabajar primero la orientación —qué evidencia hay de que no tiene
+       salida, y qué problemas sí ha resuelto antes— y volver a esta hoja después.</div>`
+    : s >= 7
+    ? `<div class="logro">Buena disposición para trabajar el problema. Se puede seguir.</div>`
+    : "";
+}
+
+function leerCantidad(){
+  const n = alternativas.length;
+  $("cuentaAlt").textContent = n;
+  $("lecturaCantidad").innerHTML = n === 0 ? ""
+    : n < 4
+    ? `<div class="pistas"><b>Solo ${n}.</b> Con menos de cuatro no hay decisión, hay dilema. Vale
+       la pena forzar tres más aunque sean malas: es el ejercicio, no un adorno. Las alternativas
+       absurdas suelen destrabar las razonables.</div>`
+    : n < 6
+    ? `<div class="pistas">Van ${n}. Empujar hasta seis u ocho suele hacer aparecer la que
+       finalmente se usa.</div>`
+    : `<div class="logro">${n} alternativas. Suficientes para que la matriz signifique algo.</div>`;
+}
+
+function leer(){
+  const lista = ordenadas();
+  if(lista.length < 2){
+    $("lNombre").textContent = "Todavía sin comparar";
+    $("lMetafora").textContent = "";
+    $("lComo").textContent = "Con menos de dos alternativas puntuadas no hay matriz que leer.";
+    $("lPregunta").textContent = "¿Qué haría alguien que no tuviera miedo a equivocarse?";
+    return;
+  }
+  const mejor = lista[0], peor = lista[lista.length - 1];
+  const cortoplacista = alternativas.filter(a => (a.cm + a.co) / 2 - (a.lm + a.lo) / 2 >= 3);
+  const empate = puntaje(lista[0]) - puntaje(lista[1]) < .4;
+
+  $("lNombre").textContent = `Gana: ${mejor.texto}`;
+  $("lMetafora").textContent = `${puntaje(mejor).toFixed(1)} sobre 10, contra ` +
+    `${puntaje(peor).toFixed(1)} de la última.`;
+
+  let como = "La matriz no decide: ordena. Si el primer puesto sorprende o incomoda, esa " +
+    "incomodidad es información y conviene conversarla antes de descartarla.";
+  if(cortoplacista.length)
+    como += ` Hay ${cortoplacista.length} alternativa${cortoplacista.length > 1 ? "s" : ""} que ` +
+      "puntúan mucho mejor a corto que a largo plazo: son las que se eligen bajo malestar y las " +
+      "que después se lamentan. Vale la pena nombrarlas explícitamente.";
+  if(empate)
+    como += " Los dos primeros puestos están prácticamente empatados: cuando eso pasa, la matriz " +
+      "ya hizo su trabajo y la decisión se toma por valores, no por puntaje.";
+  $("lComo").textContent = como;
+
+  $("lPregunta").textContent = cortoplacista.length
+    ? "De estas opciones, ¿cuál elegirías el martes a las once de la noche, y cuál elegirías hoy?"
+    : "Si un amigo tuyo estuviera en esta misma situación, ¿cuál le recomendarías?";
+}
+
+function refrescar(){
+  pintarAlternativas();
+  leerOrientacion();
+  leerCantidad();
+  leer();
+  const actual = $("elegida").value;
+  $("elegida").innerHTML = '<option value="">— elige una alternativa —</option>' +
+    ordenadas().map((a, i) =>
+      `<option value="${a.id}">${i + 1}. ${Kit.escapar(a.texto)} (${puntaje(a).toFixed(1)})</option>`).join("");
+  if(alternativas.some(a => a.id === actual)) $("elegida").value = actual;
+}
+
+function resumen(){
+  const l = [];
+  const or = Kit.activas("orientacion");
+  l.push("ORIENTACIÓN AL PROBLEMA");
+  if(or.length) l.push(or.join(" · "));
+  l.push(`Cree que tiene solución: ${$("tieneSolucion").value}/10`);
+
+  l.push("", "DEFINICIÓN");
+  const t = Kit.activas("tipoProblema"), o = Kit.activas("obstaculos"), m = Kit.activas("meta");
+  if(t.length) l.push("Tipo: " + t.join(", "));
+  if($("fraseProblema").value.trim()) l.push($("fraseProblema").value.trim());
+  if(o.length) l.push("Obstáculos: " + o.join(", "));
+  if(m.length) l.push("Meta: " + m.join(", "));
+
+  l.push("", `ALTERNATIVAS Y MATRIZ (${alternativas.length})`);
+  ordenadas().forEach((a, i) =>
+    l.push(`${i + 1}. ${a.texto} — ${puntaje(a).toFixed(1)}` +
+           `  [corto: mí ${a.cm}, otros ${a.co} · largo: mí ${a.lm}, otros ${a.lo}]`));
+
+  if(alternativas.length >= 2) l.push("", "LECTURA: " + $("lNombre").textContent, $("lComo").textContent);
+
+  const el = alternativas.find(a => a.id === $("elegida").value);
+  const pp = Kit.activas("primerPaso"), cu = Kit.activas("cuandoPaso"), ve = Kit.activas("verificacion");
+  if(el || pp.length){
+    l.push("", "PUESTA EN PRÁCTICA",
+      "Alternativa: " + (el ? el.texto : "sin elegir"),
+      "Primer paso: " + (pp.join(", ") || "sin marcar"),
+      "Cuándo: " + (cu.join(", ") || "sin marcar"),
+      "Verificación: " + (ve.join(", ") || "sin marcar") +
+        ($("criterioNota").value.trim() ? ` — ${$("criterioNota").value.trim()}` : ""));
+  }
+  return l.join("\n");
+}
+
+Kit.chips("orientacion", ORIENTACION, leerOrientacion);
+Kit.chips("tipoProblema", TIPOS);
+Kit.chips("obstaculos", OBSTACULOS);
+Kit.chips("meta", METAS);
+Kit.chips("primerPaso", PRIMEROS);
+Kit.chips("cuandoPaso", CUANDO);
+Kit.chips("verificacion", VERIFICA);
+$("tieneSolucion").addEventListener("input", leerOrientacion);
+$("nuevaAlt").addEventListener("keydown", e => {
+  if(e.key === "Enter"){ e.preventDefault(); agregarAlternativa(); }
+});
+
+Kit.iniciar({
+  clave: "tcc-solucion-de-problemas",
+  extra: () => ({alternativas, contador}),
+  restaurar: d => { alternativas = d.alternativas || []; contador = d.contador || 0; },
+  alCambiar: refrescar,
+  resumen: resumen
+});

@@ -1,0 +1,314 @@
+@@meta
+archivo: dbt-tarjeta-diaria.html
+titulo: Tarjeta diaria
+orden: 06
+enfoque: DBT
+lamina: si
+etiqueta: Seguimiento
+identificacion: si
+campo3: Semana
+campo3ph: Ej. Semana del 3 al 9
+sub: Sin registro no hay tratamiento: la memoria reconstruye la semana desde el estado de ánimo del día de la sesión, y por eso una mala tarde vuelve mala toda la semana. Esta tarjeta se llena en un minuto al día, se mira entera el día de la sesión, y decide sobre qué se trabaja.
+fuente: Tarjeta diaria de registro del entrenamiento en habilidades, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), caps. 3 y 4, sobre estructuración de sesiones y revisión de la práctica.
+resumen: Registro semanal de emociones, impulsos, conductas y habilidades usadas, con mapa de calor de los siete días. Es la que decide sobre qué se trabaja en la sesión siguiente.
+@@css
+  .dias-sel{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+  .dia-b{border:1px solid var(--linea);border-radius:10px;padding:9px 14px;cursor:pointer;
+    background:#fdfefe;text-align:center;min-width:64px}
+  .dia-b.activo{border-color:var(--acento);background:var(--acento-claro)}
+  .dia-b.lleno::after{content:"";display:block;width:6px;height:6px;border-radius:50%;
+    background:var(--logro);margin:5px auto 0}
+  .dia-b b{display:block;font-size:13.5px}
+  .dia-b span{display:block;font-size:11px;color:var(--tinta-suave)}
+
+  .fila-med{display:grid;grid-template-columns:106px 1fr auto;gap:11px;align-items:center;
+    margin-bottom:7px}
+  .fila-med .et{font-size:13.5px}
+  .fila-med input[type=range]{width:100%;height:20px}
+  .fila-med .v{font-weight:700;font-size:15px;min-width:26px;text-align:right}
+
+  .calor{width:100%;border-collapse:separate;border-spacing:3px;font-size:12px}
+  .calor th{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--tinta-suave);
+    font-weight:700;padding:2px 4px;text-align:left}
+  .calor th.dia{text-align:center;width:40px}
+  .calor td{width:40px;height:30px;border-radius:6px;text-align:center;font-weight:700;
+    color:#fff;font-size:12.5px}
+  .calor td.vacio{background:#f1f4f7;color:#c3ccd4;font-weight:400}
+  .desliza-c{overflow-x:auto}
+  @media (max-width:600px){.fila-med{grid-template-columns:88px 1fr auto}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>El día</h2>
+  <p class="ayuda">Se llena al final de cada día, no el domingo de memoria. Un punto verde marca
+  los días ya registrados.</p>
+  <div class="cuerpo">
+    <div class="dias-sel" id="selectorDias"></div>
+
+    <label class="etiqueta">Emociones, de 0 a 10</label>
+    <div id="emociones"></div>
+
+    <label class="etiqueta" style="margin-top:18px">Impulsos, de 0 a 10</label>
+    <p class="ayuda" style="margin-bottom:8px">El impulso se registra aunque no se haya actuado.
+    Esa distinción es la información más útil de toda la tarjeta.</p>
+    <div id="impulsos"></div>
+
+    <label class="etiqueta" style="margin-top:18px">¿Actuó alguno de esos impulsos?</label>
+    <div class="chips" id="actuo"></div>
+
+    <label class="etiqueta" style="margin-top:18px">Habilidades usadas hoy</label>
+    <div id="habilidades"></div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">2</span>La semana completa</h2>
+  <div class="cuerpo">
+    <div class="desliza-c"><table class="calor" id="calor"></table></div>
+    <p class="ayuda" style="margin-top:11px">Se mira en diagonal, no día por día: lo que importa
+    son los patrones —qué día se dispara, qué emoción arrastra a qué impulso, y si las habilidades
+    aparecen antes o después del pico—.</p>
+  </div>
+</section>
+
+<section class="bloque lectura" id="lectura">
+  <div class="campo" style="margin-bottom:6px"><div class="etq">Lectura de la semana</div></div>
+  <div class="nombre" id="lNombre">—</div>
+  <p class="metafora" id="lMetafora"></p>
+  <div class="campo"><div class="etq">Sobre qué trabajar</div><p id="lFoco"></p></div>
+  <div class="pregunta" id="lPregunta"></div>
+  <div id="lBandera"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const DIAS = [["Lun","lunes"],["Mar","martes"],["Mié","miércoles"],["Jue","jueves"],
+  ["Vie","viernes"],["Sáb","sábado"],["Dom","domingo"]];
+
+const EMOCIONES = [["tristeza","Tristeza","#5f77b8"],["ansiedad","Ansiedad","#8171b4"],
+  ["rabia","Rabia","#c26a4e"],["verguenza","Vergüenza","#c05c78"],
+  ["dolor","Dolor emocional","#8a5a4e"]];
+
+const IMPULSOS = [["autolesion","Autolesionarme","#8a3d3d"],["consumo","Consumir","#a8834e"],
+  ["aislarse","Aislarme","#5a6a7d"],["dejarlo","Dejarlo todo","#7a6a9c"]];
+
+const ACTUO = ["Ninguno","Me autolesioné","Consumí","Me aislé","Abandoné algo",
+  "Discutí fuerte","Dejé de comer","No salí de la cama"];
+
+const MODULOS = [
+ ["Mindfulness", ["Mente sabia","Observar","Describir","Participar","No juzgar","Una cosa a la vez",
+   "Siendo efectivo"]],
+ ["Tolerancia al malestar", ["STOP","Pros y contras","TIP","ACEPTAS","Cálmate con los 5 sentidos",
+   "SALVARA","Aceptación radical","Disposición abierta"]],
+ ["Regulación emocional", ["Verificar los hechos","Acción opuesta","Resolución de problemas",
+   "Acumular positivos","Construir competencia","Anticiparse","Cuidar el cuerpo"]],
+ ["Efectividad interpersonal", ["DEAR MAN","AVES","VIDA","Validación","Mindfulness de los otros"]]
+];
+
+let datos = {};      // dia -> {emociones:{}, impulsos:{}, actuo:[], habilidades:[]}
+let diaActivo = 0;
+
+const delDia = d => datos[d] || (datos[d] = {emociones:{}, impulsos:{}, actuo:[], habilidades:[]});
+const lleno = d => {
+  const x = datos[d];
+  if(!x) return false;
+  return Object.keys(x.emociones).length || Object.keys(x.impulsos).length ||
+         x.actuo.length || x.habilidades.length;
+};
+
+/* ====================== SELECTOR ====================== */
+function pintarSelector(){
+  $("selectorDias").innerHTML = DIAS.map(([corto, largo], i) =>
+    `<div class="dia-b ${i === diaActivo ? "activo" : ""} ${lleno(i) ? "lleno" : ""}"
+      data-d="${i}"><b>${corto}</b><span>${lleno(i) ? "registrado" : "vacío"}</span></div>`).join("");
+  $("selectorDias").querySelectorAll("[data-d]").forEach(e =>
+    e.onclick = () => { diaActivo = +e.dataset.d; pintarTodo(); });
+}
+
+function medidores(contenedor, lista, campo){
+  const d = delDia(diaActivo);
+  $(contenedor).innerHTML = lista.map(([id, et, col]) => {
+    const v = d[campo][id] === undefined ? 0 : d[campo][id];
+    return `<div class="fila-med">
+      <span class="et" style="color:${col}">${et}</span>
+      <input type="range" min="0" max="10" value="${v}" data-k="${id}" style="accent-color:${col}">
+      <span class="v" style="color:${col}">${v}</span>
+    </div>`;
+  }).join("");
+  $(contenedor).querySelectorAll("input[data-k]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      inp.parentElement.querySelector(".v").textContent = inp.value;
+    });
+    inp.addEventListener("change", () => {
+      delDia(diaActivo)[campo][inp.dataset.k] = +inp.value;
+      pintarSelector();
+      dibujarCalor();
+      leer();
+      Kit.guardar();
+    });
+  });
+}
+
+function pintarHabilidades(){
+  const d = delDia(diaActivo);
+  $("habilidades").innerHTML = MODULOS.map(([mod, hs], i) =>
+    `<div style="margin-bottom:11px">
+       <div style="font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
+         color:var(--tinta-suave);margin-bottom:6px">${mod}</div>
+       <div class="chips">${hs.map(h =>
+         `<button type="button" class="chip ${d.habilidades.indexOf(h) >= 0 ? "activa" : ""}"
+           data-h="${Kit.escapar(h)}" style="font-size:12.5px;padding:5px 11px">${h}</button>`).join("")}</div>
+     </div>`).join("");
+  $("habilidades").querySelectorAll("button[data-h]").forEach(b =>
+    b.onclick = () => {
+      const l = delDia(diaActivo).habilidades, p = l.indexOf(b.dataset.h);
+      if(p >= 0) l.splice(p, 1); else l.push(b.dataset.h);
+      b.classList.toggle("activa");
+      pintarSelector();
+      dibujarCalor();
+      leer();
+      Kit.guardar();
+    });
+}
+
+function pintarActuo(){
+  const d = delDia(diaActivo);
+  $("actuo").innerHTML = ACTUO.map(a =>
+    `<button type="button" class="chip ${d.actuo.indexOf(a) >= 0 ? "activa" : ""}"
+      data-a="${Kit.escapar(a)}">${a}</button>`).join("");
+  $("actuo").querySelectorAll("button[data-a]").forEach(b =>
+    b.onclick = () => {
+      const l = delDia(diaActivo).actuo, p = l.indexOf(b.dataset.a);
+      if(p >= 0) l.splice(p, 1); else l.push(b.dataset.a);
+      b.classList.toggle("activa");
+      pintarSelector();
+      leer();
+      Kit.guardar();
+    });
+}
+
+/* ====================== MAPA DE CALOR ====================== */
+function dibujarCalor(){
+  const filas = EMOCIONES.map(e => [e, "emociones"])
+    .concat(IMPULSOS.map(i => [i, "impulsos"]));
+  let html = "<tr><th></th>" + DIAS.map(([c]) => `<th class="dia">${c}</th>`).join("") + "</tr>";
+  filas.forEach(([[id, et, col], campo]) => {
+    html += `<tr><th>${et}</th>` + DIAS.map((d, i) => {
+      const v = (datos[i] && datos[i][campo][id] !== undefined) ? datos[i][campo][id] : null;
+      if(v === null) return `<td class="vacio">·</td>`;
+      return `<td style="background:${Kit.mezcla("#eef2f6", col, Math.pow(v / 10, .7))};` +
+             `color:${v >= 5 ? "#fff" : "#5a6a7d"}">${v}</td>`;
+    }).join("") + "</tr>";
+  });
+  html += `<tr><th>Habilidades</th>` + DIAS.map((d, i) => {
+    const n = datos[i] ? datos[i].habilidades.length : 0;
+    return n ? `<td style="background:${Kit.mezcla("#eef2f6", "#3f7d5a", Math.min(1, n / 5))};
+      color:${n >= 3 ? "#fff" : "#5a6a7d"}">${n}</td>` : `<td class="vacio">·</td>`;
+  }).join("") + "</tr>";
+  $("calor").innerHTML = html;
+}
+
+/* ====================== LECTURA ====================== */
+function leer(){
+  const registrados = DIAS.map((d, i) => i).filter(lleno);
+  const pico = (campo, id) => Math.max(...DIAS.map((d, i) =>
+    (datos[i] && datos[i][campo][id] !== undefined) ? datos[i][campo][id] : 0));
+  const habTotal = DIAS.reduce((s, d, i) => s + (datos[i] ? datos[i].habilidades.length : 0), 0);
+  const actuados = DIAS.map((d, i) => datos[i] ? datos[i].actuo.filter(a => a !== "Ninguno") : [])
+    .reduce((s, x) => s.concat(x), []);
+  const impulsoAlto = IMPULSOS.filter(([id]) => pico("impulsos", id) >= 6);
+
+  let nombre, metafora, foco, pregunta, bandera = "";
+
+  if(registrados.length === 0){
+    nombre = "Semana sin registrar";
+    metafora = "Ningún día tiene datos todavía.";
+    foco = "La tarjeta se llena al final de cada día, no antes de la sesión. Si la persona no la " +
+      "está llenando, eso es en sí mismo lo primero que hay que trabajar: casi siempre no es " +
+      "olvido, sino que llenarla obliga a mirar algo que se prefiere no mirar.";
+    pregunta = "¿Qué se te atraviesa a la hora de llenarla?";
+  } else if(registrados.length <= 3){
+    nombre = `Registro parcial: ${registrados.length} de 7 días`;
+    metafora = "Faltan días para poder leer patrones.";
+    foco = "Con menos de cuatro días no se ven secuencias. Vale la pena revisar qué días faltan: " +
+      "muy a menudo los que faltan son precisamente los peores, y esa ausencia es un dato.";
+    pregunta = "¿Los días que no llenaste fueron los más difíciles?";
+  } else if(actuados.length){
+    nombre = "Hubo conductas problema esta semana";
+    metafora = `${actuados.length} registro${actuados.length > 1 ? "s" : ""} de conducta actuada: ` +
+      `${[...new Set(actuados)].join(", ")}.`;
+    foco = "La sesión se organiza por jerarquía, no por lo que la persona quiera contar: primero " +
+      "lo que puso en riesgo la vida, después lo que interfiere con el tratamiento y después lo " +
+      "que interfiere con la calidad de vida. Conviene hacer análisis en cadena de la más grave.";
+    pregunta = "¿Cuál de estos episodios te preocupa más a ti?";
+    bandera = "Con conducta actuada en la semana corresponde valorar riesgo antes de continuar, " +
+      "revisar el plan de crisis y dejar registro de lo actuado.";
+  } else if(impulsoAlto.length && habTotal >= registrados.length * 2){
+    nombre = "Impulsos altos y habilidades en uso";
+    metafora = `Picos de ${impulsoAlto.map(i => i[1].toLowerCase()).join(" y ")}, ` +
+      `con ${habTotal} habilidades registradas y ninguna conducta actuada.`;
+    foco = "Este es el resultado que busca el entrenamiento y conviene señalarlo explícitamente: " +
+      "el impulso apareció con fuerza y no se actuó. La persona suele no darle valor porque " +
+      "«igual me sentí mal», y ahí es donde hay que insistir: las habilidades funcionaron " +
+      "aunque no se haya sentido mejor.";
+    pregunta = "¿Qué usaste el día que el impulso estuvo más alto y aun así no lo hiciste?";
+  } else if(habTotal <= registrados.length){
+    nombre = "Pocas habilidades registradas";
+    metafora = `${habTotal} habilidades en ${registrados.length} días.`;
+    foco = "Menos de una habilidad por día suele significar una de tres cosas: no se están " +
+      "usando, se están usando y no se registran, o no se reconocen como habilidades porque ya " +
+      "son automáticas. Conviene revisar cuál de las tres antes de enseñar habilidades nuevas.";
+    pregunta = "¿Hiciste algo esta semana para no sentirte peor, aunque no lo hayas llamado habilidad?";
+  } else {
+    nombre = "Semana registrada";
+    metafora = `${registrados.length} de 7 días, ${habTotal} habilidades usadas.`;
+    foco = "Con la semana completa se puede leer en diagonal: qué día se dispara todo, qué " +
+      "emoción antecede a qué impulso, y si las habilidades aparecen antes del pico o solo " +
+      "después. Eso último decide si se trabaja anticipación o supervivencia a la crisis.";
+    pregunta = "Mirando la semana entera, ¿qué día fue el más difícil y qué lo hizo distinto?";
+  }
+
+  $("lNombre").textContent   = nombre;
+  $("lMetafora").textContent = metafora;
+  $("lFoco").textContent     = foco;
+  $("lPregunta").textContent = pregunta;
+  $("lBandera").innerHTML    = bandera ? `<div class="bandera">${bandera}</div>` : "";
+}
+
+function pintarTodo(){
+  pintarSelector();
+  medidores("emociones", EMOCIONES, "emociones");
+  medidores("impulsos", IMPULSOS, "impulsos");
+  pintarActuo();
+  pintarHabilidades();
+  dibujarCalor();
+  leer();
+}
+
+function resumen(){
+  const l = [];
+  DIAS.forEach(([corto, largo], i) => {
+    if(!lleno(i)) return;
+    const d = datos[i];
+    const em = EMOCIONES.filter(([id]) => d.emociones[id]).map(([id, et]) => `${et} ${d.emociones[id]}`);
+    const im = IMPULSOS.filter(([id]) => d.impulsos[id]).map(([id, et]) => `${et} ${d.impulsos[id]}`);
+    l.push(`${largo.toUpperCase()}`);
+    if(em.length) l.push("  Emociones: " + em.join(", "));
+    if(im.length) l.push("  Impulsos: " + im.join(", "));
+    if(d.actuo.length) l.push("  Actuó: " + d.actuo.join(", "));
+    if(d.habilidades.length) l.push("  Habilidades: " + d.habilidades.join(", "));
+  });
+  if(!l.length) l.push("(semana sin registrar)");
+  l.push("", "LECTURA: " + $("lNombre").textContent, $("lMetafora").textContent,
+         "Sobre qué trabajar: " + $("lFoco").textContent);
+  const band = $("lBandera").querySelector(".bandera");
+  if(band) l.push("ALERTA: " + band.textContent.trim());
+  return l.join("\n");
+}
+
+Kit.iniciar({
+  clave: "dbt-tarjeta-diaria",
+  extra: () => ({datos, diaActivo}),
+  restaurar: d => { datos = d.datos || {}; diaActivo = d.diaActivo || 0; },
+  alCambiar: pintarTodo,
+  resumen: resumen
+});

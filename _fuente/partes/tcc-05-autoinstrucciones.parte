@@ -1,0 +1,256 @@
+@@meta
+archivo: tcc-autoinstrucciones.html
+titulo: Autoinstrucciones
+orden: 06
+enfoque: Cognitivo-conductual
+etiqueta: Inoculación de estrés
+sub: Nadie entra callado a una situación que le da miedo: todo el mundo se está diciendo algo. La diferencia entre quien se sostiene y quien se bloquea suele estar en qué se dice y en qué momento. Esta hoja arma ese guion por adelantado, en cuatro fases, y sale una tarjeta para llevar el día que toca.
+fuente: Entrenamiento en autoinstrucciones y entrenamiento en inoculación de estrés, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 9.
+resumen: Cuatro fases —preparación, confrontación, momentos críticos y autorrefuerzo— con frases elegidas por la persona, contrastadas contra lo que hoy se dice. Termina en una tarjeta imprimible.
+@@css
+  .fase{border:1px solid var(--linea);border-left-width:5px;border-radius:11px;padding:15px 18px;
+    margin-bottom:12px;background:#fdfefe}
+  .fase .cabeza{display:flex;align-items:center;gap:11px;margin-bottom:4px}
+  .fase .n{width:28px;height:28px;border-radius:8px;color:#fff;display:flex;align-items:center;
+    justify-content:center;font-weight:700;font-size:13px;flex:0 0 auto}
+  .fase h3{margin:0;font-size:16px}
+  .fase .cuando{margin:5px 0 11px;font-size:13px;color:var(--tinta-suave);line-height:1.5}
+  .fase .chip{font-size:13px}
+
+  .antes-despues{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:14px}
+  .columna{border-radius:10px;padding:13px 16px}
+  .columna.viejo{background:#fdf3ef;border:1px solid var(--alerta-linea)}
+  .columna.nuevo{background:var(--logro-fondo);border:1px solid #cfe4d8}
+  .columna h4{margin:0 0 8px;font-size:14px}
+  .columna.viejo h4{color:var(--alerta)}
+  .columna.nuevo h4{color:var(--logro)}
+  .columna ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.55}
+  .columna .velo{padding:12px 8px;font-size:13px}
+
+  .tarjeta{border:2px solid var(--tinta);border-radius:12px;padding:17px 20px;background:#fff;
+    max-width:520px;margin:0 auto}
+  .tarjeta .cab{border-bottom:2px solid var(--tinta);padding-bottom:7px;margin-bottom:12px;
+    display:flex;justify-content:space-between;align-items:baseline}
+  .tarjeta .cab b{font-size:15px;letter-spacing:.3px}
+  .tarjeta .cab span{font-size:11px;color:var(--tinta-suave)}
+  .tarjeta .bloque-f{margin-bottom:12px}
+  .tarjeta .bloque-f .t{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;
+    font-weight:700;margin-bottom:3px}
+  .tarjeta .bloque-f ul{margin:0;padding-left:17px;font-size:13px;line-height:1.55}
+  .tarjeta .pie{border-top:1px dashed var(--linea);padding-top:9px;margin-top:12px;font-size:11.5px;
+    color:var(--tinta-suave);line-height:1.5}
+  @media (max-width:600px){.antes-despues{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Para qué situación?</h2>
+  <div class="cuerpo">
+    <div class="chips" id="situacion"></div>
+    <details class="apunte">
+      <summary>Otra situación</summary>
+      <input type="text" id="situacionNota" placeholder="Cuál, y cuándo es.">
+    </details>
+
+    <label class="etiqueta" style="margin-top:16px">¿Qué te dices hoy, cuando llega ese momento?</label>
+    <p class="ayuda" style="margin-bottom:8px">Sin suavizarlo. Esta columna es la línea de base:
+    sin ella, las frases nuevas suenan a autoayuda y no se usan.</p>
+    <div class="chips" id="loQueDigo"></div>
+
+    <div class="medidor" style="margin-top:16px">
+      <label for="ansiedadHoy">¿Cuánta ansiedad te da hoy esa situación?</label>
+      <input type="range" id="ansiedadHoy" min="0" max="100" value="70">
+      <span class="valor" id="vAnsiedadHoy">70</span>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Las cuatro fases</h2>
+  <p class="ayuda">El estrés no es un bloque: tiene momentos, y cada momento necesita otra cosa.
+  Una frase que sirve mientras uno se prepara puede ser inútil en mitad del bloqueo. Elige dos o
+  tres por fase, y que suenen a ti: si no las dirías, no las vas a usar.</p>
+  <div class="cuerpo"><div id="fases"></div></div>
+</section>
+
+<div class="antes-despues">
+  <div class="columna viejo">
+    <h4>Lo que me digo hoy</h4>
+    <div id="colViejo"></div>
+  </div>
+  <div class="columna nuevo">
+    <h4>Lo que voy a decirme</h4>
+    <div id="colNuevo"></div>
+  </div>
+</div>
+
+<section class="bloque">
+  <h2><span class="num">3</span>Ensayar</h2>
+  <p class="ayuda">No funcionan leídas: funcionan dichas, y mejor si se dijeron antes del día. El
+  entrenamiento clásico va de fuera hacia adentro.</p>
+  <div class="cuerpo">
+    <div class="chips" id="ensayo"></div>
+    <div class="medidor" style="margin-top:14px">
+      <label for="ansiedadDespues">Después de ensayarlo, ¿cuánta ansiedad te da imaginarlo?</label>
+      <input type="range" id="ansiedadDespues" min="0" max="100" value="70">
+      <span class="valor" id="vAnsiedadDespues">70</span>
+    </div>
+    <div id="lecturaEnsayo"></div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">4</span>La tarjeta</h2>
+  <p class="ayuda">Se imprime y se lleva el día que toca: en el bolsillo, en la billetera o en el
+  forro del celular. La idea no es leerla en mitad del momento, sino haberla leído cinco
+  minutos antes.</p>
+  <div class="cuerpo"><div class="tarjeta" id="tarjeta"></div></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const SITUACIONES = ["Hablar delante de un grupo", "Una entrevista", "Una conversación difícil", "Presentar mi trabajo"];
+
+const LO_QUE_DIGO = ["«Voy a quedar en ridículo»", "«Se me va a olvidar todo»", "«No me preparé lo suficiente»", "«Todos saben más que yo»"];
+
+const FASES = [
+ {n:"Preparación", color:"#5f77b8",
+  cuando:"Los días y las horas antes. Aquí la mente ensaya la catástrofe; la instrucción sirve para orientar hacia la tarea en vez de hacia el desenlace.",
+  ops:["«¿Qué es exactamente lo que tengo que hacer?»","«Puedo prepararme por partes»",
+    "«Preocuparme no me prepara; prepararme sí»","«Ya he pasado por cosas parecidas»",
+    "«Voy a hacer un plan y seguirlo»","«No tiene que salir perfecto»",
+    "«Los nervios de antes no predicen cómo me va a ir»"]},
+
+ {n:"Confrontación", color:"#c9962f",
+  cuando:"El momento de entrar y empezar. La instrucción tiene que ser corta: en ese punto no hay espacio mental para frases largas.",
+  ops:["«Una cosa a la vez»","«Empiezo por lo que sí sé»","«Respira y sigue»",
+    "«Esto es incomodidad, no peligro»","«No tengo que gustarle a todo el mundo»",
+    "«Bajo la voz, hablo más lento»","«Solo tengo que dar el primer paso»"]},
+
+ {n:"Momentos críticos", color:"#c26a4e",
+  cuando:"Cuando el bloqueo llega: se va la mente en blanco, tiembla la voz, aparece la idea de irse. Es la fase que más se olvida preparar y la única que de verdad decide el resultado.",
+  ops:["«Esto ya pasó antes y bajó»","«Puedo estar nervioso y seguir igual»",
+    "«Me salto esta y vuelvo después»","«No tengo que hacerlo perfecto para terminarlo»",
+    "«Suelto los hombros, respiro y sigo»","«Que se me note no significa que esté fracasando»",
+    "«Aguanto un minuto más antes de decidir nada»"]},
+
+ {n:"Autorrefuerzo", color:"#4aa070",
+  cuando:"Al terminar, salga como salga. Es la fase que hace que el entrenamiento se sostenga: sin ella, el esfuerzo no queda registrado y la próxima vez se empieza de cero.",
+  ops:["«Lo hice, aunque me costó»","«Me quedé, que era lo difícil»",
+    "«Funcionó decirme eso»","«No salió perfecto y salí»",
+    "«Esto lo hice yo, no fue suerte»","«La próxima ya sé qué me sirve»"]}
+];
+
+const ENSAYOS = ["Lo dije en voz alta", "Lo dije frente al espejo", "Lo ensayé imaginando la situación", "Se lo dije a alguien"];
+
+/* ====================== FASES ====================== */
+$("fases").innerHTML = FASES.map((f, i) => `
+  <div class="fase" style="border-left-color:${f.color}">
+    <div class="cabeza">
+      <span class="n" style="background:${f.color}">${i + 1}</span>
+      <h3>${f.n}</h3>
+    </div>
+    <p class="cuando">${f.cuando}</p>
+    <div class="chips" id="fase-${i}"></div>
+    <details class="apunte">
+      <summary>Escribir una frase mía para esta fase</summary>
+      <input type="text" id="faseTexto-${i}" placeholder="En mis palabras, como de verdad me lo diría.">
+    </details>
+  </div>`).join("");
+FASES.forEach((f, i) => Kit.chips("fase-" + i, f.ops, refrescar));
+
+const frasesDe = i => Kit.activas("fase-" + i)
+  .concat($("faseTexto-" + i).value.trim() ? [$("faseTexto-" + i).value.trim()] : []);
+
+/* ====================== REFRESCO ====================== */
+function refrescar(){
+  $("vAnsiedadHoy").textContent = $("ansiedadHoy").value;
+  $("vAnsiedadDespues").textContent = $("ansiedadDespues").value;
+
+  const viejas = Kit.activas("loQueDigo");
+  $("colViejo").innerHTML = viejas.length
+    ? `<ul>${viejas.map(v => `<li>${Kit.escapar(v)}</li>`).join("")}</ul>`
+    : `<div class="velo">Marca arriba lo que te dices hoy.</div>`;
+
+  const nuevas = FASES.map((f, i) => [f, frasesDe(i)]).filter(([, v]) => v.length);
+  $("colNuevo").innerHTML = nuevas.length
+    ? nuevas.map(([f, v]) =>
+        `<div style="margin-bottom:8px"><b style="font-size:12px">${f.n}</b>
+         <ul>${v.map(x => `<li>${Kit.escapar(x)}</li>`).join("")}</ul></div>`).join("")
+    : `<div class="velo">Elige frases en las cuatro fases.</div>`;
+
+  armarTarjeta();
+  leerEnsayo();
+}
+
+function leerEnsayo(){
+  const a = +$("ansiedadHoy").value, d = +$("ansiedadDespues").value, dif = a - d;
+  const ens = Kit.activas("ensayo").length;
+  const completas = FASES.filter((f, i) => frasesDe(i).length).length;
+  let html = "";
+  if(completas < 4 && completas > 0)
+    html += `<div class="pistas"><b>Faltan fases.</b> Van ${completas} de 4. La que más se olvida
+      es la de momentos críticos, y es la que decide si la persona se queda o se va.</div>`;
+  if(!ens && completas)
+    html += `<div class="pistas">Todavía sin ensayar. Una tarjeta que no se dijo en voz alta no
+      se va a usar el día que toca.</div>`;
+  if(ens)
+    html += dif >= 15
+      ? `<div class="logro">Bajó ${dif} puntos solo con ensayarlo. Eso es exactamente lo que
+         busca la inoculación: llegar al momento con la respuesta ya practicada y no
+         improvisándola.</div>`
+      : dif > 0
+      ? `<div class="pistas">Bajó ${dif} puntos. Conviene repetir el ensayo, y hacerlo imaginando
+         el peor momento y no el mejor.</div>`
+      : `<div class="pistas"><b>Sin cambio.</b> Vale la pena revisar si las frases elegidas suenan
+         a esta persona o si suenan a manual: las que no se dirían nunca no producen ningún
+         efecto, por muy correctas que sean.</div>`;
+  $("lecturaEnsayo").innerHTML = html;
+}
+
+function armarTarjeta(){
+  const sit = Kit.activas("situacion");
+  const bloques = FASES.map((f, i) => {
+    const v = frasesDe(i);
+    return v.length
+      ? `<div class="bloque-f"><div class="t" style="color:${f.color}">${f.n}</div>
+         <ul>${v.map(x => `<li>${Kit.escapar(x)}</li>`).join("")}</ul></div>` : "";
+  }).join("");
+
+  $("tarjeta").innerHTML = bloques
+    ? `<div class="cab"><b>MIS AUTOINSTRUCCIONES</b><span>${
+        sit.length ? Kit.escapar(sit[0]) : "recortar y llevar"}</span></div>
+       ${bloques}
+       <div class="pie">Leerla cinco minutos antes, no durante. Si aparece el bloqueo, la fase de
+       momentos críticos es la de en medio: una frase corta y seguir.</div>`
+    : `<div class="velo">Elige frases arriba y la tarjeta se arma sola.</div>`;
+}
+
+function resumen(){
+  const l = [];
+  const sit = Kit.activas("situacion");
+  l.push("SITUACIÓN: " + (sit.join(", ") || "sin marcar") +
+         ($("situacionNota").value.trim() ? ` — ${$("situacionNota").value.trim()}` : ""));
+  const viejas = Kit.activas("loQueDigo");
+  if(viejas.length) l.push("", "LO QUE SE DICE HOY: " + viejas.join(" · "));
+  l.push(`Ansiedad antes: ${$("ansiedadHoy").value}/100   después de ensayar: ${$("ansiedadDespues").value}/100`);
+
+  l.push("", "AUTOINSTRUCCIONES POR FASE");
+  FASES.forEach((f, i) => {
+    const v = frasesDe(i);
+    if(v.length) l.push(`${f.n}:\n  - ${v.join("\n  - ")}`);
+  });
+  const ens = Kit.activas("ensayo");
+  if(ens.length) l.push("", "ENSAYO: " + ens.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("situacion", SITUACIONES, refrescar);
+Kit.chips("loQueDigo", LO_QUE_DIGO, refrescar);
+Kit.chips("ensayo", ENSAYOS, leerEnsayo);
+FASES.forEach((f, i) => $("faseTexto-" + i).addEventListener("input", refrescar));
+["ansiedadHoy","ansiedadDespues"].forEach(id => $(id).addEventListener("input", refrescar));
+
+Kit.iniciar({
+  clave: "tcc-autoinstrucciones",
+  alCambiar: refrescar,
+  resumen: resumen
+});

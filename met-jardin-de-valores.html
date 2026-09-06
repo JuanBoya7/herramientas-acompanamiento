@@ -1,0 +1,1385 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El jardín de valores</title>
+<style>
+  :root{
+    --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
+    --fondo:#f4f6f9; --papel:#ffffff; --acento:#2f6f8f; --acento-claro:#e8f1f6;
+    --alerta:#8a4a2c; --alerta-fondo:#fdf3ef; --alerta-linea:#f0d3c6;
+    --logro:#3f7d5a; --logro-fondo:#eef6f1;
+    --radio:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+
+  /* ---------- cabecera ---------- */
+  header.tapa,section.bloque,section.paso{background:var(--papel);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:74ch}
+  .fuente{margin:10px 0 0;font-size:12.5px;color:var(--tinta-suave);font-style:italic}
+  .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--linea)}
+  .campos-id label{flex:1 1 160px;font-size:12.5px;color:var(--tinta-suave)}
+  .campos-id input{width:100%;margin-top:4px;font:inherit;font-size:14.5px;color:var(--tinta);
+    border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fdfefe}
+  .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
+
+  /* ---------- pasos y bloques ---------- */
+  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;display:flex;
+    align-items:center;gap:11px}
+  .num{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);font-size:14px;font-weight:700}
+  .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+  .cuerpo{margin-top:14px}
+  textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
+    font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
+    padding:9px 11px;background:#fdfefe}
+  textarea{min-height:78px;resize:vertical;line-height:1.5}
+  textarea:focus,input:focus,select:focus{outline:2px solid var(--acento-claro);
+    border-color:var(--acento)}
+  label.etiqueta{font-size:13.5px;font-weight:600;display:block;margin:14px 0 5px}
+  label.etiqueta:first-child{margin-top:0}
+
+  /* ---------- fichas de opcion ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{font:inherit;font-size:13.5px;border:1px solid var(--linea);border-radius:999px;
+    padding:6px 14px;cursor:pointer;background:#fdfefe;color:var(--tinta-suave);
+    transition:background .12s,color .12s,border-color .12s}
+  .chip:hover{border-color:var(--acento)}
+  .chip.activa{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  /* ficha añadida por la persona: lleva su aspa para quitarla */
+  .chip.libre{padding-right:8px;display:inline-flex;align-items:center;gap:7px}
+  .chip.libre .quitarChip{display:inline-flex;align-items:center;justify-content:center;
+    width:16px;height:16px;border-radius:50%;font-size:13px;line-height:1;opacity:.55}
+  .chip.libre .quitarChip:hover{opacity:1;background:#ffffff40}
+  /* el boton de agregar: mismo tamaño, sin peso visual */
+  .chip.mas{border-style:dashed;color:var(--acento);font-weight:700;padding:6px 13px;
+    line-height:1}
+  .chip.mas:hover{background:var(--acento-claro)}
+  input.chipNuevo{font:inherit;font-size:13.5px;border:1px solid var(--acento);
+    border-radius:999px;padding:6px 14px;background:#fff;width:auto;min-width:190px}
+
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px}
+  .opcion{border:1px solid var(--linea);border-radius:9px;padding:10px 13px;cursor:pointer;
+    background:#fdfefe;transition:border-color .12s,background .12s}
+  .opcion:hover{border-color:var(--acento)}
+  .opcion.activa{border-color:var(--acento);background:var(--acento-claro)}
+  .opcion b{display:block;font-size:14px;margin-bottom:2px}
+  .opcion span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+
+  /* ---------- lo que se deja abierto ----------
+     Sin rotulo ni instruccion: una pregunta puesta en la hoja para que el
+     profesional la use cuando corresponda. */
+  .hablado{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f;margin:12px 0}
+  .hablado b{color:#16303d}
+  details.apunte{margin-top:9px}
+  details.apunte summary{cursor:pointer;font-size:12px;color:var(--tinta-suave);
+    list-style:none;display:inline-flex;align-items:center;gap:5px}
+  details.apunte summary::-webkit-details-marker{display:none}
+  details.apunte summary::before{content:"+";display:inline-flex;align-items:center;
+    justify-content:center;width:15px;height:15px;border:1px solid var(--linea);
+    border-radius:4px;font-size:12px;line-height:1}
+  details.apunte[open] summary::before{content:"\2212"}
+  details.apunte summary:hover{color:var(--acento)}
+  details.apunte textarea,details.apunte input{margin-top:7px;font-size:14px}
+  details.apunte textarea{min-height:52px}
+
+  /* ---------- mostrador y ranuras (arrastrar o tocar) ---------- */
+  .mostrador{margin-top:6px}
+  .mostrador .grupo{margin-bottom:13px}
+  .mostrador .grupo > .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.7px;
+    color:var(--tinta-suave);font-weight:700;margin-bottom:6px}
+  .pieza{border:1px solid var(--linea);border-radius:9px;padding:9px 12px;background:#fdfefe;
+    cursor:grab;transition:border-color .12s,transform .12s,opacity .12s;user-select:none}
+  .pieza:hover{border-color:var(--acento);transform:translateY(-1px)}
+  .pieza.usada{opacity:.32;cursor:default;pointer-events:none}
+  .pieza.arrastrando{opacity:.5}
+  .pieza b{display:block;font-size:13.5px;margin-bottom:2px}
+  .pieza span{display:block;font-size:12px;color:var(--tinta-suave);line-height:1.42}
+  .ranuras{display:grid;gap:10px}
+  .ranura{border:2px dashed var(--linea);border-radius:10px;padding:13px 15px;min-height:64px;
+    display:flex;align-items:center;gap:11px;background:#fbfcfd;transition:border-color .12s,
+    background .12s}
+  .ranura.encima{border-color:var(--acento);background:var(--acento-claro)}
+  .ranura.llena{border-style:solid;background:var(--papel)}
+  .ranura .hueco{color:#adb9c4;font-size:13.5px;font-style:italic}
+  .ranura .puesto{flex:1}
+  .ranura .puesto b{display:block;font-size:14.5px}
+  .ranura .puesto span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+  .ranura .orden{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--acento-claro);
+    color:var(--acento);display:flex;align-items:center;justify-content:center;font-size:13px;
+    font-weight:700}
+  .ranura .sacar{flex:0 0 auto;border:0;background:transparent;color:var(--tinta-suave);
+    font-size:18px;cursor:pointer;padding:2px 7px;border-radius:6px;line-height:1}
+  .ranura .sacar:hover{background:var(--alerta-fondo);color:var(--alerta)}
+  .pista-arrastre{font-size:12.5px;color:var(--tinta-suave);margin:0 0 9px}
+
+  /* ---------- medidores ---------- */
+  .medidor{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .medidor label{font-size:13.5px;color:var(--tinta-suave)}
+  .medidor input[type=range]{flex:1;min-width:130px;height:22px;accent-color:var(--acento)}
+  .valor{min-width:44px;text-align:center;font-weight:700;font-size:16px;color:var(--acento)}
+  .marcador{min-width:46px;text-align:center;font-weight:700;font-size:17px;color:#fff;
+    border-radius:7px;padding:2px 6px}
+
+  /* ---------- lectura / resultado ---------- */
+  .lectura{border-left:5px solid var(--acento);background:linear-gradient(180deg,#f7fbfd,#fff)}
+  .lectura .nombre{font-size:22px;font-weight:700;margin:2px 0}
+  .lectura .metafora{font-size:15px;color:var(--tinta-suave);font-style:italic;margin:0 0 14px}
+  .campo{margin-bottom:12px}
+  .campo .etq{font-size:11.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--acento);
+    font-weight:700;margin-bottom:3px}
+  .campo p{margin:0;font-size:14.5px}
+  .pregunta{background:var(--acento-claro);border-radius:8px;padding:12px 15px;font-size:15px;
+    color:#23404f}
+  .bandera{background:var(--alerta-fondo);border:1px solid var(--alerta-linea);border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--alerta);margin-top:12px}
+  .logro{background:var(--logro-fondo);border:1px solid #cfe4d8;border-radius:8px;
+    padding:11px 14px;font-size:14px;color:var(--logro);margin-top:12px}
+  .pistas{background:#f6f9fb;border-left:3px solid var(--linea);border-radius:0 6px 6px 0;
+    padding:9px 13px;margin:9px 0;font-size:13.5px;color:#3f5163}
+  .pistas b{color:var(--acento)}
+  .pistas ul{margin:5px 0 0;padding-left:19px}
+  .pistas li{margin-bottom:3px}
+  .velo{color:var(--tinta-suave);font-size:14.5px;text-align:center;padding:26px 14px;
+    border:1px dashed var(--linea);border-radius:9px;line-height:1.6}
+
+  /* ---------- lectura condensada: cuadro + su indicacion al lado ---------- */
+  .combinaciones{display:grid;gap:8px;margin-top:12px}
+  .combi{display:grid;grid-template-columns:minmax(150px,34%) 1fr;gap:0;
+    border:1px solid var(--linea);border-radius:9px;overflow:hidden;font-size:13px}
+  .combi .cual{padding:9px 13px;background:#f6f9fb;border-right:1px solid var(--linea)}
+  .combi .cual b{display:block;font-size:13.5px;color:var(--tinta);margin-bottom:1px}
+  .combi .cual span{color:var(--tinta-suave);font-size:12px;line-height:1.4}
+  .combi .quehacer{padding:9px 13px;color:var(--tinta-suave);line-height:1.45}
+  .combi.activo{border-color:var(--acento);box-shadow:0 0 0 2px var(--acento-claro)}
+  .combi.activo .cual{background:var(--acento-claro)}
+  .combi.activo .cual b,.combi.activo .quehacer{color:var(--tinta)}
+  @media (max-width:620px){.combi{grid-template-columns:1fr}
+    .combi .cual{border-right:0;border-bottom:1px solid var(--linea)}}
+
+  details.catalogo{margin-top:14px;border-top:1px dashed var(--linea);padding-top:12px}
+  details.catalogo summary{cursor:pointer;font-size:13.5px;color:var(--acento);font-weight:600}
+  .lista-perfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:8px;margin-top:11px}
+  .mini{border:1px solid var(--linea);border-radius:8px;padding:9px 12px;font-size:12.5px;
+    color:var(--tinta-suave)}
+  .mini.activo{border-color:var(--acento);background:var(--acento-claro);color:var(--tinta)}
+  .mini b{display:block;color:var(--tinta);font-size:13.5px;margin-bottom:2px}
+
+  /* ---------- tablas ---------- */
+  .tabla{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tabla th,.tabla td{border:1px solid var(--linea);padding:7px 9px;text-align:left;
+    vertical-align:top}
+  .tabla th{background:var(--acento-claro);color:#23404f;font-size:12.5px;font-weight:700}
+  .desliza{overflow-x:auto}
+
+  /* ---------- notas del profesional, plegadas ---------- */
+  details.notas-pro{background:linear-gradient(180deg,#faf8fd,#fff);border:1px solid var(--linea);
+    border-left:5px solid #7a6a9c;border-radius:var(--radio);padding:14px 20px;margin-bottom:16px}
+  details.notas-pro summary{cursor:pointer;font-size:15px;font-weight:700;color:#5b4d7a;
+    list-style:none;display:flex;align-items:center;gap:10px}
+  details.notas-pro summary::-webkit-details-marker{display:none}
+  details.notas-pro summary::before{content:"\270E";display:inline-flex;align-items:center;
+    justify-content:center;width:27px;height:27px;border-radius:50%;background:#efeaf7;
+    font-size:14px}
+  details.notas-pro[open] summary{margin-bottom:4px}
+
+  /* ---------- modo lámina: hojas para exponer ----------
+     Menos texto por bloque, letra más grande y todo en fichas del mismo
+     tamaño, para que se lea proyectado y no parezca un formulario. */
+  body.lamina{font-size:17px}
+  body.lamina .envoltura{max-width:1080px}
+  body.lamina h1{font-size:28px}
+  body.lamina .sub{font-size:15.5px;max-width:70ch}
+  body.lamina section.paso h2,body.lamina section.bloque h2{font-size:21px}
+  body.lamina .ayuda{font-size:14.5px}
+  body.lamina .chip{font-size:14.5px;padding:7px 16px}
+  body.lamina .opcion b{font-size:15px}
+  body.lamina .opcion span{font-size:13.5px}
+  body.lamina label.etiqueta{font-size:15px}
+  body.lamina .pregunta{font-size:16.5px}
+
+  .rejilla-fichas{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));
+    gap:11px;margin-top:12px}
+  .ficha-l{border:1px solid var(--linea);border-top:4px solid var(--acento);border-radius:10px;
+    padding:13px 15px;background:#fff}
+  .ficha-l .t{font-size:15.5px;font-weight:700;margin-bottom:4px;line-height:1.3}
+  .ficha-l .d{font-size:13.5px;color:var(--tinta-suave);line-height:1.45}
+  .ficha-l .chips{margin-top:9px}
+
+  /* el rótulo pequeño que ubica de qué ficha del manual viene cada cosa */
+  .procedencia{font-size:11.5px;color:var(--tinta-suave);letter-spacing:.3px;margin:2px 0 0}
+
+  /* ---------- escenas que se mueven ----------
+     Las hojas en las que la metáfora ocurre en tiempo real: el escenario, los
+     marcadores debajo, los mandos al pie y la pregunta sola al final. */
+  .escenario{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 12px 10px;margin-bottom:16px;overflow:hidden}
+  .escenario > svg,.escenario .lienzo > svg{display:block;width:100%;height:auto;margin:0 auto}
+  .escenario .lienzo{position:relative;max-width:700px;margin:0 auto}
+  .marcas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:11px}
+  .marcas div{text-align:center;min-width:92px}
+  .marcas .n{font-size:23px;font-weight:700;display:block;line-height:1.15;
+    font-variant-numeric:tabular-nums}
+  .marcas .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--tinta-suave)}
+  .mandos{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px;
+    padding-top:12px;border-top:1px dashed var(--linea)}
+  .duracion{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .duracion .chip{font-size:14px;padding:8px 18px}
+  /* la pregunta que abre la conversación, sin rótulo ni informe alrededor */
+  .pregunta-sola{border-left:5px solid var(--acento);
+    background:linear-gradient(180deg,#f7fbfd,#fff);transition:border-color .4s,background .4s}
+  .pregunta-sola .pregunta{background:transparent;padding:0;font-size:17px;line-height:1.5}
+  @media print{.mandos,.duracion{display:none !important}}
+
+  /* ---------- barra al final de la hoja ---------- */
+  .barra{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 20px;margin-top:22px}
+  button{font:inherit;font-size:14.5px;border-radius:8px;padding:9px 18px;cursor:pointer;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta)}
+  button:hover{border-color:var(--acento)}
+  button.principal{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .brindis{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    background:var(--tinta);color:#fff;font-size:13.5px;padding:8px 16px;border-radius:8px;
+    z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+  .brindis.visible{opacity:.94}
+
+  @media (max-width:820px){
+    .envoltura{padding:16px 12px 32px}
+    header.tapa,section.bloque,section.paso{padding:16px 15px}
+  }
+  @media print{
+    body{background:#fff}
+    .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
+    .opcion:not(.activa),.borrar{display:none !important}
+    header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
+    details.notas-pro,details.apunte,details.notas-pro > .cuerpo{display:block}
+    details.notas-pro summary{list-style:none}
+    .envoltura{padding:0;max-width:100%}
+    textarea{min-height:0;height:auto}
+  }
+
+  .panel-jardin{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 12px 10px;margin-bottom:16px}
+  .jardin{display:block;width:100%;height:auto;max-width:700px;margin:0 auto}
+  .clima{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:10px;
+    padding-top:11px;border-top:1px dashed var(--linea)}
+  .clima div{text-align:center;min-width:88px}
+  .clima .n{font-size:21px;font-weight:700;display:block;color:#4aa070}
+  .clima .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--tinta-suave)}
+  .avisoRegadera{text-align:center;font-size:12.5px;color:var(--tinta-suave);margin:8px 0 0}
+
+  .surcos{grid-template-columns:1fr 1fr}
+  .riegos{display:flex;flex-direction:column;gap:9px}
+  .riego{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+    border:1px solid var(--linea);border-left-width:5px;border-radius:9px;padding:10px 14px;
+    background:#fdfefe}
+  .riego .quien{font-size:14.5px;font-weight:600}
+  .riego .surco{font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+  .riego .mando{display:flex;align-items:center;gap:10px;min-width:230px}
+  .riego input[type=range]{flex:1;min-width:100px;height:22px;accent-color:#3f9b5c}
+  .riego .gota{flex:0 0 auto;display:block}
+  .riego .estado{font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 10px;
+    white-space:nowrap;min-width:86px;text-align:center}
+
+  /* ---------- malezas: recuadros que se plantan sobre una flor ---------- */
+  .malezas{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:9px}
+  .maleza{border:1px solid var(--linea);border-radius:9px;padding:9px 12px;cursor:pointer;
+    background:#fdfefe;transition:border-color .12s,background .12s}
+  .maleza:hover{border-color:#8d9478}
+  .maleza.activa{border-color:#7d8a63;background:#f4f6ee;cursor:default}
+  .maleza .nom{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .maleza .nom::before{content:"";flex:0 0 auto;width:13px;height:15px;
+    background:no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'><path d='M7 16 V6' stroke='%238d9478' stroke-width='1.6' fill='none'/><path d='M7 11 Q1 9 2 3 Q7 4 7 11' fill='%238d9478' opacity='.75'/><path d='M7 9 Q13 7 12 1 Q7 2 7 9' fill='%238d9478' opacity='.55'/></svg>")}
+  .maleza select{margin-top:7px;font-size:12.5px;padding:5px 8px}
+  .maleza .quitar{float:right;border:0;background:transparent;color:var(--tinta-suave);
+    font-size:17px;line-height:1;padding:0 3px;cursor:pointer}
+  .maleza .quitar:hover{color:var(--alerta)}
+
+  @media (max-width:640px){
+    .surcos{grid-template-columns:1fr}
+    .riego{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="envoltura">
+
+<header class="tapa">
+  <h1>El jardín de valores</h1>
+  <p class="sub">Un jardín tiene espacio para seis surcos, no para veinte. Aquí se siembra eligiendo qué entra y qué se queda afuera, se riega con la acción de esta semana, y el jardín responde: lo que se riega crece y lo que no, se dobla. El jardinero no puede hacer crecer nada; solo puede regar.</p>
+  <p class="fuente">Clarificación de valores y metáfora del jardín, en Díaz Corbobés, MANUAL ACT §2.1 y §3.6, sobre la hoja de asesoramiento de valores de Hayes, Strosahl y Wilson.</p>
+
+</header>
+
+<section class="paso">
+  <h2><span class="num">1</span>Sembrar</h2>
+  <p class="ayuda">Veinte direcciones y seis surcos. Lo que se queda afuera dice tanto como lo que
+  entra.</p>
+  <p class="pista-arrastre">Arrastra una semilla hasta un surco. En el celular, tócala.</p>
+  <div class="cuerpo">
+    <div class="ranuras surcos" id="surcos"></div>
+    <div style="margin-top:16px"><div id="semillero"></div></div>
+  </div>
+</section>
+
+<section class="paso" id="pasoRiego">
+  <h2><span class="num">2</span>Regar</h2>
+  <p class="ayuda">Cuánta agua le cayó de verdad a cada surco <b>durante la última semana</b>.</p>
+  <div class="cuerpo">
+    <div class="riegos" id="riegos"></div>
+    <div class="velo" id="veloRiego">Siembra al menos una semilla y aparecerá aquí su riego.</div>
+
+    <div id="cajaMalezas" style="margin-top:22px" hidden>
+      <label class="etiqueta">Las malezas</label>
+      <p class="ayuda" style="margin-bottom:9px">Crecen solas donde no se riega. Marca la que
+      reconozcas y ponla sobre la flor en la que crece.</p>
+      <div class="malezas" id="malezas"></div>
+      <div class="chips" id="malezasMas" style="margin-top:9px"></div>
+      <div id="lecturaMalezas"></div>
+    </div>
+  </div>
+</section>
+
+<div class="panel-jardin">
+  <svg class="jardin" id="jardin" viewBox="0 0 700 420" role="img"
+    aria-label="Jardín con los surcos sembrados, su estado según el riego y las malezas"></svg>
+  <p class="avisoRegadera" id="avisoRegadera"></p>
+  <div class="clima">
+    <div><span class="n" id="cSembradas">0</span><span class="r">surcos sembrados</span></div>
+    <div><span class="n" id="cFlor">0</span><span class="r">en flor</span></div>
+    <div><span class="n" id="cSecas" style="color:#a8834e">0</span><span class="r">secas</span></div>
+    <div><span class="n" id="cMalezas" style="color:#7d8a63">0</span><span class="r">malezas</span></div>
+  </div>
+</div>
+
+<details class="notas-pro">
+  <summary>Notas del profesional</summary>
+  <div class="cuerpo">
+    <label class="etiqueta">Observaciones del proceso</label>
+    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+    <label class="etiqueta">Hipótesis de trabajo</label>
+    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+    <label class="etiqueta">Tarea acordada</label>
+    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+    <label class="etiqueta">Para la próxima sesión</label>
+    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+    <p class="ayuda" style="margin-top:12px">
+      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+      No incluir estas notas al imprimir</label>
+    </p>
+  </div>
+</details>
+
+<div class="barra">
+  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="Kit.copiar()">Copiar resumen</button>
+  <button onclick="Kit.guardar(true)">Guardar</button>
+  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
+
+</div>
+<div class="brindis" id="brindis"></div>
+
+<script>
+/* ============================================================
+   Kit común de las herramientas.
+   Se inserta completo en cada archivo: no hay dependencias externas
+   y todo funciona abriendo el HTML con doble clic, sin internet.
+   ============================================================ */
+var Kit = (function(){
+
+  var CLAVE = "herramienta";
+  var ganchos = {};            // extra, restaurar, alCambiar, resumen
+  var listo = false;
+
+  /* ---------- utilidades ---------- */
+  function $(id){ return document.getElementById(id); }
+  function crearEl(tag, clase, texto){
+    var e = document.createElement(tag);
+    if(clase) e.className = clase;
+    if(texto !== undefined) e.textContent = texto;
+    return e;
+  }
+  function svg(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  /* mezcla dos colores hex; t=0 devuelve a, t=1 devuelve b */
+  function mezcla(a, b, t){
+    t = Math.max(0, Math.min(1, t));
+    function n(c, i){ return parseInt(c.substr(1 + i*2, 2), 16); }
+    var r = Math.round(n(a,0) + (n(b,0) - n(a,0)) * t),
+        g = Math.round(n(a,1) + (n(b,1) - n(a,1)) * t),
+        z = Math.round(n(a,2) + (n(b,2) - n(a,2)) * t);
+    return "#" + [r,g,z].map(function(v){ return ("0"+v.toString(16)).slice(-2); }).join("");
+  }
+  function escapar(s){
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  /* Se conserva por compatibilidad: estas hojas son de uso clínico. */
+  function modo(){ return "clinica"; }
+
+  /* ---------- fichas ----------
+     Pocas fichas, las más frecuentes, y un "+" para que la persona ponga la
+     suya. Lo que agrega se guarda con la hoja y vuelve al recargar.        */
+  var LIBRES = {};      // contenedorId -> [texto, ...]
+  var REG = {};         // contenedorId -> {lista, alCambiar, sinMas}
+
+  function unChip(contId, txt, id, alCambiar, libre){
+    var b = crearEl("button", "chip" + (libre ? " libre" : ""));
+    b.type = "button";
+    b.id = id;
+    b.setAttribute("data-txt", txt);
+    b.appendChild(document.createTextNode(txt));
+    if(libre){
+      var x = crearEl("span", "quitarChip", "×");
+      x.title = "Quitar";
+      x.onclick = function(ev){
+        ev.stopPropagation();
+        var l = LIBRES[contId] || [], i = l.indexOf(txt);
+        if(i >= 0) l.splice(i, 1);
+        redibujar(contId);
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      b.appendChild(x);
+    }
+    b.onclick = function(){
+      b.classList.toggle("activa");
+      if(alCambiar) alCambiar();
+      guardar();
+    };
+    return b;
+  }
+
+  function botonMas(contId, alCambiar){
+    var mas = crearEl("button", "chip mas", "+");
+    mas.type = "button";
+    mas.title = "Agregar una tuya";
+    mas.onclick = function(){
+      var caja = mas.parentElement;
+      var campo = document.createElement("input");
+      campo.type = "text";
+      campo.className = "chipNuevo";
+      campo.placeholder = "En tus palabras…";
+      caja.insertBefore(campo, mas);
+      mas.style.display = "none";
+      var cerrado = false;
+      function cerrar(guardarlo){
+        if(cerrado) return;
+        cerrado = true;
+        var txt = campo.value.trim();
+        campo.remove();
+        mas.style.display = "";
+        if(guardarlo && txt){
+          agregarLibre(contId, txt);
+          if(alCambiar) alCambiar();
+        }
+      }
+      campo.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter"){ ev.preventDefault(); cerrar(true); }
+        if(ev.key === "Escape"){ ev.preventDefault(); cerrar(false); }
+      });
+      campo.addEventListener("blur", function(){ cerrar(true); });
+      campo.focus();
+    };
+    return mas;
+  }
+
+  /* Agrega una ficha propia ya marcada. */
+  function agregarLibre(contId, txt){
+    if(!LIBRES[contId]) LIBRES[contId] = [];
+    if(LIBRES[contId].indexOf(txt) < 0) LIBRES[contId].push(txt);
+    redibujar(contId);
+    var l = LIBRES[contId], id = contId + "-libre-" + l.indexOf(txt);
+    if($(id)) $(id).classList.add("activa");
+    guardar();
+  }
+
+  function redibujar(contId){
+    var r = REG[contId];
+    if(r) chips(contId, r.lista, r.alCambiar, r.sinMas);
+  }
+
+  /* chips("miCaja", ["Una","Otra"], alCambiar)  -> con boton "+"
+     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"          */
+  function chips(contenedorId, lista, alCambiar, sinMas){
+    var c = $(contenedorId);
+    if(!c) return;
+    REG[contenedorId] = {lista:lista, alCambiar:alCambiar, sinMas:sinMas};
+    var marcadas = {};
+    for(var k = 0; k < c.children.length; k++)
+      if(c.children[k].classList.contains("activa"))
+        marcadas[c.children[k].getAttribute("data-txt")] = 1;
+
+    c.innerHTML = "";
+    c.classList.add("chips");
+    lista.forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-" + i, alCambiar);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    (LIBRES[contenedorId] || []).forEach(function(txt, i){
+      var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, alCambiar, true);
+      if(marcadas[txt]) b.classList.add("activa");
+      c.appendChild(b);
+    });
+    if(!sinMas) c.appendChild(botonMas(contenedorId, alCambiar));
+  }
+
+  /* Tarjetas con título y descripción. lista: [["Título","Descripción"], ...] */
+  function opciones(contenedorId, lista, alCambiar, unica){
+    var c = $(contenedorId);
+    if(!c) return;
+    c.innerHTML = "";
+    c.classList.add("tarjetas");
+    lista.forEach(function(par, i){
+      var e = crearEl("div", "opcion");
+      e.id = contenedorId + "-" + i;
+      e.setAttribute("data-txt", par[0]);
+      e.innerHTML = "<b>" + escapar(par[0]) + "</b><span>" + escapar(par[1] || "") + "</span>";
+      e.onclick = function(){
+        if(unica) for(var j=0;j<c.children.length;j++)
+          if(c.children[j] !== e) c.children[j].classList.remove("activa");
+        e.classList.toggle("activa");
+        if(alCambiar) alCambiar();
+        guardar();
+      };
+      c.appendChild(e);
+    });
+  }
+
+  /* ---------- mostrador con ranuras ----------
+     El patrón de arrastrar-o-tocar: un mostrador de piezas y unas ranuras que
+     las reciben. Se arrastra en escritorio y se toca en celular.
+
+     cfg = {bancoId, ranurasId, cupo, items:[{id,titulo,desc,grupo,color}],
+            etiquetas:[...], alCambiar}                                     */
+  function mostrador(cfg){
+    var banco = $(cfg.bancoId), ranuras = $(cfg.ranurasId);
+    var puestas = [];                       // ids colocados, en orden
+    var porId = {};
+    cfg.items.forEach(function(it){ porId[it.id] = it; });
+
+    function pintarBanco(){
+      var grupos = [], vistos = {};
+      cfg.items.forEach(function(it){
+        var g = it.grupo || "";
+        if(!vistos[g]){ vistos[g] = []; grupos.push(g); }
+        vistos[g].push(it);
+      });
+      banco.innerHTML = "";
+      banco.classList.add("mostrador");
+      grupos.forEach(function(g){
+        var caja = crearEl("div", "grupo");
+        var col = vistos[g][0] && vistos[g][0].color;
+        if(g){
+          var tit = crearEl("div", "titulin", g);
+          if(col) tit.style.color = col;
+          caja.appendChild(tit);
+        }
+        var rejilla = crearEl("div", "tarjetas");
+        vistos[g].forEach(function(it){
+          var e = crearEl("div", "pieza" + (puestas.indexOf(it.id) >= 0 ? " usada" : ""));
+          e.draggable = true;
+          if(it.color){
+            e.style.borderLeft = "4px solid " + it.color;
+            e.style.background = it.color + "0f";
+          }
+          e.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          e.addEventListener("dragstart", function(ev){
+            ev.dataTransfer.setData("text/plain", it.id);
+            e.classList.add("arrastrando");
+          });
+          e.addEventListener("dragend", function(){ e.classList.remove("arrastrando"); });
+          e.addEventListener("click", function(){ poner(it.id); });
+          rejilla.appendChild(e);
+        });
+        caja.appendChild(rejilla);
+        banco.appendChild(caja);
+      });
+    }
+
+    function pintarRanuras(){
+      ranuras.innerHTML = "";
+      ranuras.classList.add("ranuras");
+      for(var i = 0; i < cfg.cupo; i++)(function(i){
+        var id = puestas[i], it = id ? porId[id] : null;
+        var r = crearEl("div", "ranura" + (it ? " llena" : ""));
+        if(it && it.color){
+          r.style.borderColor = it.color;
+          r.style.background = it.color + "0f";
+        }
+        r.appendChild(crearEl("span", "orden", i + 1));
+        if(it){
+          if(it.color) r.lastChild.style.background = it.color + "26";
+          var p = crearEl("div", "puesto");
+          p.innerHTML = "<b>" + escapar(it.titulo) + "</b>" +
+                        (it.desc ? "<span>" + escapar(it.desc) + "</span>" : "");
+          r.appendChild(p);
+          var x = crearEl("button", "sacar", "×");
+          x.type = "button";
+          x.title = "Sacar";
+          x.onclick = function(){ sacar(i); };
+          r.appendChild(x);
+        } else {
+          r.appendChild(crearEl("span", "hueco",
+            (cfg.etiquetas && cfg.etiquetas[i]) || "Arrastra aquí, o toca una del mostrador"));
+        }
+        r.addEventListener("dragover", function(ev){
+          ev.preventDefault();
+          r.classList.add("encima");
+        });
+        r.addEventListener("dragleave", function(){ r.classList.remove("encima"); });
+        r.addEventListener("drop", function(ev){
+          ev.preventDefault();
+          r.classList.remove("encima");
+          poner(ev.dataTransfer.getData("text/plain"), i);
+        });
+        ranuras.appendChild(r);
+      })(i);
+    }
+
+    function poner(id, i){
+      if(!porId[id] || puestas.indexOf(id) >= 0) return;
+      if(i === undefined || puestas.length < i){
+        if(puestas.length >= cfg.cupo){ brindis("Las ranuras están llenas"); return; }
+        puestas.push(id);
+      } else {
+        puestas[i] = id;
+      }
+      refrescar();
+    }
+    function sacar(i){
+      puestas.splice(i, 1);
+      refrescar();
+    }
+    function refrescar(){
+      puestas = puestas.filter(function(x){ return x; });
+      pintarBanco();
+      pintarRanuras();
+      if(cfg.alCambiar) cfg.alCambiar();
+      guardar();
+    }
+
+    refrescar();
+    return {
+      elegidas: function(){ return puestas.map(function(id){ return porId[id]; }); },
+      ids: function(){ return puestas.slice(); },
+      cargar: function(lista){ puestas = (lista || []).filter(function(x){ return porId[x]; }); refrescar(); },
+      poner: poner,
+      refrescar: refrescar
+    };
+  }
+
+  /* Devuelve los textos marcados dentro de un contenedor de chips u opciones */
+  function activas(contenedorId){
+    var c = $(contenedorId), fuera = [];
+    if(!c) return fuera;
+    for(var i=0;i<c.children.length;i++){
+      var h = c.children[i];
+      if(!h.classList.contains("activa")) continue;
+      var t = h.getAttribute("data-txt");
+      if(t == null) t = h.tagName === "DIV" ? h.querySelector("b").textContent : h.textContent;
+      fuera.push(t);
+    }
+    return fuera;
+  }
+  /* Enlaza un input range con su etiqueta de valor */
+  function medidor(idRango, idSalida, alCambiar){
+    var r = $(idRango), s = $(idSalida);
+    if(!r) return;
+    function act(){
+      if(s) s.textContent = r.value;
+      if(alCambiar) alCambiar();
+    }
+    r.addEventListener("input", function(){ act(); guardar(); });
+    act();
+  }
+
+  /* Gota que se llena según el nivel: 0 vacía, 10 rebosando. */
+  function gota(nivel, tam){
+    var n = Math.max(0, Math.min(10, nivel)) / 10;
+    var t = tam || 26, uid = "g" + Math.random().toString(36).slice(2, 8);
+    var col = mezcla("#c9b48a", "#2f8fbf", n);
+    return '<svg class="gota" width="' + t + '" height="' + t * 1.18 + '" viewBox="0 0 24 28">' +
+      '<clipPath id="' + uid + '"><path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z"/></clipPath>' +
+      '<path d="M12 1 C12 1 3 12 3 18 a9 9 0 0 0 18 0 C21 12 12 1 12 1 Z" fill="#f2f5f8" ' +
+      'stroke="' + col + '" stroke-width="1.6"/>' +
+      '<rect x="0" y="' + (28 - 27 * n) + '" width="24" height="28" fill="' + col +
+      '" clip-path="url(#' + uid + ')" opacity="0.9"/></svg>';
+  }
+
+  /* ---------- reloj de escena ----------
+     Un solo latido para las hojas que se mueven. Llama a fn(dt) unas 25 veces
+     por segundo mientras esté andando, con dt en segundos. Se para sola cuando
+     la pestaña se va al fondo, para no gastar batería con una escena que nadie
+     está mirando, y retoma sin saltos al volver.                            */
+  function reloj(fn){
+    var id = null, previo = 0, deuda = 0, PASO = 0.04, dormida = false;
+    function latir(t){
+      id = requestAnimationFrame(latir);
+      if(!previo){ previo = t; return; }
+      var dt = Math.min(.25, (t - previo) / 1000);
+      previo = t;
+      deuda += dt;
+      if(deuda < PASO) return;
+      fn(deuda);
+      deuda = 0;
+    }
+    var r = {
+      andar: function(){ if(!id){ previo = 0; deuda = 0; id = requestAnimationFrame(latir); } },
+      parar: function(){ if(id){ cancelAnimationFrame(id); id = null; previo = 0; deuda = 0; } },
+      anda:  function(){ return !!id; }
+    };
+    document.addEventListener("visibilitychange", function(){
+      if(document.hidden && r.anda()){ dormida = true; r.parar(); }
+      else if(!document.hidden && dormida){ dormida = false; r.andar(); }
+    });
+    return r;
+  }
+
+  /* ---------- persistencia ---------- */
+  function camposGuardables(){
+    var fuera = [], t = document.querySelectorAll("input,textarea,select");
+    for(var i=0;i<t.length;i++) if(t[i].id) fuera.push(t[i]);
+    return fuera;
+  }
+  function marcablesGuardables(){
+    var fuera = [], t = document.querySelectorAll(".chip[id],.opcion[id]");
+    for(var i=0;i<t.length;i++) fuera.push(t[i]);
+    return fuera;
+  }
+  function guardar(avisar){
+    if(!listo) return;
+    var d = { _campos:{}, _marcas:{}, _libres: LIBRES };
+    camposGuardables().forEach(function(e){
+      d._campos[e.id] = (e.type === "checkbox" || e.type === "radio") ? e.checked : e.value;
+    });
+    marcablesGuardables().forEach(function(e){
+      if(e.classList.contains("activa")) d._marcas[e.id] = 1;
+    });
+    if(ganchos.extra) d._extra = ganchos.extra();
+    try{ localStorage.setItem(CLAVE, JSON.stringify(d)); }catch(e){}
+    if(avisar) brindis("Guardado en este equipo");
+  }
+  function cargar(){
+    var d = null;
+    try{ d = JSON.parse(localStorage.getItem(CLAVE) || "null"); }catch(e){}
+    if(!d) return false;
+    if(d._extra && ganchos.restaurar) ganchos.restaurar(d._extra);
+    LIBRES = d._libres || {};
+    Object.keys(LIBRES).forEach(redibujar);
+    camposGuardables().forEach(function(e){
+      if(!(e.id in (d._campos||{}))) return;
+      var v = d._campos[e.id];
+      if(e.type === "checkbox" || e.type === "radio") e.checked = !!v; else e.value = v;
+    });
+    marcablesGuardables().forEach(function(e){
+      if((d._marcas||{})[e.id]) e.classList.add("activa");
+    });
+    return true;
+  }
+  function limpiar(){
+    if(!confirm("¿Empezar de nuevo? Se borrará lo que está en pantalla en este equipo.")) return;
+    try{ localStorage.removeItem(CLAVE); }catch(e){}
+    location.reload();
+  }
+
+  /* ---------- copiar resumen para la historia clínica ---------- */
+  function encabezadoResumen(){
+    var l = [], t = document.querySelector("h1");
+    l.push((t ? t.textContent : "Herramienta").toUpperCase());
+    var pares = [["nombre","Consultante"],["fecha","Fecha"],["sesion","Sesión"],
+                 ["profesional","Profesional"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1] + ": " + e.value.trim());
+    });
+    return l.join("\n");
+  }
+  function notasProResumen(){
+    var l = [], pares = [["proObservaciones","Observaciones"],["proHipotesis","Hipótesis de trabajo"],
+                         ["proTarea","Tarea acordada"],["proProxima","Para la próxima sesión"]];
+    pares.forEach(function(p){
+      var e = $(p[0]);
+      if(e && e.value.trim()) l.push(p[1].toUpperCase() + "\n" + e.value.trim());
+    });
+    return l.length ? "\n\n--- NOTAS DEL PROFESIONAL ---\n" + l.join("\n\n") : "";
+  }
+  function textoResumen(){
+    var cuerpo = ganchos.resumen ? ganchos.resumen() : "";
+    return encabezadoResumen() + "\n\n" + cuerpo + notasProResumen();
+  }
+  function copiar(){
+    var txt = textoResumen();
+    function viejo(){
+      var a = document.createElement("textarea");
+      a.value = txt;
+      a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(a);
+      brindis(ok ? "Resumen copiado al portapapeles" : "No se pudo copiar: revise el resumen impreso");
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(function(){
+        brindis("Resumen copiado al portapapeles");
+      }, viejo);
+    } else viejo();
+  }
+  /* ---------- impresión ----------
+     Los desplegables cerrados no salen en el papel. Antes de imprimir se
+     abren, y al terminar vuelven a como estaban, para que la hoja impresa
+     lleve lo que se trabajó aunque esté plegado en pantalla. */
+  var abiertosAlImprimir = [];
+  function antesDeImprimir(){
+    abiertosAlImprimir = [];
+    var ds = document.querySelectorAll("details");
+    for(var i = 0; i < ds.length; i++){
+      if(ds[i].classList.contains("catalogo")) continue;
+      if(ds[i].classList.contains("borrar")) continue;
+      if(!ds[i].open){ ds[i].open = true; abiertosAlImprimir.push(ds[i]); }
+    }
+  }
+  function despuesDeImprimir(){
+    abiertosAlImprimir.forEach(function(d){ d.open = false; });
+    abiertosAlImprimir = [];
+  }
+  if(window.addEventListener){
+    window.addEventListener("beforeprint", antesDeImprimir);
+    window.addEventListener("afterprint", despuesDeImprimir);
+    if(window.matchMedia){
+      var mq = window.matchMedia("print");
+      if(mq.addEventListener)
+        mq.addEventListener("change", function(e){
+          if(e.matches) antesDeImprimir(); else despuesDeImprimir();
+        });
+    }
+  }
+
+  function brindis(msg){
+    var b = $("brindis");
+    if(!b) return;
+    b.textContent = msg;
+    b.classList.add("visible");
+    clearTimeout(b._t);
+    b._t = setTimeout(function(){ b.classList.remove("visible"); }, 2200);
+  }
+
+  /* ---------- arranque ---------- */
+  function iniciar(cfg){
+    CLAVE = cfg.clave || "herramienta";
+    ganchos = cfg;
+
+    var ni = $("proNoImprimir"), sincNotas = null;
+    if(ni){
+      sincNotas = function(){
+        var s = document.querySelector("details.notas-pro");
+        if(s) s.classList.toggle("borrar", ni.checked);
+      };
+      ni.addEventListener("change", sincNotas);
+    }
+
+    listo = true;
+    cargar();
+    if(sincNotas) sincNotas();
+    if($("fecha") && !$("fecha").value)
+      $("fecha").value = new Date().toLocaleDateString("es-CO");
+
+    document.querySelectorAll("input,textarea,select").forEach(function(e){
+      if(!e.id) return;
+      e.addEventListener("input", function(){ guardar(); });
+      e.addEventListener("change", function(){ guardar(); });
+    });
+
+    if(ganchos.alCambiar) ganchos.alCambiar();
+  }
+
+  /* ---------- arranque reducido ----------
+     Para las hojas que ya traían su propio motor y su propia persistencia:
+     cablea el botón de copiar y no toca nada más. */
+  function soloModo(){
+    var ni = $("proNoImprimir");
+    if(ni) ni.addEventListener("change", function(){
+      var s = document.querySelector("details.notas-pro");
+      if(s) s.classList.toggle("borrar", ni.checked);
+    });
+    ganchos = { resumen: resumenGenerico };
+  }
+
+  /* Recorre las secciones y arma un texto con lo que esté diligenciado. */
+  function resumenGenerico(){
+    var fuera = [], secciones = document.querySelectorAll("section,header");
+    for(var i = 0; i < secciones.length; i++){
+      var s = secciones[i];
+      if(s.classList.contains("notas-pro")) continue;
+      var titulo = s.querySelector("h1,h2,h3");
+      var lineas = [];
+      var campos = s.querySelectorAll("input,textarea,select");
+      for(var j = 0; j < campos.length; j++){
+        var e = campos[j];
+        if(e.type === "checkbox" || e.type === "radio" || !e.id) continue;
+        if(!String(e.value).trim()) continue;
+        var et = s.querySelector('label[for="' + e.id + '"]');
+        lineas.push("  " + (et ? et.textContent.trim() + ": " : "") + e.value.trim());
+      }
+      var marcas = s.querySelectorAll(".activa,.llena,.activo,.on");
+      var nombres = [];
+      for(var k = 0; k < marcas.length; k++){
+        var m = marcas[k];
+        if(m.classList.contains("mini")) continue;   /* catálogo, no elección */
+        var b = m.querySelector("b");
+        var txt = (b ? b.textContent : m.textContent).replace(/\s+/g, " ").trim();
+        if(txt && nombres.indexOf(txt) < 0) nombres.push(txt);
+      }
+      if(nombres.length) lineas.push("  Marcado: " + nombres.join(", "));
+      if(lineas.length){
+        if(titulo) fuera.push(titulo.textContent.trim().toUpperCase());
+        fuera.push(lineas.join("\n"));
+      }
+    }
+    return fuera.join("\n");
+  }
+
+  return {
+    iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
+    chips: chips, opciones: opciones, activas: activas, medidor: medidor,
+    agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
+    $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
+    reloj: reloj,
+    brindis: brindis, modo: modo, texto: textoResumen
+  };
+})();
+
+</script>
+<script>
+const $ = Kit.$;
+
+/* Cinco ámbitos, cada uno con su color: el recuadro de la semilla, la ranura
+   del surco y la fila de riego llevan el mismo. */
+const AMBITOS = {
+  "Vínculos": "#c26a4e",
+  "Cuerpo":   "#6ea24f",
+  "Hacer":    "#5f77b8",
+  "Sentido":  "#3f9b86",
+  "Gozo":     "#d1a52c"
+};
+
+const SEMILLAS = [
+ {id:"s1",  grupo:"Vínculos", titulo:"Estar presente",            desc:"Estar de verdad cuando estoy con alguien."},
+ {id:"s2",  grupo:"Vínculos", titulo:"Escuchar sin corregir",     desc:"Dejar que el otro termine antes de responder."},
+ {id:"s3",  grupo:"Vínculos", titulo:"Poner límites con cariño",  desc:"Decir que no sin romper el vínculo."},
+ {id:"s4",  grupo:"Vínculos", titulo:"Buscar yo también",         desc:"No esperar siempre a que el otro escriba."},
+ {id:"s5",  grupo:"Vínculos", titulo:"Reparar después de pelear", desc:"Volver rápido en vez de dejar que se enfríe."},
+
+ {id:"s6",  grupo:"Cuerpo",   titulo:"Dormir como si importara",  desc:"Tratar el sueño como algo que sostiene todo lo demás."},
+ {id:"s7",  grupo:"Cuerpo",   titulo:"Mover el cuerpo",           desc:"Caminar, bailar, jugar."},
+ {id:"s8",  grupo:"Cuerpo",   titulo:"Comer sin castigarme",      desc:"Alimentarme de una forma que me sostenga."},
+ {id:"s9",  grupo:"Cuerpo",   titulo:"Bajarle al consumo",        desc:"Menos de lo que me está saliendo caro."},
+
+ {id:"s10", grupo:"Hacer",    titulo:"Aprender algo",             desc:"Entender, no solo pasar."},
+ {id:"s11", grupo:"Hacer",    titulo:"Terminar lo que empiezo",   desc:"Cerrar en vez de acumular cosas a medias."},
+ {id:"s12", grupo:"Hacer",    titulo:"Trabajar sin dejarme la vida", desc:"Cumplir sin que se lleve todo lo demás."},
+ {id:"s13", grupo:"Hacer",    titulo:"Crear con las manos",       desc:"Hacer algo que quede: escribir, cocinar, armar."},
+
+ {id:"s14", grupo:"Sentido",  titulo:"Ayudar a alguien",          desc:"Aportarle a alguien que no tiene por qué devolverme nada."},
+ {id:"s15", grupo:"Sentido",  titulo:"Estar en la naturaleza",    desc:"Salir a donde no haya paredes."},
+ {id:"s16", grupo:"Sentido",  titulo:"Vivir según lo que creo",   desc:"Que lo que hago se parezca a lo que digo."},
+ {id:"s17", grupo:"Sentido",  titulo:"Agradecer",                 desc:"Notar lo que sí está, no solo lo que falta."},
+
+ {id:"s18", grupo:"Gozo",     titulo:"Hacer algo por gusto",      desc:"Que no rinda para nada y esté bien así."},
+ {id:"s19", grupo:"Gozo",     titulo:"Descansar sin culpa",       desc:"Parar sin tener que justificarlo."},
+ {id:"s20", grupo:"Gozo",     titulo:"Jugar",                     desc:"Lo que hacía antes de que todo tuviera que servir."}
+].map(s => Object.assign(s, {color: AMBITOS[s.grupo]}));
+
+const MALEZAS = ["No hay tiempo","Pereza","Cansancio","El celular","«mañana empiezo»",
+  "Miedo a fallar","Culpa","«no vale la pena»"];
+
+const CUPO = 6;
+let huerta;                  // control devuelto por Kit.mostrador
+let riego = {};              // id de semilla -> 0..10
+let malezas = {};            // texto de la maleza -> id del surco donde crece
+let propias = [];            // malezas puestas por la persona
+let regadera = "";           // id del surco elegido para esta semana
+
+const sembradas = () => huerta ? huerta.elegidas() : [];
+const aguaDe = s => riego[s.id] === undefined ? 5 : riego[s.id];
+const surcoPorId = id => sembradas().find(s => s.id === id);
+
+/* ---------- una sola escala, la misma en todas partes ---------- */
+const NIVELES = [
+  {min:8, nombre:"En flor",      fondo:"#e6f4ec", tinta:"#2f6b4c"},
+  {min:6, nombre:"Bien regada",  fondo:"#eef6f1", tinta:"#4a8a68"},
+  {min:4, nombre:"Le falta agua",fondo:"#fdf6e8", tinta:"#8a6a2c"},
+  {min:2, nombre:"Casi seca",    fondo:"#faf1e6", tinta:"#a8834e"},
+  {min:0, nombre:"Seca",         fondo:"#f6efe6", tinta:"#8a6a45"}
+];
+const nivelDe = a => NIVELES.find(n => a >= n.min);
+const colorPlanta = a => Kit.mezcla("#b09468", "#3f9b5c", Math.pow(a / 10, .75));
+
+/* ====================== RIEGOS ====================== */
+function pintarRiegos(){
+  const lista = sembradas();
+  $("veloRiego").style.display = lista.length ? "none" : "block";
+  $("cajaMalezas").hidden = !lista.length;
+  $("riegos").innerHTML = lista.map(s => {
+    const a = aguaDe(s);
+    return `<div class="riego" id="fila-${s.id}" style="border-left-color:${s.color}">
+      <div>
+        <div class="quien">${Kit.escapar(s.titulo)}</div>
+        <div class="surco" style="color:${s.color}">${Kit.escapar(s.grupo)}</div>
+      </div>
+      <div class="mando">
+        <span id="gota-${s.id}">${Kit.gota(a, 24)}</span>
+        <input type="range" min="0" max="10" value="${a}" data-s="${s.id}">
+        <span class="estado" id="est-${s.id}"></span>
+      </div>
+    </div>`;
+  }).join("");
+
+  $("riegos").querySelectorAll("input[data-s]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      riego[inp.dataset.s] = +inp.value;
+      pintarEstado(inp.dataset.s);
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  lista.forEach(s => pintarEstado(s.id));
+}
+
+/* La etiqueta y la gota se rehacen con el mismo dato en el mismo momento:
+   antes la etiqueta se quedaba con el valor viejo al mover el calibrador. */
+function pintarEstado(id){
+  const s = surcoPorId(id);
+  if(!s) return;
+  const a = aguaDe(s), n = nivelDe(a), et = $("est-" + id), g = $("gota-" + id);
+  if(et){
+    et.textContent = n.nombre;
+    et.style.background = n.fondo;
+    et.style.color = n.tinta;
+  }
+  if(g) g.innerHTML = Kit.gota(a, 24);
+}
+
+/* ====================== MALEZAS ====================== */
+function pintarMalezas(){
+  const lista = sembradas();
+  const todas = MALEZAS.concat(propias);
+  $("malezas").innerHTML = todas.map((m, i) => {
+    const puesta = malezas[m] !== undefined;
+    const opciones = lista.map(s =>
+      `<option value="${s.id}"${malezas[m] === s.id ? " selected" : ""}>${Kit.escapar(s.titulo)}</option>`).join("");
+    return `<div class="maleza${puesta ? " activa" : ""}" data-m="${Kit.escapar(m)}">
+      ${puesta ? `<button type="button" class="quitar" data-quita="${Kit.escapar(m)}" title="Quitar">×</button>` : ""}
+      <div class="nom">${Kit.escapar(m)}</div>
+      ${puesta ? `<select data-dnd="${Kit.escapar(m)}">${opciones}</select>` : ""}
+    </div>`;
+  }).join("");
+
+  $("malezas").querySelectorAll(".maleza").forEach(caja => {
+    caja.addEventListener("click", ev => {
+      if(ev.target.closest("select") || ev.target.closest("button")) return;
+      const m = caja.dataset.m;
+      if(malezas[m] !== undefined) return;
+      /* nace donde hay menos agua, que es donde suelen crecer */
+      const seco = lista.slice().sort((a, b) => aguaDe(a) - aguaDe(b))[0];
+      malezas[m] = seco ? seco.id : "";
+      pintarMalezas();
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  $("malezas").querySelectorAll("select[data-dnd]").forEach(sel => {
+    sel.addEventListener("change", () => {
+      malezas[sel.dataset.dnd] = sel.value;
+      refrescar();
+      Kit.guardar();
+    });
+  });
+  $("malezas").querySelectorAll("button[data-quita]").forEach(b => {
+    b.addEventListener("click", ev => {
+      ev.stopPropagation();
+      delete malezas[b.dataset.quita];
+      pintarMalezas();
+      refrescar();
+      Kit.guardar();
+    });
+  });
+}
+
+/* El "+" para poner una maleza con sus propias palabras. */
+function cablearMasMalezas(){
+  Kit.chips("malezasMas", [], () => {});
+  const caja = $("malezasMas");
+  const mas = caja.querySelector(".chip.mas");
+  if(!mas) return;
+  mas.textContent = "+ otra maleza";
+  mas.onclick = () => {
+    const campo = document.createElement("input");
+    campo.type = "text";
+    campo.className = "chipNuevo";
+    campo.placeholder = "En tus palabras…";
+    caja.insertBefore(campo, mas);
+    mas.style.display = "none";
+    let cerrado = false;
+    const cerrar = ok => {
+      if(cerrado) return;
+      cerrado = true;
+      const t = campo.value.trim();
+      campo.remove();
+      mas.style.display = "";
+      if(ok && t && propias.indexOf(t) < 0 && MALEZAS.indexOf(t) < 0){
+        propias.push(t);
+        pintarMalezas();
+        refrescar();
+        Kit.guardar();
+      }
+    };
+    campo.addEventListener("keydown", e => {
+      if(e.key === "Enter"){ e.preventDefault(); cerrar(true); }
+      if(e.key === "Escape"){ e.preventDefault(); cerrar(false); }
+    });
+    campo.addEventListener("blur", () => cerrar(true));
+    campo.focus();
+  };
+}
+
+const malezasDe = id => Object.keys(malezas).filter(m => malezas[m] === id);
+
+/* ====================== EL JARDÍN ====================== */
+const SUELO = 320;
+function dibujar(){
+  const svg = $("jardin");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, padre) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":"middle", style:estilo});
+    t.textContent = s;
+    (padre || svg).appendChild(t);
+    return t;
+  };
+
+  g("rect", {x:0, y:0, width:700, height:SUELO, fill:"#f5f9fb"});
+  g("rect", {x:0, y:SUELO, width:700, height:420 - SUELO, fill:"#c9b291"});
+  g("rect", {x:0, y:SUELO, width:700, height:7, fill:"#a8916f"});
+
+  const lista = sembradas();
+  if(!lista.length){
+    texto(350, 180, "El jardín está sin sembrar.",
+      "font:14.5px system-ui,sans-serif;fill:#a9b6c1");
+    return;
+  }
+
+  const ancho = 700 / Math.max(1, lista.length);
+  lista.forEach((s, i) => {
+    const cx = ancho * (i + .5), a = aguaDe(s), col = colorPlanta(a);
+    const alto = 34 + a * 12;
+    const caida = a <= 3 ? (4 - a) * 15 : 0;
+
+    /* toda la planta va dentro de un grupo que se puede tocar: al tocarla se
+       le pone la regadera de la semana */
+    const mata = Kit.svg("g", {style:"cursor:pointer"});
+    svg.appendChild(mata);
+    mata.addEventListener("click", () => {
+      regadera = (regadera === s.id) ? "" : s.id;
+      refrescar();
+      Kit.guardar();
+    });
+    /* zona sensible */
+    g("rect", {x:cx - ancho/2, y:80, width:ancho, height:SUELO + 60 - 80,
+      fill:"transparent"}, mata);
+
+    /* el surco removido, del color de su ámbito */
+    g("ellipse", {cx:cx, cy:SUELO + 5, rx:36, ry:7, fill:"#b59a76"}, mata);
+    g("rect", {x:cx - 36, y:SUELO + 12, width:72, height:3, rx:1.5,
+      fill:s.color, opacity:.55}, mata);
+
+    /* el tallo */
+    const puntaX = cx + caida, puntaY = SUELO - alto + caida * .5;
+    g("path", {d:`M${cx} ${SUELO} Q ${cx + caida * .35} ${SUELO - alto * .6} ${puntaX} ${puntaY}`,
+      stroke:col, "stroke-width":4, fill:"none", "stroke-linecap":"round"}, mata);
+
+    const hojas = Math.max(1, Math.round(a / 2));
+    for(let h = 0; h < hojas; h++){
+      const t = (h + 1) / (hojas + 1);
+      const hx = cx + caida * t * .5, hy = SUELO - alto * t;
+      const lado = h % 2 ? 1 : -1;
+      g("ellipse", {cx:hx + lado * 15, cy:hy, rx:15, ry:6.5, fill:col, opacity:.85,
+        transform:`rotate(${lado * (a <= 3 ? 34 : -18)} ${hx + lado * 15} ${hy})`}, mata);
+    }
+
+    if(a >= 8){
+      for(let p = 0; p < 6; p++){
+        const ang = p * 60 * Math.PI / 180;
+        g("ellipse", {cx:puntaX + Math.cos(ang) * 10, cy:puntaY + Math.sin(ang) * 10,
+          rx:7.5, ry:5.5, fill:"#e8a63c", opacity:.92,
+          transform:`rotate(${p * 60} ${puntaX + Math.cos(ang) * 10} ${puntaY + Math.sin(ang) * 10})`}, mata);
+      }
+      g("circle", {cx:puntaX, cy:puntaY, r:6, fill:"#c9822a"}, mata);
+    } else if(a >= 6){
+      g("circle", {cx:puntaX, cy:puntaY, r:5, fill:col, opacity:.6}, mata);
+    }
+
+    /* las malezas puestas en ESTE surco, con su nombre */
+    const malas = malezasDe(s.id);
+    malas.slice(0, 3).forEach((m, k) => {
+      const lado = k % 2 ? 1 : -1;
+      const mx = cx + lado * (24 + Math.floor(k / 2) * 13);
+      const altoM = 44 + Math.min(12, m.length) * 1.8;
+      g("path", {d:`M${mx} ${SUELO} q ${lado * 9} ${-altoM * .55} ${lado * 3} ${-altoM}`,
+        stroke:"#6f7d54", "stroke-width":3, fill:"none", "stroke-linecap":"round"}, mata);
+      g("path", {d:`M${mx + lado * 4} ${SUELO - altoM * .4} q ${lado * 15} ${-5} ${lado * 13} ${-18}`,
+        stroke:"#7d8a63", "stroke-width":2.4, fill:"none", "stroke-linecap":"round"}, mata);
+      g("path", {d:`M${mx + lado * 3} ${SUELO - altoM * .68} q ${-lado * 13} ${-4} ${-lado * 10} ${-16}`,
+        stroke:"#8d9478", "stroke-width":2.2, fill:"none", "stroke-linecap":"round"}, mata);
+      g("path", {d:`M${mx + lado * 3} ${SUELO - altoM * .9} q ${lado * 11} ${-3} ${lado * 9} ${-13}`,
+        stroke:"#6f7d54", "stroke-width":2, fill:"none", "stroke-linecap":"round"}, mata);
+    });
+    if(malas.length){
+      const nom = Kit.svg("text", {x:cx, y:SUELO + 62, "text-anchor":"middle",
+        style:"font:600 10.5px system-ui,sans-serif;fill:#5f6b4a"});
+      nom.textContent = malas.slice(0, 2).join(" · ") + (malas.length > 2 ? " …" : "");
+      mata.appendChild(nom);
+    }
+
+    /* rótulo del surco */
+    const et = Kit.svg("text", {x:cx, y:SUELO + 30, "text-anchor":"middle",
+      style:`font:600 11.5px system-ui,sans-serif;fill:${s.color}`});
+    et.textContent = s.titulo.length > 19 ? s.titulo.slice(0, 18) + "…" : s.titulo;
+    mata.appendChild(et);
+    const en = Kit.svg("text", {x:cx, y:SUELO + 46, "text-anchor":"middle",
+      style:"font:700 11px system-ui,sans-serif;fill:#7d674b"});
+    en.textContent = nivelDe(a).nombre.toLowerCase();
+    mata.appendChild(en);
+
+    /* la regadera de la semana, encima de la flor elegida */
+    if(regadera === s.id) dibujarRegadera(mata, cx, SUELO - Math.max(alto, 96) - 40);
+  });
+}
+
+function dibujarRegadera(padre, cx, cy){
+  const g = (t, a) => padre.appendChild(Kit.svg(t, a));
+  const R = Kit.svg("g", {transform:`translate(${cx - 26},${cy})`});
+  padre.appendChild(R);
+  const p = (t, a) => R.appendChild(Kit.svg(t, a));
+  p("rect", {x:8, y:8, width:34, height:26, rx:5, fill:"#7fa2b8", stroke:"#4f7891", "stroke-width":1.8});
+  p("path", {d:"M14 8 q 8 -12 20 -2", stroke:"#4f7891", "stroke-width":3, fill:"none",
+    "stroke-linecap":"round"});
+  p("path", {d:"M42 14 l 16 -7 l 4 5 l -14 10 Z", fill:"#7fa2b8", stroke:"#4f7891",
+    "stroke-width":1.6, "stroke-linejoin":"round"});
+  p("rect", {x:14, y:2, width:18, height:5, rx:2.5, fill:"#4f7891"});
+  /* el chorro */
+  for(let k = 0; k < 4; k++)
+    p("path", {d:`M${26 + k * 4} 30 q 2 12 ${-2 + k} 26`, stroke:"#7fbfd8",
+      "stroke-width":2, fill:"none", "stroke-linecap":"round", opacity:.75});
+  const t = Kit.svg("text", {x:26, y:-6, "text-anchor":"middle",
+    style:"font:700 10.5px system-ui,sans-serif;fill:#2f6f8f;letter-spacing:.5px"});
+  t.textContent = "ESTA SEMANA";
+  R.appendChild(t);
+}
+
+/* ====================== REFRESCO ====================== */
+const enFlor = () => sembradas().filter(s => aguaDe(s) >= 8);
+const secas  = () => sembradas().filter(s => aguaDe(s) <= 3);
+
+function refrescar(){
+  const lista = sembradas();
+  if(regadera && !lista.some(s => s.id === regadera)) regadera = "";
+  /* una maleza sin surco válido se recoloca sola en el más seco */
+  const seco = lista.slice().sort((a, b) => aguaDe(a) - aguaDe(b))[0];
+  Object.keys(malezas).forEach(m => {
+    if(!lista.some(s => s.id === malezas[m])){
+      if(seco) malezas[m] = seco.id; else delete malezas[m];
+    }
+  });
+
+  $("cSembradas").textContent = lista.length;
+  $("cFlor").textContent = enFlor().length;
+  $("cSecas").textContent = secas().length;
+  $("cMalezas").textContent = Object.keys(malezas).length;
+
+  dibujar();
+  leerMalezas();
+
+  const sel = surcoPorId(regadera);
+  $("avisoRegadera").innerHTML = !lista.length ? ""
+    : sel
+    ? `La regadera está sobre <b>${Kit.escapar(sel.titulo.toLowerCase())}</b>. Una flor por semana; la próxima, otra.`
+    : "Toca la flor que se riega esta semana. Una sola: la regadera no alcanza para seis.";
+}
+
+function leerMalezas(){
+  const n = Object.keys(malezas).length;
+  const enSecas = Object.keys(malezas).filter(m => {
+    const s = surcoPorId(malezas[m]);
+    return s && aguaDe(s) <= 3;
+  }).length;
+  $("lecturaMalezas").innerHTML = !n ? ""
+    : `<div class="pistas" style="margin-top:12px"><b>${n} maleza${n > 1 ? "s" : ""} puesta${n > 1 ? "s" : ""}</b>` +
+      (enSecas ? `, ${enSecas} sobre surcos secos.` : ", ninguna sobre un surco seco.") +
+      ` Crecen igual todas las semanas: la pregunta no es cómo quitarlas, sino qué se riega mientras están ahí.</div>`;
+}
+
+/* ====================== RESUMEN ====================== */
+function resumen(){
+  const l = [], lista = sembradas();
+  l.push(`SEMBRADO (${lista.length} de ${CUPO} surcos)`);
+  lista.forEach(s => {
+    const mal = malezasDe(s.id);
+    l.push(`- [${s.grupo}] ${s.titulo} — riego ${aguaDe(s)}/10 (${nivelDe(aguaDe(s)).nombre.toLowerCase()})` +
+           (mal.length ? `\n    Malezas: ${mal.join(", ")}` : ""));
+  });
+  const fuera = SEMILLAS.filter(s => !lista.some(x => x.id === s.id));
+  if(lista.length) l.push("", "Quedó afuera: " + fuera.map(s => s.titulo).join(", "));
+  l.push("", `En flor: ${enFlor().length}   Secas: ${secas().length}   ` +
+             `Malezas: ${Object.keys(malezas).length}`);
+  const sel = surcoPorId(regadera);
+  l.push("", "LA REGADERA DE ESTA SEMANA: " + (sel ? sel.titulo : "sin elegir"));
+  return l.join("\n");
+}
+
+/* ====================== ARRANQUE ====================== */
+cablearMasMalezas();
+
+huerta = Kit.mostrador({
+  bancoId:"semillero", ranurasId:"surcos", cupo:CUPO, items:SEMILLAS,
+  etiquetas:["Primer surco","Segundo surco","Tercer surco","Cuarto surco","Quinto surco","Sexto surco"],
+  alCambiar: () => { pintarRiegos(); pintarMalezas(); refrescar(); }
+});
+
+Kit.iniciar({
+  clave: "met-jardin-de-valores",
+  extra: () => ({surcos: huerta.ids(), riego, malezas, propias, regadera}),
+  restaurar: d => {
+    riego = d.riego || {};
+    malezas = d.malezas || {};
+    propias = d.propias || [];
+    regadera = d.regadera || "";
+    if(d.surcos) huerta.cargar(d.surcos);
+  },
+  alCambiar: () => { pintarRiegos(); pintarMalezas(); refrescar(); },
+  resumen: resumen
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+@@meta
+archivo: dbt-mente-sabia.html
+titulo: Mente sabia
+orden: 05
+enfoque: DBT
+etiqueta: Mindfulness
+lamina: si
+sub: Toda decisión difícil se juega entre dos voces: la que solo mira los hechos y la que solo siente. Ninguna de las dos se equivoca del todo, y ninguna alcanza sola. La mente sabia no es un promedio de las dos: es lo que aparece cuando se las escucha a ambas y después se hace silencio.
+fuente: Mente sabia y habilidades de mindfulness, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 7, fichas de mindfulness 1 a 3.
+resumen: Una decisión concreta pasa por las tres mentes, con banco de frases para cada una y una práctica guiada para bajar a la mente sabia. Corta, de una sola sesión.
+@@css
+  .balanza{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:18px 22px;margin-bottom:16px}
+  .balanza svg{display:block;width:100%;height:auto;max-width:440px;margin:0 auto}
+  .tres-mentes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .mente{border:1px solid var(--linea);border-top-width:5px;border-radius:11px;padding:14px 16px}
+  .mente.razon{border-top-color:#3f83a6;background:#f7fafc}
+  .mente.emocion{border-top-color:#c05c78;background:#fdf7f9}
+  .mente.sabia{border-top-color:#4aa070;background:#f6fbf8}
+  .mente h3{margin:0 0 3px;font-size:15.5px}
+  .mente .quees{margin:0 0 11px;font-size:12.5px;color:var(--tinta-suave);line-height:1.5}
+  .mente .chip{font-size:12.5px;padding:5px 11px}
+  .mente.sabia .chip.activa{background:#4aa070;border-color:#4aa070}
+  .mente.emocion .chip.activa{background:#c05c78;border-color:#c05c78}
+
+  .practica{counter-reset:pp}
+  .practica p{position:relative;padding-left:30px;margin:0 0 11px;font-size:14.5px;line-height:1.55}
+  .practica p::before{counter-increment:pp;content:counter(pp);position:absolute;left:0;top:1px;
+    width:21px;height:21px;border-radius:50%;background:#e6f4ec;color:#3f7d5a;font-size:11.5px;
+    font-weight:700;display:flex;align-items:center;justify-content:center}
+  @media (max-width:760px){.tres-mentes{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Qué hay que decidir?</h2>
+  <div class="cuerpo">
+    <div class="chips" id="decision"></div>
+    <details class="apunte">
+      <summary>Apuntarlo en una línea (opcional)</summary>
+      <input type="text" id="decisionNota" placeholder="La decisión concreta.">
+    </details>
+  </div>
+</section>
+
+<div class="balanza">
+  <svg id="balanzaSvg" viewBox="0 0 460 200" role="img"
+    aria-label="Balanza entre mente racional y mente emocional"></svg>
+  <div class="medidor" style="margin-top:12px">
+    <label for="donde">¿Desde dónde estás decidiendo ahora?</label>
+    <input type="range" id="donde" min="0" max="100" value="50">
+    <span class="valor" id="vDonde">50</span>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--tinta-suave)">
+    <span>Toda razón</span><span>Toda emoción</span>
+  </div>
+  <div id="lecturaDonde"></div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Que hable cada una</h2>
+  <p class="ayuda">Primero las dos que ya están hablando, por separado. La mente sabia no aparece
+  hasta que las otras fueron escuchadas: forzada antes, sale la racional disfrazada.</p>
+  <div class="cuerpo">
+    <div class="tres-mentes">
+      <div class="mente razon">
+        <h3>Mente racional</h3>
+        <p class="quees">Fría y lógica. Útil para resolver problemas, incapaz de decidir qué importa.</p>
+        <div class="chips" id="razon"></div>
+      </div>
+      <div class="mente emocion">
+        <h3>Mente emocional</h3>
+        <p class="quees">El ánimo manda sobre los hechos. Suele acertar en qué importa y fallar en cómo.</p>
+        <div class="chips" id="emocion"></div>
+      </div>
+      <div class="mente sabia">
+        <h3>Mente sabia</h3>
+        <p class="quees">La intersección. Sabe sin tener que argumentar, y se reconoce porque
+        tranquiliza en vez de agitar, aunque lo que diga sea difícil.</p>
+        <div class="chips" id="sabia"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">3</span>Bajar a la mente sabia</h2>
+  <p class="ayuda">Se hace en sesión, con los ojos cerrados si se puede. Tres minutos bastan.</p>
+  <div class="cuerpo practica">
+    <p>Respira siguiendo el aire que entra y el que sale. No lo cambies: solo síguelo, tres o
+    cuatro veces.</p>
+    <p>Deja caer la atención hacia el centro del cuerpo, a la altura del diafragma. Imagina que
+    eres un copo de nieve cayendo sobre un lago, y que bajas despacio hasta el fondo, donde el
+    agua está quieta.</p>
+    <p>Desde ahí, haz la pregunta. No pidas argumentos: haz la pregunta y espera. «¿Esto es mente
+    sabia?»</p>
+    <p>Si la respuesta llega envuelta en urgencia, todavía es mente emocional. Si llega envuelta
+    en justificaciones, todavía es mente racional. La mente sabia llega quieta, y muchas veces no
+    dice lo que uno quería oír.</p>
+
+    <label class="etiqueta">¿Cómo llegó la respuesta?</label>
+    <div class="chips" id="comoLlego"></div>
+
+    <div class="medidor" style="margin-top:16px">
+      <label for="claridad">Después de la práctica, ¿qué tan clara está la decisión?</label>
+      <input type="range" id="claridad" min="0" max="10" value="5">
+      <span class="valor" id="vClaridad">5</span>
+    </div>
+    <div id="lecturaClaridad"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const DECISIONES = ["Si sigo en lo que estoy haciendo", "Si termino la relación", "Si hablo con esa persona", "Si acepto el trabajo"];
+
+const RAZON = ["«Los números no dan»", "«Es lo que más conviene»", "«Ya lo analicé y es claro»", "«No hay evidencia de que sea grave»"];
+const EMOCION = ["«No aguanto más»", "«Lo necesito ya»", "«Me da miedo y no lo hago»", "«Si no lo hago ahora, exploto»"];
+const SABIA = ["«Sé lo que tengo que hacer aunque no me guste»", "«Puedo esperar antes de decidir»", "«Esto importa, y este no es el momento»", "«Necesito decirlo, y con cuidado»"];
+const COMO_LLEGO = ["Quieta, sin ruido", "Con urgencia", "Con muchos argumentos", "No llegó nada"];
+
+/* ====================== BALANZA ====================== */
+function dibujar(){
+  const svg = $("balanzaSvg");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t);
+  };
+
+  const d = +$("donde").value;
+  const inclinacion = (d - 50) * .34;          /* grados */
+  const nR = Kit.activas("razon").length, nE = Kit.activas("emocion").length,
+        nS = Kit.activas("sabia").length;
+
+  /* los dos círculos que se solapan: la intersección es la mente sabia */
+  const solape = 46 + nS * 5;
+  g("circle", {cx:230 - 74, cy:104, r:78, fill:"#3f83a6", "fill-opacity":.16,
+    stroke:"#3f83a6", "stroke-width":1.6});
+  g("circle", {cx:230 + 74, cy:104, r:78, fill:"#c05c78", "fill-opacity":.16,
+    stroke:"#c05c78", "stroke-width":1.6});
+  g("ellipse", {cx:230, cy:104, rx:solape * .46, ry:solape * .78, fill:"#4aa070",
+    "fill-opacity":.2 + Math.min(.35, nS * .07), stroke:"#4aa070", "stroke-width":2,
+    style:"transition:all .4s"});
+
+  texto(230 - 108, 104, "RAZÓN", "font:700 12.5px system-ui;fill:#3f83a6;letter-spacing:.8px");
+  texto(230 + 108, 104, "EMOCIÓN", "font:700 12.5px system-ui;fill:#c05c78;letter-spacing:.8px");
+  texto(230, 100, "SABIA", "font:700 12px system-ui;fill:#2f6b4c;letter-spacing:.8px");
+  texto(230, 116, nS ? nS + (nS === 1 ? " frase" : " frases") : "—",
+    "font:11px system-ui;fill:#4a8a68");
+
+  texto(230 - 74, 42, nR + (nR === 1 ? " frase" : " frases"), "font:11.5px system-ui;fill:#3f83a6");
+  texto(230 + 74, 42, nE + (nE === 1 ? " frase" : " frases"), "font:11.5px system-ui;fill:#c05c78");
+
+  /* la aguja: dónde está decidiendo hoy */
+  const rad = inclinacion * Math.PI / 180;
+  g("line", {x1:230, y1:186, x2:230 + Math.sin(rad) * 128, y2:186 - Math.cos(rad) * 52,
+    stroke:"#5a6a7d", "stroke-width":3, "stroke-linecap":"round",
+    style:"transition:all .3s"});
+  g("circle", {cx:230, cy:186, r:5.5, fill:"#5a6a7d"});
+}
+
+/* ====================== LECTURAS ====================== */
+function leerDonde(){
+  const d = +$("donde").value;
+  $("vDonde").textContent = d;
+  $("lecturaDonde").innerHTML = d <= 25
+    ? `<div class="pistas"><b>Decidiendo desde la mente racional.</b> Se ven los hechos y no lo
+       que importa. Suele producir decisiones impecables que después no se sostienen, porque nada
+       en la persona las respalda. Aquí la pregunta útil no es «¿qué conviene?» sino «¿qué
+       sientes al leer lo que conviene?».</div>`
+    : d >= 75
+    ? `<div class="bandera"><b>Decidiendo desde la mente emocional.</b> Cuando la emoción manda,
+       los hechos se acomodan a ella y la urgencia se siente como certeza. La regla es simple y
+       vale la pena decirla: <b>ninguna decisión importante se toma desde aquí</b>. Primero se
+       baja, después se decide.</div>`
+    : `<div class="logro">Zona de trabajo. Con las dos mentes disponibles, la mente sabia tiene
+       por dónde aparecer.</div>`;
+  dibujar();
+}
+
+function leerClaridad(){
+  const c = +$("claridad").value;
+  $("vClaridad").textContent = c;
+  const como = Kit.activas("comoLlego");
+  const urgente = como.indexOf("Con urgencia") >= 0;
+  const argumentos = como.indexOf("Con muchos argumentos") >= 0;
+  let html = "";
+  if(urgente)
+    html += `<div class="pistas">La respuesta llegó con urgencia: eso es mente emocional, no mente
+      sabia. No la descartes —suele señalar lo que importa— pero no decidas todavía.</div>`;
+  if(argumentos)
+    html += `<div class="pistas">Llegó con muchos argumentos: eso es mente racional. La mente
+      sabia no necesita convencer a nadie, ni siquiera a uno mismo.</div>`;
+  html += c >= 7
+    ? `<div class="logro">Decisión clara. Vale la pena cerrar preguntando qué es lo primero que
+       cambia mañana, para que la claridad no se quede en la sesión.</div>`
+    : c >= 4
+    ? `<div class="pistas">Claridad parcial. No hay que forzarla: la mente sabia a veces dice
+       «todavía no», y eso es una respuesta completa. Conviene poner una fecha para volver a
+       preguntar.</div>`
+    : `<div class="pistas">Poca claridad todavía. Es común en la primera práctica, sobre todo si
+       la emoción está alta. Se puede repetir el ejercicio en otro momento del día y comparar qué
+       aparece.</div>`;
+  $("lecturaClaridad").innerHTML = html;
+}
+
+function refrescar(){ leerDonde(); leerClaridad(); }
+
+function resumen(){
+  const l = [];
+  const d = Kit.activas("decision");
+  l.push("DECISIÓN: " + (d.join(", ") || "sin marcar") +
+         ($("decisionNota").value.trim() ? ` — ${$("decisionNota").value.trim()}` : ""));
+  l.push(`Desde dónde decide: ${$("donde").value}/100 (0 razón, 100 emoción)`);
+  const r = Kit.activas("razon"), e = Kit.activas("emocion"), s = Kit.activas("sabia");
+  if(r.length) l.push("", "MENTE RACIONAL: " + r.join(" · "));
+  if(e.length) l.push("MENTE EMOCIONAL: " + e.join(" · "));
+  if(s.length) l.push("MENTE SABIA: " + s.join(" · "));
+  const c = Kit.activas("comoLlego");
+  if(c.length) l.push("", "Cómo llegó la respuesta: " + c.join(", "));
+  l.push(`Claridad tras la práctica: ${$("claridad").value}/10`);
+  return l.join("\n");
+}
+
+Kit.chips("decision", DECISIONES);
+Kit.chips("razon", RAZON, refrescar);
+Kit.chips("emocion", EMOCION, refrescar);
+Kit.chips("sabia", SABIA, refrescar);
+Kit.chips("comoLlego", COMO_LLEGO, leerClaridad);
+$("donde").addEventListener("input", leerDonde);
+$("claridad").addEventListener("input", leerClaridad);
+
+Kit.iniciar({
+  clave: "dbt-mente-sabia",
+  alCambiar: refrescar,
+  resumen: resumen
+});

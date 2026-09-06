@@ -1,0 +1,264 @@
+@@meta
+archivo: met-el-poligrafo.html
+titulo: El polígrafo
+orden: 07
+enfoque: Metáforas vivas
+etiqueta: Desesperanza creativa
+sub: Estás conectado a un polígrafo y la regla es una sola: no puedes sentir eso. Si la aguja llega arriba, llega la descarga. La aguja se mueve sola, así que hay dos botones para bajarla. Lo que la hoja deja ver no es que los botones no sirvan: es qué le pasa a la línea de abajo, la del piso, cada vez que se aprieta uno.
+fuente: Metáfora del polígrafo y el control como problema, en Díaz Corbobés, MANUAL ACT §3.2, sobre la formulación de Hayes, Strosahl y Wilson.
+resumen: Una aguja que sube sola y dos botones para calmarla. Cada intento la dispara y sube el piso al que vuelve, que queda dibujado y no baja nunca. El registro en papel deja el trazo a la vista.
+campo3: Sesión
+campo3ph: Ej. Sesión 2
+@@css
+  button.control{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600}
+  button.control:hover{background:#763333;border-color:#763333}
+  button.control:disabled{background:#d3bdbd;border-color:#d3bdbd}
+  button.arranque{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
+  button.arranque:hover{background:#28607c;border-color:#28607c}
+  .marcas div{min-width:100px}
+  .pregunta-sola{border-left-color:#8a3d3d;background:linear-gradient(180deg,#fdf7f5,#fff)}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Qué es lo que no puedes sentir?</h2>
+  <p class="ayuda">Lo que si aparece, según la regla con la que vives, ya significa que algo salió
+  mal.</p>
+  <div class="cuerpo">
+    <div class="chips" id="loQue"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="papel" viewBox="0 0 700 300" role="img"
+    aria-label="Registro de polígrafo con la aguja, la zona de descarga y la línea del piso"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mNivel" style="color:#8a3d3d">0</span><span class="r">la aguja</span></div>
+    <div><span class="n" id="mPiso" style="color:#c9962f">18</span><span class="r">el piso al que vuelve</span></div>
+    <div><span class="n" id="mIntentos" style="color:#8a3d3d">0</span><span class="r">intentos de bajarla</span></div>
+    <div><span class="n" id="mRacha" style="color:#3f7d5a">0</span><span class="r">seg. sin tocar nada</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Conectar el polígrafo</button>
+    <button type="button" class="control" id="btnCalma" onclick="controlar('Cálmate ya')">Cálmate ya</button>
+    <button type="button" class="control" id="btnQuita" onclick="controlar('Quítatelo de encima')">Quítatelo de encima</button>
+    <button type="button" onclick="reiniciar()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="cajaPregunta">
+  <div class="pregunta" id="pregunta"></div>
+</section>
+@@js
+const $ = Kit.$;
+
+const COSAS = ["La ansiedad","La rabia","La tristeza","Las ganas de consumir"];
+
+const PISO_INICIAL = 18;
+const MAX_TRAZO = 260;        /* unos diez segundos de papel a la vista */
+
+let nivel = PISO_INICIAL, piso = PISO_INICIAL;
+let intentos = 0, descargas = 0, pico = PISO_INICIAL;
+let racha = 0, mejorRacha = 0, trazo = [], marcasPiso = [];
+let fogonazo = 0, esperaDescarga = 0, ultimaPregunta = "";
+
+const loQue = () => Kit.activas("loQue");
+
+/* ====================== EL LATIDO ====================== */
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  /* La aguja vuelve hacia el piso, con el temblor propio de estar vivo. Nunca
+     llega a cero: el piso es lo más abajo que puede estar. */
+  nivel += (piso - nivel) * .6 * dt + (Math.random() - .5) * 26 * Math.sqrt(dt);
+  nivel = Math.max(2, Math.min(104, nivel));
+  if(nivel > pico) pico = Math.min(100, nivel);
+
+  racha += dt;
+  if(racha > mejorRacha) mejorRacha = racha;
+
+  /* la descarga por haberlo sentido: y la descarga misma lo sube más */
+  esperaDescarga -= dt;
+  if(nivel >= 100 && esperaDescarga <= 0){
+    descargas++;
+    piso = Math.min(58, piso + 1.2);
+    nivel = 96;
+    fogonazo = 1;
+    esperaDescarga = 1.6;
+    Kit.brindis("Descarga. Y la descarga también se siente.");
+  }
+  if(fogonazo > 0) fogonazo = Math.max(0, fogonazo - dt * 2.2);
+
+  trazo.push(nivel);
+  marcasPiso.push(piso);
+  if(trazo.length > MAX_TRAZO){ trazo.shift(); marcasPiso.shift(); }
+
+  marcas();
+  dibujar();
+  preguntar();
+}
+
+/* ====================== EL PAPEL ====================== */
+const Y0 = 252, Y1 = 42;                 /* nivel 0 abajo, nivel 100 arriba */
+const X0 = 44,  X1 = 656;
+const alturaDe = v => Y0 - (v / 100) * (Y0 - Y1);
+
+function dibujar(){
+  const svg = $("papel");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const t = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    t.textContent = s; svg.appendChild(t); return t;
+  };
+
+  g("rect", {x:0, y:0, width:700, height:300, fill:"#f7f4ee"});
+  /* la cuadrícula del papel de registro */
+  for(let y = Y1; y <= Y0; y += 21)
+    g("path", {d:`M${X0} ${y} L${X1} ${y}`, stroke:"#e6ddcd", "stroke-width":1});
+  for(let x = X0; x <= X1; x += 34)
+    g("path", {d:`M${x} ${Y1} L${x} ${Y0}`, stroke:"#e6ddcd", "stroke-width":1});
+  g("rect", {x:X0, y:Y1, width:X1 - X0, height:Y0 - Y1, fill:"none", stroke:"#c9bda6",
+    "stroke-width":1.5});
+
+  /* la zona de descarga, arriba */
+  g("rect", {x:X0, y:Y1, width:X1 - X0, height:alturaDe(100) - Y1 + 20, fill:"#8a3d3d",
+    opacity:.1});
+  g("path", {d:`M${X0} ${alturaDe(100)} L${X1} ${alturaDe(100)}`, stroke:"#8a3d3d",
+    "stroke-width":2, "stroke-dasharray":"7 5"});
+  texto(X1 - 6, alturaDe(100) - 7, "descarga", "font:600 11.5px system-ui;fill:#8a3d3d", "end");
+
+  /* el piso: la línea que no baja nunca */
+  if(marcasPiso.length > 1){
+    const d = marcasPiso.map((v, i) =>
+      `${i ? "L" : "M"}${(X0 + (i / (MAX_TRAZO - 1)) * (X1 - X0)).toFixed(1)} ` +
+      `${alturaDe(v).toFixed(1)}`).join(" ");
+    g("path", {d, stroke:"#c9962f", "stroke-width":2, fill:"none", "stroke-dasharray":"5 4"});
+  } else {
+    g("path", {d:`M${X0} ${alturaDe(piso)} L${X1} ${alturaDe(piso)}`, stroke:"#c9962f",
+      "stroke-width":2, "stroke-dasharray":"5 4"});
+  }
+  texto(X0 + 6, alturaDe(piso) + 15, "el piso", "font:600 11.5px system-ui;fill:#c9962f", "start");
+
+  /* el trazo de la aguja */
+  if(trazo.length > 1){
+    const d = trazo.map((v, i) =>
+      `${i ? "L" : "M"}${(X0 + (i / (MAX_TRAZO - 1)) * (X1 - X0)).toFixed(1)} ` +
+      `${alturaDe(v).toFixed(1)}`).join(" ");
+    g("path", {d, stroke:"#8a3d3d", "stroke-width":2, fill:"none", "stroke-linejoin":"round"});
+  }
+
+  /* la plumilla, al final del papel */
+  const yA = alturaDe(nivel);
+  const xA = X0 + ((Math.min(trazo.length, MAX_TRAZO) - 1) / (MAX_TRAZO - 1)) * (X1 - X0);
+  g("path", {d:`M${xA} ${yA} L${xA + 22} ${yA - 6} L${xA + 22} ${yA + 6} Z`, fill:"#3f5163"});
+  g("circle", {cx:xA, cy:yA, r:3.5, fill:"#8a3d3d"});
+
+  /* qué se está midiendo */
+  const et = loQue().length ? loQue().join(" · ") : "lo que no puedes sentir";
+  texto(X0 + 6, 26, et.length > 44 ? et.slice(0, 43) + "…" : et,
+    "font:600 13px system-ui;fill:#3f5163", "start");
+  texto(X1 - 6, 26, "no puedes sentirlo",
+    "font:italic 12px system-ui;fill:#8a7f74", "end");
+
+  /* el fogonazo de la descarga */
+  if(fogonazo > 0)
+    g("rect", {x:0, y:0, width:700, height:300, fill:"#8a3d3d",
+      opacity:(fogonazo * .42).toFixed(2)});
+}
+
+/* ====================== ACCIONES ====================== */
+function arrancar(){
+  if(!loQue().length){ Kit.brindis("Marca primero qué se está midiendo"); return; }
+  escena.andar();
+  botones();
+  Kit.guardar();
+}
+
+/* El único botón que hay es el de controlarlo. La otra opción no tiene botón:
+   es el marcador de segundos sin tocar nada. */
+function controlar(cual){
+  if(!loQue().length){ Kit.brindis("Marca primero qué se está midiendo"); return; }
+  if(!escena.anda()) escena.andar();
+  intentos++;
+  nivel = Math.min(104, nivel + 15 + intentos * 1.6);
+  piso = Math.min(58, piso + 1.7);      /* el piso sube y no vuelve a bajar */
+  racha = 0;
+  botones();
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  nivel = PISO_INICIAL; piso = PISO_INICIAL;
+  intentos = 0; descargas = 0; pico = PISO_INICIAL;
+  racha = 0; mejorRacha = 0; trazo = []; marcasPiso = [];
+  fogonazo = 0; esperaDescarga = 0;
+  refrescar();
+  Kit.guardar();
+}
+
+function botones(){
+  $("btnArrancar").disabled = escena.anda();
+}
+
+function marcas(){
+  $("mNivel").textContent    = Math.round(nivel);
+  $("mPiso").textContent     = Math.round(piso);
+  $("mIntentos").textContent = intentos;
+  $("mRacha").textContent    = Math.floor(racha);
+}
+
+function refrescar(){
+  botones();
+  marcas();
+  dibujar();
+  preguntar();
+}
+
+function preguntar(){
+  let q;
+  if(!loQue().length)
+    q = "¿Qué es eso que, si aparece, ya significa que fallaste?";
+  else if(!escena.anda() && !intentos)
+    q = "¿Cuál es tu versión de esa regla, con tus palabras?";
+  else if(intentos === 0 && racha > 18)
+    q = `Llevas ${Math.floor(racha)} segundos sin tocar ningún botón y la aguja se quedó abajo sola. ¿Qué tuviste que hacer para eso?`;
+  else if(intentos === 0)
+    q = "La aguja se mueve sin que hagas nada. ¿Qué te dan ganas de hacer?";
+  else if(descargas > 0)
+    q = "La descarga llegó por sentirlo, y la descarga también se siente. ¿Dónde has visto esto antes?";
+  else if(intentos < 4)
+    q = "Mira el piso. ¿Estaba ahí cuando empezaste?";
+  else
+    q = `${intentos} intentos y el piso subió de ${PISO_INICIAL} a ${Math.round(piso)}. ¿Cuánto llevas haciendo esto fuera de aquí?`;
+  if(q !== ultimaPregunta){
+    $("pregunta").textContent = q;
+    ultimaPregunta = q;
+  }
+}
+
+function resumen(){
+  const l = [];
+  l.push("LO QUE NO PUEDE SENTIR");
+  l.push(loQue().length ? loQue().join(" · ") : "(sin marcar)");
+  l.push("", `POLÍGRAFO: ${intentos} intentos de bajarla, la aguja llegó a ${Math.round(pico)}, ` +
+             `${descargas} descarga${descargas === 1 ? "" : "s"}.`);
+  l.push(`El piso pasó de ${PISO_INICIAL} a ${Math.round(piso)} y no volvió a bajar.`);
+  l.push(`Racha más larga sin tocar ningún botón: ${Math.floor(mejorRacha)} segundos.`);
+  l.push("", "PREGUNTA QUE QUEDÓ ABIERTA", $("pregunta").textContent);
+  return l.join("\n");
+}
+
+Kit.chips("loQue", COSAS, refrescar);
+
+Kit.iniciar({
+  clave: "met-el-poligrafo",
+  extra: () => ({intentos, descargas, piso, pico, mejorRacha}),
+  restaurar: d => {
+    intentos = d.intentos || 0; descargas = d.descargas || 0;
+    piso = d.piso === undefined ? PISO_INICIAL : d.piso;
+    pico = d.pico || PISO_INICIAL; mejorRacha = d.mejorRacha || 0;
+    nivel = piso;
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});
