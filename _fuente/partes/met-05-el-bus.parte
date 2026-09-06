@@ -4,9 +4,9 @@ titulo: El bus y los pasajeros
 orden: 05
 enfoque: Metáforas vivas
 etiqueta: Acción comprometida
-sub: Tú manejas el bus. Los pasajeros son los pensamientos, las emociones y los recuerdos que se subieron sin permiso. El bus avanza solo mientras conduces: no hay botón de avanzar. Ellos gritan cuando quieren, y en ese momento aparece encima del bus la opción de parar a discutir, unos segundos y se va. Parar detiene los kilómetros; el reloj del viaje no se detiene con nada.
+sub: Tú manejas el bus. Los pasajeros son los pensamientos, las emociones y los recuerdos que se subieron sin permiso. El bus avanza solo mientras conduces: no hay botón de avanzar. Ellos gritan cuando quieren, y en ese momento aparece encima del bus la opción de parar a discutir, unos segundos y se va. Parar detiene los kilómetros; el reloj del viaje no se detiene con nada. Y la energía sí se acaba: discutir la gasta mucho más rápido que manejar, y en cero el bus se queda donde esté.
 fuente: Compromiso y acción, y metáfora del vecino indeseable, en Díaz Corbobés, MANUAL ACT §3.7, sobre la metáfora clásica de los pasajeros del autobús de Hayes, Strosahl y Wilson.
-resumen: El viaje ocurre en tiempo real: el bus avanza, los pasajeros gritan cuando quieren y la única decisión es si se para a discutir. Discutir congela los kilómetros pero no el reloj, y eso lo dice el tablero.
+resumen: El viaje ocurre en tiempo real: el bus avanza, los pasajeros gritan cuando quieren y la única decisión es si se para a discutir. Discutir congela los kilómetros, gasta la energía y no detiene el reloj; sin energía el bus se vara donde esté.
 campo3: Sesión
 campo3ph: Ej. Sesión 8
 @@css
@@ -33,6 +33,7 @@ campo3ph: Ej. Sesión 8
     font-variant-numeric:tabular-nums}
   .tramo.avanzo{background:#f4faf6}
   .tramo.paro{background:#fdf6f4}
+  .tramo.varado{background:#fdf3ef;font-weight:600}
   .tramo .que{flex:1}
   .tramo .km{font-weight:700;font-size:12.5px;white-space:nowrap}
   @media print{.reto{display:none}}
@@ -108,14 +109,20 @@ const TRAMOS = ["Escribir el primer párrafo","Mandar el correo","Llamar a algui
 const VELOCIDAD = 2.7;        /* km por segundo: el destino queda a unos 37 s */
 const DISCUSION = 5;          /* lo que dura una parada a discutir, en segundos */
 const VENTANA = 4;            /* lo que el botón de discutir permanece encima   */
+const RESERVA = 18;           /* energía con la que el bus vuelve a arrancar    */
 
 let km = 0, paradas = 0, energia = 100, bitacora = [], tiempo = 0;
 let discutiendo = 0, ventana = 0, proximoGrito = 2.2, globos = [], llego = false;
+let varado = false, varadas = 0;
 
 const destinos  = () => Kit.activas("destino");
 const pasajeros = () => Kit.activas("pasajeros");
 const grito     = () => Math.round(Math.min(24, 4 + km * .2));
 const parado    = () => discutiendo > 0;
+const quieto    = () => parado() || varado || llego;
+/* Manejar cansado se nota antes de quedarse sin nada: por debajo de 40 el bus
+   pierde ritmo, y en cero no avanza. */
+const velocidad = () => VELOCIDAD * (.5 + .5 * Math.min(1, energia / 40));
 const reloj     = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
 
 /* ====================== EL LATIDO ====================== */
@@ -126,14 +133,25 @@ function latido(dt){
 
   if(parado()){
     discutiendo -= dt;
-    energia = Math.max(0, energia - 4 * dt);   /* discutir sale caro */
+    energia = Math.max(0, energia - 2.6 * dt);   /* discutir sale caro */
+    if(energia <= 0) quedarseSinNada();
     if(discutiendo <= 0){
       discutiendo = 0;
       Kit.brindis("La discusión terminó donde empezó. El bus sigue.");
     }
+  } else if(varado){
+    /* Sin energía no se avanza. Parado se recupera algo, y arranca de nuevo con
+       lo justo: los kilómetros no se recuperan y el reloj no se detiene. */
+    energia = Math.min(100, energia + 1.6 * dt);
+    if(energia >= RESERVA){
+      varado = false;
+      Kit.brindis("Vuelve a arrancar, con lo que quedó.");
+      Kit.guardar();
+    }
   } else if(!llego){
-    km = Math.min(100, km + VELOCIDAD * dt);
+    km = Math.min(100, km + velocidad() * dt);
     energia = Math.max(0, energia - .8 * dt);
+    if(energia <= 0) quedarseSinNada();
     if(km >= 100){
       llego = true;
       escena.parar();
@@ -188,7 +206,7 @@ function dibujar(){
   g("rect", {x:0, y:CARRIL - 30, width:700, height:330 - CARRIL + 30, fill:"#cfd6da"});
   g("rect", {x:0, y:CARRIL - 30, width:700, height:5, fill:"#b6bec3"});
   /* las rayas del asfalto corren hacia atrás: así se ve que el bus avanza */
-  const corrida = parado() ? 0 : (tiempo * 150) % 54;
+  const corrida = quieto() ? 0 : (tiempo * 150) % 54;
   for(let x = -54; x < 700; x += 54)
     g("rect", {x:x + 54 - corrida, y:CARRIL + 40, width:30, height:4, fill:"#fff", opacity:.85});
 
@@ -202,7 +220,7 @@ function dibujar(){
 
   /* el bus, en el punto exacto del recorrido */
   const bx = 60 + (km / 100) * 500;
-  const brinco = parado() || llego ? 0 : Math.sin(tiempo * 24) * .9;
+  const brinco = quieto() ? 0 : Math.sin(tiempo * 24) * .9;
   const bus = Kit.svg("g", {transform:`translate(${bx},${CARRIL - 62 + brinco})`});
   svg.appendChild(bus);
   g("rect", {x:0, y:0, width:132, height:56, rx:9, fill:"#e8c15a", stroke:"#c9a03a",
@@ -218,14 +236,14 @@ function dibujar(){
   if(lista.length || destinos().length)
     g("circle", {cx:110, cy:24, r:6.5, fill:"#3f5163"}, bus);
   /* ruedas que giran solo cuando el bus se mueve */
-  const giro = parado() || llego ? 0 : km * 26;
+  const giro = quieto() ? 0 : km * 26;
   [28, 104].forEach(cx => {
     g("circle", {cx:cx, cy:60, r:11, fill:"#3f4348"}, bus);
     g("path", {d:"M-7 0 L7 0 M0 -7 L0 7", stroke:"#7d858c", "stroke-width":2,
       transform:`translate(${cx},60) rotate(${giro})`}, bus);
   });
   /* humo del escape mientras anda */
-  if(!parado() && !llego && escena.anda())
+  if(!quieto() && escena.anda())
     for(let k = 0; k < 3; k++){
       const f = ((tiempo * 1.6 + k * .33) % 1);
       g("circle", {cx:-6 - f * 26, cy:48 - f * 12, r:3 + f * 6, fill:"#b6bec3",
@@ -254,6 +272,15 @@ function dibujar(){
   if(lista.length > 3)
     texto(bx + 66, CARRIL - 4, `y ${lista.length - 3} más adentro`,
       "font:11px system-ui;fill:#7b8288");
+
+  /* sin energía: el bus se queda donde está y el reloj sigue corriendo */
+  if(varado){
+    texto(bx + 66, CARRIL - 118, "sin energía",
+      "font:600 13px system-ui;fill:#8a3d3d;paint-order:stroke;stroke:#eef4f7;stroke-width:3");
+    g("rect", {x:bx + 16, y:CARRIL + 62, width:100, height:6, rx:3, fill:"#dfe5e9"});
+    g("rect", {x:bx + 16, y:CARRIL + 62, width:100 * Math.min(1, energia / RESERVA), height:6,
+      rx:3, fill:"#c9962f"});
+  }
 
   /* mientras se discute, el bus está detenido y se nota */
   if(parado()){
@@ -296,7 +323,8 @@ function discutir(){
   if(!listo()) return;
   paradas++;
   discutiendo = DISCUSION;
-  energia = Math.max(0, energia - 10);
+  energia = Math.max(0, energia - 8);
+  if(energia <= 0) quedarseSinNada();
   ventana = 0;
   bitacora.push({tipo:"paro", seg:tiempo, km:km});
   pintarBitacora();
@@ -304,10 +332,24 @@ function discutir(){
   Kit.guardar();
 }
 
+function quedarseSinNada(){
+  if(varado) return;
+  energia = 0;
+  varado = true;
+  varadas++;
+  discutiendo = 0;
+  ventana = 0;
+  bitacora.push({tipo:"varado", seg:tiempo, km:km});
+  pintarBitacora();
+  Kit.brindis("Te quedaste sin energía. El bus se detiene.");
+  Kit.guardar();
+}
+
 function reiniciarViaje(){
   escena.parar();
   km = 0; paradas = 0; energia = 100; bitacora = []; tiempo = 0;
   discutiendo = 0; ventana = 0; proximoGrito = 2.2; globos = []; llego = false;
+  varado = false; varadas = 0;
   refrescar();
   Kit.guardar();
 }
@@ -320,7 +362,7 @@ function botones(){
 /* El reto se ancla al bus: la posición del viewBox se traduce a porcentaje del
    lienzo, así sigue encima del bus aunque cambie el tamaño de la ventana. */
 function ponerReto(){
-  const visible = ventana > 0 && !parado() && escena.anda() && !llego;
+  const visible = ventana > 0 && !quieto() && escena.anda();
   $("reto").hidden = !visible;
   if(!visible) return;
   const bx = 60 + (km / 100) * 500;
@@ -335,9 +377,11 @@ function pintarBitacora(){
           <span class="cual">${reloj(t.seg)}</span>
           <span class="que">${t.tipo === "avanzo"
             ? "Gritaron y seguiste manejando"
-            : "Paraste a discutir con los pasajeros"}</span>
+            : t.tipo === "paro" ? "Paraste a discutir con los pasajeros"
+            : "Se acabó la energía y el bus se detuvo"}</span>
           <span class="km" style="color:${t.tipo === "avanzo" ? "#3f7d5a" : "#8a3d3d"}">
-            ${t.tipo === "avanzo" ? "seguía avanzando" : "0 km en 5 s"}</span>
+            ${t.tipo === "avanzo" ? "seguía avanzando"
+              : t.tipo === "paro" ? "0 km en 5 s" : `varado en el km ${Math.round(t.km)}`}</span>
         </div>`;
       }).join("")
     : `<div class="velo">Todavía no has arrancado.</div>`;
@@ -348,6 +392,7 @@ function marcas(){
   $("mReloj").textContent   = reloj(tiempo);
   $("mParadas").textContent = paradas;
   $("mEnergia").textContent = Math.round(energia);
+  $("mEnergia").style.color = varado ? "#8a3d3d" : energia < 40 ? "#c9962f" : "#2f6f8f";
 }
 
 function refrescar(){
@@ -375,6 +420,20 @@ function leer(){
     como = "No hay botón de avanzar: el bus anda solo mientras lo dejes andar. Lo único que se " +
       "puede tocar es el freno, y aparece cuando ellos gritan.";
     pregunta = "¿Qué sueles hacer en la vida real cuando empiezan a gritar?";
+  } else if(varado){
+    nombre = "Sin energía, en el kilómetro " + Math.round(km);
+    metafora = `${paradas} parada${paradas === 1 ? "" : "s"} a discutir, ${reloj(tiempo)} de reloj.`;
+    como = "El bus no se detuvo por falta de destino ni porque los pasajeros ganaran: se detuvo " +
+      "porque la energía se acabó. Discutir la gasta tres veces más rápido que manejar, y el " +
+      "camino que falta es el mismo que faltaba.";
+    pregunta = "¿Cuándo fue la última vez que te quedaste así, y en qué se te había ido la energía?";
+  } else if(varadas > 0 && !llego){
+    nombre = "Andando con la reserva";
+    metafora = `${Math.round(km)} km, energía en ${Math.round(energia)}, ` +
+      `${varadas} vez${varadas === 1 ? "" : "ces"} varado.`;
+    como = "El bus volvió a arrancar, pero con lo que quedaba, y por debajo de 40 va más lento. " +
+      "Los kilómetros perdidos mientras estabas parado no se recuperan; el reloj tampoco.";
+    pregunta = "Con esta energía, ¿qué es lo primero que dejarías de hacer?";
   } else if(paradas > 0 && km < 12){
     nombre = "Todas las paradas, ningún kilómetro";
     metafora = `${paradas} paradas. ${Math.round(km)} km en ${reloj(tiempo)}.`;
@@ -430,6 +489,8 @@ function resumen(){
              `${paradas} paradas a discutir, ${seguidos} veces que gritaron y siguió, ` +
              `energía ${Math.round(energia)}/100.`);
   l.push("Llegó al destino: " + (llego ? "sí" : "no"));
+  l.push("Se quedó sin energía: " + (varadas
+    ? `sí, ${varadas} vez${varadas === 1 ? "" : "ces"}` : "no"));
   l.push("", "LECTURA: " + $("lNombre").textContent, $("lComo").textContent);
   const band = $("lBandera").querySelector(".bandera");
   if(band) l.push("Alerta: " + band.textContent.trim());
@@ -446,11 +507,12 @@ window.addEventListener("resize", ponerReto);
 
 Kit.iniciar({
   clave: "met-el-bus",
-  extra: () => ({km, paradas, energia, bitacora, tiempo, llego}),
+  extra: () => ({km, paradas, energia, bitacora, tiempo, llego, varado, varadas}),
   restaurar: d => {
     km = d.km || 0; paradas = d.paradas || 0;
     energia = d.energia === undefined ? 100 : d.energia;
     bitacora = d.bitacora || []; tiempo = d.tiempo || 0; llego = !!d.llego;
+    varado = !!d.varado; varadas = d.varadas || 0;
   },
   alCambiar: refrescar,
   resumen: resumen

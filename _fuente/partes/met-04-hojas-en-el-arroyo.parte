@@ -4,9 +4,9 @@ titulo: Hojas en el arroyo
 orden: 04
 enfoque: Metáforas vivas
 etiqueta: Defusión
-sub: Un arroyo que baja, hojas que pasan solas y un pensamiento sobre cada hoja. No hay que producirlas: llegan sin avisar, se repiten, a veces vienen dos juntas. El ejercicio no consiste en que dejen de venir ni en mirar para otro lado: consiste en verlas pasar sin subirse a ninguna. Y cuando notes que te fuiste con la corriente, marcarlo. Darse cuenta es el ejercicio, no el error.
+sub: Un arroyo que baja, hojas que pasan solas y un pensamiento sobre cada hoja. No hay que producirlas: llegan sin avisar, se repiten, a veces vienen dos juntas. El ejercicio no consiste en que dejen de venir ni en mirar para otro lado: consiste en verlas pasar sin subirse a ninguna. Y cuando notes que te fuiste con la corriente, volver. Darse cuenta es el ejercicio, no el error.
 fuente: Defusión cognitiva y meditación para desliteralizar el lenguaje, en Díaz Corbobés, MANUAL ACT §3.4, dentro del estilo abierto de respuesta.
-resumen: Práctica de defusión guiada y cronometrada, de minuto y medio o de tres minutos. La corriente trae los pensamientos sola, encadenados y barajados, y se marca cada enganche. Cuenta enganches, no fallos.
+resumen: Práctica de defusión guiada y cronometrada, de minuto y medio o de tres minutos. La corriente trae los pensamientos sola, barajados, y hacia el final llegan en racimo. El botón para marcar el enganche se puede quitar, si conviene preguntarlo hablando. Cuenta retornos, no fallos.
 campo3: Sesión
 campo3ph: Ej. Sesión 5
 @@css
@@ -42,8 +42,8 @@ campo3ph: Ej. Sesión 5
     mirarlas de frente y dejarlas ir igual: los feos, los aburridos y también este de «lo estoy
     haciendo bien».</p>
     <p>En algún momento vas a notar que dejaste de mirar el arroyo, que te fuiste con una hoja
-    corriente abajo. <b>Eso va a pasar, y no es una falla.</b> Cuando lo notes, marca el botón
-    naranja, vuelve a sentarte junto al arroyo y sigue.</p>
+    corriente abajo. <b>Eso va a pasar, y no es una falla.</b> Cuando lo notes, vuelve a sentarte
+    junto al arroyo. Si el botón naranja está puesto, marcarlo es parte de volver.</p>
   </div>
 </section>
 
@@ -53,17 +53,18 @@ campo3ph: Ej. Sesión 5
   <div class="marcas">
     <div><span class="n" id="mReloj" style="color:#2f6f8f">3:00</span><span class="r">quedan</span></div>
     <div><span class="n" id="mHojas" style="color:#3f7d5a">0</span><span class="r">hojas que pasaron</span></div>
-    <div><span class="n" id="mEnganches" style="color:#c9962f">0</span><span class="r">veces que volví</span></div>
+    <div id="cajaEnganches"><span class="n" id="mEnganches" style="color:#c9962f">0</span><span class="r">veces que volví</span></div>
   </div>
   <div class="duracion" id="duracion">
     <button type="button" class="chip" id="d90">Minuto y medio</button>
     <button type="button" class="chip activa" id="d180">Tres minutos</button>
     <button type="button" class="chip" id="vLento">Corriente lenta</button>
     <button type="button" class="chip activa" id="vNormal">Corriente normal</button>
+    <button type="button" class="chip activa" id="cMarcar">Botón de enganche</button>
   </div>
   <div class="mandos">
     <button type="button" class="soltar" id="btnArrancar" onclick="arrancar()">Empezar la práctica</button>
-    <button type="button" class="enganche" onclick="engancharse()">Me enganché</button>
+    <button type="button" class="enganche" id="btnEnganche" onclick="engancharse()">Me enganché</button>
     <button type="button" onclick="ponerLaMia()">Poner una hoja ahora</button>
     <button type="button" onclick="reiniciar()">Reiniciar</button>
   </div>
@@ -80,15 +81,27 @@ const PENSAMIENTOS = ["No sirvo para esto","Voy a fallar","No soy suficiente","�
 let hojas = [], pasadas = 0, enganches = 0;
 let total = 180, restante = 180;
 let corriendo = false, animacion = null;
-let baraja = [], proxima = 0, lenta = false;
+let baraja = [], proxima = 0, lenta = false, conBoton = true;
 
 const elegidos = () => Kit.activas("pensamientos");
 
 /* ====================== EL RITMO DE LA CORRIENTE ======================
-   Una hoja nueva cada cuatro segundos y pico. Con ese intervalo caben dos o
-   tres hojas a la vez en el agua, cada una da tiempo a leerse, y el
-   solapamiento ocurre por azar y no por regla: parece corriente, no fila. */
-const INTERVALO = () => (lenta ? 6.2 : 4.1) + Math.random() * (lenta ? 2.2 : 1.6);
+   El intervalo entre hojas va emparejado con lo que tarda una en cruzar, de
+   modo que lo normal sea ver una sola en el agua y el solapamiento sea la
+   excepción.
+
+   La excepción es lo interesante: de vez en cuando la siguiente entra antes de
+   que salga la anterior y se ven dos o tres juntas. Eso es raro al principio y
+   frecuente al final, porque así se comporta el bucle. Los pensamientos no se
+   agolpan porque sí: se agolpan cuando uno ya lleva rato dándoles importancia,
+   y cada uno trae al siguiente. */
+const INTERVALO = () => {
+  const avance = total ? (total - restante) / total : 0;
+  /* el racimo aparece casi nunca al empezar y a menudo al terminar */
+  if(Math.random() < avance * avance * .6)
+    return (lenta ? 3.4 : 2.3) + Math.random() * (lenta ? 1.2 : .9);
+  return (lenta ? 10.5 : 6.3) + Math.random() * (lenta ? 2.5 : 1.5);
+};
 
 /* Se sirven barajados y no en orden fijo: un ciclo predecible se vuelve
    mueble y deja de notarse. Cada vuelta se remezcla. */
@@ -109,7 +122,7 @@ function siguientePensamiento(){
 
 function nuevaHoja(texto){
   hojas.push({texto, x:-90, y:104 + Math.random() * 96, giro:-10 + Math.random() * 20,
-    vel:(lenta ? .38 : .55) + Math.random() * (lenta ? .22 : .35)});
+    vel:(lenta ? .62 : .95) + Math.random() * (lenta ? .22 : .3)});
 }
 
 /* ====================== EL LATIDO ====================== */
@@ -157,6 +170,17 @@ function ponerRitmo(esLenta){
   lenta = esLenta;
   $("vLento").classList.toggle("activa", lenta);
   $("vNormal").classList.toggle("activa", !lenta);
+  Kit.guardar();
+}
+
+/* El botón de enganche se puede quitar. Con él, marcar es el acto de volver y
+   queda el rastro de cuándo ocurrió; sin él, la práctica queda limpia y el
+   enganche se pregunta después, hablando. Es decisión de quien acompaña. */
+function ponerBoton(hay){
+  conBoton = hay;
+  $("cMarcar").classList.toggle("activa", conBoton);
+  $("btnEnganche").hidden = !conBoton;
+  $("cajaEnganches").hidden = !conBoton;
   Kit.guardar();
 }
 
@@ -208,6 +232,7 @@ function ponerLaMia(){
 }
 
 function engancharse(){
+  if(!conBoton) return;
   enganches++;
   marcar();
   Kit.brindis("Lo notaste. Vuelve al arroyo y sigue.");
@@ -258,7 +283,7 @@ function pregunta(){
   const visible = pasada >= total / 2 && (pasadas > 0 || enganches > 0);
   $("cajaPregunta").hidden = !visible;
   if(!visible) return;
-  $("pregunta").textContent = enganches === 0
+  $("pregunta").textContent = (!conBoton || enganches === 0)
     ? "Durante este rato, ¿en algún momento dejaste de ver el arroyo?"
     : "Cada vez que marcaste el botón, ¿qué te hizo darte cuenta?";
 }
@@ -269,8 +294,10 @@ function resumen(){
   l.push(elegidos().length ? elegidos().join(" · ") : "(ninguno marcado)");
   l.push("", `PRÁCTICA (${total === 90 ? "minuto y medio" : "tres minutos"}, ` +
              `corriente ${lenta ? "lenta" : "normal"}): ${pasadas} hojas pasaron, ` +
-             `${enganches} veces que se enganchó y volvió, ` +
              `${total - restante} segundos practicados.`);
+  l.push(conBoton
+    ? `Veces que se enganchó y volvió: ${enganches} (marcadas en pantalla).`
+    : "Sin botón de enganche: los enganches se preguntaron en sesión.");
   return l.join("\n");
 }
 
@@ -279,18 +306,23 @@ $("d90").onclick = () => ponerDuracion(90);
 $("d180").onclick = () => ponerDuracion(180);
 $("vLento").onclick = () => ponerRitmo(true);
 $("vNormal").onclick = () => ponerRitmo(false);
+$("cMarcar").onclick = () => ponerBoton(!conBoton);
 
 Kit.iniciar({
   clave: "met-hojas-en-el-arroyo",
-  extra: () => ({pasadas, enganches, total, lenta}),
+  extra: () => ({pasadas, enganches, total, lenta, conBoton}),
   restaurar: d => {
     pasadas = d.pasadas || 0; enganches = d.enganches || 0;
     total = d.total || 180; restante = total; lenta = !!d.lenta;
+    conBoton = d.conBoton === undefined ? true : !!d.conBoton;
   },
   alCambiar: () => { $("d90").classList.toggle("activa", total === 90);
                      $("d180").classList.toggle("activa", total === 180);
                      $("vLento").classList.toggle("activa", lenta);
                      $("vNormal").classList.toggle("activa", !lenta);
+                     $("cMarcar").classList.toggle("activa", conBoton);
+                     $("btnEnganche").hidden = !conBoton;
+                     $("cajaEnganches").hidden = !conBoton;
                      marcar(); dibujar(); },
   resumen: resumen
 });

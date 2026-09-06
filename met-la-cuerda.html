@@ -1200,8 +1200,10 @@ function dibujar(){
       stroke:"#b9a98c", "stroke-width":3.5, fill:"none", "stroke-linecap":"round", opacity:.8});
     g("path", {d:`M${HX1 + 4} ${SUELO - 4} Q ${m.mano[0] - 20} ${SUELO + 2} ${m.mano[0]} ${m.mano[1]}`,
       stroke:"#b9a98c", "stroke-width":3.5, fill:"none", "stroke-linecap":"round", opacity:.8});
-    /* el globo de lo que va a hacer, justo encima de él */
-    globo(svg, px, SUELO - 118, Kit.activas("manosLibres"));
+    /* El globo va por encima de la cabeza, no apoyado en ella: la coronilla
+       queda en SUELO-110 y la cola del globo baja 49 px desde su borde, así
+       que la caja arranca en SUELO-172 y quedan unos treinta píxeles de aire. */
+    globo(svg, px, SUELO - 172, Kit.activas("manosLibres"));
   } else {
     /* la cuerda tensa por encima del hoyo: se comba menos cuanto más se jala */
     const combado = caido ? 40

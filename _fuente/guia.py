@@ -80,7 +80,7 @@ GUIA = [
                    "para sacarse cosas de encima."),
     ("Junto a", "El tablero, que instala la posición desde la que se mira."),
     ("Antes de", "La escalera de exposición y El bus.")],
-  "cuidado":"La trampa más frecuente no es engancharse: es mirar el agua para no ver las hojas. Eso es evitación con buena presentación, y deja la agenda de control intacta. Lo que se entrena es mirar la hoja de frente y dejarla pasar igual. Por encima de 70 u 80 de activación no hay práctica contemplativa que funcione: ahí va "
+  "cuidado":"El botón de enganche se puede quitar desde la hoja. Conviene dejarlo cuando marcar ayuda a que volver sea un acto y no una idea, y quitarlo cuando el botón se vuelve puntaje y la persona empieza a marcar para quedar bien; sin él, el enganche se pregunta después, sabiendo que el reporte retrospectivo siempre queda corto. La trampa más frecuente no es engancharse: es mirar el agua para no ver las hojas. Eso es evitación con buena presentación, y deja la agenda de control intacta. Lo que se entrena es mirar la hoja de frente y dejarla pasar igual. Por encima de 70 u 80 de activación no hay práctica contemplativa que funcione: ahí va "
             "la Tarjeta de crisis. Con disociación o intrusiones traumáticas, ojos abiertos mirando "
             "el arroyo de la pantalla, minuto y medio y anclaje. En psicosis activa, la instrucción "
             "de observar los pensamientos como objetos puede confundir."},
