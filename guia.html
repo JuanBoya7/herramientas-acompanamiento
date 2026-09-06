@@ -316,11 +316,30 @@
     color:var(--alerta);line-height:1.5}
   .ficha-guia .aviso-uso b{display:block;font-size:10.5px;text-transform:uppercase;
     letter-spacing:.7px;margin-bottom:2px}
+  .ficha-guia details.guion{margin-top:12px;border-top:1px dashed var(--linea);padding-top:10px}
+  .ficha-guia details.guion summary{cursor:pointer;font-size:13px;color:var(--acento);
+    font-weight:600;list-style:none;display:inline-flex;align-items:center;gap:7px}
+  .ficha-guia details.guion summary::-webkit-details-marker{display:none}
+  .ficha-guia details.guion summary::before{content:"+";display:inline-flex;align-items:center;
+    justify-content:center;width:16px;height:16px;border:1px solid var(--linea);border-radius:4px;
+    font-size:13px;line-height:1}
+  .ficha-guia details.guion[open] summary::before{content:"2"}
+  .ficha-guia .tramo-guion{margin-top:13px}
+  .ficha-guia .tramo-guion p{margin:0 0 7px;font-size:13.5px;line-height:1.55;
+    color:var(--tinta-suave)}
+  /* lo entrecomillado es lo que se dice en voz alta, tal cual */
+  .ficha-guia .tramo-guion p.dice{color:#23404f;background:var(--acento-claro);border-radius:8px;
+    padding:10px 13px;font-size:14px;line-height:1.5;margin-bottom:8px}
+  /* y lo tachado es lo que arruina el ejercicio */
+  .ficha-guia .tramo-guion p.no{color:var(--alerta);background:var(--alerta-fondo);
+    border:1px solid var(--alerta-linea);border-radius:8px;padding:8px 12px;font-size:13.5px;
+    margin-bottom:6px}
   @media (max-width:760px){.fichas{grid-template-columns:1fr}}
   @media print{
     body{background:#fff}
     .volver{display:none}
     .ficha-guia,.ruta{break-inside:avoid}
+    details.guion > *{display:block}
     .fichas{grid-template-columns:1fr 1fr}
   }
 
@@ -444,6 +463,53 @@
       <div class="paso"><b>Junto a</b> El tablero, que instala la posición desde la que se mira.</div>
       <div class="paso"><b>Antes de</b> La escalera de exposición y El bus.</div>
       <div class="aviso-uso"><b>Cuidado</b>El botón de enganche se puede quitar desde la hoja. Conviene dejarlo cuando marcar ayuda a que volver sea un acto y no una idea, y quitarlo cuando el botón se vuelve puntaje y la persona empieza a marcar para quedar bien; sin él, el enganche se pregunta después, sabiendo que el reporte retrospectivo siempre queda corto. La trampa más frecuente no es engancharse: es mirar el agua para no ver las hojas. Eso es evitación con buena presentación, y deja la agenda de control intacta. Lo que se entrena es mirar la hoja de frente y dejarla pasar igual. Por encima de 70 u 80 de activación no hay práctica contemplativa que funcione: ahí va la Tarjeta de crisis. Con disociación o intrusiones traumáticas, ojos abiertos mirando el arroyo de la pantalla, minuto y medio y anclaje. En psicosis activa, la instrucción de observar los pensamientos como objetos puede confundir.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Pide desesperanza creativa ya hecha. Sin eso se escucha como una técnica más para sacarse cosas de encima, y se usa así.</p>
+        <p>No se anuncia como relajación y no se promete calma. Anunciada como calma, la persona la evalúa por si se calmó, y en ese momento el ejercicio ya se perdió.</p>
+        <p>Se eligen juntos tres o cuatro pensamientos de los de todos los días. Los peores no: con esos la práctica se vuelve exposición sin preparar.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Vamos a hacer algo que suena raro, y te aviso desde ya: no es para que te sientas mejor. Puede que termines igual de incómodo que ahora, y estaría bien.»</p>
+        <p class="dice">«Tu mente va a seguir produciendo todo el rato. No vamos a apagarla ni a discutirle. Vamos a practicar mirar los pensamientos, en vez de mirar desde ellos.»</p>
+        <p class="dice">«En la pantalla baja un arroyo. Cada hoja trae uno de los que escogimos. Léelo, y déjalo pasar. No lo empujes, no lo retengas, y tampoco mires el agua para no verlo: se trata de mirarlo de frente y dejarlo ir igual.»</p>
+        <p>Todo el encargo cabe en tres verbos, y conviene dejarlos dichos así: leer, soltar, volver a mirar.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Nombrar el enganche antes de que ocurra</div>
+        <p class="dice">«En algún momento vas a notar que llevas un rato sin leer ninguna hoja, o que le estabas contestando a una. Eso va a pasar, y no es un error: esa parte es justamente la que estamos entrenando.»</p>
+        <p class="dice">«Cuando lo notes, vuelve a mirar el arroyo. Si el botón naranja está puesto, márcalo: marcarlo es parte de volver.»</p>
+        <p>Decirlo antes evita que lo viva como fracaso cuando ocurra, y le deja un nombre para poder contarlo después.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante: callarse</div>
+        <p>El guion ya está en la pantalla. No hace falta acompañar con voz, ni narrar, ni repetir la instrucción a mitad de camino.</p>
+        <p>Si habla, no se responde el contenido: «eso también va en una hoja».</p>
+        <p>Si se ríe o dice que esto es raro: «ponlo en una hoja».</p>
+        <p>Si pide parar antes de tiempo, se para. El tiempo no se negocia.</p>
+        <p>Mirar cuándo marca, no cuántas veces. Tres marcas seguidas después de un minuto limpio dicen algo que el total no dice.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar: el orden importa</div>
+        <p class="dice">«¿Cómo te fue?» Abierta, sin dirección, y después callarse. El silencio lo llena la persona.</p>
+        <p class="dice">«¿En qué momento dejaste de ver el arroyo?» y «¿qué te hizo darte cuenta de que te habías ido?» El proceso, no el resultado.</p>
+        <p class="dice">«¿Hubo alguna que no pudiste dejar ir? ¿Qué hiciste con esa?» Ahí está el material.</p>
+        <p class="dice">«¿Notaste algo distinto en cómo pesan?» Solo al final, y solo si la persona lo trae. Nunca de primera.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «¿Verdad que te sientes más tranquilo?» Pide en voz alta la respuesta que arruina el ejercicio.</p>
+        <p class="no">✗ «Muy bien, casi no te enganchaste.» Convierte en puntaje lo que era práctica, y la próxima vez marcará menos para quedar bien.</p>
+        <p class="no">✗ «Trata de que no te afecten.» Es la agenda de control otra vez, con otro nombre.</p>
+        <p class="no">✗ «Si te distraes, vuelve a concentrarte.» Esto no es concentración, y llamarlo así cambia lo que la persona practica.</p>
+        <p class="no">✗ Explicar la metáfora después de haberla hecho. Ya la vivió; explicarla la devuelve a idea.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Se enganchó muchas veces: es una buena sesión, y conviene decirlo con esas palabras. La dosis del ejercicio es el número de retornos, no el de aciertos.</p>
+        <p>No se enganchó ninguna: casi nunca significa que no se fue. Repetir más corto, o pasar a La palabra repetida, que no depende de notar.</p>
+        <p class="dice">«Se detuvo el arroyo», «se quedó atascada una hoja»: señal clásica de fusión. Se marca y se vuelve, sin interpretarla en el momento.</p>
+        <p class="dice">«Quedé tranquilo, me sirvió»: preguntar «¿lo hiciste para que se fueran?». Si la respuesta es que sí, el ejercicio se volvió control y toca volver a El costo de la lucha.</p>
+        <p>Quiso acelerar las hojas, empujarlas o saltarse alguna: es la agenda de control apareciendo dentro del ejercicio. Es de lo mejor que puede pasar, y se nombra.</p>
+        <p>Se activó, se disoció o no pudo sostener la pantalla: se para, se ancla y se pasa a la Tarjeta de crisis. La práctica contemplativa no es el lugar.</p>
+      </div>
+      </details>
     </div>
     <div class="ficha-guia" style="border-left-color:#c26a4e">
       <div class="cab">

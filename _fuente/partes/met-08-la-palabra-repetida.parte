@@ -4,9 +4,9 @@ titulo: La palabra repetida
 orden: 08
 enfoque: Metáforas vivas
 etiqueta: Defusión
-sub: Una palabra dicha en voz alta, una y otra vez, cada vez más rápido, durante cuarenta y cinco segundos. Al final deja de significar y queda solo el sonido. Primero se prueba con una palabra cualquiera, para ver el efecto donde no duele. Después con la que pesa, y se compara cuánto pesaba antes y cuánto pesa al terminar.
+sub: Una palabra dicha en voz alta, primero al ritmo en que uno la diría normalmente y después cada vez más rápido, durante cuarenta y cinco segundos. Al final deja de significar y queda solo el sonido. Primero se prueba con una palabra cualquiera, para ver el efecto donde no duele. Después con la que pesa, y se compara cuánto pesaba antes y cuánto pesa al terminar.
 fuente: Ejercicio clásico de repetición de Titchener, usado en defusión cognitiva; en Díaz Corbobés, MANUAL ACT §3.4, dentro de las técnicas para desliteralizar el lenguaje.
-resumen: La palabra se repite en pantalla acelerando hasta perder el significado. Se calibra antes y después cuánto pesa y cuánto suena a verdad, y la diferencia queda a la vista sin que nadie la explique.
+resumen: La palabra se repite en pantalla, despacio al principio y acelerando hasta perder el significado. Se calibra antes y después cuánto pesa y cuánto suena a verdad, y la diferencia queda a la vista sin que nadie la explique.
 campo3: Sesión
 campo3ph: Ej. Sesión 6
 @@css
@@ -38,8 +38,9 @@ campo3ph: Ej. Sesión 6
 <section class="bloque">
   <h2><span class="num">2</span>Cómo se hace</h2>
   <div class="cuerpo guion">
-    <p>Se dice en voz alta, al ritmo que marca la pantalla, sin parar, hasta que se acabe el
-    tiempo. En voz alta de verdad: si se dice por dentro no ocurre.</p>
+    <p>Se dice en voz alta, al ritmo que marca el punto, sin parar, hasta que se acabe el tiempo.
+    Empieza despacio, como la dirías normalmente, y va acelerando sola. En voz alta de verdad: si
+    se dice por dentro no ocurre.</p>
     <p>El primer turno es con una palabra cualquiera, para ver qué pasa donde no duele. El segundo
     es con la tuya.</p>
   </div>
@@ -107,14 +108,24 @@ const $ = Kit.$;
 const PALABRAS = ["Inútil","Débil","Fracasado","Insuficiente"];
 const NEUTRA = "limón";
 const DUR = 45;
-const LENTO = 1.3, RAPIDO = 4;   /* veces por segundo, al principio y al final */
+const LENTO = .6, RAPIDO = 4;    /* veces por segundo, al principio y al final */
+const ARRANQUE = .18;            /* proporción del turno que se dice al ritmo de entrada */
 
 let ronda = "ensayo", t = 0, veces = 0, pulso = 0, acumula = 0;
 let ecos = [], corriendo = false, hechaLaPropia = false;
 
 const marcada = () => Kit.activas("palabra")[0] || "";
 const palabra = () => ronda === "ensayo" ? NEUTRA : (marcada() || "tu palabra");
-const ritmo   = () => LENTO + (RAPIDO - LENTO) * Math.min(1, t / DUR);
+/* Los primeros ocho segundos van al ritmo en que uno diría la palabra
+   normalmente, y ahí todavía significa. Ese tramo es el que hace falta para
+   que la pérdida de significado se note después como un cambio: si empieza
+   rápido, es ruido desde el primer segundo y no hay contraste con nada. */
+const ritmo = () => {
+  const p = Math.min(1, t / DUR);
+  if(p < ARRANQUE) return LENTO;
+  const q = (p - ARRANQUE) / (1 - ARRANQUE);
+  return LENTO + (RAPIDO - LENTO) * Math.pow(q, 1.5);
+};
 
 /* ====================== EL LATIDO ====================== */
 const escena = Kit.reloj(latido);
