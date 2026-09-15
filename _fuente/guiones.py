@@ -74,20 +74,41 @@ GUIONES = {
   "dejes afuera no es que no importe: es que no cabe.»",
   "«No hay respuesta correcta, y no voy a opinar de lo que siembres.»"]),
 
+ ("Al enraizar", [
+  "Las veinticuatro semillas están redactadas como conductas, a propósito: por ahí entra quien no "
+  "sabe nombrar valores. El paso de enraizar existe para que la conducta no se quede haciendo de "
+  "valor, y es el momento donde más fácil se desvía el ejercicio hacia metas.",
+  "«Cuando dices «bajarle al consumo», eso suena a una acción. ¿Qué hay detrás de esa intención, "
+  "qué quieres proteger?»",
+  "«Entonces, en vez de llamar a este surco «comprar menos», ¿cómo lo llamarías tú? ¿Te representa?» "
+  "El rótulo del surco se escribe con sus palabras, no con las de la lista.",
+  "«Si esa parte de tu vida estuviera más presente estos meses, ¿qué cambiaría en cómo te tratas?»",
+  "«¿Qué versión de ti estás cuidando cuando eliges esta semilla?»",
+  "Las fichas de «qué cuida» son un repertorio para destrabar, no un menú que haya que usar. Si la "
+  "persona lo dice con otras palabras, va el «+».",
+  "Un surco puede quedarse sin raíz y no pasa nada: el contador lo deja a la vista y es material "
+  "para la próxima sesión. Lo que no conviene es rellenarlo por completar."]),
+
  ("Durante", [
   "Cuando dude a quién dejar afuera, no ayudarle a decidir. Esa incomodidad es el ejercicio.",
   "Si dice «es que todos importan»: «claro que sí, y aun así hay seis surcos».",
   "Al regar: «con lo que hiciste esta semana, no con lo que quisieras hacer». Esa frase es la que "
-  "separa el jardín de una lista de buenas intenciones."]),
+  "separa el jardín de una lista de buenas intenciones.",
+  "Al elegir la regadera: «¿cuál quieres regar esta semana porque de verdad te importa, no porque "
+  "deberías?»"]),
 
  ("Al terminar", [
   "«¿Cuál está más marchito?» Esperar.",
-  "Y solo después: «¿qué es lo más pequeño que lo regaría?»"]),
+  "Y solo después: «¿qué es lo más pequeño que lo regaría?»",
+  "El qué día, a qué hora y en qué lugar se acuerda hablando y queda escrito en «tarea "
+  "acordada», al pie de la hoja. En la hoja no hay agenda, a propósito."]),
 
  ("Lo que no se dice", [
   "✗ «Deberías regar más la familia.» El jardín es suyo, incluidas las decisiones que incomodan.",
   "✗ Comparar unos surcos con otros, o con los de otra persona.",
-  "✗ Convertir el surco más seco en tarea de la semana antes de saber qué lo secó."]),
+  "✗ Convertir el surco más seco en tarea de la semana antes de saber qué lo secó.",
+  "✗ Poner la raíz uno mismo. Si el profesional elige la ficha de «qué cuida», el valor pasó a ser "
+  "suyo y el ejercicio se acabó."]),
 
  ("Qué hacer con lo que salga", [
   "No logra sembrar ni tres: la conversación ya no es de valores, es de aplanamiento. Conviene "

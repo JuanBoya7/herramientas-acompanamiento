@@ -4,9 +4,9 @@ titulo: El jardín de valores
 orden: 02
 enfoque: Metáforas vivas
 etiqueta: Valores
-sub: Un jardín tiene espacio para seis surcos, y aquí hay veinticuatro semillas. Aquí se siembra eligiendo qué entra y qué se queda afuera, se riega con la acción de esta semana, y el jardín responde: lo que se riega crece y lo que no, se dobla. El jardinero no puede hacer crecer nada; solo puede regar.
-fuente: Clarificación de valores y metáfora del jardín, en Díaz Corbobés, MANUAL ACT §2.1 y §3.6. El procedimiento —elegir unas pocas direcciones de una lista mayor y calificar después la consistencia del último periodo— viene del values card sort y del VLQ de Wilson. Las veinticuatro semillas no son un instrumento: son un repertorio de partida redactado para esta hoja, y por eso está el botón «+».
-resumen: Se siembran seis direcciones de veinticuatro posibles, se riega cada una y el jardín crece o se marchita en pantalla. Las malezas se plantan sobre los surcos concretos en los que crecen: una sola puede cubrir varios o el jardín entero.
+sub: Un jardín tiene espacio para seis surcos, y aquí hay veinticuatro semillas. Aquí se siembra eligiendo qué entra y qué se queda afuera, se enraíza nombrando qué cuida cada surco, se riega con la acción de esta semana, y el jardín responde: lo que se riega crece y lo que no, se dobla. El jardinero no puede hacer crecer nada; solo puede regar.
+fuente: Clarificación de valores y metáfora del jardín, en Díaz Corbobés, MANUAL ACT §2.1 y §3.6. El procedimiento —elegir unas pocas direcciones de una lista mayor y calificar después la consistencia del último periodo— viene del values card sort y del VLQ de Wilson. Las veinticuatro semillas no son un instrumento: son un repertorio de partida redactado para esta hoja, y por eso está el botón «+». Lo mismo vale para lo que cada semilla cuida: son direcciones frecuentes, puestas ahí para que la persona encuentre la suya, no para clasificarla. El paso de enraizar existe porque toda semilla está redactada como conducta, y una conducta sin lo que protege debajo es una meta.
+resumen: Se siembran seis direcciones de veinticuatro posibles, cada surco dice qué cuida por debajo y se renombra con las palabras de la persona, y el riego lo hace crecer o marchitarse en pantalla. Las malezas se plantan sobre los surcos concretos en los que crecen: una sola puede cubrir varios o el jardín entero.
 campo3: Momento
 campo3ph: Ej. Sesión 3
 @@css
@@ -19,6 +19,25 @@ campo3ph: Ej. Sesión 3
   .clima .n{font-size:21px;font-weight:700;display:block;color:#4aa070}
   .clima .r{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--tinta-suave)}
   .avisoRegadera{text-align:center;font-size:12.5px;color:var(--tinta-suave);margin:8px 0 0}
+
+  /* ---------- enraizar: lo que cada surco cuida por debajo ---------- */
+  .raices{display:flex;flex-direction:column;gap:10px}
+  .raiz{border:1px solid var(--linea);border-left-width:5px;border-radius:9px;
+    padding:10px 14px 12px;background:#fdfefe}
+  .raiz .semilla{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+  .raiz input.nombre{font:inherit;font-size:15px;font-weight:600;color:var(--tinta);width:100%;
+    border:0;border-bottom:1px dashed var(--linea);border-radius:0;background:transparent;
+    padding:2px 0 4px;margin:2px 0 10px}
+  .raiz input.nombre:focus{outline:none;border-bottom-color:var(--acento);
+    border-bottom-style:solid}
+  .raiz .pregunta{margin:0 0 7px;font-size:12.5px;color:var(--tinta-suave)}
+  .raizChips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .raizChip{font:inherit;font-size:12.5px;line-height:1.3;border:1px solid var(--linea);
+    border-radius:999px;padding:4px 11px;background:#fff;color:var(--tinta);cursor:pointer}
+  .raizChip:hover{border-color:var(--acento)}
+  .raizChip.marcada{color:#fff;font-weight:600}
+  .raizChip.mas{border-style:dashed;color:var(--acento);font-weight:700;padding:4px 12px}
+  .raizChip.mas:hover{background:var(--acento-claro)}
 
   .surcos{grid-template-columns:1fr 1fr}
   .riegos{display:flex;flex-direction:column;gap:9px}
@@ -71,8 +90,17 @@ campo3ph: Ej. Sesión 3
   </div>
 </section>
 
+<section class="paso" id="pasoRaiz">
+  <h2><span class="num">2</span>Enraizar</h2>
+  <p class="ayuda">Lo que se sembró es una conducta. ¿Qué está cuidando por debajo?</p>
+  <div class="cuerpo">
+    <div class="raices" id="raices"></div>
+    <div class="velo" id="veloRaiz">Siembra al menos una semilla y aparecerá aquí su raíz.</div>
+  </div>
+</section>
+
 <section class="paso" id="pasoRiego">
-  <h2><span class="num">2</span>Regar</h2>
+  <h2><span class="num">3</span>Regar</h2>
   <p class="ayuda">Cuánta agua le cayó de verdad a cada surco <b>durante la última semana</b>.</p>
   <div class="cuerpo">
     <div class="riegos" id="riegos"></div>
@@ -95,6 +123,7 @@ campo3ph: Ej. Sesión 3
   <p class="avisoRegadera" id="avisoRegadera"></p>
   <div class="clima">
     <div><span class="n" id="cSembradas">0</span><span class="r">surcos sembrados</span></div>
+    <div><span class="n" id="cSinRaiz" style="color:#8a6a45">0</span><span class="r">sin raíz</span></div>
     <div><span class="n" id="cFlor">0</span><span class="r">en flor</span></div>
     <div><span class="n" id="cSecas" style="color:#a8834e">0</span><span class="r">secas</span></div>
     <div><span class="n" id="cMalezas" style="color:#7d8a63">0</span><span class="r">malezas</span></div>
@@ -111,6 +140,41 @@ const AMBITOS = {
   "Hacer":    "#5f77b8",
   "Sentido":  "#3f9b86",
   "Gozo":     "#d1a52c"
+};
+
+/* Lo que cada semilla cuida por debajo. La semilla es la puerta —siempre está
+   redactada como conducta, porque por ahí entra quien no sabe nombrar valores—
+   y esto es la dirección que la conducta hace visible. Tres o cuatro frecuentes
+   y un «+»: la que vale es la que la persona diga con sus palabras. */
+const CUIDA = {
+  s1: ["Que el otro se sienta acompañado","Cercanía de verdad","No vivir en automático"],
+  s2: ["Que el otro se sienta entendido","Respeto por lo que piensa","Dejar de tener la razón"],
+  s3: ["Respeto por mí","Honestidad","Cuidar el vínculo sin perderme"],
+  s4: ["Reciprocidad","Que el vínculo importe","No esperar a ser buscado"],
+  s5: ["Que el vínculo pese más que el orgullo","Hacerme cargo","No dejar heridas abiertas"],
+  s21:["Ser alguien con quien se puede contar","Proteger","Devolver lo que recibí"],
+  s22:["Intimidad","Complicidad","Volver a elegirnos"],
+
+  s6: ["Cuidarme","Tener con qué responder","Tratarme con respeto"],
+  s7: ["Sentirme capaz de mi cuerpo","Vitalidad","Habitarme","Gusto de moverme"],
+  s8: ["Amabilidad conmigo","Nutrirme","Paz con mi cuerpo"],
+  s9: ["Tranquilidad","Control sobre lo mío","Libertad","No acumular"],
+
+  s10:["Curiosidad","Crecer","Entender el mundo"],
+  s11:["Confianza en mi palabra","Integridad","Alivio","Ser alguien que cumple"],
+  s12:["Equilibrio","Que mi vida no sea solo esto","Dignidad en lo que hago"],
+  s13:["Expresarme","Dejar algo hecho","Oficio","Gusto de hacer"],
+
+  s14:["Generosidad","Que mi presencia sume","Compasión"],
+  s15:["Calma","Perspectiva","Sentirme parte de algo"],
+  s16:["Coherencia","Integridad","Poder mirarme a la cara"],
+  s17:["Notar lo que sí está","Humildad","No dar por sentado"],
+  s23:["Pertenecer","Dejar algo mejor","Compromiso","Que no sea solo lo mío"],
+  s24:["Conexión","Sentido","Paz interior"],
+
+  s18:["Autonomía","Disfrute","Curiosidad","Libertad"],
+  s19:["Permiso para parar","Amabilidad conmigo","Valgo sin producir"],
+  s20:["Alegría","Espontaneidad","Ligereza","Reencontrarme"]
 };
 
 const SEMILLAS = [
@@ -144,7 +208,7 @@ const SEMILLAS = [
  {id:"s18", grupo:"Gozo",     titulo:"Hacer algo por gusto",      desc:"Que no rinda para nada y esté bien así."},
  {id:"s19", grupo:"Gozo",     titulo:"Descansar sin culpa",       desc:"Parar sin tener que justificarlo."},
  {id:"s20", grupo:"Gozo",     titulo:"Jugar",                     desc:"Lo que hacía antes de que todo tuviera que servir."}
-].map(s => Object.assign(s, {color: AMBITOS[s.grupo]}));
+].map(s => Object.assign(s, {color: AMBITOS[s.grupo], cuida: CUIDA[s.id] || []}));
 
 const MALEZAS = ["No hay tiempo","Pereza","Cansancio","El celular","«mañana empiezo»",
   "Miedo a fallar","Culpa","«no vale la pena»"];
@@ -152,6 +216,9 @@ const MALEZAS = ["No hay tiempo","Pereza","Cansancio","El celular","«mañana em
 const CUPO = 6;
 let huerta;                  // control devuelto por Kit.mostrador
 let riego = {};              // id de semilla -> 0..10
+let raiz = {};               // id de semilla -> qué cuida ese surco
+let nombre = {};             // id de semilla -> cómo lo llama la persona
+let raicesPropias = {};      // id de semilla -> [raíces escritas por la persona]
 let malezas = {};            // texto de la maleza -> [ids de los surcos donde crece]
 let propias = [];            // malezas puestas por la persona
 let regadera = "";           // id del surco elegido para esta semana
@@ -159,6 +226,12 @@ let regadera = "";           // id del surco elegido para esta semana
 const sembradas = () => huerta ? huerta.elegidas() : [];
 const aguaDe = s => riego[s.id] === undefined ? 5 : riego[s.id];
 const surcoPorId = id => sembradas().find(s => s.id === id);
+
+/* El surco se llama como lo llame la persona; la semilla queda como origen. */
+const tituloDe = s => nombre[s.id] || s.titulo;
+const raizDe = s => raiz[s.id] || "";
+const propio = s => !!nombre[s.id] && nombre[s.id] !== s.titulo;
+const rotuloSemilla = s => s.grupo + (propio(s) ? " · de «" + s.titulo + "»" : "");
 
 /* Una maleza puede crecer en varios surcos. Lo guardado antes era un solo id
    suelto, así que se lee igual y se devuelve siempre como lista. */
@@ -177,6 +250,93 @@ const NIVELES = [
 const nivelDe = a => NIVELES.find(n => a >= n.min);
 const colorPlanta = a => Kit.mezcla("#b09468", "#3f9b5c", Math.pow(a / 10, .75));
 
+/* Un campo que aparece donde estaba el botón y se cierra con Enter, con
+   Escape o al salir. Lo usan las raíces y las malezas. */
+function campoNuevo(caja, boton, alAceptar){
+  const campo = document.createElement("input");
+  campo.type = "text";
+  campo.className = "chipNuevo";
+  campo.placeholder = "En tus palabras…";
+  caja.insertBefore(campo, boton);
+  boton.style.display = "none";
+  let cerrado = false;
+  const cerrar = ok => {
+    if(cerrado) return;
+    cerrado = true;
+    const txt = campo.value.trim();
+    campo.remove();
+    boton.style.display = "";
+    if(ok && txt) alAceptar(txt);
+  };
+  campo.addEventListener("keydown", e => {
+    if(e.key === "Enter"){ e.preventDefault(); cerrar(true); }
+    if(e.key === "Escape"){ e.preventDefault(); cerrar(false); }
+  });
+  campo.addEventListener("blur", () => cerrar(true));
+  campo.focus();
+}
+
+/* ====================== ENRAIZAR ====================== */
+function pintarRaices(){
+  const lista = sembradas();
+  $("veloRaiz").style.display = lista.length ? "none" : "block";
+  $("raices").innerHTML = lista.map(s => {
+    const fichas = (s.cuida || []).concat(raicesPropias[s.id] || []).map(c => {
+      const puesta = raizDe(s) === c;
+      return `<button type="button" class="raizChip${puesta ? " marcada" : ""}" data-c="${Kit.escapar(c)}"` +
+             (puesta ? ` style="background:${s.color};border-color:${s.color}"` : "") +
+             `>${Kit.escapar(c)}</button>`;
+    }).join("");
+    return `<div class="raiz" data-s="${s.id}" style="border-left-color:${s.color}">
+      <div class="semilla" style="color:${s.color}">${Kit.escapar(rotuloSemilla(s))}</div>
+      <input type="text" class="nombre" value="${Kit.escapar(tituloDe(s))}"
+        placeholder="${Kit.escapar(s.titulo)}" aria-label="Cómo se llama este surco">
+      <p class="pregunta">¿Qué cuida?</p>
+      <div class="raizChips">${fichas}<button type="button" class="raizChip mas">+ otra</button></div>
+    </div>`;
+  }).join("");
+
+  $("raices").querySelectorAll(".raiz").forEach(caja => {
+    const s = surcoPorId(caja.dataset.s);
+    if(!s) return;
+
+    /* Renombrar en vivo. Mientras se escribe no se rehace ninguna caja: se
+       retocan los rótulos donde está el mismo nombre, o el cursor se pierde. */
+    const inp = caja.querySelector("input.nombre");
+    inp.addEventListener("input", () => {
+      const txt = inp.value.trim();
+      if(txt && txt !== s.titulo) nombre[s.id] = txt; else delete nombre[s.id];
+      caja.querySelector(".semilla").textContent = rotuloSemilla(s);
+      const fila = $("fila-" + s.id);
+      if(fila) fila.querySelector(".quien").textContent = tituloDe(s);
+      document.querySelectorAll(`#malezas button[data-surco="${s.id}"]`)
+        .forEach(b => { b.textContent = cortar(tituloDe(s)); });
+      refrescar();
+      Kit.guardar();
+    });
+
+    /* Una sola raíz por surco: la que se vuelve a tocar se suelta. */
+    caja.querySelectorAll("button[data-c]").forEach(b => {
+      b.addEventListener("click", () => {
+        if(raizDe(s) === b.dataset.c) delete raiz[s.id]; else raiz[s.id] = b.dataset.c;
+        pintarRaices();
+        refrescar();
+        Kit.guardar();
+      });
+    });
+
+    const mas = caja.querySelector(".raizChip.mas");
+    mas.addEventListener("click", () => campoNuevo(mas.parentElement, mas, txt => {
+      const suyas = raicesPropias[s.id] || (raicesPropias[s.id] = []);
+      if(suyas.indexOf(txt) < 0 && (s.cuida || []).indexOf(txt) < 0) suyas.push(txt);
+      raiz[s.id] = txt;
+      pintarRaices();
+      refrescar();
+      Kit.guardar();
+    }));
+  });
+}
+
 /* ====================== RIEGOS ====================== */
 function pintarRiegos(){
   const lista = sembradas();
@@ -186,7 +346,7 @@ function pintarRiegos(){
     const a = aguaDe(s);
     return `<div class="riego" id="fila-${s.id}" style="border-left-color:${s.color}">
       <div>
-        <div class="quien">${Kit.escapar(s.titulo)}</div>
+        <div class="quien">${Kit.escapar(tituloDe(s))}</div>
         <div class="surco" style="color:${s.color}">${Kit.escapar(s.grupo)}</div>
       </div>
       <div class="mando">
@@ -233,7 +393,7 @@ function pintarMalezas(){
       const marcado = donde.indexOf(s.id) >= 0;
       return `<button type="button" class="surquito${marcado ? " marcado" : ""}" data-surco="${s.id}"` +
              (marcado ? ` style="background:${s.color};border-color:${s.color}"` : "") +
-             `>${Kit.escapar(cortar(s.titulo))}</button>`;
+             `>${Kit.escapar(cortar(tituloDe(s)))}</button>`;
     }).join("");
     return `<div class="maleza${puesta ? " activa" : ""}" data-m="${Kit.escapar(m)}">
       ${puesta ? `<button type="button" class="quitar" data-quita="${Kit.escapar(m)}" title="Quitar">×</button>` : ""}
@@ -381,8 +541,19 @@ function dibujar(){
 
     /* el surco removido, del color de su ámbito */
     g("ellipse", {cx:cx, cy:SUELO + 5, rx:36, ry:7, fill:"#b59a76"}, mata);
-    g("rect", {x:cx - 36, y:SUELO + 12, width:72, height:3, rx:1.5,
-      fill:s.color, opacity:.55}, mata);
+
+    /* Lo que se sembró sin nombrar qué cuida se sostiene sobre una línea plana;
+       en cuanto se enraíza, echa raíz bajo la tierra. */
+    if(raizDe(s)){
+      [[-1, .85], [0, 1], [1, .85]].forEach(([lado, largo]) => {
+        g("path", {d:`M${cx} ${SUELO + 4} q ${lado * 7} ${9 * largo} ${lado * 13} ${19 * largo}`,
+          stroke:s.color, "stroke-width":2.1, fill:"none", "stroke-linecap":"round",
+          opacity:.5}, mata);
+      });
+    } else {
+      g("rect", {x:cx - 36, y:SUELO + 12, width:72, height:3, rx:1.5,
+        fill:s.color, opacity:.3}, mata);
+    }
 
     /* el tallo */
     const puntaX = cx + caida, puntaY = SUELO - alto + caida * .5;
@@ -426,18 +597,19 @@ function dibujar(){
         stroke:"#6f7d54", "stroke-width":2, fill:"none", "stroke-linecap":"round"}, mata);
     });
     if(malas.length){
-      const nom = Kit.svg("text", {x:cx, y:SUELO + 62, "text-anchor":"middle",
+      const nom = Kit.svg("text", {x:cx, y:SUELO + 66, "text-anchor":"middle",
         style:"font:600 10.5px system-ui,sans-serif;fill:#5f6b4a"});
       nom.textContent = malas.slice(0, 2).join(" · ") + (malas.length > 2 ? " …" : "");
       mata.appendChild(nom);
     }
 
     /* rótulo del surco */
-    const et = Kit.svg("text", {x:cx, y:SUELO + 30, "text-anchor":"middle",
+    const et = Kit.svg("text", {x:cx, y:SUELO + 34, "text-anchor":"middle",
       style:`font:600 11.5px system-ui,sans-serif;fill:${s.color}`});
-    et.textContent = s.titulo.length > 19 ? s.titulo.slice(0, 18) + "…" : s.titulo;
+    const rot = tituloDe(s);
+    et.textContent = rot.length > 19 ? rot.slice(0, 18) + "…" : rot;
     mata.appendChild(et);
-    const en = Kit.svg("text", {x:cx, y:SUELO + 46, "text-anchor":"middle",
+    const en = Kit.svg("text", {x:cx, y:SUELO + 50, "text-anchor":"middle",
       style:"font:700 11px system-ui,sans-serif;fill:#7d674b"});
     en.textContent = nivelDe(a).nombre.toLowerCase();
     mata.appendChild(en);
@@ -486,6 +658,7 @@ function refrescar(){
   });
 
   $("cSembradas").textContent = lista.length;
+  $("cSinRaiz").textContent = lista.filter(s => !raizDe(s)).length;
   $("cFlor").textContent = enFlor().length;
   $("cSecas").textContent = secas().length;
   $("cMalezas").textContent = Object.keys(malezas).length;
@@ -496,7 +669,7 @@ function refrescar(){
   const sel = surcoPorId(regadera);
   $("avisoRegadera").innerHTML = !lista.length ? ""
     : sel
-    ? `La regadera está sobre <b>${Kit.escapar(sel.titulo.toLowerCase())}</b>. Una flor por semana; la próxima, otra.`
+    ? `La regadera está sobre <b>${Kit.escapar(tituloDe(sel).toLowerCase())}</b>. Una flor por semana; la próxima, otra.`
     : "Toca la flor que se riega esta semana. Una sola: la regadera no alcanza para seis.";
 }
 
@@ -523,22 +696,27 @@ function resumen(){
   l.push(`SEMBRADO (${lista.length} de ${CUPO} surcos)`);
   lista.forEach(s => {
     const mal = malezasDe(s.id);
-    l.push(`- [${s.grupo}] ${s.titulo} — riego ${aguaDe(s)}/10 (${nivelDe(aguaDe(s)).nombre.toLowerCase()})` +
-           (mal.length ? `\n    Malezas: ${mal.join(", ")}` : ""));
+    l.push(`- [${s.grupo}] ${tituloDe(s)}`);
+    if(propio(s)) l.push(`    semilla: ${s.titulo}`);
+    l.push(`    cuida: ${raizDe(s) || "sin nombrar"}`);
+    l.push(`    riego ${aguaDe(s)}/10 (${nivelDe(aguaDe(s)).nombre.toLowerCase()})`);
+    if(mal.length) l.push(`    malezas: ${mal.join(", ")}`);
   });
   const anchas = Object.keys(malezas).filter(m => surcosDe(m).length > 1);
   if(anchas.length) l.push("", "MALEZAS EN VARIOS SURCOS", ...anchas.map(m => {
     const donde = surcosDe(m);
     return `- ${m}: ` + (donde.length === lista.length && lista.length > 1
       ? "todo el jardín"
-      : donde.map(id => (surcoPorId(id) || {}).titulo).filter(Boolean).join(", "));
+      : donde.map(id => { const s = surcoPorId(id); return s ? tituloDe(s) : ""; })
+              .filter(Boolean).join(", "));
   }));
   const fuera = SEMILLAS.filter(s => !lista.some(x => x.id === s.id));
   if(lista.length) l.push("", "Quedó afuera: " + fuera.map(s => s.titulo).join(", "));
   l.push("", `En flor: ${enFlor().length}   Secas: ${secas().length}   ` +
+             `Sin raíz: ${lista.filter(s => !raizDe(s)).length}   ` +
              `Malezas: ${Object.keys(malezas).length}`);
   const sel = surcoPorId(regadera);
-  l.push("", "LA REGADERA DE ESTA SEMANA: " + (sel ? sel.titulo : "sin elegir"));
+  l.push("", "LA REGADERA DE ESTA SEMANA: " + (sel ? tituloDe(sel) : "sin elegir"));
   return l.join("\n");
 }
 
@@ -548,14 +726,18 @@ cablearMasMalezas();
 huerta = Kit.mostrador({
   bancoId:"semillero", ranurasId:"surcos", cupo:CUPO, items:SEMILLAS,
   etiquetas:["Primer surco","Segundo surco","Tercer surco","Cuarto surco","Quinto surco","Sexto surco"],
-  alCambiar: () => { pintarRiegos(); pintarMalezas(); refrescar(); }
+  alCambiar: () => { pintarRaices(); pintarRiegos(); pintarMalezas(); refrescar(); }
 });
 
 Kit.iniciar({
   clave: "met-jardin-de-valores",
-  extra: () => ({surcos: huerta.ids(), riego, malezas, propias, regadera}),
+  extra: () => ({surcos: huerta.ids(), riego, raiz, nombre, raicesPropias,
+                 malezas, propias, regadera}),
   restaurar: d => {
     riego = d.riego || {};
+    raiz = d.raiz || {};
+    nombre = d.nombre || {};
+    raicesPropias = d.raicesPropias || {};
     malezas = {};
     Object.keys(d.malezas || {}).forEach(m => {
       const v = d.malezas[m];
@@ -566,6 +748,6 @@ Kit.iniciar({
     regadera = d.regadera || "";
     if(d.surcos) huerta.cargar(d.surcos);
   },
-  alCambiar: () => { pintarRiegos(); pintarMalezas(); refrescar(); },
+  alCambiar: () => { pintarRaices(); pintarRiegos(); pintarMalezas(); refrescar(); },
   resumen: resumen
 });

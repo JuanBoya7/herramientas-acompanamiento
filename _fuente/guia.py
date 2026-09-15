@@ -46,7 +46,9 @@ GUIA = [
 
  {"archivo":"met-jardin-de-valores.html", "titulo":"El jardín de valores", "etq":"Valores",
   "paraque":"Clarificación por elección y no por escritura: seis surcos de veinticuatro, y la distancia "
-            "entre lo que importa y lo que efectivamente se regó.",
+            "entre lo que importa y lo que efectivamente se regó. Entre sembrar y regar hay un paso "
+            "de enraizar: cada surco dice qué cuida por debajo y se renombra con las palabras de la "
+            "persona, que es donde la conducta deja de pasar por valor.",
   "conviene":[
     "Cuando preguntar «¿cuáles son tus valores?» produce silencio o discurso aprendido.",
     "Personas poco verbales, o que no escriben, o que se pierden en la brújula.",
@@ -56,7 +58,9 @@ GUIA = [
     ("Alternativa a", "La brújula de valores, cuando hace falta algo más concreto y menos verbal."),
     ("Después va", "El bus, o activación conductual si lo que falla es arrancar.")],
   "cuidado":"Si no logra sembrar ni tres surcos, la conversación no es sobre valores sino sobre el "
-            "aplanamiento. Conviene tamizar sintomatología depresiva antes de seguir."},
+            "aplanamiento. Conviene tamizar sintomatología depresiva antes de seguir. Y si los surcos "
+            "se quedan sin raíz, la hoja se está usando como lista de tareas: el contador «sin raíz» "
+            "dice exactamente dónde falta preguntar."},
 
  {"archivo":"met-la-cuerda.html", "titulo":"La cuerda y el monstruo", "etq":"Aceptación",
   "paraque":"Que la persona compruebe en pantalla que la fuerza alimenta la lucha, y que soltar no "
