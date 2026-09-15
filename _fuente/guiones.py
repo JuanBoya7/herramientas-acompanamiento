@@ -95,7 +95,10 @@ GUIONES = {
   "Siembra seis y los riega todos al máximo: suele ser deseabilidad. Bajar a la semana concreta, "
   "día por día, y volver a regar.",
   "Aparece un surco que riega mucho y que no eligió como valor: mirarlo. Casi siempre es evitación "
-  "bien disfrazada de responsabilidad."]),
+  "bien disfrazada de responsabilidad.",
+  "Una misma maleza marcada en varios surcos, o en todos: no es una barrera de esa área, es un "
+  "proceso que atraviesa la vida entera. Ahí la conversación deja de ser por surcos y pasa a ser "
+  "por el proceso: qué hace con eso cuando aparece, no en cuál jardín aparece."]),
 ],
 
 # -------------------------------------------------- la cuerda y el monstruo
