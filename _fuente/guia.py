@@ -11,6 +11,7 @@ ni guardado, ni notas. Se reconstruye sola al correr construir.py.
 from pathlib import Path
 
 import guiones
+import rieles
 
 SALTO = chr(10)
 
@@ -620,14 +621,14 @@ def guion(bloques):
             SALTO.join(partes) + SALTO + "      </details>")
 
 
-def ficha(h, color):
+def ficha(h, color, enfoque):
     conviene = "\n".join("        <li>%s</li>" % c for c in h["conviene"])
     pasos = "\n".join('      <div class="paso"><b>%s</b> %s</div>' % (r, t)
                       for r, t in h["secuencia"])
     aviso = ('\n      <div class="aviso-uso"><b>Cuidado</b>%s</div>' % h["cuidado"]) \
         if h.get("cuidado") else ""
     libreto = guion(h["guion"]) if h.get("guion") else ""
-    return f"""    <div class="ficha-guia" style="border-left-color:{color}">
+    return f"""    <div class="ficha-guia" style="border-left-color:{color}" data-item data-enf="{enfoque}" data-titulo="{h['titulo']}">
       <div class="cab">
         <h3><a href="{h['archivo']}">{h['titulo']}</a></h3>
         <span class="etq" style="color:{color};background:{color}1a">{h['etq']}</span>
@@ -659,11 +660,13 @@ def construir(kit_css=None):
     bloques = []
     for enfoque, hojas in con_guiones(GUIA):
         color = COLORES[enfoque]
-        fichas = "\n".join(ficha(h, color) for h in hojas)
-        bloques.append(f"""<h2 class="enfoque" style="color:{color}">{enfoque}</h2>
+        fichas = "\n".join(ficha(h, color, enfoque) for h in hojas)
+        bloques.append(f"""<section data-grupo="{enfoque}">
+<h2 class="enfoque" style="color:{color}">{enfoque}</h2>
   <div class="fichas">
 {fichas}
-  </div>""")
+  </div>
+</section>""")
 
     rutas = "\n".join(ruta(r) for r in RUTAS)
     cuantas = sum(len(h) for _, h in GUIA)
@@ -677,11 +680,13 @@ def construir(kit_css=None):
 <style>
 {kit_css}
 {CSS}
+{rieles.CSS}
 </style>
 </head>
-<body>
-<div class="envoltura">
+<body data-extra="&lt;a class=&quot;extra&quot; href=&quot;#encadenamientos&quot;&gt;Encadenamientos frecuentes&lt;/a&gt;&lt;a class=&quot;extra&quot; href=&quot;index.html&quot;&gt;Volver a las herramientas&lt;/a&gt;">
+<div class="envoltura con-rieles">
 
+<div class="cab">
 <a class="volver" href="index.html">Volver a las herramientas</a>
 
 <header class="tapa">
@@ -689,8 +694,12 @@ def construir(kit_css=None):
   <p class="sub">Para qué sirve cada una de las {cuantas} hojas, en qué casos rinde, con qué va
   antes o después, y dónde conviene tener cuidado. Los títulos abren la herramienta.</p>
 </header>
+</div>
 
-<section class="bloque">
+{rieles.controles("Buscar una hoja por nombre, uso o cuidado…")}
+
+<main class="centro">
+<section class="bloque" id="encadenamientos">
   <h2>Encadenamientos frecuentes</h2>
   <p class="ayuda">No son protocolos: son los órdenes que suelen funcionar. Lo que casi nunca
   funciona es empezar por el final.</p>
@@ -701,7 +710,13 @@ def construir(kit_css=None):
 
 {chr(10).join(bloques)}
 
+<div class="sin-resultados" id="sin-resultados" hidden>Ninguna hoja coincide con el filtro y la búsqueda.</div>
+</main>
+
+{rieles.MAPA}
+
 </div>
+<script>{rieles.JS}</script>
 </body>
 </html>
 """

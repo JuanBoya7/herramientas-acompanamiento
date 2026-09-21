@@ -108,8 +108,10 @@ resumen: Una o dos frases para la ficha del índice.
 que existen para dejar registro (análisis en cadena, tarjeta diaria, escalera de exposición y
 análisis funcional).
 
-`lamina` sube el tamaño de letra y ordena el contenido en fichas parejas. La llevan las hojas de
-DBT, que se usan tanto para trabajar como para exponer.
+`lamina` ya no enciende nada por sí sola: marca la hoja como proyectable y el kit le pone un
+botón «Modo lámina» en la barra, que sube el tamaño de letra y se recuerda en ese equipo. La
+llevan las hojas de DBT, que se usan tanto para trabajar como para exponer. Nacían en lámina y en
+consulta uno a uno la letra grande alargaba la hoja sin aportar nada.
 
 ## El criterio de diseño
 
@@ -133,6 +135,25 @@ Vale la pena tenerlo presente al agregar cualquier herramienta nueva:
    hablando. La hoja deja el recordatorio, no la agenda.
 7. **Todo cabe en un archivo.** Sin dependencias, sin servidor, sin conexión.
 8. **Uso clínico.** No hay selector de modo ni mención institucional: son hojas de consulta.
+
+## Lo que el kit hace solo, sin que la hoja pida nada
+
+Al llamar a `Kit.iniciar` —o a `Kit.soloModo` en las tres antiguas— se aplican tres arreglos de
+presentación que no tocan el contenido de ninguna hoja:
+
+- **Un paso a la vez.** Si hay tres o más secciones numeradas —`.paso` o `.bloque`, lo que cuenta
+  es el `<span class="num">`— se pliegan todas menos la que se está trabajando, con un
+  «Siguiente» al pie. Los pasos siguen en el documento, así que el motor de cada hoja los sigue
+  encontrando, y al imprimir se abren todos. Los pasos que la hoja oculta con `hidden` —las dos
+  ramas de Verificar los hechos— no cuentan mientras no estén a la vista, y el que la hoja destape
+  se abre solo.
+- **La ayuda detrás de un signo.** Los `<p class="ayuda">` que cuelgan directamente de la sección
+  pasan a un «?» junto al título. Los que acompañan a un campo dentro del `.cuerpo` se quedan
+  donde están: esos sí son indicaciones de uso.
+- **El botón de lámina**, en las hojas marcadas con `lamina: si`.
+
+Nada de esto hay que pedirlo desde la hoja. Al agregar una herramienta nueva, basta con numerar
+las secciones como siempre.
 
 ## Las funciones del kit que más se usan
 
@@ -178,3 +199,12 @@ Kit.iniciar({
   resumen: resumen                // el texto que arma "Copiar resumen"
 });
 ```
+
+## Las columnas laterales del índice y de la guía
+
+`rieles.py` arma las dos columnas que usan `index.html` y `guia.html` en pantallas anchas: a la
+izquierda, el buscador y el filtro por enfoque; a la derecha, el mapa de las hojas, las dos fijas
+mientras se recorre el centro. En pantallas medianas y en el teléfono los filtros vuelven arriba y
+el mapa se oculta. La página solo marca `data-grupo` en cada bloque de enfoque y `data-item` (con
+`data-enf` y `data-titulo`, y `data-href` si abre otra página) en cada ficha; el mapa se arma solo.
+Las hojas de trabajo no usan este módulo.

@@ -14,6 +14,7 @@ import sys, re
 from pathlib import Path
 
 import guia
+import rieles
 
 AQUI = Path(__file__).resolve().parent
 DESTINO = AQUI.parent
@@ -96,13 +97,18 @@ def construir(ruta, plantilla, kit_css, kit_js):
     else:
         identificacion = ""
 
-    # Las hojas expositivas se marcan con "lamina: si": el kit les sube el
-    # tamaño de letra y ordena el contenido en fichas, para proyectarlas.
-    lamina = ' class="lamina"' if meta.get("lamina", "").lower() in ("si", "sí", "true", "1") else ""
+    # Las hojas expositivas se marcan con "lamina: si". Ya no nacen en
+    # lámina: se marcan como laminables y el kit pone el botón que la
+    # enciende. En consulta uno a uno la letra grande estorbaba.
+    laminable = meta.get("lamina", "").lower() in ("si", "sí", "true", "1")
+    lamina = ' data-laminable="1"' if laminable else ""
+    boton_lamina = ("  <button class='botonLamina' onclick='Kit.lamina()'>Modo lámina</button>" + "\n"
+                    if laminable else "")
 
     salida = plantilla
     for clave, valor in [
         ("{{LAMINA}}", lamina),
+        ("{{BOTON_LAMINA}}", boton_lamina),
         ("{{IDENTIFICACION}}", identificacion),
         ("{{KIT_CSS}}", kit_css),
         ("{{KIT_JS}}", kit_js),
@@ -126,7 +132,7 @@ def construir(ruta, plantilla, kit_css, kit_js):
     return meta, destino
 
 
-TARJETA = """      <a class="ficha" href="{archivo}">
+TARJETA = """      <a class="ficha" href="{archivo}" data-item data-enf="{enfoque}" data-titulo="{titulo}" data-href="{archivo}">
         <span class="etq">{etiqueta}</span>
         <b>{titulo}</b>
         <span class="dice">{resumen}</span>
@@ -143,6 +149,7 @@ def construir_indice(fichas, kit_css):
         tarjetas = "\n".join(
             TARJETA.format(
                 archivo=f["archivo"],
+                enfoque=f["enfoque"],
                 etiqueta=f.get("etiqueta", f["enfoque"]),
                 titulo=f["titulo"],
                 resumen=f["resumen"],
@@ -151,7 +158,7 @@ def construir_indice(fichas, kit_css):
             for f in propias
         )
         bloques.append(
-            f"""  <section class="bloque">
+            f"""  <section class="bloque" data-grupo="{enfoque}">
     <h2>{enfoque}</h2>
     <p class="ayuda">{descripcion}</p>
     <div class="rejilla">
@@ -199,11 +206,13 @@ def construir_indice(fichas, kit_css):
 <style>
 {kit_css}
 {css_extra}
+{rieles.CSS}
 </style>
 </head>
-<body>
-<div class="envoltura">
+<body data-extra="&lt;a class=&quot;extra&quot; href=&quot;guia.html&quot;&gt;Guía rápida de uso &amp;rarr;&lt;/a&gt;">
+<div class="envoltura con-rieles">
 
+<div class="cab">
 <header class="tapa">
   <h1>Herramientas de acompañamiento</h1>
   <p class="sub">{len(fichas)} hojas de trabajo interactivas para el espacio clínico, cada una en
@@ -220,8 +229,14 @@ def construir_indice(fichas, kit_css):
   </span>
   <span class="flecha">&rarr;</span>
 </a>
+</div>
 
+{rieles.controles("Buscar una hoja por nombre, técnica o uso…")}
+
+<main class="centro">
 {chr(10).join(bloques)}
+
+  <div class="sin-resultados" id="sin-resultados" hidden>Ninguna hoja coincide con el filtro y la búsqueda.</div>
 
   <section class="bloque">
     <h2>Cómo se usan</h2>
@@ -237,8 +252,12 @@ def construir_indice(fichas, kit_css):
       lo diligenciado y las notas del profesional, listo para pegar.</div>
     </div>
   </section>
+</main>
+
+{rieles.MAPA}
 
 </div>
+<script>{rieles.JS}</script>
 </body>
 </html>
 """

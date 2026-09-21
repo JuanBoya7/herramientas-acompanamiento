@@ -37,6 +37,31 @@
     width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
     color:var(--acento);font-size:14px;font-weight:700}
   .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+
+  /* ---------- la ayuda detrás de un signo ---------- */
+  .comoAsi{flex:0 0 auto;width:21px;height:21px;padding:0;border-radius:50%;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta-suave);
+    font:700 12.5px/1 inherit;cursor:pointer}
+  .comoAsi:hover,.comoAsi.abierto{border-color:var(--acento);color:var(--acento);
+    background:var(--acento-claro)}
+  .ayudaCaja{margin-top:7px}
+  .ayudaCaja .ayuda{margin-top:0}
+
+  /* ---------- un paso a la vez ---------- */
+  section.plegable > h2{cursor:pointer;user-select:none}
+  section.plegable > h2::after{content:"";flex:0 0 auto;margin-left:auto;width:9px;height:9px;
+    border-right:2px solid #b3bfca;border-bottom:2px solid #b3bfca;transform:rotate(45deg);
+    transition:transform .15s;margin-top:-4px}
+  section.cerrado{padding-top:13px;padding-bottom:13px;background:#fbfcfe}
+  section.cerrado > h2{margin:0;color:var(--tinta-suave)}
+  section.cerrado > h2::after{transform:rotate(-135deg);margin-top:3px}
+  section.cerrado > h2 .num{background:var(--fondo);color:var(--tinta-suave)}
+  section.cerrado > *:not(h2){display:none}
+  .pasoNav{display:flex;justify-content:flex-end;margin-top:15px}
+  .pasoNav button{font:inherit;font-size:13.5px;font-weight:600;color:var(--acento);
+    border:1px solid var(--linea);border-radius:999px;padding:6px 16px;background:#fff;
+    cursor:pointer}
+  .pasoNav button:hover{border-color:var(--acento);background:var(--acento-claro)}
   .cuerpo{margin-top:14px}
   textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
     font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
@@ -262,6 +287,9 @@
   }
   @media print{
     body{background:#fff}
+    section.cerrado > *:not(h2){display:revert}
+    section.cerrado{background:none}
+    .comoAsi,.pasoNav,.ayudaCaja{display:none !important}
     .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
     .opcion:not(.activa),.borrar{display:none !important}
     header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
@@ -343,11 +371,70 @@
     .fichas{grid-template-columns:1fr 1fr}
   }
 
+
+  /* ---- Distribución con columnas laterales ---- */
+  .envoltura.con-rieles{display:grid;grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"cab" "izq" "centro"}
+  .con-rieles > .cab{grid-area:cab}
+  .con-rieles > .riel-izq{grid-area:izq}
+  .con-rieles > .centro{grid-area:centro;min-width:0}
+  .con-rieles > .riel-der{display:none}
+  .controles{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 16px;margin-bottom:16px}
+  .controles .fila{display:flex;flex-wrap:wrap;gap:6px}
+  .controles-r{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--tinta-suave);margin:12px 0 6px}
+  .buscador{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:8px 13px;
+    border:1px solid var(--linea);border-radius:999px;background:#fff}
+  .buscador:focus{outline:none;border-color:var(--acento)}
+  .fchip{font:inherit;font-size:13px;border:1px solid var(--linea);border-radius:999px;
+    padding:5px 12px;background:#fff;color:var(--tinta-suave);cursor:pointer}
+  .fchip:hover{border-color:var(--acento);color:var(--tinta)}
+  .fchip[aria-pressed="true"]{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  .cuenta{margin-top:12px;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
+  [data-grupo][hidden],[data-item][hidden]{display:none !important}
+  .sin-resultados{border:1px dashed var(--linea);border-radius:var(--radio);padding:22px;
+    text-align:center;color:var(--tinta-suave);font-size:14px}
+  .sin-resultados[hidden]{display:none}
+
+  .mapa-r{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--tinta-suave);margin:2px 0 10px}
+  .mapa-g{margin-top:14px}
+  .mapa-g[hidden],.mapa li[hidden]{display:none}
+  .mapa-g > a{display:block;font-weight:700;font-size:14px;color:var(--tinta);text-decoration:none;
+    margin-bottom:4px}
+  .mapa ul{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--linea)}
+  .mapa li a{display:block;font-size:13px;line-height:1.35;color:var(--tinta-suave);text-decoration:none;
+    padding:4px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent}
+  .mapa a:hover{color:var(--acento);background:var(--acento-claro)}
+  .mapa li a.actual{color:var(--acento);border-left-color:var(--acento);background:var(--acento-claro);
+    font-weight:600}
+  .mapa .extra{display:block;margin-top:16px;font-size:13px;font-weight:600;color:var(--acento);
+    text-decoration:none}
+
+  @media (min-width:1280px){
+    .envoltura.con-rieles{max-width:none;padding-left:clamp(20px,2vw,36px);
+      padding-right:clamp(20px,2vw,36px);
+      grid-template-columns:clamp(236px,17vw,290px) minmax(0,1fr) clamp(236px,17vw,290px);
+      grid-template-areas:"izq cab der" "izq centro der";grid-template-rows:auto 1fr;
+      column-gap:clamp(24px,2.4vw,44px)}
+    .con-rieles > .riel-der{display:block;grid-area:der}
+    .con-rieles .controles,.con-rieles .mapa{position:sticky;top:20px;max-height:calc(100vh - 40px);
+      overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+    .con-rieles .controles{margin:0}
+    .con-rieles [id]{scroll-margin-top:18px}
+  }
+  @media print{
+    .con-rieles > .riel-izq,.con-rieles > .riel-der{display:none !important}
+    .envoltura.con-rieles{display:block}
+  }
+
 </style>
 </head>
-<body>
-<div class="envoltura">
+<body data-extra="&lt;a class=&quot;extra&quot; href=&quot;#encadenamientos&quot;&gt;Encadenamientos frecuentes&lt;/a&gt;&lt;a class=&quot;extra&quot; href=&quot;index.html&quot;&gt;Volver a las herramientas&lt;/a&gt;">
+<div class="envoltura con-rieles">
 
+<div class="cab">
 <a class="volver" href="index.html">Volver a las herramientas</a>
 
 <header class="tapa">
@@ -355,8 +442,21 @@
   <p class="sub">Para qué sirve cada una de las 29 hojas, en qué casos rinde, con qué va
   antes o después, y dónde conviene tener cuidado. Los títulos abren la herramienta.</p>
 </header>
+</div>
 
-<section class="bloque">
+<aside class="riel-izq" aria-label="Filtros">
+  <div class="controles">
+    <input class="buscador" id="buscador" type="search" placeholder="Buscar una hoja por nombre, uso o cuidado…" autocomplete="off">
+    <div class="controles-r">Enfoque</div>
+    <div class="fila" id="f-enf">
+      <button class="fchip" type="button" data-enf="todos" aria-pressed="true">Todos</button><button class="fchip" type="button" data-enf="Metáforas vivas" aria-pressed="false">Metáforas vivas</button><button class="fchip" type="button" data-enf="Psicología positiva" aria-pressed="false">Psicología positiva</button><button class="fchip" type="button" data-enf="ACT" aria-pressed="false">ACT</button><button class="fchip" type="button" data-enf="DBT" aria-pressed="false">DBT</button><button class="fchip" type="button" data-enf="Cognitivo-conductual" aria-pressed="false">Cognitivo-conductual</button>
+    </div>
+    <div class="cuenta" id="cuenta"></div>
+  </div>
+</aside>
+
+<main class="centro">
+<section class="bloque" id="encadenamientos">
   <h2>Encadenamientos frecuentes</h2>
   <p class="ayuda">No son protocolos: son los órdenes que suelen funcionar. Lo que casi nunca
   funciona es empezar por el final.</p>
@@ -389,9 +489,10 @@
   </div>
 </section>
 
+<section data-grupo="Metáforas vivas">
 <h2 class="enfoque" style="color:#c26a4e">Metáforas vivas</h2>
   <div class="fichas">
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="El tablero">
       <div class="cab">
         <h3><a href="met-el-tablero.html">El tablero</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Yo observador</span>
@@ -443,7 +544,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="El jardín de valores">
       <div class="cab">
         <h3><a href="met-jardin-de-valores.html">El jardín de valores</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Valores</span>
@@ -504,7 +605,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="La cuerda y el monstruo">
       <div class="cab">
         <h3><a href="met-la-cuerda.html">La cuerda y el monstruo</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Aceptación</span>
@@ -553,7 +654,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="Hojas en el arroyo">
       <div class="cab">
         <h3><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Defusión</span>
@@ -619,7 +720,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="El bus y los pasajeros">
       <div class="cab">
         <h3><a href="met-el-bus.html">El bus y los pasajeros</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Acción comprometida</span>
@@ -667,7 +768,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="Los ochenta años">
       <div class="cab">
         <h3><a href="met-los-ochenta-anos.html">Los ochenta años</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Valores</span>
@@ -715,7 +816,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="El polígrafo">
       <div class="cab">
         <h3><a href="met-el-poligrafo.html">El polígrafo</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Desesperanza creativa</span>
@@ -767,7 +868,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="La palabra repetida">
       <div class="cab">
         <h3><a href="met-la-palabra-repetida.html">La palabra repetida</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Defusión</span>
@@ -820,7 +921,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="La radio que no se apaga">
       <div class="cab">
         <h3><a href="met-la-radio.html">La radio que no se apaga</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Defusión</span>
@@ -867,7 +968,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c26a4e">
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="Metáforas vivas" data-titulo="El hombre en el hoyo">
       <div class="cab">
         <h3><a href="met-el-hoyo.html">El hombre en el hoyo</a></h3>
         <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Desesperanza creativa</span>
@@ -919,9 +1020,11 @@
       </details>
     </div>
   </div>
+</section>
+<section data-grupo="Psicología positiva">
 <h2 class="enfoque" style="color:#c9962f">Psicología positiva</h2>
   <div class="fichas">
-    <div class="ficha-guia" style="border-left-color:#c9962f">
+    <div class="ficha-guia" style="border-left-color:#c9962f" data-item data-enf="Psicología positiva" data-titulo="Mi flor PERMAH">
       <div class="cab">
         <h3><a href="flor-permah.html">Mi flor PERMAH</a></h3>
         <span class="etq" style="color:#c9962f;background:#c9962f1a">Bienestar</span>
@@ -938,7 +1041,7 @@
       <div class="paso"><b>Se repite</b> En el cierre, como medida de contraste.</div>
       <div class="aviso-uso"><b>Cuidado</b>No es un instrumento psicométrico y no debe presentarse como tal. Con un perfil plano y todo bajo, tamizar antes de planificar nada.</div>
     </div>
-    <div class="ficha-guia" style="border-left-color:#c9962f">
+    <div class="ficha-guia" style="border-left-color:#c9962f" data-item data-enf="Psicología positiva" data-titulo="Mis fortalezas del carácter">
       <div class="cab">
         <h3><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></h3>
         <span class="etq" style="color:#c9962f;background:#c9962f1a">Recursos</span>
@@ -957,9 +1060,11 @@
       <div class="aviso-uso"><b>Cuidado</b>Si queda en elogio, se lee como minimización. Cada fortaleza elegida tiene que quedar anclada a un ejemplo conductual concreto antes de pasar a la siguiente.</div>
     </div>
   </div>
+</section>
+<section data-grupo="ACT">
 <h2 class="enfoque" style="color:#3f9b86">ACT</h2>
   <div class="fichas">
-    <div class="ficha-guia" style="border-left-color:#3f9b86">
+    <div class="ficha-guia" style="border-left-color:#3f9b86" data-item data-enf="ACT" data-titulo="La brújula de valores">
       <div class="cab">
         <h3><a href="act-brujula-de-valores.html">La brújula de valores</a></h3>
         <span class="etq" style="color:#3f9b86;background:#3f9b861a">Valores</span>
@@ -978,7 +1083,7 @@
       <div class="paso"><b>Alternativa</b> El jardín de valores, si la persona se pierde en doce ámbitos.</div>
       <div class="aviso-uso"><b>Cuidado</b>Si ningún ámbito pasa de 4 en importancia, no insistir con la hoja: el tema es el aplanamiento, no los valores.</div>
     </div>
-    <div class="ficha-guia" style="border-left-color:#3f9b86">
+    <div class="ficha-guia" style="border-left-color:#3f9b86" data-item data-enf="ACT" data-titulo="El costo de la lucha">
       <div class="cab">
         <h3><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></h3>
         <span class="etq" style="color:#3f9b86;background:#3f9b861a">Desesperanza creativa</span>
@@ -1019,7 +1124,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#3f9b86">
+    <div class="ficha-guia" style="border-left-color:#3f9b86" data-item data-enf="ACT" data-titulo="Por dónde entrar">
       <div class="cab">
         <h3><a href="act-por-donde-entrar.html">Por dónde entrar</a></h3>
         <span class="etq" style="color:#3f9b86;background:#3f9b861a">Formulación</span>
@@ -1036,7 +1141,7 @@
       <div class="paso"><b>Se rehace</b> A mitad de proceso, para ver qué se movió.</div>
       <div class="aviso-uso"><b>Cuidado</b>No se llena delante del consultante como si fuera una prueba. Es material del profesional.</div>
     </div>
-    <div class="ficha-guia" style="border-left-color:#3f9b86">
+    <div class="ficha-guia" style="border-left-color:#3f9b86" data-item data-enf="ACT" data-titulo="Soltar el anzuelo">
       <div class="cab">
         <h3><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></h3>
         <span class="etq" style="color:#3f9b86;background:#3f9b861a">Defusión</span>
@@ -1076,9 +1181,11 @@
       </details>
     </div>
   </div>
+</section>
+<section data-grupo="DBT">
 <h2 class="enfoque" style="color:#5f77b8">DBT</h2>
   <div class="fichas">
-    <div class="ficha-guia" style="border-left-color:#5f77b8">
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Análisis en cadena">
       <div class="cab">
         <h3><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></h3>
         <span class="etq" style="color:#5f77b8;background:#5f77b81a">Análisis conductual</span>
@@ -1118,7 +1225,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#5f77b8">
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Tarjeta de crisis">
       <div class="cab">
         <h3><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></h3>
         <span class="etq" style="color:#5f77b8;background:#5f77b81a">Tolerancia al malestar</span>
@@ -1155,7 +1262,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#5f77b8">
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Verificar los hechos y acción opuesta">
       <div class="cab">
         <h3><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></h3>
         <span class="etq" style="color:#5f77b8;background:#5f77b81a">Regulación emocional</span>
@@ -1198,7 +1305,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#5f77b8">
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Pedir y decir que no">
       <div class="cab">
         <h3><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></h3>
         <span class="etq" style="color:#5f77b8;background:#5f77b81a">Efectividad interpersonal</span>
@@ -1237,7 +1344,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#5f77b8">
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Mente sabia">
       <div class="cab">
         <h3><a href="dbt-mente-sabia.html">Mente sabia</a></h3>
         <span class="etq" style="color:#5f77b8;background:#5f77b81a">Mindfulness</span>
@@ -1277,7 +1384,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#5f77b8">
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Tarjeta diaria">
       <div class="cab">
         <h3><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></h3>
         <span class="etq" style="color:#5f77b8;background:#5f77b81a">Registro</span>
@@ -1312,9 +1419,11 @@
       </details>
     </div>
   </div>
+</section>
+<section data-grupo="Cognitivo-conductual">
 <h2 class="enfoque" style="color:#2f6f8f">Cognitivo-conductual</h2>
   <div class="fichas">
-    <div class="ficha-guia" style="border-left-color:#2f6f8f">
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Registro de pensamientos">
       <div class="cab">
         <h3><a href="registro-de-pensamientos.html">Registro de pensamientos</a></h3>
         <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Reestructuración</span>
@@ -1332,7 +1441,7 @@
       <div class="paso"><b>Deriva a</b> Defusión si tras varios registros la creencia no se mueve.</div>
       <div class="aviso-uso"><b>Cuidado</b>Cuando debatir el contenido ya se volvió parte del problema, o la fusión es muy alta, un registro más refuerza la pelea. Ahí toca cambiar de vía, no insistir.</div>
     </div>
-    <div class="ficha-guia" style="border-left-color:#2f6f8f">
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="La flecha descendente">
       <div class="cab">
         <h3><a href="tcc-flecha-descendente.html">La flecha descendente</a></h3>
         <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Creencias nucleares</span>
@@ -1375,7 +1484,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#2f6f8f">
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="La escalera de exposición">
       <div class="cab">
         <h3><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></h3>
         <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Exposición</span>
@@ -1414,7 +1523,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#2f6f8f">
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Activación conductual">
       <div class="cab">
         <h3><a href="tcc-activacion-conductual.html">Activación conductual</a></h3>
         <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Activación</span>
@@ -1452,7 +1561,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#2f6f8f">
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Solución de problemas">
       <div class="cab">
         <h3><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></h3>
         <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Afrontamiento</span>
@@ -1491,7 +1600,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#2f6f8f">
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Autoinstrucciones">
       <div class="cab">
         <h3><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></h3>
         <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Autorregulación</span>
@@ -1530,7 +1639,7 @@
       </div>
       </details>
     </div>
-    <div class="ficha-guia" style="border-left-color:#2f6f8f">
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Análisis funcional">
       <div class="cab">
         <h3><a href="tcc-analisis-funcional.html">Análisis funcional</a></h3>
         <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Formulación</span>
@@ -1573,7 +1682,88 @@
       </details>
     </div>
   </div>
+</section>
+
+<div class="sin-resultados" id="sin-resultados" hidden>Ninguna hoja coincide con el filtro y la búsqueda.</div>
+</main>
+
+<aside class="riel-der">
+  <nav class="mapa" id="mapa" aria-label="Mapa de las hojas"></nav>
+</aside>
 
 </div>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const items = [...document.querySelectorAll("[data-item]")];
+  const grupos = [...document.querySelectorAll("[data-grupo]")];
+  items.forEach(el => { el.dataset.txt = norm(el.textContent); });
+
+  // Mapa: un encabezado por enfoque y, debajo, sus hojas.
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  $("mapa").innerHTML = '<span class="mapa-r">Las hojas</span>' + grupos.map((g, gi) => {
+    if (!g.id) g.id = "grupo-" + gi;
+    const suyos = items.filter(it => g.contains(it));
+    return '<div class="mapa-g" data-g="' + g.id + '"><a href="#' + g.id + '">' + esc(g.dataset.grupo) + '</a><ul>' +
+      suyos.map((it, ii) => {
+        if (!it.id) it.id = g.id + "-" + ii;
+        const destino = it.dataset.href || ("#" + it.id);
+        return '<li data-i="' + it.id + '"><a href="' + esc(destino) + '" data-i="' + it.id + '">' + esc(it.dataset.titulo) + '</a></li>';
+      }).join("") + '</ul></div>';
+  }).join("") + (document.body.dataset.extra || "");
+
+  let enf = "todos";
+  function aplicar(){
+    const q = norm($("buscador").value.trim());
+    let n = 0;
+    items.forEach(it => {
+      const ok = (enf === "todos" || it.dataset.enf === enf) && (!q || it.dataset.txt.includes(q));
+      it.hidden = !ok;
+      $("mapa").querySelector('li[data-i="' + it.id + '"]').hidden = !ok;
+      if (ok) n++;
+    });
+    grupos.forEach(g => {
+      const vacio = !items.some(it => !it.hidden && g.contains(it));
+      g.hidden = vacio;
+      $("mapa").querySelector('[data-g="' + g.id + '"]').hidden = vacio;
+    });
+    $("cuenta").textContent = n + (n === 1 ? " hoja" : " hojas") +
+      (enf === "todos" ? "" : " de " + enf) + (q ? (n === 1 ? " que coincide" : " que coinciden") + " con la búsqueda" : "");
+    const vacia = $("sin-resultados");
+    if (vacia) vacia.hidden = n > 0;
+  }
+  $("f-enf").addEventListener("click", ev => {
+    const b = ev.target.closest(".fchip"); if (!b) return;
+    enf = b.dataset.enf;
+    $("f-enf").querySelectorAll(".fchip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
+    aplicar();
+  });
+  $("buscador").addEventListener("input", aplicar);
+  aplicar();
+
+  // La hoja o el bloque que está en pantalla se marca en el mapa: el último
+  // cuyo comienzo ya pasó por el tercio superior de la ventana.
+  function marcar(){
+    const limite = innerHeight / 3;
+    let actual = null;
+    items.forEach(it => { if (!it.hidden && it.getBoundingClientRect().top <= limite) actual = it; });
+    const m = $("mapa"), previo = m.querySelector("a.actual");
+    const a = actual ? m.querySelector('a[data-i="' + actual.id + '"]') : null;
+    if (a === previo) return;
+    if (previo) previo.classList.remove("actual");
+    if (!a) return;
+    a.classList.add("actual");
+    const r = a.getBoundingClientRect(), rm = m.getBoundingClientRect();
+    if (r.top < rm.top || r.bottom > rm.bottom) m.scrollTop += r.top - rm.top - rm.height / 3;
+  }
+  let pendiente = false;
+  addEventListener("scroll", () => {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(() => { pendiente = false; marcar(); });
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>

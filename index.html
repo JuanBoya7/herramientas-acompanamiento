@@ -37,6 +37,31 @@
     width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
     color:var(--acento);font-size:14px;font-weight:700}
   .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+
+  /* ---------- la ayuda detrás de un signo ---------- */
+  .comoAsi{flex:0 0 auto;width:21px;height:21px;padding:0;border-radius:50%;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta-suave);
+    font:700 12.5px/1 inherit;cursor:pointer}
+  .comoAsi:hover,.comoAsi.abierto{border-color:var(--acento);color:var(--acento);
+    background:var(--acento-claro)}
+  .ayudaCaja{margin-top:7px}
+  .ayudaCaja .ayuda{margin-top:0}
+
+  /* ---------- un paso a la vez ---------- */
+  section.plegable > h2{cursor:pointer;user-select:none}
+  section.plegable > h2::after{content:"";flex:0 0 auto;margin-left:auto;width:9px;height:9px;
+    border-right:2px solid #b3bfca;border-bottom:2px solid #b3bfca;transform:rotate(45deg);
+    transition:transform .15s;margin-top:-4px}
+  section.cerrado{padding-top:13px;padding-bottom:13px;background:#fbfcfe}
+  section.cerrado > h2{margin:0;color:var(--tinta-suave)}
+  section.cerrado > h2::after{transform:rotate(-135deg);margin-top:3px}
+  section.cerrado > h2 .num{background:var(--fondo);color:var(--tinta-suave)}
+  section.cerrado > *:not(h2){display:none}
+  .pasoNav{display:flex;justify-content:flex-end;margin-top:15px}
+  .pasoNav button{font:inherit;font-size:13.5px;font-weight:600;color:var(--acento);
+    border:1px solid var(--linea);border-radius:999px;padding:6px 16px;background:#fff;
+    cursor:pointer}
+  .pasoNav button:hover{border-color:var(--acento);background:var(--acento-claro)}
   .cuerpo{margin-top:14px}
   textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
     font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
@@ -262,6 +287,9 @@
   }
   @media print{
     body{background:#fff}
+    section.cerrado > *:not(h2){display:revert}
+    section.cerrado{background:none}
+    .comoAsi,.pasoNav,.ayudaCaja{display:none !important}
     .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
     .opcion:not(.activa),.borrar{display:none !important}
     header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
@@ -300,11 +328,70 @@
   a.aGuia span{display:block;font-size:13.5px;color:var(--tinta-suave);line-height:1.45}
   a.aGuia .flecha{flex:0 0 auto;font-size:20px;color:var(--acento)}
 
+
+  /* ---- Distribución con columnas laterales ---- */
+  .envoltura.con-rieles{display:grid;grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"cab" "izq" "centro"}
+  .con-rieles > .cab{grid-area:cab}
+  .con-rieles > .riel-izq{grid-area:izq}
+  .con-rieles > .centro{grid-area:centro;min-width:0}
+  .con-rieles > .riel-der{display:none}
+  .controles{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:14px 16px;margin-bottom:16px}
+  .controles .fila{display:flex;flex-wrap:wrap;gap:6px}
+  .controles-r{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--tinta-suave);margin:12px 0 6px}
+  .buscador{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:8px 13px;
+    border:1px solid var(--linea);border-radius:999px;background:#fff}
+  .buscador:focus{outline:none;border-color:var(--acento)}
+  .fchip{font:inherit;font-size:13px;border:1px solid var(--linea);border-radius:999px;
+    padding:5px 12px;background:#fff;color:var(--tinta-suave);cursor:pointer}
+  .fchip:hover{border-color:var(--acento);color:var(--tinta)}
+  .fchip[aria-pressed="true"]{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
+  .cuenta{margin-top:12px;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
+  [data-grupo][hidden],[data-item][hidden]{display:none !important}
+  .sin-resultados{border:1px dashed var(--linea);border-radius:var(--radio);padding:22px;
+    text-align:center;color:var(--tinta-suave);font-size:14px}
+  .sin-resultados[hidden]{display:none}
+
+  .mapa-r{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--tinta-suave);margin:2px 0 10px}
+  .mapa-g{margin-top:14px}
+  .mapa-g[hidden],.mapa li[hidden]{display:none}
+  .mapa-g > a{display:block;font-weight:700;font-size:14px;color:var(--tinta);text-decoration:none;
+    margin-bottom:4px}
+  .mapa ul{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--linea)}
+  .mapa li a{display:block;font-size:13px;line-height:1.35;color:var(--tinta-suave);text-decoration:none;
+    padding:4px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent}
+  .mapa a:hover{color:var(--acento);background:var(--acento-claro)}
+  .mapa li a.actual{color:var(--acento);border-left-color:var(--acento);background:var(--acento-claro);
+    font-weight:600}
+  .mapa .extra{display:block;margin-top:16px;font-size:13px;font-weight:600;color:var(--acento);
+    text-decoration:none}
+
+  @media (min-width:1280px){
+    .envoltura.con-rieles{max-width:none;padding-left:clamp(20px,2vw,36px);
+      padding-right:clamp(20px,2vw,36px);
+      grid-template-columns:clamp(236px,17vw,290px) minmax(0,1fr) clamp(236px,17vw,290px);
+      grid-template-areas:"izq cab der" "izq centro der";grid-template-rows:auto 1fr;
+      column-gap:clamp(24px,2.4vw,44px)}
+    .con-rieles > .riel-der{display:block;grid-area:der}
+    .con-rieles .controles,.con-rieles .mapa{position:sticky;top:20px;max-height:calc(100vh - 40px);
+      overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+    .con-rieles .controles{margin:0}
+    .con-rieles [id]{scroll-margin-top:18px}
+  }
+  @media print{
+    .con-rieles > .riel-izq,.con-rieles > .riel-der{display:none !important}
+    .envoltura.con-rieles{display:block}
+  }
+
 </style>
 </head>
-<body>
-<div class="envoltura">
+<body data-extra="&lt;a class=&quot;extra&quot; href=&quot;guia.html&quot;&gt;Guía rápida de uso &amp;rarr;&lt;/a&gt;">
+<div class="envoltura con-rieles">
 
+<div class="cab">
 <header class="tapa">
   <h1>Herramientas de acompañamiento</h1>
   <p class="sub">29 hojas de trabajo interactivas para el espacio clínico, cada una en
@@ -321,66 +408,79 @@
   </span>
   <span class="flecha">&rarr;</span>
 </a>
+</div>
 
-  <section class="bloque">
+<aside class="riel-izq" aria-label="Filtros">
+  <div class="controles">
+    <input class="buscador" id="buscador" type="search" placeholder="Buscar una hoja por nombre, técnica o uso…" autocomplete="off">
+    <div class="controles-r">Enfoque</div>
+    <div class="fila" id="f-enf">
+      <button class="fchip" type="button" data-enf="todos" aria-pressed="true">Todos</button><button class="fchip" type="button" data-enf="Metáforas vivas" aria-pressed="false">Metáforas vivas</button><button class="fchip" type="button" data-enf="Psicología positiva" aria-pressed="false">Psicología positiva</button><button class="fchip" type="button" data-enf="ACT" aria-pressed="false">ACT</button><button class="fchip" type="button" data-enf="DBT" aria-pressed="false">DBT</button><button class="fchip" type="button" data-enf="Cognitivo-conductual" aria-pressed="false">Cognitivo-conductual</button>
+    </div>
+    <div class="cuenta" id="cuenta"></div>
+  </div>
+</aside>
+
+<main class="centro">
+  <section class="bloque" data-grupo="Metáforas vivas">
     <h2>Metáforas vivas</h2>
     <p class="ayuda">Recursos experienciales, no clasificadores: la metáfora se juega y se atraviesa dentro de la hoja, y el cambio ocurre al usarla.</p>
     <div class="rejilla">
-      <a class="ficha" href="met-el-tablero.html">
+      <a class="ficha" href="met-el-tablero.html" data-item data-enf="Metáforas vivas" data-titulo="El tablero" data-href="met-el-tablero.html">
         <span class="etq">Yo observador</span>
         <b>El tablero</b>
         <span class="dice">La partida corre sola: las piezas negras brotan con el tiempo, empujar trae más y gasta. Al pasar a ser el tablero las piezas siguen llegando y el marcador de energía se detiene.</span>
         <span class="ref">Metáfora del tablero de ajedrez y dimensiones del yo, en Díaz Corbobés, MANUAL ACT §3.3, con el ejercicio del observador.</span>
       </a>
-      <a class="ficha" href="met-jardin-de-valores.html">
+      <a class="ficha" href="met-jardin-de-valores.html" data-item data-enf="Metáforas vivas" data-titulo="El jardín de valores" data-href="met-jardin-de-valores.html">
         <span class="etq">Valores</span>
         <b>El jardín de valores</b>
         <span class="dice">Se siembran seis direcciones de veinticuatro posibles, cada surco dice qué cuida por debajo y se renombra con las palabras de la persona, y el riego lo hace crecer o marchitarse en pantalla. Las malezas se plantan sobre los surcos concretos en los que crecen: una sola puede cubrir varios o el jardín entero.</span>
         <span class="ref">Clarificación de valores y metáfora del jardín, en Díaz Corbobés, MANUAL ACT §2.1 y §3.6. El procedimiento —elegir unas pocas direcciones de una lista mayor y calificar después la consistencia del último periodo— viene del values card sort y del VLQ de Wilson. Las veinticuatro semillas no son un instrumento: son un repertorio de partida redactado para esta hoja, y por eso está el botón «+». Lo mismo vale para lo que cada semilla cuida: son direcciones frecuentes, puestas ahí para que la persona encuentre la suya, no para clasificarla. El paso de enraizar existe porque toda semilla está redactada como conducta, y una conducta sin lo que protege debajo es una meta.</span>
       </a>
-      <a class="ficha" href="met-la-cuerda.html">
+      <a class="ficha" href="met-la-cuerda.html" data-item data-enf="Metáforas vivas" data-titulo="La cuerda y el monstruo" data-href="met-la-cuerda.html">
         <span class="etq">Aceptación</span>
         <b>La cuerda y el monstruo</b>
         <span class="dice">El monstruo jala en tiempo real y el borde se acerca solo. Jalar da centímetros prestados que cada vez rinden menos; soltar detiene el arrastre y deja las manos libres, con el monstruo todavía de pie.</span>
         <span class="ref">Metáfora de la lucha con el monstruo y el control como problema, en Díaz Corbobés, MANUAL ACT §3.2, dentro del trabajo de desesperanza creativa y aceptación.</span>
       </a>
-      <a class="ficha" href="met-hojas-en-el-arroyo.html">
+      <a class="ficha" href="met-hojas-en-el-arroyo.html" data-item data-enf="Metáforas vivas" data-titulo="Hojas en el arroyo" data-href="met-hojas-en-el-arroyo.html">
         <span class="etq">Defusión</span>
         <b>Hojas en el arroyo</b>
         <span class="dice">Práctica de defusión guiada y cronometrada, de minuto y medio o de tres minutos. La corriente trae los pensamientos sola, barajados, y hacia el final llegan en racimo. El botón para marcar el enganche se puede quitar, si conviene preguntarlo hablando. Cuenta retornos, no fallos.</span>
         <span class="ref">Defusión cognitiva y meditación para desliteralizar el lenguaje, en Díaz Corbobés, MANUAL ACT §3.4, dentro del estilo abierto de respuesta.</span>
       </a>
-      <a class="ficha" href="met-el-bus.html">
+      <a class="ficha" href="met-el-bus.html" data-item data-enf="Metáforas vivas" data-titulo="El bus y los pasajeros" data-href="met-el-bus.html">
         <span class="etq">Acción comprometida</span>
         <b>El bus y los pasajeros</b>
         <span class="dice">El viaje ocurre en tiempo real: el bus avanza, los pasajeros gritan cuando quieren y la única decisión es si se para a discutir. Discutir congela los kilómetros, gasta la energía y no detiene el reloj; sin energía el bus se vara donde esté.</span>
         <span class="ref">Compromiso y acción, y metáfora del vecino indeseable, en Díaz Corbobés, MANUAL ACT §3.7, sobre la metáfora clásica de los pasajeros del autobús de Hayes, Strosahl y Wilson.</span>
       </a>
-      <a class="ficha" href="met-los-ochenta-anos.html">
+      <a class="ficha" href="met-los-ochenta-anos.html" data-item data-enf="Metáforas vivas" data-titulo="Los ochenta años" data-href="met-los-ochenta-anos.html">
         <span class="etq">Valores</span>
         <b>Los ochenta años</b>
         <span class="dice">Tres invitados, dos frases cada uno y un calibrador por frase. Las frases que no se parecen al último mes se apagan sobre la mesa: la distancia se ve, no se explica.</span>
         <span class="ref">Ejercicio del funeral y clarificación de valores, en Díaz Corbobés, MANUAL ACT §3.6, adaptado de Hayes, Strosahl y Wilson.</span>
       </a>
-      <a class="ficha" href="met-el-poligrafo.html">
+      <a class="ficha" href="met-el-poligrafo.html" data-item data-enf="Metáforas vivas" data-titulo="El polígrafo" data-href="met-el-poligrafo.html">
         <span class="etq">Desesperanza creativa</span>
         <b>El polígrafo</b>
         <span class="dice">Una aguja que sube sola y dos botones para calmarla. Cada intento la dispara y sube el piso al que vuelve, que queda dibujado y no baja nunca. El registro en papel deja el trazo a la vista.</span>
         <span class="ref">Metáfora del polígrafo y el control como problema, en Díaz Corbobés, MANUAL ACT §3.2, sobre la formulación de Hayes, Strosahl y Wilson.</span>
       </a>
-      <a class="ficha" href="met-la-palabra-repetida.html">
+      <a class="ficha" href="met-la-palabra-repetida.html" data-item data-enf="Metáforas vivas" data-titulo="La palabra repetida" data-href="met-la-palabra-repetida.html">
         <span class="etq">Defusión</span>
         <b>La palabra repetida</b>
         <span class="dice">La palabra se repite en pantalla, despacio al principio y acelerando hasta perder el significado. Se calibra antes y después cuánto pesa y cuánto suena a verdad, y la diferencia queda a la vista sin que nadie la explique.</span>
         <span class="ref">Ejercicio clásico de repetición de Titchener, usado en defusión cognitiva; en Díaz Corbobés, MANUAL ACT §3.4, dentro de las técnicas para desliteralizar el lenguaje.</span>
       </a>
-      <a class="ficha" href="met-la-radio.html">
+      <a class="ficha" href="met-la-radio.html" data-item data-enf="Metáforas vivas" data-titulo="La radio que no se apaga" data-href="met-la-radio.html">
         <span class="etq">Defusión</span>
         <b>La radio que no se apaga</b>
         <span class="dice">La emisora habla sola mientras se hace una tarea de doce pasos al lado. Bajarle el volumen la vuelve más frecuente y apagarla la devuelve más fuerte. El marcador es la tarea terminada, no el silencio.</span>
         <span class="ref">Metáfora de la radio que no se apaga y del vecino indeseable, en Díaz Corbobés, MANUAL ACT §3.4 y §3.7, dentro del trabajo de defusión y disposición.</span>
       </a>
-      <a class="ficha" href="met-el-hoyo.html">
+      <a class="ficha" href="met-el-hoyo.html" data-item data-enf="Metáforas vivas" data-titulo="El hombre en el hoyo" data-href="met-el-hoyo.html">
         <span class="etq">Desesperanza creativa</span>
         <b>El hombre en el hoyo</b>
         <span class="dice">Se cava manteniendo el botón y la sensación de avance se llena mientras dura el esfuerzo; al soltar se vacía y solo queda la profundidad acumulada. Soltar la pala no saca a nadie del hoyo, y deja las manos libres.</span>
@@ -388,17 +488,17 @@
       </a>
     </div>
   </section>
-  <section class="bloque">
+  <section class="bloque" data-grupo="Psicología positiva">
     <h2>Psicología positiva</h2>
     <p class="ayuda">El punto de partida: cómo está la vida hoy y con qué cuenta la persona.</p>
     <div class="rejilla">
-      <a class="ficha" href="flor-permah.html">
+      <a class="ficha" href="flor-permah.html" data-item data-enf="Psicología positiva" data-titulo="Mi flor PERMAH" data-href="flor-permah.html">
         <span class="etq">Bienestar</span>
         <b>Mi flor PERMAH</b>
         <span class="dice">Seis áreas del bienestar dibujadas como una flor que se abre o se marchita. Devuelve un perfil con doce lecturas posibles y por dónde empezar.</span>
         <span class="ref">Modelo PERMAH (Seligman) · taller Flourish</span>
       </a>
-      <a class="ficha" href="fortalezas-del-caracter.html">
+      <a class="ficha" href="fortalezas-del-caracter.html" data-item data-enf="Psicología positiva" data-titulo="Mis fortalezas del carácter" data-href="fortalezas-del-caracter.html">
         <span class="etq">Recursos</span>
         <b>Mis fortalezas del carácter</b>
         <span class="dice">Las 24 fortalezas VIA en un mostrador del que se eligen tres o cinco. Al revelarlas nombra la virtud dominante y qué hacer con ella.</span>
@@ -406,29 +506,29 @@
       </a>
     </div>
   </section>
-  <section class="bloque">
+  <section class="bloque" data-grupo="ACT">
     <h2>ACT</h2>
     <p class="ayuda">Terapia de aceptación y compromiso: dejar de pelear con lo interno y moverse hacia lo que importa.</p>
     <div class="rejilla">
-      <a class="ficha" href="act-brujula-de-valores.html">
+      <a class="ficha" href="act-brujula-de-valores.html" data-item data-enf="ACT" data-titulo="La brújula de valores" data-href="act-brujula-de-valores.html">
         <span class="etq">Valores</span>
         <b>La brújula de valores</b>
         <span class="dice">Doce ámbitos vitales: se eligen direcciones de un mostrador y se calibran importancia y acción. La brújula dibuja las dos siluetas y la lectura nombra dónde duele la distancia.</span>
         <span class="ref">Hoja de asesoramiento de valores y Cuestionario de vida basada en valores (VLQ-2), en Díaz Corbobés, MANUAL ACT §3.6 y §3.7, adaptados de Hayes, Strosahl y Wilson (2014). Los diez primeros ámbitos son los dominios del VLQ; entorno y arte se añadieron para esta hoja.</span>
       </a>
-      <a class="ficha" href="act-costo-de-la-lucha.html">
+      <a class="ficha" href="act-costo-de-la-lucha.html" data-item data-enf="ACT" data-titulo="El costo de la lucha" data-href="act-costo-de-la-lucha.html">
         <span class="etq">Desesperanza creativa</span>
         <b>El costo de la lucha</b>
         <span class="dice">Cada estrategia de control se califica por alivio inmediato, resultado a largo plazo y costo. El mapa las ubica y deja ver la trampa sin que haya que nombrarla.</span>
         <span class="ref">Desesperanza creativa y el control como problema, en Díaz Corbobés, MANUAL ACT §3.1 y §3.2, con las metáforas del campo de hoyos, la lucha con el monstruo y el polígrafo.</span>
       </a>
-      <a class="ficha" href="act-por-donde-entrar.html">
+      <a class="ficha" href="act-por-donde-entrar.html" data-item data-enf="ACT" data-titulo="Por dónde entrar" data-href="act-por-donde-entrar.html">
         <span class="etq">Formulación</span>
         <b>Por dónde entrar</b>
         <span class="dice">Seis continuos que deforman un hexágono y señalan la puerta de entrada. Mapa de formulación para decidir con qué herramienta seguir, no hoja para el consultante.</span>
         <span class="ref">Modelo hexagonal de la flexibilidad psicológica y estilos de respuesta, en Díaz Corbobés, MANUAL ACT §1.3 y §1.3.2.</span>
       </a>
-      <a class="ficha" href="act-soltar-el-anzuelo.html">
+      <a class="ficha" href="act-soltar-el-anzuelo.html" data-item data-enf="ACT" data-titulo="Soltar el anzuelo" data-href="act-soltar-el-anzuelo.html">
         <span class="etq">Defusión</span>
         <b>Soltar el anzuelo</b>
         <span class="dice">Un pensamiento pegajoso pasa por cinco ejercicios cortos de defusión con una sola medida: cuánto agarra antes y después de cada uno. Termina eligiendo el que se lleva a la semana.</span>
@@ -436,41 +536,41 @@
       </a>
     </div>
   </section>
-  <section class="bloque">
+  <section class="bloque" data-grupo="DBT">
     <h2>DBT</h2>
     <p class="ayuda">Habilidades de terapia dialéctico-conductual, en módulos que se pueden trabajar sueltos.</p>
     <div class="rejilla">
-      <a class="ficha" href="dbt-analisis-en-cadena.html">
+      <a class="ficha" href="dbt-analisis-en-cadena.html" data-item data-enf="DBT" data-titulo="Análisis en cadena" data-href="dbt-analisis-en-cadena.html">
         <span class="etq">Análisis conductual</span>
         <b>Análisis en cadena</b>
         <span class="dice">Reconstruye la cadena que lleva a una conducta problema y ubica en cada eslabón la habilidad DBT que cabía. Sirve para trabajar con el consultante y para enseñar a analizar.</span>
         <span class="ref">Análisis conductual en cadena, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 6: habilidades generales, orientación y análisis conductual.</span>
       </a>
-      <a class="ficha" href="dbt-tarjeta-de-crisis.html">
+      <a class="ficha" href="dbt-tarjeta-de-crisis.html" data-item data-enf="DBT" data-titulo="Tarjeta de crisis" data-href="dbt-tarjeta-de-crisis.html">
         <span class="etq">Tolerancia al malestar</span>
         <b>Tarjeta de crisis</b>
         <span class="dice">Un termómetro decide qué habilidades se ofrecen: STOP y TIP arriba, ACEPTAS y los cinco sentidos en medio, y abajo pros y contras, SALVARA y aceptación radical. Con lo elegido arma una tarjeta imprimible.</span>
         <span class="ref">Habilidades de supervivencia a la crisis, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 10, fichas de tolerancia al malestar 3 a 9.</span>
       </a>
-      <a class="ficha" href="dbt-verificar-los-hechos.html">
+      <a class="ficha" href="dbt-verificar-los-hechos.html" data-item data-enf="DBT" data-titulo="Verificar los hechos y acción opuesta" data-href="dbt-verificar-los-hechos.html">
         <span class="etq">Regulación emocional</span>
         <b>Verificar los hechos y acción opuesta</b>
         <span class="dice">Se nombra la emoción, se verifican los hechos con siete preguntas y la hoja se bifurca: resolución de problemas si se ajusta, acción opuesta completa si no. Trae la tabla por emoción.</span>
         <span class="ref">Verificar los hechos, prepararse para la acción opuesta y actuar de forma opuesta a la emoción actual, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 9, fichas de regulación emocional 8 a 12.</span>
       </a>
-      <a class="ficha" href="dbt-pedir-y-decir-no.html">
+      <a class="ficha" href="dbt-pedir-y-decir-no.html" data-item data-enf="DBT" data-titulo="Pedir y decir que no" data-href="dbt-pedir-y-decir-no.html">
         <span class="etq">Efectividad interpersonal</span>
         <b>Pedir y decir que no</b>
         <span class="dice">Se ordenan objetivo, relación y autorrespeto, se calibra la intensidad con los diez factores de la ficha EI 8 y se arma un guion DEAR MAN imprimible con capas de AVES y VIDA.</span>
         <span class="ref">Habilidades de efectividad interpersonal, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 8, fichas de efectividad interpersonal 4 a 8.</span>
       </a>
-      <a class="ficha" href="dbt-mente-sabia.html">
+      <a class="ficha" href="dbt-mente-sabia.html" data-item data-enf="DBT" data-titulo="Mente sabia" data-href="dbt-mente-sabia.html">
         <span class="etq">Mindfulness</span>
         <b>Mente sabia</b>
         <span class="dice">Una decisión concreta pasa por las tres mentes, con banco de frases para cada una y una práctica guiada para bajar a la mente sabia. Corta, de una sola sesión.</span>
         <span class="ref">Mente sabia y habilidades de mindfulness, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 7, fichas de mindfulness 1 a 3.</span>
       </a>
-      <a class="ficha" href="dbt-tarjeta-diaria.html">
+      <a class="ficha" href="dbt-tarjeta-diaria.html" data-item data-enf="DBT" data-titulo="Tarjeta diaria" data-href="dbt-tarjeta-diaria.html">
         <span class="etq">Seguimiento</span>
         <b>Tarjeta diaria</b>
         <span class="dice">Registro semanal de emociones, impulsos, conductas y habilidades usadas, con mapa de calor de los siete días. Es la que decide sobre qué se trabaja en la sesión siguiente.</span>
@@ -478,47 +578,47 @@
       </a>
     </div>
   </section>
-  <section class="bloque">
+  <section class="bloque" data-grupo="Cognitivo-conductual">
     <h2>Cognitivo-conductual</h2>
     <p class="ayuda">Técnicas clásicas de evaluación, reestructuración, exposición y activación.</p>
     <div class="rejilla">
-      <a class="ficha" href="registro-de-pensamientos.html">
+      <a class="ficha" href="registro-de-pensamientos.html" data-item data-enf="Cognitivo-conductual" data-titulo="Registro de pensamientos" data-href="registro-de-pensamientos.html">
         <span class="etq">Reestructuración</span>
         <b>Registro de pensamientos</b>
         <span class="dice">El registro clásico en siete pasos: situación, emoción, pensamiento caliente, trampas, evidencia a favor y en contra, alternativa y recalificación.</span>
         <span class="ref">Terapia Cognitiva (Beck) · Ruiz, Díaz y Villalobos, cap. 8</span>
       </a>
-      <a class="ficha" href="tcc-flecha-descendente.html">
+      <a class="ficha" href="tcc-flecha-descendente.html" data-item data-enf="Cognitivo-conductual" data-titulo="La flecha descendente" data-href="tcc-flecha-descendente.html">
         <span class="etq">Creencias nucleares</span>
         <b>La flecha descendente</b>
         <span class="dice">Cinco peldaños desde el pensamiento automático hasta la creencia nuclear, clasificada en las tres categorías de Beck. Cierra con el continuo, que es lo que rompe el todo o nada.</span>
         <span class="ref">Técnica de la flecha descendente y trabajo con creencias nucleares, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 8, Terapia Cognitiva.</span>
       </a>
-      <a class="ficha" href="tcc-escalera-de-exposicion.html">
+      <a class="ficha" href="tcc-escalera-de-exposicion.html" data-item data-enf="Cognitivo-conductual" data-titulo="La escalera de exposición" data-href="tcc-escalera-de-exposicion.html">
         <span class="etq">Exposición</span>
         <b>La escalera de exposición</b>
         <span class="dice">Jerarquía ordenada sola por USAs y registro de ensayos con curva de habituación. Avisa de los dos errores clásicos: ensayo demasiado corto y ensayo apuntalado en conductas de seguridad.</span>
         <span class="ref">Terapias y técnicas de exposición, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 4, con el uso de unidades subjetivas de ansiedad y el control de conductas de seguridad.</span>
       </a>
-      <a class="ficha" href="tcc-activacion-conductual.html">
+      <a class="ficha" href="tcc-activacion-conductual.html" data-item data-enf="Cognitivo-conductual" data-titulo="Activación conductual" data-href="tcc-activacion-conductual.html">
         <span class="etq">Activación</span>
         <b>Activación conductual</b>
         <span class="dice">Actividades de la semana calificadas en agrado y dominio, repartidas en cuatro cuadrantes. La lectura distingue al que hace sin disfrutar del que disfruta sin logro y del que tiene la semana vacía.</span>
         <span class="ref">Técnicas operantes y programación de actividades con registro de dominio y agrado, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, caps. 3 y 8.</span>
       </a>
-      <a class="ficha" href="tcc-solucion-de-problemas.html">
+      <a class="ficha" href="tcc-solucion-de-problemas.html" data-item data-enf="Cognitivo-conductual" data-titulo="Solución de problemas" data-href="tcc-solucion-de-problemas.html">
         <span class="etq">Afrontamiento</span>
         <b>Solución de problemas</b>
         <span class="dice">Los cinco pasos clásicos, con generación sin censura y una matriz que puntúa consecuencias a corto y largo plazo, en uno mismo y en los demás, y ordena las alternativas.</span>
         <span class="ref">Terapia de solución de problemas de D'Zurilla y Nezu, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 9.</span>
       </a>
-      <a class="ficha" href="tcc-autoinstrucciones.html">
+      <a class="ficha" href="tcc-autoinstrucciones.html" data-item data-enf="Cognitivo-conductual" data-titulo="Autoinstrucciones" data-href="tcc-autoinstrucciones.html">
         <span class="etq">Inoculación de estrés</span>
         <b>Autoinstrucciones</b>
         <span class="dice">Cuatro fases —preparación, confrontación, momentos críticos y autorrefuerzo— con frases elegidas por la persona, contrastadas contra lo que hoy se dice. Termina en una tarjeta imprimible.</span>
         <span class="ref">Entrenamiento en autoinstrucciones y entrenamiento en inoculación de estrés, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 9.</span>
       </a>
-      <a class="ficha" href="tcc-analisis-funcional.html">
+      <a class="ficha" href="tcc-analisis-funcional.html" data-item data-enf="Cognitivo-conductual" data-titulo="Análisis funcional" data-href="tcc-analisis-funcional.html">
         <span class="etq">Formación</span>
         <b>Análisis funcional</b>
         <span class="dice">Antecedentes, conducta en los tres sistemas de respuesta y consecuencias, con una hipótesis funcional generada a partir de lo marcado. Herramienta de formulación y de formación de practicantes.</span>
@@ -526,6 +626,8 @@
       </a>
     </div>
   </section>
+
+  <div class="sin-resultados" id="sin-resultados" hidden>Ninguna hoja coincide con el filtro y la búsqueda.</div>
 
   <section class="bloque">
     <h2>Cómo se usan</h2>
@@ -541,7 +643,85 @@
       lo diligenciado y las notas del profesional, listo para pegar.</div>
     </div>
   </section>
+</main>
+
+<aside class="riel-der">
+  <nav class="mapa" id="mapa" aria-label="Mapa de las hojas"></nav>
+</aside>
 
 </div>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const items = [...document.querySelectorAll("[data-item]")];
+  const grupos = [...document.querySelectorAll("[data-grupo]")];
+  items.forEach(el => { el.dataset.txt = norm(el.textContent); });
+
+  // Mapa: un encabezado por enfoque y, debajo, sus hojas.
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  $("mapa").innerHTML = '<span class="mapa-r">Las hojas</span>' + grupos.map((g, gi) => {
+    if (!g.id) g.id = "grupo-" + gi;
+    const suyos = items.filter(it => g.contains(it));
+    return '<div class="mapa-g" data-g="' + g.id + '"><a href="#' + g.id + '">' + esc(g.dataset.grupo) + '</a><ul>' +
+      suyos.map((it, ii) => {
+        if (!it.id) it.id = g.id + "-" + ii;
+        const destino = it.dataset.href || ("#" + it.id);
+        return '<li data-i="' + it.id + '"><a href="' + esc(destino) + '" data-i="' + it.id + '">' + esc(it.dataset.titulo) + '</a></li>';
+      }).join("") + '</ul></div>';
+  }).join("") + (document.body.dataset.extra || "");
+
+  let enf = "todos";
+  function aplicar(){
+    const q = norm($("buscador").value.trim());
+    let n = 0;
+    items.forEach(it => {
+      const ok = (enf === "todos" || it.dataset.enf === enf) && (!q || it.dataset.txt.includes(q));
+      it.hidden = !ok;
+      $("mapa").querySelector('li[data-i="' + it.id + '"]').hidden = !ok;
+      if (ok) n++;
+    });
+    grupos.forEach(g => {
+      const vacio = !items.some(it => !it.hidden && g.contains(it));
+      g.hidden = vacio;
+      $("mapa").querySelector('[data-g="' + g.id + '"]').hidden = vacio;
+    });
+    $("cuenta").textContent = n + (n === 1 ? " hoja" : " hojas") +
+      (enf === "todos" ? "" : " de " + enf) + (q ? (n === 1 ? " que coincide" : " que coinciden") + " con la búsqueda" : "");
+    const vacia = $("sin-resultados");
+    if (vacia) vacia.hidden = n > 0;
+  }
+  $("f-enf").addEventListener("click", ev => {
+    const b = ev.target.closest(".fchip"); if (!b) return;
+    enf = b.dataset.enf;
+    $("f-enf").querySelectorAll(".fchip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
+    aplicar();
+  });
+  $("buscador").addEventListener("input", aplicar);
+  aplicar();
+
+  // La hoja o el bloque que está en pantalla se marca en el mapa: el último
+  // cuyo comienzo ya pasó por el tercio superior de la ventana.
+  function marcar(){
+    const limite = innerHeight / 3;
+    let actual = null;
+    items.forEach(it => { if (!it.hidden && it.getBoundingClientRect().top <= limite) actual = it; });
+    const m = $("mapa"), previo = m.querySelector("a.actual");
+    const a = actual ? m.querySelector('a[data-i="' + actual.id + '"]') : null;
+    if (a === previo) return;
+    if (previo) previo.classList.remove("actual");
+    if (!a) return;
+    a.classList.add("actual");
+    const r = a.getBoundingClientRect(), rm = m.getBoundingClientRect();
+    if (r.top < rm.top || r.bottom > rm.bottom) m.scrollTop += r.top - rm.top - rm.height / 3;
+  }
+  let pendiente = false;
+  addEventListener("scroll", () => {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(() => { pendiente = false; marcar(); });
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
