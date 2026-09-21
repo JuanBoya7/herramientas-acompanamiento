@@ -37,6 +37,31 @@
     width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
     color:var(--acento);font-size:14px;font-weight:700}
   .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+
+  /* ---------- la ayuda detrás de un signo ---------- */
+  .comoAsi{flex:0 0 auto;width:21px;height:21px;padding:0;border-radius:50%;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta-suave);
+    font:700 12.5px/1 inherit;cursor:pointer}
+  .comoAsi:hover,.comoAsi.abierto{border-color:var(--acento);color:var(--acento);
+    background:var(--acento-claro)}
+  .ayudaCaja{margin-top:7px}
+  .ayudaCaja .ayuda{margin-top:0}
+
+  /* ---------- un paso a la vez ---------- */
+  section.plegable > h2{cursor:pointer;user-select:none}
+  section.plegable > h2::after{content:"";flex:0 0 auto;margin-left:auto;width:9px;height:9px;
+    border-right:2px solid #b3bfca;border-bottom:2px solid #b3bfca;transform:rotate(45deg);
+    transition:transform .15s;margin-top:-4px}
+  section.cerrado{padding-top:13px;padding-bottom:13px;background:#fbfcfe}
+  section.cerrado > h2{margin:0;color:var(--tinta-suave)}
+  section.cerrado > h2::after{transform:rotate(-135deg);margin-top:3px}
+  section.cerrado > h2 .num{background:var(--fondo);color:var(--tinta-suave)}
+  section.cerrado > *:not(h2){display:none}
+  .pasoNav{display:flex;justify-content:flex-end;margin-top:15px}
+  .pasoNav button{font:inherit;font-size:13.5px;font-weight:600;color:var(--acento);
+    border:1px solid var(--linea);border-radius:999px;padding:6px 16px;background:#fff;
+    cursor:pointer}
+  .pasoNav button:hover{border-color:var(--acento);background:var(--acento-claro)}
   .cuerpo{margin-top:14px}
   textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
     font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
@@ -262,6 +287,9 @@
   }
   @media print{
     body{background:#fff}
+    section.cerrado > *:not(h2){display:revert}
+    section.cerrado{background:none}
+    .comoAsi,.pasoNav,.ayudaCaja{display:none !important}
     .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
     .opcion:not(.activa),.borrar{display:none !important}
     header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
@@ -869,6 +897,124 @@ var Kit = (function(){
   }
 
   /* ---------- arranque ---------- */
+  /* ---------- lámina: la letra grande solo cuando se proyecta ----------
+     Las hojas expositivas ya no nacen en lámina. Se enciende con el botón de
+     la barra y se recuerda en este equipo: en consulta uno a uno la letra
+     grande alargaba la hoja sin aportar nada. */
+  function lamina(encender){
+    var b = document.body;
+    if(!b.hasAttribute("data-laminable")) return;
+    var on = encender === undefined ? !b.classList.contains("lamina") : !!encender;
+    b.classList.toggle("lamina", on);
+    var bt = document.querySelector(".botonLamina");
+    if(bt) bt.textContent = on ? "Salir de lámina" : "Modo lámina";
+    try{ localStorage.setItem(CLAVE + ":lamina", on ? "1" : "0"); }catch(e){}
+  }
+  function laminaGuardada(){
+    if(!document.body.hasAttribute("data-laminable")) return;
+    var v = null;
+    try{ v = localStorage.getItem(CLAVE + ":lamina"); }catch(e){}
+    lamina(v === "1");
+  }
+
+  /* ---------- un paso a la vez ----------
+     Las hojas de cuatro y cinco pasos se leían enteras de un golpe y eso
+     rompe la conducción de la sesión. Los pasos siguen en el documento —el
+     motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
+     está trabajando. Al imprimir se abren todos. */
+  function pasos(){
+    /* Un paso es una sección numerada, venga como .paso o como .bloque: la
+       tarjeta de crisis lleva dos de sus tres pasos como bloque. */
+    var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
+                 .filter(function(s){ return s.querySelector("h2 .num"); });
+    if(secs.length < 3) return;
+    var arrancado = false;
+
+    /* Hay hojas con pasos que aparecen y desaparecen según lo que se responda
+       —las dos ramas de Verificar los hechos—: esas no cuentan mientras no
+       estén a la vista. */
+    function hay(k){ return k >= 0 && k < secs.length && !secs[k].hidden; }
+    function siguiente(i){
+      for(var k = i + 1; k < secs.length; k++) if(hay(k)) return k;
+      return -1;
+    }
+    function abrir(i){
+      if(i >= 0 && !hay(i)) i = siguiente(i);
+      secs.forEach(function(s, k){
+        s.classList.toggle("cerrado", k !== i);
+        var nav = s.querySelector(":scope > .pasoNav");
+        if(nav) nav.hidden = siguiente(k) < 0;
+      });
+      if(i > 0) secs[i].scrollIntoView({block:"start", behavior:"smooth"});
+    }
+
+    secs.forEach(function(s, i){
+      var h = s.querySelector("h2");
+      if(!h) return;
+      s.classList.add("plegable");
+      h.setAttribute("role", "button");
+      h.setAttribute("tabindex", "0");
+      h.addEventListener("click", function(ev){
+        if(ev.target.closest("button,a,input,label")) return;
+        abrir(s.classList.contains("cerrado") ? i : -1);
+      });
+      h.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); h.click(); }
+      });
+      var nav = crearEl("div", "pasoNav");
+      var b = crearEl("button", "", "Siguiente ›");
+      b.type = "button";
+      b.onclick = function(){ var k = siguiente(i); if(k >= 0) abrir(k); };
+      nav.appendChild(b);
+      s.appendChild(nav);
+
+      /* Si la hoja destapa un paso, ese es el que toca: se abre solo. */
+      new MutationObserver(function(){
+        if(arrancado && !s.hidden && s.classList.contains("cerrado")) abrir(i);
+      }).observe(s, {attributes:true, attributeFilter:["hidden"]});
+    });
+
+    abrir(0);
+    setTimeout(function(){ arrancado = true; }, 0);
+  }
+
+  /* ---------- la ayuda, fuera del camino ----------
+     El párrafo que explica para qué es el paso pasa detrás de un «?»: sigue
+     ahí para quien lo necesite y deja de interponerse mientras se conduce.
+     Solo los que cuelgan de la sección; los que acompañan a un campo dentro
+     del cuerpo se quedan donde están. */
+  function ayudas(){
+    document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
+      var h = s.querySelector("h2");
+      if(!h) return;
+      var sueltas = [].slice.call(s.children).filter(function(e){
+        return e.classList && e.classList.contains("ayuda");
+      });
+      if(!sueltas.length) return;
+      var caja = crearEl("div", "ayudaCaja");
+      caja.hidden = true;
+      sueltas.forEach(function(x){ caja.appendChild(x); });
+      s.insertBefore(caja, h.nextSibling);
+      var b = crearEl("button", "comoAsi", "?");
+      b.type = "button";
+      b.title = "Para qué es este paso";
+      b.setAttribute("aria-label", "Para qué es este paso");
+      b.onclick = function(ev){
+        ev.stopPropagation();
+        caja.hidden = !caja.hidden;
+        b.classList.toggle("abierto", !caja.hidden);
+      };
+      h.appendChild(b);
+    });
+  }
+
+  /* Los tres arreglos de presentación, que no tocan el contenido de nadie. */
+  function presentar(){
+    ayudas();
+    pasos();
+    laminaGuardada();
+  }
+
   function iniciar(cfg){
     CLAVE = cfg.clave || "herramienta";
     ganchos = cfg;
@@ -894,6 +1040,7 @@ var Kit = (function(){
       e.addEventListener("change", function(){ guardar(); });
     });
 
+    presentar();
     if(ganchos.alCambiar) ganchos.alCambiar();
   }
 
@@ -907,6 +1054,7 @@ var Kit = (function(){
       if(s) s.classList.toggle("borrar", ni.checked);
     });
     ganchos = { resumen: resumenGenerico };
+    presentar();
   }
 
   /* Recorre las secciones y arma un texto con lo que esté diligenciado. */
@@ -947,6 +1095,7 @@ var Kit = (function(){
     iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
     chips: chips, opciones: opciones, activas: activas, medidor: medidor,
     agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
+    lamina: lamina,
     $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
     reloj: reloj,
     brindis: brindis, modo: modo, texto: textoResumen

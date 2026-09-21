@@ -30,6 +30,31 @@
     width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
     color:var(--acento);font-size:14px;font-weight:700}
   .ayuda{margin:6px 0 0;font-size:13.5px;color:var(--tinta-suave);max-width:78ch}
+
+  /* ---------- la ayuda detrás de un signo ---------- */
+  .comoAsi{flex:0 0 auto;width:21px;height:21px;padding:0;border-radius:50%;
+    border:1px solid var(--linea);background:#fff;color:var(--tinta-suave);
+    font:700 12.5px/1 inherit;cursor:pointer}
+  .comoAsi:hover,.comoAsi.abierto{border-color:var(--acento);color:var(--acento);
+    background:var(--acento-claro)}
+  .ayudaCaja{margin-top:7px}
+  .ayudaCaja .ayuda{margin-top:0}
+
+  /* ---------- un paso a la vez ---------- */
+  section.plegable > h2{cursor:pointer;user-select:none}
+  section.plegable > h2::after{content:"";flex:0 0 auto;margin-left:auto;width:9px;height:9px;
+    border-right:2px solid #b3bfca;border-bottom:2px solid #b3bfca;transform:rotate(45deg);
+    transition:transform .15s;margin-top:-4px}
+  section.cerrado{padding-top:13px;padding-bottom:13px;background:#fbfcfe}
+  section.cerrado > h2{margin:0;color:var(--tinta-suave)}
+  section.cerrado > h2::after{transform:rotate(-135deg);margin-top:3px}
+  section.cerrado > h2 .num{background:var(--fondo);color:var(--tinta-suave)}
+  section.cerrado > *:not(h2){display:none}
+  .pasoNav{display:flex;justify-content:flex-end;margin-top:15px}
+  .pasoNav button{font:inherit;font-size:13.5px;font-weight:600;color:var(--acento);
+    border:1px solid var(--linea);border-radius:999px;padding:6px 16px;background:#fff;
+    cursor:pointer}
+  .pasoNav button:hover{border-color:var(--acento);background:var(--acento-claro)}
   .cuerpo{margin-top:14px}
   textarea,input[type=text],input[type=date],input[type=number],select{width:100%;font:inherit;
     font-size:14.5px;color:var(--tinta);border:1px solid var(--linea);border-radius:8px;
@@ -255,6 +280,9 @@
   }
   @media print{
     body{background:#fff}
+    section.cerrado > *:not(h2){display:revert}
+    section.cerrado{background:none}
+    .comoAsi,.pasoNav,.ayudaCaja{display:none !important}
     .barra,.brindis,details.catalogo,.chip.mas,.chip:not(.activa),
     .opcion:not(.activa),.borrar{display:none !important}
     header.tapa,section.bloque,section.paso{break-inside:avoid;box-shadow:none}
