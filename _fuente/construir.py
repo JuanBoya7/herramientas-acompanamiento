@@ -281,6 +281,12 @@ def main():
     orden = {n: i for i, (n, _) in enumerate(ORDEN_ENFOQUES)}
     fichas.sort(key=lambda f: (orden.get(f["enfoque"], 99), f.get("orden", "99")))
 
+    # Cada herramienta lleva el índice de todas las hojas.
+    for f in fichas:
+        ruta = DESTINO / f["archivo"]
+        if ruta.exists():
+            rieles.inyectar_indice(ruta, fichas)
+
     indice = DESTINO / "index.html"
     indice.write_text(construir_indice(fichas, kit_css), encoding="utf-8")
 

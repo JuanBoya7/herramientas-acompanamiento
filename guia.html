@@ -424,7 +424,31 @@
     .con-rieles .controles{margin:0}
     .con-rieles [id]{scroll-margin-top:18px}
   }
+  /* Celular, tableta y portátil: los rieles no caben al costado, así que dos
+     botones flotantes los abren como paneles: el mapa a la derecha y los
+     filtros a la izquierda. */
+  .nav-movil,.nm-cerrar{display:none}
+  @media (max-width:1279px){
+    .nav-movil{display:flex;position:fixed;right:14px;bottom:14px;gap:8px;z-index:40}
+    .nav-movil button{font:inherit;font-size:14px;font-weight:600;padding:10px 16px;border-radius:999px;
+      border:1px solid var(--acento);background:var(--acento);color:#fff;
+      box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer}
+    .nav-movil button.sec{background:#fff;color:var(--acento)}
+    body.panel-mapa .con-rieles > .riel-der{display:block;position:fixed;top:0;right:0;bottom:0;
+      width:min(86vw,340px);background:var(--papel);z-index:60;overflow-y:auto;overscroll-behavior:contain;
+      padding:14px 16px 40px;box-shadow:-6px 0 24px rgba(0,0,0,.22);box-sizing:border-box}
+    body.panel-filtros .controles{position:fixed;top:0;left:0;bottom:0;width:min(86vw,340px);margin:0;
+      z-index:60;overflow-y:auto;overscroll-behavior:contain;border-radius:0;
+      padding:14px 16px 40px;box-shadow:6px 0 24px rgba(0,0,0,.22);box-sizing:border-box}
+    body.panel-mapa .nm-cerrar,body.panel-filtros .nm-cerrar{display:block;margin:0 0 8px auto;font:inherit;
+      font-size:13px;font-weight:600;background:#fff;border:1px solid var(--linea);border-radius:8px;
+      padding:5px 12px;color:var(--tinta-suave);cursor:pointer}
+    body.panel-mapa .nav-movil,body.panel-filtros .nav-movil{display:none}
+    #nm-velo{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+    #nm-velo[hidden]{display:none}
+  }
   @media print{
+    .nav-movil,#nm-velo,.nm-cerrar{display:none !important}
     .con-rieles > .riel-izq,.con-rieles > .riel-der{display:none !important}
     .envoltura.con-rieles{display:block}
   }
@@ -1690,6 +1714,11 @@
 <aside class="riel-der">
   <nav class="mapa" id="mapa" aria-label="Mapa de las hojas"></nav>
 </aside>
+<div class="nav-movil">
+  <button type="button" class="sec" id="nm-filtros">Filtros</button>
+  <button type="button" id="nm-mapa">Hojas</button>
+</div>
+<div id="nm-velo" hidden></div>
 
 </div>
 <script>
@@ -1757,6 +1786,22 @@
     const r = a.getBoundingClientRect(), rm = m.getBoundingClientRect();
     if (r.top < rm.top || r.bottom > rm.bottom) m.scrollTop += r.top - rm.top - rm.height / 3;
   }
+  // Paneles en pantallas angostas.
+  const velo = $("nm-velo"), riel = document.querySelector(".riel-der"), filtros = document.querySelector(".controles");
+  function cerrar(){ document.body.classList.remove("panel-mapa", "panel-filtros"); velo.hidden = true; }
+  function abrir(c){ cerrar(); document.body.classList.add(c); velo.hidden = false; }
+  [riel, filtros].forEach(p => {
+    const x = document.createElement("button");
+    x.type = "button"; x.className = "nm-cerrar"; x.textContent = "Cerrar ×";
+    x.addEventListener("click", cerrar);
+    p.prepend(x);
+  });
+  $("nm-mapa").addEventListener("click", () => abrir("panel-mapa"));
+  $("nm-filtros").addEventListener("click", () => abrir("panel-filtros"));
+  velo.addEventListener("click", cerrar);
+  document.addEventListener("keydown", ev => { if (ev.key === "Escape") cerrar(); });
+  riel.addEventListener("click", ev => { if (ev.target.closest("a")) cerrar(); });
+
   let pendiente = false;
   addEventListener("scroll", () => {
     if (pendiente) return;

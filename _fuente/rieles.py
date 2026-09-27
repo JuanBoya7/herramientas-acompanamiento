@@ -35,7 +35,12 @@ def controles(placeholder):
 
 MAPA = """<aside class="riel-der">
   <nav class="mapa" id="mapa" aria-label="Mapa de las hojas"></nav>
-</aside>"""
+</aside>
+<div class="nav-movil">
+  <button type="button" class="sec" id="nm-filtros">Filtros</button>
+  <button type="button" id="nm-mapa">Hojas</button>
+</div>
+<div id="nm-velo" hidden></div>"""
 
 
 CSS = """
@@ -91,7 +96,31 @@ CSS = """
     .con-rieles .controles{margin:0}
     .con-rieles [id]{scroll-margin-top:18px}
   }
+  /* Celular, tableta y portátil: los rieles no caben al costado, así que dos
+     botones flotantes los abren como paneles: el mapa a la derecha y los
+     filtros a la izquierda. */
+  .nav-movil,.nm-cerrar{display:none}
+  @media (max-width:1279px){
+    .nav-movil{display:flex;position:fixed;right:14px;bottom:14px;gap:8px;z-index:40}
+    .nav-movil button{font:inherit;font-size:14px;font-weight:600;padding:10px 16px;border-radius:999px;
+      border:1px solid var(--acento);background:var(--acento);color:#fff;
+      box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer}
+    .nav-movil button.sec{background:#fff;color:var(--acento)}
+    body.panel-mapa .con-rieles > .riel-der{display:block;position:fixed;top:0;right:0;bottom:0;
+      width:min(86vw,340px);background:var(--papel);z-index:60;overflow-y:auto;overscroll-behavior:contain;
+      padding:14px 16px 40px;box-shadow:-6px 0 24px rgba(0,0,0,.22);box-sizing:border-box}
+    body.panel-filtros .controles{position:fixed;top:0;left:0;bottom:0;width:min(86vw,340px);margin:0;
+      z-index:60;overflow-y:auto;overscroll-behavior:contain;border-radius:0;
+      padding:14px 16px 40px;box-shadow:6px 0 24px rgba(0,0,0,.22);box-sizing:border-box}
+    body.panel-mapa .nm-cerrar,body.panel-filtros .nm-cerrar{display:block;margin:0 0 8px auto;font:inherit;
+      font-size:13px;font-weight:600;background:#fff;border:1px solid var(--linea);border-radius:8px;
+      padding:5px 12px;color:var(--tinta-suave);cursor:pointer}
+    body.panel-mapa .nav-movil,body.panel-filtros .nav-movil{display:none}
+    #nm-velo{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+    #nm-velo[hidden]{display:none}
+  }
   @media print{
+    .nav-movil,#nm-velo,.nm-cerrar{display:none !important}
     .con-rieles > .riel-izq,.con-rieles > .riel-der{display:none !important}
     .envoltura.con-rieles{display:block}
   }
@@ -163,6 +192,22 @@ JS = r"""
     const r = a.getBoundingClientRect(), rm = m.getBoundingClientRect();
     if (r.top < rm.top || r.bottom > rm.bottom) m.scrollTop += r.top - rm.top - rm.height / 3;
   }
+  // Paneles en pantallas angostas.
+  const velo = $("nm-velo"), riel = document.querySelector(".riel-der"), filtros = document.querySelector(".controles");
+  function cerrar(){ document.body.classList.remove("panel-mapa", "panel-filtros"); velo.hidden = true; }
+  function abrir(c){ cerrar(); document.body.classList.add(c); velo.hidden = false; }
+  [riel, filtros].forEach(p => {
+    const x = document.createElement("button");
+    x.type = "button"; x.className = "nm-cerrar"; x.textContent = "Cerrar ×";
+    x.addEventListener("click", cerrar);
+    p.prepend(x);
+  });
+  $("nm-mapa").addEventListener("click", () => abrir("panel-mapa"));
+  $("nm-filtros").addEventListener("click", () => abrir("panel-filtros"));
+  velo.addEventListener("click", cerrar);
+  document.addEventListener("keydown", ev => { if (ev.key === "Escape") cerrar(); });
+  riel.addEventListener("click", ev => { if (ev.target.closest("a")) cerrar(); });
+
   let pendiente = false;
   addEventListener("scroll", () => {
     if (pendiente) return;
@@ -171,3 +216,92 @@ JS = r"""
   }, { passive: true });
 })();
 """
+
+
+# ---------------------------------------------------------------------------
+# Índice de hojas dentro de cada herramienta
+# ---------------------------------------------------------------------------
+# Cada hoja lleva un índice con todas las demás, agrupadas por enfoque y con
+# la actual marcada. En pantallas muy anchas queda fijo a la izquierda; en las
+# demás lo abre el botón «Hojas». Va entre dos marcas para poder rehacerlo sin
+# reconstruir la hoja (las tres antiguas se arman por su cuenta).
+INICIO, FIN = "<!--indice-hojas-->", "<!--/indice-hojas-->"
+
+INDICE_CSS = """
+.ih-boton{position:fixed;bottom:14px;right:14px;z-index:40;font:inherit;font-size:13.5px;font-weight:600;
+  padding:8px 14px;border-radius:999px;border:1px solid var(--acento,#2f6f8f);background:#fff;
+  color:var(--acento,#2f6f8f);box-shadow:0 3px 10px rgba(0,0,0,.15);cursor:pointer}
+.ih-panel{position:fixed;top:0;left:0;bottom:0;width:min(86vw,300px);box-sizing:border-box;
+  background:var(--papel,#fff);border-right:1px solid var(--linea,#dde);z-index:60;overflow-y:auto;
+  overscroll-behavior:contain;padding:16px 16px 40px;transform:translateX(-105%);
+  transition:transform .2s;box-shadow:6px 0 24px rgba(0,0,0,.2);font-size:14px}
+body.ih-abierto .ih-panel{transform:none}
+.ih-velo{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+.ih-velo[hidden]{display:none}
+.ih-cerrar{display:block;margin:0 0 10px auto;font:inherit;font-size:13px;font-weight:600;background:#fff;
+  border:1px solid var(--linea,#dde);border-radius:8px;padding:5px 12px;color:var(--tinta-suave,#667);cursor:pointer}
+.ih-panel .ih-top{display:block;font-weight:700;color:var(--acento,#2f6f8f);text-decoration:none;margin:2px 0 4px}
+.ih-panel .ih-g{margin-top:14px}
+.ih-panel .ih-g > b{display:block;font-size:13.5px;color:var(--tinta,#223);margin-bottom:4px}
+.ih-panel ul{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--linea,#dde)}
+.ih-panel li a{display:block;font-size:13px;line-height:1.35;color:var(--tinta-suave,#667);text-decoration:none;
+  padding:4px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent}
+.ih-panel li a:hover{color:var(--acento,#2f6f8f);background:var(--acento-claro,#eef5f8)}
+.ih-panel li a.actual{color:var(--acento,#2f6f8f);border-left-color:var(--acento,#2f6f8f);
+  background:var(--acento-claro,#eef5f8);font-weight:600}
+@media (min-width:1500px){
+  .ih-boton,.ih-cerrar,.ih-velo{display:none !important}
+  .ih-panel{transform:none;box-shadow:none;width:260px;padding-top:22px}
+  body{padding-left:260px;box-sizing:border-box}
+}
+@media print{.ih-boton,.ih-panel,.ih-velo{display:none !important}}
+"""
+
+INDICE_JS = """
+(function(){
+  const b = document.body, v = document.getElementById("ih-velo");
+  const cerrar = () => { b.classList.remove("ih-abierto"); v.hidden = true; };
+  document.getElementById("ih-boton").addEventListener("click", () => { b.classList.add("ih-abierto"); v.hidden = false; });
+  document.getElementById("ih-cerrar").addEventListener("click", cerrar);
+  v.addEventListener("click", cerrar);
+  document.addEventListener("keydown", e => { if (e.key === "Escape") cerrar(); });
+  const a = document.querySelector(".ih-panel a.actual");
+  if (a) a.scrollIntoView({ block: "center" });
+})();
+"""
+
+
+def indice_hojas(fichas, actual):
+    import html as _h
+    grupos = []
+    for enfoque in ENFOQUES:
+        suyas = [f for f in fichas if f["enfoque"] == enfoque]
+        if not suyas:
+            continue
+        items = "".join(
+            '<li><a href="%s"%s>%s</a></li>' % (
+                f["archivo"], ' class="actual" aria-current="page"' if f["archivo"] == actual else "",
+                _h.escape(f["titulo"]))
+            for f in suyas)
+        grupos.append('<div class="ih-g"><b>%s</b><ul>%s</ul></div>' % (_h.escape(enfoque), items))
+    return (INICIO + "\n<style>" + INDICE_CSS + "</style>\n"
+            '<button type="button" class="ih-boton" id="ih-boton">&#9776; Hojas</button>\n'
+            '<nav class="ih-panel" aria-label="Índice de hojas">'
+            '<button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button>'
+            '<a class="ih-top" href="index.html">&larr; Todas las hojas</a>'
+            '<a class="ih-top" href="guia.html">Guía rápida de uso</a>'
+            + "".join(grupos) + '</nav>\n<div class="ih-velo" id="ih-velo" hidden></div>\n'
+            "<script>" + INDICE_JS + "</script>\n" + FIN)
+
+
+def inyectar_indice(ruta, fichas):
+    """Pone (o rehace) el índice de hojas en una herramienta ya construida."""
+    import re as _re
+    d = ruta.read_text(encoding="utf-8")
+    bloque = indice_hojas(fichas, ruta.name)
+    if INICIO in d:
+        d = _re.sub(_re.escape(INICIO) + ".*?" + _re.escape(FIN), lambda m: bloque, d, flags=_re.S)
+    else:
+        i = d.rindex("</body>")
+        d = d[:i] + bloque + "\n" + d[i:]
+    ruta.write_text(d, encoding="utf-8")

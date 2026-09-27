@@ -325,6 +325,11 @@ def main():
         (DESTINO / nombre).write_text(d, encoding="utf-8")
         print(f"  {nombre:38s} rehecha desde el respaldo")
 
+    # Rehechas desde el respaldo pierden el índice de hojas: se lo devuelve
+    # la construcción general, que lo pone en todas.
+    import construir
+    construir.main()
+
 
 if __name__ == "__main__":
     main()

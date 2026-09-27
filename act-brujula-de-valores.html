@@ -1469,5 +1469,51 @@ Kit.iniciar({
   resumen: resumen
 });
 </script>
+<!--indice-hojas-->
+<style>
+.ih-boton{position:fixed;bottom:14px;right:14px;z-index:40;font:inherit;font-size:13.5px;font-weight:600;
+  padding:8px 14px;border-radius:999px;border:1px solid var(--acento,#2f6f8f);background:#fff;
+  color:var(--acento,#2f6f8f);box-shadow:0 3px 10px rgba(0,0,0,.15);cursor:pointer}
+.ih-panel{position:fixed;top:0;left:0;bottom:0;width:min(86vw,300px);box-sizing:border-box;
+  background:var(--papel,#fff);border-right:1px solid var(--linea,#dde);z-index:60;overflow-y:auto;
+  overscroll-behavior:contain;padding:16px 16px 40px;transform:translateX(-105%);
+  transition:transform .2s;box-shadow:6px 0 24px rgba(0,0,0,.2);font-size:14px}
+body.ih-abierto .ih-panel{transform:none}
+.ih-velo{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+.ih-velo[hidden]{display:none}
+.ih-cerrar{display:block;margin:0 0 10px auto;font:inherit;font-size:13px;font-weight:600;background:#fff;
+  border:1px solid var(--linea,#dde);border-radius:8px;padding:5px 12px;color:var(--tinta-suave,#667);cursor:pointer}
+.ih-panel .ih-top{display:block;font-weight:700;color:var(--acento,#2f6f8f);text-decoration:none;margin:2px 0 4px}
+.ih-panel .ih-g{margin-top:14px}
+.ih-panel .ih-g > b{display:block;font-size:13.5px;color:var(--tinta,#223);margin-bottom:4px}
+.ih-panel ul{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--linea,#dde)}
+.ih-panel li a{display:block;font-size:13px;line-height:1.35;color:var(--tinta-suave,#667);text-decoration:none;
+  padding:4px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent}
+.ih-panel li a:hover{color:var(--acento,#2f6f8f);background:var(--acento-claro,#eef5f8)}
+.ih-panel li a.actual{color:var(--acento,#2f6f8f);border-left-color:var(--acento,#2f6f8f);
+  background:var(--acento-claro,#eef5f8);font-weight:600}
+@media (min-width:1500px){
+  .ih-boton,.ih-cerrar,.ih-velo{display:none !important}
+  .ih-panel{transform:none;box-shadow:none;width:260px;padding-top:22px}
+  body{padding-left:260px;box-sizing:border-box}
+}
+@media print{.ih-boton,.ih-panel,.ih-velo{display:none !important}}
+</style>
+<button type="button" class="ih-boton" id="ih-boton">&#9776; Hojas</button>
+<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>Metáforas vivas</b><ul><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li></ul></div><div class="ih-g"><b>ACT</b><ul><li><a href="act-brujula-de-valores.html" class="actual" aria-current="page">La brújula de valores</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html">Activación conductual</a></li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li></ul></div></nav>
+<div class="ih-velo" id="ih-velo" hidden></div>
+<script>
+(function(){
+  const b = document.body, v = document.getElementById("ih-velo");
+  const cerrar = () => { b.classList.remove("ih-abierto"); v.hidden = true; };
+  document.getElementById("ih-boton").addEventListener("click", () => { b.classList.add("ih-abierto"); v.hidden = false; });
+  document.getElementById("ih-cerrar").addEventListener("click", cerrar);
+  v.addEventListener("click", cerrar);
+  document.addEventListener("keydown", e => { if (e.key === "Escape") cerrar(); });
+  const a = document.querySelector(".ih-panel a.actual");
+  if (a) a.scrollIntoView({ block: "center" });
+})();
+</script>
+<!--/indice-hojas-->
 </body>
 </html>

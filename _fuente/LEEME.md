@@ -50,6 +50,16 @@ Avisa de lo único que rompe una hoja en silencio: JavaScript que pide por id un
 está en el HTML. Es exactamente lo que dejó a las fortalezas del carácter sin casillas durante un
 tiempo. También avisa de llaves descuadradas y de restos de lenguaje que ya no corresponde.
 
+## Índice de hojas y navegación en el teléfono
+
+`rieles.py` arma tres cosas. En el índice y en la guía, los filtros quedan a la izquierda y el mapa
+a la derecha; en pantallas de menos de 1280 px, dos botones flotantes («Filtros» y «Hojas») los
+abren como paneles. En cada herramienta pone un índice con todas las hojas y la actual marcada.
+Ese índice queda fijo a la izquierda en pantallas de 1500 px o más; en las demás, lo abre el botón
+«Hojas». `construir.py` lo agrega al final de cada hoja, entre las marcas
+`<!--indice-hojas-->`, y `armonizar_antiguas.py` llama a la construcción general al terminar,
+para que las tres hojas antiguas también lo tengan.
+
 ## La guía de uso
 
 `guia.html` no es una herramienta: es la hoja de ruta del profesional, y por eso no lleva kit, ni
