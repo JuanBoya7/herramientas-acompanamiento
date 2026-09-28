@@ -1,0 +1,267 @@
+@@meta
+archivo: tcc-inoculacion-de-estres.html
+titulo: Inoculación de estrés
+orden: 11
+enfoque: Cognitivo-conductual
+etiqueta: Estrés
+sub: Como una vacuna: dosis de estrés lo bastante fuertes para activar las defensas, pero no tanto como para vencerlas. Primero se separa lo que se puede cambiar de lo que no, porque piden formas distintas de afrontar. Después se ensaya con las situaciones de menor a mayor, en la imaginación, en un juego de roles y en la vida real, y la dosis sube solo después de varios éxitos.
+fuente: Entrenamiento en inoculación de estrés: fases de conceptualización, adquisición de habilidades y aplicación, en Meichenbaum, Stress Inoculation Training (1985), caps. 3 a 6.
+resumen: Se ordenan los aspectos del estrés en cambiables y no cambiables y se elige el afrontamiento para cada lado. Luego una escalera de situaciones que se ensaya por dosis, en tres formatos, con una marca de resistencia que crece con cada ensayo logrado. Termina anticipando los tropiezos.
+identificacion: si
+@@css
+  .dos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .col{border:1px solid var(--linea);border-radius:10px;padding:10px 12px;border-top:4px solid var(--c);background:#fbfcfd}
+  .col .tit{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--c)}
+  .col .sub{font-size:12px;color:var(--tinta-suave);margin-bottom:8px}
+  .aspecto{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--linea);border-radius:8px;
+    padding:6px 8px;font-size:14px;margin-bottom:6px}
+  .aspecto .t{flex:1}
+  .aspecto button{padding:2px 8px;font-size:12px}
+  .agregar{display:flex;gap:8px}
+  .agregar input{flex:1;min-width:0}
+  .escalon{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;padding:8px 10px;
+    border:1px solid var(--linea);border-radius:9px;margin-bottom:7px;background:#fff}
+  .escalon .d{font-weight:700;color:#fff;border-radius:6px;text-align:center;font-size:13px;padding:3px 0}
+  .escalon .t{font-size:14.5px}
+  .escalon .modos{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .escalon .modos button{font-size:11.5px;padding:4px 8px;border-radius:20px}
+  .escalon .modos button.ok{background:#3f9b86;border-color:#3f9b86;color:#fff}
+  .escalon .modos button.duro{background:#fbeae6;border-color:#b0503f;color:#8a3d2e}
+  .escudo{display:block;width:100%;max-width:520px;height:auto;margin:0 auto}
+  .fase{font-size:18px;font-weight:700;text-align:center;margin:6px auto 2px;color:var(--acento);min-height:26px;max-width:600px}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:580px;margin:0 auto;min-height:40px;line-height:1.5}
+  @media (max-width:640px){.dos{grid-template-columns:1fr}.escalon{grid-template-columns:28px 1fr}.escalon .modos{grid-column:1 / -1;justify-content:flex-start}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>¿Qué se puede cambiar?</h2>
+  <p class="ayuda">Los aspectos de la situación estresante, uno por uno. Lo que se puede cambiar
+  pide afrontar el problema; lo que no, regular la emoción y cambiar el significado. Casi siempre
+  hay de los dos.</p>
+  <div class="cuerpo">
+    <div class="agregar">
+      <input type="text" id="nuevoAspecto" placeholder="Ej. el volumen de trabajo de fin de mes">
+      <button type="button" id="btnAspecto">Agregar</button>
+    </div>
+    <div class="dos" id="dos"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Con qué se afronta</h2>
+  <p class="ayuda">Pocas herramientas, las que encajen: muchas opciones a la vez también estresan.
+  Las frases para antes, durante y después se arman en la hoja de autoinstrucciones.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Para lo que se puede cambiar</label>
+    <div class="chips" id="afProblema"></div>
+    <label class="etiqueta">Para lo que no se puede cambiar</label>
+    <div class="chips" id="afEmocion"></div>
+    <label class="etiqueta">Las primeras señales de que el estrés empieza</label>
+    <div class="chips" id="senales"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Las dosis</h2>
+  <p class="ayuda">Situaciones de la menos a la más estresante. Un toque en el número cambia la dosis.
+  Cada una se ensaya en tres formatos; al ensayar en la imaginación se incluye el momento de
+  estresarse y cómo se afronta, no solo el éxito.</p>
+  <div class="cuerpo">
+    <div class="agregar">
+      <input type="text" id="nuevaEscena" placeholder="Ej. acostar a los niños cuando no quieren">
+      <button type="button" id="btnEscena">Agregar</button>
+    </div>
+    <div id="escalera" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="escudo" id="escudo" viewBox="0 0 520 170" role="img"
+    aria-label="La resistencia que crece con cada ensayo logrado frente a la dosis de cada situación"></svg>
+  <div class="fase" id="fase">La resistencia crece con cada ensayo logrado</div>
+  <div class="fase-sub" id="faseSub"></div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">4</span>Los tropiezos</h2>
+  <p class="ayuda">Una respuesta que funcionó puede fallar otra vez. Se anticipan las situaciones de
+  más riesgo y lo que se hará si algo sale mal: un éxito parcial suele ser lo máximo realista.</p>
+  <div class="cuerpo">
+    <label class="etiqueta" for="riesgo">Dónde es más probable tropezar</label>
+    <input type="text" id="riesgo" placeholder="Ej. el lunes después de un fin de semana difícil">
+    <label class="etiqueta" for="siFallo">Si falla, lo que me voy a decir y lo que voy a hacer</label>
+    <textarea id="siFallo" placeholder="Con sus palabras"></textarea>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const AF_PROBLEMA = ["Buscar información", "Resolver el problema paso a paso", "Decidir y actuar", "Pedir ayuda",
+  "Decir que no"];
+const AF_EMOCION = ["Respiración lenta y relajación", "Cambiar lo que me digo", "Aceptar lo que no cambia",
+  "Buscar apoyo", "Verlo como un reto"];
+const SENALES = ["Tensión en los hombros o el cuello", "La respiración se acelera", "Me pongo irritable",
+  "Empiezo a anticipar lo peor"];
+const MODOS = [["imag", "Imaginación"], ["rol", "Juego de roles"], ["vivo", "En la vida real"]];
+const DOSIS_COL = ["#9cc3b8", "#7fb0a4", "#c9962f", "#c26a4e", "#b0503f"];
+
+let A = [];   /* aspectos: [{t, c: true|false}] */
+let E = [];   /* escenas: [{t, d:1..5, imag, rol, vivo}] con '', 'ok' o 'duro' */
+
+/* ---------- lo cambiable ---------- */
+function pintarAspectos(){
+  const caja = $("dos");
+  caja.innerHTML = "";
+  [[true, "Se puede cambiar", "afrontar el problema", "#2f6f8f"], [false, "No se puede cambiar", "regular la emoción, cambiar el significado", "#8a6d3b"]]
+  .forEach(([c, tit, sub, col]) => {
+    const d = Kit.crearEl("div", "col");
+    d.style.setProperty("--c", col);
+    d.appendChild(Kit.crearEl("div", "tit", tit));
+    d.appendChild(Kit.crearEl("div", "sub", sub));
+    A.forEach((x, i) => {
+      if(x.c !== c) return;
+      const f = Kit.crearEl("div", "aspecto");
+      f.appendChild(Kit.crearEl("span", "t", x.t));
+      const m = Kit.crearEl("button", "", c ? "→" : "←"); m.type = "button"; m.title = "Pasar al otro lado";
+      m.onclick = () => { x.c = !x.c; cambio(); };
+      const q = Kit.crearEl("button", "", "×"); q.type = "button"; q.title = "Quitar";
+      q.onclick = () => { A.splice(i, 1); cambio(); };
+      f.appendChild(m); f.appendChild(q);
+      d.appendChild(f);
+    });
+    caja.appendChild(d);
+  });
+}
+function agregarAspecto(){
+  const t = $("nuevoAspecto").value.trim(); if(!t) return;
+  A.push({t, c:true}); $("nuevoAspecto").value = ""; cambio(); $("nuevoAspecto").focus();
+}
+$("btnAspecto").onclick = agregarAspecto;
+$("nuevoAspecto").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); agregarAspecto(); } });
+
+/* ---------- la escalera de dosis ---------- */
+function pintarEscalera(){
+  const caja = $("escalera");
+  caja.innerHTML = "";
+  E.slice().sort((a, b) => a.d - b.d).forEach(x => {
+    const f = Kit.crearEl("div", "escalon");
+    const d = Kit.crearEl("span", "d", String(x.d));
+    d.style.background = DOSIS_COL[x.d - 1]; d.style.cursor = "pointer"; d.title = "Cambiar la dosis";
+    d.onclick = () => { x.d = x.d % 5 + 1; cambio(); };
+    f.appendChild(d);
+    f.appendChild(Kit.crearEl("span", "t", x.t));
+    const m = Kit.crearEl("span", "modos");
+    MODOS.forEach(([k, n]) => {
+      const b = Kit.crearEl("button", x[k] || "", n + (x[k] === "ok" ? " ✓" : x[k] === "duro" ? " ✗" : ""));
+      b.type = "button"; b.title = "Sin ensayar → lo manejé → me desbordó";
+      b.onclick = () => { x[k] = x[k] === "" ? "ok" : x[k] === "ok" ? "duro" : ""; cambio(); };
+      m.appendChild(b);
+    });
+    const q = Kit.crearEl("button", "", "×"); q.type = "button"; q.title = "Quitar";
+    q.onclick = () => { E.splice(E.indexOf(x), 1); cambio(); };
+    m.appendChild(q);
+    f.appendChild(m);
+    caja.appendChild(f);
+  });
+}
+function agregarEscena(){
+  const t = $("nuevaEscena").value.trim(); if(!t) return;
+  E.push({t, d:Math.min(5, E.length + 1), imag:"", rol:"", vivo:""}); $("nuevaEscena").value = ""; cambio(); $("nuevaEscena").focus();
+}
+$("btnEscena").onclick = agregarEscena;
+$("nuevaEscena").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); agregarEscena(); } });
+
+/* ---------- la resistencia ---------- */
+/* cada ensayo logrado suma según su dosis y su formato; la resistencia alcanza una dosis
+   cuando se han logrado varios ensayos en las anteriores */
+const PESO_MODO = {imag:.6, rol:.8, vivo:1};
+function resistencia(){
+  let r = 0;
+  E.forEach(x => MODOS.forEach(([k]) => { if(x[k] === "ok") r += x.d * PESO_MODO[k] * .45; }));
+  return Math.min(5.5, 1 + r / Math.max(1, E.length) * 1.6);
+}
+let mostrada = 1, objetivo = 1;
+function dibujar(){
+  const svg = $("escudo");
+  svg.innerHTML = "";
+  const X0 = 40, X1 = 480, Y = 70, esc = d => X0 + (d - .5) / 5 * (X1 - X0);
+  for(let d = 1; d <= 5; d++){
+    svg.appendChild(Kit.svg("rect", {x:esc(d - .5) + 2, y:Y, width:(X1 - X0) / 5 - 4, height:34, rx:6,
+      fill:DOSIS_COL[d - 1], "fill-opacity":.25}));
+    const t = Kit.svg("text", {x:esc(d), y:Y + 22, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#55616d"});
+    t.textContent = "dosis " + d;
+    svg.appendChild(t);
+  }
+  /* las escenas, como marcas sobre su dosis */
+  E.forEach((x, i) => {
+    const hechos = MODOS.filter(([k]) => x[k] === "ok").length, duro = MODOS.some(([k]) => x[k] === "duro");
+    svg.appendChild(Kit.svg("circle", {cx:esc(x.d) + ((i % 3) - 1) * 16, cy:Y - 16 - Math.floor(i / 3) % 2 * 16, r:6,
+      fill:duro ? "#b0503f" : hechos === 3 ? "#3f9b86" : hechos ? "#9cc3b8" : "#fff", stroke:"#55616d", "stroke-width":1}));
+  });
+  /* la barra de resistencia */
+  const w = esc(mostrada) - X0;
+  svg.appendChild(Kit.svg("rect", {x:X0, y:Y + 50, width:X1 - X0, height:14, rx:7, fill:"#e6ebee"}));
+  svg.appendChild(Kit.svg("rect", {x:X0, y:Y + 50, width:Math.max(0, w), height:14, rx:7, fill:"#3f9b86"}));
+  const r = Kit.svg("text", {x:X0, y:Y + 84, "font-size":12, "font-weight":700, fill:"#3f9b86"});
+  r.textContent = "Resistencia";
+  svg.appendChild(r);
+}
+const reloj = Kit.reloj(dt => {
+  mostrada += (objetivo - mostrada) * Math.min(1, dt * 3);
+  if(Math.abs(objetivo - mostrada) < .01){ mostrada = objetivo; reloj.parar(); }
+  dibujar();
+});
+
+function leerEscalera(){
+  objetivo = resistencia();
+  if(!reloj.anda()) reloj.andar();
+  const orden = E.slice().sort((a, b) => a.d - b.d);
+  const duro = orden.find(x => MODOS.some(([k]) => x[k] === "duro"));
+  let f = "", s = "";
+  if(!E.length){ f = "La resistencia crece con cada ensayo logrado"; s = "Se agregan situaciones en el paso 3."; }
+  else if(duro){
+    const k = MODOS.find(([k]) => duro[k] === "duro");
+    const antes = orden.filter(x => x.d < duro.d).pop();
+    f = "Esa dosis fue demasiado fuerte";
+    s = (antes ? "Volver a «" + antes.t + "» en " + k[1].toLowerCase() + " antes de repetirla. " : "Repetirla en un formato más suave. ") +
+        "¿Qué se aprendió del intento?";
+  } else {
+    const sig = orden.find(x => MODOS.some(([k]) => x[k] !== "ok"));
+    if(!sig){ f = "Todas las dosis ensayadas"; s = "Queda anticipar los tropiezos."; }
+    else {
+      const k = MODOS.find(([k]) => sig[k] !== "ok");
+      const lista = sig.d <= objetivo + .5;
+      f = lista ? "Siguiente: «" + sig.t + "», " + k[1].toLowerCase() : "La próxima dosis todavía es alta";
+      s = lista ? "La dosis sube solo después de varios éxitos." : "Conviene sumar ensayos logrados en las dosis más bajas antes de subir.";
+    }
+  }
+  $("fase").textContent = f; $("faseSub").textContent = s;
+}
+
+function cambio(){ leer(); Kit.guardar(); }
+function leer(){ pintarAspectos(); pintarEscalera(); leerEscalera(); }
+
+function resumen(){
+  const l = [];
+  const si = A.filter(x => x.c).map(x => x.t), no = A.filter(x => !x.c).map(x => x.t);
+  if(si.length) l.push("Se puede cambiar: " + si.join("; "));
+  if(no.length) l.push("No se puede cambiar: " + no.join("; "));
+  const p = Kit.activas("afProblema"), e = Kit.activas("afEmocion"), s = Kit.activas("senales");
+  if(p.length) l.push("Afrontamiento del problema: " + p.join(", "));
+  if(e.length) l.push("Regulación de la emoción: " + e.join(", "));
+  if(s.length) l.push("Señales tempranas: " + s.join(", "));
+  if(E.length){
+    l.push("", "DOSIS (imaginación / roles / vida real)");
+    E.slice().sort((a, b) => a.d - b.d).forEach(x => l.push("  " + x.d + ". " + x.t + " — " +
+      MODOS.map(([k]) => x[k] === "ok" ? "✓" : x[k] === "duro" ? "✗" : "·").join(" / ")));
+  }
+  const r = $("riesgo").value.trim(), f = $("siFallo").value.trim();
+  if(r || f) l.push("", "TROPIEZOS: " + [r, f].filter(Boolean).join(" · "));
+  return l.join("\n");
+}
+
+Kit.chips("afProblema", AF_PROBLEMA);
+Kit.chips("afEmocion", AF_EMOCION);
+Kit.chips("senales", SENALES);
+
+Kit.iniciar({ clave: "tcc-inoculacion-de-estres", alCambiar: leer, resumen: resumen,
+  extra: () => ({a: A, e: E}), restaurar: d => { A = d.a || []; E = d.e || []; } });

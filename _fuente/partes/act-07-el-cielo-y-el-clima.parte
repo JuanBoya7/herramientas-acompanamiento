@@ -1,0 +1,274 @@
+@@meta
+archivo: act-el-cielo-y-el-clima.html
+titulo: El cielo y el clima
+orden: 07
+enfoque: ACT
+etiqueta: Dejar espacio
+sub: Por malo que sea el clima, el cielo tiene espacio para él, y el clima no lo daña. Tarde o temprano cambia. Lo difícil se nombra, se le da forma y se deja ahí, en el cielo; la respiración va hacia adentro y alrededor. Lo que crece es el espacio, no el clima.
+fuente: Dejar espacio, en OPS, En tiempos de estrés, haz lo que importa: guía ilustrada, versión para América Latina (2022), parte 5.
+resumen: Se nombra un pensamiento o sentimiento difícil y se le da forma, tamaño, color y temperatura. Durante la práctica ese clima cambia por su cuenta mientras la respiración le hace espacio. Antes y después se califica cuánto se está luchando con él, y se acuerdan los momentos para practicar.
+@@css
+  .cielo{display:block;width:100%;max-width:440px;height:auto;margin:0 auto}
+  .fase{font-size:20px;font-weight:700;text-align:center;margin:6px 0 2px;color:var(--acento);min-height:28px}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:540px;margin:0 auto;
+    min-height:40px;line-height:1.5}
+  button.arrancar{background:#3f9b86;border-color:#3f9b86;color:#fff;font-weight:600}
+  button.arrancar:hover{background:#357f6e;border-color:#357f6e}
+  .rasgos{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;align-items:center;margin-top:12px}
+  .rasgos .r{font-size:12.5px;color:var(--tinta-suave);text-transform:uppercase;letter-spacing:.4px}
+  @media (max-width:560px){.rasgos{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Darse cuenta y ponerle nombre</h2>
+  <p class="ayuda">Un pensamiento o un sentimiento difícil, el que esté ahora. Después se le da forma
+  como si fuera un objeto: un ladrillo marrón, frío y pesado sobre el pecho.</p>
+  <div class="cuerpo">
+    <div class="chips" id="nombre"></div>
+    <div class="rasgos">
+      <span class="r">Forma</span><div class="chips" id="forma"></div>
+      <span class="r">Tamaño</span><div class="chips" id="tamano"></div>
+      <span class="r">Color</span><div class="chips" id="color"></div>
+      <span class="r">Temperatura</span><div class="chips" id="temp"></div>
+      <span class="r">Dónde</span><div class="chips" id="donde"></div>
+    </div>
+    <div class="medidor" style="margin-top:16px">
+      <label for="antes">¿Cuánto estás luchando con esto?</label>
+      <input type="range" id="antes" min="0" max="10" value="6">
+      <span class="valor" id="vAntes">6</span>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="cielo" id="cielo" viewBox="0 0 440 280" role="img"
+    aria-label="Un cielo que se abre alrededor de un clima que cambia solo"></svg>
+  <div class="fase" id="fase">Listo para empezar</div>
+  <div class="fase-sub" id="faseSub">Siéntate cómodo y centra la atención en lo que nombraste.</div>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#3f9b86">2:00</span><span class="r">quedan</span></div>
+  </div>
+  <div class="duracion" id="tiempo">
+    <button type="button" class="chip activa" id="t120">2 minutos</button>
+    <button type="button" class="chip" id="t240">4 minutos</button>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" onclick="detener()">Detener</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Después</h2>
+  <p class="ayuda">El objetivo no era que se fuera: era dejarle espacio. Puede haber crecido, encogido,
+  quedado igual o desaparecido.</p>
+  <div class="cuerpo">
+    <div class="chips" id="paso"></div>
+    <div class="medidor" style="margin-top:14px">
+      <label for="despues">¿Cuánto estás luchando con esto ahora?</label>
+      <input type="range" id="despues" min="0" max="10" value="6">
+      <span class="valor" id="vDespues">6</span>
+    </div>
+    <div id="lectura"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Practicar, practicar, practicar</h2>
+  <p class="ayuda">Con un pensamiento también sirve imaginarlo como palabras en las páginas de un
+  libro: el libro sobre el regazo, o bajo el brazo, mientras se conecta con lo que hay alrededor.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Cuándo</label>
+    <div class="chips" id="cuando"></div>
+    <label class="etiqueta">Además</label>
+    <div class="chips" id="ademas"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const NOMBRE = ["Tristeza", "Miedo", "Rabia", "Culpa", "«Soy débil»", "Un dolor en el cuerpo"];
+const FORMA = ["Ladrillo", "Piedra", "Nudo", "Nube"];
+const TAMANO = ["Pequeño", "Mediano", "Grande"];
+const COLORES = {"Marrón":"#8a5a3b", "Gris":"#7b8490", "Rojo":"#b0503f", "Negro":"#3a3d44", "Azul":"#4f6fa8"};
+const TEMP = ["Frío", "Tibio", "Caliente"];
+const DONDE = ["Pecho", "Garganta", "Estómago", "Cabeza", "Hombros"];
+const PASO = ["Creció", "Se encogió", "Se quedó igual", "Desapareció", "Se movió de lugar",
+  "Luché con él"];
+const CUANDO = ["En la cama, cuando no puedo dormir", "Cuando aparece un dolor en el cuerpo",
+  "Cuando me doy cuenta de que me enganché"];
+const ADEMAS = ["El pensamiento como palabras en un libro"];
+
+const unaSola = ["forma", "tamano", "color", "temp"];
+function unica(id){
+  $(id).addEventListener("click", e => {
+    const b = e.target.closest(".chip");
+    if(!b || !b.hasAttribute("data-txt")) return;
+    $(id).querySelectorAll(".chip.activa").forEach(c => { if(c !== b) c.classList.remove("activa"); });
+  }, true);
+}
+const uno = id => Kit.activas(id)[0] || "";
+
+/* ---------- la respiración: vaciar, entrar, salir, contar hasta tres ---------- */
+const CICLO = [["Deja ir el aire", "hasta vaciar los pulmones", 4, "sale"],
+               ["Toma aire lentamente", "hacia adentro y alrededor de lo difícil", 5, "entra"],
+               ["Deja ir el aire", "lentamente, dejándole espacio", 5, "sale"],
+               ["Pausa", "1 · 2 · 3", 3, "pausa"]];
+const LARGO = CICLO.reduce((a, c) => a + c[2], 0);
+let total = 120, quedan = 120, t = 0, deriva = 0, escala = 1, meta = 1;
+
+function fase(){
+  let x = t % LARGO;
+  for(const c of CICLO){ if(x < c[2]) return [c, x / c[2]]; x -= c[2]; }
+  return [CICLO[0], 0];
+}
+
+/* el cielo: crece un poco con cada ciclo y respira; el clima va a su ritmo */
+function dibujar(){
+  const svg = $("cielo");
+  svg.innerHTML = "";
+  const ciclos = Math.floor(t / LARGO);
+  const [c, p] = t > 0 ? fase() : [null, 0];
+  let resp = 0;
+  if(c){ resp = c[3] === "entra" ? p : c[3] === "sale" ? (c === CICLO[0] ? 0 : 1 - p) : 0; }
+  const r = Math.min(200, 100 + Math.min(ciclos, 8) * 8) + resp * 22;
+
+  const def = Kit.svg("defs", {});
+  const grad = Kit.svg("radialGradient", {id:"gCielo", cx:"50%", cy:"45%", r:"60%"});
+  grad.appendChild(Kit.svg("stop", {offset:"0%", "stop-color":"#dff0fb"}));
+  grad.appendChild(Kit.svg("stop", {offset:"100%", "stop-color":"#a9cfe8"}));
+  def.appendChild(grad);
+  svg.appendChild(def);
+  svg.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78, fill:"url(#gCielo)"}));
+  svg.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78, fill:"none",
+    stroke:"#8fbfdc", "stroke-width":1.5, "stroke-dasharray":"3 5"}));
+
+  /* el clima */
+  const col = COLORES[uno("color")] || "#7b8490";
+  const base = {"Pequeño":.7, "Mediano":1, "Grande":1.35}[uno("tamano")] || 1;
+  const s = base * escala;
+  const x = 220 + Math.sin(deriva) * 26, y = 138 + Math.cos(deriva * .7) * 10;
+  const g = Kit.svg("g", {transform:`translate(${x} ${y}) scale(${s})`});
+  const forma = uno("forma") || "Nube";
+  if(forma === "Ladrillo")
+    g.appendChild(Kit.svg("rect", {x:-38, y:-18, width:76, height:36, rx:4, fill:col}));
+  else if(forma === "Piedra")
+    g.appendChild(Kit.svg("path", {d:"M-36 8 C-40 -14 -14 -28 8 -24 C30 -22 42 -6 36 10 C30 26 -30 28 -36 8 Z", fill:col}));
+  else if(forma === "Nudo")
+    g.appendChild(Kit.svg("path", {d:"M-34 0 C-34 -26 0 -26 0 0 C0 26 34 26 34 0 C34 -26 0 -26 0 0 C0 26 -34 26 -34 0 Z",
+      fill:"none", stroke:col, "stroke-width":9, "stroke-linejoin":"round"}));
+  else
+    g.appendChild(Kit.svg("path", {d:"M-40 14 C-52 14 -52 -6 -38 -6 C-38 -24 -14 -28 -6 -16 C0 -30 26 -28 26 -10 " +
+      "C40 -12 46 12 32 14 Z", fill:col}));
+  const temp = uno("temp");
+  if(temp === "Caliente")
+    g.appendChild(Kit.svg("circle", {cx:0, cy:0, r:48, fill:"#e0703a", "fill-opacity":.12}));
+  if(temp === "Frío")
+    [-24, 0, 24].forEach(dx => {
+      const copo = Kit.svg("text", {x:dx, y:40, "text-anchor":"middle", "font-size":13, fill:"#4f6fa8"});
+      copo.textContent = "✻";
+      g.appendChild(copo);
+    });
+  svg.appendChild(g);
+
+  const n = Kit.activas("nombre").join(", ");
+  if(n){
+    const tx = Kit.svg("text", {x:220, y:268, "text-anchor":"middle", "font-size":13, fill:"#55616d"});
+    tx.textContent = n + (Kit.activas("donde").length ? " · " + Kit.activas("donde").join(", ").toLowerCase() : "");
+    svg.appendChild(tx);
+  }
+}
+
+function pintarReloj(){
+  const s = Math.max(0, Math.ceil(quedan));
+  $("mReloj").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+}
+
+let cambio = 0;
+const reloj = Kit.reloj(dt => {
+  t += dt; quedan -= dt; deriva += dt * .35;
+  /* el clima cambia por su cuenta: a veces crece, a veces encoge */
+  cambio -= dt;
+  if(cambio <= 0){ meta = .8 + Math.random() * .45; cambio = 6 + Math.random() * 6; }
+  escala += (meta - escala) * Math.min(1, dt * .4);
+  const [c] = fase();
+  $("fase").textContent = c[0];
+  $("faseSub").textContent = c[1];
+  dibujar();
+  if(quedan <= 0) terminar();
+  pintarReloj();
+});
+
+function arrancar(){
+  if(reloj.anda()) return;
+  if(quedan <= 0) quedan = total;
+  t = 0; escala = 1;
+  $("btnArrancar").textContent = "En curso…";
+  reloj.andar();
+}
+function detener(){
+  reloj.parar();
+  $("fase").textContent = "Detenido";
+  $("faseSub").textContent = "Vuelve a conectar con lo que hay alrededor.";
+  $("btnArrancar").textContent = "Empezar";
+}
+function terminar(){
+  reloj.parar();
+  quedan = total;
+  $("fase").textContent = "Terminó";
+  $("faseSub").textContent = "Lo difícil sigue en el cielo. Conecta con lo que te rodea: qué ves, qué oyes.";
+  $("btnArrancar").textContent = "Otra vez";
+  Kit.brindis("Práctica terminada");
+}
+$("tiempo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b || reloj.anda()) return;
+  $("tiempo").querySelectorAll(".chip").forEach(c => c.classList.toggle("activa", c === b));
+  total = quedan = +b.id.slice(1); pintarReloj();
+});
+
+function leer(){
+  const a = +$("antes").value, d = +$("despues").value;
+  $("vAntes").textContent = a; $("vDespues").textContent = d;
+  const p = Kit.activas("paso");
+  let html = "";
+  if(p.indexOf("Luché con él") >= 0)
+    html += `<div class="pistas">Es lo que la mente hace por costumbre. Al notarlo, se vuelve a
+      respirar hacia adentro y alrededor, sin tratar de sacarlo.</div>`;
+  if(p.length && d < a)
+    html += `<div class="logro">La lucha bajó ${a - d} ${a - d === 1 ? "punto" : "puntos"}, haya
+      pasado lo que haya pasado con el clima.</div>`;
+  else if(p.length && d >= a)
+    html += `<div class="pistas">Sin cambio en la lucha. Es una habilidad: crece con la práctica.</div>`;
+  $("lectura").innerHTML = html;
+  if(!reloj.anda()) dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const n = Kit.activas("nombre");
+  if(n.length) l.push("Lo difícil: " + n.join(", "));
+  const r = [uno("forma"), uno("tamano").toLowerCase(), uno("color").toLowerCase(), uno("temp").toLowerCase()]
+    .filter(Boolean).join(", ");
+  if(r) l.push("Como objeto: " + r + (Kit.activas("donde").length ? " · en " + Kit.activas("donde").join(", ").toLowerCase() : ""));
+  l.push("Práctica de " + (total / 60) + " min · lucha antes: " + $("antes").value + "/10 · después: " + $("despues").value + "/10");
+  const p = Kit.activas("paso");
+  if(p.length) l.push("Qué pasó: " + p.join(", "));
+  const c = Kit.activas("cuando").concat(Kit.activas("ademas"));
+  if(c.length) l.push("", "PRÁCTICA: " + c.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("nombre", NOMBRE, leer);
+Kit.chips("forma", FORMA, leer, true);
+Kit.chips("tamano", TAMANO, leer, true);
+Kit.chips("color", Object.keys(COLORES), leer, true);
+Kit.chips("temp", TEMP, leer, true);
+Kit.chips("donde", DONDE, leer);
+Kit.chips("paso", PASO, leer);
+Kit.chips("cuando", CUANDO);
+Kit.chips("ademas", ADEMAS, null, true);
+unaSola.forEach(unica);
+$("antes").addEventListener("input", leer);
+$("despues").addEventListener("input", leer);
+dibujar(); pintarReloj();
+
+Kit.iniciar({ clave: "act-el-cielo-y-el-clima", alCambiar: leer, resumen: resumen });

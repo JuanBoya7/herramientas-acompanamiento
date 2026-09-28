@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>La cuerda y el monstruo</title>
+<title>Balance decisional</title>
 <style>
   :root{
     --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
@@ -299,81 +299,88 @@
     textarea{min-height:0;height:auto}
   }
 
-  button.jalar{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600}
-  button.jalar:hover{background:#763333;border-color:#763333}
-  button.jalar:disabled{background:#d3bdbd;border-color:#d3bdbd}
-  button.soltar{background:#3f7d5a;border-color:#3f7d5a;color:#fff;font-weight:600}
-  button.soltar:hover{background:#356b4d;border-color:#356b4d}
-  button.arranque{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
-  button.arranque:hover{background:#28607c;border-color:#28607c}
-
-  /* el globo que se abre sobre el sujeto cuando suelta la cuerda */
-  .bocadillo{position:relative;max-width:520px;margin:16px auto 4px;border:2px solid #3f7d5a;
-    border-radius:14px;padding:13px 16px;background:#f4faf6}
-  /* la punta mira hacia arriba, hacia la persona que acaba de soltar */
-  .bocadillo::after{content:"";position:absolute;left:26%;top:-11px;width:18px;height:18px;
-    background:#f4faf6;border-left:2px solid #3f7d5a;border-top:2px solid #3f7d5a;
-    transform:rotate(45deg)}
-  .bocadillo .titulin{font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
-    color:#3f7d5a;margin-bottom:8px}
-  .bocadillo .chip.activa{background:#3f7d5a;border-color:#3f7d5a}
-  .bocadillo .chip.mas{color:#3f7d5a}
-
-  .pregunta-sola{border-left-color:#8a3d3d;background:linear-gradient(180deg,#fdf7f5,#fff)}
-  .pregunta-sola.libre{border-left-color:#3f7d5a;background:linear-gradient(180deg,#f4faf6,#fff)}
-  .pregunta-sola.libre .pregunta{color:#2c5a44}
+  .balanza{display:block;width:100%;max-width:620px;height:auto;margin:0 auto}
+  .celdas4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .celda{border:1px solid var(--linea);border-radius:10px;padding:11px 12px;background:#fbfcfd;border-top:4px solid var(--c)}
+  .celda .tit{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--c);margin-bottom:2px}
+  .celda .lado{font-size:12px;color:var(--tinta-suave);margin-bottom:8px}
+  .razones{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;min-height:6px}
+  .razon{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--linea);border-radius:8px;
+    padding:6px 8px;font-size:14px;cursor:pointer;user-select:none}
+  .razon .peso{display:flex;gap:3px;flex:none}
+  .razon .peso i{width:8px;height:8px;border-radius:50%;background:#dfe5e8}
+  .razon .peso i.on{background:var(--c)}
+  .razon .t{flex:1}
+  .razon .x{flex:none;color:var(--tinta-suave);font-size:16px;line-height:1;padding:0 2px}
+  .agregar{display:flex;gap:6px}
+  .agregar input{flex:1;min-width:0}
+  .agregar button{padding:6px 11px;font-size:13px}
+  .sugeridas{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+  .sugeridas button{font-size:12px;padding:3px 9px;border-radius:20px;border-style:dashed;color:var(--tinta-suave)}
+  .respuesta{margin:0 0 12px}
+  .respuesta .r{font-size:14px;font-weight:600;margin-bottom:5px}
+  .respuesta textarea{min-height:50px}
+  .pasos-obj input{margin-bottom:7px}
+  @media (max-width:640px){.celdas4{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="envoltura">
 
 <header class="tapa">
-  <h1>La cuerda y el monstruo</h1>
-  <p class="sub">Hay un monstruo al otro lado de un hoyo sin fondo y una cuerda entre los dos. En cuanto empieza, él jala solo: no espera a que decidas nada. Jalar te devuelve unos centímetros y le da fuerza a él, así que cada vez duran menos. Soltar no lo hace desaparecer ni lo hace caer, y es lo único que detiene el arrastre.</p>
-  <p class="fuente">Metáfora de la lucha con el monstruo y el control como problema, en Díaz Corbobés, MANUAL ACT §3.2, dentro del trabajo de desesperanza creativa y aceptación.</p>
-
+  <h1>Balance decisional</h1>
+  <p class="sub">Cuatro celdas: lo bueno y lo malo de cambiar, y lo bueno y lo malo de seguir igual. Cada razón se pone donde va y se le da peso; la balanza se inclina sola. Seguir igual también tiene beneficios, y nombrarlos es lo que permite responderles. Termina en un objetivo concreto y sus primeros pasos.</p>
+  <p class="fuente">Hoja de balance decisional y hoja para el establecimiento de objetivos de tratamiento, en Barlow et al., Protocolo unificado para el tratamiento transdiagnóstico de los trastornos emocionales, módulo 1 (caps. 5 del manual del terapeuta y 4 del manual del paciente).</p>
+  <div class="campos-id">
+    <label>Nombre o iniciales <input type="text" id="nombre" placeholder="Opcional"></label>
+    <label>Fecha <input type="text" id="fecha"></label>
+    <label>Sesión <input type="text" id="sesion" placeholder="Ej. Sesión 3"></label>
+    <label class="solo-clinica">Profesional <input type="text" id="profesional" placeholder="Quien acompaña"></label>
+  </div>
 </header>
 
 <section class="paso">
-  <h2><span class="num">1</span>¿Con quién estás jalando?</h2>
-  <p class="ayuda">No es una persona ni una situación: es lo de adentro contra lo que llevas años
-  haciendo fuerza.</p>
+  <h2><span class="num">1</span>Las cuatro celdas</h2>
+  <p class="ayuda">Cada razón va en su celda. Un toque sobre ella cambia su peso, de uno a tres
+  puntos. Vale la pena llenar todas: suele costar encontrar lo bueno de seguir igual.</p>
   <div class="cuerpo">
-    <div class="chips" id="monstruo"></div>
-    <div class="medidor" style="margin-top:16px">
-      <label for="tamano">Qué tan grande está hoy</label>
-      <input type="range" id="tamano" min="1" max="10" value="6">
-      <span class="valor" id="vTamano">6</span>
-    </div>
+    <label class="etiqueta" for="cambio">El cambio</label>
+    <input type="text" id="cambio" placeholder="Ej. dejar de evitar las reuniones con gente nueva">
+    <div class="celdas4" id="celdas" style="margin-top:12px"></div>
   </div>
 </section>
 
 <div class="escenario">
-  <svg id="tira" viewBox="0 0 700 340" role="img"
-    aria-label="Tira y afloja con el monstruo sobre un hoyo sin fondo"></svg>
-
-  <div class="bocadillo" id="bocadillo" hidden>
-    <div class="titulin">Con las manos libres</div>
-    <div class="chips" id="manosLibres"></div>
-  </div>
-
+  <svg class="balanza" id="balanza" viewBox="0 0 620 250" role="img"
+    aria-label="Una balanza con las razones para cambiar a un lado y las razones para seguir igual al otro"></svg>
   <div class="marcas">
-    <div><span class="n" id="mJalones" style="color:#8a3d3d">0</span><span class="r">jalones</span></div>
-    <div><span class="n" id="mBorde" style="color:#8a3d3d">100</span><span class="r">cm del borde</span></div>
-    <div><span class="n" id="mSuelo" style="color:#3f7d5a">0</span><span class="r">seg. con la cuerda en el suelo</span></div>
-    <div><span class="n" id="mCaidas" style="color:#8a3d3d">0</span><span class="r">veces que cayó él</span></div>
+    <div><span class="n" id="mCambio" style="color:#2f6f8f">0</span><span class="r">hacia el cambio</span></div>
+    <div><span class="n" id="mIgual" style="color:#b0503f">0</span><span class="r">hacia seguir igual</span></div>
   </div>
-  <div class="mandos">
-    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Empezar</button>
-    <button type="button" class="jalar" id="btnJalar" onclick="jalar()">Jalar más fuerte</button>
-    <button type="button" class="soltar" id="btnSoltar" onclick="soltar()">Soltar la cuerda</button>
-    <button type="button" id="btnRetomar" onclick="retomar()" hidden>Volver a jalar</button>
-    <button type="button" onclick="reiniciar()">Reiniciar</button>
-  </div>
+  <div id="lecturaBalanza" style="margin-top:10px"></div>
 </div>
 
-<section class="bloque pregunta-sola" id="relato">
-  <div class="pregunta" id="preguntaRelato"></div>
+<section class="paso">
+  <h2><span class="num">2</span>Responder a las razones para seguir igual</h2>
+  <p class="ayuda">A lo bueno de seguir igual y a lo difícil de cambiar. Después de responder, se
+  puede volver a calibrar su peso arriba.</p>
+  <div class="cuerpo">
+    <div id="respuestas"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El objetivo y los primeros pasos</h2>
+  <p class="ayuda">Un objetivo general y, debajo, pasos concretos y factibles. Si un paso parece
+  demasiado grande, se pregunta qué podría hacerse antes.</p>
+  <div class="cuerpo pasos-obj">
+    <label class="etiqueta" for="objetivo">Objetivo</label>
+    <input type="text" id="objetivo" placeholder="Ej. tener más amigos">
+    <label class="etiqueta">Pasos concretos</label>
+    <input type="text" id="paso1" placeholder="Primer paso">
+    <input type="text" id="paso2" placeholder="Segundo paso">
+    <input type="text" id="paso3" placeholder="Tercer paso">
+  </div>
 </section>
 
 <details class="notas-pro">
@@ -1106,439 +1113,170 @@ var Kit = (function(){
 <script>
 const $ = Kit.$;
 
-const MONSTRUOS = ["La ansiedad","La tristeza","La culpa","El miedo a fallar"];
-const MANOS = ["Salir de la casa","Estar con mi gente"];
+/* lado: a qué platillo empuja cada celda */
+const CELDAS = [
+  {k:"cPro", tit:"Cambiar", sub:"lo bueno", lado:"cambio", c:"#2f6f8f",
+   sug:["No tendré que sufrir más", "Podré hacer lo que hoy evito", "Conocer gente nueva"]},
+  {k:"cContra", tit:"Cambiar", sub:"lo difícil", lado:"igual", c:"#b0503f",
+   sug:["Es difícil y duro", "¿Y si no funciona?", "Requiere tiempo y esfuerzo"]},
+  {k:"iPro", tit:"Seguir igual", sub:"lo bueno", lado:"igual", c:"#b0503f",
+   sug:["Es más fácil", "Es lo que acostumbro", "Evito el malestar por ahora"]},
+  {k:"iContra", tit:"Seguir igual", sub:"lo malo", lado:"cambio", c:"#2f6f8f",
+   sug:["Sigo limitado", "Evitar también cansa", "Me pierdo cosas que me importan"]}
+];
+let R = {cPro:[], cContra:[], iPro:[], iContra:[]};   /* [{t, p}] */
+let RESP = {};                                          /* texto de la razón -> respuesta */
 
-let jalones = 0, soltada = false, caido = false;
-let borde = 100;               /* centímetros que faltan para el borde del hoyo */
-let suelo = 0, mejorSuelo = 0; /* segundos seguidos con la cuerda en el suelo   */
-let arrastrado = 0;            /* centímetros que ganó él sin que hicieras nada */
-let fase = 0, rugidos = [], proximoRugido = 1.1, ultimaPregunta = "";
+function pintarCeldas(){
+  const caja = $("celdas");
+  const foco = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.celda : null;
+  caja.innerHTML = "";
+  CELDAS.forEach(cd => {
+    const e = Kit.crearEl("div", "celda");
+    e.style.setProperty("--c", cd.c);
+    e.appendChild(Kit.crearEl("div", "tit", cd.tit + " · " + cd.sub));
+    e.appendChild(Kit.crearEl("div", "lado", cd.lado === "cambio" ? "empuja hacia el cambio" : "empuja hacia seguir igual"));
+    const lista = Kit.crearEl("div", "razones");
+    R[cd.k].forEach((r, i) => {
+      const f = Kit.crearEl("div", "razon");
+      f.title = "Toca para cambiar el peso";
+      const pe = Kit.crearEl("span", "peso");
+      for(let n = 1; n <= 3; n++){ const d = document.createElement("i"); if(n <= r.p) d.className = "on"; pe.appendChild(d); }
+      f.appendChild(pe);
+      f.appendChild(Kit.crearEl("span", "t", r.t));
+      const x = Kit.crearEl("span", "x", "×");
+      x.title = "Quitar";
+      x.onclick = ev => { ev.stopPropagation(); R[cd.k].splice(i, 1); cambio(); };
+      f.appendChild(x);
+      f.onclick = () => { r.p = r.p % 3 + 1; cambio(); };
+      lista.appendChild(f);
+    });
+    e.appendChild(lista);
+    const ag = Kit.crearEl("div", "agregar");
+    const inp = document.createElement("input");
+    inp.type = "text"; inp.placeholder = "Otra razón"; inp.dataset.celda = cd.k;
+    const b = Kit.crearEl("button", "", "Agregar"); b.type = "button";
+    const poner = () => { const t = inp.value.trim(); if(!t) return; R[cd.k].push({t, p:2}); inp.value = ""; cambio(); };
+    b.onclick = poner;
+    inp.addEventListener("keydown", ev => { if(ev.key === "Enter"){ ev.preventDefault(); poner(); } });
+    ag.appendChild(inp); ag.appendChild(b);
+    e.appendChild(ag);
+    const su = Kit.crearEl("div", "sugeridas");
+    cd.sug.filter(t => !R[cd.k].some(r => r.t === t)).forEach(t => {
+      const s = Kit.crearEl("button", "", "+ " + t); s.type = "button";
+      s.onclick = () => { R[cd.k].push({t, p:2}); cambio(); };
+      su.appendChild(s);
+    });
+    e.appendChild(su);
+    caja.appendChild(e);
+    if(foco === cd.k) inp.focus();
+  });
+}
 
-const nombres = () => Kit.activas("monstruo");
-/* Cada jalón lo hace más grande. Al soltar baja un poco y ahí se queda:
-   no se va, no se cae, solo deja de alimentarse de la fuerza. */
-const tamano = () => {
-  const base = Math.min(10, +$("tamano").value + jalones * .6);
-  return soltada ? Math.max(1, base - 1) : base;
+/* ---------- la balanza ---------- */
+const pesos = () => {
+  let c = 0, g = 0;
+  CELDAS.forEach(cd => R[cd.k].forEach(r => { if(cd.lado === "cambio") c += r.p; else g += r.p; }));
+  return [c, g];
 };
-/* Lo que él jala por segundo. Empieza bajo y crece con cada jalón tuyo: por eso
-   los centímetros que recuperas cada vez te duran menos. */
-const arrastre = () => 2.4 + jalones * .95;
-
-/* ====================== EL LATIDO ====================== */
-const escena = Kit.reloj(latido);
-
-function latido(dt){
-  fase += dt;
-
-  if(!soltada && !caido){
-    const antes = borde;
-    borde = Math.max(0, borde - arrastre() * dt);
-    arrastrado += antes - borde;
-    if(borde <= 0){
-      caido = true;
-      Kit.brindis("Te caíste al hoyo. Él sigue de pie.");
-      botones();
-      Kit.guardar();
-    }
-  }
-  if(soltada){
-    suelo += dt;
-    if(suelo > mejorSuelo) mejorSuelo = suelo;
-  }
-
-  /* Ruge igual: cuando jalas, cuando sueltas y cuando no haces nada. */
-  proximoRugido -= dt;
-  if(proximoRugido <= 0){
-    const l = nombres();
-    if(l.length) rugidos.push({texto:l[Math.floor(Math.random() * l.length)], t:0});
-    proximoRugido = 2.1 + Math.random() * 1.5;
-  }
-  rugidos.forEach(r => { r.t += dt; });
-  rugidos = rugidos.filter(r => r.t < 2.4);
-
-  marcas();
-  dibujar();
-  preguntar();
-}
-
-/* ====================== FIGURAS ====================== */
-/* El monstruo: patas, brazos, melena de lobo y hocico. Crece de verdad. */
-function monstruo(padre, x, base, alto, col){
-  const g = (t, a) => padre.appendChild(Kit.svg(t, a));
-  const e = alto / 100;                       // escala respecto al alto
-  const oscuro = Kit.mezcla(col, "#241c2b", .45);
-  const cy = base - alto * .52;               // centro del cuerpo
-  const ancho = alto * .58;
-
-  /* patas traseras y delanteras */
-  [-1, 1].forEach(lado => {
-    const px = x + lado * ancho * .38;
-    g("path", {d:`M${px} ${cy + alto * .28} L${px + lado * 6 * e * 10 * .1} ${base - 6}`,
-      stroke:oscuro, "stroke-width":11 * e * 10 * .1 + 5, fill:"none", "stroke-linecap":"round"});
-    g("ellipse", {cx:px + lado * 5, cy:base - 3, rx:13 * e * 10 * .1 + 7, ry:5, fill:oscuro});
-    /* garras */
-    for(let k = -1; k <= 1; k++)
-      g("path", {d:`M${px + lado * 5 + k * 5} ${base - 4} l 0 4`, stroke:"#f0eaf2",
-        "stroke-width":1.6, "stroke-linecap":"round"});
-  });
-
-  /* cuerpo */
-  g("ellipse", {cx:x, cy:cy, rx:ancho * .55, ry:alto * .34, fill:col});
-  /* pelaje del lomo */
-  const lomo = [];
-  for(let k = 0; k <= 6; k++){
-    const t = k / 6;
-    const lx = x - ancho * .5 + t * ancho;
-    const ly = cy - alto * .3 - Math.sin(t * Math.PI) * alto * .05;
-    lomo.push(`${k ? "L" : "M"}${lx} ${ly} l ${ancho * .05} ${-alto * .05} l ${ancho * .04} ${alto * .05}`);
-  }
-  g("path", {d:lomo.join(" "), stroke:oscuro, "stroke-width":2, fill:"none",
-    "stroke-linejoin":"round"});
-
-  /* brazos que sostienen la cuerda, hacia el hoyo (a la izquierda) */
-  const hombro = [x - ancho * .3, cy - alto * .12];
-  const mano = [x - ancho * .95, cy - alto * .02];
-  g("path", {d:`M${hombro[0]} ${hombro[1]} Q ${x - ancho * .75} ${cy - alto * .2} ${mano[0]} ${mano[1]}`,
-    stroke:col, "stroke-width":alto * .13, fill:"none", "stroke-linecap":"round"});
-  g("circle", {cx:mano[0], cy:mano[1], r:alto * .08, fill:oscuro});
-
-  /* cabeza de lobo */
-  const cabX = x + ancho * .1, cabY = cy - alto * .42;
-  const rc = alto * .21;
-  /* orejas */
-  [-1, 1].forEach(lado => g("path", {
-    d:`M${cabX + lado * rc * .55} ${cabY - rc * .6} l ${lado * rc * .35} ${-rc * .85} l ${lado * rc * .18} ${rc * .75} Z`,
-    fill:oscuro}));
-  g("circle", {cx:cabX, cy:cabY, r:rc, fill:col});
-  /* melena */
-  for(let k = 0; k < 9; k++){
-    const ang = (k / 8) * Math.PI * 2;
-    g("path", {d:`M${cabX + Math.cos(ang) * rc * .95} ${cabY + Math.sin(ang) * rc * .95} ` +
-      `l ${Math.cos(ang) * rc * .32} ${Math.sin(ang) * rc * .32}`,
-      stroke:oscuro, "stroke-width":2.2, "stroke-linecap":"round"});
-  }
-  /* hocico hacia la izquierda, mirando a la persona; se abre al rugir */
-  const abre = 1 + Math.max(0, Math.sin(fase * 3.1)) * .35;
-  g("ellipse", {cx:cabX - rc * .78, cy:cabY + rc * .3, rx:rc * .55, ry:rc * .34 * abre, fill:oscuro});
-  g("circle", {cx:cabX - rc * 1.25, cy:cabY + rc * .22, r:rc * .12, fill:"#141018"});
-  /* dientes */
-  for(let k = 0; k < 3; k++)
-    g("path", {d:`M${cabX - rc * 1.05 + k * rc * .28} ${cabY + rc * .55} l ${rc * .1} ${rc * .16} l ${rc * .1} ${-rc * .16}`,
-      fill:"#fff"});
-  /* ojos */
-  [-.28, .28].forEach((d, i) => {
-    g("ellipse", {cx:cabX - rc * .18 + i * rc * .5, cy:cabY - rc * .18, rx:rc * .21, ry:rc * .17,
-      fill:"#fff", opacity:.95});
-    g("circle", {cx:cabX - rc * .16 + i * rc * .5, cy:cabY - rc * .16, r:rc * .1, fill:"#241c2b"});
-  });
-  /* ceño */
-  [-1, 1].forEach(lado => g("path", {
-    d:`M${cabX + lado * rc * .1 - rc * .04} ${cabY - rc * .44} l ${lado * rc * .38} ${rc * .12}`,
-    stroke:oscuro, "stroke-width":2.4, "stroke-linecap":"round"}));
-
-  return {mano, cabeza:[cabX, cabY - rc]};
-}
-
-/* La persona: cabeza, pelo, tronco, dos brazos y dos piernas afianzadas. */
-function persona(padre, x, base, col, estado, tiembla){
-  const g = (t, a) => padre.appendChild(Kit.svg(t, a));
-  const cad = base - 46, hom = base - 84, cab = base - 98;
-
-  if(estado === "caido"){
-    /* dentro del hoyo, con los brazos arriba */
-    const y = base + 26;
-    g("circle", {cx:x, cy:y, r:11, fill:col});
-    g("path", {d:`M${x - 5} ${y - 8} q 5 -7 10 0`, stroke:"#2c3a48", "stroke-width":3,
-      fill:"none", "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${y + 11} L${x} ${y + 26}`, stroke:col, "stroke-width":6,
-      "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${y + 15} L${x - 16} ${y - 2} M${x} ${y + 15} L${x + 16} ${y - 2}`,
-      stroke:col, "stroke-width":5, "stroke-linecap":"round"});
-    return {mano:[x, y - 2]};
-  }
-
-  const suelta = estado === "suelta";
-  /* piernas: una adelante afianzada, otra atrás */
-  g("path", {d:`M${x} ${cad} L${x - 13} ${base - 2}`, stroke:col, "stroke-width":6,
-    "stroke-linecap":"round"});
-  g("path", {d:`M${x} ${cad} L${x + (suelta ? 11 : 16)} ${base - 2}`, stroke:col,
-    "stroke-width":6, "stroke-linecap":"round"});
-  g("path", {d:`M${x - 13} ${base - 2} l -7 0 M${x + (suelta ? 11 : 16)} ${base - 2} l 8 0`,
-    stroke:col, "stroke-width":5, "stroke-linecap":"round"});
-  /* tronco: inclinado hacia atrás mientras jala, recto al soltar. Con la cuerda
-     tensa el cuerpo tiembla del esfuerzo. */
-  const inc = suelta ? 0 : -7 + tiembla;
-  g("path", {d:`M${x} ${cad} L${x + inc} ${hom}`, stroke:col, "stroke-width":8,
-    "stroke-linecap":"round"});
-  /* cabeza y pelo */
-  g("circle", {cx:x + inc, cy:cab, r:12, fill:col});
-  g("path", {d:`M${x + inc - 12} ${cab - 3} q 4 -13 12 -12 q 9 0 12 12 q -6 -6 -12 -5 q -7 1 -12 5 Z`,
-    fill:"#2c3a48"});
-  /* cara mirando al frente */
-  g("circle", {cx:x + inc + 6, cy:cab - 1, r:1.8, fill:"#fff", opacity:.9});
-
-  let mano;
-  if(suelta){
-    /* un brazo relajado, el otro señalando hacia adelante */
-    g("path", {d:`M${x} ${hom + 5} q -12 12 -14 24`, stroke:col, "stroke-width":5.5,
-      fill:"none", "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${hom + 5} q 14 8 20 2`, stroke:col, "stroke-width":5.5,
-      fill:"none", "stroke-linecap":"round"});
-    mano = [x + 20, hom + 7];
-  } else {
-    /* las dos manos agarradas a la cuerda */
-    g("path", {d:`M${x + inc} ${hom + 4} L${x + 20} ${hom + 2}`, stroke:col, "stroke-width":5.5,
-      "stroke-linecap":"round"});
-    g("path", {d:`M${x + inc} ${hom + 10} L${x + 26} ${hom + 6}`, stroke:col, "stroke-width":5.5,
-      "stroke-linecap":"round"});
-    mano = [x + 26, hom + 4];
-  }
-  return {mano};
-}
-
-/* ====================== ESCENA ====================== */
+let angulo = 0, meta = 0;
 function dibujar(){
-  const svg = $("tira");
+  const svg = $("balanza");
   svg.innerHTML = "";
-  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
-  const texto = (x, y, s, estilo) => {
-    const t = Kit.svg("text", {x, y, "text-anchor":"middle", style:estilo});
-    t.textContent = s;
+  const cx = 310, cy = 70, brazo = 210;
+  svg.appendChild(Kit.svg("path", {d:`M${cx} ${cy} L${cx - 34} 236 L${cx + 34} 236 Z`, fill:"#e3e8ea"}));
+  svg.appendChild(Kit.svg("rect", {x:cx - 70, y:234, width:140, height:8, rx:4, fill:"#cfd8dc"}));
+  const rad = angulo * Math.PI / 180;
+  const pto = s => [cx + s * brazo * Math.cos(rad), cy + s * brazo * Math.sin(rad)];
+  const [lx, ly] = pto(-1), [rx, ry] = pto(1);
+  svg.appendChild(Kit.svg("line", {x1:lx, y1:ly, x2:rx, y2:ry, stroke:"#55616d", "stroke-width":5, "stroke-linecap":"round"}));
+  svg.appendChild(Kit.svg("circle", {cx:cx, cy:cy, r:8, fill:"#55616d"}));
+  const platillo = (x, y, lado, col, rot) => {
+    svg.appendChild(Kit.svg("line", {x1:x, y1:y, x2:x - 52, y2:y + 70, stroke:"#9aa5ab"}));
+    svg.appendChild(Kit.svg("line", {x1:x, y1:y, x2:x + 52, y2:y + 70, stroke:"#9aa5ab"}));
+    svg.appendChild(Kit.svg("path", {d:`M${x - 62} ${y + 70} Q${x} ${y + 98} ${x + 62} ${y + 70} Z`, fill:col, "fill-opacity":.18,
+      stroke:col, "stroke-width":1.5}));
+    /* los bloques: uno por razón, alto según su peso */
+    const bl = [];
+    CELDAS.filter(cd => cd.lado === lado).forEach(cd => R[cd.k].forEach(r => bl.push(r.p)));
+    let bx = x - 50, by = y + 70;
+    bl.forEach(p => {
+      const h = 5 + p * 5;
+      if(bx > x + 38){ bx = x - 50; by -= 16; }
+      svg.appendChild(Kit.svg("rect", {x:bx, y:by - h, width:12, height:h, rx:2, fill:col, "fill-opacity":.75}));
+      bx += 14;
+    });
+    const t = Kit.svg("text", {x:x, y:y + 116, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:col});
+    t.textContent = rot;
     svg.appendChild(t);
   };
-
-  const SUELO = 250, HX0 = 260, HX1 = 440;
-
-  g("rect", {x:0, y:0, width:700, height:SUELO, fill:"#f5f9fb"});
-  g("rect", {x:0, y:SUELO, width:HX0, height:340 - SUELO, fill:"#c9b291"});
-  g("rect", {x:HX1, y:SUELO, width:700 - HX1, height:340 - SUELO, fill:"#c9b291"});
-
-  const defs = Kit.svg("defs", {});
-  const hoyo = Kit.svg("linearGradient", {id:"hoyo", x1:"0", y1:"0", x2:"0", y2:"1"});
-  hoyo.appendChild(Kit.svg("stop", {offset:"0", "stop-color":"#4a4034"}));
-  hoyo.appendChild(Kit.svg("stop", {offset:"1", "stop-color":"#120f0c"}));
-  defs.appendChild(hoyo);
-  svg.appendChild(defs);
-  g("rect", {x:HX0, y:SUELO, width:HX1 - HX0, height:340 - SUELO, fill:"url(#hoyo)"});
-  g("ellipse", {cx:(HX0 + HX1) / 2, cy:SUELO, rx:(HX1 - HX0) / 2, ry:11, fill:"#241e18"});
-
-  const t = tamano();
-  /* respira: el alto late un poco aunque nadie toque nada */
-  const alto = (52 + t * 11) * (1 + Math.sin(fase * 1.7) * .018);
-  const mx = HX1 + 92;
-  const mCol = Kit.mezcla("#9a8fa8", "#5c3f6e", t / 10);
-
-  const tenso = escena.anda() && !soltada && !caido;
-  const tiembla = tenso ? Math.sin(fase * 21) * 1.3 : 0;
-  const px = caido ? (HX0 + HX1) / 2 - 6 : HX0 - 30 - borde * 1.55;
-  const pCol = soltada ? "#3f7d5a" : "#3f5163";
-
-  const capaM = Kit.svg("g", {});
-  svg.appendChild(capaM);
-  const m = monstruo(capaM, mx, SUELO, alto, mCol);
-
-  const capaP = Kit.svg("g", {});
-  svg.appendChild(capaP);
-  const p = persona(capaP, px, SUELO, pCol, caido ? "caido" : soltada ? "suelta" : "jala", tiembla);
-
-  if(soltada){
-    /* la cuerda tirada en el suelo, de un lado al otro del hoyo */
-    g("path", {d:`M${px + 24} ${SUELO - 2} q 40 10 ${HX0 - px - 40} 6`,
-      stroke:"#b9a98c", "stroke-width":3.5, fill:"none", "stroke-linecap":"round", opacity:.8});
-    g("path", {d:`M${HX1 + 4} ${SUELO - 4} Q ${m.mano[0] - 20} ${SUELO + 2} ${m.mano[0]} ${m.mano[1]}`,
-      stroke:"#b9a98c", "stroke-width":3.5, fill:"none", "stroke-linecap":"round", opacity:.8});
-    /* El globo va por encima de la cabeza, no apoyado en ella: la coronilla
-       queda en SUELO-110 y la cola del globo baja 49 px desde su borde, así
-       que la caja arranca en SUELO-172 y quedan unos treinta píxeles de aire. */
-    globo(svg, px, SUELO - 172, Kit.activas("manosLibres"));
-  } else {
-    /* la cuerda tensa por encima del hoyo: se comba menos cuanto más se jala */
-    const combado = caido ? 40
-      : Math.max(4, 26 - jalones * 2) + (tenso ? Math.sin(fase * 15) * 1.6 : 0);
-    g("path", {d:`M${p.mano[0]} ${p.mano[1]} Q ${(px + mx) / 2} ${p.mano[1] + combado} ` +
-      `${m.mano[0]} ${m.mano[1]}`, stroke:"#8a7a5f", "stroke-width":4, fill:"none",
-      "stroke-linecap":"round"});
-  }
-
-  /* lo que grita mientras tanto, jales o no jales */
-  rugidos.forEach(r => {
-    const op = r.t < .3 ? r.t / .3 : Math.max(0, 1 - (r.t - .3) / 2.1);
-    const y = m.cabeza[1] - 12 - r.t * 26;
-    const corto = r.texto.length > 22 ? r.texto.slice(0, 21) + "…" : r.texto;
-    texto(m.cabeza[0] + 26, y, "«" + corto + "»",
-      `font:600 12.5px system-ui;fill:#5c3f6e;opacity:${op.toFixed(2)};` +
-      `paint-order:stroke;stroke:#f5f9fb;stroke-width:3;stroke-linejoin:round`);
-  });
-
-  const et = nombres().length ? nombres().join(" · ") : "el monstruo";
-  texto(mx, SUELO - alto - 34, et.length > 34 ? et.slice(0, 33) + "…" : et,
-    `font:600 13px system-ui;fill:${mCol}`);
-  texto(HX0 - 62, SUELO + 62, "un hoyo sin fondo", "font:11.5px system-ui;fill:#8a7f74");
+  platillo(lx, ly, "cambio", "#2f6f8f", "Hacia el cambio");
+  platillo(rx, ry, "igual", "#b0503f", "Hacia seguir igual");
 }
-
-/* Globo de pensamiento sobre la persona con lo que hará con las manos libres. */
-function globo(svg, x, y, lista){
-  const txt = lista.length ? lista.join(" · ") : "…";
-  const corto = txt.length > 40 ? txt.slice(0, 39) + "…" : txt;
-  const ancho = Math.max(76, 18 + corto.length * 6.6);
-  const gg = Kit.svg("g", {transform:`translate(${x - ancho / 2},${y})`});
-  svg.appendChild(gg);
-  const p = (t, a) => gg.appendChild(Kit.svg(t, a));
-  p("rect", {x:0, y:0, width:ancho, height:30, rx:15, fill:"#f4faf6", stroke:"#3f7d5a",
-    "stroke-width":2});
-  p("circle", {cx:ancho / 2 - 4, cy:38, r:5, fill:"#f4faf6", stroke:"#3f7d5a", "stroke-width":2});
-  p("circle", {cx:ancho / 2 + 4, cy:49, r:3.2, fill:"#f4faf6", stroke:"#3f7d5a", "stroke-width":1.8});
-  const t = Kit.svg("text", {x:ancho / 2, y:20, "text-anchor":"middle",
-    style:"font:600 12px system-ui,sans-serif;fill:#2c5a44"});
-  t.textContent = corto;
-  gg.appendChild(t);
-}
-
-/* ====================== ACCIONES ====================== */
-function arrancar(){
-  if(!nombres().length){ Kit.brindis("Primero dile cómo se llama"); return; }
-  if(caido){ Kit.brindis("Ya estás dentro del hoyo. Solo queda soltar."); return; }
-  escena.andar();
-  botones();
-  Kit.guardar();
-}
-
-function jalar(){
-  if(!nombres().length){ Kit.brindis("Primero dile cómo se llama"); return; }
-  if(caido){ Kit.brindis("Ya estás dentro del hoyo. Solo queda soltar."); return; }
-  if(!escena.anda()) escena.andar();
-  /* jalar devuelve unos centímetros y le da fuerza a él: la próxima vez
-     los mismos centímetros duran menos */
-  borde = Math.min(100, borde + 6);
-  jalones++;
-  soltada = false;
-  suelo = 0;
-  $("btnRetomar").hidden = true;
-  $("bocadillo").hidden = true;
-  botones();
-  Kit.guardar();
-}
-
-function soltar(){
-  if(!nombres().length){ Kit.brindis("Primero dile cómo se llama"); return; }
-  soltada = true;
-  suelo = 0;
-  if(caido){                    /* sale del hoyo, pero queda justo en el borde */
-    caido = false;
-    borde = 14;
-  }
-  escena.andar();               /* la escena sigue: él no se detiene contigo */
-  $("btnRetomar").hidden = false;
-  $("bocadillo").hidden = false;
-  botones();
-  Kit.guardar();
-  setTimeout(() => $("bocadillo").scrollIntoView({behavior:"smooth", block:"center"}), 350);
-}
-
-function retomar(){
-  soltada = false;
-  suelo = 0;
-  $("btnRetomar").hidden = true;
-  $("bocadillo").hidden = true;
-  escena.andar();
-  botones();
-  Kit.guardar();
-}
-
-function reiniciar(){
-  escena.parar();
-  jalones = 0; soltada = false; caido = false;
-  borde = 100; suelo = 0; mejorSuelo = 0; arrastrado = 0;
-  rugidos = []; proximoRugido = 1.1;
-  $("btnRetomar").hidden = true;
-  $("bocadillo").hidden = true;
-  refrescar();
-  Kit.guardar();
-}
-
-function botones(){
-  $("btnJalar").disabled = caido;
-  $("btnArrancar").disabled = escena.anda();
-}
-
-function marcas(){
-  $("mJalones").textContent = jalones;
-  $("mBorde").textContent   = Math.round(borde);
-  $("mSuelo").textContent   = Math.floor(suelo);
-  $("mCaidas").textContent  = 0;
-}
-
-/* Al cargar y cuando cambia una ficha: pinta sin depender del latido. */
-function refrescar(){
-  $("vTamano").textContent = $("tamano").value;
-  botones();
-  marcas();
+const reloj = Kit.reloj(dt => {
+  angulo += (meta - angulo) * Math.min(1, dt * 4);
+  if(Math.abs(meta - angulo) < .05){ angulo = meta; reloj.parar(); }
   dibujar();
-  preguntar();
+});
+
+function leerBalanza(){
+  const [c, g] = pesos();
+  $("mCambio").textContent = c; $("mIgual").textContent = g;
+  meta = Math.max(-16, Math.min(16, (g - c) * 2.2));
+  if(!reloj.anda()) reloj.andar();
+  let html = "";
+  const vacias = CELDAS.filter(cd => !R[cd.k].length);
+  if(c + g && vacias.some(cd => cd.k === "iPro" || cd.k === "cContra"))
+    html = `<div class="pistas">Falta lo que sostiene seguir igual. Si cuesta encontrarlo: ¿qué
+      impidió cambiar antes? Nombrarlo es lo que permite responderle.</div>`;
+  else if(c + g && vacias.length)
+    html = `<div class="pistas">Queda una celda vacía. Vale la pena explorarla antes de mirar la balanza.</div>`;
+  else if(c + g)
+    html = `<div class="pregunta-sola" style="padding:10px 14px;border-radius:10px"><div class="pregunta">
+      ${c > g ? "La balanza se inclina hacia el cambio. ¿Qué es lo que más pesa de ese lado?"
+       : c < g ? "Hoy pesa más seguir igual. ¿Qué haría falta para que alguna de esas razones pesara menos?"
+       : "La balanza está en equilibrio: justo así se siente la ambivalencia."}</div></div>`;
+  $("lecturaBalanza").innerHTML = html;
 }
 
-function preguntar(){
-  const rel = $("relato");
-  rel.classList.toggle("libre", soltada);
-  let q;
-  if(soltada && suelo >= 15)
-    q = `Llevas ${Math.floor(suelo)} segundos sin jalar y él sigue ahí. ¿Qué ha pasado contigo en estos segundos?`;
-  else if(soltada)
-    q = "¿Qué cosas dejaste de hacer todos estos años porque tenías las manos ocupadas?";
-  else if(caido)
-    q = "Estás dentro del hoyo y él sigue arriba. ¿Qué te queda por probar?";
-  else if(!nombres().length)
-    q = "¿Qué es eso que más quisieras que no estuviera?";
-  else if(!escena.anda() && jalones === 0)
-    q = "¿Cómo se ve, en tu vida real, ese jalar más fuerte?";
-  else if(jalones === 0)
-    q = "Él ya está jalando y tú todavía no has hecho nada. ¿Se parece a algo?";
-  else if(jalones < 4)
-    q = "¿Cuánto te duró lo que ganaste con ese jalón?";
-  else
-    q = "Si esto no se puede ganar jalando, ¿qué es lo que no has probado?";
-  if(q !== ultimaPregunta){
-    $("preguntaRelato").textContent = q;
-    ultimaPregunta = q;
-  }
+function pintarRespuestas(){
+  const caja = $("respuestas");
+  const lista = R.iPro.map(r => ["Lo bueno de seguir igual", r.t]).concat(R.cContra.map(r => ["Lo difícil de cambiar", r.t]));
+  caja.innerHTML = lista.length ? "" : `<p class="ayuda" style="margin:0">Aparecen al llenar lo bueno de seguir igual y lo difícil de cambiar.</p>`;
+  lista.forEach(([tipo, t]) => {
+    const d = Kit.crearEl("div", "respuesta");
+    d.appendChild(Kit.crearEl("div", "r", t));
+    const ta = document.createElement("textarea");
+    ta.placeholder = tipo === "Lo bueno de seguir igual" ? "¿Cuánto cuesta en realidad seguir igual?" : "¿Qué se le puede responder?";
+    ta.value = RESP[t] || "";
+    ta.addEventListener("input", () => { RESP[t] = ta.value; Kit.guardar(); });
+    d.appendChild(ta);
+    caja.appendChild(d);
+  });
 }
 
-/* ====================== RESUMEN ====================== */
+function cambio(){ pintarCeldas(); leerBalanza(); pintarRespuestas(); Kit.guardar(); }
+function leer(){ pintarCeldas(); leerBalanza(); pintarRespuestas(); }
+
 function resumen(){
   const l = [];
-  l.push("EL MONSTRUO");
-  l.push(nombres().length ? nombres().join(" · ") : "(sin nombrar)");
-  l.push(`Tamaño declarado al empezar: ${$("tamano").value}/10`);
-  l.push("", `TIRA Y AFLOJA: ${jalones} jalones, monstruo en ${tamano().toFixed(1)}, ` +
-             `${Math.round(borde)} cm del borde, ${Math.round(arrastrado)} cm arrastrados por él, ` +
-             `0 caídas del monstruo.`);
-  l.push("Cayó al hoyo en sesión: " + (caido ? "sí" : "no"));
-  l.push("Soltó la cuerda en sesión: " + (soltada ? "sí" : "no"));
-  l.push(`Racha más larga con la cuerda en el suelo: ${Math.floor(mejorSuelo)} segundos.`);
-
-  const m = Kit.activas("manosLibres");
-  if(m.length) l.push("", "QUÉ HARÁ CON LAS MANOS LIBRES", m.join(", "));
+  const c = $("cambio").value.trim();
+  if(c) l.push("Cambio: " + c);
+  CELDAS.forEach(cd => {
+    if(R[cd.k].length) l.push(cd.tit + " · " + cd.sub + ": " + R[cd.k].map(r => r.t + " (" + r.p + ")").join("; "));
+  });
+  const [a, b] = pesos();
+  if(a + b) l.push("Balanza: " + a + " hacia el cambio · " + b + " hacia seguir igual");
+  const rs = Object.keys(RESP).filter(k => RESP[k] && RESP[k].trim() && R.iPro.concat(R.cContra).some(r => r.t === k));
+  if(rs.length){ l.push("", "RESPUESTAS"); rs.forEach(k => l.push("  " + k + " → " + RESP[k].trim())); }
+  const o = $("objetivo").value.trim(), ps = ["paso1", "paso2", "paso3"].map(i => $(i).value.trim()).filter(Boolean);
+  if(o || ps.length) l.push("", "OBJETIVO: " + (o || "—") + (ps.length ? " · pasos: " + ps.join("; ") : ""));
   return l.join("\n");
 }
 
-Kit.chips("monstruo", MONSTRUOS, refrescar);
-Kit.chips("manosLibres", MANOS, refrescar);
-$("tamano").addEventListener("input", refrescar);
-
-Kit.iniciar({
-  clave: "met-la-cuerda",
-  extra: () => ({jalones, soltada, caido, borde, mejorSuelo, arrastrado}),
-  restaurar: d => {
-    jalones = d.jalones || 0; soltada = !!d.soltada; caido = !!d.caido;
-    borde = d.borde === undefined ? 100 : d.borde;
-    mejorSuelo = d.mejorSuelo || 0; arrastrado = d.arrastrado || 0;
-    if(soltada){ $("bocadillo").hidden = false; $("btnRetomar").hidden = false; }
-  },
-  alCambiar: refrescar,
-  resumen: resumen
-});
+Kit.iniciar({ clave: "tcc-balance-decisional", alCambiar: leer, resumen: resumen,
+  extra: () => ({r: R, resp: RESP}),
+  restaurar: d => { if(d.r) R = d.r; RESP = d.resp || {}; } });
 </script>
 <!--indice-hojas-->
 <style>
@@ -1571,7 +1309,7 @@ body.ih-abierto .ih-panel{transform:none}
 @media print{.ih-boton,.ih-panel,.ih-velo{display:none !important}}
 </style>
 <button type="button" class="ih-boton" id="ih-boton">&#9776; Hojas</button>
-<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>Metáforas vivas</b><ul><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-la-cuerda.html" class="actual" aria-current="page">La cuerda y el monstruo</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li><li><a href="pp-tres-cosas-buenas.html">Tres cosas buenas y mi mejor versión</a></li></ul></div><div class="ih-g"><b>ACT</b><ul><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="act-matriz.html">La matriz</a></li><li><a href="act-los-ganchos.html">Los ganchos</a></li><li><a href="act-el-cielo-y-el-clima.html">El cielo y el clima</a></li><li><a href="act-empujar-el-papel.html">Empujar el papel</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html">Activación conductual</a></li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li><li><a href="tcc-aplazar-la-preocupacion.html">Aplazar la preocupación</a></li><li><a href="tcc-balance-decisional.html">Balance decisional</a></li><li><a href="tcc-ventana-de-sueno.html">Ventana de sueño</a></li><li><a href="tcc-lista-abc.html">Lista de tareas A-B-C</a></li><li><a href="tcc-inoculacion-de-estres.html">Inoculación de estrés</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li><a href="cft-ritmo-tranquilizador.html">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li><li><a href="cft-pausa-de-autocompasion.html">Pausa de autocompasión</a></li><li><a href="cft-el-yo-compasivo.html">El yo compasivo</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li><li><a href="crisis-importancia-y-confianza.html">Importancia y confianza</a></li></ul></div></nav>
+<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>Metáforas vivas</b><ul><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li><li><a href="pp-tres-cosas-buenas.html">Tres cosas buenas y mi mejor versión</a></li></ul></div><div class="ih-g"><b>ACT</b><ul><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="act-matriz.html">La matriz</a></li><li><a href="act-los-ganchos.html">Los ganchos</a></li><li><a href="act-el-cielo-y-el-clima.html">El cielo y el clima</a></li><li><a href="act-empujar-el-papel.html">Empujar el papel</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html">Activación conductual</a></li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li><li><a href="tcc-aplazar-la-preocupacion.html">Aplazar la preocupación</a></li><li><a href="tcc-balance-decisional.html" class="actual" aria-current="page">Balance decisional</a></li><li><a href="tcc-ventana-de-sueno.html">Ventana de sueño</a></li><li><a href="tcc-lista-abc.html">Lista de tareas A-B-C</a></li><li><a href="tcc-inoculacion-de-estres.html">Inoculación de estrés</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li><a href="cft-ritmo-tranquilizador.html">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li><li><a href="cft-pausa-de-autocompasion.html">Pausa de autocompasión</a></li><li><a href="cft-el-yo-compasivo.html">El yo compasivo</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li><li><a href="crisis-importancia-y-confianza.html">Importancia y confianza</a></li></ul></div></nav>
 <div class="ih-velo" id="ih-velo" hidden></div>
 <script>
 (function(){

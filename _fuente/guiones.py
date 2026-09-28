@@ -806,4 +806,225 @@ GUIONES = {
   "resistencia."]),
 ],
 
+
+"cft-pausa-de-autocompasion.html": [
+ ("Antes de empezar", [
+  "Primero el gesto, después las palabras. Se prueban dos o tres formas de tocarse con apoyo y se "
+  "queda la que sostenga; si ninguna, se sigue sin gesto.",
+  "La situación, leve o moderada. Con la más grave del historial se aprende a desbordarse, no a "
+  "practicar."]),
+
+ ("Cómo se propone", [
+  "«Vamos a probar algo breve para los momentos difíciles. No es para que el malestar se vaya, sino "
+  "para tratarte como tratarías a alguien que quieres cuando está mal.»",
+  "Se dice despacio, con pausas entre las frases. El guía no agrega explicaciones mientras la persona "
+  "practica."]),
+
+ ("Después", [
+  "«¿Qué notaste?» Y luego, por partes: «¿pasó algo al decir la primera frase?», «¿y con la de que a "
+  "cualquiera le pasa?», «¿necesitabas consuelo o fuerza?».",
+  "Si dice que se sintió peor, se valida sin alarma: el dolor no lo creó la práctica, estaba antes."]),
+
+ ("Lo que no se dice", [
+  "✗ «Tienes que quererte más.»",
+  "✗ «Hay gente que está peor que tú.» Es lo contrario de la humanidad compartida.",
+  "✗ «Respira y ya se te pasa.»"]),
+],
+
+"cft-el-yo-compasivo.html": [
+ ("Cómo se presenta", [
+  "Como un papel de actor. «No se trata de si ya eres así. Los actores hacen personajes muy distintos "
+  "de ellos: imaginan cómo se sentirían, qué pensarían, qué harían. Vamos a hacer lo mismo.»",
+  "Si aparece «eso no soy yo», no se discute: es justo lo que el papel permite dejar de lado."]),
+
+ ("Mientras se conduce", [
+  "Pausas largas entre cualidades. Quien acompaña no llena el silencio.",
+  "Al traer la situación: «¿Tiene sentido que se sienta así?» y «No es su culpa, ¿verdad?», con "
+  "tiempo para que responda."]),
+
+ ("Después", [
+  "«¿Cómo fue imaginarte así?» Si solo pudo imaginarlo, se valida: al principio es lo esperable.",
+  "Se practica fuera en momentos favorables, no en plena crisis."]),
+
+ ("Lo que no se dice", [
+  "✗ «Tienes que ser más compasivo contigo.»",
+  "✗ «Deja de pensar en eso y piensa en algo bonito.» No es una distracción: se vuelve a la situación."]),
+],
+
+"act-los-ganchos.html": [
+ ("Cómo se presenta", [
+  "Con preguntas, no con la explicación: «¿Cómo sabe un pez que mordió un anzuelo?» Hasta llegar a "
+  "«porque lo arrastran en otra dirección».",
+  "«¿Necesitaría entender el anzuelo, analizarlo o saber quién sostiene la caña?» Se deja que "
+  "responda que no."]),
+
+ ("Mientras el pez nada", [
+  "En cada gancho, la persona decide en voz alta. Si muerde, no se corrige: se mira adónde lo "
+  "llevó y se vuelve a soltar el pez.",
+  "«¿Qué haces tú cuando aparece este?»"]),
+
+ ("Lo que no se dice", [
+  "✗ «Eso es solo un pensamiento, no es real.»",
+  "✗ «Tienes que evitar esos ganchos.» Los ganchos siguen en el agua; se aprende a notarlos."]),
+],
+
+"act-el-cielo-y-el-clima.html": [
+ ("Cómo se presenta", [
+  "«Por malo que sea el clima, el cielo tiene espacio para él. Y el clima nunca le hace daño al "
+  "cielo. Tarde o temprano cambia.»",
+  "Primero se nombra y se le da forma. Cuanto más concreto el objeto, más fácil dejarle espacio."]),
+
+ ("Mientras dura", [
+  "Poca voz. Si la persona abre los ojos para ver si el objeto encogió, se nombra con suavidad: "
+  "«no hace falta que cambie».",
+  "En la pantalla el clima cambia solo, a veces crece: está bien. Lo que crece de verdad es el cielo."]),
+
+ ("Lo que no se dice", [
+  "✗ «Respira hasta que se te pase.»",
+  "✗ «¿Ya se fue?» Esa pregunta convierte la práctica en otra forma de lucha."]),
+],
+
+"act-empujar-el-papel.html": [
+ ("Con papel de verdad", [
+  "Si se puede, primero con hojas reales: se escribe el «papá» en una, la persona trabaja en otra, y "
+  "de pronto se le pone el papel frente a la cara. Cuando empuja, se ofrece resistencia con el brazo.",
+  "«¿Qué pasó con el informe? ¿Cuánta fuerza pusiste? ¿Qué conseguiste empujando?»"]),
+
+ ("Las preguntas que sostienen el ejercicio", [
+  "«¿Se pone el papel más fuerte o más débil cuando empujas?»",
+  "«¿Te sientes así al final del día: cansado, con los hombros tensos?»",
+  "«Si empujando solo le das más fuerza, ¿qué se te ocurre que podrías hacer?» Se moldea la respuesta "
+  "hasta que aparezca dejar de empujar."]),
+
+ ("Después", [
+  "Los binoculares: dentro de un año y dentro de cinco, empujando y sin empujar. «¿Quién estaría "
+  "mandando en tu vida?»"]),
+
+ ("Lo que no se dice", [
+  "✗ «Ese pensamiento no es cierto.» No se discute el contenido.",
+  "✗ «Ignóralo.» Dejarlo al lado no es ignorarlo: se mira y se elige dónde ponerlo."]),
+],
+
+"tcc-aplazar-la-preocupacion.html": [
+ ("Antes de proponerlo", [
+  "Primero la pregunta que abre la duda: «Si la preocupación es incontrolable, ¿cómo es que se "
+  "detiene cuando suena el teléfono? ¿Y cuando duermes?»",
+  "Distinguir con cuidado: no se controla el pensamiento que llega; se elige no seguir el proceso de "
+  "preocupación que viene después."]),
+
+ ("Cómo se presenta", [
+  "«No te pido que no tengas el pensamiento. Puede estar ahí. Solo dite: es un desencadenante, lo "
+  "dejo en paz y me ocupo más tarde.»",
+  "«Es un experimento para comprobar hasta qué punto la preocupación es incontrolable.»"]),
+
+ ("En la sesión siguiente", [
+  "No basta un «sí, lo hice». Se pregunta con qué desencadenantes, cuántas veces, y qué hizo "
+  "exactamente con el pensamiento."]),
+
+ ("Lo que no se dice", [
+  "✗ «Trata de no pensar en eso.» Es supresión, lo contrario de lo que se busca.",
+  "✗ «Tienes que usar el rato de preocupación.» No es obligatorio."]),
+],
+
+"crisis-importancia-y-confianza.html": [
+ ("Cómo se pregunta", [
+  "«En una escala del 0 al 10, ¿qué tan importante es para ti…?» Y después: «¿Por qué un 6 y no un 0?»",
+  "La respuesta es lenguaje de cambio. Se refleja y se afirma, sin agregar razones propias."]),
+
+ ("Hacia arriba", [
+  "«¿Qué haría falta para pasar de un 6 a un 8?» También evoca: lo que la persona necesita para avanzar."]),
+
+ ("Lo que no se dice", [
+  "✗ «¿Por qué no un 10?» Invita a defender el no cambio.",
+  "✗ «Pero debería ser más importante para ti.»",
+  "✗ Elogios generales como «¡qué bien!». Se afirma lo concreto: «Has sido muy constante con esto»."]),
+],
+
+"tcc-balance-decisional.html": [
+ ("Cómo se llena", [
+  "Las cuatro celdas, sin saltarse ninguna. Si queda en blanco lo bueno de seguir igual: «¿Qué te "
+  "impidió cambiar esto antes?»",
+  "Se valida: «Cambiar la propia conducta es un trabajo muy duro, sobre todo algo practicado por años.»"]),
+
+ ("Cómo se responde", [
+  "Se usa lo que la persona dijo. Si seguir igual es «más fácil»: «¿Cuánto trabajo te supone hoy "
+  "manejar esto?» Muchas veces descubre que seguir igual también cuesta.",
+  "Se refleja selectivamente lo que apoya el cambio, sin descartar lo otro."]),
+
+ ("Lo que no se dice", [
+  "✗ «Es obvio que te conviene cambiar.»",
+  "✗ Llenar las celdas por la persona. Sus razones valen porque son suyas."]),
+],
+
+"tcc-ventana-de-sueno.html": [
+ ("Cómo se presenta", [
+  "Tiene algo paradójico y conviene decirlo: a quien duerme poco se le pide pasar menos tiempo en la "
+  "cama. «Quedarse más en la cama da más oportunidad de dormir, pero el sueño sale superficial y cortado.»",
+  "Se anticipa que al principio dormirá algo menos, y que más adelante costará mantenerse despierto "
+  "hasta la hora."]),
+
+ ("Cada semana", [
+  "Lo primero de la sesión es el diario: la persona lee los números, se calcula la eficiencia y se "
+  "ajusta la ventana. Si no se revisa primero, deja de llenarse."]),
+
+ ("Lo que no se dice", [
+  "✗ «Si una noche duermes mal, quédate más en la cama al otro día.»",
+  "✗ «Levántate cuando te despiertes, a la hora que sea.» La hora de levantarse es fija."]),
+],
+
+"tcc-lista-abc.html": [
+ ("Cómo se arma", [
+  "Primero volcar todo, sin calificar. Después las letras, de a una tarea, discutiendo cada A: "
+  "«¿Tiene que estar hecha hoy o mañana?»",
+  "Se juega el día en los dos órdenes con sus propias tareas. La diferencia la ve la persona."]),
+
+ ("En la sesión siguiente", [
+  "«¿Cuándo miraste la lista?» antes que «¿qué hiciste?». Si no se miró, se revisa el momento del día "
+  "al que se ató, no la fuerza de voluntad.",
+  "Si una A se quedó sin hacer, se vuelve a calificar al día siguiente. No es un fracaso: es "
+  "información sobre cuánto cabe en un día."]),
+
+ ("Lo que no se dice", [
+  "✗ «Tienes que ser más organizado.»",
+  "✗ «Cuando encuentres la aplicación ideal, empezamos.»"]),
+],
+
+"pp-tres-cosas-buenas.html": [
+ ("Cómo se presenta el diario", [
+  "«La mente recuerda con más facilidad lo que salió mal que lo que salió bien. Quejarse es fácil; "
+  "apreciar lo bueno requiere atención y esfuerzo.»",
+  "Tres cosas cada noche, cada una con una frase sobre por qué pasó. Lo que importa es la frase."]),
+
+ ("La visualización", [
+  "Se lee despacio, con tiempo en cada pregunta. Si la persona no logra ideas concretas, una imagen "
+  "clara de la mejor versión también sirve para orientar el camino.",
+  "Después se escribe sin pensarlo mucho, tal como se visualizó."]),
+
+ ("En la sesión siguiente", [
+  "Se empieza por el diario. Si no se llenó, se reconstruye ahí mismo mirando la semana."]),
+
+ ("Lo que no se dice", [
+  "✗ «Hay gente que está peor; agradece lo que tienes.»",
+  "✗ «Tienes que ser más positivo.»"]),
+],
+
+"tcc-inoculacion-de-estres.html": [
+ ("Cómo se presenta", [
+  "Como una vacuna: «Se trata de exponerte a dosis que activen tus defensas sin vencerlas. Con cada "
+  "una que manejas, la siguiente se vuelve posible.»",
+  "El objetivo no es quitar el estrés por completo, sino usarlo: verlo como un reto o un problema "
+  "por resolver."]),
+
+ ("Al ensayar en la imaginación", [
+  "La escena incluye estresarse: la tensión que sube, el pensamiento catastrófico, y luego cómo lo "
+  "nota y lo afronta. Una escena donde todo sale bien enseña menos."]),
+
+ ("Después de cada tarea", [
+  "Preguntar como Colombo: «¿Cómo lo lograste? ¿Qué hiciste exactamente?» Que el mérito lo ponga la persona.",
+  "Si reporta un fracaso, revisar su criterio de éxito: a veces un éxito parcial se lee como fracaso total."]),
+
+ ("Lo que no se dice", [
+  "✗ «La próxima vez no te vas a estresar.»",
+  "✗ Proponer diez técnicas a la vez."]),
+],
 }

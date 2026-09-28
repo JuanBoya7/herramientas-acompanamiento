@@ -1,0 +1,323 @@
+@@meta
+archivo: act-empujar-el-papel.html
+titulo: Empujar el papel
+orden: 08
+enfoque: ACT
+etiqueta: Preocupación y rumia
+sub: Mientras se hace algo que importa, aparece en frente el pensamiento que alimenta a todos los demás, el «papá», y detrás vienen sus «hijitos». Se juegan dos rondas de un minuto: una empujándolos para que se vayan y otra dejándolos al lado de la mesa. Al final se compara cuánto se avanzó y cuánto cansancio quedó.
+fuente: Metáfora física de empujar el papel y ejercicio de enredarse y dejar estar, en Ruiz et al., Protocolo de dos sesiones de ACT centrado en el pensamiento negativo repetitivo (2018), sesión 1.
+resumen: Se identifica el «papá» de las preocupaciones, algunos «hijitos» y una tarea importante. Luego dos rondas de un minuto: en una los papeles se empujan, en la otra se ponen al lado. La hoja compara el avance y el cansancio de cada ronda y termina con la pregunta de los binoculares.
+@@css
+  .mesa{display:block;width:100%;height:auto;max-width:640px;margin:0 auto;touch-action:manipulation}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:6px auto 2px;color:var(--acento);
+    min-height:28px;max-width:600px}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:560px;margin:0 auto;min-height:22px}
+  button.arrancar{background:#3f9b86;border-color:#3f9b86;color:#fff;font-weight:600}
+  button.arrancar:hover{background:#357f6e;border-color:#357f6e}
+  button.empujar{background:#b0503f;border-color:#b0503f;color:#fff;font-weight:700;min-width:150px}
+  button.alLado{background:#fff;border-color:#3f9b86;color:#3f9b86;font-weight:700;min-width:150px}
+  .comparar{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+  .ronda{border:1px solid var(--linea);border-radius:10px;padding:12px 14px;background:#fbfcfd}
+  .ronda .t{font-size:12px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px}
+  .ronda .v{font-size:14px;line-height:1.6}
+  .ronda .v b{font-size:18px}
+  .ronda.vacia .v{color:var(--tinta-suave)}
+  @media (max-width:560px){.comparar{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>El papá y sus hijitos</h2>
+  <p class="ayuda">Si tuvieras una sola bala mágica, ¿a qué pensamiento le dispararías para que los
+  demás cayeran como un castillo de naipes? Suele ser abstracto, viejo, presente en varias áreas
+  y el que más dolería creer cierto.</p>
+  <div class="cuerpo">
+    <label class="etiqueta" for="papa">El papá</label>
+    <input type="text" id="papa" placeholder="Ej. «Soy un fracaso»">
+    <label class="etiqueta">Algunos hijitos</label>
+    <div class="chips" id="hijitos"></div>
+    <label class="etiqueta">Lo importante que estarías haciendo</label>
+    <div class="chips" id="tarea"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <div class="duracion" id="modo" style="margin:0 0 10px">
+    <button type="button" class="chip activa" id="mEmpujar">Ronda 1 · empujarlos</button>
+    <button type="button" class="chip" id="mDejar">Ronda 2 · dejarlos al lado</button>
+  </div>
+  <svg class="mesa" id="mesa" viewBox="0 0 640 300" role="img"
+    aria-label="Una hoja de trabajo sobre la mesa y papeles con pensamientos que aparecen enfrente"></svg>
+  <div class="fase" id="fase">Un minuto de trabajo</div>
+  <div class="fase-sub" id="faseSub">Los papeles aparecen solos, cuando quieren.</div>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#3f9b86">1:00</span><span class="r">quedan</span></div>
+    <div><span class="n" id="mAvance" style="color:#2f6f8f">0 %</span><span class="r">de la tarea</span></div>
+    <div><span class="n" id="mCansancio" style="color:#b0503f">0</span><span class="r">cansancio</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" class="empujar" id="btnEmpujar" onclick="empujar()" hidden>Empujar</button>
+    <button type="button" class="alLado" id="btnAlLado" onclick="alLado()" hidden>Ponerlo al lado</button>
+    <button type="button" onclick="detener()">Detener</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Las dos rondas</h2>
+  <p class="ayuda">¿Se ponía el papel más fuerte o más débil al empujarlo? ¿Cuánto se pudo avanzar
+  en cada ronda?</p>
+  <div class="cuerpo">
+    <div class="comparar">
+      <div class="ronda vacia" id="rEmpujar"><div class="t" style="color:#b0503f">Empujándolos</div>
+        <div class="v">Sin jugar todavía</div></div>
+      <div class="ronda vacia" id="rDejar"><div class="t" style="color:#3f9b86">Dejándolos al lado</div>
+        <div class="v">Sin jugar todavía</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Con unos binoculares, mírate dentro de un año. Si esto fuera una película,
+  ¿qué título tendría?</div>
+  <div class="cuerpo" style="padding:10px 0 0">
+    <label class="etiqueta" for="tituloEmpujar">Si sigues empujando</label>
+    <input type="text" id="tituloEmpujar" placeholder="El título">
+    <label class="etiqueta" for="tituloDejar">Si los dejas al lado y sigues con lo tuyo</label>
+    <input type="text" id="tituloDejar" placeholder="El título">
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El próximo mes</h2>
+  <p class="ayuda">A veces uno se descubre enredado sin darse cuenta. No pasa nada: en cada momento
+  se puede elegir, sin enredarse en por qué se enredó.</p>
+  <div class="cuerpo">
+    <div class="chips" id="practica"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const HIJITOS = ["«Voy a fracasar»", "«Me va a dejar»", "«¿Por qué no avanzo?»", "«No voy a poder»",
+  "«¿Y si me enfermo?»"];
+const TAREA = ["Estudiar", "Terminar un informe", "Jugar con mis hijos", "Conversar con mi pareja"];
+const PRACTICA = ["Notar cuándo empiezo a darle vueltas", "Elegir ponerlo al lado y seguir con lo que hacía",
+  "Hacer algo importante en vez de enredarme en por qué me enredé"];
+
+const DURA = 60;
+let modo = "empujar", quedan = DURA, avance = 0, cansancio = 0;
+let papel = null, espera = 4, fuerza = 3, golpes = 0, alLadoN = [], vez = 0, sacudir = 0;
+const RES = {empujar:null, dejar:null};
+
+const tarea = () => (Kit.activas("tarea")[0] || "lo importante").toLowerCase();
+function textos(){
+  const p = $("papa").value.trim() || "El papá";
+  const h = Kit.activas("hijitos");
+  return {p, h: h.length ? h : ["Otro pensamiento"]};
+}
+
+/* ---------- la mesa ---------- */
+function envolver(t, n){
+  const pal = t.split(" "), l = [];
+  let a = "";
+  pal.forEach(w => { if((a + " " + w).trim().length > n){ if(a) l.push(a); a = w; } else a = (a + " " + w).trim(); });
+  if(a) l.push(a);
+  return l.slice(0, 3);
+}
+function postit(svg, x, y, s, txt, col, rot){
+  const g = Kit.svg("g", {transform:`translate(${x} ${y}) rotate(${rot || 0}) scale(${s})`});
+  g.appendChild(Kit.svg("rect", {x:-55, y:-45, width:110, height:90, rx:3, fill:col, stroke:"#c9a93a",
+    "stroke-width":1, style:"filter:drop-shadow(0 2px 3px rgba(0,0,0,.18))"}));
+  envolver(txt, 14).forEach((l, i, a) => {
+    const t = Kit.svg("text", {x:0, y:(i - (a.length - 1) / 2) * 15 + 4, "text-anchor":"middle",
+      "font-size":13, "font-weight":600, fill:"#5a4a1a"});
+    t.textContent = l;
+    g.appendChild(t);
+  });
+  svg.appendChild(g);
+}
+function dibujar(){
+  const svg = $("mesa");
+  svg.innerHTML = "";
+  svg.appendChild(Kit.svg("rect", {x:0, y:0, width:640, height:300, rx:10, fill:"#efe6d8"}));
+  /* la hoja de trabajo */
+  svg.appendChild(Kit.svg("rect", {x:150, y:22, width:260, height:256, rx:4, fill:"#fff", stroke:"#d8d2c6"}));
+  const tt = Kit.svg("text", {x:280, y:46, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#2f6f8f"});
+  tt.textContent = tarea().charAt(0).toUpperCase() + tarea().slice(1);
+  svg.appendChild(tt);
+  const lineas = 13, llenas = avance / 100 * lineas;
+  for(let i = 0; i < lineas; i++){
+    const f = Math.max(0, Math.min(1, llenas - i));
+    if(f > 0) svg.appendChild(Kit.svg("rect", {x:170, y:62 + i * 16, width:(i % 4 === 3 ? 150 : 220) * f, height:5,
+      rx:2, fill:"#b9c8d3"}));
+  }
+  /* los que quedaron al lado */
+  alLadoN.forEach((t, i) => postit(svg, 520 + (i % 2) * 22, 70 + Math.floor(i / 2) * 44 + (i % 2) * 14,
+    .48, t, "#fbe99a", (i % 3 - 1) * 6));
+  if(alLadoN.length){
+    const ll = Kit.svg("text", {x:530, y:290, "text-anchor":"middle", "font-size":11, fill:"#7a6e5c"});
+    ll.textContent = "siguen en la mesa";
+    svg.appendChild(ll);
+  }
+  /* el que está enfrente */
+  if(papel){
+    const dx = sacudir > 0 ? Math.sin(sacudir * 60) * 6 : 0;
+    const s = papel.sale ? 1.3 - papel.sale * .8 : (1 + (modo === "empujar" ? (fuerza - 3) * .12 : 0));
+    const x = papel.sale ? 280 + papel.sale * (525 - 280) : 280 + dx;
+    const y = papel.sale ? 150 - papel.sale * 40 : 150;
+    postit(svg, x, y, Math.min(1.9, s * 1.3), papel.txt, "#fde67a", papel.sale ? 8 * papel.sale : -3);
+  }
+  /* el cansancio */
+  svg.appendChild(Kit.svg("rect", {x:60, y:40, width:14, height:220, rx:7, fill:"#e3d9c9"}));
+  svg.appendChild(Kit.svg("rect", {x:60, y:40 + 220 * (1 - cansancio / 100), width:14, height:220 * cansancio / 100,
+    rx:7, fill:"#b0503f"}));
+  const lc = Kit.svg("text", {x:67, y:278, "text-anchor":"middle", "font-size":10.5, fill:"#7a6e5c"});
+  lc.textContent = "cansancio";
+  svg.appendChild(lc);
+}
+
+function marcas(){
+  const s = Math.max(0, Math.ceil(quedan));
+  $("mReloj").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  $("mAvance").textContent = Math.round(avance) + " %";
+  $("mCansancio").textContent = Math.round(cansancio);
+}
+function botones(){
+  const enFrente = papel && !papel.sale;
+  $("btnEmpujar").hidden = !(enFrente && modo === "empujar" && reloj.anda());
+  $("btnAlLado").hidden = !(enFrente && modo === "dejar" && reloj.anda());
+}
+
+function aparecer(){
+  const {p, h} = textos();
+  const txt = vez === 0 ? p : h[(vez - 1) % h.length];
+  vez++;
+  papel = {txt, sale:0};
+  golpes = 0;
+  $("fase").textContent = "Aparece: " + txt;
+  $("faseSub").textContent = modo === "empujar" ? "Empújalo para que se vaya." : "Míralo y ponlo al lado, con suavidad.";
+  botones();
+}
+
+const reloj = Kit.reloj(dt => {
+  quedan -= dt;
+  if(sacudir > 0) sacudir -= dt;
+  if(papel && papel.sale){
+    papel.sale += dt * 2.2;
+    if(papel.sale >= 1){ alLadoN.push(papel.txt); papel = null; espera = 5 + Math.random() * 3; botones(); }
+  } else if(!papel){
+    avance = Math.min(100, avance + dt * 100 / 38);
+    espera -= dt;
+    if(espera <= 0) aparecer();
+    else if($("fase").textContent.indexOf("Aparece") === 0 || $("fase").textContent === "Se fue"){
+      $("fase").textContent = "Trabajando en " + tarea();
+      $("faseSub").textContent = modo === "dejar" && alLadoN.length ? "Los papeles siguen ahí, al lado." : "";
+    }
+  }
+  dibujar(); marcas();
+  if(quedan <= 0) terminar();
+});
+
+function empujar(){
+  if(!papel || papel.sale) return;
+  golpes++; sacudir = .25;
+  cansancio = Math.min(100, cansancio + 5);
+  if(golpes >= fuerza){
+    papel = null; fuerza++;
+    espera = Math.max(1.5, 6 - fuerza * .8);
+    $("fase").textContent = "Se fue";
+    $("faseSub").textContent = "Por ahora.";
+  } else {
+    $("faseSub").textContent = "Resiste. Otra vez…";
+  }
+  botones(); dibujar(); marcas();
+}
+function alLado(){
+  if(!papel || papel.sale) return;
+  papel.sale = .01;
+  $("fase").textContent = "Al lado";
+  $("faseSub").textContent = "Sigue en la mesa. Y tú sigues con " + tarea() + ".";
+  botones();
+}
+
+function preparar(){
+  quedan = DURA; avance = 0; cansancio = 0; papel = null; espera = 4; fuerza = 3; vez = 0; alLadoN = [];
+  $("fase").textContent = "Un minuto de trabajo";
+  $("faseSub").textContent = "Los papeles aparecen solos, cuando quieren.";
+  dibujar(); marcas(); botones();
+}
+function arrancar(){
+  if(reloj.anda()) return;
+  preparar();
+  $("btnArrancar").textContent = "En curso…";
+  $("fase").textContent = "Trabajando en " + tarea();
+  reloj.andar(); botones();
+}
+function detener(){
+  reloj.parar(); botones();
+  $("btnArrancar").textContent = "Empezar";
+  $("fase").textContent = "Detenido";
+  $("faseSub").textContent = "";
+}
+function terminar(){
+  reloj.parar();
+  papel = null; botones();
+  RES[modo] = {avance:Math.round(avance), cansancio:Math.round(cansancio), papeles:vez};
+  $("btnArrancar").textContent = "Otra vez";
+  $("fase").textContent = "Avance: " + Math.round(avance) + " % · cansancio: " + Math.round(cansancio);
+  $("faseSub").textContent = modo === "empujar" ? "Ahora la ronda 2: dejarlos al lado." : "Compara las dos rondas abajo.";
+  dibujar(); pintarRondas(); Kit.guardar();
+  Kit.brindis("Ronda terminada");
+}
+
+function pintarRondas(){
+  [["empujar", "rEmpujar"], ["dejar", "rDejar"]].forEach(([k, id]) => {
+    const r = RES[k], c = $(id);
+    c.classList.toggle("vacia", !r);
+    c.querySelector(".v").innerHTML = r
+      ? `Tarea: <b>${r.avance} %</b><br>Cansancio: <b>${r.cansancio}</b><br>Papeles que aparecieron: ${r.papeles}`
+      : "Sin jugar todavía";
+  });
+}
+
+$("modo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b || reloj.anda()) return;
+  $("modo").querySelectorAll(".chip").forEach(c => c.classList.toggle("activa", c === b));
+  modo = b.id === "mEmpujar" ? "empujar" : "dejar";
+  preparar();
+  $("btnArrancar").textContent = "Empezar";
+});
+
+function leer(){ if(!reloj.anda()) dibujar(); }
+
+function resumen(){
+  const l = [];
+  const p = $("papa").value.trim();
+  if(p) l.push("El papá: " + p);
+  const h = Kit.activas("hijitos");
+  if(h.length) l.push("Hijitos: " + h.join(", "));
+  const t = Kit.activas("tarea");
+  if(t.length) l.push("Lo importante: " + t.join(", "));
+  if(RES.empujar) l.push("Ronda empujando: tarea " + RES.empujar.avance + " %, cansancio " + RES.empujar.cansancio);
+  if(RES.dejar) l.push("Ronda dejándolos al lado: tarea " + RES.dejar.avance + " %, cansancio " + RES.dejar.cansancio);
+  const a = $("tituloEmpujar").value.trim(), b = $("tituloDejar").value.trim();
+  if(a || b) l.push("", "La película dentro de un año · empujando: «" + (a || "—") + "» · dejándolos al lado: «" + (b || "—") + "»");
+  const pr = Kit.activas("practica");
+  if(pr.length) l.push("", "PRÁCTICA: " + pr.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("hijitos", HIJITOS, leer);
+Kit.chips("tarea", TAREA, leer);
+$("tarea").addEventListener("click", e => {
+  const b = e.target.closest(".chip");
+  if(!b || !b.hasAttribute("data-txt")) return;
+  $("tarea").querySelectorAll(".chip.activa").forEach(c => { if(c !== b) c.classList.remove("activa"); });
+}, true);
+Kit.chips("practica", PRACTICA);
+$("papa").addEventListener("input", leer);
+dibujar(); marcas();
+
+Kit.iniciar({ clave: "act-empujar-el-papel", alCambiar: leer, resumen: resumen,
+  extra: () => ({res: RES}),
+  restaurar: d => { if(d.res){ RES.empujar = d.res.empujar; RES.dejar = d.res.dejar; } } });
+pintarRondas();

@@ -1,0 +1,284 @@
+@@meta
+archivo: pp-tres-cosas-buenas.html
+titulo: Tres cosas buenas y mi mejor versión
+orden: 03
+enfoque: Psicología positiva
+etiqueta: Gratitud y metas
+sub: La mente recuerda con más facilidad lo que salió mal que lo que salió bien; apreciar lo bueno requiere atención deliberada. Primero, tres cosas buenas del día, cada una con una frase sobre por qué pasó. Después, una visualización de una mejor versión de uno mismo que termina en un plan concreto, apoyado en las propias fortalezas.
+fuente: Diario de gratitud (sesión 1) y Una mejor versión de mí (sesión 4), en Rashid y Seligman, Positive Psychotherapy: Clinician Manual (2018), caps. 7 y 10.
+resumen: Tres cosas buenas con su reflexión y el área de la vida de donde vienen, para ver patrones. Luego una visualización guiada de una mejor versión, un tema elegido, las fortalezas que lo sostienen, acciones para los próximos tres meses, las barreras y quién ayuda.
+identificacion: si
+@@css
+  .buena{border:1px solid var(--linea);border-radius:10px;padding:11px 13px;margin-bottom:10px;background:#fffdf8;
+    border-left:5px solid #c9962f}
+  .buena .n{font-size:12px;font-weight:700;color:#a57a1f;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .buena textarea{min-height:44px;margin-bottom:6px}
+  .buena .fila{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}
+  .buena .fila .r{font-size:12px;color:var(--tinta-suave);margin-right:2px}
+  .mini{font-size:12px;padding:3px 10px;border-radius:20px}
+  .mini.on{background:#c9962f;border-color:#c9962f;color:#fff}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:6px auto 2px;color:var(--acento);min-height:28px;max-width:600px}
+  .fase-sub{text-align:center;font-size:14.5px;color:var(--tinta-suave);max-width:580px;margin:0 auto;min-height:48px;line-height:1.55}
+  .camino{display:block;width:100%;max-width:560px;height:auto;margin:0 auto}
+  button.arrancar{background:#c9962f;border-color:#c9962f;color:#fff;font-weight:600}
+  .acciones-plan input{margin-bottom:7px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Tres cosas buenas</h2>
+  <p class="ayuda">De hoy o de ayer, grandes o pequeñas. Junto a cada una, una frase: por qué pasó
+  y qué significa, qué se aprende al nombrarla, o qué pusieron uno mismo u otros para que pasara.</p>
+  <div class="cuerpo">
+    <div id="buenas"></div>
+    <label class="etiqueta">Si cuesta encontrarlas</label>
+    <div class="chips" id="pistas"></div>
+    <div id="lecturaBuenas"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Una mejor versión</h2>
+  <p class="ayuda">Un solo tema. Sirve si la persona cree que la haría más feliz o satisfecha, que es
+  bueno para ella y que de verdad quiere ser así: las metas elegidas por uno mismo son las que se sostienen.</p>
+  <div class="cuerpo">
+    <div class="chips" id="tema"></div>
+    <label class="etiqueta">¿Se cumple?</label>
+    <div class="chips" id="condiciones"></div>
+    <div id="avisoCond"></div>
+    <label class="etiqueta">Fortalezas distintivas que la sostienen (hasta tres)</label>
+    <div class="chips" id="fortalezas"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="camino" id="camino" viewBox="0 0 560 150" role="img"
+    aria-label="Un camino desde hoy hasta una mejor versión, que se recorre durante la visualización"></svg>
+  <div class="fase" id="fase">Visualizar la mejor versión</div>
+  <div class="fase-sub" id="faseSub">Espalda apoyada, pies en el piso, tres respiraciones profundas.
+  Si quieres, cierra los ojos.</div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" onclick="siguiente()">Siguiente</button>
+    <button type="button" onclick="detener()">Detener</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">3</span>El plan</h2>
+  <p class="ayuda">Sin pensarlo mucho, tal como se visualizó. Acciones concretas y alcanzables
+  para los próximos tres meses.</p>
+  <div class="cuerpo acciones-plan">
+    <label class="etiqueta">Lo que voy a hacer</label>
+    <input type="text" id="accion1" placeholder="Ej. correr tres veces por semana">
+    <input type="text" id="accion2" placeholder="Otra acción">
+    <input type="text" id="accion3" placeholder="Otra acción">
+    <label class="etiqueta" for="barreras">Lo que podría frenarme</label>
+    <textarea id="barreras" placeholder="Por dentro o por fuera"></textarea>
+    <label class="etiqueta" for="apoyo">Quién me apoya</label>
+    <input type="text" id="apoyo" placeholder="Ej. un amigo que también quiere correr">
+    <label class="etiqueta" for="cambiaria">Qué cambiaría en mi día a día</label>
+    <textarea id="cambiaria" placeholder="Concreto"></textarea>
+    <div class="chips" id="compartir" style="margin-top:10px"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const REFLEXION = ["¿Por qué pasó? ¿Qué significa para mí?", "¿Qué aprendí al nombrarla?",
+  "¿Qué pusimos yo u otros para que pasara?"];
+const AREAS = ["Familia", "Amistades", "Trabajo o estudio", "Naturaleza", "Yo mismo"];
+const PISTAS = ["Hoy noté algo bello", "Hoy hice algo bien", "Alguien fue amable conmigo, o yo con alguien",
+  "Hoy supe una buena noticia", "Hoy vi algo que me inspiró", "Estoy pasando por algo muy duro"];
+const TEMA = ["Más tranquilo", "Más centrado", "Más entusiasta", "Con más energía", "Más comprometido",
+  "Más creativo", "Más conectado", "Más reflexivo", "Más feliz", "Más saludable"];
+const CONDICIONES = ["Me haría más feliz o más satisfecho", "Es bueno para mí", "Quiero ser así",
+  "Siento que necesito ser así"];
+const FORTALEZAS = ["Creatividad", "Curiosidad", "Apertura de mente", "Deseo de aprender", "Perspectiva",
+  "Valentía", "Persistencia", "Integridad", "Vitalidad", "Amor", "Amabilidad", "Inteligencia social",
+  "Ciudadanía", "Justicia", "Liderazgo", "Perdón y compasión", "Humildad", "Prudencia", "Autorregulación",
+  "Aprecio de la belleza", "Gratitud", "Esperanza", "Sentido del humor", "Espiritualidad"];
+const COMPARTIR = ["Contarle el plan a alguien y darle noticias cada semana"];
+
+/* ---------- las tres cosas buenas ---------- */
+let B = [0, 1, 2].map(() => ({que:"", ref:0, frase:"", area:"", yo:""}));
+function pintarBuenas(){
+  const caja = $("buenas");
+  caja.innerHTML = "";
+  B.forEach((b, i) => {
+    const d = Kit.crearEl("div", "buena");
+    d.appendChild(Kit.crearEl("div", "n", "Cosa buena " + (i + 1)));
+    const q = document.createElement("textarea");
+    q.placeholder = "Qué pasó"; q.value = b.que;
+    q.addEventListener("input", () => { b.que = q.value; Kit.guardar(); leerBuenas(); });
+    d.appendChild(q);
+    const f1 = Kit.crearEl("div", "fila");
+    REFLEXION.forEach((r, k) => {
+      const x = Kit.crearEl("button", "mini" + (b.ref === k ? " on" : ""), r); x.type = "button";
+      x.onclick = () => { b.ref = k; cambio(); };
+      f1.appendChild(x);
+    });
+    d.appendChild(f1);
+    const fr = document.createElement("textarea");
+    fr.placeholder = REFLEXION[b.ref]; fr.value = b.frase; fr.style.marginTop = "6px";
+    fr.addEventListener("input", () => { b.frase = fr.value; Kit.guardar(); });
+    d.appendChild(fr);
+    const f2 = Kit.crearEl("div", "fila");
+    f2.appendChild(Kit.crearEl("span", "r", "Viene de:"));
+    AREAS.forEach(a => {
+      const x = Kit.crearEl("button", "mini" + (b.area === a ? " on" : ""), a); x.type = "button";
+      x.onclick = () => { b.area = b.area === a ? "" : a; cambio(); };
+      f2.appendChild(x);
+    });
+    d.appendChild(f2);
+    const f3 = Kit.crearEl("div", "fila");
+    ["La hice pasar yo", "Me pasó", "La hicimos con otros"].forEach(a => {
+      const x = Kit.crearEl("button", "mini" + (b.yo === a ? " on" : ""), a); x.type = "button";
+      x.onclick = () => { b.yo = b.yo === a ? "" : a; cambio(); };
+      f3.appendChild(x);
+    });
+    d.appendChild(f3);
+    caja.appendChild(d);
+  });
+}
+function leerBuenas(){
+  const p = Kit.activas("pistas");
+  let html = "";
+  if(p.indexOf("Estoy pasando por algo muy duro") >= 0)
+    html += `<div class="pistas" style="margin-top:10px">Con una pérdida o una situación muy dura puede
+      no salir de forma auténtica, y no se fuerza. Alternativas: escribir algo negativo y algo positivo,
+      una buena noticia del mundo, o un logro pasado y quién ayudó a conseguirlo.</div>`;
+  const llenas = B.filter(b => b.que.trim());
+  if(llenas.length >= 2){
+    const areas = llenas.map(b => b.area).filter(Boolean);
+    const faltan = AREAS.filter(a => areas.indexOf(a) < 0);
+    const pasivas = llenas.filter(b => b.yo === "Me pasó").length;
+    let q = [];
+    if(areas.length >= 2 && new Set(areas).size === 1) q.push("Todas vienen de " + areas[0].toLowerCase() + ". ¿Qué otras áreas de la vida no aparecieron?");
+    if(pasivas === llenas.length) q.push("Todas le pasaron: ¿en cuál tuvo algún papel?");
+    if(q.length) html += `<div class="pregunta" style="margin-top:10px">${q.join(" ")}</div>`;
+  }
+  $("lecturaBuenas").innerHTML = html;
+}
+function usarPista(){
+  const p = Kit.activas("pistas").filter(x => x !== "Estoy pasando por algo muy duro");
+  const libre = B.find(b => !b.que.trim());
+  if(p.length && libre && !B.some(b => b.que.indexOf(p[p.length - 1]) === 0)){
+    libre.que = p[p.length - 1] + ": ";
+    pintarBuenas();
+  }
+  leerBuenas();
+}
+
+/* ---------- la visualización ---------- */
+function guion(){
+  const t = Kit.activas("tema")[0];
+  const f = Kit.activas("fortalezas");
+  return [
+    ["Una mejor versión", "Imagina una mejor versión de ti" + (t ? ": " + t.toLowerCase() + "." : ". Elige un solo tema."), 30],
+    ["¿Es buena para ti?", "¿Te haría más feliz? ¿Es buena para ti? ¿Quieres de verdad ser así?", 25],
+    ["El camino", "Piénsalo como un viaje. ¿Qué camino hay que recorrer? ¿Qué tendrías que hacer exactamente?", 35],
+    ["Tus fortalezas", (f.length ? "Piensa en tu " + f.join(", ").toLowerCase() + ". " : "Piensa en tus fortalezas. ") +
+      "Los intereses, talentos y habilidades que van con " + (f.length === 1 ? "ella." : "ellas."), 35],
+    ["Acciones concretas", "Actos, rutinas y hábitos que expresan esas fortalezas. ¿Cómo te acercan a esa mejor versión?", 40],
+    ["Comprometerse", "De esas acciones, ¿cuáles estás dispuesto a sostener los próximos tres meses?", 30],
+    ["Las barreras", "¿Qué podría frenarte, por dentro o por fuera? ¿Qué harías? ¿Quién te puede apoyar?", 35],
+    ["Si lo logras", "¿Qué cambiaría en tu vida y en tu día a día? Sé concreto.", 30],
+    ["Volver", "Cuando estés listo, vuelve a la sala y escribe lo que visualizaste, sin pensarlo mucho.", 10]
+  ];
+}
+let paso = -1, enPaso = 0;
+function dibujar(){
+  const svg = $("camino"), g = guion();
+  svg.innerHTML = "";
+  svg.appendChild(Kit.svg("path", {d:"M30 120 C150 120 170 40 290 60 S430 110 530 40", fill:"none", stroke:"#eadcc0",
+    "stroke-width":10, "stroke-linecap":"round"}));
+  const p = paso < 0 ? 0 : Math.min(1, (paso + Math.min(1, enPaso / g[paso][2])) / (g.length - 1));
+  const camino = Kit.svg("path", {d:"M30 120 C150 120 170 40 290 60 S430 110 530 40", fill:"none", stroke:"#c9962f",
+    "stroke-width":10, "stroke-linecap":"round", "stroke-dasharray":"1000", "stroke-dashoffset":String(1000 - p * 1000),
+    pathLength:"1000"});
+  svg.appendChild(camino);
+  const hoy = Kit.svg("text", {x:30, y:145, "font-size":12, "font-weight":700, fill:"#8a96a0"}); hoy.textContent = "Hoy";
+  svg.appendChild(hoy);
+  const t = Kit.activas("tema")[0];
+  const meta = Kit.svg("text", {x:530, y:24, "text-anchor":"end", "font-size":13, "font-weight":700, fill:"#a57a1f"});
+  meta.textContent = t || "Una mejor versión";
+  svg.appendChild(meta);
+  svg.appendChild(Kit.svg("circle", {cx:530, cy:40, r:9, fill:p >= 1 ? "#c9962f" : "#fff", stroke:"#c9962f", "stroke-width":3}));
+}
+function mostrar(){
+  const g = guion();
+  if(paso < 0) return;
+  $("fase").textContent = g[paso][0];
+  $("faseSub").textContent = g[paso][1];
+  dibujar();
+}
+const reloj = Kit.reloj(dt => {
+  enPaso += dt;
+  if(enPaso >= guion()[paso][2]) siguiente();
+  else dibujar();
+});
+function arrancar(){
+  if(reloj.anda()) return;
+  paso = 0; enPaso = 0;
+  $("btnArrancar").textContent = "En curso…";
+  mostrar(); reloj.andar();
+}
+function siguiente(){
+  if(paso < 0) return arrancar();
+  if(paso >= guion().length - 1){ reloj.parar(); enPaso = guion()[paso][2]; dibujar();
+    $("btnArrancar").textContent = "Otra vez"; Kit.brindis("Visualización terminada"); return; }
+  paso++; enPaso = 0; mostrar();
+}
+function detener(){
+  reloj.parar();
+  $("fase").textContent = "Detenido";
+  $("faseSub").textContent = "Vuelve a la sala cuando quieras.";
+  $("btnArrancar").textContent = "Empezar";
+}
+
+/* ---------- lectura general ---------- */
+function leer(){
+  pintarBuenas(); leerBuenas();
+  const c = Kit.activas("condiciones");
+  $("avisoCond").innerHTML = Kit.activas("tema").length && c.length && c.length < 3
+    ? `<div class="pistas" style="margin-top:8px">Si no la haría más feliz, no es buena para la persona o
+       no la quiere de verdad, conviene elegir otro tema: una meta impuesta no se sostiene.</div>` : "";
+  const f = Kit.activas("fortalezas");
+  if(f.length > 3) $("avisoCond").innerHTML += `<div class="pistas" style="margin-top:8px">Mejor tres
+    fortalezas como máximo: las distintivas, no todas las que se reconocen.</div>`;
+  if(!reloj.anda()) dibujar(); else mostrar();
+}
+function cambio(){ leer(); Kit.guardar(); }
+
+function resumen(){
+  const l = [];
+  const b = B.filter(x => x.que.trim());
+  if(b.length){
+    l.push("TRES COSAS BUENAS");
+    b.forEach((x, i) => l.push("  " + (i + 1) + ". " + x.que.trim() + (x.frase.trim() ? " — " + x.frase.trim() : "") +
+      (x.area || x.yo ? " (" + [x.area, x.yo].filter(Boolean).join(", ") + ")" : "")));
+  }
+  const t = Kit.activas("tema"), f = Kit.activas("fortalezas");
+  if(t.length || f.length) l.push("", "MEJOR VERSIÓN: " + (t.join(", ") || "—") + (f.length ? " · fortalezas: " + f.join(", ") : ""));
+  const ac = ["accion1", "accion2", "accion3"].map(id => $(id).value.trim()).filter(Boolean);
+  if(ac.length) l.push("Acciones (tres meses): " + ac.join("; "));
+  const ba = $("barreras").value.trim(), ap = $("apoyo").value.trim(), ca = $("cambiaria").value.trim();
+  if(ba) l.push("Barreras: " + ba);
+  if(ap) l.push("Apoyo: " + ap);
+  if(ca) l.push("Qué cambiaría: " + ca);
+  if(Kit.activas("compartir").length) l.push("Lo compartirá con alguien y le dará noticias cada semana.");
+  return l.join("\n");
+}
+
+Kit.chips("pistas", PISTAS, usarPista);
+Kit.chips("tema", TEMA, leer, true);
+Kit.chips("condiciones", CONDICIONES, leer, true);
+Kit.chips("fortalezas", FORTALEZAS, leer, true);
+Kit.chips("compartir", COMPARTIR, null, true);
+$("tema").addEventListener("click", e => {
+  const b = e.target.closest(".chip");
+  if(!b || !b.hasAttribute("data-txt")) return;
+  $("tema").querySelectorAll(".chip.activa").forEach(c => { if(c !== b) c.classList.remove("activa"); });
+}, true);
+
+Kit.iniciar({ clave: "pp-tres-cosas-buenas", alCambiar: leer, resumen: resumen,
+  extra: () => ({b: B}), restaurar: d => { if(d.b) B = d.b; } });

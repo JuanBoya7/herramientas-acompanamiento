@@ -8,7 +8,7 @@ Esto sirve únicamente para cuando haya que cambiar algo en todas a la vez.
 
 | Archivo | Para qué |
 |---|---|
-| `kit.css` | Los estilos que comparten las 26 hojas: colores, fichas, calibradores, modo lámina, impresión. |
+| `kit.css` | Los estilos que comparten todas las hojas: colores, fichas, calibradores, modo lámina, impresión. |
 | `kit.js` | El motor común: fichas con «+», guardado local, copiar resumen, mostrador de arrastre y el reloj de las escenas que se mueven. |
 | `plantilla.html` | El esqueleto: cabecera, notas del profesional plegadas y barra de botones al final. |
 | `partes/*.parte` | El contenido propio de cada herramienta. Una por archivo. |
@@ -25,7 +25,7 @@ Esto sirve únicamente para cuando haya que cambiar algo en todas a la vez.
 python construir.py
 ```
 
-Reescribe las 26 herramientas, el índice y la guía de uso. Para trabajar sobre una sola, se le pasa un pedazo del
+Reescribe todas las herramientas, el índice y la guía de uso. Para trabajar sobre una sola, se le pasa un pedazo del
 nombre y solo esa se imprime en pantalla (igual se reconstruyen todas, que toma menos de un segundo):
 
 ```bash

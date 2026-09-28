@@ -1,6 +1,6 @@
 # Herramientas de acompañamiento
 
-Treinta y cuatro hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
+Cuarenta y seis hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
 HTML** que funciona con doble clic: sin instalación, sin servidor y sin conexión.
 
 Todo se elige, se calibra o se arrastra. Cada hoja lleva plegado un bloque de notas del
@@ -15,14 +15,14 @@ sirve cada hoja, en qué casos rinde, con qué va antes o después y dónde conv
 | Enfoque | Hojas |
 |---|---|
 | **Metáforas vivas** | El tablero · El jardín de valores · La cuerda y el monstruo · Hojas en el arroyo · El bus y los pasajeros · Los ochenta años · El polígrafo · La palabra repetida · La radio que no se apaga · El hombre en el hoyo |
-| **Psicología positiva** | Mi flor PERMAH · Mis fortalezas del carácter |
-| **ACT** | La brújula de valores · El costo de la lucha · Por dónde entrar · Soltar el anzuelo · La matriz |
+| **Psicología positiva** | Mi flor PERMAH · Mis fortalezas del carácter · Tres cosas buenas y mi mejor versión |
+| **ACT** | La brújula de valores · El costo de la lucha · Por dónde entrar · Soltar el anzuelo · La matriz · Los ganchos · El cielo y el clima · Empujar el papel |
 | **DBT** | Análisis en cadena · Tarjeta de crisis · Verificar los hechos · Pedir y decir que no · Mente sabia · Tarjeta diaria |
-| **Cognitivo-conductual** | Registro de pensamientos · Flecha descendente · Escalera de exposición · Activación conductual · Solución de problemas · Autoinstrucciones · Análisis funcional |
-| **Compasión y mindfulness** | Respiración de ritmo tranquilizador · Espacio de respiración de tres minutos |
-| **Crisis y consumo** | Plan de seguridad · Surfear el impulso |
+| **Cognitivo-conductual** | Registro de pensamientos · Flecha descendente · Escalera de exposición · Activación conductual · Solución de problemas · Autoinstrucciones · Análisis funcional · Aplazar la preocupación · Balance decisional · Ventana de sueño · Lista de tareas A-B-C · Inoculación de estrés |
+| **Compasión y mindfulness** | Respiración de ritmo tranquilizador · Espacio de respiración de tres minutos · Pausa de autocompasión · El yo compasivo |
+| **Crisis y consumo** | Plan de seguridad · Surfear el impulso · Importancia y confianza |
 
-Ocho de ellas tienen **escena viva**: la metáfora ocurre en tiempo real y no espera a que se
+Varias tienen **escena viva**: la metáfora ocurre en tiempo real y no espera a que se
 apriete un botón. El monstruo jala solo, el bus avanza solo, las piezas negras brotan solas, la
 aguja del polígrafo se mueve sola y las hojas bajan solas por el arroyo. Lo que sí lleva botón es
 la decisión: jalar, discutir, empujar, controlar, cavar o soltar.
@@ -53,4 +53,7 @@ Las hojas se apoyan en fuentes publicadas, citadas dentro de cada una: el manual
 Corbobés, el manual de habilidades DBT de Linehan, la terapia cognitiva de Beck, y la
 clasificación VIA y el modelo PERMAH de Seligman. Las metáforas de ACT (el tablero, el bus, la
 cuerda, las hojas en el arroyo, el hombre en el hoyo, el polígrafo) provienen de Hayes, Strosahl y
-Wilson.
+Wilson. Entre las demás fuentes están Kolts y Gilbert para la
+compasión, Germer y Neff, Polk y colegas para la matriz, Ruiz y colegas, Wells, Barlow y colegas,
+Meichenbaum, Perlis y colegas, Safren y colegas, Rashid y Seligman, Rollnick y Miller, y la guía
+de la OPS «En tiempos de estrés, haz lo que importa».

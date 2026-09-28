@@ -1,0 +1,184 @@
+@@meta
+archivo: crisis-importancia-y-confianza.html
+titulo: Importancia y confianza
+orden: 03
+enfoque: Crisis y consumo
+etiqueta: Entrevista motivacional
+sub: Dos reglas del 0 al 10: cuánto importa el cambio, que es el porqué, y cuánta confianza hay en lograrlo, que es el cómo. El número no es lo que importa: lo que importa es la respuesta a la pregunta que sigue. «¿Por qué un 6 y no un 0?» hace que la persona diga en voz alta sus propias razones.
+fuente: Preguntas de importancia y confianza y preguntas de escala, en Rollnick, Miller y Butler, Motivational Interviewing in Health Care (2023), cap. 9; reglas de importancia y confianza para mantener el cambio, en Naar y Flynn, cap. 7 de Arkowitz, Westra, Miller y Rollnick (eds.), Motivational Interviewing in the Treatment of Psychological Problems (2015).
+resumen: Se nombra el cambio y se marcan las dos reglas. La hoja devuelve las dos preguntas que evocan las razones y los recursos de la persona, y se anota lo que responde con sus palabras. Según cómo quedan las dos reglas, sugiere si conviene conversar primero sobre el porqué o sobre el cómo.
+@@css
+  .regla{margin:4px 0 20px}
+  .regla .tit{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+  .regla .tit b{font-size:15.5px}
+  .regla .tit span{font-size:13px;color:var(--tinta-suave)}
+  .celdas{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+  .celdas button{padding:10px 0;font-size:16px;font-weight:700;border-radius:7px;border:1px solid var(--linea);
+    background:#fff;color:var(--tinta-suave)}
+  .celdas button.lleno{color:#fff;border-color:transparent}
+  .celdas button.elegido{outline:3px solid var(--tinta);outline-offset:1px}
+  .extremos{display:flex;justify-content:space-between;font-size:11.5px;color:var(--tinta-suave);margin-top:4px}
+  .preguntas{display:grid;gap:12px}
+  .preg{border-left:4px solid var(--c);background:#fbfcfd;border-radius:8px;padding:11px 14px}
+  .preg .q{font-size:16.5px;font-weight:600;line-height:1.4;margin-bottom:8px}
+  .preg textarea{min-height:54px}
+  @media (max-width:520px){.celdas button{font-size:13px;padding:8px 0}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>El cambio</h2>
+  <p class="ayuda">Uno concreto, dicho como lo diría la persona.</p>
+  <div class="cuerpo">
+    <div class="chips" id="cambio"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Las dos reglas</h2>
+  <p class="ayuda">Se marca sin pensarlo mucho. No hay número correcto.</p>
+  <div class="cuerpo">
+    <div class="regla" style="--c:#c26a4e">
+      <div class="tit"><b>¿Qué tan importante es para ti?</b><span>el porqué</span></div>
+      <div class="celdas" id="celdasImp"></div>
+      <div class="extremos"><span>Nada importante</span><span>Lo más importante</span></div>
+      <input type="hidden" id="imp" value="">
+    </div>
+    <div class="regla" style="--c:#2f6f8f">
+      <div class="tit"><b>¿Qué tan seguro estás de poder lograrlo?</b><span>el cómo</span></div>
+      <div class="celdas" id="celdasConf"></div>
+      <div class="extremos"><span>Nada seguro</span><span>Totalmente seguro</span></div>
+      <input type="hidden" id="conf" value="">
+    </div>
+  </div>
+</section>
+
+<section class="paso" id="pasoPreguntas">
+  <h2><span class="num">3</span>Lo que dice la persona</h2>
+  <p class="ayuda">Se pregunta, se escucha y se refleja. Lo que responde se anota con sus palabras.</p>
+  <div class="cuerpo">
+    <div class="preguntas" id="preguntas"></div>
+    <div id="lectura" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>Lo que ya lo muestra</h2>
+  <p class="ayuda">Para la confianza: cambios que ya logró antes, y fortalezas que otros le reconocen.</p>
+  <div class="cuerpo">
+    <div class="chips" id="fortalezas"></div>
+    <label class="etiqueta" for="antes">Una vez que logró algo difícil, y cómo lo hizo</label>
+    <textarea id="antes" placeholder="Con sus palabras"></textarea>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const CAMBIO = ["Dejar o reducir el consumo", "Tomar el tratamiento todos los días", "Volver a salir de casa",
+  "Hablar con mi pareja", "Venir a las sesiones"];
+const FORTALEZAS = ["Soy constante", "No me rindo fácil", "Pido ayuda cuando la necesito",
+  "Ya dejé algo antes", "Cuido a otros"];
+const COL = {imp:"#c26a4e", conf:"#2f6f8f"};
+
+function unica(id){
+  $(id).addEventListener("click", e => {
+    const b = e.target.closest(".chip");
+    if(!b || !b.hasAttribute("data-txt")) return;
+    $(id).querySelectorAll(".chip.activa").forEach(c => { if(c !== b) c.classList.remove("activa"); });
+  }, true);
+}
+
+function regla(clave, caja){
+  const c = $(caja);
+  for(let i = 0; i <= 10; i++){
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = i;
+    b.onclick = () => { $(clave).value = i; leer(); Kit.guardar(); };
+    c.appendChild(b);
+  }
+}
+function pintarRegla(clave, caja){
+  const v = $(clave).value === "" ? -1 : +$(clave).value;
+  [...$(caja).children].forEach((b, i) => {
+    const lleno = i <= v;
+    b.classList.toggle("lleno", lleno);
+    b.classList.toggle("elegido", i === v);
+    const claro = clave === "imp" ? "#f1e4de" : "#dde9f0";
+    b.style.background = lleno ? Kit.mezcla(claro, COL[clave], .35 + .65 * i / 10) : "";
+  });
+  return v;
+}
+
+const valor = id => $(id).value === "" ? -1 : +$(id).value;
+
+/* las respuestas viven en campos que se crean según los números; se guardan aparte */
+let RESP = {};
+function pregunta(clave, texto, col){
+  const d = Kit.crearEl("div", "preg");
+  d.style.setProperty("--c", col);
+  d.appendChild(Kit.crearEl("div", "q", texto));
+  const ta = document.createElement("textarea");
+  ta.placeholder = "Lo que responde";
+  ta.value = RESP[clave] || "";
+  ta.addEventListener("input", () => { RESP[clave] = ta.value; Kit.guardar(); });
+  d.appendChild(ta);
+  return d;
+}
+
+function leer(){
+  const i = pintarRegla("imp", "celdasImp"), c = pintarRegla("conf", "celdasConf");
+  const caja = $("preguntas");
+  caja.innerHTML = "";
+  if(i >= 0){
+    caja.appendChild(pregunta("impBaja", i > 0 ? `¿Por qué un ${i} y no un 0?` :
+      `¿Qué tendría que pasar para que fuera un poco más importante?`, COL.imp));
+    if(i > 0 && i < 10) caja.appendChild(pregunta("impSube", `¿Qué haría falta para pasar de ${i} a ${Math.min(10, i + 2)}?`, COL.imp));
+  }
+  if(c >= 0){
+    caja.appendChild(pregunta("confBaja", c > 0 ? `¿Por qué un ${c} y no un 0?` :
+      `¿Qué te ayudaría a sentirte un poco más capaz?`, COL.conf));
+    if(c > 0 && c < 10) caja.appendChild(pregunta("confSube", `¿Qué te ayudaría a pasar de ${c} a ${Math.min(10, c + 2)}?`, COL.conf));
+  }
+  if(i < 0 && c < 0)
+    caja.innerHTML = `<p class="ayuda" style="margin:0">Aparecen al marcar las reglas.</p>`;
+
+  let html = "";
+  if(i >= 0 && c >= 0){
+    if(i <= 4)
+      html = `<div class="pistas">Por ahora el cambio importa poco. Conviene conversar sobre el
+        porqué —lo que la persona valora, lo que le preocupa— antes de hablar de planes.</div>`;
+    else if(c <= 4)
+      html = `<div class="pistas">Importa, pero no se siente capaz. La conversación va sobre el cómo:
+        logros anteriores, fortalezas, pasos pequeños, ensayar en sesión.</div>`;
+    else
+      html = `<div class="logro">Las dos reglas están arriba: puede ser momento de pasar a un plan.</div>`;
+    if(c >= 9)
+      html += `<div class="bandera">Una confianza muy alta al comienzo puede venir de expectativas poco
+        realistas sobre qué tan rápido y fácil será cambiar. La que predice mejor es la que se gana con
+        la práctica: conviene acordar metas realistas y flexibles.</div>`;
+  }
+  $("lectura").innerHTML = html;
+}
+
+function resumen(){
+  const l = [];
+  const ca = Kit.activas("cambio");
+  if(ca.length) l.push("Cambio: " + ca.join(", "));
+  const i = valor("imp"), c = valor("conf");
+  if(i >= 0 || c >= 0) l.push("Importancia: " + (i >= 0 ? i + "/10" : "—") + " · Confianza: " + (c >= 0 ? c + "/10" : "—"));
+  const q = {impBaja:"Por qué ese número de importancia", impSube:"Qué subiría la importancia",
+    confBaja:"Por qué ese número de confianza", confSube:"Qué subiría la confianza"};
+  Object.keys(q).forEach(k => { if(RESP[k] && RESP[k].trim()) l.push(q[k] + ": " + RESP[k].trim()); });
+  const f = Kit.activas("fortalezas");
+  if(f.length) l.push("Fortalezas: " + f.join(", "));
+  const a = $("antes").value.trim();
+  if(a) l.push("Un logro anterior: " + a);
+  return l.join("\n");
+}
+
+regla("imp", "celdasImp");
+regla("conf", "celdasConf");
+Kit.chips("cambio", CAMBIO, leer);
+Kit.chips("fortalezas", FORTALEZAS);
+unica("cambio");
+
+Kit.iniciar({ clave: "crisis-importancia-y-confianza", alCambiar: leer, resumen: resumen,
+  extra: () => ({resp: RESP}), restaurar: d => { RESP = d.resp || {}; } });

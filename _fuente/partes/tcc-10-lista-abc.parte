@@ -1,0 +1,250 @@
+@@meta
+archivo: tcc-lista-abc.html
+titulo: Lista de tareas A-B-C
+orden: 10
+enfoque: Cognitivo-conductual
+etiqueta: Organización
+sub: Todas las tareas van a una sola lista y cada una recibe una letra: A, lo importante que hay que hacer ya; B, lo importante de más largo plazo; C, lo fácil y atractivo pero menos importante. Empezar por lo fácil da la sensación de avanzar sin avanzar en lo que importa. La regla es una sola: todas las A antes que cualquier B.
+fuente: Lista maestra, lista del día y calificación A, B y C, en Safren, Sprich, Perlman y Otto, Mastering Your Adult ADHD (2017), caps. 4 y 5.
+resumen: Se vuelcan las tareas en la lista maestra y se califican con A, B o C. Un mismo día se juega en dos órdenes, empezando por lo fácil y empezando por las A, para ver qué queda sin hacer. Termina con la lista del día y el momento fijo para mirarla.
+identificacion: si
+@@css
+  .agregar{display:flex;gap:8px}
+  .agregar input{flex:1;min-width:0}
+  .tareas{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+  .tarea{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--linea);border-radius:9px;
+    padding:6px 8px 6px 12px;border-left:5px solid var(--c,#dfe5e8)}
+  .tarea .t{flex:1;font-size:14.5px}
+  .tarea .letras{display:flex;gap:4px;flex:none}
+  .tarea .letras button{width:32px;height:30px;padding:0;font-weight:700;font-size:14px;border-radius:7px}
+  .tarea .letras button.on{color:#fff;border-color:transparent}
+  .tarea .x{flex:none;border:0;background:none;color:var(--tinta-suave);font-size:18px;padding:0 4px}
+  .dia{display:block;width:100%;height:auto;max-width:680px;margin:0 auto}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:6px auto 2px;color:var(--acento);min-height:26px}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:560px;margin:0 auto;min-height:22px}
+  button.arrancar{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
+  .deldia{counter-reset:n;margin:0;padding:0;list-style:none}
+  .deldia li{counter-increment:n;display:flex;gap:10px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--linea);font-size:14.5px}
+  .deldia li::before{content:counter(n);font-weight:700;color:var(--tinta-suave);min-width:18px}
+  .deldia li b{font-size:12px;color:#fff;border-radius:5px;padding:1px 7px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La lista maestra</h2>
+  <p class="ayuda">Todo lo pendiente, en un solo lugar: lo que hoy está en papelitos, mensajes o la
+  cabeza. Se agrega de a una tarea.</p>
+  <div class="cuerpo">
+    <div class="agregar">
+      <input type="text" id="nueva" placeholder="Ej. llamar al banco">
+      <button type="button" id="btnAgregar">Agregar</button>
+    </div>
+    <div class="tareas" id="tareas"></div>
+    <div id="avisoA"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <div class="duracion" id="orden" style="margin:0 0 10px">
+    <button type="button" class="chip activa" id="oFacil">Empezando por lo fácil</button>
+    <button type="button" class="chip" id="oABC">Todas las A primero</button>
+  </div>
+  <svg class="dia" id="dia" viewBox="0 0 680 190" role="img"
+    aria-label="Un día con tiempo limitado que se va llenando con las tareas en el orden elegido"></svg>
+  <div class="fase" id="fase">El mismo día, en dos órdenes</div>
+  <div class="fase-sub" id="faseSub">El día alcanza para una parte de la lista.</div>
+  <div class="marcas">
+    <div><span class="n" id="mA" style="color:#b0503f">—</span><span class="r">A hechas</span></div>
+    <div><span class="n" id="mTot" style="color:#2f6f8f">—</span><span class="r">tareas hechas</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Jugar el día</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>La lista de hoy</h2>
+  <p class="ayuda">Sale de la maestra, en orden: primero las A, después las B. Lo que no se termine
+  pasa a la lista de mañana. Las letras cambian: una C se vuelve B y luego A cuando se acerca el plazo.</p>
+  <div class="cuerpo">
+    <ol class="deldia" id="deldia"></ol>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Mirarla todos los días</h2>
+  <p class="ayuda">Lo que más ayuda es atarla a algo que ya se hace cada día. Y un solo sistema,
+  el que resulte cómodo, durante al menos tres meses: buscar el sistema perfecto termina en no
+  tener ninguno.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Cuándo la miro</label>
+    <div class="chips" id="cuando"></div>
+    <label class="etiqueta">Dónde vive la lista</label>
+    <div class="chips" id="donde"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const COL = {A:"#b0503f", B:"#c9962f", C:"#6f8fa8"};
+const ESFUERZO = {A:2, B:2, C:1, "":2};   /* las C suelen ser más fáciles */
+const CUANDO = ["Con el café de la mañana", "Después de cepillarme los dientes", "Al llegar al trabajo",
+  "Al darle de comer a la mascota"];
+const DONDE = ["Una libreta", "Una aplicación del teléfono", "Una agenda de papel"];
+
+let T = [];   /* [{t, c}] */
+
+function pintarTareas(){
+  const caja = $("tareas");
+  caja.innerHTML = "";
+  T.forEach((x, i) => {
+    const f = Kit.crearEl("div", "tarea");
+    if(x.c) f.style.setProperty("--c", COL[x.c]);
+    f.appendChild(Kit.crearEl("span", "t", x.t));
+    const le = Kit.crearEl("span", "letras");
+    ["A", "B", "C"].forEach(L => {
+      const b = Kit.crearEl("button", x.c === L ? "on" : "", L);
+      b.type = "button";
+      if(x.c === L) b.style.background = COL[L];
+      b.onclick = () => { x.c = x.c === L ? "" : L; cambio(); };
+      le.appendChild(b);
+    });
+    f.appendChild(le);
+    const q = Kit.crearEl("button", "x", "×"); q.type = "button"; q.title = "Quitar";
+    q.onclick = () => { T.splice(i, 1); cambio(); };
+    f.appendChild(q);
+    caja.appendChild(f);
+  });
+  const nA = T.filter(x => x.c === "A").length, n = T.length;
+  $("avisoA").innerHTML = n >= 4 && nA > Math.max(2, n / 3)
+    ? `<div class="pistas" style="margin-top:10px">Hay ${nA} tareas A. Cuidado con calificar demasiadas
+       como A: ¿cuáles tienen que hacerse de verdad hoy o mañana?</div>`
+    : (n && T.some(x => !x.c) ? `<div class="pistas" style="margin-top:10px">Faltan letras: cada tarea lleva
+       A, B o C.</div>` : "");
+}
+
+function agregar(){
+  const t = $("nueva").value.trim();
+  if(!t) return;
+  T.push({t, c:""});
+  $("nueva").value = "";
+  cambio();
+  $("nueva").focus();
+}
+$("btnAgregar").onclick = agregar;
+$("nueva").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); agregar(); } });
+
+/* ---------- el día ---------- */
+let orden = "facil", prog = 0, secuencia = [], capacidad = 0;
+function ordenar(o){
+  const r = {A:0, B:1, C:2, "":1};
+  const l = T.slice();
+  if(o === "facil") l.sort((a, b) => ESFUERZO[a.c] - ESFUERZO[b.c]);   /* lo fácil primero */
+  else l.sort((a, b) => r[a.c] - r[b.c]);
+  return l;
+}
+function preparar(){
+  secuencia = ordenar(orden);
+  const total = T.reduce((s, x) => s + ESFUERZO[x.c], 0);
+  capacidad = Math.max(1, Math.round(total * .55));
+}
+function dibujar(){
+  const svg = $("dia");
+  svg.innerHTML = "";
+  const X0 = 30, X1 = 650, Y = 40, H = 46;
+  const total = Math.max(capacidad, secuencia.reduce((s, x) => s + ESFUERZO[x.c], 0));
+  const u = (X1 - X0) / Math.max(1, total);
+  const finDia = X0 + capacidad * u;
+  svg.appendChild(Kit.svg("rect", {x:X0, y:Y - 6, width:finDia - X0, height:H + 12, rx:8, fill:"#eef4f7", stroke:"#b9cfdb"}));
+  const td = Kit.svg("text", {x:X0, y:Y - 14, "font-size":12, "font-weight":700, fill:"#2f6f8f"}); td.textContent = "Hoy";
+  svg.appendChild(td);
+  const tm = Kit.svg("text", {x:finDia + 6, y:Y - 14, "font-size":12, "font-weight":700, fill:"#8a96a0"}); tm.textContent = "Queda para mañana";
+  svg.appendChild(tm);
+  svg.appendChild(Kit.svg("line", {x1:finDia, y1:Y - 22, x2:finDia, y2:Y + H + 30, stroke:"#8a96a0", "stroke-dasharray":"4 3"}));
+  let x = X0, usado = 0, hechasA = 0, hechas = 0;
+  const hasta = prog * total;
+  secuencia.forEach((t, i) => {
+    const w = ESFUERZO[t.c] * u;
+    if(usado >= hasta) return;
+    const visible = Math.min(w, (hasta - usado) * u);
+    const dentro = usado + ESFUERZO[t.c] <= capacidad;
+    svg.appendChild(Kit.svg("rect", {x:x + 1, y:Y, width:Math.max(0, visible - 2), height:H, rx:6,
+      fill:COL[t.c] || "#9aa5ab", "fill-opacity":dentro ? .9 : .3}));
+    if(visible >= w - .5){
+      const lt = Kit.svg("text", {x:x + w / 2, y:Y + 29, "text-anchor":"middle", "font-size":15, "font-weight":700, fill:"#fff"});
+      lt.textContent = t.c || "?";
+      svg.appendChild(lt);
+      const nt = Kit.svg("text", {x:x + w / 2, y:Y + H + 16 + (i % 2) * 14, "text-anchor":"middle", "font-size":10.5, fill:"#55616d"});
+      nt.textContent = t.t.length > 16 ? t.t.slice(0, 15) + "…" : t.t;
+      svg.appendChild(nt);
+      if(dentro){ hechas++; if(t.c === "A") hechasA++; }
+    }
+    usado += ESFUERZO[t.c]; x += w;
+  });
+  if(prog >= 1){
+    const nA = T.filter(t => t.c === "A").length;
+    $("mA").textContent = hechasA + " de " + nA;
+    $("mTot").textContent = hechas + " de " + T.length;
+  }
+}
+const reloj = Kit.reloj(dt => {
+  prog = Math.min(1, prog + dt / 4);
+  dibujar();
+  if(prog >= 1){
+    reloj.parar();
+    $("btnArrancar").textContent = "Otra vez";
+    const nA = T.filter(t => t.c === "A").length;
+    $("fase").textContent = orden === "facil" ? "Se tacharon muchas cosas" : "Las A quedaron hechas";
+    $("faseSub").textContent = orden === "facil"
+      ? "¿Y las importantes? Ahora el mismo día con todas las A primero."
+      : (nA ? "Puede que se tachen menos cosas, pero son las que importaban." : "Todavía no hay tareas A en la lista.");
+  }
+});
+function arrancar(){
+  if(!T.length){ $("fase").textContent = "Primero, la lista"; $("faseSub").textContent = "Se llena arriba."; return; }
+  preparar(); prog = 0;
+  $("fase").textContent = orden === "facil" ? "Empezando por lo fácil" : "Todas las A primero";
+  $("faseSub").textContent = "";
+  $("btnArrancar").textContent = "Jugando…";
+  reloj.andar();
+}
+$("orden").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b || reloj.anda()) return;
+  $("orden").querySelectorAll(".chip").forEach(c => c.classList.toggle("activa", c === b));
+  orden = b.id === "oFacil" ? "facil" : "abc";
+  preparar(); prog = 0; dibujar();
+  $("mA").textContent = "—"; $("mTot").textContent = "—";
+  $("btnArrancar").textContent = "Jugar el día";
+  $("fase").textContent = orden === "facil" ? "Empezando por lo fácil" : "Todas las A primero";
+  $("faseSub").textContent = "";
+});
+
+function pintarDia(){
+  const l = ordenar("abc").filter(x => x.c === "A" || x.c === "B");
+  $("deldia").innerHTML = l.length
+    ? l.map(x => `<li><b style="background:${COL[x.c]}">${x.c}</b>${Kit.escapar(x.t)}</li>`).join("")
+    : `<p class="ayuda" style="margin:0">Aparece al calificar las tareas con A o B.</p>`;
+}
+
+function cambio(){ leer(); Kit.guardar(); }
+function leer(){
+  pintarTareas(); pintarDia();
+  if(!reloj.anda()){ preparar(); dibujar(); }
+}
+
+function resumen(){
+  const l = [];
+  ["A", "B", "C"].forEach(L => {
+    const x = T.filter(t => t.c === L).map(t => t.t);
+    if(x.length) l.push(L + ": " + x.join("; "));
+  });
+  const s = T.filter(t => !t.c).map(t => t.t);
+  if(s.length) l.push("Sin calificar: " + s.join("; "));
+  const c = Kit.activas("cuando"), d = Kit.activas("donde");
+  if(c.length || d.length) l.push("", "LA LISTA: " + [d.join(", "), c.length ? "se mira " + c.join(", ").toLowerCase() : ""].filter(Boolean).join(" · "));
+  return l.join("\n");
+}
+
+Kit.chips("cuando", CUANDO);
+Kit.chips("donde", DONDE);
+
+Kit.iniciar({ clave: "tcc-lista-abc", alCambiar: leer, resumen: resumen,
+  extra: () => ({t: T}), restaurar: d => { T = d.t || []; } });

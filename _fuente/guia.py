@@ -222,6 +222,19 @@ GUIA = [
     ("Se retoma", "Al planificar acción: la fortaleza elegida es la vía de entrada.")],
   "cuidado":"Si queda en elogio, se lee como minimización. Cada fortaleza elegida tiene que quedar "
             "anclada a un ejemplo conductual concreto antes de pasar a la siguiente."},
+ {"archivo":"pp-tres-cosas-buenas.html", "titulo":"Tres cosas buenas y mi mejor versión", "etq":"Gratitud y metas",
+  "paraque":"Entrenar la atención hacia lo que sale bien con un diario de tres cosas buenas, y convertir "
+            "una imagen de una mejor versión de uno mismo en un plan apoyado en las propias fortalezas.",
+  "conviene":[
+    "Síntomas depresivos con atención fija en lo negativo y comparaciones con los demás.",
+    "Personas que ya identificaron sus fortalezas y no saben cómo usarlas.",
+    "Como práctica continua durante toda la terapia: el diario se revisa al inicio de cada sesión."],
+  "secuencia":[
+    ("Después de", "Mis fortalezas del carácter, que da las fortalezas distintivas para el plan."),
+    ("Junto a", "Mi flor PERMAH, para ver en qué área del bienestar cae la mejor versión."),
+    ("Tarea", "Tres cosas buenas cada noche y el plan compartido con alguien que reciba noticias.")],
+  "cuidado":"En un duelo o una situación muy dura el diario puede no salir de forma auténtica: no se "
+            "fuerza y se buscan alternativas. Y la gente se acostumbra: conviene variar el formato."},
 ]),
 
 ("ACT", [
@@ -298,6 +311,46 @@ GUIA = [
   "cuidado":"Se empieza por quién importa, para que la primera mirada sea un acierto, y no se busca "
             "una lista completa. Si la persona dice «me autosaboteo», se pregunta qué se le ve "
             "haciendo: arriba van conductas observables."},
+ {"archivo":"act-los-ganchos.html", "titulo":"Los ganchos", "etq":"Matriz, paso 3",
+  "paraque":"Reconocer qué engancha a la persona y darse cuenta de que mordió por lo que hace después, "
+            "no por analizar el gancho.",
+  "conviene":[
+    "Después de la matriz, cuando ya se distinguen movimientos hacia y de alejamiento.",
+    "Reacciones que se repiten ante los mismos disparadores: rabia, autocrítica, ganas de consumir.",
+    "Personas que buscan entender de dónde viene cada pensamiento antes de poder moverse."],
+  "secuencia":[
+    ("Después de", "La matriz y la revisión de si los movimientos de alejamiento funcionan."),
+    ("Junto a", "Soltar el anzuelo, para ensayar la defusión con un gancho concreto."),
+    ("Tarea", "Notar ganchos en la semana y lo que se hizo después.")],
+  "cuidado":"No se corrige cómo clasifica: si pone una conducta en el cebo o algo externo, se sigue. "
+            "Tampoco se sugiere que los ganchos «están solo en la cabeza»."},
+ {"archivo":"act-el-cielo-y-el-clima.html", "titulo":"El cielo y el clima", "etq":"Dejar espacio",
+  "paraque":"Dejar de pelear con un pensamiento, un sentimiento o un dolor dándole espacio: se nombra, "
+            "se le da forma y la respiración va hacia adentro y alrededor.",
+  "conviene":[
+    "Emociones o sensaciones que se intentan apartar y vuelven con más fuerza.",
+    "Dolor físico persistente con lucha alrededor.",
+    "Insomnio con pensamientos que no dejan dormir, combinada con respiración."],
+  "secuencia":[
+    ("Después de", "Poner los pies en la tierra y desengancharse, como en la guía de la OPS."),
+    ("Junto a", "La cuerda y el monstruo, que muestra el costo de pelear."),
+    ("Tarea", "Practicar en la cama cuando no se puede dormir, o cuando aparece el dolor.")],
+  "cuidado":"No es una técnica para que se vaya: si la persona la usa para eso y el clima no cambia, "
+            "concluye que falló. Se calibra la lucha, no la intensidad."},
+ {"archivo":"act-empujar-el-papel.html", "titulo":"Empujar el papel", "etq":"Preocupación y rumia",
+  "paraque":"Hacer visible, en el cuerpo y en un minuto, lo que cuesta pelear con la preocupación o la "
+            "rumia, y probar la alternativa: dejar el pensamiento al lado y seguir con lo que importa.",
+  "conviene":[
+    "Preocupación o rumia que ocupan horas del día.",
+    "Personas que ya intentaron distraerse, suprimir o discutir sus pensamientos sin resultado.",
+    "Intervenciones breves: es el centro de la primera sesión del protocolo."],
+  "secuencia":[
+    ("Antes de", "Identificar el «papá», sus «hijitos» y lo que se hace para dejar de pensar."),
+    ("Después de", "La matriz, que da el esquema de arriba a la derecha y abajo a la izquierda."),
+    ("Abre paso a", "Hojas en el arroyo y La palabra repetida, como práctica de defusión.")],
+  "cuidado":"Con papel real funciona mejor: el terapeuta sostiene la hoja y ofrece resistencia. La hoja "
+            "no reemplaza eso, lo resume. Y el «papá» se busca con cuidado: suele ser el pensamiento "
+            "que más dolería creer cierto."},
 ]),
 
 ("DBT", [
@@ -483,6 +536,73 @@ GUIA = [
   "cuidado":"No es hoja de consultante. Y si la consecuencia es intermitente, hay que advertirle al "
             "entorno que al retirar el refuerzo la conducta aumenta antes de bajar, o el plan se "
             "abandona en la primera semana."},
+ {"archivo":"tcc-aplazar-la-preocupacion.html", "titulo":"Aplazar la preocupación", "etq":"Metacognitiva",
+  "paraque":"Poner a prueba la creencia de que la preocupación o la rumiación son incontrolables: se "
+            "deja el desencadenante en paz y se aplaza el proceso a un momento breve más tarde en el día.",
+  "conviene":[
+    "Ansiedad generalizada con preocupación que se vive como imposible de parar.",
+    "Rumiación depresiva o pensamientos intrusivos después de un trauma.",
+    "Personas que intentan suprimir los pensamientos y confunden eso con controlarlos."],
+  "secuencia":[
+    ("Antes de", "Practicar el mindfulness desapegado con un pensamiento neutro, como un tigre."),
+    ("Después de", "Los experimentos de intentar perder el control, en sesión y luego en casa."),
+    ("Tarea", "Aplazar con todos los desencadenantes y volver a calificar la creencia en la sesión siguiente.")],
+  "cuidado":"Aplazar no es suprimir: el pensamiento puede quedarse en la mente, lo que se deja para "
+            "después es el proceso de preocuparse. Se revisa con detalle cómo se aplicó: suele usarse "
+            "solo con algunos desencadenantes, o se confunde con distraerse."},
+ {"archivo":"tcc-balance-decisional.html", "titulo":"Balance decisional", "etq":"Motivación",
+  "paraque":"Trabajar la ambivalencia explorando con honestidad los pros y contras de cambiar y de seguir "
+            "igual, responder a lo que sostiene no cambiar y llegar a un objetivo con pasos concretos.",
+  "conviene":[
+    "Al inicio del tratamiento, antes de los módulos que exigen esfuerzo, como la exposición.",
+    "Cuando la motivación baja o hay un retroceso: se vuelve a revisar el balance.",
+    "Ambivalencia fuerte que no se resuelve con las preguntas de importancia y confianza."],
+  "secuencia":[
+    ("Después de", "Importancia y confianza, si la ambivalencia pide más que dos preguntas."),
+    ("Abre paso a", "La escalera de exposición o la activación conductual, según el objetivo."),
+    ("Se repite", "Antes de las exposiciones y cada vez que la motivación flaquee.")],
+  "cuidado":"Las celdas de lo bueno de seguir igual y lo difícil de cambiar suelen quedar vacías. No se "
+            "sigue sin explorarlas: ahí están los obstáculos que aparecerán después."},
+ {"archivo":"tcc-ventana-de-sueno.html", "titulo":"Ventana de sueño", "etq":"Insomnio",
+  "paraque":"Consolidar el sueño ajustando el tiempo en la cama al tiempo que de verdad se duerme, con una "
+            "hora fija para levantarse, y ampliarlo semana a semana según la eficiencia.",
+  "conviene":[
+    "Insomnio crónico con mucho tiempo despierto en la cama.",
+    "Personas que se acuestan cada vez más temprano o se quedan en cama para recuperar sueño.",
+    "Cuando ya hay al menos una semana de diario de sueño."],
+  "secuencia":[
+    ("Antes de", "Una o dos semanas de diario de sueño, que dan los promedios."),
+    ("Junto a", "El control de estímulos, que se acuerda en la misma sesión."),
+    ("Se ajusta", "Cada semana, al comienzo de la sesión, con el diario.")],
+  "cuidado":"Nunca menos de cuatro horas y media en la cama. Puede estar contraindicada con antecedentes "
+            "de manía, apnea obstructiva, convulsiones, parasomnias o riesgo de caídas. Al comienzo se "
+            "duerme algo menos: conviene anticiparlo."},
+ {"archivo":"tcc-lista-abc.html", "titulo":"Lista de tareas A-B-C", "etq":"Organización",
+  "paraque":"Reunir todo lo pendiente en una sola lista y priorizar con una regla simple: todas las A "
+            "antes que cualquier B, para no llenar el día con lo fácil y dejar lo importante.",
+  "conviene":[
+    "Adultos con TDAH o con dificultades de organización y postergación.",
+    "Personas que se sienten ocupadas todo el día y no avanzan en lo importante.",
+    "Como base de otras habilidades: la lista y el calendario sostienen el resto del programa."],
+  "secuencia":[
+    ("Antes de", "Acordar un calendario y una sola lista maestra, que reemplacen los papelitos."),
+    ("Abre paso a", "La solución de problemas, cuando las A se quedan sin hacer una y otra vez."),
+    ("Tarea", "Mirar la lista cada día a una hora fija y armar la lista del día con sus letras.")],
+  "cuidado":"El error más común es calificar demasiadas tareas como A. Y no buscar el sistema perfecto: "
+            "uno sencillo y cómodo, sostenido al menos tres meses."},
+ {"archivo":"tcc-inoculacion-de-estres.html", "titulo":"Inoculación de estrés", "etq":"Estrés",
+  "paraque":"Recorrer las tres fases del entrenamiento: entender el estrés y separar lo cambiable de lo que "
+            "no, reunir un repertorio de afrontamiento y ensayarlo con dosis de estrés crecientes.",
+  "conviene":[
+    "Estrés laboral, de crianza o por enfermedad, con situaciones que se repiten.",
+    "Preparación para algo difícil que se sabe que viene: una cirugía, una audiencia, un examen.",
+    "Ira o ansiedad ante situaciones interpersonales concretas."],
+  "secuencia":[
+    ("Junto a", "Autoinstrucciones, que arma las frases para antes, durante y después."),
+    ("Usa", "La solución de problemas para lo cambiable y la respiración lenta para lo que no."),
+    ("Tarea", "La siguiente dosis como experimento personal, acordado con la persona.")],
+  "cuidado":"La dosis sube solo después de varios éxitos; si una se desborda, se vuelve a una más suave. "
+            "Y no se abruma con opciones: pocas herramientas, las que encajen."},
 ]),
 ("Compasión y mindfulness", [
  {"archivo":"cft-ritmo-tranquilizador.html", "titulo":"Respiración de ritmo tranquilizador", "etq":"Sistema de calma",
@@ -509,6 +629,33 @@ GUIA = [
     ("Abre paso a", "Las puertas del cuerpo, del pensamiento y de la acción hábil.")],
   "cuidado":"No es un tiempo muerto para escapar de la crisis: si se usa para que lo desagradable se "
             "vaya, se vuelve a la modalidad «hacer». Tampoco importa que dure exactamente tres minutos."},
+ {"archivo":"cft-pausa-de-autocompasion.html", "titulo":"Pausa de autocompasión", "etq":"Autocompasión",
+  "paraque":"Responder a un momento difícil con los tres componentes de la autocompasión: reconocer que "
+            "duele, recordar que le pasa a cualquiera y ofrecerse lo que hace falta, consuelo o fuerza.",
+  "conviene":[
+    "Autocrítica dura ante errores o fracasos.",
+    "Vergüenza o sensación de estar solo con el problema.",
+    "Como práctica informal breve, para usar en el día cuando aparece el estrés."],
+  "secuencia":[
+    ("Después de", "La respiración de ritmo tranquilizador, si la activación es alta."),
+    ("Abre paso a", "El yo compasivo, para trabajar la autocrítica con más profundidad."),
+    ("Tarea", "La tarjeta con las tres frases y el gesto, en los momentos acordados.")],
+  "cuidado":"Al comienzo puede sentirse peor: es el contragolpe, dolor que ya estaba y sale cuando se "
+            "abre la puerta a la amabilidad. Se avanza más despacio, y con historia de trauma se "
+            "practica primero en sesión. No se usa para que el malestar desaparezca."},
+ {"archivo":"cft-el-yo-compasivo.html", "titulo":"El yo compasivo", "etq":"Autocrítica",
+  "paraque":"Pasar de la perspectiva de amenaza a una organizada por la compasión, ensayándola como un "
+            "papel, y desde ahí acompañar a la versión de uno que sufre.",
+  "conviene":[
+    "Autocrítica y vergüenza arraigadas.",
+    "Ansiedad ante situaciones que activan viejas experiencias de humillación.",
+    "Personas que dicen «yo no soy así»: el papel evita la discusión."],
+  "secuencia":[
+    ("Después de", "La respiración de ritmo tranquilizador, que abre la práctica."),
+    ("Junto a", "La pausa de autocompasión, para el día a día."),
+    ("Tarea", "Ponerse el papel en momentos tranquilos y acordados; después, una carta desde el yo compasivo.")],
+  "cuidado":"No es un escape de la situación difícil: se sale de la amenaza para volver a ella desde "
+            "otra perspectiva. Con vergüenza muy intensa se empieza por acompañar a otra persona."},
 ]),
 ("Crisis y consumo", [
  {"archivo":"crisis-plan-de-seguridad.html", "titulo":"Plan de seguridad", "etq":"Riesgo suicida",
@@ -535,6 +682,19 @@ GUIA = [
     ("Complementa", "Hojas en el arroyo: la misma actitud de observar sin actuar.")],
   "cuidado":"Si hubo consumo, se revisa como información para la próxima vez, no como fracaso: una "
             "caída no borra lo aprendido."},
+ {"archivo":"crisis-importancia-y-confianza.html", "titulo":"Importancia y confianza", "etq":"Entrevista motivacional",
+  "paraque":"Explorar la ambivalencia con dos preguntas de escala y evocar, en palabras de la persona, "
+            "sus razones para cambiar y sus recursos para lograrlo.",
+  "conviene":[
+    "Ambivalencia ante un cambio: consumo, adherencia al tratamiento, volver a la actividad.",
+    "Una tarea acordada que no se hizo: se revisan la importancia y la confianza antes de insistir.",
+    "Mantenimiento: después de un tropiezo, para volver a las razones y a la confianza."],
+  "secuencia":[
+    ("Después de", "Enfocar: acordar juntos de qué cambio se está hablando."),
+    ("Abre paso a", "El balance decisional, si la ambivalencia es fuerte; el plan, si las dos reglas están altas."),
+    ("Se repite", "En sesiones posteriores, para ver cómo se mueven.")],
+  "cuidado":"El número no se discute ni se corrige. Si se pregunta «¿por qué no un 10?», la persona "
+            "responde con sus razones para no cambiar: la pregunta va siempre hacia el número más bajo."},
 ]),
 ]
 

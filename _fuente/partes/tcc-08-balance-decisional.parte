@@ -1,0 +1,245 @@
+@@meta
+archivo: tcc-balance-decisional.html
+titulo: Balance decisional
+orden: 08
+enfoque: Cognitivo-conductual
+etiqueta: Motivación
+sub: Cuatro celdas: lo bueno y lo malo de cambiar, y lo bueno y lo malo de seguir igual. Cada razón se pone donde va y se le da peso; la balanza se inclina sola. Seguir igual también tiene beneficios, y nombrarlos es lo que permite responderles. Termina en un objetivo concreto y sus primeros pasos.
+fuente: Hoja de balance decisional y hoja para el establecimiento de objetivos de tratamiento, en Barlow et al., Protocolo unificado para el tratamiento transdiagnóstico de los trastornos emocionales, módulo 1 (caps. 5 del manual del terapeuta y 4 del manual del paciente).
+resumen: Se llenan las cuatro celdas del balance con razones de distinto peso y se ve hacia dónde se inclina. Luego se responde a las razones para seguir igual y a los costos de cambiar, y se define un objetivo concreto con sus pasos.
+identificacion: si
+@@css
+  .balanza{display:block;width:100%;max-width:620px;height:auto;margin:0 auto}
+  .celdas4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .celda{border:1px solid var(--linea);border-radius:10px;padding:11px 12px;background:#fbfcfd;border-top:4px solid var(--c)}
+  .celda .tit{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--c);margin-bottom:2px}
+  .celda .lado{font-size:12px;color:var(--tinta-suave);margin-bottom:8px}
+  .razones{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;min-height:6px}
+  .razon{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--linea);border-radius:8px;
+    padding:6px 8px;font-size:14px;cursor:pointer;user-select:none}
+  .razon .peso{display:flex;gap:3px;flex:none}
+  .razon .peso i{width:8px;height:8px;border-radius:50%;background:#dfe5e8}
+  .razon .peso i.on{background:var(--c)}
+  .razon .t{flex:1}
+  .razon .x{flex:none;color:var(--tinta-suave);font-size:16px;line-height:1;padding:0 2px}
+  .agregar{display:flex;gap:6px}
+  .agregar input{flex:1;min-width:0}
+  .agregar button{padding:6px 11px;font-size:13px}
+  .sugeridas{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+  .sugeridas button{font-size:12px;padding:3px 9px;border-radius:20px;border-style:dashed;color:var(--tinta-suave)}
+  .respuesta{margin:0 0 12px}
+  .respuesta .r{font-size:14px;font-weight:600;margin-bottom:5px}
+  .respuesta textarea{min-height:50px}
+  .pasos-obj input{margin-bottom:7px}
+  @media (max-width:640px){.celdas4{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Las cuatro celdas</h2>
+  <p class="ayuda">Cada razón va en su celda. Un toque sobre ella cambia su peso, de uno a tres
+  puntos. Vale la pena llenar todas: suele costar encontrar lo bueno de seguir igual.</p>
+  <div class="cuerpo">
+    <label class="etiqueta" for="cambio">El cambio</label>
+    <input type="text" id="cambio" placeholder="Ej. dejar de evitar las reuniones con gente nueva">
+    <div class="celdas4" id="celdas" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="balanza" id="balanza" viewBox="0 0 620 250" role="img"
+    aria-label="Una balanza con las razones para cambiar a un lado y las razones para seguir igual al otro"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mCambio" style="color:#2f6f8f">0</span><span class="r">hacia el cambio</span></div>
+    <div><span class="n" id="mIgual" style="color:#b0503f">0</span><span class="r">hacia seguir igual</span></div>
+  </div>
+  <div id="lecturaBalanza" style="margin-top:10px"></div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Responder a las razones para seguir igual</h2>
+  <p class="ayuda">A lo bueno de seguir igual y a lo difícil de cambiar. Después de responder, se
+  puede volver a calibrar su peso arriba.</p>
+  <div class="cuerpo">
+    <div id="respuestas"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>El objetivo y los primeros pasos</h2>
+  <p class="ayuda">Un objetivo general y, debajo, pasos concretos y factibles. Si un paso parece
+  demasiado grande, se pregunta qué podría hacerse antes.</p>
+  <div class="cuerpo pasos-obj">
+    <label class="etiqueta" for="objetivo">Objetivo</label>
+    <input type="text" id="objetivo" placeholder="Ej. tener más amigos">
+    <label class="etiqueta">Pasos concretos</label>
+    <input type="text" id="paso1" placeholder="Primer paso">
+    <input type="text" id="paso2" placeholder="Segundo paso">
+    <input type="text" id="paso3" placeholder="Tercer paso">
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+/* lado: a qué platillo empuja cada celda */
+const CELDAS = [
+  {k:"cPro", tit:"Cambiar", sub:"lo bueno", lado:"cambio", c:"#2f6f8f",
+   sug:["No tendré que sufrir más", "Podré hacer lo que hoy evito", "Conocer gente nueva"]},
+  {k:"cContra", tit:"Cambiar", sub:"lo difícil", lado:"igual", c:"#b0503f",
+   sug:["Es difícil y duro", "¿Y si no funciona?", "Requiere tiempo y esfuerzo"]},
+  {k:"iPro", tit:"Seguir igual", sub:"lo bueno", lado:"igual", c:"#b0503f",
+   sug:["Es más fácil", "Es lo que acostumbro", "Evito el malestar por ahora"]},
+  {k:"iContra", tit:"Seguir igual", sub:"lo malo", lado:"cambio", c:"#2f6f8f",
+   sug:["Sigo limitado", "Evitar también cansa", "Me pierdo cosas que me importan"]}
+];
+let R = {cPro:[], cContra:[], iPro:[], iContra:[]};   /* [{t, p}] */
+let RESP = {};                                          /* texto de la razón -> respuesta */
+
+function pintarCeldas(){
+  const caja = $("celdas");
+  const foco = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.celda : null;
+  caja.innerHTML = "";
+  CELDAS.forEach(cd => {
+    const e = Kit.crearEl("div", "celda");
+    e.style.setProperty("--c", cd.c);
+    e.appendChild(Kit.crearEl("div", "tit", cd.tit + " · " + cd.sub));
+    e.appendChild(Kit.crearEl("div", "lado", cd.lado === "cambio" ? "empuja hacia el cambio" : "empuja hacia seguir igual"));
+    const lista = Kit.crearEl("div", "razones");
+    R[cd.k].forEach((r, i) => {
+      const f = Kit.crearEl("div", "razon");
+      f.title = "Toca para cambiar el peso";
+      const pe = Kit.crearEl("span", "peso");
+      for(let n = 1; n <= 3; n++){ const d = document.createElement("i"); if(n <= r.p) d.className = "on"; pe.appendChild(d); }
+      f.appendChild(pe);
+      f.appendChild(Kit.crearEl("span", "t", r.t));
+      const x = Kit.crearEl("span", "x", "×");
+      x.title = "Quitar";
+      x.onclick = ev => { ev.stopPropagation(); R[cd.k].splice(i, 1); cambio(); };
+      f.appendChild(x);
+      f.onclick = () => { r.p = r.p % 3 + 1; cambio(); };
+      lista.appendChild(f);
+    });
+    e.appendChild(lista);
+    const ag = Kit.crearEl("div", "agregar");
+    const inp = document.createElement("input");
+    inp.type = "text"; inp.placeholder = "Otra razón"; inp.dataset.celda = cd.k;
+    const b = Kit.crearEl("button", "", "Agregar"); b.type = "button";
+    const poner = () => { const t = inp.value.trim(); if(!t) return; R[cd.k].push({t, p:2}); inp.value = ""; cambio(); };
+    b.onclick = poner;
+    inp.addEventListener("keydown", ev => { if(ev.key === "Enter"){ ev.preventDefault(); poner(); } });
+    ag.appendChild(inp); ag.appendChild(b);
+    e.appendChild(ag);
+    const su = Kit.crearEl("div", "sugeridas");
+    cd.sug.filter(t => !R[cd.k].some(r => r.t === t)).forEach(t => {
+      const s = Kit.crearEl("button", "", "+ " + t); s.type = "button";
+      s.onclick = () => { R[cd.k].push({t, p:2}); cambio(); };
+      su.appendChild(s);
+    });
+    e.appendChild(su);
+    caja.appendChild(e);
+    if(foco === cd.k) inp.focus();
+  });
+}
+
+/* ---------- la balanza ---------- */
+const pesos = () => {
+  let c = 0, g = 0;
+  CELDAS.forEach(cd => R[cd.k].forEach(r => { if(cd.lado === "cambio") c += r.p; else g += r.p; }));
+  return [c, g];
+};
+let angulo = 0, meta = 0;
+function dibujar(){
+  const svg = $("balanza");
+  svg.innerHTML = "";
+  const cx = 310, cy = 70, brazo = 210;
+  svg.appendChild(Kit.svg("path", {d:`M${cx} ${cy} L${cx - 34} 236 L${cx + 34} 236 Z`, fill:"#e3e8ea"}));
+  svg.appendChild(Kit.svg("rect", {x:cx - 70, y:234, width:140, height:8, rx:4, fill:"#cfd8dc"}));
+  const rad = angulo * Math.PI / 180;
+  const pto = s => [cx + s * brazo * Math.cos(rad), cy + s * brazo * Math.sin(rad)];
+  const [lx, ly] = pto(-1), [rx, ry] = pto(1);
+  svg.appendChild(Kit.svg("line", {x1:lx, y1:ly, x2:rx, y2:ry, stroke:"#55616d", "stroke-width":5, "stroke-linecap":"round"}));
+  svg.appendChild(Kit.svg("circle", {cx:cx, cy:cy, r:8, fill:"#55616d"}));
+  const platillo = (x, y, lado, col, rot) => {
+    svg.appendChild(Kit.svg("line", {x1:x, y1:y, x2:x - 52, y2:y + 70, stroke:"#9aa5ab"}));
+    svg.appendChild(Kit.svg("line", {x1:x, y1:y, x2:x + 52, y2:y + 70, stroke:"#9aa5ab"}));
+    svg.appendChild(Kit.svg("path", {d:`M${x - 62} ${y + 70} Q${x} ${y + 98} ${x + 62} ${y + 70} Z`, fill:col, "fill-opacity":.18,
+      stroke:col, "stroke-width":1.5}));
+    /* los bloques: uno por razón, alto según su peso */
+    const bl = [];
+    CELDAS.filter(cd => cd.lado === lado).forEach(cd => R[cd.k].forEach(r => bl.push(r.p)));
+    let bx = x - 50, by = y + 70;
+    bl.forEach(p => {
+      const h = 5 + p * 5;
+      if(bx > x + 38){ bx = x - 50; by -= 16; }
+      svg.appendChild(Kit.svg("rect", {x:bx, y:by - h, width:12, height:h, rx:2, fill:col, "fill-opacity":.75}));
+      bx += 14;
+    });
+    const t = Kit.svg("text", {x:x, y:y + 116, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:col});
+    t.textContent = rot;
+    svg.appendChild(t);
+  };
+  platillo(lx, ly, "cambio", "#2f6f8f", "Hacia el cambio");
+  platillo(rx, ry, "igual", "#b0503f", "Hacia seguir igual");
+}
+const reloj = Kit.reloj(dt => {
+  angulo += (meta - angulo) * Math.min(1, dt * 4);
+  if(Math.abs(meta - angulo) < .05){ angulo = meta; reloj.parar(); }
+  dibujar();
+});
+
+function leerBalanza(){
+  const [c, g] = pesos();
+  $("mCambio").textContent = c; $("mIgual").textContent = g;
+  meta = Math.max(-16, Math.min(16, (g - c) * 2.2));
+  if(!reloj.anda()) reloj.andar();
+  let html = "";
+  const vacias = CELDAS.filter(cd => !R[cd.k].length);
+  if(c + g && vacias.some(cd => cd.k === "iPro" || cd.k === "cContra"))
+    html = `<div class="pistas">Falta lo que sostiene seguir igual. Si cuesta encontrarlo: ¿qué
+      impidió cambiar antes? Nombrarlo es lo que permite responderle.</div>`;
+  else if(c + g && vacias.length)
+    html = `<div class="pistas">Queda una celda vacía. Vale la pena explorarla antes de mirar la balanza.</div>`;
+  else if(c + g)
+    html = `<div class="pregunta-sola" style="padding:10px 14px;border-radius:10px"><div class="pregunta">
+      ${c > g ? "La balanza se inclina hacia el cambio. ¿Qué es lo que más pesa de ese lado?"
+       : c < g ? "Hoy pesa más seguir igual. ¿Qué haría falta para que alguna de esas razones pesara menos?"
+       : "La balanza está en equilibrio: justo así se siente la ambivalencia."}</div></div>`;
+  $("lecturaBalanza").innerHTML = html;
+}
+
+function pintarRespuestas(){
+  const caja = $("respuestas");
+  const lista = R.iPro.map(r => ["Lo bueno de seguir igual", r.t]).concat(R.cContra.map(r => ["Lo difícil de cambiar", r.t]));
+  caja.innerHTML = lista.length ? "" : `<p class="ayuda" style="margin:0">Aparecen al llenar lo bueno de seguir igual y lo difícil de cambiar.</p>`;
+  lista.forEach(([tipo, t]) => {
+    const d = Kit.crearEl("div", "respuesta");
+    d.appendChild(Kit.crearEl("div", "r", t));
+    const ta = document.createElement("textarea");
+    ta.placeholder = tipo === "Lo bueno de seguir igual" ? "¿Cuánto cuesta en realidad seguir igual?" : "¿Qué se le puede responder?";
+    ta.value = RESP[t] || "";
+    ta.addEventListener("input", () => { RESP[t] = ta.value; Kit.guardar(); });
+    d.appendChild(ta);
+    caja.appendChild(d);
+  });
+}
+
+function cambio(){ pintarCeldas(); leerBalanza(); pintarRespuestas(); Kit.guardar(); }
+function leer(){ pintarCeldas(); leerBalanza(); pintarRespuestas(); }
+
+function resumen(){
+  const l = [];
+  const c = $("cambio").value.trim();
+  if(c) l.push("Cambio: " + c);
+  CELDAS.forEach(cd => {
+    if(R[cd.k].length) l.push(cd.tit + " · " + cd.sub + ": " + R[cd.k].map(r => r.t + " (" + r.p + ")").join("; "));
+  });
+  const [a, b] = pesos();
+  if(a + b) l.push("Balanza: " + a + " hacia el cambio · " + b + " hacia seguir igual");
+  const rs = Object.keys(RESP).filter(k => RESP[k] && RESP[k].trim() && R.iPro.concat(R.cContra).some(r => r.t === k));
+  if(rs.length){ l.push("", "RESPUESTAS"); rs.forEach(k => l.push("  " + k + " → " + RESP[k].trim())); }
+  const o = $("objetivo").value.trim(), ps = ["paso1", "paso2", "paso3"].map(i => $(i).value.trim()).filter(Boolean);
+  if(o || ps.length) l.push("", "OBJETIVO: " + (o || "—") + (ps.length ? " · pasos: " + ps.join("; ") : ""));
+  return l.join("\n");
+}
+
+Kit.iniciar({ clave: "tcc-balance-decisional", alCambiar: leer, resumen: resumen,
+  extra: () => ({r: R, resp: RESP}),
+  restaurar: d => { if(d.r) R = d.r; RESP = d.resp || {}; } });

@@ -1,0 +1,322 @@
+@@meta
+archivo: cft-pausa-de-autocompasion.html
+titulo: Pausa de autocompasión
+orden: 03
+enfoque: Compasión y mindfulness
+etiqueta: Autocompasión
+sub: Tres frases y un gesto para un momento difícil. La primera reconoce que duele, la segunda recuerda que eso le pasa a cualquiera y la tercera ofrece lo que hace falta: consuelo o fuerza. No se hace para sentirse mejor, sino porque se está mal.
+fuente: Tacto tranquilizador y pausa de autocompasión (self-compassion break), en Germer y Neff, Teaching the Mindful Self-Compassion Program (2019), cap. 10; el contragolpe, en los caps. 11 y 20.
+resumen: Se elige una situación difícil de peso leve o moderado, se ubica en el cuerpo y se escogen las palabras de cada uno de los tres componentes y un gesto de apoyo. La pausa se recorre guiada, se revisa qué pasó y queda una tarjeta con las frases para la semana.
+@@css
+  .fase{font-size:21px;font-weight:700;text-align:center;margin:8px auto 2px;color:var(--acento);
+    min-height:30px;max-width:560px;line-height:1.35}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:540px;margin:0 auto;
+    min-height:42px;line-height:1.5}
+  .tres{display:block;width:100%;max-width:330px;height:auto;margin:0 auto}
+  button.arrancar{background:#4a8a7a;border-color:#4a8a7a;color:#fff;font-weight:600}
+  button.arrancar:hover{background:#3f776a;border-color:#3f776a}
+  .componente{border-left:4px solid var(--c);padding:2px 0 4px 13px;margin:0 0 16px}
+  .componente .nom{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--c);
+    font-weight:700;margin-bottom:6px}
+  .necesidad{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+  textarea#amigo{min-height:62px}
+  .tarjeta-pausa{border:1px solid var(--linea);border-radius:12px;padding:16px 18px;background:#fbfdfc;
+    max-width:520px;margin:4px auto 0}
+  .tarjeta-pausa .linea{font-size:16.5px;line-height:1.45;margin:0 0 8px;padding-left:12px;
+    border-left:3px solid var(--c)}
+  .tarjeta-pausa .gesto{font-size:13.5px;color:var(--tinta-suave);margin-top:10px}
+  .tarjeta-pausa .vacia{font-size:13.5px;color:var(--tinta-suave)}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Algo difícil, no lo más difícil</h2>
+  <p class="ayuda">Un problema de salud, de una relación, del trabajo, alguien que pasó por encima.
+  Para aprender la práctica conviene uno de peso leve o moderado.</p>
+  <div class="cuerpo">
+    <textarea id="situacion" placeholder="En pocas palabras"></textarea>
+    <div class="medidor" style="margin-top:12px">
+      <label for="peso">¿Cuánto pesa?</label>
+      <input type="range" id="peso" min="0" max="10" value="5">
+      <span class="valor" id="vPeso">5</span>
+    </div>
+    <div id="avisoPeso"></div>
+    <label class="etiqueta">Dónde se siente en el cuerpo</label>
+    <div class="chips" id="zona"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Las palabras</h2>
+  <p class="ayuda">Una frase por componente, la que suene propia. Si ninguna sirve, se escribe
+  otra con el «+».</p>
+  <div class="cuerpo">
+    <div class="componente" style="--c:#5b6fa6">
+      <div class="nom">Reconocer que duele</div>
+      <div class="chips" id="fAtencion"></div>
+    </div>
+    <div class="componente" style="--c:#c9962f">
+      <div class="nom">A cualquiera le pasa</div>
+      <div class="chips" id="fHumanidad"></div>
+    </div>
+    <div class="componente" style="--c:#b8566e">
+      <div class="nom">Lo que necesito ahora</div>
+      <div class="necesidad" id="necesidad"></div>
+      <div class="chips" id="fYin"></div>
+      <div class="chips" id="fYang" hidden></div>
+    </div>
+    <label class="etiqueta" for="amigo">Si no aparecen las palabras: ¿qué le dirías a alguien querido
+    con este mismo problema, sin darle consejos?</label>
+    <textarea id="amigo" placeholder="Lo que le dirías"></textarea>
+    <label class="etiqueta">El gesto</label>
+    <div class="chips" id="gesto"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="tres" id="tres" viewBox="0 0 300 260" role="img"
+    aria-label="Tres círculos que se encienden uno a uno: reconocer, a cualquiera le pasa y lo que necesito"></svg>
+  <div class="fase" id="fase">Cuando estés listo</div>
+  <div class="fase-sub" id="faseSub">Siéntate cómodo. Si quieres, cierra los ojos.</div>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#4a8a7a">2:20</span><span class="r">quedan</span></div>
+  </div>
+  <div class="duracion" id="tiempo">
+    <button type="button" class="chip activa" id="tLenta">Despacio</button>
+    <button type="button" class="chip" id="tCorta">Un minuto</button>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" onclick="siguiente()">Siguiente</button>
+    <button type="button" onclick="detener()">Detener</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">3</span>Qué pasó</h2>
+  <p class="ayuda">No hay respuesta correcta. A veces no se nota nada y a veces se siente peor
+  antes de sentirse mejor.</p>
+  <div class="cuerpo">
+    <div class="chips" id="notado"></div>
+    <div id="lectura"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>Para llevar</h2>
+  <p class="ayuda">Con práctica, basta el gesto para traer la pausa entera, y dura un minuto.</p>
+  <div class="cuerpo">
+    <div class="tarjeta-pausa" id="tarjeta"></div>
+    <label class="etiqueta">Cuándo usarla</label>
+    <div class="chips" id="cuando"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const ZONA = ["Pecho", "Garganta", "Estómago", "Hombros y cuello", "Mandíbula", "Cabeza"];
+const ATENCION = ["Este es un momento de sufrimiento", "Esto duele", "Ay", "Esto no se siente bien"];
+const HUMANIDAD = ["El sufrimiento es parte de la vida", "Otros se sentirían igual", "No estoy solo",
+  "A mí también me pasa"];
+const YIN = ["Que pueda ser amable conmigo", "Que pueda darme lo que necesito",
+  "Que pueda aceptarme tal como soy", "Que pueda cuidarme con ternura en este momento"];
+const YANG = ["No voy a permitir que me hagan daño así", "Que tenga el valor y la fuerza para hacer un cambio",
+  "Esto me importa y lo voy a defender"];
+const GESTO = ["Las dos manos en el corazón", "Un puño cubierto por la otra mano, en el pecho",
+  "Una mano en el vientre y otra en el corazón", "Una mano en la mejilla",
+  "Cruzar los brazos y apretar suave", "Las manos juntas en el regazo"];
+const NOTADO = ["Algo de distancia del problema", "Un poco de alivio", "No noté mayor cosa",
+  "Me sentí peor o aparecieron cosas viejas", "«A cualquiera le pasa» me hizo sentir más solo",
+  "Me costó encontrar las palabras", "El gesto me incomodó"];
+const CUANDO = ["Cuando me critico", "Cuando el cuerpo se tensa", "Después de un error",
+  "Al final de un día pesado"];
+
+const COL = {a:"#5b6fa6", h:"#c9962f", k:"#b8566e"};
+
+/* una sola frase por componente */
+function unica(id){
+  $(id).addEventListener("click", e => {
+    const b = e.target.closest(".chip");
+    if(!b || !b.hasAttribute("data-txt")) return;
+    $(id).querySelectorAll(".chip.activa").forEach(c => { if(c !== b) c.classList.remove("activa"); });
+  }, true);
+}
+function primera(id){ return Kit.activas(id)[0] || ""; }
+function amable(){ return primera(fuerza() ? "fYang" : "fYin"); }
+function fuerza(){ return Kit.activas("necesidad")[0] === "Fuerza"; }
+
+/* ---------- la pausa guiada ---------- */
+const TIEMPOS = {tLenta:[20, 30, 30, 40, 20], tCorta:[10, 15, 15, 15, 5]};
+let tiempos = TIEMPOS.tLenta, paso = -1, enPaso = 0;
+
+function pasos(){
+  const z = Kit.activas("zona");
+  const donde = z.length ? " Quizá en " + z.join(", ").toLowerCase() + "." : "";
+  const g = primera("gesto");
+  const amigo = $("amigo").value.trim();
+  return [
+    ["Trae la situación", "Déjala aparecer hasta notar algo de incomodidad en el cuerpo." + donde +
+      " Haz contacto con esa molestia.", null],
+    ["«" + (primera("fAtencion") || "Este es un momento de sufrimiento") + "»",
+      "Dilo para ti, despacio y con claridad.", "a"],
+    ["«" + (primera("fHumanidad") || "El sufrimiento es parte de la vida") + "»",
+      "Dilo para ti, despacio. No es el único al que le pasa.", "h"],
+    ["«" + (amable() || amigo || "Que pueda ser amable conmigo") + "»",
+      (g ? g + ". " : "Pon las manos donde te sostengan. ") + "Siente el calor de las manos.", "k"],
+    ["Quédate un momento", "Deja que se asiente. No hace falta que se sienta mejor.", "fin"]
+  ];
+}
+
+function dibujar(){
+  const svg = $("tres");
+  svg.innerHTML = "";
+  const c = [["a", 110, 100, "Reconocer"], ["h", 190, 100, "A cualquiera"], ["k", 150, 168, "Lo que necesito"]];
+  const actual = paso >= 0 ? pasos()[paso][2] : null;
+  c.forEach(([k, x, y, rot], i) => {
+    const encendido = actual === "fin" || (actual && "ahk".indexOf(actual) >= i);
+    const ahora = actual === k;
+    svg.appendChild(Kit.svg("circle", {cx:x, cy:y, r:ahora ? 66 : 60, fill:COL[k],
+      "fill-opacity":encendido ? (ahora ? .38 : .22) : .05, stroke:COL[k],
+      "stroke-width":ahora ? 3 : 1.6, "stroke-opacity":encendido ? 1 : .4}));
+    const t = Kit.svg("text", {x:x + (k === "a" ? -18 : k === "h" ? 18 : 0), y:y + (k === "k" ? 30 : -14),
+      "text-anchor":"middle", "font-size":12.5, "font-weight":700, fill:COL[k],
+      opacity:encendido ? 1 : .5});
+    t.textContent = rot;
+    svg.appendChild(t);
+  });
+}
+
+function mostrar(){
+  const p = pasos();
+  if(paso < 0) return;
+  $("fase").textContent = p[paso][0];
+  $("faseSub").textContent = p[paso][1];
+  dibujar();
+}
+function pintarReloj(){
+  let s = paso < 0 ? tiempos.reduce((a, b) => a + b, 0)
+                   : tiempos.slice(paso).reduce((a, b) => a + b, 0) - enPaso;
+  s = Math.max(0, Math.ceil(s));
+  $("mReloj").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+}
+
+const reloj = Kit.reloj(dt => {
+  enPaso += dt;
+  if(enPaso >= tiempos[paso]) siguiente();
+  pintarReloj();
+});
+
+function arrancar(){
+  if(reloj.anda()) return;
+  paso = 0; enPaso = 0;
+  $("btnArrancar").textContent = "En curso…";
+  mostrar(); pintarReloj();
+  reloj.andar();
+}
+function siguiente(){
+  if(paso < 0) return arrancar();
+  if(paso >= tiempos.length - 1) return terminar();
+  paso++; enPaso = 0;
+  mostrar(); pintarReloj();
+}
+function detener(){
+  reloj.parar();
+  $("fase").textContent = "Detenido";
+  $("faseSub").textContent = "Abre los ojos despacio.";
+  $("btnArrancar").textContent = "Empezar";
+}
+function terminar(){
+  reloj.parar();
+  paso = tiempos.length - 1; enPaso = tiempos[paso];
+  $("fase").textContent = "Terminó";
+  $("faseSub").textContent = "Abre los ojos despacio. Si quieres, anota lo que notaste.";
+  $("btnArrancar").textContent = "Otra vez";
+  dibujar(); pintarReloj();
+  Kit.brindis("Pausa terminada");
+}
+$("tiempo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b || reloj.anda()) return;
+  $("tiempo").querySelectorAll(".chip").forEach(c => c.classList.toggle("activa", c === b));
+  tiempos = TIEMPOS[b.id]; pintarReloj();
+});
+
+/* ---------- lectura ---------- */
+function leer(){
+  const p = +$("peso").value;
+  $("vPeso").textContent = p;
+  $("avisoPeso").innerHTML = p >= 8
+    ? `<div class="pistas" style="margin-top:10px">Para aprender la práctica, mejor una situación más
+       liviana. Esta se retoma cuando la pausa ya sea conocida.</div>` : "";
+
+  const f = fuerza();
+  $("fYin").hidden = f; $("fYang").hidden = !f;
+
+  const n = Kit.activas("notado");
+  let html = "";
+  if(n.indexOf("Me sentí peor o aparecieron cosas viejas") >= 0)
+    html += `<div class="bandera">Es el contragolpe: al abrirle la puerta a la amabilidad, sale dolor
+      que ya estaba ahí, a veces viejo. La práctica no lo crea. Se sigue, pero más despacio: más corta,
+      con los ojos abiertos, o con algo concreto que cuide, como una caminata o una bebida caliente.
+      Si lo que aparece son recuerdos traumáticos intensos, primero se trabaja en sesión.</div>`;
+  if(n.indexOf("«A cualquiera le pasa» me hizo sentir más solo") >= 0)
+    html += `<div class="pistas">A veces «todos sufren» suena a «no tienes derecho a quejarte». Ese
+      componente busca lo contrario: probar «No estoy solo» u «Otros se sentirían igual».</div>`;
+  if(n.indexOf("Me costó encontrar las palabras") >= 0)
+    html += `<div class="pistas">Las palabras se buscan con tiempo. Mientras tanto sirve lo que le
+      diría a un amigo con el mismo problema.</div>`;
+  if(n.indexOf("El gesto me incomodó") >= 0)
+    html += `<div class="pistas">A algunas personas la mano en el corazón les genera vergüenza o las
+      hace sentir vulnerables. Se prueba otro gesto, o ninguno: lo que cuenta es la intención de
+      sostenerse.</div>`;
+  if(!html && (n.indexOf("Algo de distancia del problema") >= 0 || n.indexOf("Un poco de alivio") >= 0))
+    html += `<div class="logro">Eso es lo que se practica: el problema sigue ahí y hay un poco más de
+      espacio alrededor.</div>`;
+  if(!html && n.indexOf("No noté mayor cosa") >= 0)
+    html += `<div class="pistas">Es frecuente al principio, o cuando se está distraído. Los efectos
+      crecen con la práctica.</div>`;
+  $("lectura").innerHTML = html;
+  tarjeta();
+  if(reloj.anda()) mostrar();
+}
+
+function tarjeta(){
+  const l = [[primera("fAtencion"), COL.a], [primera("fHumanidad"), COL.h],
+             [amable() || $("amigo").value.trim(), COL.k]].filter(x => x[0]);
+  const g = primera("gesto");
+  $("tarjeta").innerHTML = l.length
+    ? l.map(([t, c]) => `<p class="linea" style="--c:${c}">${Kit.escapar(t)}</p>`).join("") +
+      (g ? `<div class="gesto">${Kit.escapar(g)}</div>` : "")
+    : `<div class="vacia">Aquí aparecen las frases elegidas.</div>`;
+}
+
+function resumen(){
+  const l = [];
+  const s = $("situacion").value.trim();
+  if(s) l.push("Situación: " + s + " (peso " + $("peso").value + "/10)");
+  const z = Kit.activas("zona");
+  if(z.length) l.push("En el cuerpo: " + z.join(", "));
+  l.push("Frases: " + [primera("fAtencion"), primera("fHumanidad"), amable() || $("amigo").value.trim()]
+    .filter(Boolean).map(x => "«" + x + "»").join(" · ") + (fuerza() ? " (fuerza)" : " (consuelo)"));
+  const g = primera("gesto");
+  if(g) l.push("Gesto: " + g);
+  const n = Kit.activas("notado");
+  if(n.length) l.push("Qué pasó: " + n.join(", "));
+  const c = Kit.activas("cuando");
+  if(c.length) l.push("", "PARA LA SEMANA: " + c.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("zona", ZONA, leer);
+Kit.chips("fAtencion", ATENCION, leer);
+Kit.chips("fHumanidad", HUMANIDAD, leer);
+Kit.chips("necesidad", ["Consuelo", "Fuerza"], leer, true);
+Kit.chips("fYin", YIN, leer);
+Kit.chips("fYang", YANG, leer);
+Kit.chips("gesto", GESTO, leer);
+Kit.chips("notado", NOTADO, leer);
+Kit.chips("cuando", CUANDO);
+["fAtencion", "fHumanidad", "necesidad", "fYin", "fYang", "gesto"].forEach(unica);
+$("peso").addEventListener("input", leer);
+$("amigo").addEventListener("input", leer);
+dibujar(); pintarReloj();
+
+Kit.iniciar({ clave: "cft-pausa-de-autocompasion", alCambiar: leer, resumen: resumen });
+if(!Kit.activas("necesidad").length){ $("necesidad").querySelector(".chip").classList.add("activa"); leer(); }
