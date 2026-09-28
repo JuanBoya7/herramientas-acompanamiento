@@ -52,6 +52,10 @@ ORDEN_ENFOQUES = [
     ("ACT", "Terapia de aceptación y compromiso: dejar de pelear con lo interno y moverse hacia lo que importa."),
     ("DBT", "Habilidades de terapia dialéctico-conductual, en módulos que se pueden trabajar sueltos."),
     ("Cognitivo-conductual", "Técnicas clásicas de evaluación, reestructuración, exposición y activación."),
+    ("Compasión y mindfulness", "Prácticas breves para bajar el ritmo y cambiar la relación con lo que aparece: "
+                                "el sistema de calma de la terapia centrada en la compasión y el espacio de respiración."),
+    ("Crisis y consumo", "Para los momentos de riesgo: el plan de seguridad ante la crisis suicida y el manejo del "
+                         "impulso en la prevención de recaídas."),
 ]
 
 

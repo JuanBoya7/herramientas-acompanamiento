@@ -24,6 +24,8 @@ COLORES = {
     "ACT":                  "#3f9b86",
     "DBT":                  "#5f77b8",
     "Cognitivo-conductual": "#2f6f8f",
+    "Compasión y mindfulness": "#4a8a7a",
+    "Crisis y consumo": "#b0503f",
 }
 
 # Cada hoja: archivo, título, para qué (el mecanismo, en una línea),
@@ -281,6 +283,21 @@ GUIA = [
   "cuidado":"Mismo riesgo que el arroyo: si se usa para que el pensamiento se vaya, deja de "
             "funcionar. Que ninguna mueva la cifra admite tres lecturas y conviene distinguirlas "
             "antes de insistir."},
+ {"archivo":"act-matriz.html", "titulo":"La matriz", "etq":"Punto de vista",
+  "paraque":"Un solo diagrama para ordenar lo que importa, lo que se interpone, lo que se hace para "
+            "alejarse y lo que se hace o podría hacerse para acercarse. Sirve igual para problemas "
+            "distintos y habla en palabras de la persona, sin conceptos técnicos.",
+  "conviene":[
+    "Evitación en muchas áreas, con ciclos de alivio inmediato y costo a largo plazo.",
+    "Personas a las que los conceptos de la terapia de aceptación y compromiso las mandan a la cabeza.",
+    "Como mapa compartido para volver a él sesión tras sesión.",
+    "Trabajo con parejas, familias o equipos, donde cada uno ordena su propia matriz."],
+  "secuencia":[
+    ("Abre", "El trabajo con la matriz: después vienen la funcionalidad de los movimientos de alejamiento y los ganchos."),
+    ("Junto a", "La brújula de valores, para desarrollar el cuadrante de quién y qué importa.")],
+  "cuidado":"Se empieza por quién importa, para que la primera mirada sea un acierto, y no se busca "
+            "una lista completa. Si la persona dice «me autosaboteo», se pregunta qué se le ve "
+            "haciendo: arriba van conductas observables."},
 ]),
 
 ("DBT", [
@@ -466,6 +483,58 @@ GUIA = [
   "cuidado":"No es hoja de consultante. Y si la consecuencia es intermitente, hay que advertirle al "
             "entorno que al retirar el refuerzo la conducta aumenta antes de bajar, o el plan se "
             "abandona en la primera semana."},
+]),
+("Compasión y mindfulness", [
+ {"archivo":"cft-ritmo-tranquilizador.html", "titulo":"Respiración de ritmo tranquilizador", "etq":"Sistema de calma",
+  "paraque":"Enlentecer la respiración y atender a la sensación de ir más despacio, para suavizar las "
+            "emociones de amenaza. Es una de las primeras prácticas de la terapia centrada en la compasión.",
+  "conviene":[
+    "Activación alta, ansiedad o enojo que no dejan pensar ni practicar otra cosa.",
+    "Como puerta de entrada a las prácticas compasivas.",
+    "Para instalar desde la primera sesión el hábito de practicar entre sesiones."],
+  "secuencia":[
+    ("Antes de", "El espacio de respiración y las prácticas de autocompasión."),
+    ("Tarea", "Treinta segundos, dos o tres veces al día, con un recordatorio acordado.")],
+  "cuidado":"No es respiración consciente: aquí sí se cambia el ritmo. Si atender al cuerpo o a la "
+            "respiración incomoda, no se convierte en exposición: se busca otro foco tranquilizador."},
+ {"archivo":"cft-espacio-de-respiracion.html", "titulo":"Espacio de respiración de tres minutos", "etq":"Mindfulness",
+  "paraque":"Llevar la práctica al día y usarla como primer paso ante lo difícil: reconocer lo que hay, "
+            "reunir la atención en la respiración y ampliarla al cuerpo entero.",
+  "conviene":[
+    "Prevención de recaídas en depresión, dentro o fuera del programa completo.",
+    "Momentos del día en que se entra en piloto automático o en rumiación.",
+    "Antes de responder en una situación difícil."],
+  "secuencia":[
+    ("Después de", "Alguna práctica formal más larga, como el escáner corporal."),
+    ("Abre paso a", "Las puertas del cuerpo, del pensamiento y de la acción hábil.")],
+  "cuidado":"No es un tiempo muerto para escapar de la crisis: si se usa para que lo desagradable se "
+            "vaya, se vuelve a la modalidad «hacer». Tampoco importa que dure exactamente tres minutos."},
+]),
+("Crisis y consumo", [
+ {"archivo":"crisis-plan-de-seguridad.html", "titulo":"Plan de seguridad", "etq":"Riesgo suicida",
+  "paraque":"Un plan escrito con la persona, en sus palabras, de lo que hará si la crisis vuelve: de lo "
+            "que puede hacer sola a lo que requiere ayuda, con teléfonos concretos y los medios fuera de alcance.",
+  "conviene":[
+    "Después de una valoración de riesgo suicida, en un momento de calma.",
+    "Tras un intento o una autolesión, antes de terminar el contacto.",
+    "Como parte del seguimiento: se revisa en cada encuentro."],
+  "secuencia":[
+    ("Después de", "La valoración del riesgo, que va primero."),
+    ("Junto a", "La tarjeta de crisis de DBT, para las habilidades del segundo paso.")],
+  "cuidado":"No reemplaza la ruta de urgencias: con plan en curso, intención o incapacidad de "
+            "mantenerse a salvo, se activa la ruta. Y es más útil que pedir un contrato de no suicidio."},
+ {"archivo":"crisis-surfear-el-impulso.html", "titulo":"Surfear el impulso", "etq":"Prevención de recaídas",
+  "paraque":"Atravesar el deseo de consumir sin obedecerlo ni pelear con él: nombrarlo como impulso, "
+            "observarlo en el cuerpo y dejar que suba y baje como una ola.",
+  "conviene":[
+    "Consumo de sustancias o apuestas con deseo intenso ante señales o emociones.",
+    "Personas que intentan suprimir el deseo y terminan más atrapadas en él.",
+    "Como práctica en sesión antes de usarla en situaciones reales."],
+  "secuencia":[
+    ("Junto a", "El plan de prevención de recaídas y la identificación de situaciones de riesgo."),
+    ("Complementa", "Hojas en el arroyo: la misma actitud de observar sin actuar.")],
+  "cuidado":"Si hubo consumo, se revisa como información para la próxima vez, no como fracaso: una "
+            "caída no borra lo aprendido."},
 ]),
 ]
 

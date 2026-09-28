@@ -14,7 +14,8 @@ La página que las usa marca:
 El mapa se arma solo a partir de esas marcas.
 """
 
-ENFOQUES = ["Metáforas vivas", "Psicología positiva", "ACT", "DBT", "Cognitivo-conductual"]
+ENFOQUES = ["Metáforas vivas", "Psicología positiva", "ACT", "DBT", "Cognitivo-conductual",
+            "Compasión y mindfulness", "Crisis y consumo"]
 
 
 def controles(placeholder):

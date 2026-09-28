@@ -1,0 +1,203 @@
+@@meta
+archivo: cft-espacio-de-respiracion.html
+titulo: Espacio de respiración de tres minutos
+orden: 02
+enfoque: Compasión y mindfulness
+etiqueta: Mindfulness
+sub: Una meditación breve para llevar al día lo que se practica en las sesiones largas, y un primer paso ante lo difícil. La atención se mueve como un reloj de arena: primero amplia, para reconocer lo que hay; después angosta, en la respiración; y otra vez amplia, en el cuerpo entero. No es un tiempo muerto en medio de la crisis: es un cambio de actitud hacia lo que está ocurriendo.
+fuente: Espacio de respiración de tres minutos, en Segal, Williams y Teasdale, Terapia cognitiva basada en el mindfulness para la depresión (2.ª ed., trad. esp.), sesión 3 y su uso a lo largo del programa.
+resumen: Guía de los tres pasos con un reloj de arena que se abre, se angosta y se vuelve a abrir. Después de practicar se elige por qué puerta seguir —volver a la situación, el cuerpo, el pensamiento o la acción hábil— y se deja acordado cuándo practicar en el día.
+@@css
+  .arena{display:block;width:100%;max-width:300px;height:auto;margin:0 auto}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:6px 0 2px;color:var(--acento);min-height:26px}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:560px;margin:0 auto;min-height:40px;line-height:1.5}
+  button.arrancar{background:#5b6fa6;border-color:#5b6fa6;color:#fff;font-weight:600}
+  button.arrancar:hover{background:#4d5f90;border-color:#4d5f90}
+  .puertas{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .puertas .opcion{border:1px solid var(--linea);border-radius:10px;padding:12px 14px;cursor:pointer;background:#fff}
+  .puertas .opcion.activa{border-color:#5b6fa6;background:#f3f5fb}
+  .puertas .opcion b{display:block;margin-bottom:3px}
+  .puertas .opcion span{font-size:13px;color:var(--tinta-suave);line-height:1.45}
+  @media (max-width:640px){.puertas{grid-template-columns:1fr}}
+@@html
+<div class="escenario">
+  <svg class="arena" id="arena" viewBox="0 0 240 260" role="img"
+    aria-label="Reloj de arena: la atención amplia, se angosta en la respiración y se vuelve a ampliar"></svg>
+  <div class="fase" id="fase">Antes de empezar</div>
+  <div class="fase-sub" id="faseSub">Ajusta la postura, de pie o sentado, de un modo que exprese
+  estar despierto: salir del piloto automático.</div>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#5b6fa6">3:00</span><span class="r">quedan</span></div>
+    <div><span class="n" id="mPaso" style="color:var(--acento)">—</span><span class="r">paso</span></div>
+  </div>
+  <div class="duracion" id="tiempo">
+    <button type="button" class="chip activa" id="t180">Tres minutos</button>
+    <button type="button" class="chip" id="t90">Versión corta</button>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" onclick="siguiente()">Pasar al siguiente paso</button>
+    <button type="button" onclick="detener()">Detener</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Qué apareció en el primer paso</h2>
+  <p class="ayuda">Solo reconocerlo, sin cambiarlo. Es opcional y puede quedar vacío.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Pensamientos</label>
+    <div class="chips" id="pensamientos"></div>
+    <label class="etiqueta">Sentimientos</label>
+    <div class="chips" id="sentimientos"></div>
+    <label class="etiqueta">Sensaciones del cuerpo</label>
+    <div class="chips" id="sensaciones"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Después del espacio de respiración</h2>
+  <p class="ayuda">Terminados los tres pasos, se abren varias puertas. Ninguna es obligatoria.</p>
+  <div class="cuerpo">
+    <div class="puertas" id="puertas"></div>
+    <div id="lecturaPuerta"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Cuándo practicarlo</h2>
+  <p class="ayuda">Primero en momentos preestablecidos, tres veces al día; ayuda asociarlo a algo
+  que ya se hace. Más adelante, también cada vez que aparezca algo desagradable. No importa si
+  dura exactamente tres minutos: a veces solo hay tiempo para un par de respiraciones.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Momentos del día</label>
+    <div class="chips" id="momentos"></div>
+    <label class="etiqueta">Además</label>
+    <div class="chips" id="ademas"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const PASOS = [
+  ["Paso 1 · Reconocer", "¿Qué estoy experimentando ahora? Nota los pensamientos, los sentimientos y las sensaciones del cuerpo que están presentes, y déjalos ser tal como son, aunque no sean agradables."],
+  ["Paso 2 · Reunir", "Lleva toda la atención a las sensaciones de la respiración en una zona del cuerpo, por ejemplo el abdomen: cómo sube con el aire que entra y baja con el que sale. Si la mente se va, vuelve a la respiración."],
+  ["Paso 3 · Ampliar", "Expande la atención desde la respiración al cuerpo entero, con su postura y sus sensaciones, como si todo el cuerpo respirara. Luego, cuando estés listo, sigue con el día desde aquí."]
+];
+const PENS = ["Preocupaciones", "Autocrítica", "Pendientes", "Recuerdos"];
+const SENT = ["Tristeza", "Ansiedad", "Irritación", "Cansancio", "Calma"];
+const SENS = ["Tensión en los hombros", "Opresión en el pecho", "Nudo en el estómago", "Pesadez"];
+const PUERTAS = [
+  ["Volver a la situación", "Retomar lo que se estaba haciendo, con una presencia más asentada y una perspectiva más amplia, aunque lo desagradable siga ahí."],
+  ["La puerta del cuerpo", "Llevar una atención abierta y amable a la zona donde se siente la dificultad, respirar hacia ella y explorar sus sensaciones."],
+  ["La puerta del pensamiento", "Mirar los pensamientos como sucesos mentales y no como hechos: notar su ir y venir y si vienen del cansancio o del estado de ánimo."],
+  ["La puerta de la acción hábil", "Elegir una acción que cuide de uno mismo; muchas veces la más necesaria es la más amable."]
+];
+const MOMENTOS = ["Con el café de la mañana", "Antes o después de comer", "Al llegar al trabajo", "Al sentarme ante el computador", "Antes de dormir"];
+const ADEMAS = ["Cada vez que note algo desagradable", "Antes de responder en una situación difícil"];
+
+let total = 180, quedan = 180, paso = -1, enPaso = 0;
+
+$("tiempo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b || reloj.anda()) return;
+  $("tiempo").querySelectorAll(".chip").forEach(c => c.classList.toggle("activa", c === b));
+  total = quedan = +b.id.slice(1); pintar();
+});
+
+/* La atención como reloj de arena: ancho, angosto, ancho. */
+function dibujar(){
+  const svg = $("arena"); svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  g("path", {d:"M30 20 H210 L128 130 L210 240 H30 L112 130 Z", fill:"#f3f5fb", stroke:"#5b6fa6", "stroke-width":2});
+  const zonas = [
+    {d:"M30 20 H210 L166 80 H74 Z"},          /* amplio arriba */
+    {d:"M74 80 H166 L128 130 L112 130 Z"},    /* se angosta */
+    {d:"M112 130 H128 L210 240 H30 Z"}        /* amplio abajo */
+  ];
+  zonas.forEach((z, i) => g("path", {d:z.d, fill:"#5b6fa6",
+    "fill-opacity": i === paso ? .45 : (i < paso ? .15 : .05), style:"transition:fill-opacity .6s"}));
+  ["1", "2", "3"].forEach((n, i) => {
+    const t = Kit.svg("text", {x:[120, 120, 120][i], y:[56, 110, 205][i], "text-anchor":"middle",
+      style:"font:700 " + (i === 1 ? 13 : 16) + "px system-ui;fill:" + (i === paso ? "#2d3a66" : "#8d99bf")});
+    t.textContent = n; svg.appendChild(t);
+  });
+}
+
+function pintar(){
+  const s = Math.ceil(quedan);
+  $("mReloj").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  $("mPaso").textContent = paso < 0 ? "—" : (paso + 1) + " de 3";
+  if(paso >= 0){ $("fase").textContent = PASOS[paso][0]; $("faseSub").textContent = PASOS[paso][1]; }
+  dibujar();
+}
+
+const reloj = Kit.reloj(dt => {
+  quedan -= dt; enPaso += dt;
+  if(enPaso >= total / 3 && paso < 2){ paso++; enPaso = 0; }
+  if(quedan <= 0){ terminar(); return; }
+  pintar();
+});
+
+function arrancar(){
+  if(reloj.anda()) return;
+  quedan = total; paso = 0; enPaso = 0;
+  $("btnArrancar").textContent = "En curso…";
+  pintar(); reloj.andar();
+}
+function siguiente(){
+  if(!reloj.anda()) return;
+  if(paso < 2){ quedan = total - (paso + 1) * total / 3; paso++; enPaso = 0; pintar(); }
+  else terminar();
+}
+function detener(){
+  reloj.parar(); $("btnArrancar").textContent = "Empezar";
+  $("fase").textContent = "Detenido"; $("faseSub").textContent = "Se puede retomar cuando haga falta.";
+}
+function terminar(){
+  reloj.parar(); quedan = total; paso = 3;
+  $("btnArrancar").textContent = "Otra vez";
+  $("fase").textContent = "Terminó";
+  $("faseSub").textContent = "Ahora se puede elegir por qué puerta seguir, más abajo.";
+  pintar(); $("mPaso").textContent = "—";
+  Kit.brindis("Espacio de respiración terminado");
+}
+
+function pintarPuertas(){
+  $("puertas").innerHTML = "";
+  PUERTAS.forEach((p, i) => {
+    const d = document.createElement("div");
+    d.className = "opcion"; d.id = "puerta-" + i;
+    d.innerHTML = "<b>" + p[0] + "</b><span>" + p[1] + "</span>";
+    d.addEventListener("click", () => { d.classList.toggle("activa"); Kit.guardar(); leerPuerta(); });
+    $("puertas").appendChild(d);
+  });
+}
+function leerPuerta(){
+  const n = document.querySelectorAll("#puertas .activa").length;
+  $("lecturaPuerta").innerHTML = n ? "" :
+    `<div class="pistas">Si no se elige ninguna, también está bien: completar los tres pasos y
+     volver a lo que se estaba haciendo ya es la primera puerta.</div>`;
+}
+
+function resumen(){
+  const l = [], p = Kit.activas("pensamientos"), s = Kit.activas("sentimientos"), c = Kit.activas("sensaciones");
+  if(p.length || s.length || c.length){
+    l.push("PRIMER PASO");
+    if(p.length) l.push("  Pensamientos: " + p.join(", "));
+    if(s.length) l.push("  Sentimientos: " + s.join(", "));
+    if(c.length) l.push("  Sensaciones: " + c.join(", "));
+  }
+  const pu = [...document.querySelectorAll("#puertas .activa b")].map(b => b.textContent);
+  if(pu.length) l.push("Puerta elegida: " + pu.join(", "));
+  const m = Kit.activas("momentos"), a = Kit.activas("ademas");
+  if(m.length || a.length) l.push("", "PRÁCTICA: " + [...m, ...a].join(" · "));
+  return l.join("\n");
+}
+
+Kit.chips("pensamientos", PENS);
+Kit.chips("sentimientos", SENT);
+Kit.chips("sensaciones", SENS);
+Kit.chips("momentos", MOMENTOS);
+Kit.chips("ademas", ADEMAS, null, true);
+pintarPuertas(); leerPuerta(); pintar();
+
+Kit.iniciar({ clave: "cft-espacio-de-respiracion", alCambiar: leerPuerta, resumen: resumen });

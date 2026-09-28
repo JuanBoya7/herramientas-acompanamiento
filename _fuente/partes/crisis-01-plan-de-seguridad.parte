@@ -1,0 +1,161 @@
+@@meta
+archivo: crisis-plan-de-seguridad.html
+titulo: Plan de seguridad
+orden: 01
+enfoque: Crisis y consumo
+etiqueta: Riesgo suicida
+identificacion: si
+campo3: Fecha de revisión
+campo3ph: Ej. próxima sesión
+sub: Lo que voy a hacer si la crisis vuelve, escrito con mis palabras en un momento de calma. Va de lo que puedo hacer solo a lo que requiere a otros, y cada paso tiene nombres, lugares y teléfonos concretos. No es un contrato de no hacerse daño: es un plan para atravesar el momento difícil.
+fuente: Plan de seguridad en pasos, en Comtois y Landes, Crisis management and treating suicidality from a behavioral perspective (2018), y en OMS, mhGAP guideline (2023), recomendación SUI1.
+resumen: Los pasos del plan de seguridad —señales de alerta, lo que hago solo, personas y lugares que distraen, a quién pido ayuda, servicios profesionales y medios fuera de alcance— con espacio para teléfonos y la línea de atención en Colombia. Se imprime o se guarda para llevarlo siempre.
+@@css
+  .alerta-ruta{background:#fdf1f1;border:1px solid #e3a6a6;border-left:5px solid #c0504d;border-radius:var(--radio);
+    padding:14px 18px;margin-bottom:16px;font-size:14px;line-height:1.55}
+  .alerta-ruta b{color:#8f2f2c}
+  .contacto{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .contacto input{width:100%;box-sizing:border-box}
+  @media (max-width:560px){.contacto{grid-template-columns:1fr}}
+@@html
+<div class="alerta-ruta">
+  <b>Si hay un plan en curso, intención de hacerlo o la persona no puede mantenerse a salvo</b>,
+  esto no reemplaza la atención de urgencias: se activa la ruta. En Colombia, <b>Línea 192,
+  opción 4</b> (salud mental) y <b>123</b> para emergencias.
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Mis señales de alerta</h2>
+  <p class="ayuda">Pensamientos, emociones, situaciones o conductas que avisan que la crisis puede
+  estar empezando. Se empieza por las que la persona reconoce.</p>
+  <div class="cuerpo"><div class="chips" id="senales"></div></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Lo que puedo hacer solo para calmarme</h2>
+  <p class="ayuda">Estrategias propias, que no requieren a nadie más.</p>
+  <div class="cuerpo"><div class="chips" id="solo"></div></div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Personas y lugares que me distraen</h2>
+  <p class="ayuda">Estar con otros o en otro lugar, sin tener que hablar de la crisis.</p>
+  <div class="cuerpo">
+    <div class="chips" id="lugares"></div>
+    <div class="contacto">
+      <input type="text" id="dist1" placeholder="Persona o lugar">
+      <input type="text" id="dist1tel" placeholder="Teléfono o dirección">
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>Personas a las que puedo pedir ayuda</h2>
+  <p class="ayuda">Personas de confianza a las que se les puede decir lo que está pasando.</p>
+  <div class="cuerpo">
+    <div class="contacto">
+      <input type="text" id="ayuda1" placeholder="Nombre">
+      <input type="text" id="ayuda1tel" placeholder="Teléfono">
+      <input type="text" id="ayuda2" placeholder="Nombre">
+      <input type="text" id="ayuda2tel" placeholder="Teléfono">
+      <input type="text" id="ayuda3" placeholder="Nombre">
+      <input type="text" id="ayuda3tel" placeholder="Teléfono">
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">5</span>Profesionales y servicios</h2>
+  <div class="cuerpo">
+    <div class="contacto">
+      <input type="text" id="prof1" placeholder="Profesional o servicio que me atiende">
+      <input type="text" id="prof1tel" placeholder="Teléfono">
+      <input type="text" id="urg" placeholder="Servicio de urgencias más cercano">
+      <input type="text" id="urgdir" placeholder="Dirección">
+    </div>
+    <p class="ayuda" style="margin-top:10px">Línea 192, opción 4 (salud mental) · 123
+    (emergencias). Si hay una línea local o departamental, se agrega aquí.</p>
+    <input type="text" id="lineaLocal" placeholder="Línea local o departamental (opcional)">
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">6</span>Mantener fuera de alcance los medios</h2>
+  <p class="ayuda">Qué se retira, se guarda o queda en manos de otra persona, y quién lo hace.</p>
+  <div class="cuerpo">
+    <div class="chips" id="medios"></div>
+    <input type="text" id="mediosQuien" placeholder="Quién lo guarda o lo retira" style="margin-top:8px">
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">7</span>Revisar el plan</h2>
+  <p class="ayuda">Para cada paso: ¿qué podría impedir usarlo? Se deja acordado dónde se guardará
+  el plan y se revisa en cada contacto.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Dónde lo voy a guardar</label>
+    <div class="chips" id="donde"></div>
+    <label class="etiqueta" for="obstaculos">Obstáculos y cómo sortearlos</label>
+    <textarea id="obstaculos" placeholder="Por ejemplo: «si no contesta mi hermana, llamo a mi amiga»."></textarea>
+    <div id="lecturaPlan"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const SENALES = ["Pienso que no hay salida", "Me aíslo", "Dejo de dormir", "Siento que soy una carga",
+  "Discusiones fuertes", "Tomo más de lo usual", "Fechas o aniversarios difíciles"];
+const SOLO = ["Salir a caminar", "Ducharme", "Escuchar música", "Respirar más despacio", "Escribir lo que siento",
+  "Rezar o meditar", "Hacer algo con las manos"];
+const LUGARES = ["Casa de un familiar", "Un parque", "La iglesia", "Un café", "Un amigo"];
+const MEDIOS = ["Medicamentos", "Armas", "Objetos cortantes", "Venenos o químicos", "Alcohol"];
+const DONDE = ["En el teléfono", "En la billetera", "En la mesa de noche", "Una copia con alguien de confianza"];
+
+const CAMPOS = ["dist1", "ayuda1", "ayuda2", "ayuda3", "prof1", "urg"];
+
+function leer(){
+  const pasos = [Kit.activas("senales").length, Kit.activas("solo").length,
+    Kit.activas("lugares").length + ($("dist1").value.trim() ? 1 : 0),
+    ["ayuda1", "ayuda2", "ayuda3"].filter(i => $(i).value.trim()).length,
+    ($("prof1").value.trim() || $("urg").value.trim()) ? 1 : 0,
+    Kit.activas("medios").length];
+  const faltan = pasos.map((n, i) => n ? null : i + 1).filter(Boolean);
+  const sinTel = ["ayuda1", "ayuda2", "ayuda3", "prof1"].filter(i => $(i).value.trim() && !$(i + "tel").value.trim());
+  let html = "";
+  if(sinTel.length)
+    html += `<div class="pistas">Hay ${sinTel.length === 1 ? "un contacto" : sinTel.length + " contactos"}
+      sin teléfono. En la crisis no hay tiempo de buscarlo: conviene dejarlo escrito.</div>`;
+  html += faltan.length
+    ? `<div class="pistas">Pasos sin completar: ${faltan.join(", ")}. Un plan con nombres y teléfonos
+       concretos es más fácil de usar en el momento difícil.</div>`
+    : `<div class="logro">Todos los pasos tienen algo concreto. Queda acordar dónde se guarda y
+       revisarlo en cada contacto.</div>`;
+  $("lecturaPlan").innerHTML = html;
+}
+
+function resumen(){
+  const l = [], v = id => $(id).value.trim();
+  const par = (a, b) => v(a) ? v(a) + (v(b) ? " — " + v(b) : "") : "";
+  l.push("PLAN DE SEGURIDAD");
+  l.push("1. Señales de alerta: " + (Kit.activas("senales").join(", ") || "—"));
+  l.push("2. Lo que hago solo: " + (Kit.activas("solo").join(", ") || "—"));
+  l.push("3. Personas y lugares que distraen: " + ([...Kit.activas("lugares"), par("dist1", "dist1tel")].filter(Boolean).join(", ") || "—"));
+  l.push("4. A quién pido ayuda: " + (["1", "2", "3"].map(i => par("ayuda" + i, "ayuda" + i + "tel")).filter(Boolean).join(" · ") || "—"));
+  l.push("5. Profesionales y servicios: " + ([par("prof1", "prof1tel"), par("urg", "urgdir"), v("lineaLocal")].filter(Boolean).join(" · ") || "—") +
+    " · Línea 192, opción 4 · 123");
+  l.push("6. Medios fuera de alcance: " + (Kit.activas("medios").join(", ") || "—") + (v("mediosQuien") ? " (" + v("mediosQuien") + ")" : ""));
+  const d = Kit.activas("donde");
+  if(d.length) l.push("Dónde se guarda: " + d.join(", "));
+  if(v("obstaculos")) l.push("Obstáculos: " + v("obstaculos"));
+  return l.join("\n");
+}
+
+Kit.chips("senales", SENALES, leer);
+Kit.chips("solo", SOLO, leer);
+Kit.chips("lugares", LUGARES, leer);
+Kit.chips("medios", MEDIOS, leer);
+Kit.chips("donde", DONDE);
+document.querySelectorAll(".contacto input, #obstaculos").forEach(e => e.addEventListener("input", leer));
+leer();
+
+Kit.iniciar({ clave: "crisis-plan-de-seguridad", alCambiar: leer, resumen: resumen });

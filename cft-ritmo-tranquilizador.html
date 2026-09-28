@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Verificar los hechos y acción opuesta</title>
+<title>Respiración de ritmo tranquilizador</title>
 <style>
   :root{
     --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
@@ -299,124 +299,105 @@
     textarea{min-height:0;height:auto}
   }
 
-  .emocion-elegida{border:1px solid var(--linea);border-left-width:5px;border-radius:10px;
-    padding:14px 17px;margin-top:14px;background:#fdfefe}
-  .emocion-elegida .quees{font-size:13.5px;color:var(--tinta-suave);line-height:1.5;margin:0}
-  .emocion-elegida .pide{margin-top:9px;font-size:13.5px}
-  .emocion-elegida .pide b{color:var(--alerta)}
-
-  .verificar{display:grid;gap:9px}
-  .pregunta-v{border:1px solid var(--linea);border-radius:9px;padding:11px 14px;background:#fdfefe;
-    display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
-  .pregunta-v .q{font-size:14px;line-height:1.45}
-  .pregunta-v .q small{display:block;font-size:12px;color:var(--tinta-suave);margin-top:2px}
-  .siono{display:flex;gap:6px;flex:0 0 auto}
-  .siono button{font-size:12.5px;padding:5px 15px;border-radius:999px;border:1px solid var(--linea);
-    background:#fdfefe;color:var(--tinta-suave);cursor:pointer}
-  .siono button.si.marcado{background:var(--logro);border-color:var(--logro);color:#fff;font-weight:600}
-  .siono button.no.marcado{background:var(--alerta);border-color:var(--alerta);color:#fff;font-weight:600}
-
-  .veredicto{border-radius:11px;padding:18px 22px;margin:16px 0}
-  .veredicto.ajusta{background:#eef4f9;border:1px solid #c3d8e6}
-  .veredicto.noajusta{background:#fdf3ef;border:1px solid var(--alerta-linea)}
-  .veredicto .rot{font-size:11px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;
-    margin-bottom:5px}
-  .veredicto .tit{font-size:21px;font-weight:700;margin-bottom:6px}
-  .veredicto p{margin:0;font-size:14.5px;line-height:1.55}
-
-  .camino{display:grid;gap:9px}
-  .tramo-op{border:1px solid var(--linea);border-radius:9px;padding:11px 14px;background:#fdfefe;
-    cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start}
-  .tramo-op.hecho{border-color:#8fbfa4;background:#f6fbf8}
-  .tramo-op .caja{width:20px;height:20px;border-radius:5px;border:2px solid var(--linea);
-    margin-top:2px}
-  .tramo-op.hecho .caja{background:var(--logro);border-color:var(--logro)}
-  .tramo-op b{display:block;font-size:14px}
-  .tramo-op span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
-  @media (max-width:620px){.pregunta-v{grid-template-columns:1fr}}
+  .respira{display:block;width:100%;max-width:360px;height:auto;margin:0 auto}
+  .fase{font-size:20px;font-weight:700;text-align:center;margin:6px 0 2px;color:var(--acento);min-height:28px}
+  .fase-sub{text-align:center;font-size:13.5px;color:var(--tinta-suave);min-height:20px}
+  button.arrancar{background:#4a8a7a;border-color:#4a8a7a;color:#fff;font-weight:600}
+  button.arrancar:hover{background:#3f776a;border-color:#3f776a}
+  .guion{counter-reset:paso}
+  .guion p{position:relative;padding-left:30px;margin:0 0 11px;font-size:14.5px;line-height:1.55}
+  .guion p::before{counter-increment:paso;content:counter(paso);position:absolute;left:0;top:1px;
+    width:21px;height:21px;border-radius:50%;background:var(--acento-claro);color:var(--acento);
+    font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
-<body data-laminable="1">
+<body>
 <div class="envoltura">
 
 <header class="tapa">
-  <h1>Verificar los hechos y acción opuesta</h1>
-  <p class="sub">Antes de cambiar una emoción hay que averiguar si sobra. Si se ajusta a los hechos, lo que toca es resolver el problema. Si no se ajusta —o su intensidad no—, lo que toca es hacer lo contrario de lo que pide, y hacerlo completo. La hoja bifurca sola según lo que se marque.</p>
-  <p class="fuente">Verificar los hechos, prepararse para la acción opuesta y actuar de forma opuesta a la emoción actual, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 9, fichas de regulación emocional 8 a 12.</p>
+  <h1>Respiración de ritmo tranquilizador</h1>
+  <p class="sub">No se trata de respirar «bien» ni de quitarse lo que se siente: se trata de ir más despacio. El círculo marca un ritmo algo más lento que el habitual, y la atención se queda en la sensación de enlentecer, el cuerpo primero y la mente después. La emoción difícil no desaparece; se suaviza y deja espacio para otras cosas.</p>
+  <p class="fuente">Respiración de ritmo tranquilizador (soothing rhythm breathing), en Kolts, CFT Made Simple (2016), cap. 4.</p>
 
 </header>
 
 <section class="paso">
-  <h2><span class="num">1</span>¿Qué emoción es?</h2>
-  <p class="ayuda">Una sola, la que más pesa. La acción opuesta de la rabia y la del miedo son
-  contrarias: hacer las dos a la vez no lleva a ninguna parte.</p>
+  <h2><span class="num">1</span>Cómo llegas</h2>
+  <p class="ayuda">Una cifra rápida, sin pensarla mucho. Sirve para comparar al final, no para
+  evaluar si la práctica «funcionó».</p>
   <div class="cuerpo">
-    <div class="chips" id="emociones"></div>
-    <div id="fichaEmocion"></div>
+    <div class="medidor">
+      <label for="antes">¿Qué tan activado o tenso estás ahora?</label>
+      <input type="range" id="antes" min="0" max="10" value="5">
+      <span class="valor" id="vAntes">5</span>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">2</span>Cómo se hace</h2>
+  <div class="cuerpo guion">
+    <p>Siéntate erguido, con los dos pies en el piso y las manos sobre las piernas. La cabeza
+    derecha, digna pero relajada. Si quieres, cierra los ojos.</p>
+    <p>Primero solo nota el aire que entra y sale, sin cambiarlo, unos segundos.</p>
+    <p>Ahora deja que la respiración se haga más lenta: el aire entra mientras el círculo se abre,
+    una pausa breve, y sale mientras se cierra.</p>
+    <p>Pon la atención en la sensación de ir más despacio: el cuerpo más lento, la mente más
+    lenta. Si el ritmo te resulta demasiado lento, cámbialo abajo hasta encontrar uno cómodo y
+    tranquilizador.</p>
+    <p>Al terminar, deja que la respiración vuelva a su ritmo normal y abre los ojos despacio.</p>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="respira" id="circulo" viewBox="0 0 300 300" role="img"
+    aria-label="Círculo que se abre al inhalar y se cierra al exhalar"></svg>
+  <div class="fase" id="fase">Listo para empezar</div>
+  <div class="fase-sub" id="faseSub"></div>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#4a8a7a">2:00</span><span class="r">quedan</span></div>
+    <div><span class="n" id="mCiclos" style="color:var(--acento)">0</span><span class="r">respiraciones</span></div>
+  </div>
+  <div class="duracion" id="ritmo">
+    <button type="button" class="chip" id="r3">Entrar 3 s · salir 3 s</button>
+    <button type="button" class="chip activa" id="r4">Entrar 4 s · salir 4 s</button>
+    <button type="button" class="chip" id="r5">Entrar 5 s · salir 5 s</button>
+  </div>
+  <div class="duracion" id="tiempo">
+    <button type="button" class="chip" id="t30">30 segundos</button>
+    <button type="button" class="chip" id="t60">1 minuto</button>
+    <button type="button" class="chip activa" id="t120">2 minutos</button>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" onclick="detener()">Detener</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">3</span>Qué notaste</h2>
+  <p class="ayuda">Los efectos crecen con la práctica: en las primeras veces es común notar poco.
+  Enlentecer no hace desaparecer las emociones de amenaza; las suaviza.</p>
+  <div class="cuerpo">
+    <div class="chips" id="notado"></div>
     <div class="medidor" style="margin-top:14px">
-      <label for="intensidad">Intensidad ahora</label>
-      <input type="range" id="intensidad" min="0" max="100" value="70">
-      <span class="valor" id="vIntensidad">70</span>
+      <label for="despues">¿Qué tan activado o tenso estás ahora?</label>
+      <input type="range" id="despues" min="0" max="10" value="5">
+      <span class="valor" id="vDespues">5</span>
     </div>
+    <div id="lectura"></div>
   </div>
 </section>
 
 <section class="paso">
-  <h2><span class="num">2</span>El hecho y la interpretación</h2>
-  <p class="ayuda">Primero lo que habría grabado una cámara. Aparte, lo que tu mente hizo con eso:
-  la emoción que no se ajusta casi nunca responde al hecho.</p>
+  <h2><span class="num">4</span>Práctica para la semana</h2>
+  <p class="ayuda">Treinta segundos alcanzan, dos o tres veces al día. El obstáculo más común es
+  olvidarse, así que se acuerda desde ya qué lo va a recordar.</p>
   <div class="cuerpo">
-    <label class="etiqueta">Qué pasó, en términos de cámara</label>
-    <div class="chips" id="hechos"></div>
-    <label class="etiqueta">Qué dice mi mente que eso significa</label>
-    <div class="chips" id="interpretaciones"></div>
-    <details class="apunte">
-      <summary>Apuntar el hecho en una línea (opcional)</summary>
-      <input type="text" id="hechoNota" placeholder="Solo lo observable, sin interpretar.">
-    </details>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">3</span>Verificar los hechos</h2>
-  <p class="ayuda">Siete preguntas de la ficha RE 8. Sí o no, sin discutirlas: la primera
-  respuesta suele ser la honesta.</p>
-  <div class="cuerpo"><div class="verificar" id="verificar"></div></div>
-</section>
-
-<div class="veredicto" id="veredicto"></div>
-
-<section class="paso" id="ramaProblemas" hidden>
-  <h2><span class="num">4</span>Resolución de problemas</h2>
-  <p class="ayuda">La emoción se ajusta: está avisando. No hay nada que cambiar por dentro; hay
-  algo que cambiar afuera. Ficha RE 12.</p>
-  <div class="cuerpo">
-    <label class="etiqueta">¿Qué se puede hacer con el problema?</label>
-    <div class="chips" id="opcionesProblema"></div>
-    <details class="apunte">
-      <summary>Apuntar el plan en una línea (opcional)</summary>
-      <input type="text" id="planProblema" placeholder="Qué, cuándo y con quién.">
-    </details>
-  </div>
-</section>
-
-<section class="paso" id="ramaOpuesta" hidden>
-  <h2><span class="num">4</span>Acción opuesta, hasta el final</h2>
-  <p class="ayuda">Se hace lo contrario de lo que la emoción pide, y se hace <b>completo</b>: media
-  acción opuesta le confirma a la emoción que tenía razón. Fichas RE 10 y 11.</p>
-  <div class="cuerpo">
-    <div id="tablaOpuesta"></div>
-    <label class="etiqueta" style="margin-top:16px">Todo el camino</label>
-    <p class="ayuda" style="margin-bottom:8px">Las cinco vías por las que se sostiene. Se dan
-    vuelta todas, no solo la conducta visible.</p>
-    <div class="camino" id="camino"></div>
-
-    <div class="medidor" style="margin-top:16px">
-      <label for="intensidadFinal">Intensidad después de practicarlo</label>
-      <input type="range" id="intensidadFinal" min="0" max="100" value="70">
-      <span class="valor" id="vIntensidadFinal">70</span>
-    </div>
-    <div id="lecturaFinal"></div>
+    <label class="etiqueta">Veces al día</label>
+    <div class="chips" id="veces"></div>
+    <label class="etiqueta">Qué lo va a recordar</label>
+    <div class="chips" id="recordatorio"></div>
   </div>
 </section>
 
@@ -442,7 +423,6 @@
   <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
   <button onclick="Kit.copiar()">Copiar resumen</button>
   <button onclick="Kit.guardar(true)">Guardar</button>
-  <button class='botonLamina' onclick='Kit.lamina()'>Modo lámina</button>
   <button onclick="Kit.limpiar()">Empezar de nuevo</button>
 </div>
 
@@ -1151,336 +1131,129 @@ var Kit = (function(){
 <script>
 const $ = Kit.$;
 
-/* La tabla de acción opuesta por emoción, según fichas RE 10 y 11. */
-const EMOCIONES = [
- {id:"miedo", nombre:"Miedo", color:"#8171b4",
-  quees:"Avisa de una amenaza a la vida, la salud o el bienestar.",
-  ajusta:"Hay una amenaza real a la vida, la salud o el bienestar, tuyo o de alguien que te importa.",
-  pide:"huir, evitar, congelarse",
-  opuesta:["Acercarte a lo que estás evitando, una y otra vez",
-    "Hacer aquello que te da miedo, empezando por lo más fácil",
-    "Ponerte de pie, pecho abierto, hombros atrás",
-    "Mantener el contacto visual",
-    "Quedarte hasta que la ansiedad baje sola, no antes"]},
+const NOTADO = ["El cuerpo se hizo más lento", "La mente se aquietó un poco", "La emoción se suavizó",
+  "No noté mayor cambio", "Me costó quedarme con la respiración", "Me incomodó atender al cuerpo"];
+const VECES = ["Dos veces", "Tres veces"];
+const RECORDATORIO = ["Alarma en el teléfono", "Al levantarme", "Antes de cada comida",
+  "En la primera pausa comercial", "Al llegar a casa", "Antes de dormir"];
 
- {id:"rabia", nombre:"Rabia", color:"#c26a4e",
-  quees:"Avisa de un obstáculo a una meta importante, o de un daño hacia ti o los tuyos.",
-  ajusta:"Alguien atacó algo que te importa, o te bloquearon una meta importante de forma injusta.",
-  pide:"atacar, gritar, reclamar",
-  opuesta:["Alejarte con amabilidad, en vez de atacar",
-    "Bajar la voz y hablar más despacio de lo normal",
-    "Aflojar la mandíbula y las manos; media sonrisa",
-    "Imaginar con empatía el punto de vista del otro",
-    "Hacer algo amable por esa persona, aunque no tengas ganas"]},
+let ritmo = 4, total = 120, quedan = 120, t = 0, ciclos = 0;
+const PAUSA = 1;                 /* pausa breve entre entrar y salir */
 
- {id:"tristeza", nombre:"Tristeza", color:"#5f77b8",
-  quees:"Avisa de una pérdida, o de que las cosas no son como querías.",
-  ajusta:"Perdiste algo o a alguien, o no conseguiste algo que de verdad querías.",
-  pide:"retirarse, quedarse quieto, no hacer",
-  opuesta:["Activarte: hacer algo, aunque sea pequeño y no tengas ganas",
-    "Acercarte a la gente en vez de encerrarte",
-    "Hacer lo que antes disfrutabas, sin esperar a disfrutarlo",
-    "Enderezar la postura y levantar la mirada",
-    "Salir de la cama y del cuarto"]},
-
- {id:"culpaJ", nombre:"Culpa que se ajusta", color:"#a8834e",
-  quees:"Avisa de que hiciste algo contra tus propios valores.",
-  ajusta:"Hiciste algo que va en contra de tus valores, y el daño es real.",
-  pide:"esconderse, castigarse",
-  opuesta:["Reparar el daño concreto que hiciste",
-    "Pedir disculpas una sola vez, sin repetirlas",
-    "Comprometerte a no repetirlo, con algo observable",
-    "Aceptar las consecuencias sin agrandarlas",
-    "Dejarlo ir después de reparar: la culpa ya hizo su trabajo"]},
-
- {id:"culpaI", nombre:"Culpa que no se ajusta", color:"#c9962f",
-  quees:"Aparece sin que hayas hecho nada contra tus valores.",
-  ajusta:"No violaste ningún valor tuyo: la culpa viene de una regla ajena o de exigencias imposibles.",
-  pide:"disculparse, retroceder, compensar",
-  opuesta:["Hacer aquello por lo que te sientes culpable, una y otra vez",
-    "No pedir disculpas y no justificarte",
-    "Postura erguida, voz firme, mirada al frente",
-    "Contarlo en voz alta a alguien que no te vaya a juzgar",
-    "Seguir haciéndolo hasta que la culpa deje de aparecer"]},
-
- {id:"verguenzaJ", nombre:"Vergüenza que se ajusta", color:"#8a5a4e",
-  quees:"Avisa de que si esto se sabe, tu grupo te va a rechazar de verdad.",
-  ajusta:"Si la gente que te importa lo supiera, te rechazaría con razón.",
-  pide:"esconderse, desaparecer",
-  opuesta:["Reparar el daño con las personas afectadas",
-    "Cambiar la conducta que lo produjo",
-    "Aceptar las consecuencias sociales sin esconderte",
-    "Perdonarte y soltarlo después de reparar"]},
-
- {id:"verguenzaI", nombre:"Vergüenza que no se ajusta", color:"#c05c78",
-  quees:"Aparece por algo que no te haría rechazar por la gente que importa.",
-  ajusta:"La gente que de verdad te importa no te rechazaría por esto si lo supiera.",
-  pide:"ocultarse, callar, evitar miradas",
-  opuesta:["Contarlo, repetidamente, a gente que no te va a rechazar",
-    "Mantener la cabeza en alto y el contacto visual",
-    "No bajar la voz al hablar del tema",
-    "Quedarte en el grupo en vez de irte",
-    "Hacer en público aquello que te avergüenza, si no daña a nadie"]},
-
- {id:"asco", nombre:"Asco", color:"#7d8a4e",
-  quees:"Avisa de algo contaminado, tóxico o que puede enfermarte.",
-  ajusta:"Aquello de lo que te apartas puede hacerte daño de verdad, a ti o a alguien.",
-  pide:"apartarse, rechazar, escupir, no tocar",
-  opuesta:["Acercarte a lo que rechazas, en pequeñas dosis",
-    "Comer o beber aquello que estás evitando sin motivo",
-    "Quedarte cerca en vez de apartarte",
-    "Tratar con amabilidad a quien te repugna",
-    "Aflojar la cara: soltar el labio y el ceño"]},
-
- {id:"envidia", nombre:"Envidia", color:"#6ea24f",
-  quees:"Avisa de que alguien tiene algo que quieres y no tienes.",
-  ajusta:"Otra persona tiene algo que tú necesitas o quieres de verdad, y eso te afecta.",
-  pide:"comparar, criticar, desear que al otro le vaya mal",
-  opuesta:["Contar lo que sí tienes, en concreto",
-    "Dejar de mirar lo del otro: cerrar la aplicación, cambiar de tema",
-    "Alegrarte en voz alta por el otro, aunque no lo sientas",
-    "Trabajar por lo tuyo en vez de medirte con lo suyo"]},
-
- {id:"celos", nombre:"Celos", color:"#9c6a8a",
-  quees:"Avisa de que hay riesgo de perder una relación importante.",
-  ajusta:"Hay una amenaza real de perder una relación que te importa.",
-  pide:"controlar, revisar, vigilar",
-  opuesta:["Soltar el control: no revisar, no preguntar, no vigilar",
-    "Compartir a la persona en vez de retenerla",
-    "Aflojar el cuerpo y respirar en vez de perseguir",
-    "Confiar como acto, no como sentimiento"]},
-
- {id:"amor", nombre:"Amor no correspondido", color:"#b06a9c",
-  quees:"Avisa de un vínculo que importa, aunque no sea recíproco.",
-  ajusta:"La relación es posible y sostiene tu vida.",
-  pide:"buscar, insistir, recordar",
-  opuesta:["Evitar el contacto y los recordatorios",
-    "Dejar de repasar los buenos momentos",
-    "Recordar en concreto por qué no funciona",
-    "Ocupar el tiempo con otras personas y otras cosas"]}
-];
-
-const HECHOS = ["No me contestó", "Me dijeron que no", "Me fue mal en algo", "Me criticaron"];
-const INTERPRETACIONES = ["Que no le importo", "Que no sirvo", "Que me van a dejar", "Que se burlan de mí"];
-const OPCIONES_PROBLEMA = ["Hablar con la persona", "Pedir ayuda", "Cambiar el plan", "Poner un límite"];
-
-/* Las siete preguntas de la ficha RE 8. "peso" indica cuánto empuja hacia
-   "no se ajusta" la respuesta marcada en 'malo'. */
-const PREGUNTAS = [
- {id:"v1", q:"¿Lo que describí es un hecho o una interpretación?", sub:"Hecho = lo que grabaría una cámara.",
-  si:"Es un hecho", no:"Es una interpretación", malo:"no"},
- {id:"v2", q:"¿Hay otra manera posible de interpretar lo que pasó?", sub:"Si se te ocurre una sola, ya cuenta.",
-  si:"Sí, hay otras", no:"No, solo esta", malo:"si"},
- {id:"v3", q:"¿Estoy suponiendo una amenaza?", sub:"Nombra cuál sería el peligro concreto.",
-  si:"Sí", no:"No", malo:"si"},
- {id:"v4", q:"Si esa amenaza fuera real, ¿qué tan probable es que pase?", sub:"Piensa en cuántas veces ha pasado de verdad.",
-  si:"Bastante probable", no:"Poco probable", malo:"no"},
- {id:"v5", q:"Si pasara lo peor, ¿podría afrontarlo?", sub:"No si te gustaría: si podrías.",
-  si:"Sí, podría", no:"No podría", malo:"si"},
- {id:"v6", q:"¿La emoción se ajusta a los hechos?", sub:"No a la interpretación: a los hechos.",
-  si:"Se ajusta", no:"No se ajusta", malo:"no"},
- {id:"v7", q:"¿La intensidad se ajusta a los hechos?", sub:"Una emoción puede ajustarse y su tamaño no.",
-  si:"Se ajusta", no:"Es desproporcionada", malo:"no"}
-];
-
-const CAMINO = [
- ["El cuerpo", "Postura, cara y manos. Si el cuerpo sigue haciendo lo que la emoción pide, la emoción se sostiene sola."],
- ["La cara", "La expresión facial retroalimenta la emoción. Media sonrisa, mandíbula suelta, cejas relajadas."],
- ["La voz", "Volumen, velocidad y tono. Bajarlos hace más que cualquier argumento."],
- ["El pensamiento", "Dejar de repasar lo que alimenta la emoción. No discutirlo: cambiar de tema mental."],
- ["La acción", "Hacer lo contrario de lo que la emoción pide, y sostenerlo hasta que ceda, no hasta que incomode."]
-];
-
-let respuestas = {};
-
-/* ====================== ARMADO ====================== */
-Kit.chips("emociones", EMOCIONES.map(e => e.nombre), elegirEmocion);
-Kit.chips("hechos", HECHOS);
-Kit.chips("interpretaciones", INTERPRETACIONES);
-Kit.chips("opcionesProblema", OPCIONES_PROBLEMA);
-
-$("verificar").innerHTML = PREGUNTAS.map(p => `
-  <div class="pregunta-v">
-    <div class="q">${p.q}<small>${p.sub}</small></div>
-    <div class="siono">
-      <button type="button" class="si" data-p="${p.id}" data-r="si">${p.si}</button>
-      <button type="button" class="no" data-p="${p.id}" data-r="no">${p.no}</button>
-    </div>
-  </div>`).join("");
-$("verificar").querySelectorAll("button[data-p]").forEach(b => {
-  b.onclick = () => {
-    const p = b.dataset.p, r = b.dataset.r;
-    respuestas[p] = respuestas[p] === r ? null : r;
-    pintarRespuestas();
-    refrescar();
-    Kit.guardar();
-  };
-});
-function pintarRespuestas(){
-  $("verificar").querySelectorAll("button[data-p]").forEach(b =>
-    b.classList.toggle("marcado", respuestas[b.dataset.p] === b.dataset.r));
+function elegir(grupo, id){
+  $(grupo).querySelectorAll(".chip").forEach(c => c.classList.toggle("activa", c.id === id));
 }
-
-$("camino").innerHTML = CAMINO.map(([t, d], i) => `
-  <div class="tramo-op" id="cam-${i}">
-    <span class="caja"></span>
-    <span><b>${t}</b><span>${d}</span></span>
-  </div>`).join("");
-CAMINO.forEach((c, i) => {
-  const e = $("cam-" + i);
-  e.onclick = () => { e.classList.toggle("hecho"); Kit.guardar(); };
+$("ritmo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b) return;
+  elegir("ritmo", b.id); ritmo = +b.id.slice(1); dibujar(0);
+});
+$("tiempo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b || reloj.anda()) return;
+  elegir("tiempo", b.id); total = quedan = +b.id.slice(1); pintarReloj();
 });
 
-const emocionActual = () => {
-  const n = Kit.activas("emociones")[0];
-  return EMOCIONES.find(e => e.nombre === n) || null;
-};
-
-function elegirEmocion(){
-  /* una sola emoción a la vez: la última marcada gana */
-  const activas = Kit.activas("emociones");
-  if(activas.length > 1){
-    const ultima = activas[activas.length - 1];
-    $("emociones").querySelectorAll(".chip").forEach(c => {
-      if(c.textContent !== ultima) c.classList.remove("activa");
-    });
-  }
-  refrescar();
+function pintarReloj(){
+  const s = Math.ceil(quedan);
+  $("mReloj").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  $("mCiclos").textContent = ciclos;
 }
 
-/* ====================== BIFURCACIÓN ====================== */
-function seAjusta(){
-  const contestadas = PREGUNTAS.filter(p => respuestas[p.id]);
-  if(contestadas.length < 4) return null;          /* todavía no alcanza */
-  const contra = contestadas.filter(p => respuestas[p.id] === p.malo).length;
-  return contra <= 1;
+/* 0 = cerrado, 1 = abierto */
+function dibujar(apertura){
+  const svg = $("circulo");
+  svg.innerHTML = "";
+  svg.appendChild(Kit.svg("circle", {cx:150, cy:150, r:132, fill:"none", stroke:"#d8e6e2", "stroke-width":2,
+    "stroke-dasharray":"4 6"}));
+  svg.appendChild(Kit.svg("circle", {cx:150, cy:150, r:52 + apertura * 78, fill:"#4a8a7a",
+    "fill-opacity":.18 + apertura * .22, stroke:"#4a8a7a", "stroke-width":2.5}));
+  svg.appendChild(Kit.svg("circle", {cx:150, cy:150, r:6, fill:"#4a8a7a"}));
 }
 
-function refrescar(){
-  $("vIntensidad").textContent = $("intensidad").value;
-  $("vIntensidadFinal").textContent = $("intensidadFinal").value;
-
-  const em = emocionActual();
-  $("fichaEmocion").innerHTML = em ? `
-    <div class="emocion-elegida" style="border-left-color:${em.color}">
-      <p class="quees">${em.quees}</p>
-      <p class="pide">Se ajusta a los hechos cuando: ${em.ajusta}<br>
-      <b>Lo que esta emoción pide hacer: ${em.pide}.</b></p>
-    </div>` : "";
-
-  const ajusta = seAjusta();
-  const v = $("veredicto");
-  if(!em){
-    v.className = "veredicto";
-    v.innerHTML = `<div class="velo">Elige una emoción arriba y contesta las preguntas de
-      verificación: la hoja se bifurca sola.</div>`;
-    $("ramaProblemas").hidden = true;
-    $("ramaOpuesta").hidden = true;
-    return;
-  }
-  if(ajusta === null){
-    v.className = "veredicto";
-    v.innerHTML = `<div class="velo">Contesta al menos cuatro de las siete preguntas para que la
-      hoja pueda bifurcar.</div>`;
-    $("ramaProblemas").hidden = true;
-    $("ramaOpuesta").hidden = true;
-    return;
-  }
-
-  if(ajusta){
-    v.className = "veredicto ajusta";
-    v.innerHTML = `<div class="rot">Veredicto</div>
-      <div class="tit">La emoción se ajusta a los hechos</div>
-      <p>${em.nombre} está haciendo su trabajo: avisar. No hay que cambiarla ni discutirla, y
-      tratar de quitarla sería quitarle a la persona la información que le está dando. Lo que
-      corresponde es actuar sobre el problema. Si además la intensidad es desproporcionada, se
-      puede hacer acción opuesta sobre la intensidad y resolución de problemas sobre el hecho.</p>`;
-    $("ramaProblemas").hidden = false;
-    $("ramaOpuesta").hidden = true;
-  } else {
-    v.className = "veredicto noajusta";
-    v.innerHTML = `<div class="rot">Veredicto</div>
-      <div class="tit">La emoción no se ajusta a los hechos</div>
-      <p>${em.nombre} está respondiendo a la interpretación y no al hecho, o su tamaño no
-      corresponde a lo que pasó. Aquí discutir con la emoción no sirve: lo que la mantiene es la
-      conducta que la acompaña. Se hace lo contrario, y se hace completo.</p>`;
-    $("ramaProblemas").hidden = true;
-    $("ramaOpuesta").hidden = false;
-    $("tablaOpuesta").innerHTML = `
-      <label class="etiqueta">Acción opuesta para ${em.nombre.toLowerCase()}</label>
-      <p class="ayuda" style="margin-bottom:8px">Marca lo que se va a practicar. Se sostiene
-      <b>hasta que la emoción baje</b>, no hasta que deje de incomodar.</p>
-      <div class="chips" id="opuestas"></div>`;
-    Kit.chips("opuestas", em.opuesta);
-  }
-
-  leerFinal();
+function fase(){
+  const ciclo = ritmo * 2 + PAUSA * 2;
+  const x = t % ciclo;
+  if(x < ritmo) return ["Entra el aire", Math.floor(x) + 1, x / ritmo];
+  if(x < ritmo + PAUSA) return ["Pausa", "", 1];
+  if(x < ritmo * 2 + PAUSA) return ["Sale el aire", Math.floor(x - ritmo - PAUSA) + 1, 1 - (x - ritmo - PAUSA) / ritmo];
+  return ["Pausa", "", 0];
 }
 
-function leerFinal(){
-  if($("ramaOpuesta").hidden){ $("lecturaFinal").innerHTML = ""; return; }
-  const a = +$("intensidad").value, d = +$("intensidadFinal").value, dif = a - d;
-  $("lecturaFinal").innerHTML = dif >= 15
-    ? `<div class="logro">Bajó ${dif} puntos. Vale la pena que la persona note que no bajó por
-       convencerse de nada: bajó por hacer lo contrario. Esa es la evidencia que sostiene la
-       práctica en casa.</div>`
-    : dif > 0
-    ? `<div class="pistas"><b>Bajó ${dif} puntos.</b> La acción opuesta necesita repetición y
-       tiempo: una sola vez rara vez alcanza. Conviene revisar si se dio todo el camino o solo la
-       conducta visible.</div>`
-    : `<div class="pistas"><b>No bajó.</b> Tres cosas que revisar: si se hizo completo —cuerpo,
-       cara, voz, pensamiento y acción—, si se sostuvo el tiempo suficiente, y si la emoción en
-       realidad sí se ajustaba a los hechos y por eso no cede.</div>`;
+const reloj = Kit.reloj(dt => {
+  const ciclo = ritmo * 2 + PAUSA * 2;
+  const antes = Math.floor(t / ciclo);
+  t += dt; quedan -= dt;
+  if(Math.floor(t / ciclo) > antes) ciclos++;
+  const [nombre, cuenta, apertura] = fase();
+  $("fase").textContent = nombre;
+  $("faseSub").textContent = cuenta ? cuenta + " · más despacio" : "";
+  dibujar(apertura);
+  if(quedan <= 0){ quedan = 0; terminar(); }
+  pintarReloj();
+});
+
+function arrancar(){
+  if(reloj.anda()) return;
+  if(quedan <= 0) quedan = total;
+  t = 0; ciclos = 0;
+  $("btnArrancar").textContent = "En curso…";
+  reloj.andar();
+}
+function detener(){
+  reloj.parar();
+  $("fase").textContent = "Detenido";
+  $("faseSub").textContent = "Deja que la respiración vuelva a su ritmo normal.";
+  $("btnArrancar").textContent = "Empezar";
+}
+function terminar(){
+  reloj.parar();
+  $("fase").textContent = "Terminó";
+  $("faseSub").textContent = "Deja que la respiración vuelva a su ritmo normal y abre los ojos despacio.";
+  $("btnArrancar").textContent = "Otra vez";
+  quedan = total;
+  Kit.brindis("Práctica terminada");
+}
+
+function leer(){
+  const a = +$("antes").value, d = +$("despues").value;
+  $("vAntes").textContent = a; $("vDespues").textContent = d;
+  const n = Kit.activas("notado");
+  let html = "";
+  if(n.indexOf("Me incomodó atender al cuerpo") >= 0)
+    html += `<div class="bandera">Si atender a la respiración o al cuerpo incomoda —por trauma u
+      otras razones—, no hay que convertir la práctica en una exposición. Conviene buscar otro foco
+      tranquilizador: una relajación muscular progresiva, o algo que se pueda sentir con las manos,
+      como la textura de una pelota.</div>`;
+  if(n.indexOf("Me costó quedarme con la respiración") >= 0)
+    html += `<div class="pistas">Si costó sostenerla, se puede empezar con treinta segundos. La
+      idea es que la experiencia sea de aprendizaje, no algo que se aguanta.</div>`;
+  html += d < a
+    ? `<div class="logro">Bajó ${a - d} ${a - d === 1 ? "punto" : "puntos"}. No hace falta que baje
+       siempre: lo que se entrena es enlentecer.</div>`
+    : `<div class="pistas">Sin cambio en la cifra. Es esperable al comienzo: los efectos crecen con
+       la práctica repetida, no con una sola vez.</div>`;
+  $("lectura").innerHTML = html;
 }
 
 function resumen(){
-  const em = emocionActual();
   const l = [];
-  l.push("EMOCIÓN: " + (em ? em.nombre : "sin elegir") +
-         `  —  intensidad inicial ${$("intensidad").value}/100`);
-  const h = Kit.activas("hechos"), i = Kit.activas("interpretaciones");
-  if(h.length) l.push("Hecho: " + h.join(", "));
-  if($("hechoNota").value.trim()) l.push("  " + $("hechoNota").value.trim());
-  if(i.length) l.push("Interpretación: " + i.join(", "));
-
-  l.push("", "VERIFICACIÓN DE LOS HECHOS");
-  PREGUNTAS.forEach(p => {
-    if(!respuestas[p.id]) return;
-    l.push(`- ${p.q} → ${respuestas[p.id] === "si" ? p.si : p.no}`);
-  });
-
-  const ajusta = seAjusta();
-  if(ajusta === null){ l.push("", "Sin verificación suficiente para bifurcar."); return l.join("\n"); }
-
-  if(ajusta){
-    l.push("", "VEREDICTO: la emoción SE AJUSTA a los hechos → resolución de problemas");
-    const op = Kit.activas("opcionesProblema");
-    if(op.length) l.push("Opciones elegidas: " + op.join(", "));
-    if($("planProblema").value.trim()) l.push("Plan: " + $("planProblema").value.trim());
-  } else {
-    l.push("", "VEREDICTO: la emoción NO SE AJUSTA a los hechos → acción opuesta");
-    const op = Kit.activas("opuestas");
-    if(op.length) l.push("Acciones opuestas elegidas:\n  - " + op.join("\n  - "));
-    const cam = CAMINO.filter((c, k) => $("cam-" + k).classList.contains("hecho")).map(c => c[0]);
-    l.push("Vías trabajadas: " + (cam.length ? cam.join(", ") : "ninguna marcada"));
-    l.push(`Intensidad: ${$("intensidad").value} → ${$("intensidadFinal").value}`);
-  }
+  l.push(`Ritmo: entrar ${ritmo} s · salir ${ritmo} s · práctica de ${total} s`);
+  l.push(`Activación antes: ${$("antes").value}/10 · después: ${$("despues").value}/10`);
+  const n = Kit.activas("notado");
+  if(n.length) l.push("Qué notó: " + n.join(", "));
+  const v = Kit.activas("veces"), r = Kit.activas("recordatorio");
+  if(v.length || r.length) l.push("", "PRÁCTICA: 30 segundos, " + (v.join(", ") || "sin definir") +
+    " al día" + (r.length ? " · recordatorio: " + r.join(", ") : ""));
   return l.join("\n");
 }
 
-["intensidad","intensidadFinal"].forEach(id => $(id).addEventListener("input", refrescar));
+Kit.chips("notado", NOTADO, leer);
+Kit.chips("veces", VECES, null, true);
+Kit.chips("recordatorio", RECORDATORIO);
+$("antes").addEventListener("input", leer);
+$("despues").addEventListener("input", leer);
+dibujar(0); pintarReloj();
 
-Kit.iniciar({
-  clave: "dbt-verificar-los-hechos",
-  extra: () => ({respuestas, camino: CAMINO.map((c, i) => $("cam-" + i).classList.contains("hecho"))}),
-  restaurar: d => {
-    respuestas = d.respuestas || {};
-    pintarRespuestas();
-    (d.camino || []).forEach((v, i) => { if(v && $("cam-" + i)) $("cam-" + i).classList.add("hecho"); });
-  },
-  alCambiar: refrescar,
-  resumen: resumen
-});
+Kit.iniciar({ clave: "cft-ritmo-tranquilizador", alCambiar: leer, resumen: resumen });
 </script>
 <!--indice-hojas-->
 <style>
@@ -1513,7 +1286,7 @@ body.ih-abierto .ih-panel{transform:none}
 @media print{.ih-boton,.ih-panel,.ih-velo{display:none !important}}
 </style>
 <button type="button" class="ih-boton" id="ih-boton">&#9776; Hojas</button>
-<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>Metáforas vivas</b><ul><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li></ul></div><div class="ih-g"><b>ACT</b><ul><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="act-matriz.html">La matriz</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html" class="actual" aria-current="page">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html">Activación conductual</a></li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li><a href="cft-ritmo-tranquilizador.html">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li></ul></div></nav>
+<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>Metáforas vivas</b><ul><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li></ul></div><div class="ih-g"><b>ACT</b><ul><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="act-matriz.html">La matriz</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html">Activación conductual</a></li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li><a href="cft-ritmo-tranquilizador.html" class="actual" aria-current="page">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li></ul></div></nav>
 <div class="ih-velo" id="ih-velo" hidden></div>
 <script>
 (function(){

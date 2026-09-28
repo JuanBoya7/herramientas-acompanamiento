@@ -1,0 +1,226 @@
+@@meta
+archivo: cft-ritmo-tranquilizador.html
+titulo: Respiración de ritmo tranquilizador
+orden: 01
+enfoque: Compasión y mindfulness
+etiqueta: Sistema de calma
+sub: No se trata de respirar «bien» ni de quitarse lo que se siente: se trata de ir más despacio. El círculo marca un ritmo algo más lento que el habitual, y la atención se queda en la sensación de enlentecer, el cuerpo primero y la mente después. La emoción difícil no desaparece; se suaviza y deja espacio para otras cosas.
+fuente: Respiración de ritmo tranquilizador (soothing rhythm breathing), en Kolts, CFT Made Simple (2016), cap. 4.
+resumen: Un círculo que se abre y se cierra marca un ritmo de respiración más lento, que se ajusta a lo que resulte cómodo. Treinta segundos, uno o dos minutos. Antes y después se califica la activación, y se deja acordada la práctica de treinta segundos para la semana.
+@@css
+  .respira{display:block;width:100%;max-width:360px;height:auto;margin:0 auto}
+  .fase{font-size:20px;font-weight:700;text-align:center;margin:6px 0 2px;color:var(--acento);min-height:28px}
+  .fase-sub{text-align:center;font-size:13.5px;color:var(--tinta-suave);min-height:20px}
+  button.arrancar{background:#4a8a7a;border-color:#4a8a7a;color:#fff;font-weight:600}
+  button.arrancar:hover{background:#3f776a;border-color:#3f776a}
+  .guion{counter-reset:paso}
+  .guion p{position:relative;padding-left:30px;margin:0 0 11px;font-size:14.5px;line-height:1.55}
+  .guion p::before{counter-increment:paso;content:counter(paso);position:absolute;left:0;top:1px;
+    width:21px;height:21px;border-radius:50%;background:var(--acento-claro);color:var(--acento);
+    font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Cómo llegas</h2>
+  <p class="ayuda">Una cifra rápida, sin pensarla mucho. Sirve para comparar al final, no para
+  evaluar si la práctica «funcionó».</p>
+  <div class="cuerpo">
+    <div class="medidor">
+      <label for="antes">¿Qué tan activado o tenso estás ahora?</label>
+      <input type="range" id="antes" min="0" max="10" value="5">
+      <span class="valor" id="vAntes">5</span>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">2</span>Cómo se hace</h2>
+  <div class="cuerpo guion">
+    <p>Siéntate erguido, con los dos pies en el piso y las manos sobre las piernas. La cabeza
+    derecha, digna pero relajada. Si quieres, cierra los ojos.</p>
+    <p>Primero solo nota el aire que entra y sale, sin cambiarlo, unos segundos.</p>
+    <p>Ahora deja que la respiración se haga más lenta: el aire entra mientras el círculo se abre,
+    una pausa breve, y sale mientras se cierra.</p>
+    <p>Pon la atención en la sensación de ir más despacio: el cuerpo más lento, la mente más
+    lenta. Si el ritmo te resulta demasiado lento, cámbialo abajo hasta encontrar uno cómodo y
+    tranquilizador.</p>
+    <p>Al terminar, deja que la respiración vuelva a su ritmo normal y abre los ojos despacio.</p>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="respira" id="circulo" viewBox="0 0 300 300" role="img"
+    aria-label="Círculo que se abre al inhalar y se cierra al exhalar"></svg>
+  <div class="fase" id="fase">Listo para empezar</div>
+  <div class="fase-sub" id="faseSub"></div>
+  <div class="marcas">
+    <div><span class="n" id="mReloj" style="color:#4a8a7a">2:00</span><span class="r">quedan</span></div>
+    <div><span class="n" id="mCiclos" style="color:var(--acento)">0</span><span class="r">respiraciones</span></div>
+  </div>
+  <div class="duracion" id="ritmo">
+    <button type="button" class="chip" id="r3">Entrar 3 s · salir 3 s</button>
+    <button type="button" class="chip activa" id="r4">Entrar 4 s · salir 4 s</button>
+    <button type="button" class="chip" id="r5">Entrar 5 s · salir 5 s</button>
+  </div>
+  <div class="duracion" id="tiempo">
+    <button type="button" class="chip" id="t30">30 segundos</button>
+    <button type="button" class="chip" id="t60">1 minuto</button>
+    <button type="button" class="chip activa" id="t120">2 minutos</button>
+  </div>
+  <div class="mandos">
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" onclick="detener()">Detener</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">3</span>Qué notaste</h2>
+  <p class="ayuda">Los efectos crecen con la práctica: en las primeras veces es común notar poco.
+  Enlentecer no hace desaparecer las emociones de amenaza; las suaviza.</p>
+  <div class="cuerpo">
+    <div class="chips" id="notado"></div>
+    <div class="medidor" style="margin-top:14px">
+      <label for="despues">¿Qué tan activado o tenso estás ahora?</label>
+      <input type="range" id="despues" min="0" max="10" value="5">
+      <span class="valor" id="vDespues">5</span>
+    </div>
+    <div id="lectura"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">4</span>Práctica para la semana</h2>
+  <p class="ayuda">Treinta segundos alcanzan, dos o tres veces al día. El obstáculo más común es
+  olvidarse, así que se acuerda desde ya qué lo va a recordar.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Veces al día</label>
+    <div class="chips" id="veces"></div>
+    <label class="etiqueta">Qué lo va a recordar</label>
+    <div class="chips" id="recordatorio"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const NOTADO = ["El cuerpo se hizo más lento", "La mente se aquietó un poco", "La emoción se suavizó",
+  "No noté mayor cambio", "Me costó quedarme con la respiración", "Me incomodó atender al cuerpo"];
+const VECES = ["Dos veces", "Tres veces"];
+const RECORDATORIO = ["Alarma en el teléfono", "Al levantarme", "Antes de cada comida",
+  "En la primera pausa comercial", "Al llegar a casa", "Antes de dormir"];
+
+let ritmo = 4, total = 120, quedan = 120, t = 0, ciclos = 0;
+const PAUSA = 1;                 /* pausa breve entre entrar y salir */
+
+function elegir(grupo, id){
+  $(grupo).querySelectorAll(".chip").forEach(c => c.classList.toggle("activa", c.id === id));
+}
+$("ritmo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b) return;
+  elegir("ritmo", b.id); ritmo = +b.id.slice(1); dibujar(0);
+});
+$("tiempo").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b || reloj.anda()) return;
+  elegir("tiempo", b.id); total = quedan = +b.id.slice(1); pintarReloj();
+});
+
+function pintarReloj(){
+  const s = Math.ceil(quedan);
+  $("mReloj").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  $("mCiclos").textContent = ciclos;
+}
+
+/* 0 = cerrado, 1 = abierto */
+function dibujar(apertura){
+  const svg = $("circulo");
+  svg.innerHTML = "";
+  svg.appendChild(Kit.svg("circle", {cx:150, cy:150, r:132, fill:"none", stroke:"#d8e6e2", "stroke-width":2,
+    "stroke-dasharray":"4 6"}));
+  svg.appendChild(Kit.svg("circle", {cx:150, cy:150, r:52 + apertura * 78, fill:"#4a8a7a",
+    "fill-opacity":.18 + apertura * .22, stroke:"#4a8a7a", "stroke-width":2.5}));
+  svg.appendChild(Kit.svg("circle", {cx:150, cy:150, r:6, fill:"#4a8a7a"}));
+}
+
+function fase(){
+  const ciclo = ritmo * 2 + PAUSA * 2;
+  const x = t % ciclo;
+  if(x < ritmo) return ["Entra el aire", Math.floor(x) + 1, x / ritmo];
+  if(x < ritmo + PAUSA) return ["Pausa", "", 1];
+  if(x < ritmo * 2 + PAUSA) return ["Sale el aire", Math.floor(x - ritmo - PAUSA) + 1, 1 - (x - ritmo - PAUSA) / ritmo];
+  return ["Pausa", "", 0];
+}
+
+const reloj = Kit.reloj(dt => {
+  const ciclo = ritmo * 2 + PAUSA * 2;
+  const antes = Math.floor(t / ciclo);
+  t += dt; quedan -= dt;
+  if(Math.floor(t / ciclo) > antes) ciclos++;
+  const [nombre, cuenta, apertura] = fase();
+  $("fase").textContent = nombre;
+  $("faseSub").textContent = cuenta ? cuenta + " · más despacio" : "";
+  dibujar(apertura);
+  if(quedan <= 0){ quedan = 0; terminar(); }
+  pintarReloj();
+});
+
+function arrancar(){
+  if(reloj.anda()) return;
+  if(quedan <= 0) quedan = total;
+  t = 0; ciclos = 0;
+  $("btnArrancar").textContent = "En curso…";
+  reloj.andar();
+}
+function detener(){
+  reloj.parar();
+  $("fase").textContent = "Detenido";
+  $("faseSub").textContent = "Deja que la respiración vuelva a su ritmo normal.";
+  $("btnArrancar").textContent = "Empezar";
+}
+function terminar(){
+  reloj.parar();
+  $("fase").textContent = "Terminó";
+  $("faseSub").textContent = "Deja que la respiración vuelva a su ritmo normal y abre los ojos despacio.";
+  $("btnArrancar").textContent = "Otra vez";
+  quedan = total;
+  Kit.brindis("Práctica terminada");
+}
+
+function leer(){
+  const a = +$("antes").value, d = +$("despues").value;
+  $("vAntes").textContent = a; $("vDespues").textContent = d;
+  const n = Kit.activas("notado");
+  let html = "";
+  if(n.indexOf("Me incomodó atender al cuerpo") >= 0)
+    html += `<div class="bandera">Si atender a la respiración o al cuerpo incomoda —por trauma u
+      otras razones—, no hay que convertir la práctica en una exposición. Conviene buscar otro foco
+      tranquilizador: una relajación muscular progresiva, o algo que se pueda sentir con las manos,
+      como la textura de una pelota.</div>`;
+  if(n.indexOf("Me costó quedarme con la respiración") >= 0)
+    html += `<div class="pistas">Si costó sostenerla, se puede empezar con treinta segundos. La
+      idea es que la experiencia sea de aprendizaje, no algo que se aguanta.</div>`;
+  html += d < a
+    ? `<div class="logro">Bajó ${a - d} ${a - d === 1 ? "punto" : "puntos"}. No hace falta que baje
+       siempre: lo que se entrena es enlentecer.</div>`
+    : `<div class="pistas">Sin cambio en la cifra. Es esperable al comienzo: los efectos crecen con
+       la práctica repetida, no con una sola vez.</div>`;
+  $("lectura").innerHTML = html;
+}
+
+function resumen(){
+  const l = [];
+  l.push(`Ritmo: entrar ${ritmo} s · salir ${ritmo} s · práctica de ${total} s`);
+  l.push(`Activación antes: ${$("antes").value}/10 · después: ${$("despues").value}/10`);
+  const n = Kit.activas("notado");
+  if(n.length) l.push("Qué notó: " + n.join(", "));
+  const v = Kit.activas("veces"), r = Kit.activas("recordatorio");
+  if(v.length || r.length) l.push("", "PRÁCTICA: 30 segundos, " + (v.join(", ") || "sin definir") +
+    " al día" + (r.length ? " · recordatorio: " + r.join(", ") : ""));
+  return l.join("\n");
+}
+
+Kit.chips("notado", NOTADO, leer);
+Kit.chips("veces", VECES, null, true);
+Kit.chips("recordatorio", RECORDATORIO);
+$("antes").addEventListener("input", leer);
+$("despues").addEventListener("input", leer);
+dibujar(0); pintarReloj();
+
+Kit.iniciar({ clave: "cft-ritmo-tranquilizador", alCambiar: leer, resumen: resumen });

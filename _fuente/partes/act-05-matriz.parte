@@ -1,0 +1,139 @@
+@@meta
+archivo: act-matriz.html
+titulo: La matriz
+orden: 05
+enfoque: ACT
+etiqueta: Punto de vista
+sub: Dos líneas que se cruzan y cuatro preguntas. Abajo, lo que nadie más ve: quién y qué te importa, y lo que aparece por dentro y se interpone. Arriba, lo que cualquiera podría verte hacer: para alejarte de eso que aparece, o para acercarte a lo que importa. En el centro estás tú, notando. No hace falta ordenar bien: basta con empezar a ordenar.
+fuente: La matriz ACT, paso 1, en Polk, Schoendorff, Webster y Olaz, The Essential Guide to the ACT Matrix (2016).
+resumen: Los cuatro cuadrantes de la matriz, en el orden en que los recorren sus autores: quién y qué importa, qué se interpone, qué haces para alejarte y qué podrías hacer para acercarte. Deja acordada la práctica de notar movimientos hacia y de alejamiento.
+@@css
+  .matriz{position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;
+    gap:0;border-radius:var(--radio);overflow:hidden;border:1px solid var(--linea);background:#fff}
+  .cuad{padding:14px 16px 16px;min-height:150px}
+  .cuad h3{margin:0 0 2px;font-size:14.5px}
+  .cuad .preg{margin:0 0 10px;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
+  .cuad .chip{font-size:12.5px;padding:5px 11px}
+  .c-al-ar{border-right:2px solid #7a8a99;border-bottom:2px solid #7a8a99;background:#fbf7f3}
+  .c-ha-ar{border-bottom:2px solid #7a8a99;background:#f4f9f6}
+  .c-al-ab{border-right:2px solid #7a8a99;background:#fdf6f6}
+  .c-ha-ab{background:#f3f7fb}
+  .centro-yo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;
+    border:2px solid var(--acento);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:700;
+    color:var(--acento);white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .ejes{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--tinta-suave);margin:8px 2px 0}
+  .eje-v{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);
+    margin:0 2px 6px}
+  @media (max-width:700px){
+    .matriz{grid-template-columns:1fr}
+    .c-al-ar,.c-al-ab{border-right:0}
+    .c-ha-ar{border-bottom:2px solid #7a8a99}
+    .c-al-ab{border-bottom:2px solid #7a8a99}
+    .centro-yo{position:static;transform:none;display:block;text-align:center;margin:8px auto;width:max-content}
+  }
+@@html
+<section class="bloque">
+  <h2><span class="num">1</span>El punto de vista</h2>
+  <p class="ayuda">Se recorre en este orden: primero abajo a la derecha, después abajo a la
+  izquierda, luego arriba a la izquierda y al final arriba a la derecha. Con una sola persona
+  importante ya se puede mirar por la matriz: no se busca una lista completa.</p>
+  <div class="cuerpo">
+    <div class="eje-v">↑ Lo que cualquiera podría verte hacer (cinco sentidos)</div>
+    <div class="matriz" id="matriz">
+      <div class="cuad c-al-ar">
+        <h3>3 · Lo que haces para alejarte</h3>
+        <p class="preg">¿Qué se te puede ver haciendo para alejarte de eso que aparece por dentro?
+        Conductas que se ven: «me quedo en casa», no «me autosaboteo».</p>
+        <div class="chips" id="alejarse"></div>
+      </div>
+      <div class="cuad c-ha-ar">
+        <h3>4 · Lo que haces o podrías hacer para acercarte</h3>
+        <p class="preg">¿Qué se te puede ver haciendo, o qué podrías hacer, para ir hacia quien o
+        lo que te importa?</p>
+        <div class="chips" id="acercarse"></div>
+      </div>
+      <div class="cuad c-al-ab">
+        <h3>2 · Lo que aparece y se interpone</h3>
+        <p class="preg">¿Qué aparece por dentro —pensamientos, emociones, sensaciones, recuerdos—
+        y se interpone entre tú y lo que importa?</p>
+        <div class="chips" id="interpone"></div>
+      </div>
+      <div class="cuad c-ha-ab">
+        <h3>1 · Quién y qué te importa</h3>
+        <p class="preg">Primero quién, después qué: personas, y luego áreas o cosas.</p>
+        <div class="chips" id="importa"></div>
+      </div>
+      <div class="centro-yo">Yo, notando</div>
+    </div>
+    <div class="ejes"><span>← Alejarse de</span><span>Ir hacia →</span></div>
+    <div class="eje-v" style="margin-top:6px">↓ Lo que nadie más ve (experiencia interna)</div>
+    <div id="lecturaMatriz"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>¿Quién nota todo esto?</h2>
+  <p class="ayuda">Señalando los dos cuadrantes de abajo: ¿quién puede elegir y notar quién y qué
+  te importa, y quién puede notar lo que aparece y se interpone? Casi siempre la respuesta es
+  «yo». Solo tú puedes notar, además, si lo que haces es un movimiento hacia o de alejamiento.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">¿Hay algo que aparezca en los dos lados de arriba?</label>
+    <div class="chips" id="ambos"></div>
+    <p class="ayuda" style="margin-top:8px">Pasa: dormir o hacer ejercicio pueden ser un
+    movimiento de alejamiento un día y uno hacia otro día. Quien lo hace es quien puede notarlo.</p>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Práctica para la semana</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué notar</label>
+    <div class="chips" id="practica"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const IMPORTA = ["Mis hijos", "Mi pareja", "Mi familia", "Mis amigos", "El trabajo", "Aprender", "La salud", "Divertirme"];
+const INTERPONE = ["Miedo", "Ansiedad", "Tristeza", "Rabia", "Vergüenza", "«No puedo con esto»", "«No soy suficiente»", "Recuerdos dolorosos"];
+const ALEJARSE = ["Me quedo en casa", "Doy excusas y me voy", "Duermo de más", "Veo televisión horas", "Tomo", "Grito", "Peleo"];
+const ACERCARSE = ["Llamo a alguien", "Salgo a caminar", "Visito a alguien", "Juego con mis hijos", "Hablo de lo que me pasa", "Hago ejercicio"];
+const AMBOS = ["Dormir", "Hacer ejercicio", "Trabajar", "Estar con el teléfono"];
+const PRACTICA = ["Al menos un movimiento hacia cada día", "Al menos un movimiento de alejamiento cada día",
+  "Qué aparece justo antes de alejarme"];
+
+function leer(){
+  const n = ["importa", "interpone", "alejarse", "acercarse"].map(id => Kit.activas(id).length);
+  let html = "";
+  if(!n[0])
+    html = `<div class="pistas">Se empieza abajo a la derecha, con quién importa: casi todo el mundo
+      nombra a alguien, y así la primera mirada por la matriz es un acierto.</div>`;
+  else if(n.every(x => x > 0))
+    html = `<div class="logro">Los cuatro cuadrantes tienen algo. Ese es el punto de vista: desde
+      aquí se puede preguntar, ante cualquier situación, si lo que hiciste te acercó o te alejó de
+      quien o lo que te importa.</div>`;
+  $("lecturaMatriz").innerHTML = html;
+}
+
+function resumen(){
+  const l = [];
+  const f = (t, id) => { const a = Kit.activas(id); if(a.length) l.push(t + ": " + a.join(" · ")); };
+  f("QUIÉN Y QUÉ IMPORTA", "importa");
+  f("LO QUE APARECE Y SE INTERPONE", "interpone");
+  f("LO QUE HACE PARA ALEJARSE", "alejarse");
+  f("LO QUE HACE O PODRÍA HACER PARA ACERCARSE", "acercarse");
+  f("En los dos lados", "ambos");
+  f("Práctica", "practica");
+  return l.join("\n");
+}
+
+Kit.chips("importa", IMPORTA, leer);
+Kit.chips("interpone", INTERPONE, leer);
+Kit.chips("alejarse", ALEJARSE, leer);
+Kit.chips("acercarse", ACERCARSE, leer);
+Kit.chips("ambos", AMBOS);
+Kit.chips("practica", PRACTICA, null, true);
+leer();
+
+Kit.iniciar({ clave: "act-matriz", alCambiar: leer, resumen: resumen });

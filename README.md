@@ -1,6 +1,6 @@
 # Herramientas de acompañamiento
 
-Veintinueve hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
+Treinta y cuatro hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
 HTML** que funciona con doble clic: sin instalación, sin servidor y sin conexión.
 
 Todo se elige, se calibra o se arrastra. Cada hoja lleva plegado un bloque de notas del
@@ -16,9 +16,11 @@ sirve cada hoja, en qué casos rinde, con qué va antes o después y dónde conv
 |---|---|
 | **Metáforas vivas** | El tablero · El jardín de valores · La cuerda y el monstruo · Hojas en el arroyo · El bus y los pasajeros · Los ochenta años · El polígrafo · La palabra repetida · La radio que no se apaga · El hombre en el hoyo |
 | **Psicología positiva** | Mi flor PERMAH · Mis fortalezas del carácter |
-| **ACT** | La brújula de valores · El costo de la lucha · Por dónde entrar · Soltar el anzuelo |
+| **ACT** | La brújula de valores · El costo de la lucha · Por dónde entrar · Soltar el anzuelo · La matriz |
 | **DBT** | Análisis en cadena · Tarjeta de crisis · Verificar los hechos · Pedir y decir que no · Mente sabia · Tarjeta diaria |
 | **Cognitivo-conductual** | Registro de pensamientos · Flecha descendente · Escalera de exposición · Activación conductual · Solución de problemas · Autoinstrucciones · Análisis funcional |
+| **Compasión y mindfulness** | Respiración de ritmo tranquilizador · Espacio de respiración de tres minutos |
+| **Crisis y consumo** | Plan de seguridad · Surfear el impulso |
 
 Ocho de ellas tienen **escena viva**: la metáfora ocurre en tiempo real y no espera a que se
 apriete un botón. El monstruo jala solo, el bus avanza solo, las piezas negras brotan solas, la
