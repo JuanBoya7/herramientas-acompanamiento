@@ -301,7 +301,9 @@
 
   .panel-jardin{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
     padding:14px 12px 10px;margin-bottom:16px}
-  .jardin{display:block;width:100%;height:auto;max-width:700px;margin:0 auto}
+  .lienzo{position:relative;max-width:700px;margin:0 auto;border-radius:8px;overflow:hidden}
+  .jardin{display:block;width:100%;height:auto;position:relative}
+  .lienzo .capa{position:absolute;left:0;top:0;pointer-events:none}
   .clima{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:10px;
     padding-top:11px;border-top:1px dashed var(--linea)}
   .clima div{text-align:center;min-width:88px}
@@ -418,8 +420,12 @@
 </section>
 
 <div class="panel-jardin">
-  <svg class="jardin" id="jardin" viewBox="0 0 700 420" role="img"
-    aria-label="Jardín con los surcos sembrados, su estado según el riego y las malezas"></svg>
+  <div class="lienzo">
+    <svg class="jardin capa" id="jardinFondo" viewBox="0 0 700 440" aria-hidden="true"></svg>
+    <svg class="jardin" id="jardin" viewBox="0 0 700 440" role="img"
+      aria-label="Jardín con los surcos sembrados, su estado según el riego y las malezas"></svg>
+    <svg class="jardin capa" id="jardinPapel" viewBox="0 0 700 440" aria-hidden="true"></svg>
+  </div>
   <p class="avisoRegadera" id="avisoRegadera"></p>
   <div class="clima">
     <div><span class="n" id="cSembradas">0</span><span class="r">surcos sembrados</span></div>
@@ -1276,7 +1282,6 @@ const NIVELES = [
   {min:0, nombre:"Seca",         fondo:"#f6efe6", tinta:"#8a6a45"}
 ];
 const nivelDe = a => NIVELES.find(n => a >= n.min);
-const colorPlanta = a => Kit.mezcla("#b09468", "#3f9b5c", Math.pow(a / 10, .75));
 
 /* Un campo que aparece donde estaba el botón y se cierra con Enter, con
    Escape o al salir. Lo usan las raíces y las malezas. */
@@ -1525,147 +1530,278 @@ function cablearMasMalezas(){
 const malezasDe = id => Object.keys(malezas).filter(m => surcosDe(m).indexOf(id) >= 0);
 
 /* ====================== EL JARDÍN ====================== */
-const SUELO = 320;
+/* Acuarela. El papel, el cielo y las colinas se pintan una sola vez, cada uno
+   en su capa; al regar solo se rehace la capa de las plantas, y el filtro del
+   papel, que es el más pesado, no se recalcula a cada paso del calibrador. */
+const SUELO = 300, ALTO_J = 440;
+
+/* Cada ámbito florece con su especie. El rótulo del surco conserva el color
+   del ámbito; la flor tiene el suyo. */
+const ESPECIE = {
+  "Vínculos":{forma:"redondo", n:5,  L:17, W:14, capas:2, pet:"#e8806e", osc:"#b9544a", cen:"#f3c457"},
+  "Cuerpo":  {forma:"estrecho",n:14, L:19, W:6,  pet:"#f4b93a", osc:"#c9861c", cen:"#6b4226", rc:8, semillas:"#4a2c18"},
+  "Hacer":   {forma:"flecos",  n:8,  L:18, W:9,  pet:"#5d86d9", osc:"#3c5fae", cen:"#2e3f7a", rc:5},
+  "Sentido": {forma:"muesca",  n:8,  L:18, W:10, pet:"#a98cdb", osc:"#7a5fb3", cen:"#f3c457"},
+  "Gozo":    {forma:"estrecho",n:16, L:18, W:5,  pet:"#fffaf0", osc:"#cfc2a6", cen:"#f2b632", rc:6}
+};
+function formaPetalo(f, L, W){
+  if(f === "redondo") return `M0 0 C${-W} ${-L*.25} ${-W*1.05} ${-L} 0 ${-L} C${W*1.05} ${-L} ${W} ${-L*.25} 0 0Z`;
+  if(f === "estrecho") return `M0 0 C${-W} ${-L*.3} ${-W*.8} ${-L*.9} 0 ${-L} C${W*.8} ${-L*.9} ${W} ${-L*.3} 0 0Z`;
+  if(f === "flecos") return `M0 0 C${-W*.6} ${-L*.3} ${-W} ${-L*.7} ${-W} ${-L*.86} L${-W*.62} ${-L*.95} L${-W*.3} ${-L*.87} L0 ${-L} L${W*.3} ${-L*.87} L${W*.62} ${-L*.95} L${W} ${-L*.86} C${W} ${-L*.7} ${W*.6} ${-L*.3} 0 0Z`;
+  return `M0 0 C${-W*.9} ${-L*.3} ${-W*1.05} ${-L*.8} ${-W*.55} ${-L} Q${-W*.2} ${-L*1.02} 0 ${-L*.86} Q${W*.2} ${-L*1.02} ${W*.55} ${-L} C${W*1.05} ${-L*.8} ${W*.9} ${-L*.3} 0 0Z`;
+}
+const formaHoja = (L, W) => `M0 0 C${L*.3} ${-W} ${L*.72} ${-W*1.05} ${L} 0 C${L*.7} ${W*.55} ${L*.3} ${W*.6} 0 0Z`;
+const ACUA = "url(#jv-acua)";
+
+/* ---------- el papel y el paisaje: una sola vez ---------- */
+function pintarFondo(){
+  const svg = $("jardinFondo"), papel = $("jardinPapel");
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  const defs = g("defs", {});
+
+  /* el borde tembloroso del pincel */
+  const f = g("filter", {id:"jv-acua", x:"-20%", y:"-20%", width:"140%", height:"140%"}, defs);
+  g("feTurbulence", {type:"fractalNoise", baseFrequency:.045, numOctaves:2, seed:4, result:"r"}, f);
+  g("feDisplacementMap", {in:"SourceGraphic", in2:"r", scale:3.2}, f);
+  /* las aguadas del fondo, más sueltas y difusas */
+  const w = g("filter", {id:"jv-lavado", x:"-20%", y:"-50%", width:"140%", height:"200%"}, defs);
+  g("feTurbulence", {type:"fractalNoise", baseFrequency:.018, numOctaves:3, seed:9, result:"r"}, w);
+  g("feDisplacementMap", {in:"SourceGraphic", in2:"r", scale:16, result:"d"}, w);
+  g("feGaussianBlur", {in:"d", stdDeviation:4}, w);
+
+  g("rect", {x:0, y:0, width:700, height:ALTO_J, fill:"#fbf6ec"});
+  g("ellipse", {cx:190, cy:70, rx:280, ry:95, fill:"#bcdcee", opacity:.32, filter:"url(#jv-lavado)"});
+  g("ellipse", {cx:430, cy:40, rx:190, ry:60, fill:"#cfe6f1", opacity:.3, filter:"url(#jv-lavado)"});
+  g("ellipse", {cx:590, cy:130, rx:200, ry:85, fill:"#f7d2b4", opacity:.34, filter:"url(#jv-lavado)"});
+  g("circle", {cx:606, cy:78, r:30, fill:"#fbd98c", opacity:.55, filter:"url(#jv-lavado)"});
+  g("path", {d:`M-20 ${SUELO-52} Q140 ${SUELO-102} 300 ${SUELO-66} T720 ${SUELO-82} V${SUELO+10} H-20Z`,
+    fill:"#a9cf94", opacity:.32, filter:"url(#jv-lavado)"});
+  g("path", {d:`M-20 ${SUELO-24} Q180 ${SUELO-56} 360 ${SUELO-32} T720 ${SUELO-42} V${SUELO+10} H-20Z`,
+    fill:"#8fbf7a", opacity:.34, filter:"url(#jv-lavado)"});
+  g("path", {d:`M-20 ${SUELO+1} Q200 ${SUELO-7} 380 ${SUELO+2} T720 ${SUELO-1} V${SUELO+24} H-20Z`,
+    fill:"#b98f68", opacity:.5, filter:"url(#jv-lavado)"});
+
+  /* el grano del papel, encima de todo y sin atrapar los toques */
+  const gp = (t, a, p) => (p || papel).appendChild(Kit.svg(t, a));
+  const dp = gp("defs", {});
+  const fp = gp("filter", {id:"jv-grano", x:0, y:0, width:"100%", height:"100%"}, dp);
+  gp("feTurbulence", {type:"fractalNoise", baseFrequency:.85, numOctaves:2, seed:2}, fp);
+  gp("feColorMatrix", {values:"0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .3  0 0 0 .08 0"}, fp);
+  gp("rect", {x:0, y:0, width:700, height:ALTO_J, filter:"url(#jv-grano)"});
+}
+
+/* ---------- las piezas de la planta ---------- */
+function flor(p, x, y, E, esc, rot){
+  const f = p.appendChild(Kit.svg("g", {filter:ACUA,
+    transform:`translate(${x} ${y}) rotate(${rot || 0}) scale(${esc})`}));
+  const anillo = (L, W, desf, fill) => {
+    for(let i = 0; i < E.n; i++)
+      f.appendChild(Kit.svg("path", {d:formaPetalo(E.forma, L, W), transform:`rotate(${desf + i * 360 / E.n})`,
+        fill, opacity:.8, stroke:E.osc, "stroke-width":.8, "stroke-opacity":.45}));
+  };
+  anillo(E.L, E.W, 0, E.pet);
+  if(E.capas === 2) anillo(E.L * .64, E.W * .72, 36, E.osc);
+  const rc = E.rc || 5;
+  f.appendChild(Kit.svg("circle", {r:rc, fill:E.cen}));
+  if(E.semillas) for(let i = 0; i < 10; i++){
+    const an = i * 2.4, rr = 1.8 + i * .55;
+    f.appendChild(Kit.svg("circle", {cx:Math.cos(an) * rr, cy:Math.sin(an) * rr, r:.9, fill:E.semillas}));
+  }
+  f.appendChild(Kit.svg("circle", {r:rc * .45, cx:-rc * .25, cy:-rc * .25, fill:"#fff", opacity:.35}));
+}
+function capullo(p, x, y, E, abierto, rot, seco, esc){
+  const c = p.appendChild(Kit.svg("g", {filter:ACUA,
+    transform:`translate(${x} ${y}) rotate(${rot || 0}) scale(${esc || 1})`}));
+  const col = seco ? Kit.mezcla(E.pet, "#a58a64", .7) : E.pet;
+  if(abierto){
+    [-22, 0, 22].forEach(r => c.appendChild(Kit.svg("path", {
+      d:formaPetalo(E.forma === "flecos" ? "flecos" : "redondo", 15, 7), transform:`rotate(${r})`,
+      fill:col, opacity:.85, stroke:E.osc, "stroke-width":.7, "stroke-opacity":.4})));
+  } else {
+    c.appendChild(Kit.svg("path", {d:"M0 0 C-7 -4 -6 -14 0 -18 C6 -14 7 -4 0 0Z", fill:col, opacity:.85}));
+  }
+  const v = seco ? "#9a8a5c" : "#4f9a5c";
+  c.appendChild(Kit.svg("path", {d:"M0 1 C-6 -1 -9 -6 -8 -10 C-5 -6 -2 -4 0 -3Z", fill:v}));
+  c.appendChild(Kit.svg("path", {d:"M0 1 C6 -1 9 -6 8 -10 C5 -6 2 -4 0 -3Z", fill:v}));
+}
+function mariposa(p, x, y){
+  const m = p.appendChild(Kit.svg("g", {filter:ACUA, transform:`translate(${x} ${y}) rotate(-14)`}));
+  const q = (t, a) => m.appendChild(Kit.svg(t, a));
+  q("path", {d:"M0 0 C-10 -14 -20 -6 -14 2 C-18 8 -8 12 0 2Z", fill:"#f09a6b", opacity:.9});
+  q("path", {d:"M0 0 C10 -14 20 -6 14 2 C18 8 8 12 0 2Z", fill:"#f4b183", opacity:.9});
+  q("circle", {cx:-9, cy:-4, r:2, fill:"#fff", opacity:.8});
+  q("circle", {cx:9, cy:-4, r:2, fill:"#fff", opacity:.8});
+  q("path", {d:"M0 -4 V6", stroke:"#5a4632", "stroke-width":2, "stroke-linecap":"round"});
+  q("path", {d:"M0 -4 q -3 -6 -6 -7 M0 -4 q 3 -6 6 -7", stroke:"#5a4632", "stroke-width":.9, fill:"none"});
+}
+function cardo(p, x, k){
+  const c = p.appendChild(Kit.svg("g", {filter:ACUA, transform:`translate(${x} ${SUELO})`}));
+  [[-22, .9, "#7b8a5a"], [0, 1.15, "#6a7a4c"], [20, .85, "#8d9a68"]].forEach(([r, e, col]) => {
+    c.appendChild(Kit.svg("path", {
+      d:"M0 0 L-4 -9 L-1 -8 L-6 -18 L-2 -16 L-5 -27 L0 -38 L5 -27 L2 -16 L6 -18 L1 -8 L4 -9Z",
+      fill:col, opacity:.9, transform:`rotate(${r + k * 6}) scale(${e})`}));
+  });
+  c.appendChild(Kit.svg("path", {d:"M2 -40 V-30", stroke:"#6a7a4c", "stroke-width":1.5}));
+  c.appendChild(Kit.svg("circle", {cx:2, cy:-44, r:4, fill:"#a98ab0", opacity:.9}));
+}
+
+/* ---------- el rótulo cabe entero: se reparte en líneas ---------- */
+function partir(svg, txt, estilo, ancho, maxLineas){
+  const prueba = svg.appendChild(Kit.svg("text", {style:estilo}));
+  const mide = s => { prueba.textContent = s; return prueba.getComputedTextLength() || s.length * 7; };
+  const lineas = [];
+  let l = "";
+  txt.split(/\s+/).filter(Boolean).forEach(w => {
+    const junta = l ? l + " " + w : w;
+    if(l && mide(junta) > ancho){ lineas.push(l); l = w; } else l = junta;
+  });
+  if(l) lineas.push(l);
+  prueba.remove();
+  if(lineas.length > maxLineas){
+    lineas.length = maxLineas;
+    lineas[maxLineas - 1] += "…";
+  }
+  return lineas;
+}
+function rotulo(p, x, y, lineas, estilo, salto){
+  const t = p.appendChild(Kit.svg("text", {x, y, "text-anchor":"middle", style:estilo}));
+  lineas.forEach((l, i) => {
+    const s = t.appendChild(Kit.svg("tspan", {x, dy:i ? salto : 0}));
+    s.textContent = l;
+  });
+  return y + (lineas.length - 1) * salto;
+}
+
+/* ---------- una planta por surco ---------- */
+function plantar(svg, s, cx, ancho){
+  const a = aguaDe(s), E = ESPECIE[s.grupo] || ESPECIE["Vínculos"];
+
+  /* toda la planta va dentro de un grupo que se puede tocar: al tocarla se
+     le pone la regadera de la semana */
+  const mata = svg.appendChild(Kit.svg("g", {style:"cursor:pointer"}));
+  mata.addEventListener("click", () => {
+    regadera = (regadera === s.id) ? "" : s.id;
+    refrescar();
+    Kit.guardar();
+  });
+  const g = (t, at, p) => (p || mata).appendChild(Kit.svg(t, at));
+  g("rect", {x:cx - ancho / 2, y:0, width:ancho, height:ALTO_J, fill:"transparent"});
+
+  const vivo = Math.pow(a / 10, .7);
+  const verde = Kit.mezcla("#b39a6e", "#4f9a5c", vivo), verdeO = Kit.mezcla("#9a805a", "#3d7f4b", vivo);
+
+  /* la tierra del surco: oscura y húmeda si se riega, pálida y agrietada si no */
+  g("ellipse", {cx, cy:SUELO + 6, rx:38, ry:8, fill:Kit.mezcla("#d9bb8c", "#5e412b", a / 10),
+    opacity:.8, filter:ACUA});
+  if(a <= 3) g("path", {d:`M${cx-20} ${SUELO+6} l6 3 l5 -2 l6 3 M${cx+6} ${SUELO+4} l5 3 l7 -1`,
+    stroke:"#a78458", "stroke-width":1.1, fill:"none"});
+
+  /* Lo que se sembró sin nombrar qué cuida se sostiene sobre una línea plana;
+     en cuanto se enraíza, echa raíz bajo la tierra. */
+  if(raizDe(s)){
+    [[-1, .85], [0, 1], [1, .85]].forEach(([lado, largo]) => {
+      g("path", {d:`M${cx} ${SUELO + 10} q ${lado * 7} ${9 * largo} ${lado * 13} ${19 * largo}`,
+        stroke:s.color, "stroke-width":2.1, fill:"none", "stroke-linecap":"round", opacity:.55});
+    });
+  } else {
+    g("rect", {x:cx - 36, y:SUELO + 18, width:72, height:3, rx:1.5, fill:s.color, opacity:.3});
+  }
+
+  /* el tallo y las hojas: lo seco se dobla */
+  const alto = 44 + a * 12.5;
+  const caida = a <= 3 ? (4 - a) * 16 : 0;
+  const tx = cx + caida, ty = SUELO - alto + caida * .45;
+  const qx = cx + caida * .15, qy = SUELO - alto * .72;
+  const B = t => [(1-t)*(1-t)*cx + 2*(1-t)*t*qx + t*t*tx, (1-t)*(1-t)*SUELO + 2*(1-t)*t*qy + t*t*ty];
+
+  const cuerpo = g("g", {filter:ACUA});
+  g("path", {d:`M${cx} ${SUELO} Q${qx} ${qy} ${tx} ${ty}`, stroke:verde, "stroke-width":4.2,
+    fill:"none", "stroke-linecap":"round"}, cuerpo);
+  const nh = Math.max(2, Math.round(a / 2) + 1);
+  for(let h = 0; h < nh; h++){
+    const [hx, hy] = B(.16 + h * (.62 / nh)), lado = h % 2 ? 1 : -1;
+    const L = 30 - h * 1.6, ang = a <= 3 ? -40 + h * 4 : 28 + h * 3;
+    const hg = g("g", {transform:`translate(${hx} ${hy}) scale(${lado} 1) rotate(${-ang})`}, cuerpo);
+    g("path", {d:formaHoja(L, 9.5), fill:verde, opacity:.85, stroke:verdeO, "stroke-width":.7,
+      "stroke-opacity":.5}, hg);
+    g("path", {d:`M1 0 Q${L*.5} -1.5 ${L*.92} 0`, stroke:verdeO, "stroke-width":1, fill:"none",
+      opacity:.6}, hg);
+  }
+
+  /* la cabeza: flor, capullo, brote o nada, según el agua */
+  if(a >= 8){
+    if(a >= 9){
+      const [bx, by] = B(.55);
+      g("path", {d:`M${bx} ${by} q 17 -9 24 -30`, stroke:verde, "stroke-width":2.6, fill:"none",
+        "stroke-linecap":"round"}, cuerpo);
+      if(a >= 10) flor(mata, bx + 24, by - 30, E, .85, 20);
+      else capullo(mata, bx + 24, by - 28, E, false, 22, false, 1.2);
+    }
+    flor(mata, tx, ty, E, 1.55, 0);
+    if(a >= 10) mariposa(mata, tx + 40, regadera === s.id ? ty + 16 : ty - 36);
+  } else if(a >= 6){
+    capullo(mata, tx, ty + 2, E, a >= 7, 0, false, 1.5);
+  } else if(a >= 4){
+    g("circle", {cx:tx, cy:ty - 4, r:6, fill:"#6fae6a", opacity:.9}, cuerpo);
+  } else if(a >= 2){
+    capullo(mata, tx + 2, ty + 3, E, false, 150, true, 1.35);
+  } else {
+    g("circle", {cx:tx, cy:ty, r:3.5, fill:"#8a6a45"}, cuerpo);
+  }
+
+  /* las malezas puestas en ESTE surco */
+  const malas = malezasDe(s.id);
+  malas.slice(0, 3).forEach((m, k) => cardo(mata, cx + (k % 2 ? 1 : -1) * (30 + k * 6), k));
+
+  /* los rótulos, enteros */
+  const util = ancho - 10;
+  const estNom = `font:700 12px Georgia,'Times New Roman',serif;fill:${s.color}`;
+  let y = rotulo(mata, cx, SUELO + 46, partir(svg, tituloDe(s), estNom, util, 4), estNom, 14);
+  y = rotulo(mata, cx, y + 17, [nivelDe(a).nombre.toLowerCase()],
+    "font:600 11px system-ui,sans-serif;fill:#8a7458;letter-spacing:.3px", 0);
+  if(malas.length){
+    const estMal = "font:italic 600 10.5px system-ui,sans-serif;fill:#6a7a4c";
+    /* cada maleza en su línea, hasta donde alcance el papel */
+    const cabe = Math.max(1, Math.floor((ALTO_J - 8 - (y + 16)) / 13) + 1);
+    let lineas = [];
+    malas.forEach(m => { lineas = lineas.concat(partir(svg, m, estMal, util, 2)); });
+    if(lineas.length > cabe){ lineas.length = cabe; lineas[cabe - 1] += " …"; }
+    rotulo(mata, cx, y + 16, lineas, estMal, 13);
+  }
+
+  /* la regadera de la semana, encima de la flor elegida */
+  if(regadera === s.id) dibujarRegadera(mata, cx, Math.max(40, ty - 92));
+}
+
 function dibujar(){
   const svg = $("jardin");
   svg.innerHTML = "";
-  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
-  const texto = (x, y, s, estilo, padre) => {
-    const t = Kit.svg("text", {x, y, "text-anchor":"middle", style:estilo});
-    t.textContent = s;
-    (padre || svg).appendChild(t);
-    return t;
-  };
-
-  g("rect", {x:0, y:0, width:700, height:SUELO, fill:"#f5f9fb"});
-  g("rect", {x:0, y:SUELO, width:700, height:420 - SUELO, fill:"#c9b291"});
-  g("rect", {x:0, y:SUELO, width:700, height:7, fill:"#a8916f"});
-
   const lista = sembradas();
   if(!lista.length){
-    texto(350, 180, "El jardín está sin sembrar.",
-      "font:14.5px system-ui,sans-serif;fill:#a9b6c1");
+    const t = svg.appendChild(Kit.svg("text", {x:350, y:180, "text-anchor":"middle",
+      style:"font:italic 16px Georgia,'Times New Roman',serif;fill:#a3998a"}));
+    t.textContent = "El jardín está sin sembrar.";
     return;
   }
-
-  const ancho = 700 / Math.max(1, lista.length);
-  lista.forEach((s, i) => {
-    const cx = ancho * (i + .5), a = aguaDe(s), col = colorPlanta(a);
-    const alto = 34 + a * 12;
-    const caida = a <= 3 ? (4 - a) * 15 : 0;
-
-    /* toda la planta va dentro de un grupo que se puede tocar: al tocarla se
-       le pone la regadera de la semana */
-    const mata = Kit.svg("g", {style:"cursor:pointer"});
-    svg.appendChild(mata);
-    mata.addEventListener("click", () => {
-      regadera = (regadera === s.id) ? "" : s.id;
-      refrescar();
-      Kit.guardar();
-    });
-    /* zona sensible */
-    g("rect", {x:cx - ancho/2, y:80, width:ancho, height:SUELO + 60 - 80,
-      fill:"transparent"}, mata);
-
-    /* el surco removido, del color de su ámbito */
-    g("ellipse", {cx:cx, cy:SUELO + 5, rx:36, ry:7, fill:"#b59a76"}, mata);
-
-    /* Lo que se sembró sin nombrar qué cuida se sostiene sobre una línea plana;
-       en cuanto se enraíza, echa raíz bajo la tierra. */
-    if(raizDe(s)){
-      [[-1, .85], [0, 1], [1, .85]].forEach(([lado, largo]) => {
-        g("path", {d:`M${cx} ${SUELO + 4} q ${lado * 7} ${9 * largo} ${lado * 13} ${19 * largo}`,
-          stroke:s.color, "stroke-width":2.1, fill:"none", "stroke-linecap":"round",
-          opacity:.5}, mata);
-      });
-    } else {
-      g("rect", {x:cx - 36, y:SUELO + 12, width:72, height:3, rx:1.5,
-        fill:s.color, opacity:.3}, mata);
-    }
-
-    /* el tallo */
-    const puntaX = cx + caida, puntaY = SUELO - alto + caida * .5;
-    g("path", {d:`M${cx} ${SUELO} Q ${cx + caida * .35} ${SUELO - alto * .6} ${puntaX} ${puntaY}`,
-      stroke:col, "stroke-width":4, fill:"none", "stroke-linecap":"round"}, mata);
-
-    const hojas = Math.max(1, Math.round(a / 2));
-    for(let h = 0; h < hojas; h++){
-      const t = (h + 1) / (hojas + 1);
-      const hx = cx + caida * t * .5, hy = SUELO - alto * t;
-      const lado = h % 2 ? 1 : -1;
-      g("ellipse", {cx:hx + lado * 15, cy:hy, rx:15, ry:6.5, fill:col, opacity:.85,
-        transform:`rotate(${lado * (a <= 3 ? 34 : -18)} ${hx + lado * 15} ${hy})`}, mata);
-    }
-
-    if(a >= 8){
-      for(let p = 0; p < 6; p++){
-        const ang = p * 60 * Math.PI / 180;
-        g("ellipse", {cx:puntaX + Math.cos(ang) * 10, cy:puntaY + Math.sin(ang) * 10,
-          rx:7.5, ry:5.5, fill:"#e8a63c", opacity:.92,
-          transform:`rotate(${p * 60} ${puntaX + Math.cos(ang) * 10} ${puntaY + Math.sin(ang) * 10})`}, mata);
-      }
-      g("circle", {cx:puntaX, cy:puntaY, r:6, fill:"#c9822a"}, mata);
-    } else if(a >= 6){
-      g("circle", {cx:puntaX, cy:puntaY, r:5, fill:col, opacity:.6}, mata);
-    }
-
-    /* las malezas puestas en ESTE surco, con su nombre */
-    const malas = malezasDe(s.id);
-    malas.slice(0, 3).forEach((m, k) => {
-      const lado = k % 2 ? 1 : -1;
-      const mx = cx + lado * (24 + Math.floor(k / 2) * 13);
-      const altoM = 44 + Math.min(12, m.length) * 1.8;
-      g("path", {d:`M${mx} ${SUELO} q ${lado * 9} ${-altoM * .55} ${lado * 3} ${-altoM}`,
-        stroke:"#6f7d54", "stroke-width":3, fill:"none", "stroke-linecap":"round"}, mata);
-      g("path", {d:`M${mx + lado * 4} ${SUELO - altoM * .4} q ${lado * 15} ${-5} ${lado * 13} ${-18}`,
-        stroke:"#7d8a63", "stroke-width":2.4, fill:"none", "stroke-linecap":"round"}, mata);
-      g("path", {d:`M${mx + lado * 3} ${SUELO - altoM * .68} q ${-lado * 13} ${-4} ${-lado * 10} ${-16}`,
-        stroke:"#8d9478", "stroke-width":2.2, fill:"none", "stroke-linecap":"round"}, mata);
-      g("path", {d:`M${mx + lado * 3} ${SUELO - altoM * .9} q ${lado * 11} ${-3} ${lado * 9} ${-13}`,
-        stroke:"#6f7d54", "stroke-width":2, fill:"none", "stroke-linecap":"round"}, mata);
-    });
-    if(malas.length){
-      const nom = Kit.svg("text", {x:cx, y:SUELO + 66, "text-anchor":"middle",
-        style:"font:600 10.5px system-ui,sans-serif;fill:#5f6b4a"});
-      nom.textContent = malas.slice(0, 2).join(" · ") + (malas.length > 2 ? " …" : "");
-      mata.appendChild(nom);
-    }
-
-    /* rótulo del surco */
-    const et = Kit.svg("text", {x:cx, y:SUELO + 34, "text-anchor":"middle",
-      style:`font:600 11.5px system-ui,sans-serif;fill:${s.color}`});
-    const rot = tituloDe(s);
-    et.textContent = rot.length > 19 ? rot.slice(0, 18) + "…" : rot;
-    mata.appendChild(et);
-    const en = Kit.svg("text", {x:cx, y:SUELO + 50, "text-anchor":"middle",
-      style:"font:700 11px system-ui,sans-serif;fill:#7d674b"});
-    en.textContent = nivelDe(a).nombre.toLowerCase();
-    mata.appendChild(en);
-
-    /* la regadera de la semana, encima de la flor elegida */
-    if(regadera === s.id) dibujarRegadera(mata, cx, SUELO - Math.max(alto, 96) - 40);
-  });
+  const ancho = 700 / lista.length;
+  lista.forEach((s, i) => plantar(svg, s, ancho * (i + .5), ancho));
 }
 
 function dibujarRegadera(padre, cx, cy){
-  const g = (t, a) => padre.appendChild(Kit.svg(t, a));
-  const R = Kit.svg("g", {transform:`translate(${cx - 26},${cy})`});
-  padre.appendChild(R);
+  const R = padre.appendChild(Kit.svg("g", {filter:ACUA, transform:`translate(${cx - 26},${cy})`}));
   const p = (t, a) => R.appendChild(Kit.svg(t, a));
-  p("rect", {x:8, y:8, width:34, height:26, rx:5, fill:"#7fa2b8", stroke:"#4f7891", "stroke-width":1.8});
-  p("path", {d:"M14 8 q 8 -12 20 -2", stroke:"#4f7891", "stroke-width":3, fill:"none",
-    "stroke-linecap":"round"});
-  p("path", {d:"M42 14 l 16 -7 l 4 5 l -14 10 Z", fill:"#7fa2b8", stroke:"#4f7891",
-    "stroke-width":1.6, "stroke-linejoin":"round"});
+  p("rect", {x:8, y:8, width:34, height:26, rx:5, fill:"#8fb3c9", opacity:.9, stroke:"#4f7891", "stroke-width":1.4});
+  p("path", {d:"M14 8 q 8 -12 20 -2", stroke:"#4f7891", "stroke-width":3, fill:"none", "stroke-linecap":"round"});
+  p("path", {d:"M42 14 l 16 -7 l 4 5 l -14 10 Z", fill:"#8fb3c9", opacity:.9, stroke:"#4f7891",
+    "stroke-width":1.3, "stroke-linejoin":"round"});
   p("rect", {x:14, y:2, width:18, height:5, rx:2.5, fill:"#4f7891"});
   /* el chorro */
   for(let k = 0; k < 4; k++)
     p("path", {d:`M${26 + k * 4} 30 q 2 12 ${-2 + k} 26`, stroke:"#7fbfd8",
       "stroke-width":2, fill:"none", "stroke-linecap":"round", opacity:.75});
-  const t = Kit.svg("text", {x:26, y:-6, "text-anchor":"middle",
-    style:"font:700 10.5px system-ui,sans-serif;fill:#2f6f8f;letter-spacing:.5px"});
+  const t = padre.appendChild(Kit.svg("text", {x:cx, y:cy - 6, "text-anchor":"middle",
+    style:"font:700 10.5px system-ui,sans-serif;fill:#2f6f8f;letter-spacing:.5px"}));
   t.textContent = "ESTA SEMANA";
-  R.appendChild(t);
 }
 
 /* ====================== REFRESCO ====================== */
@@ -1749,6 +1885,7 @@ function resumen(){
 }
 
 /* ====================== ARRANQUE ====================== */
+pintarFondo();
 cablearMasMalezas();
 
 huerta = Kit.mostrador({
