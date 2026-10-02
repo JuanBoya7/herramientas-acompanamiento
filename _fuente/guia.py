@@ -351,6 +351,29 @@ GUIA = [
   "cuidado":"Con papel real funciona mejor: el terapeuta sostiene la hoja y ofrece resistencia. La hoja "
             "no reemplaza eso, lo resume. Y el «papá» se busca con cuidado: suele ser el pensamiento "
             "que más dolería creer cierto."},
+ {"archivo":"act-quien-lleva-los-globos.html", "titulo":"Quién lleva los globos",
+  "etq":"Defusión y elección",
+  "paraque":"Tres movimientos seguidos sobre lo mismo: ponerlo enfrente, notar quién lo mira y que hay "
+            "sitio para ese y para todos, y elegir quién manda en el paso siguiente. Es defusión con "
+            "perspectiva y con dirección, no solo con distancia.",
+  "conviene":[
+    "Ya observa sus pensamientos, y cuando aparecen sigue haciendo lo que ellos dicen.",
+    "Hojas en el arroyo se le volvió una manera de esperar a que pasen.",
+    "Conducta reactiva o impulsiva: lo siente y lo hace, sin intervalo en medio.",
+    "Preocupación y rumia, después de Empujar el papel: es el ejercicio que abre la segunda sesión "
+    "de ese protocolo."],
+  "secuencia":[
+    ("Necesita antes", "La brújula o El jardín: sin algo que importe no hay hacia dónde elegir."),
+    ("Después de", "Hojas en el arroyo, que entrena solo la distancia."),
+    ("Junto a", "El tablero o El cielo y el clima, que dan la imagen de tener sitio."),
+    ("Antes de", "La radio que no se apaga y El bus: de elegir en la hoja a hacer con el ruido puesto.")],
+  "cuidado":"Aquí los globos no se sueltan: si la persona espera que se vayan, se volvió control. «Que "
+            "mande el globo» es una respuesta válida y no se corrige. El respaldo es de laboratorio, con "
+            "muestras pequeñas y casi todas no clínicas: sumar perspectiva y elección rindió más que la "
+            "sola distancia en conducta problema, tolerancia al malestar y rendimiento en una tarea, "
+            "pero los estudios no separan cuál de las dos cosas aporta, y sobre el malestar reportado "
+            "la ventaja fue pequeña e irregular. Con disociación o despersonalización, ojos abiertos y "
+            "sin insistir en la pregunta de quién mira."},
 ]),
 
 ("DBT", [
@@ -723,6 +746,7 @@ RUTAS = [
   "pasos":[("El costo de la lucha","act-costo-de-la-lucha.html"),
            ("El tablero","met-el-tablero.html"),
            ("Hojas en el arroyo","met-hojas-en-el-arroyo.html"),
+           ("Quién lleva los globos","act-quien-lleva-los-globos.html"),
            ("La palabra repetida","met-la-palabra-repetida.html"),
            ("Soltar el anzuelo","act-soltar-el-anzuelo.html"),
            ("La radio que no se apaga","met-la-radio.html"),

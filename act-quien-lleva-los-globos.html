@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El tablero</title>
+<title>Quién lleva los globos</title>
 <style>
   :root{
     --tinta:#1d2733; --tinta-suave:#5a6a7d; --linea:#d9e1ea;
@@ -299,89 +299,79 @@
     textarea{min-height:0;height:auto}
   }
 
-  .escenario > svg{max-width:660px}
-  .mandos button{font-size:14px}
-  button.pelea{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600}
-  button.pelea:hover{background:#763333;border-color:#763333}
-  button.mesa{background:#3f7d5a;border-color:#3f7d5a;color:#fff;font-weight:600}
-  button.mesa:hover{background:#356b4d;border-color:#356b4d}
-  button.mesa:disabled{background:#b9cec2;border-color:#b9cec2}
-  button.arranque{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600}
-  button.arranque:hover{background:#28607c;border-color:#28607c}
-  .marcas div{min-width:88px}
-
-  .bandos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .bando{border:1px solid var(--linea);border-radius:10px;padding:13px 15px}
-  .bando.blancas{border-left:5px solid #b9a98c;background:#fdfcf9}
-  .bando.negras{border-left:5px solid #3a3f47;background:#f8f9fa}
-  .bando h3{margin:0 0 3px;font-size:15px}
-  .bando .quees{margin:0 0 10px;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
-  .bando .chip{font-size:12.5px;padding:5px 12px}
-  .bando.negras .chip.activa{background:#3a3f47;border-color:#3a3f47}
-  .bando.negras .chip.mas{color:#3a3f47}
-
-  .pregunta-sola.enMesa{border-left-color:#3f7d5a;background:linear-gradient(180deg,#f4faf6,#fff)}
-  .pregunta-sola.enMesa .pregunta{color:#2c5a44}
-
-  @media (max-width:640px){.bandos{grid-template-columns:1fr}}
+  .camino{display:block;width:100%;height:auto;max-width:700px;margin:0 auto}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:8px auto 2px;color:var(--acento);
+    min-height:28px;max-width:600px}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:560px;
+    margin:0 auto;min-height:22px;line-height:1.5}
+  .unaPalabra{max-width:320px;margin:9px auto 0}
+  .unaPalabra input{text-align:center}
+  button.arrancar{background:#3f9b86;border-color:#3f9b86;color:#fff;font-weight:600}
+  button.arrancar:hover{background:#357f6e;border-color:#357f6e}
+  button.seguir{background:#2f6f8f;border-color:#2f6f8f;color:#fff;font-weight:600;min-width:170px}
+  button.seguir:hover{background:#28607c;border-color:#28607c}
+  button.mandaEl{background:#fff;border-color:#9aa8b5;color:#5a6a7d;font-weight:700;min-width:150px}
+  button.mandoYo{background:#fff;border-color:#3f9b86;color:#3f9b86;font-weight:700;min-width:150px}
+  .marcas div{min-width:104px}
 </style>
 </head>
 <body>
 <div class="envoltura">
 
 <header class="tapa">
-  <h1>El tablero</h1>
-  <p class="sub">Hay una partida que llevas años jugando: de un lado las piezas que quieres que ganen, del otro las que quieres que desaparezcan. Empieza y verás que las negras siguen apareciendo aunque no hagas nada: no las pones tú. Empujar trae dos más de golpe y cuesta. Y después está la única jugada que la metáfora propone, que no detiene ninguna pieza: detiene el gasto.</p>
-  <p class="fuente">Metáfora del tablero de ajedrez y dimensiones del yo, en Díaz Corbobés, MANUAL ACT §3.3, con el ejercicio del observador.</p>
+  <h1>Quién lleva los globos</h1>
+  <p class="sub">Algo aparece y por un momento se mira todo desde adentro de él. Luego pasa a un globo, enfrente; se pregunta quién lo está mirando; y con el globo en la mano se decide quién manda en el paso siguiente. Aquí los globos no se sueltan: se llevan. Lo que se practica es notar quién los lleva y hacia dónde camina.</p>
+  <p class="fuente">Interacciones de defusión con encuadre deíctico, jerárquico y de regulación, en Luciano et al. (2011), Gil-Luciano et al. (2017) y López-López y Luciano (2017); ejercicio del globo en Ruiz et al., Protocolo de dos sesiones de ACT centrado en el pensamiento negativo repetitivo (2018), sesión 2; y las tres estrategias de Törneke, Luciano, Barnes-Holmes y Bond (2016). La escena de caminar con los globos en la mano es una adaptación de esta hoja.</p>
 
 </header>
 
 <section class="paso">
-  <h2><span class="num">1</span>Carga tus piezas</h2>
+  <h2><span class="num">1</span>Hacia dónde vas</h2>
+  <p class="ayuda">Lo que importa en esta época de la vida. No hace falta que esté yendo bien:
+  basta con que importe. Es la dirección del letrero.</p>
   <div class="cuerpo">
-    <div class="bandos">
-      <div class="bando blancas">
-        <h3>Las piezas blancas</h3>
-        <p class="quees">Lo que quieres que gane.</p>
-        <div class="chips" id="blancas"></div>
-      </div>
-      <div class="bando negras">
-        <h3>Las piezas negras</h3>
-        <p class="quees">Lo que quieres que desaparezca.</p>
-        <div class="chips" id="negras"></div>
-      </div>
-    </div>
+    <div class="chips" id="importa"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Lo que aparece en el camino</h2>
+  <p class="ayuda">Pensamientos o sensaciones de los de siempre, tal como llegan. Primero vendrán
+  cosas neutras, para practicar donde no duele, y después estas.</p>
+  <div class="cuerpo">
+    <div class="chips" id="dificiles"></div>
+    <label class="etiqueta">Cuando eso manda, sueles…</label>
+    <div class="chips" id="manda"></div>
   </div>
 </section>
 
 <div class="escenario">
-  <svg id="escena" viewBox="0 0 660 480" role="img"
-    aria-label="Tablero con las piezas blancas y negras de la partida"></svg>
+  <svg class="camino" id="camino" viewBox="0 0 700 300" role="img"
+    aria-label="Una figura que camina con globos en la mano hacia un letrero"></svg>
+  <div class="fase" id="fase"></div>
+  <div class="fase-sub" id="faseSub"></div>
+  <div class="unaPalabra" id="cajaPalabra" hidden>
+    <input type="text" id="palabra" placeholder="Una palabra que lo resuma, si quieres">
+  </div>
   <div class="marcas">
-    <div><span class="n" id="mRondas" style="color:#8a3d3d">0</span><span class="r">empujones</span></div>
-    <div><span class="n" id="mNegras" style="color:#3a3f47">0</span><span class="r">piezas negras</span></div>
-    <div><span class="n" id="mFuera" style="color:#8a3d3d">0</span><span class="r">negras sacadas</span></div>
-    <div><span class="n" id="mEnergia" style="color:#8a3d3d">0</span><span class="r">energía gastada</span></div>
+    <div><span class="n" id="mGlobos" style="color:#2f6f8f">0</span><span class="r">globos en la mano</span></div>
+    <div><span class="n" id="mYo" style="color:#3f9b86">0</span><span class="r">veces que mandaste tú</span></div>
+    <div><span class="n" id="mEl" style="color:#7d8994">0</span><span class="r">veces que mandó el globo</span></div>
+  </div>
+  <div class="duracion">
+    <button type="button" class="chip activa" id="cNeutros">Empezar por lo neutro</button>
   </div>
   <div class="mandos">
-    <button type="button" class="arranque" id="btnArrancar" onclick="arrancar()">Empezar la partida</button>
-    <button type="button" class="pelea" id="btnPelear" onclick="pelear()">Empujar más fuerte</button>
-    <button type="button" class="mesa" id="btnMesa" onclick="serElTablero()">Ser el tablero</button>
-    <button type="button" id="btnVolver" onclick="volverAJugar()" hidden>Volver a la partida</button>
+    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Empezar</button>
+    <button type="button" class="seguir" id="btnPaso" onclick="avanzar()" hidden>Ya lo noto</button>
+    <button type="button" class="mandaEl" id="btnEl" onclick="elegir('el')" hidden>Que mande el globo</button>
+    <button type="button" class="mandoYo" id="btnYo" onclick="elegir('yo')" hidden>Mando yo</button>
     <button type="button" onclick="reiniciar()">Reiniciar</button>
   </div>
 </div>
 
-<section class="bloque pregunta-sola" id="relato">
-  <div class="pregunta" id="preguntaRelato"></div>
-</section>
-
-<section class="paso" id="pasoDespues" hidden>
-  <h2><span class="num">2</span>Desde el tablero</h2>
-  <div class="cuerpo">
-    <label class="etiqueta">Con todas las piezas todavía puestas, ¿qué podrías hacer?</label>
-    <div class="chips" id="ahoraQue"></div>
-  </div>
+<section class="bloque pregunta-sola" id="cajaPregunta" hidden>
+  <div class="pregunta" id="pregunta"></div>
 </section>
 
 <details class="notas-pro">
@@ -1114,315 +1104,347 @@ var Kit = (function(){
 <script>
 const $ = Kit.$;
 
-/* Pocas y las más frecuentes: lo demás lo pone la persona con el "+". */
-const BLANCAS = ["Soy capaz","Todo va a estar bien","Ya lo superé","Soy suficiente"];
-const NEGRAS  = ["No sirvo para esto","Voy a fallar","Me van a dejar","La ansiedad"];
-const ACCIONES = ["Presentar el trabajo igual","Salir de la casa","Decir que no","Pedir ayuda"];
+const IMPORTA   = ["Mi familia","Mi trabajo","Mi salud","Mis amistades"];
+const DIFICILES = ["No voy a poder","Algo malo va a pasar","No soy suficiente","Un nudo en el pecho"];
+const MANDA     = ["Lo dejo para después","Me quedo callado","Le doy vueltas","Me encierro"];
 
-/* Lo que va apareciendo. Pelear con una pieza no devuelve la misma pieza:
-   convoca otras. Y algunas llegan solas, sin que nadie empuje. */
-const BROTES_NEGROS = [
-  "¿Y si me pasa algo?","Se van a dar cuenta","No debería sentirme así",
-  "Otra vez lo mismo","Nunca voy a poder","Soy una carga","Estoy solo",
-  "Y si esto no se me quita","Me está pasando algo grave","No lo estoy haciendo bien",
-  "Todos pueden menos yo","Se me va a notar","Y si empeora","No voy a aguantar",
-  "Debí haber hecho otra cosa","Lo voy a arruinar"
-];
-const BROTES_BLANCOS = [
-  "Tengo que poder","No pasa nada","Hay gente peor","Ya se me va a pasar",
-  "Solo tengo que esforzarme","Piensa positivo","Es cuestión de actitud","Respira y ya"
+/* La parte neutra: los mismos pasos donde no duele. En los protocolos de
+   origen el entrenamiento empieza siempre así —respiración, sensaciones, un
+   pensamiento cualquiera, un recuerdo reciente— y solo después pasa a lo que
+   la persona evita. */
+const NEUTROS = [
+  {t:"Tu respiración", sub:"Nótala entrar y salir, sin cambiarla.", corto:"La respiración"},
+  {t:"Un sonido de este lugar", sub:"El que haya. Solo nótalo.", corto:"Un sonido"},
+  {t:"Lo que estás pensando ahora mismo", sub:"Lo primero que pase, sea lo que sea.",
+   corto:"Un pensamiento", palabra:true},
+  {t:"Algo que hiciste hace unos días", sub:"Deja que llegue el recuerdo.",
+   corto:"Un recuerdo", palabra:true}
 ];
 
-const SOLA = 3.4;                 /* cada cuánto brota una negra por su cuenta */
+const FX = 230, SUELO = 252, CABEZA = 150;
+const TONOS = ["#c26a4e","#c9962f","#8a6a9c","#b0503f","#5f77b8"];
+const TONO_NEUTRO = "#9fc3d6";
 
-let rondas = 0, energia = 0, vista = "partida";
-let brotesN = [], brotesB = [];   /* los pensamientos que fueron apareciendo   */
-let piezas = [];                  /* con posición propia, para que se muevan   */
-let mesa = 0;                     /* 0 en la partida, 1 siendo el tablero      */
-let proximaSola = SOLA, sobranN = 0, sobranB = 0, totalNegras = 0;
-let ultimaPregunta = "";
+/* fase: espera · notar · alla · quien · elegir · tras · fin */
+let fase = "espera", cola = [], idx = -1, ultimo = null, pausa = 0;
+let llevados = [];            /* {txt, dificil, mando: "yo" | "el" | null} */
+let conNeutros = true;
+let globo = null;             /* el que se está trabajando */
+let halo = 0, haloMeta = 0, mundo = 0, mundoMeta = 0, vaiven = 0, zancada = 0;
 
-const elegidas = () => ({b: Kit.activas("blancas"), n: Kit.activas("negras")});
+const importa = () => Kit.activas("importa")[0] || "";
+const corta = (s, n) => s.length > n ? s.slice(0, n - 1) + "…" : s;
+const cuenta = q => llevados.filter(g => g.mando === q).length;
 
-/* Trae un pensamiento nuevo. Una de cada cuatro veces repite uno que ya está,
-   porque eso también pasa. */
-function brote(pozo, yaPuestos){
-  const libres = pozo.filter(t => yaPuestos.indexOf(t) < 0);
-  if(yaPuestos.length && (!libres.length || Math.random() < .25))
-    return yaPuestos[Math.floor(Math.random() * yaPuestos.length)];
-  return libres[Math.floor(Math.random() * libres.length)];
+/* Dónde queda cada globo en el ramo que se lleva en la mano de atrás. */
+function ranura(i){
+  const fila = Math.floor(i / 4), col = i % 4;
+  return {x: FX - 62 - col * 27 + (fila % 2) * 13, y: 106 - (fila % 3) * 31 + (col % 2) * 7};
+}
+const tono = (g, i) => g.dificil ? TONOS[i % TONOS.length] : TONO_NEUTRO;
+
+/* ====================== EL CICLO DE CADA ENSAYO ======================
+   Tres movimientos sobre lo mismo, siempre en este orden:
+   1. enfrente: yo aquí, eso allá;
+   2. quién lo mira, y que hay sitio para ese y para todos;
+   3. con lo difícil, quién manda en lo que se hace ahora.
+   El tercero solo va con lo difícil: con la respiración no hay nada que
+   decidir. */
+function arrancar(){
+  if(fase !== "espera" && fase !== "fin") return;
+  if(!importa()){ Kit.brindis("Marca primero hacia dónde vas"); return; }
+  const dif = Kit.activas("dificiles");
+  if(!dif.length){ Kit.brindis("Marca primero al menos una cosa de las que aparecen"); return; }
+  cola = (conNeutros ? NEUTROS.map(n => Object.assign({dificil:false}, n)) : [])
+    .concat(dif.map(t => ({t:"«" + t + "»", sub:"Apareció solo. Nótalo.", corto:t, dificil:true})));
+  idx = -1;
+  escena.andar();
+  siguiente();
+}
+
+function siguiente(){
+  idx++;
+  ultimo = null;
+  if(idx >= cola.length){
+    fase = "fin"; globo = null; haloMeta = 1;
+    pintar();
+    Kit.guardar();
+    return;
+  }
+  /* aparece encima de la cabeza: por un momento se mira desde adentro */
+  fase = "notar";
+  haloMeta = 0;
+  globo = {x:FX, y:CABEZA, tx:FX, ty:CABEZA, r:34, rt:34, item:cola[idx], guardado:false};
+  pintar();
+}
+
+function avanzar(){
+  if(!globo) return;
+  if(fase === "notar"){
+    fase = "alla";
+    globo.tx = FX + 122; globo.ty = 116; globo.rt = 24;
+  } else if(fase === "alla"){
+    const it = globo.item;
+    if(it.palabra){
+      const p = $("palabra").value.trim();
+      if(p) it.corto = p;
+      $("palabra").value = "";
+    }
+    fase = "quien";
+    haloMeta = 1;
+  } else if(fase === "quien"){
+    if(globo.item.dificil) fase = "elegir";
+    else { alRamo(null); fase = "tras"; pausa = 1.6; }
+  }
+  pintar();
+}
+
+function alRamo(quien){
+  llevados.push({txt:globo.item.corto, dificil:!!globo.item.dificil, mando:quien});
+  ultimo = quien || "neutro";
+}
+
+/* Las dos respuestas valen. Si manda el globo no se corrige ni se repite: se
+   ve un momento cómo queda, y viene el siguiente. */
+function elegir(quien){
+  if(fase !== "elegir" || !globo) return;
+  alRamo(quien);
+  fase = "tras";
+  if(quien === "yo"){ mundoMeta += 150; pausa = 2.8; }
+  else { globo.tx = FX; globo.ty = CABEZA; globo.rt = 34; pausa = 3.2; }
+  pintar();
+  Kit.guardar();
+}
+
+function reiniciar(){
+  escena.parar();
+  fase = "espera"; cola = []; idx = -1; ultimo = null; globo = null;
+  llevados = []; halo = haloMeta = 0; mundo = mundoMeta = 0;
+  $("palabra").value = "";
+  pintar();
+  Kit.guardar();
+}
+
+function ponerNeutros(hay){
+  conNeutros = hay;
+  $("cNeutros").classList.toggle("activa", conNeutros);
+  Kit.guardar();
 }
 
 /* ====================== EL LATIDO ====================== */
 const escena = Kit.reloj(latido);
 
 function latido(dt){
-  /* las negras siguen llegando: en la partida y también desde el tablero */
-  proximaSola -= dt;
-  if(proximaSola <= 0){
-    const {b, n} = elegidas();
-    const t = brote(BROTES_NEGROS, n.concat(brotesN));
-    if(t) brotesN.push(t);
-    proximaSola = SOLA + Math.random() * 2;
-    recomponer();
+  vaiven += dt;
+  const k = Math.min(1, dt * 4);
+  halo += (haloMeta - halo) * Math.min(1, dt * 2.5);
+
+  const falta = mundoMeta - mundo;
+  if(falta > 1){ mundo += Math.min(falta, 62 * dt); zancada += dt * 8; }
+
+  if(globo){
+    /* el que mandó la persona se va al ramo; el que mandó él vuelve a la cabeza */
+    if(fase === "tras" && ultimo !== "el" && !globo.guardado){
+      const r = ranura(llevados.length - 1);
+      globo.tx = r.x; globo.ty = r.y; globo.rt = 13; globo.guardado = true;
+    }
+    globo.x += (globo.tx - globo.x) * k;
+    globo.y += (globo.ty - globo.y) * k;
+    globo.r += (globo.rt - globo.r) * k;
   }
 
-  /* jugar cuesta; ser el tablero no. Ese contraste es toda la lectura. */
-  if(mesa < .5) energia += 1.5 * dt;
-
-  /* la vista se aleja o se acerca sin salto */
-  const meta = vista === "tablero" ? 1 : 0;
-  mesa += (meta - mesa) * Math.min(1, dt * 3.2);
-  if(Math.abs(meta - mesa) < .004) mesa = meta;
-
-  /* cada pieza va a su sitio, y el empujón se le va apagando */
-  piezas.forEach(p => {
-    p.ap = Math.min(1, p.ap + dt * 2.4);
-    p.x += (p.tx - p.x) * Math.min(1, dt * 5);
-    p.y += (p.ty - p.y) * Math.min(1, dt * 5);
-    p.jx -= p.jx * Math.min(1, dt * 4);
-    p.jy -= p.jy * Math.min(1, dt * 4);
-  });
-
-  marcas();
+  if(fase === "tras"){
+    pausa -= dt;
+    if(pausa <= 0 && falta <= 1) siguiente();
+  }
   dibujar();
-  preguntar();
+  if(fase === "fin" && Math.abs(haloMeta - halo) < .02) escena.parar();
 }
 
-/* ====================== COLOCACIÓN ====================== */
-const CX = 330, CY = 250;
-const POR_FILA = 5, FILAS_MAX = 3, CUPO_LADO = POR_FILA * FILAS_MAX;
-
-function recomponer(){
-  const {b, n} = elegidas();
-  /* Cada copia lleva un sufijo invisible para tener identidad propia aunque
-     el texto se repita. */
-  const marcar = (lista, desde) => lista.map((t, i) => ({texto:t, cl:t + "​".repeat(desde + i)}));
-  const negras  = marcar(n, 0).concat(marcar(brotesN, n.length));
-  const blancas = marcar(b, 0).concat(marcar(brotesB, b.length));
-
-  const vivas = {};
-  const colocar = (lista, bando) => {
-    const arriba = bando === "blanca";
-    const vis = lista.slice(0, CUPO_LADO);
-    const filas = Math.max(1, Math.ceil(vis.length / POR_FILA));
-    vis.forEach((it, i) => {
-      const fila = Math.floor(i / POR_FILA);
-      const enFila = Math.min(POR_FILA, vis.length - fila * POR_FILA);
-      const col = i % POR_FILA;
-      const t = enFila === 1 ? .5 : col / (enFila - 1);
-      /* las filas de más se apilan hacia afuera; cada bando en su mitad */
-      const salto = filas > 2 ? 52 : 60;
-      const tx = 128 + t * 404;
-      const ty = CY + (arriba ? -1 : 1) * (44 + fila * salto);
-      const clave = bando + "|" + it.cl;
-      vivas[clave] = 1;
-      const ya = piezas.find(p => p.clave === clave);
-      if(ya){ ya.tx = tx; ya.ty = ty; ya.texto = it.texto; }
-      /* la nueva entra desde su lado del tablero, no aparece de la nada */
-      else piezas.push({clave, texto:it.texto, bando, tx, ty, x:tx,
-        y:ty + (arriba ? -60 : 60), jx:0, jy:0, ap:0});
-    });
-    return lista.length - vis.length;
-  };
-  sobranN = colocar(negras, "negra");
-  sobranB = colocar(blancas, "blanca");
-  piezas = piezas.filter(p => vivas[p.clave]);
-  totalNegras = negras.length;
-
-  if(!escena.anda()){ marcas(); dibujar(); preguntar(); }
-}
-
-/* ====================== ESCENA ====================== */
+/* ====================== LA ESCENA ====================== */
 function dibujar(){
-  const svg = $("escena");
+  const svg = $("camino");
   svg.innerHTML = "";
-  const g = (t, a, padre) => (padre || svg).appendChild(Kit.svg(t, a));
-
-  const escala = 1 - .48 * mesa;
-  const mundo = Kit.svg("g", {
-    transform:`translate(${CX},${CY}) scale(${escala.toFixed(3)}) translate(${-CX},${-CY})`});
-  svg.appendChild(mundo);
-
-  const casilla = 55, lado = 8 * casilla, x0 = CX - lado / 2, y0 = CY - lado / 2;
-  for(let f = 0; f < 8; f++)
-    for(let c = 0; c < 8; c++)
-      g("rect", {x:x0 + c*casilla, y:y0 + f*casilla, width:casilla, height:casilla,
-        fill:(f + c) % 2 ? "#d8cfbe" : "#f2ede3"}, mundo);
-  g("rect", {x:x0, y:y0, width:lado, height:lado, fill:"none",
-    stroke: Kit.mezcla("#b6ab97", "#3f7d5a", mesa), "stroke-width": 2.5 + 1.5 * mesa}, mundo);
-
-  /* Las negras engordan con cada empujón; las blancas casi no. */
-  const rN = 15 + Math.min(8, rondas * 1.4);
-  const rB = 15 + Math.min(8, rondas * 1.4) * .35;
-
-  piezas.forEach(p => {
-    const negra = p.bando === "negra";
-    const r = (negra ? rN : rB) * p.ap;
-    if(r < .6) return;
-    const pieza = Kit.svg("g", {transform:`translate(${(p.x + p.jx).toFixed(1)},${(p.y + p.jy).toFixed(1)})`,
-      opacity:((1 - .55 * mesa) * p.ap).toFixed(2)});
-    mundo.appendChild(pieza);
-
-    g("circle", {cx:0, cy:1, r:r + 2, fill:"#00000018"}, pieza);
-    g("circle", {cx:0, cy:-2, r:r, fill: negra ? "#3a3f47" : "#faf6ee",
-      stroke: negra ? "#22262b" : "#c3b79f", "stroke-width":2}, pieza);
-
-    /* el rótulo siempre hacia afuera del centro: las blancas por arriba,
-       las negras por abajo. Así ninguna etiqueta invade el otro bando. */
-    const et = Kit.svg("text", {x:0, y: negra ? r + 14 : -r - 8, "text-anchor":"middle",
-      style:`font:600 ${(11 - 2 * mesa).toFixed(1)}px system-ui,sans-serif;` +
-            `paint-order:stroke;stroke:#f2ede3;stroke-width:3.5;stroke-linejoin:round;` +
-            `fill:${negra ? "#22262b" : "#7a6a4e"}`});
-    et.textContent = p.texto.length > 24 ? p.texto.slice(0, 23) + "…" : p.texto;
-    pieza.appendChild(et);
-  });
-
-  const rotulo = (x, y, s, color) => {
-    const t = Kit.svg("text", {x, y, "text-anchor":"middle",
-      style:`font:600 12px system-ui,sans-serif;fill:${color};` +
-            `paint-order:stroke;stroke:#f2ede3;stroke-width:3.5;stroke-linejoin:round`});
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const letra = (x, y, s, estilo) => {
+    const t = g("text", {x:x, y:y, "text-anchor":"middle", style:estilo});
     t.textContent = s;
-    mundo.appendChild(t);
+    return t;
   };
-  if(sobranN > 0) rotulo(CX, CY + 218, `y ${sobranN} más que ya no caben`, "#22262b");
-  if(sobranB > 0) rotulo(CX, CY - 214, `y ${sobranB} más`, "#7a6a4e");
+  const ROTULO = "font:600 13px system-ui,sans-serif;fill:#3f5163;paint-order:stroke;" +
+                 "stroke:#f3f7f9;stroke-width:3.5;stroke-linejoin:round";
+  const MENUDA = "font:11.5px system-ui,sans-serif;fill:#6d7f8f";
 
-  if(mesa > .05){
-    g("circle", {cx:CX, cy:CY, r:198, fill:"none", stroke:"#3f7d5a",
-      "stroke-width":1.5, "stroke-dasharray":"6 7", opacity:(.55 * mesa).toFixed(2)});
-    const et = Kit.svg("text", {x:CX, y:CY + 222, "text-anchor":"middle",
-      style:`font:600 14px system-ui,sans-serif;fill:#3f7d5a;opacity:${mesa.toFixed(2)}`});
-    et.textContent = "Tú eres esto. No una de las piezas.";
-    svg.appendChild(et);
+  g("rect", {x:0, y:0, width:700, height:300, fill:"#f3f7f9"});
+
+  /* el sitio: cabe la figura, el globo de enfrente y todo el ramo */
+  if(halo > .02){
+    g("ellipse", {cx:FX + 14, cy:150, rx:224, ry:140, fill:"#e3eff6", opacity:halo});
+    g("ellipse", {cx:FX + 14, cy:150, rx:224, ry:140, fill:"none", stroke:"#8fbfdc",
+      "stroke-width":1.5, "stroke-dasharray":"3 6", opacity:halo});
   }
-}
 
-function marcas(){
-  $("mRondas").textContent  = rondas;
-  $("mNegras").textContent  = totalNegras;
-  $("mFuera").textContent   = 0;
-  $("mEnergia").textContent = Math.round(energia);
-  $("btnMesa").disabled = !elegidas().n.length;
-  $("btnArrancar").disabled = escena.anda();
-}
-
-/* ====================== LA PARTIDA ====================== */
-function arrancar(){
-  if(!elegidas().n.length){ Kit.brindis("Primero pon al menos una pieza negra"); return; }
-  proximaSola = SOLA;
-  escena.andar();
-  marcas();
-  Kit.guardar();
-}
-
-function pelear(){
-  const {b, n} = elegidas();
-  if(!n.length){ Kit.brindis("Primero pon al menos una pieza negra"); return; }
-  if(!escena.anda()) escena.andar();
-  rondas++;
-  energia += 10 + rondas * 5;
-  /* Dos pensamientos negros nuevos por empujón, y uno blanco de respuesta. */
-  const puestosN = n.concat(brotesN), puestosB = b.concat(brotesB);
-  for(let k = 0; k < 2; k++){
-    const t = brote(BROTES_NEGROS, puestosN);
-    if(t){ brotesN.push(t); puestosN.push(t); }
+  /* el suelo corre hacia atrás cuando se camina; el letrero siempre queda adelante */
+  g("path", {d:`M0 ${SUELO} L700 ${SUELO} L700 300 L0 300 Z`, fill:"#dbe6d8"});
+  for(let n = 0; n < 11; n++){
+    const x = ((n * 70 - mundo) % 770 + 770) % 770 - 35;
+    g("path", {d:`M${x} ${SUELO + 14} l26 0`, stroke:"#b9cdb4", "stroke-width":3,
+      "stroke-linecap":"round"});
   }
-  const tb = brote(BROTES_BLANCOS, puestosB);
-  if(tb) brotesB.push(tb);
+  g("path", {d:`M632 ${SUELO} L632 150`, stroke:"#8a9a86", "stroke-width":4, "stroke-linecap":"round"});
+  g("path", {d:"M548 128 L642 128 L664 146 L642 164 L548 164 Z", fill:"#fff", stroke:"#3f7d5a",
+    "stroke-width":1.6, "stroke-linejoin":"round"});
+  letra(598, 142, "hacia", "font:10.5px system-ui,sans-serif;fill:#6d7f8f;letter-spacing:.6px");
+  letra(598, 157, corta(importa() || "lo que importa", 15),
+    "font:700 12.5px system-ui,sans-serif;fill:#2f5f45");
 
-  vista = "partida";
-  $("btnVolver").hidden = true;
-  $("pasoDespues").hidden = true;
-  recomponer();
-  /* el empujón se ve: todas las piezas se sacuden y ninguna sale */
-  piezas.forEach(p => { p.jx = (Math.random() - .5) * 30; p.jy = (Math.random() - .5) * 30; });
-  Kit.guardar();
-}
-
-function serElTablero(){
-  vista = "tablero";
-  if(!escena.anda()) escena.andar();
-  $("btnVolver").hidden = false;
-  $("pasoDespues").hidden = false;
-  setTimeout(() => $("relato").scrollIntoView({behavior:"smooth", block:"center"}), 400);
-  Kit.guardar();
-}
-
-function volverAJugar(){
-  vista = "partida";
-  $("btnVolver").hidden = true;
-  Kit.guardar();
-}
-
-function reiniciar(){
-  escena.parar();
-  rondas = 0; energia = 0; vista = "partida"; mesa = 0;
-  brotesN = []; brotesB = []; piezas = []; proximaSola = SOLA;
-  $("btnVolver").hidden = true;
-  $("pasoDespues").hidden = true;
-  recomponer();
-  Kit.guardar();
-}
-
-/* ====================== LA PREGUNTA ====================== */
-function preguntar(){
-  const {n} = elegidas();
-  const rel = $("relato");
-  rel.classList.toggle("enMesa", vista === "tablero");
-
-  let q;
-  if(vista === "tablero")
-    q = "Las piezas siguen llegando y el marcador de energía se detuvo. ¿Qué cosas de tu vida quedaron esperando a que ganaras esta partida?";
-  else if(!n.length)
-    q = "¿Cuál es la pieza que más quisieras que no estuviera ahí?";
-  else if(!escena.anda() && rondas === 0)
-    q = "¿Cómo has estado empujando hasta ahora, en la vida real?";
-  else if(rondas === 0)
-    q = "Están apareciendo solas y tú no has empujado nada. ¿Te suena?";
-  else if(rondas < 3)
-    q = "¿Salió alguna?";
-  else
-    q = "Si esta partida no se puede ganar, ¿cuánto tiempo más estás dispuesto a jugarla?";
-  if(q !== ultimaPregunta){
-    $("preguntaRelato").textContent = q;
-    ultimaPregunta = q;
+  /* el ramo, en la mano de atrás */
+  const enRamo = llevados.length - (globo && fase === "tras" ? 1 : 0);
+  const atras = {x:FX - 16, y:198};
+  for(let i = 0; i < enRamo; i++){
+    const r = ranura(i), y = r.y + Math.sin(vaiven * 1.3 + i) * 2;
+    g("path", {d:`M${atras.x} ${atras.y} L${r.x} ${y + 14}`, stroke:"#a9b6c2", "stroke-width":1});
+    g("circle", {cx:r.x, cy:y, r:13, fill:tono(llevados[i], i), opacity:.9});
+    g("path", {d:`M${r.x - 3} ${y + 15} L${r.x + 3} ${y + 15} L${r.x} ${y + 12} Z`,
+      fill:tono(llevados[i], i)});
   }
+
+  /* la figura */
+  const apagada = fase === "tras" && ultimo === "el";
+  const c = apagada ? "#9aa8b5" : "#2f6f8f";
+  const camina = mundoMeta - mundo > 1;
+  const abre = camina ? Math.sin(zancada) * 13 : 5;
+  const enfrente = globo && !globo.guardado && globo.x > FX + 40;
+  const mano = enfrente ? {x:FX + 24, y:186} : {x:FX + 14, y:198};
+  const trazo = (d, w) => g("path", {d:d, stroke:c, "stroke-width":w, "stroke-linecap":"round", fill:"none"});
+  trazo(`M${FX} 214 L${FX + abre} ${SUELO}`, 6);
+  trazo(`M${FX} 214 L${FX - abre} ${SUELO}`, 6);
+  trazo(`M${FX} 168 L${FX} 214`, 9);
+  trazo(`M${FX} 177 L${atras.x} ${atras.y}`, 5);
+  trazo(`M${FX} 177 L${mano.x} ${mano.y}`, 5);
+  g("circle", {cx:FX, cy:CABEZA, r:14, fill:c});
+  if(fase === "quien" || fase === "elegir")
+    g("circle", {cx:FX, cy:CABEZA, r:21, fill:"none", stroke:"#3f9b86", "stroke-width":2});
+
+  /* el globo que se está trabajando */
+  if(globo){
+    const i = globo.guardado || fase === "tras" ? llevados.length - 1 : llevados.length;
+    const col = tono(globo.item, i);
+    const y = globo.y + (globo.guardado ? 0 : Math.sin(vaiven * 1.3) * 2);
+    if(globo.guardado)
+      g("path", {d:`M${atras.x} ${atras.y} L${globo.x} ${y + globo.r}`, stroke:"#a9b6c2", "stroke-width":1});
+    else if(enfrente)
+      g("path", {d:`M${mano.x} ${mano.y} L${globo.x} ${y + globo.r}`, stroke:"#a9b6c2", "stroke-width":1.2});
+    g("circle", {cx:globo.x, cy:y, r:globo.r, fill:col, opacity:.92});
+    g("path", {d:`M${globo.x - 4} ${y + globo.r + 3} L${globo.x + 4} ${y + globo.r + 3} ` +
+      `L${globo.x} ${y + globo.r - 1} Z`, fill:col});
+    if(!globo.guardado){
+      /* sobre la cabeza el rótulo va al costado, para no tapar el ramo */
+      const encima = globo.x < FX + 40;
+      const t = letra(encima ? globo.x + globo.r + 10 : globo.x,
+        encima ? y - globo.r + 12 : y - globo.r - 9,
+        corta(fase === "notar" ? globo.item.t : globo.item.corto, 36), ROTULO);
+      if(encima) t.setAttribute("text-anchor", "start");
+    }
+    if(fase === "alla" || fase === "quien" || fase === "elegir"){
+      letra(FX, 288, "tú, aquí", MENUDA);
+      letra(globo.x, 288, "eso, allá", MENUDA);
+    }
+  }
+
+  if(fase === "espera")
+    letra(360, 96, "Lo que aparece empieza a llegar cuando arranques.",
+      "font:14.5px system-ui,sans-serif;fill:#7fa0b2");
 }
 
-/* ====================== RESUMEN ====================== */
+/* ====================== LO QUE SE LEE DEBAJO ====================== */
+function leyenda(){
+  const hacia = importa() ? "«" + importa() + "»" : "lo que importa";
+  if(fase === "espera") return ["", ""];
+  if(fase === "notar") return [globo.item.t, globo.item.sub];
+  if(fase === "alla") return ["Pon eso en el globo, enfrente",
+    "Mira el globo como se mira un cuadro. No hay que hacer nada con él."];
+  if(fase === "quien") return ["¿Quién está mirando ese globo?",
+    "Tú estás aquí y eso está allá. Y hay sitio para este y para todos los de hoy."];
+  if(fase === "elegir") return ["¿Quién manda en lo que haces ahora?",
+    "Con el globo en la mano, hacia " + hacia + "."];
+  if(fase === "tras"){
+    if(ultimo === "yo") return ["Vas tú, con el globo en la mano", "No se fue. Tampoco hizo falta."];
+    if(ultimo === "el"){
+      const suele = Kit.activas("manda")[0];
+      return ["Esta vez mandó el globo",
+        suele ? "Y con él, lo de siempre: " + suele.toLowerCase() + "." : "Se mira adónde lleva, y viene el siguiente."];
+    }
+    return ["Va contigo", "Hay sitio para este también."];
+  }
+  return ["Mira todo lo que llevas", "Todos son tuyos, y ninguno es todo lo que eres."];
+}
+
+function pintar(){
+  const [titulo, sub] = leyenda();
+  $("fase").textContent = titulo;
+  $("faseSub").textContent = sub;
+
+  const enCurso = fase !== "espera" && fase !== "fin";
+  $("btnArrancar").hidden = enCurso;
+  $("btnArrancar").textContent = fase === "fin" ? "Otra ronda" : "Empezar";
+  $("btnPaso").hidden = !(fase === "notar" || fase === "alla" || fase === "quien");
+  $("btnPaso").textContent = fase === "notar" ? "Ya lo noto"
+                           : fase === "alla" ? "Ya está enfrente" : "Soy yo";
+  $("btnEl").hidden = $("btnYo").hidden = fase !== "elegir";
+  $("cajaPalabra").hidden = !(fase === "alla" && globo && globo.item.palabra);
+
+  $("mGlobos").textContent = llevados.length;
+  $("mYo").textContent = cuenta("yo");
+  $("mEl").textContent = cuenta("el");
+  pregunta();
+  if(!escena.anda()) dibujar();
+}
+
+/* Una sola pregunta, y solo cuando terminó la ronda. */
+function pregunta(){
+  const yo = cuenta("yo"), el = cuenta("el");
+  const visible = fase === "fin" && yo + el > 0;
+  $("cajaPregunta").hidden = !visible;
+  if(!visible) return;
+  const hacia = importa() ? "«" + importa() + "»" : "lo que importa";
+  $("pregunta").textContent =
+    el === 0 ? `Ninguno de los globos se fue, y caminaste igual. Afuera de esta hoja, ¿cuál sería el primer paso hacia ${hacia} con ellos en la mano?`
+    : yo === 0 ? `Mandaron los globos todas las veces. Si siguieran mandando ellos un año más, ¿dónde estaría ${hacia}?`
+    : "Con unos mandaste tú y con otros mandaron ellos. ¿En qué se parecen los que mandaron?";
+}
+
 function resumen(){
-  const {b, n} = elegidas();
   const l = [];
-  l.push("PIEZAS BLANCAS (lo que quiere que gane)");
-  l.push(b.length ? b.join(" · ") : "(ninguna)");
-  l.push("", "PIEZAS NEGRAS (lo que quiere sacar del tablero)");
-  l.push(n.length ? n.join(" · ") : "(ninguna)");
-  if(brotesN.length) l.push("Aparecidas durante la partida: " + brotesN.join(" · "));
-  l.push("", `PARTIDA: ${rondas} empujones, ${Math.round(energia)} de energía gastada, ` +
-             `${totalNegras} negras en el tablero, 0 sacadas.`);
-  l.push("Cambio de perspectiva: " + (vista === "tablero" ? "realizado en sesión" : "no realizado"));
+  l.push("HACIA DÓNDE");
+  l.push(Kit.activas("importa").join(" · ") || "(sin marcar)");
+  const suele = Kit.activas("manda");
+  if(suele.length) l.push("", "CUANDO ESO MANDA, SUELE", suele.join(" · "));
 
-  const acc = Kit.activas("ahoraQue");
-  if(acc.length) l.push("", "QUÉ PUEDE HACER CON LAS PIEZAS PUESTAS", acc.join(", "));
+  const dif = llevados.filter(g => g.dificil), neu = llevados.length - dif.length;
+  l.push("", `ENSAYOS (${llevados.length}: ${neu} neutros, ${dif.length} con lo difícil)`);
+  if(!dif.length) l.push("(sin ensayos con lo difícil)");
+  dif.forEach(g => l.push(`«${g.txt}» — al mando: ${g.mando === "yo" ? "la persona" : "el globo"}`));
+  if(dif.length)
+    l.push("", `Eligió mandar en ${cuenta("yo")} de ${dif.length}. Los globos quedaron en la mano en todos los casos.`);
   return l.join("\n");
 }
 
-/* ====================== ARRANQUE ====================== */
-Kit.chips("blancas", BLANCAS, recomponer);
-Kit.chips("negras",  NEGRAS,  recomponer);
-Kit.chips("ahoraQue", ACCIONES);
+Kit.chips("importa", IMPORTA, pintar);
+Kit.chips("dificiles", DIFICILES);
+Kit.chips("manda", MANDA);
+$("cNeutros").onclick = () => { if(fase === "espera" || fase === "fin") ponerNeutros(!conNeutros); };
 
 Kit.iniciar({
-  clave: "met-el-tablero",
-  extra: () => ({rondas, energia, vista, brotesN, brotesB}),
+  clave: "act-quien-lleva-los-globos",
+  extra: () => ({llevados, conNeutros, mundo:mundoMeta}),
   restaurar: d => {
-    rondas = d.rondas || 0; energia = d.energia || 0; vista = d.vista || "partida";
-    brotesN = d.brotesN || []; brotesB = d.brotesB || [];
-    mesa = vista === "tablero" ? 1 : 0;
-    if(vista === "tablero"){ $("pasoDespues").hidden = false; $("btnVolver").hidden = false; }
+    llevados = d.llevados || [];
+    conNeutros = d.conNeutros === undefined ? true : !!d.conNeutros;
+    mundo = mundoMeta = d.mundo || 0;
+    if(llevados.length){ fase = "fin"; halo = haloMeta = 1; }
   },
-  alCambiar: recomponer,
+  alCambiar: () => { $("cNeutros").classList.toggle("activa", conNeutros); pintar(); },
   resumen: resumen
 });
 </script>
@@ -1457,7 +1479,7 @@ body.ih-abierto .ih-panel{transform:none}
 @media print{.ih-boton,.ih-panel,.ih-velo{display:none !important}}
 </style>
 <button type="button" class="ih-boton" id="ih-boton">&#9776; Hojas</button>
-<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>Metáforas vivas</b><ul><li><a href="met-el-tablero.html" class="actual" aria-current="page">El tablero</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li><li><a href="pp-tres-cosas-buenas.html">Tres cosas buenas y mi mejor versión</a></li></ul></div><div class="ih-g"><b>ACT</b><ul><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="act-matriz.html">La matriz</a></li><li><a href="act-los-ganchos.html">Los ganchos</a></li><li><a href="act-el-cielo-y-el-clima.html">El cielo y el clima</a></li><li><a href="act-empujar-el-papel.html">Empujar el papel</a></li><li><a href="act-quien-lleva-los-globos.html">Quién lleva los globos</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html">Activación conductual</a></li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li><li><a href="tcc-aplazar-la-preocupacion.html">Aplazar la preocupación</a></li><li><a href="tcc-balance-decisional.html">Balance decisional</a></li><li><a href="tcc-ventana-de-sueno.html">Ventana de sueño</a></li><li><a href="tcc-lista-abc.html">Lista de tareas A-B-C</a></li><li><a href="tcc-inoculacion-de-estres.html">Inoculación de estrés</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li><a href="cft-ritmo-tranquilizador.html">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li><li><a href="cft-pausa-de-autocompasion.html">Pausa de autocompasión</a></li><li><a href="cft-el-yo-compasivo.html">El yo compasivo</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li><li><a href="crisis-importancia-y-confianza.html">Importancia y confianza</a></li></ul></div></nav>
+<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>Metáforas vivas</b><ul><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li><li><a href="pp-tres-cosas-buenas.html">Tres cosas buenas y mi mejor versión</a></li></ul></div><div class="ih-g"><b>ACT</b><ul><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="act-matriz.html">La matriz</a></li><li><a href="act-los-ganchos.html">Los ganchos</a></li><li><a href="act-el-cielo-y-el-clima.html">El cielo y el clima</a></li><li><a href="act-empujar-el-papel.html">Empujar el papel</a></li><li><a href="act-quien-lleva-los-globos.html" class="actual" aria-current="page">Quién lleva los globos</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html">Activación conductual</a></li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li><li><a href="tcc-aplazar-la-preocupacion.html">Aplazar la preocupación</a></li><li><a href="tcc-balance-decisional.html">Balance decisional</a></li><li><a href="tcc-ventana-de-sueno.html">Ventana de sueño</a></li><li><a href="tcc-lista-abc.html">Lista de tareas A-B-C</a></li><li><a href="tcc-inoculacion-de-estres.html">Inoculación de estrés</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li><a href="cft-ritmo-tranquilizador.html">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li><li><a href="cft-pausa-de-autocompasion.html">Pausa de autocompasión</a></li><li><a href="cft-el-yo-compasivo.html">El yo compasivo</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li><li><a href="crisis-importancia-y-confianza.html">Importancia y confianza</a></li></ul></div></nav>
 <div class="ih-velo" id="ih-velo" hidden></div>
 <script>
 (function(){

@@ -905,6 +905,63 @@ GUIONES = {
   "✗ «Ignóralo.» Dejarlo al lado no es ignorarlo: se mira y se elige dónde ponerlo."]),
 ],
 
+"act-quien-lleva-los-globos.html": [
+ ("Antes de proponerlo", [
+  "Pide algo que importe ya nombrado. La tercera parte del ejercicio es elegir hacia dónde, y sin "
+  "dirección queda en mirar globos.",
+  "Va mejor después de haber practicado observar. Esta hoja le suma dos cosas a esa práctica: quién "
+  "está mirando, y quién manda.",
+  "No se anuncia como alivio. Los globos se quedan, y eso se dice desde el comienzo."]),
+
+ ("Cómo se presenta", [
+  "«Vamos a hacer lo mismo varias veces: primero con cosas que no pesan, después con las que sí.»",
+  "«No se trata de que se vayan. Aquí los globos no se sueltan: se llevan en la mano.»"]),
+
+ ("La parte neutra", [
+  "«Nota tu respiración… ¿Quién la está notando?»",
+  "«Deja que llegue un pensamiento, el que sea. Ponlo en el globo y míralo como mirarías un cuadro. "
+  "¿Te das cuenta de que eres tú quien lo está mirando?»",
+  "Se hace entera las primeras veces. Es donde se aprende el movimiento, y con lo difícil ya no hay "
+  "que explicarlo."]),
+
+ ("Con lo difícil", [
+  "«Tú estás aquí y eso está allá, enfrente. No hay que hacer nada con él.»",
+  "«¿Quién está mirando ese pensamiento?» Se espera la respuesta. El botón dice «Soy yo» y lo aprieta "
+  "la persona.",
+  "«Imagina que tienes sitio para este y para todos los que has tenido hoy. Como los lunares: uno "
+  "camina a donde quiere con ellos puestos.»",
+  "«Imagínate cuando eso manda en lo que haces. ¿Qué haces?… Ahora imagínate mandando tú, con eso "
+  "en la mano.»",
+  "«¿Quién quieres que mande en lo que haces ahora: tú o lo que sientes?»"]),
+
+ ("Durante", [
+  "Los pasos los marca la persona, a su ritmo. No se aprieta por ella ni se le adelanta la respuesta.",
+  "Si elige que mande el globo, no se corrige ni se repite el ensayo. La hoja muestra un momento "
+  "cómo queda, y viene el siguiente.",
+  "Callarse en la elección. Los segundos con los dos botones a la vista son el ejercicio."]),
+
+ ("Al terminar", [
+  "Mirar el ramo antes de hablar: todo eso estuvo ahí, y la figura caminó o no caminó.",
+  "La pregunta de la hoja lleva a un paso fuera de la sesión. El cuándo se acuerda hablando."]),
+
+ ("Lo que no se dice", [
+  "✗ «Suéltalo.» En esta hoja no se suelta nada: se lleva.",
+  "✗ «Tú no eres tus pensamientos.» Son suyos, y es más que cualquiera de ellos. Dicho como eslogan "
+  "borra la mitad.",
+  "✗ «Muy bien, mandaste tú.» Convierte la elección en desempeño, y la próxima vez elegirá para "
+  "quedar bien.",
+  "✗ «¿Verdad que pesa menos?» Pide en voz alta que el globo cambie."]),
+
+ ("Qué hacer con lo que salga", [
+  "Mandó en todas, muy rápido: preguntar qué hizo con el globo. Si la respuesta es «no le hice caso», "
+  "lo empujó, y eso es otra cosa.",
+  "Mandó el globo varias veces: es su patrón dibujado, no un fallo. «¿Se parece a algo de esta "
+  "semana?»",
+  "Dice «pero es que es verdad»: no se discute. «Puede ser verdad. ¿Quién lo está mirando?»",
+  "Se queda en «no sé quién mira» o se angustia con la pregunta: no se insiste. Se vuelve a la "
+  "respiración y a lo que hay alrededor."]),
+],
+
 "tcc-aplazar-la-preocupacion.html": [
  ("Antes de proponerlo", [
   "Primero la pregunta que abre la duda: «Si la preocupación es incontrolable, ¿cómo es que se "

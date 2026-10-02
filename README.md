@@ -1,6 +1,6 @@
 # Herramientas de acompañamiento
 
-Cuarenta y seis hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
+Cuarenta y siete hojas de trabajo interactivas para el espacio clínico. Cada una es **un solo archivo
 HTML** que funciona con doble clic: sin instalación, sin servidor y sin conexión.
 
 Todo se elige, se calibra o se arrastra. Cada hoja lleva plegado un bloque de notas del
@@ -16,7 +16,7 @@ sirve cada hoja, en qué casos rinde, con qué va antes o después y dónde conv
 |---|---|
 | **Metáforas vivas** | El tablero · El jardín de valores · La cuerda y el monstruo · Hojas en el arroyo · El bus y los pasajeros · Los ochenta años · El polígrafo · La palabra repetida · La radio que no se apaga · El hombre en el hoyo |
 | **Psicología positiva** | Mi flor PERMAH · Mis fortalezas del carácter · Tres cosas buenas y mi mejor versión |
-| **ACT** | La brújula de valores · El costo de la lucha · Por dónde entrar · Soltar el anzuelo · La matriz · Los ganchos · El cielo y el clima · Empujar el papel |
+| **ACT** | La brújula de valores · El costo de la lucha · Por dónde entrar · Soltar el anzuelo · La matriz · Los ganchos · El cielo y el clima · Empujar el papel · Quién lleva los globos |
 | **DBT** | Análisis en cadena · Tarjeta de crisis · Verificar los hechos · Pedir y decir que no · Mente sabia · Tarjeta diaria |
 | **Cognitivo-conductual** | Registro de pensamientos · Flecha descendente · Escalera de exposición · Activación conductual · Solución de problemas · Autoinstrucciones · Análisis funcional · Aplazar la preocupación · Balance decisional · Ventana de sueño · Lista de tareas A-B-C · Inoculación de estrés |
 | **Compasión y mindfulness** | Respiración de ritmo tranquilizador · Espacio de respiración de tres minutos · Pausa de autocompasión · El yo compasivo |
@@ -54,6 +54,6 @@ Corbobés, el manual de habilidades DBT de Linehan, la terapia cognitiva de Beck
 clasificación VIA y el modelo PERMAH de Seligman. Las metáforas de ACT (el tablero, el bus, la
 cuerda, las hojas en el arroyo, el hombre en el hoyo, el polígrafo) provienen de Hayes, Strosahl y
 Wilson. Entre las demás fuentes están Kolts y Gilbert para la
-compasión, Germer y Neff, Polk y colegas para la matriz, Ruiz y colegas, Wells, Barlow y colegas,
+compasión, Germer y Neff, Polk y colegas para la matriz, Ruiz y colegas, Luciano y colegas, Wells, Barlow y colegas,
 Meichenbaum, Perlis y colegas, Safren y colegas, Rashid y Seligman, Rollnick y Miller, y la guía
 de la OPS «En tiempos de estrés, haz lo que importa».
