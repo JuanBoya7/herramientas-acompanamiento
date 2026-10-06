@@ -47,7 +47,14 @@
   .casilla .hueco{color:#9aa8b6;font-size:13.5px;font-style:italic}
   .casilla .puesta b{display:block;font-size:15.5px}
   .casilla .puesta small{color:var(--tinta-suave);font-size:12px}
-  .casilla .quitar{margin-left:auto;border:none;background:none;color:var(--tinta-suave);
+  .casilla .mover{display:flex;flex-direction:column;gap:2px;margin-left:auto}
+  .casilla .mover button{border:1px solid var(--linea);background:#fff;color:var(--tinta-suave);border-radius:5px;
+    width:26px;height:22px;font-size:11px;line-height:1;cursor:pointer;padding:0}
+  .casilla .mover button:hover:not(:disabled){border-color:var(--oro);color:var(--tinta)}
+  .casilla .mover button:disabled{opacity:.3;cursor:default}
+  .casilla.llena[draggable="true"]{cursor:grab}
+  .casilla.moviendo{opacity:.45}
+  .casilla .quitar{margin-left:4px;border:none;background:none;color:var(--tinta-suave);
     font-size:19px;line-height:1;cursor:pointer;padding:2px 4px}
 
   .sonda{background:#f6f9fb;border-left:3px solid var(--acento);border-radius:0 6px 6px 0;
@@ -399,9 +406,11 @@ function pintarCasillas(){
   $("casillas").innerHTML = Array.from({length:cupo},(_,i)=>{
     const n = elegidas[i];
     const f = n ? TODAS[n] : null;
-    return `<div class="casilla ${f?"llena":""}" data-i="${i}">
+    return `<div class="casilla ${f?"llena":""}" data-i="${i}"${f?' draggable="true"':""}>
         <div class="indice">${i+1}</div>
         ${f ? `<div class="puesta"><b>${f.n}</b><small>${f.d}</small></div>
+               <div class="mover"><button title="Subir un puesto" data-sube="${i}" ${i===0?"disabled":""}>&#9650;</button>
+                 <button title="Bajar un puesto" data-baja="${i}" ${i>=elegidas.length-1?"disabled":""}>&#9660;</button></div>
                <button class="quitar" title="Retirar" data-q="${i}">&times;</button>`
             : `<div class="hueco">Arrastra aquí una fortaleza</div>`}
       </div>
@@ -413,10 +422,24 @@ function pintarCasillas(){
     c.addEventListener("dragleave",()=>c.classList.remove("encima"));
     c.addEventListener("drop",e=>{
       e.preventDefault(); c.classList.remove("encima");
+      const desde=e.dataTransfer.getData("text/x-casilla");
+      if(desde!==""){ mover(+desde, +c.dataset.i); return; }
       const n=e.dataTransfer.getData("text/plain");
       if(n && !elegidas.includes(n)) colocar(n, +c.dataset.i);
     });
+    if(c.classList.contains("llena")){
+      c.addEventListener("dragstart",e=>{
+        e.dataTransfer.setData("text/x-casilla", c.dataset.i);
+        e.dataTransfer.effectAllowed="move";
+        c.classList.add("moviendo");
+      });
+      c.addEventListener("dragend",()=>c.classList.remove("moviendo"));
+    }
   });
+  $("casillas").querySelectorAll("[data-sube]").forEach(b=>
+    b.addEventListener("click",e=>{e.stopPropagation(); const i=+b.dataset.sube; mover(i,i-1);}));
+  $("casillas").querySelectorAll("[data-baja]").forEach(b=>
+    b.addEventListener("click",e=>{e.stopPropagation(); const i=+b.dataset.baja; mover(i,i+1);}));
   $("casillas").querySelectorAll(".quitar").forEach(b=>{
     b.addEventListener("click",e=>{e.stopPropagation(); quitar(+b.dataset.q)});
   });
@@ -427,7 +450,7 @@ function pintarCasillas(){
   const faltan = cupo - elegidas.length;
   $("pista").textContent = faltan>0
     ? `Arrastra una fortaleza hasta una casilla. En el celular, tócala. Faltan ${faltan}.`
-    : "Listo. Ahí abajo está el perfil.";
+    : "Listo. Para ordenar el top, arrastra una casilla sobre otra o usa las flechas. Ahí abajo está el perfil.";
   // el perfil aparece solo al completar las casillas: no hace falta botón
   if(faltan>0) ocultarPerfil(); else revelar(true);
   guardar();
@@ -440,6 +463,13 @@ function colocar(n, i){
   pintarCasillas();
 }
 function quitar(i){ elegidas.splice(i,1); pintarCasillas(); }
+// Cambia de puesto dos fortalezas ya elegidas (si el destino está vacío, va al final).
+function mover(i, j){
+  if(i===j || i<0 || i>=elegidas.length || j<0 || j>=cupo) return;
+  if(j>=elegidas.length) j = elegidas.length-1;
+  [elegidas[i], elegidas[j]] = [elegidas[j], elegidas[i]];
+  pintarCasillas();
+}
 
 function cambiarCupo(c){
   if(c<cupo && elegidas.length>c){

@@ -301,6 +301,71 @@ pintarCasillas();""",
 if(cupo!==3 && cupo!==5) cupo = 3;
 $("b3").classList.toggle("on",cupo===3); $("b5").classList.toggle("on",cupo===5);
 pintarCasillas();""")
+
+    # Reordenar el «top» en sesión: las casillas llenas se arrastran sobre otra para
+    # intercambiarlas, y las flechas suben o bajan un puesto (sirven con el dedo,
+    # donde arrastrar no siempre responde).
+    estilo = "  .casilla .quitar{margin-left:auto;"
+    assert estilo in d, "no se encontró el estilo de las casillas"
+    d = d.replace(estilo, """  .casilla .mover{display:flex;flex-direction:column;gap:2px;margin-left:auto}
+  .casilla .mover button{border:1px solid var(--linea);background:#fff;color:var(--tinta-suave);border-radius:5px;
+    width:26px;height:22px;font-size:11px;line-height:1;cursor:pointer;padding:0}
+  .casilla .mover button:hover:not(:disabled){border-color:var(--oro);color:var(--tinta)}
+  .casilla .mover button:disabled{opacity:.3;cursor:default}
+  .casilla.llena[draggable="true"]{cursor:grab}
+  .casilla.moviendo{opacity:.45}
+  .casilla .quitar{margin-left:4px;""", 1)
+
+    casilla = """    return `<div class="casilla ${f?"llena":""}" data-i="${i}">"""
+    assert casilla in d, "no se encontró la casilla"
+    d = d.replace(casilla, """    return `<div class="casilla ${f?"llena":""}" data-i="${i}"${f?' draggable="true"':""}>""", 1)
+    quitar = """               <button class="quitar" title="Retirar" data-q="${i}">&times;</button>`"""
+    assert quitar in d, "no se encontró el botón de retirar"
+    d = d.replace(quitar, """               <div class="mover"><button title="Subir un puesto" data-sube="${i}" ${i===0?"disabled":""}>&#9650;</button>
+                 <button title="Bajar un puesto" data-baja="${i}" ${i>=elegidas.length-1?"disabled":""}>&#9660;</button></div>
+               <button class="quitar" title="Retirar" data-q="${i}">&times;</button>`""", 1)
+
+    soltar = """    c.addEventListener("drop",e=>{
+      e.preventDefault(); c.classList.remove("encima");
+      const n=e.dataTransfer.getData("text/plain");
+      if(n && !elegidas.includes(n)) colocar(n, +c.dataset.i);
+    });
+  });"""
+    assert soltar in d, "no se encontró el soltar de las casillas"
+    d = d.replace(soltar, """    c.addEventListener("drop",e=>{
+      e.preventDefault(); c.classList.remove("encima");
+      const desde=e.dataTransfer.getData("text/x-casilla");
+      if(desde!==""){ mover(+desde, +c.dataset.i); return; }
+      const n=e.dataTransfer.getData("text/plain");
+      if(n && !elegidas.includes(n)) colocar(n, +c.dataset.i);
+    });
+    if(c.classList.contains("llena")){
+      c.addEventListener("dragstart",e=>{
+        e.dataTransfer.setData("text/x-casilla", c.dataset.i);
+        e.dataTransfer.effectAllowed="move";
+        c.classList.add("moviendo");
+      });
+      c.addEventListener("dragend",()=>c.classList.remove("moviendo"));
+    }
+  });
+  $("casillas").querySelectorAll("[data-sube]").forEach(b=>
+    b.addEventListener("click",e=>{e.stopPropagation(); const i=+b.dataset.sube; mover(i,i-1);}));
+  $("casillas").querySelectorAll("[data-baja]").forEach(b=>
+    b.addEventListener("click",e=>{e.stopPropagation(); const i=+b.dataset.baja; mover(i,i+1);}));""", 1)
+
+    funcion = "function quitar(i){ elegidas.splice(i,1); pintarCasillas(); }"
+    assert funcion in d, "no se encontró quitar()"
+    d = d.replace(funcion, funcion + """
+// Cambia de puesto dos fortalezas ya elegidas (si el destino está vacío, va al final).
+function mover(i, j){
+  if(i===j || i<0 || i>=elegidas.length || j<0 || j>=cupo) return;
+  if(j>=elegidas.length) j = elegidas.length-1;
+  [elegidas[i], elegidas[j]] = [elegidas[j], elegidas[i]];
+  pintarCasillas();
+}""", 1)
+
+    d = d.replace("""    : "Listo. Ahí abajo está el perfil.";""",
+                  """    : "Listo. Para ordenar el top, arrastra una casilla sobre otra o usa las flechas. Ahí abajo está el perfil.";""", 1)
     return d
 
 
