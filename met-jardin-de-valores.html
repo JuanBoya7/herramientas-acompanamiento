@@ -365,6 +365,31 @@
     font-size:17px;line-height:1;padding:0 3px;cursor:pointer}
   .maleza .quitar:hover{color:var(--alerta)}
 
+  /* ---------- el semillero: cada semilla en su matera ----------
+     El recuadro es el cuerpo de la matera: el borde de arriba, el contenido
+     y su orden no cambian. Encima asoma la flor del ámbito, la misma especie
+     que crece en el jardín; al sembrarla, la matera queda vacía. */
+  #semillero .tarjetas{row-gap:62px;column-gap:16px;padding-top:54px}
+  #semillero .pieza.matera{position:relative;z-index:0;border:0;background:transparent;
+    padding:17px 16px 13px;border-radius:0}
+  #semillero .pieza.matera::after{content:"";position:absolute;inset:6px 4px 0;z-index:-1;
+    background:linear-gradient(180deg,var(--amb-s),var(--amb-t) 70%),#fdfbf8;
+    border:1.5px solid var(--amb-b);border-top:0;border-radius:2px 2px 15px 15px;
+    transform:perspective(320px) rotateX(5deg);transform-origin:50% 0;
+    transition:border-color .12s}
+  #semillero .pieza.matera::before{content:"";position:absolute;left:0;right:0;top:0;
+    height:11px;z-index:2;border-radius:5px;background:var(--amb);
+    box-shadow:inset 0 -3px 0 #00000014}
+  #semillero .pieza.matera:hover::after{border-color:var(--amb)}
+  #semillero .pieza .planta{position:absolute;left:50%;bottom:calc(100% - 5px);z-index:1;
+    width:170px;height:60px;margin-left:-85px;overflow:visible;pointer-events:none}
+  /* la enredadera trepa por un costado, corre por el borde y baja por el otro;
+     va por los márgenes de la matera y no tapa el texto */
+  #semillero .pieza .enredadera{position:absolute;left:0;top:0;z-index:3;overflow:visible;
+    pointer-events:none}
+  #semillero .pieza.usada .planta{visibility:hidden}
+  #surcos .ranura .florcita{flex:0 0 auto;width:30px;height:30px;overflow:visible}
+
   @media (max-width:640px){
     .surcos{grid-template-columns:1fr}
     .riego{grid-template-columns:1fr}
@@ -421,10 +446,10 @@
 
 <div class="panel-jardin">
   <div class="lienzo">
-    <svg class="jardin capa" id="jardinFondo" viewBox="0 0 700 440" aria-hidden="true"></svg>
-    <svg class="jardin" id="jardin" viewBox="0 0 700 440" role="img"
-      aria-label="Jardín con los surcos sembrados, su estado según el riego y las malezas"></svg>
-    <svg class="jardin capa" id="jardinPapel" viewBox="0 0 700 440" aria-hidden="true"></svg>
+    <svg class="jardin capa" id="jardinFondo" viewBox="0 0 700 530" aria-hidden="true"></svg>
+    <svg class="jardin" id="jardin" viewBox="0 0 700 530" role="img"
+      aria-label="Jardín con los surcos sembrados, lo que cuida cada uno bajo tierra, su estado según el riego y las malezas"></svg>
+    <svg class="jardin capa" id="jardinPapel" viewBox="0 0 700 530" aria-hidden="true"></svg>
   </div>
   <p class="avisoRegadera" id="avisoRegadera"></p>
   <div class="clima">
@@ -1533,7 +1558,11 @@ const malezasDe = id => Object.keys(malezas).filter(m => surcosDe(m).indexOf(id)
 /* Acuarela. El papel, el cielo y las colinas se pintan una sola vez, cada uno
    en su capa; al regar solo se rehace la capa de las plantas, y el filtro del
    papel, que es el más pesado, no se recalcula a cada paso del calibrador. */
-const SUELO = 300, ALTO_J = 440;
+const SUELO = 300, ALTO_J = 530;
+/* Bajo tierra: arriba el rótulo del surco; al fondo, donde llegan las raíces,
+   lo que ese surco cuida. Todos a la misma hondura, en una sola fila. */
+const HONDO = ALTO_J - 82;
+const HALO = "paint-order:stroke;stroke:#f6eee2;stroke-width:3.2px;stroke-linejoin:round";
 
 /* Cada ámbito florece con su especie. El rótulo del surco conserva el color
    del ámbito; la flor tiene el suyo. */
@@ -1564,6 +1593,10 @@ function pintarFondo(){
   g("feTurbulence", {type:"fractalNoise", baseFrequency:.045, numOctaves:2, seed:4, result:"r"}, f);
   g("feDisplacementMap", {in:"SourceGraphic", in2:"r", scale:3.2}, f);
   /* las aguadas del fondo, más sueltas y difusas */
+  /* el mismo pincel, más suave, para las hojas menudas de las enredaderas */
+  const ff = g("filter", {id:"jv-acua-fino", x:"-20%", y:"-20%", width:"140%", height:"140%"}, defs);
+  g("feTurbulence", {type:"fractalNoise", baseFrequency:.09, numOctaves:2, seed:6, result:"r"}, ff);
+  g("feDisplacementMap", {in:"SourceGraphic", in2:"r", scale:1.3}, ff);
   const w = g("filter", {id:"jv-lavado", x:"-20%", y:"-50%", width:"140%", height:"200%"}, defs);
   g("feTurbulence", {type:"fractalNoise", baseFrequency:.018, numOctaves:3, seed:9, result:"r"}, w);
   g("feDisplacementMap", {in:"SourceGraphic", in2:"r", scale:16, result:"d"}, w);
@@ -1578,6 +1611,11 @@ function pintarFondo(){
     fill:"#a9cf94", opacity:.32, filter:"url(#jv-lavado)"});
   g("path", {d:`M-20 ${SUELO-24} Q180 ${SUELO-56} 360 ${SUELO-32} T720 ${SUELO-42} V${SUELO+10} H-20Z`,
     fill:"#8fbf7a", opacity:.34, filter:"url(#jv-lavado)"});
+  /* la tierra en corte, para que se vea lo que hay debajo */
+  g("rect", {x:-20, y:SUELO + 12, width:740, height:ALTO_J, fill:"#c9a37c", opacity:.13,
+    filter:"url(#jv-lavado)"});
+  g("rect", {x:-20, y:HONDO - 14, width:740, height:ALTO_J, fill:"#a9825c", opacity:.08,
+    filter:"url(#jv-lavado)"});
   g("path", {d:`M-20 ${SUELO+1} Q200 ${SUELO-7} 380 ${SUELO+2} T720 ${SUELO-1} V${SUELO+24} H-20Z`,
     fill:"#b98f68", opacity:.5, filter:"url(#jv-lavado)"});
 
@@ -1591,13 +1629,13 @@ function pintarFondo(){
 }
 
 /* ---------- las piezas de la planta ---------- */
-function flor(p, x, y, E, esc, rot){
+function flor(p, x, y, E, esc, rot, trazo){
   const f = p.appendChild(Kit.svg("g", {filter:ACUA,
     transform:`translate(${x} ${y}) rotate(${rot || 0}) scale(${esc})`}));
   const anillo = (L, W, desf, fill) => {
     for(let i = 0; i < E.n; i++)
       f.appendChild(Kit.svg("path", {d:formaPetalo(E.forma, L, W), transform:`rotate(${desf + i * 360 / E.n})`,
-        fill, opacity:.8, stroke:E.osc, "stroke-width":.8, "stroke-opacity":.45}));
+        fill, opacity:.8, stroke:E.osc, "stroke-width":.8, "stroke-opacity":trazo || .45}));
   };
   anillo(E.L, E.W, 0, E.pet);
   if(E.capas === 2) anillo(E.L * .64, E.W * .72, 36, E.osc);
@@ -1697,25 +1735,62 @@ function plantar(svg, s, cx, ancho){
     stroke:"#a78458", "stroke-width":1.1, fill:"none"});
 
   /* Lo que se sembró sin nombrar qué cuida se sostiene sobre una línea plana;
-     en cuanto se enraíza, echa raíz bajo la tierra. */
-  if(raizDe(s)){
-    [[-1, .85], [0, 1], [1, .85]].forEach(([lado, largo]) => {
-      g("path", {d:`M${cx} ${SUELO + 10} q ${lado * 7} ${9 * largo} ${lado * 13} ${19 * largo}`,
-        stroke:s.color, "stroke-width":2.1, fill:"none", "stroke-linecap":"round", opacity:.55});
+     en cuanto se enraíza, las raíces bajan hasta lo hondo y allí, envuelto
+     por ellas, queda escrito lo que ese surco cuida. */
+  const cuida = raizDe(s), anchoR = Math.min(ancho - 12, 150);
+  if(cuida){
+    const y0 = SUELO + 8, y1 = HONDO, abre = Math.min(ancho * .4, 58);
+    const rz = g("g", {filter:ACUA, stroke:s.color, fill:"none", "stroke-linecap":"round", opacity:.62});
+    /* punto de una curva cúbica, para colgar de ella las raicillas */
+    const sobre = (p0, p1, p2, p3, t) => {
+      const u = 1 - t;
+      return [0, 1].map(k => u*u*u*p0[k] + 3*u*u*t*p1[k] + 3*u*t*t*p2[k] + t*t*t*p3[k]);
+    };
+    [-1, 1].forEach(l => {
+      const P = [[cx, y0], [cx + l * abre * .95, y0 + 34], [cx + l * abre, y1 - 62], [cx + l * 12, y1 + 2]];
+      g("path", {d:`M${P[0]} C${P[1]} ${P[2]} ${P[3]}`, "stroke-width":2.6}, rz);
+      [[.2, 15], [.42, 13], [.64, 11], [.84, 8]].forEach(([t, L], k) => {
+        const [px, py] = sobre(P[0], P[1], P[2], P[3], t);
+        g("path", {d:`M${px} ${py} q ${l * L * .6} ${L * .2} ${l * L} ${L * (.55 + k * .1)}`,
+          "stroke-width":1.1, opacity:.85}, rz);
+      });
     });
+    g("path", {d:`M${cx} ${y0} C${cx - 4} ${y0 + 60} ${cx + 4} ${y1 - 60} ${cx} ${y1}`,
+      "stroke-width":1.5, opacity:.55}, rz);
+
+    const estC = `font:italic 700 11.5px Georgia,'Times New Roman',serif;fill:${Kit.mezcla(s.color, "#1d2733", .38)}`;
+    const lineas = partir(svg, cuida, estC, anchoR - 16, 4);
+    const altoR = 15 + lineas.length * 13;
+    g("rect", {x:cx - anchoR / 2, y:y1, width:anchoR, height:altoR, rx:Math.min(altoR / 2, 15),
+      fill:Kit.mezcla(s.color, "#ffffff", .8), stroke:s.color, "stroke-width":1.5,
+      "stroke-opacity":.7, filter:ACUA});
+    rotulo(mata, cx, y1 + 17, lineas, estC, 13);
   } else {
     g("rect", {x:cx - 36, y:SUELO + 18, width:72, height:3, rx:1.5, fill:s.color, opacity:.3});
+    g("rect", {x:cx - anchoR / 2, y:HONDO, width:anchoR, height:28, rx:14, fill:"none",
+      stroke:"#b6a58c", "stroke-width":1.2, "stroke-dasharray":"4 4"});
+    rotulo(mata, cx, HONDO + 18, ["sin raíz"],
+      "font:italic 11px Georgia,'Times New Roman',serif;fill:#a3937a", 0);
   }
 
-  /* el tallo y las hojas: lo seco se dobla */
+  /* el tallo y las hojas: lo seco se dobla. El tallo ondula en S; cada surco
+     se mece hacia su lado y con su amplitud, para que no salgan en serie. */
   const alto = 44 + a * 12.5;
   const caida = a <= 3 ? (4 - a) * 16 : 0;
-  const tx = cx + caida, ty = SUELO - alto + caida * .45;
-  const qx = cx + caida * .15, qy = SUELO - alto * .72;
-  const B = t => [(1-t)*(1-t)*cx + 2*(1-t)*t*qx + t*t*tx, (1-t)*(1-t)*SUELO + 2*(1-t)*t*qy + t*t*ty];
+  const num = parseInt(s.id.slice(1), 10) || 0;
+  const l = num % 2 ? 1 : -1;
+  const amp = (16 + (num % 3) * 5) * (a <= 3 ? .55 : 1) * Math.min(1, .45 + a / 10);
+  const tx = cx + l * amp * .45 + caida, ty = SUELO - alto + caida * .45;
+  const c1 = [cx - l * amp, SUELO - alto * .32];
+  const c2 = [cx + l * amp * 1.25 + caida * .25, SUELO - alto * .7];
+  const B = t => {
+    const u = 1 - t;
+    return [u*u*u*cx + 3*u*u*t*c1[0] + 3*u*t*t*c2[0] + t*t*t*tx,
+            u*u*u*SUELO + 3*u*u*t*c1[1] + 3*u*t*t*c2[1] + t*t*t*ty];
+  };
 
   const cuerpo = g("g", {filter:ACUA});
-  g("path", {d:`M${cx} ${SUELO} Q${qx} ${qy} ${tx} ${ty}`, stroke:verde, "stroke-width":4.2,
+  g("path", {d:`M${cx} ${SUELO} C${c1} ${c2} ${tx} ${ty}`, stroke:verde, "stroke-width":4.2,
     fill:"none", "stroke-linecap":"round"}, cuerpo);
   const nh = Math.max(2, Math.round(a / 2) + 1);
   for(let h = 0; h < nh; h++){
@@ -1732,10 +1807,11 @@ function plantar(svg, s, cx, ancho){
   if(a >= 8){
     if(a >= 9){
       const [bx, by] = B(.55);
-      g("path", {d:`M${bx} ${by} q 17 -9 24 -30`, stroke:verde, "stroke-width":2.6, fill:"none",
-        "stroke-linecap":"round"}, cuerpo);
-      if(a >= 10) flor(mata, bx + 24, by - 30, E, .85, 20);
-      else capullo(mata, bx + 24, by - 28, E, false, 22, false, 1.2);
+      /* la rama sale hacia el lado contrario al que se mece el tallo */
+      g("path", {d:`M${bx} ${by} c ${-l * 14} -1 ${-l * 26} -11 ${-l * 24} -30`, stroke:verde,
+        "stroke-width":2.6, fill:"none", "stroke-linecap":"round"}, cuerpo);
+      if(a >= 10) flor(mata, bx - l * 24, by - 30, E, .85, -l * 20);
+      else capullo(mata, bx - l * 24, by - 28, E, false, -l * 22, false, 1.2);
     }
     flor(mata, tx, ty, E, 1.55, 0);
     if(a >= 10) mariposa(mata, tx + 40, regadera === s.id ? ty + 16 : ty - 36);
@@ -1755,14 +1831,14 @@ function plantar(svg, s, cx, ancho){
 
   /* los rótulos, enteros */
   const util = ancho - 10;
-  const estNom = `font:700 12px Georgia,'Times New Roman',serif;fill:${s.color}`;
-  let y = rotulo(mata, cx, SUELO + 46, partir(svg, tituloDe(s), estNom, util, 4), estNom, 14);
+  const estNom = `font:700 12px Georgia,'Times New Roman',serif;fill:${s.color};${HALO}`;
+  let y = rotulo(mata, cx, SUELO + 42, partir(svg, tituloDe(s), estNom, util, 3), estNom, 14);
   y = rotulo(mata, cx, y + 17, [nivelDe(a).nombre.toLowerCase()],
-    "font:600 11px system-ui,sans-serif;fill:#8a7458;letter-spacing:.3px", 0);
+    `font:600 11px system-ui,sans-serif;fill:#8a7458;letter-spacing:.3px;${HALO}`, 0);
   if(malas.length){
-    const estMal = "font:italic 600 10.5px system-ui,sans-serif;fill:#6a7a4c";
-    /* cada maleza en su línea, hasta donde alcance el papel */
-    const cabe = Math.max(1, Math.floor((ALTO_J - 8 - (y + 16)) / 13) + 1);
+    const estMal = `font:italic 600 10.5px system-ui,sans-serif;fill:#6a7a4c;${HALO}`;
+    /* cada maleza en su línea, hasta donde empieza lo hondo */
+    const cabe = Math.max(1, Math.floor((HONDO - 12 - (y + 16)) / 13) + 1);
     let lineas = [];
     malas.forEach(m => { lineas = lineas.concat(partir(svg, m, estMal, util, 2)); });
     if(lineas.length > cabe){ lineas.length = cabe; lineas[cabe - 1] += " …"; }
@@ -1802,6 +1878,176 @@ function dibujarRegadera(padre, cx, cy){
   const t = padre.appendChild(Kit.svg("text", {x:cx, y:cy - 6, "text-anchor":"middle",
     style:"font:700 10.5px system-ui,sans-serif;fill:#2f6f8f;letter-spacing:.5px"}));
   t.textContent = "ESTA SEMANA";
+}
+
+/* ====================== LAS MATERAS ====================== */
+/* El mostrador pinta recuadros; aquí cada uno se vuelve matera: asoman tres
+   flores de su ámbito sobre una mata de hojas, y una enredadera la recubre por
+   los bordes. Cada matera varía —qué tallo lleva la flor, por dónde trepa la
+   enredadera— con una semilla fija, para que no cambie al recargar. */
+const semillaPorTitulo = t => SEMILLAS.find(s => s.titulo === t);
+const azarCon = k => {
+  let sem = ((k + 1) * 2654435761) >>> 0;
+  return () => { sem = (Math.imul(sem, 1664525) + 1013904223) >>> 0; return sem / 4294967296; };
+};
+const VERDES = ["#4f9a5c", "#5fa865", "#7fb86a", "#3f8a52"];
+
+function plantaDeMatera(s, k){
+  const E = ESPECIE[s.grupo] || ESPECIE["Vínculos"];
+  const svg = Kit.svg("svg", {class:"planta", viewBox:"-85 -60 170 60", "aria-hidden":"true"});
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  const verde = "#4f9a5c", verdeO = "#3d7f4b", verdeC = "#7fb86a";
+  const azar = azarCon(k);
+  const l = k % 2 ? 1 : -1;                    // hacia dónde se inclina el tallo alto
+  const hoja = (x, y, lado, ang, L, W, col) => {
+    const h = g("g", {filter:ACUA, transform:`translate(${x} ${y}) scale(${lado} 1) rotate(${-ang})`});
+    g("path", {d:formaHoja(L, W), fill:col || verde, opacity:.86, stroke:verdeO, "stroke-width":.7,
+      "stroke-opacity":.5}, h);
+    g("path", {d:`M1 0 Q${L*.5} -1 ${L*.9} 0`, stroke:verdeO, "stroke-width":.8, fill:"none", opacity:.55}, h);
+  };
+  /* la mata: hojas bajas que salen de la tierra y se abren hacia los lados */
+  for(let i = 0; i < 15; i++){
+    const u = i / 14 * 2 - 1, c = 1 - Math.abs(u);
+    hoja(u * 50 + (azar() - .5) * 6, 3, u < 0 ? -1 : 1, 10 + c * 52 + azar() * 14,
+      18 + c * 12 + azar() * 5, 7 + azar() * 2.5, VERDES[i % 4]);
+  }
+  const tallos = g("g", {filter:ACUA, fill:"none", stroke:verde, "stroke-linecap":"round"});
+  g("path", {d:`M0 3 C${-l * 8} -10 ${l * 12} -24 ${l * 6} -38`, "stroke-width":2.6}, tallos);
+  g("path", {d:`M-5 3 C-6 -8 -22 -6 -30 -21`, "stroke-width":2}, tallos);
+  g("path", {d:`M5 3 C7 -6 24 -4 31 -17`, "stroke-width":2}, tallos);
+  /* hojas de adelante: unas caen sobre el borde, como en las materas llenas */
+  hoja(-14, 3, -1, 6, 24, 8);
+  hoja(-4, 3, -1, 24, 18, 7, verdeC);
+  hoja(6, 3, 1, 20, 20, 7.5);
+  hoja(16, 3, 1, 5, 23, 8, verdeC);
+  hoja(l * 3, -14, l, 52, 15, 6);
+  hoja(-l * 2, -20, -l, 60, 13, 5.5, verdeC);
+  flor(svg, l * 6, -38, E, .86, l * 8, .9);
+  const cual = k % 3;
+  if(cual === 0){ flor(svg, -30, -21, E, .56, -16, .9); capullo(svg, 31, -17, E, false, 26, false, .95); }
+  else if(cual === 1){ capullo(svg, -30, -21, E, true, -24, false, .9); flor(svg, 31, -17, E, .56, 16, .9); }
+  else { flor(svg, -30, -21, E, .52, -16, .9); flor(svg, 31, -17, E, .46, 18, .9); }
+  return svg;
+}
+
+/* ---------- la enredadera ----------
+   Se dibuja en los píxeles reales de la matera, así que se rehace cuando la
+   matera cambia de tamaño (otra ventana, otro teléfono). */
+function curvaPor(pts){                        // Catmull-Rom a cúbicas
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for(let i = 0; i < pts.length - 1; i++){
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += ` C${p1[0] + (p2[0] - p0[0]) / 6} ${p1[1] + (p2[1] - p0[1]) / 6}` +
+         ` ${p2[0] - (p3[0] - p1[0]) / 6} ${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+}
+function aLoLargo(pts, paso, fn){              // un punto cada `paso` px, con su dirección
+  let resto = paso * .5;
+  for(let i = 0; i < pts.length - 1; i++){
+    const [x0, y0] = pts[i], [x1, y1] = pts[i + 1];
+    const L = Math.hypot(x1 - x0, y1 - y0), ang = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI;
+    let t = resto;
+    while(t < L){ fn(x0 + (x1 - x0) * t / L, y0 + (y1 - y0) * t / L, ang); t += paso; }
+    resto = t - L;
+  }
+}
+function enredadera(svg, w, h, s, k){
+  const E = ESPECIE[s.grupo] || ESPECIE["Vínculos"];
+  const azar = azarCon(k + 31);
+  svg.innerHTML = "";
+  svg.setAttribute("width", w);
+  svg.setAttribute("height", h);
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  const lado = k % 2 ? 1 : -1;                 // -1 trepa por la izquierda, 1 por la derecha
+  const X = x => lado < 0 ? x : w - x;
+  const ond = azar() * 6;
+
+  /* la rama larga: sube por un costado y corre por el borde de arriba */
+  const larga = [];
+  for(let y = h + 3; y > 12; y -= 12) larga.push([X(4 + Math.sin(y * .32 + ond) * 3.2), y]);
+  larga.push([X(9), 5]);
+  for(let x = 22, fin = w * (.5 + azar() * .18); x < fin; x += 15)
+    larga.push([X(x), 5 + Math.sin(x * .21 + ond) * 3]);
+  /* la corta: entra por la esquina de abajo del otro lado y trepa un poco */
+  const corta = [];
+  for(let x = w * (.22 + azar() * .1); x > 14; x -= 15)
+    corta.push([w - X(x), h - 2 + Math.sin(x * .3 + ond) * 2]);
+  for(let y = h - 6, fin = h * (.25 + azar() * .2); y > fin; y -= 12)
+    corta.push([w - X(4 + Math.sin(y * .3 + ond) * 3), y]);
+
+  const ramas = g("g", {filter:"url(#jv-acua-fino)"});
+  [larga, corta].forEach(pts => {
+    if(pts.length < 2) return;
+    g("path", {d:curvaPor(pts), fill:"none", stroke:"#5b8f4e", "stroke-width":1.5,
+      "stroke-linecap":"round", opacity:.9}, ramas);
+    let n = 0;
+    aLoLargo(pts, 10.5, (x, y, ang) => {
+      const sale = n % 2 ? 1 : -1;
+      const L = 8 + azar() * 4;
+      const hg = g("g", {transform:`translate(${x} ${y}) rotate(${ang + sale * (50 + azar() * 20)})`}, ramas);
+      g("path", {d:formaHoja(L, 4 + azar() * 1.4), fill:VERDES[n % 4], opacity:.9,
+        stroke:"#3d7f4b", "stroke-width":.5, "stroke-opacity":.5}, hg);
+      /* de vez en cuando, un zarcillo enroscado */
+      if(n % 7 === 3) g("path", {d:"M0 0 c 3 -1 6 1 5 4 c -1 2 -3 2 -3 0", fill:"none",
+        stroke:"#6a9a58", "stroke-width":.8}, hg);
+      n++;
+    });
+  });
+  /* unas pocas flores menudas de su ámbito, sobre la rama larga */
+  const sitios = [];
+  aLoLargo(larga, 34 + azar() * 10, (x, y) => sitios.push([x, y]));
+  sitios.filter((_, i) => i % 2 === 1).slice(0, 3)
+    .forEach(([x, y], i) => flor(svg, x, y, E, .24 + azar() * .06, i * 30, .9));
+}
+
+/* una sola vigilancia para todas las materas */
+const vigiaMateras = typeof ResizeObserver === "function" ? new ResizeObserver(cambios => {
+  cambios.forEach(c => {
+    const e = c.target, w = e.offsetWidth, h = e.offsetHeight;
+    if(!w || !h || e._tam === w + "x" + h) return;
+    e._tam = w + "x" + h;
+    const v = e.querySelector(".enredadera");
+    if(v && e._semilla) enredadera(v, w, h, e._semilla, e._k);
+  });
+}) : null;
+
+function vestirMateras(){
+  document.querySelectorAll("#semillero .pieza").forEach((e, k) => {
+    if(e.querySelector(".planta")) return;
+    const b = e.querySelector("b"), s = b && semillaPorTitulo(b.textContent);
+    if(!s) return;
+    e.classList.add("matera");
+    e.style.borderLeft = "";
+    e.style.background = "";
+    e.style.setProperty("--amb", s.color);
+    e.style.setProperty("--amb-b", s.color + "8c");
+    e.style.setProperty("--amb-s", s.color + "0a");
+    e.style.setProperty("--amb-t", s.color + "1f");
+    e.appendChild(plantaDeMatera(s, k));
+    const v = Kit.svg("svg", {class:"enredadera", "aria-hidden":"true"});
+    e.appendChild(v);
+    e._semilla = s;
+    e._k = k;
+    if(e.offsetWidth){
+      e._tam = e.offsetWidth + "x" + e.offsetHeight;
+      enredadera(v, e.offsetWidth, e.offsetHeight, s, k);
+    }
+  });
+  if(vigiaMateras){
+    vigiaMateras.disconnect();
+    document.querySelectorAll("#semillero .pieza.matera").forEach(e => vigiaMateras.observe(e));
+  }
+  /* el surco sembrado lleva, junto a su número, la flor de lo que se sembró */
+  document.querySelectorAll("#surcos .ranura.llena").forEach(r => {
+    if(r.querySelector(".florcita")) return;
+    const b = r.querySelector(".puesto b"), s = b && semillaPorTitulo(b.textContent);
+    if(!s) return;
+    const f = Kit.svg("svg", {class:"florcita", viewBox:"-15 -15 30 30", "aria-hidden":"true"});
+    flor(f, 0, 0, ESPECIE[s.grupo] || ESPECIE["Vínculos"], .62, 0, .9);
+    r.insertBefore(f, r.querySelector(".puesto"));
+  });
 }
 
 /* ====================== REFRESCO ====================== */
@@ -1891,7 +2137,7 @@ cablearMasMalezas();
 huerta = Kit.mostrador({
   bancoId:"semillero", ranurasId:"surcos", cupo:CUPO, items:SEMILLAS,
   etiquetas:["Primer surco","Segundo surco","Tercer surco","Cuarto surco","Quinto surco","Sexto surco"],
-  alCambiar: () => { pintarRaices(); pintarRiegos(); pintarMalezas(); refrescar(); }
+  alCambiar: () => { vestirMateras(); pintarRaices(); pintarRiegos(); pintarMalezas(); refrescar(); }
 });
 
 Kit.iniciar({
@@ -1913,7 +2159,7 @@ Kit.iniciar({
     regadera = d.regadera || "";
     if(d.surcos) huerta.cargar(d.surcos);
   },
-  alCambiar: () => { pintarRaices(); pintarRiegos(); pintarMalezas(); refrescar(); },
+  alCambiar: () => { vestirMateras(); pintarRaices(); pintarRiegos(); pintarMalezas(); refrescar(); },
   resumen: resumen
 });
 </script>
