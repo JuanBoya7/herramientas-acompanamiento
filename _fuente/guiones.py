@@ -851,6 +851,73 @@ GUIONES = {
   "✗ «Deja de pensar en eso y piensa en algo bonito.» No es una distracción: se vuelve a la situación."]),
 ],
 
+# --------------------------------------------------------------- la matriz
+# Paso 1 de Polk, Schoendorff, Webster y Olaz (2016): montar el punto de vista.
+"act-matriz.html": [
+ ("Antes de proponerlo", [
+  "Primero, lo que trae a la persona. Se le devuelve lo escuchado hasta que diga «sí, es eso»; "
+  "sin ese paso, la matriz llega como una técnica más y no como su propia experiencia ordenada.",
+  "Se pide permiso para mostrar un punto de vista. La hoja no se abre antes de ese sí."]),
+
+ ("Cómo se presenta", [
+  "«Es solo un punto de vista. No digo que sea el único ni el correcto: a mucha gente le ha "
+  "servido para hacer lo que le importa aunque aparezcan obstáculos.»",
+  "La línea horizontal antes que los cuadrantes: «A un conejo se le puede ver yendo hacia una "
+  "zanahoria o alejándose de un perro que ladra. A nosotros también, y además hacia personas y "
+  "cosas que importan y lejos de cosas que aparecen por dentro, que nadie ve.»",
+  "Se empieza abajo a la derecha, y por quién antes que por qué: «¿Quién te importa?» Casi todos "
+  "nombran a alguien, y la primera mirada tiene que ser un acierto."]),
+
+ ("Durante", [
+  "Ritmo liviano. Una persona y un par de cosas por cuadrante bastan: «buena muestra; no buscamos "
+  "que esté completo».",
+  "Abajo a la izquierda se abre normalizando: «¿Haces todo el tiempo lo que te acerca a quien te "
+  "importa?» Ante el no: «entonces algo se interpone». Los obstáculos de afuera se reconocen y se "
+  "dejan para después.",
+  "Terminado abajo, y antes de subir, señalando los dos cuadrantes: «¿Quién puede notar quién te "
+  "importa y lo que aparece?» Se espera el «yo». El paso 2 de la hoja lo retoma al final.",
+  "Al subir se avisa el cambio: «abajo estaba lo que nadie ve; arriba, lo que cualquiera podría "
+  "verte hacer».",
+  "Si dice «me autosaboteo» o «evito», se pregunta una sola vez: «¿y qué se te ve haciendo cuando "
+  "evitas?». Si no sale una conducta, se anota lo que dijo, con sus palabras, y se sigue.",
+  "Ordena la persona. Si algo queda donde no parece ir —«no sentir ansiedad» como lo que importa, "
+  "el jefe como lo que se interpone—, se deja así: el orden se afina con la práctica.",
+  "Se señalan los cuadrantes en la pantalla, y que la persona también señale. Se apunta a su "
+  "experiencia; el diagrama no se explica."]),
+
+ ("Al terminar", [
+  "«Si pudieras elegir entre una vida que va sobre todo por este lado (izquierda) y una que va "
+  "sobre todo por este otro (derecha), ¿cuál elegirías?»",
+  "«¿Te interesa aprender a elegir con más facilidad esto (arriba a la derecha) aunque aparezca "
+  "aquello (abajo a la izquierda)?» Ese sí es el acuerdo de trabajo.",
+  "La práctica de la semana es de notar, no de hacer. Si no la hace, que note que no la hizo: "
+  "eso también es notar, y en la sesión siguiente cuenta como logro."]),
+
+ ("Lo que no se dice", [
+  "✗ «Valores», «aceptación», «defusión». Se habla de quién y qué importa, de lo que aparece y de "
+  "lo que se ve hacer.",
+  "✗ «Eso va en el otro cuadrante.» Corregir el orden le enseña a ordenar para quien acompaña, no "
+  "a mirar su experiencia.",
+  "✗ «Lo de la izquierda está mal.» Alejarse no es un error: es lo que se hace, y en el paso "
+  "siguiente se mira si funciona.",
+  "✗ Empezar por el problema. Si la primera pregunta va a la izquierda, la sesión se va al relato "
+  "de lo que no funciona y cuesta volver a la derecha."]),
+
+ ("Qué hacer con lo que salga", [
+  "Dice que nadie le importa: «Entre una vida en la que alguien o algo importa y una en la que nada "
+  "importa, ¿cuál elegirías?» Se anota «alguien o algo que importe» y encontrarlo pasa a ser parte "
+  "del trabajo.",
+  "No se nombra a sí misma entre quienes importan: se le hace notar después de abajo a la "
+  "izquierda, con suavidad. Si sale una historia, no se discute; se pide permiso para anotar «yo».",
+  "Lo mismo aparece en los dos lados de arriba —dormir, el ejercicio, el teléfono—: «¿quién puede "
+  "saber si esta vez fue para acercarte o para alejarte?».",
+  "Pregunta «¿y cómo hago eso?»: es una habilidad, y ya empezó a practicarla al elegir la derecha "
+  "con todo lo de abajo a la izquierda presente. No se dan soluciones hechas; la matriz sirve para "
+  "encontrar las suyas.",
+  "Se va a un relato largo: se valida, y se invita a ubicarlo: «eso que acabas de decir, ¿dónde "
+  "iría en la matriz?»."]),
+],
+
 "act-los-ganchos.html": [
  ("Cómo se presenta", [
   "Con preguntas, no con la explicación: «¿Cómo sabe un pez que mordió un anzuelo?» Hasta llegar a "
