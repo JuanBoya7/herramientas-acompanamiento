@@ -82,7 +82,7 @@ campo3ph: Ej. Sesión 3
      que crece en el jardín; al sembrarla, la matera queda vacía. Las filas van
      juntas para que el semillero entero quepa en una pantalla: la primera fila
      de cada ámbito crece al lado de su rótulo, que va a la izquierda. */
-  #semillero .tarjetas{row-gap:30px;column-gap:14px;padding-top:0}
+  #semillero .tarjetas{row-gap:28px;column-gap:22px;padding-top:0}
   #semillero .pieza.matera{position:relative;z-index:0;border:0;background:transparent;
     padding:14px 16px 8px;border-radius:0}
   #semillero .pieza.matera::after{content:"";position:absolute;inset:6px 4px 0;z-index:-1;
@@ -94,8 +94,8 @@ campo3ph: Ej. Sesión 3
     height:11px;z-index:2;border-radius:5px;background:var(--amb);
     box-shadow:inset 0 -3px 0 #00000014}
   #semillero .pieza.matera:hover::after{border-color:var(--amb)}
-  #semillero .pieza .planta{position:absolute;left:50%;bottom:calc(100% - 10px);z-index:1;
-    width:112.5px;height:43.75px;margin-left:-56.25px;pointer-events:none}
+  #semillero .pieza .planta{position:absolute;right:-22px;top:-34px;z-index:4;
+    width:94px;height:66px;pointer-events:none}
   /* la enredadera trepa por un costado, corre por el borde y baja por el otro;
      va por los márgenes de la matera y no tapa el texto */
   #semillero .pieza .enredadera{position:absolute;left:-16px;top:-16px;z-index:3;
@@ -867,40 +867,46 @@ const azarCon = k => {
 const VERDES = ["#4f9a5c", "#5fa865", "#7fb86a", "#3f8a52"];
 
 function plantaDeMatera(s, k){
+  /* Las flores se recuestan sobre la esquina de arriba a la derecha: no se
+     elevan sobre el centro, dejan libre el rótulo y todas las materas quedan
+     alineadas por el mismo lado. El origen es esa esquina, en píxeles. */
   const E = ESPECIE[s.grupo] || ESPECIE["Vínculos"];
-  const svg = Kit.svg("svg", {class:"planta", viewBox:"-80 -58 160 58", "aria-hidden":"true"});
+  const svg = Kit.svg("svg", {});
   const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
-  const verde = "#4f9a5c", verdeO = "#3d7f4b", verdeC = "#7fb86a";
+  const verde = "#4f9a5c", verdeO = "#3d7f4b";
   const azar = azarCon(k);
-  const l = k % 2 ? 1 : -1;                    // hacia dónde se inclina el tallo alto
   const hoja = (x, y, lado, ang, L, W, col) => {
-    const h = g("g", {filter:ACUA, transform:`translate(${x} ${y}) scale(${lado} 1) rotate(${-ang})`});
-    g("path", {d:formaHoja(L, W), fill:col || verde, opacity:.86, stroke:verdeO, "stroke-width":.7,
+    const h = g("g", {transform:`translate(${x} ${y}) scale(${lado} 1) rotate(${-ang})`});
+    g("path", {d:formaHoja(L, W), fill:col || verde, opacity:.88, stroke:verdeO, "stroke-width":.6,
       "stroke-opacity":.5}, h);
-    g("path", {d:`M1 0 Q${L*.5} -1 ${L*.9} 0`, stroke:verdeO, "stroke-width":.8, fill:"none", opacity:.55}, h);
+    g("path", {d:`M1 0 Q${L*.5} -1 ${L*.9} 0`, stroke:verdeO, "stroke-width":.7, fill:"none", opacity:.55}, h);
   };
-  /* la mata: hojas bajas que salen de la tierra y se abren hacia los lados */
-  for(let i = 0; i < 15; i++){
-    const u = i / 14 * 2 - 1, c = 1 - Math.abs(u);
-    hoja(u * 50 + (azar() - .5) * 6, 3, u < 0 ? -1 : 1, 10 + c * 52 + azar() * 14,
-      18 + c * 12 + azar() * 5, 7 + azar() * 2.5, VERDES[i % 4]);
+  /* la mata baja, que nace del borde junto a la esquina */
+  for(let i = 0; i < 9; i++){
+    const u = i / 8;                                   // 0 = adentro, 1 = la esquina
+    hoja(-48 + u * 44 + (azar() - .5) * 4, 0, u < .45 ? -1 : 1, 18 + azar() * 40,
+      11 + azar() * 6, 4.6 + azar() * 1.6, VERDES[i % 4]);
   }
-  const tallos = g("g", {filter:ACUA, fill:"none", stroke:verde, "stroke-linecap":"round"});
-  g("path", {d:`M0 3 C${-l * 8} -10 ${l * 12} -24 ${l * 6} -38`, "stroke-width":2.6}, tallos);
-  g("path", {d:`M-5 3 C-6 -8 -22 -6 -30 -21`, "stroke-width":2}, tallos);
-  g("path", {d:`M5 3 C7 -6 24 -4 31 -17`, "stroke-width":2}, tallos);
-  /* hojas de adelante: unas caen sobre el borde, como en las materas llenas */
-  hoja(-14, 3, -1, 6, 24, 8);
-  hoja(-4, 3, -1, 24, 18, 7, verdeC);
-  hoja(6, 3, 1, 20, 20, 7.5);
-  hoja(16, 3, 1, 5, 23, 8, verdeC);
-  hoja(l * 3, -14, l, 52, 15, 6);
-  hoja(-l * 2, -20, -l, 60, 13, 5.5, verdeC);
-  flor(svg, l * 6, -38, E, .86, l * 8, .9);
+  /* los tallos: uno erguido, uno que se asoma por la esquina, uno hacia adentro */
+  const tallos = g("g", {fill:"none", stroke:verde, "stroke-linecap":"round"});
+  g("path", {d:"M-16 1 C-19 -6 -10 -10 -12 -17", "stroke-width":1.9}, tallos);
+  g("path", {d:"M-7 1 C-3 -5 3 -7 9 -6", "stroke-width":1.6}, tallos);
+  g("path", {d:"M-28 1 C-29 -4 -34 -6 -37 -10", "stroke-width":1.5}, tallos);
+  /* y una rama que cae por el costado */
+  g("path", {d:"M-1 1 C5 3 6 10 4 19", "stroke-width":1.3}, tallos);
+  hoja(-1, 1, 1, -28, 15, 5.6);
+  hoja(4, 8, 1, -62, 12, 4.8, VERDES[2]);
+  hoja(5, 14, -1, 70, 10, 4.2, VERDES[1]);
+  hoja(-20, -8, -1, 40, 10, 4.2, VERDES[3]);
+  hoja(-11, -9, 1, 48, 9, 4, VERDES[2]);
+
   const cual = k % 3;
-  if(cual === 0){ flor(svg, -30, -21, E, .56, -16, .9); capullo(svg, 31, -17, E, false, 26, false, .95); }
-  else if(cual === 1){ capullo(svg, -30, -21, E, true, -24, false, .9); flor(svg, 31, -17, E, .56, 16, .9); }
-  else { flor(svg, -30, -21, E, .52, -16, .9); flor(svg, 31, -17, E, .46, 18, .9); }
+  flor(svg, -12, -17, E, .56, (azar() - .5) * 20, .9);
+  if(cual === 1) capullo(svg, 9, -6, E, true, 62, false, .8);
+  else flor(svg, 9, -6, E, .42, 38, .9);
+  if(cual === 0) capullo(svg, -37, -10, E, false, -30, false, .8);
+  else flor(svg, -37, -10, E, .36, -20, .9);
+  capullo(svg, 4, 20, E, false, 170, false, .62);
   return svg;
 }
 
@@ -934,7 +940,7 @@ function enredadera(svg, w, h, s, k){
   svg.setAttribute("height", h);
   svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
   const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
-  const lado = k % 2 ? 1 : -1;                 // -1 trepa por la izquierda, 1 por la derecha
+  const lado = -1;                             // trepa por la izquierda, hacia las flores de la esquina
   const X = x => lado < 0 ? x : w - x;
   const ond = azar() * 6;
 
@@ -948,7 +954,7 @@ function enredadera(svg, w, h, s, k){
   const corta = [];
   for(let x = w * (.22 + azar() * .1); x > 14; x -= 15)
     corta.push([w - X(x), h - 2 + Math.sin(x * .3 + ond) * 2]);
-  for(let y = h - 6, fin = h * (.25 + azar() * .2); y > fin; y -= 12)
+  for(let y = h - 6, fin = h * (.5 + azar() * .15); y > fin; y -= 12)
     corta.push([w - X(4 + Math.sin(y * .3 + ond) * 3), y]);
 
   const ramas = g("g", {filter:"url(#jv-acua-fino)"});
@@ -1050,7 +1056,7 @@ function vestirMateras(){
     e.style.setProperty("--amb-s", s.color + "0a");
     e.style.setProperty("--amb-t", s.color + "1f");
     e.appendChild(imagen("planta", aImagen("p" + k, () => plantaDeMatera(s, k),
-      "-90 -62 180 70", 112.5, 43.75, "grueso")));
+      "-72 -34 94 66", 94, 66, "grueso")));
     const v = e.appendChild(imagen("enredadera"));
     e._semilla = s;
     e._k = k;
