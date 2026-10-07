@@ -137,80 +137,13 @@ function latido(dt){
 
 /* ====================== FIGURAS ====================== */
 /* El monstruo: patas, brazos, melena de lobo y hocico. Crece de verdad. */
+let spriteMonstruo = null;
 function monstruo(padre, x, base, alto, col){
-  const g = (t, a) => padre.appendChild(Kit.svg(t, a));
-  const e = alto / 100;                       // escala respecto al alto
-  const oscuro = Kit.mezcla(col, "#241c2b", .45);
-  const cy = base - alto * .52;               // centro del cuerpo
-  const ancho = alto * .58;
-
-  /* patas traseras y delanteras */
-  [-1, 1].forEach(lado => {
-    const px = x + lado * ancho * .38;
-    g("path", {d:`M${px} ${cy + alto * .28} L${px + lado * 6 * e * 10 * .1} ${base - 6}`,
-      stroke:oscuro, "stroke-width":11 * e * 10 * .1 + 5, fill:"none", "stroke-linecap":"round"});
-    g("ellipse", {cx:px + lado * 5, cy:base - 3, rx:13 * e * 10 * .1 + 7, ry:5, fill:oscuro});
-    /* garras */
-    for(let k = -1; k <= 1; k++)
-      g("path", {d:`M${px + lado * 5 + k * 5} ${base - 4} l 0 4`, stroke:"#f0eaf2",
-        "stroke-width":1.6, "stroke-linecap":"round"});
-  });
-
-  /* cuerpo */
-  g("ellipse", {cx:x, cy:cy, rx:ancho * .55, ry:alto * .34, fill:col});
-  /* pelaje del lomo */
-  const lomo = [];
-  for(let k = 0; k <= 6; k++){
-    const t = k / 6;
-    const lx = x - ancho * .5 + t * ancho;
-    const ly = cy - alto * .3 - Math.sin(t * Math.PI) * alto * .05;
-    lomo.push(`${k ? "L" : "M"}${lx} ${ly} l ${ancho * .05} ${-alto * .05} l ${ancho * .04} ${alto * .05}`);
-  }
-  g("path", {d:lomo.join(" "), stroke:oscuro, "stroke-width":2, fill:"none",
-    "stroke-linejoin":"round"});
-
-  /* brazos que sostienen la cuerda, hacia el hoyo (a la izquierda) */
-  const hombro = [x - ancho * .3, cy - alto * .12];
-  const mano = [x - ancho * .95, cy - alto * .02];
-  g("path", {d:`M${hombro[0]} ${hombro[1]} Q ${x - ancho * .75} ${cy - alto * .2} ${mano[0]} ${mano[1]}`,
-    stroke:col, "stroke-width":alto * .13, fill:"none", "stroke-linecap":"round"});
-  g("circle", {cx:mano[0], cy:mano[1], r:alto * .08, fill:oscuro});
-
-  /* cabeza de lobo */
-  const cabX = x + ancho * .1, cabY = cy - alto * .42;
-  const rc = alto * .21;
-  /* orejas */
-  [-1, 1].forEach(lado => g("path", {
-    d:`M${cabX + lado * rc * .55} ${cabY - rc * .6} l ${lado * rc * .35} ${-rc * .85} l ${lado * rc * .18} ${rc * .75} Z`,
-    fill:oscuro}));
-  g("circle", {cx:cabX, cy:cabY, r:rc, fill:col});
-  /* melena */
-  for(let k = 0; k < 9; k++){
-    const ang = (k / 8) * Math.PI * 2;
-    g("path", {d:`M${cabX + Math.cos(ang) * rc * .95} ${cabY + Math.sin(ang) * rc * .95} ` +
-      `l ${Math.cos(ang) * rc * .32} ${Math.sin(ang) * rc * .32}`,
-      stroke:oscuro, "stroke-width":2.2, "stroke-linecap":"round"});
-  }
-  /* hocico hacia la izquierda, mirando a la persona; se abre al rugir */
-  const abre = 1 + Math.max(0, Math.sin(fase * 3.1)) * .35;
-  g("ellipse", {cx:cabX - rc * .78, cy:cabY + rc * .3, rx:rc * .55, ry:rc * .34 * abre, fill:oscuro});
-  g("circle", {cx:cabX - rc * 1.25, cy:cabY + rc * .22, r:rc * .12, fill:"#141018"});
-  /* dientes */
-  for(let k = 0; k < 3; k++)
-    g("path", {d:`M${cabX - rc * 1.05 + k * rc * .28} ${cabY + rc * .55} l ${rc * .1} ${rc * .16} l ${rc * .1} ${-rc * .16}`,
-      fill:"#fff"});
-  /* ojos */
-  [-.28, .28].forEach((d, i) => {
-    g("ellipse", {cx:cabX - rc * .18 + i * rc * .5, cy:cabY - rc * .18, rx:rc * .21, ry:rc * .17,
-      fill:"#fff", opacity:.95});
-    g("circle", {cx:cabX - rc * .16 + i * rc * .5, cy:cabY - rc * .16, r:rc * .1, fill:"#241c2b"});
-  });
-  /* ceño */
-  [-1, 1].forEach(lado => g("path", {
-    d:`M${cabX + lado * rc * .1 - rc * .04} ${cabY - rc * .44} l ${lado * rc * .38} ${rc * .12}`,
-    stroke:oscuro, "stroke-width":2.4, "stroke-linecap":"round"}));
-
-  return {mano, cabeza:[cabX, cabY - rc]};
+  if(!spriteMonstruo) spriteMonstruo=Kit.svg("image", {href:"[[imagen:monstruo-acuarela.png]]", preserveAspectRatio:"xMidYMid meet"});
+  const h=alto*1.26, w=h*.84, izquierda=x-w*.47, arriba=base-h;
+  Object.entries({x:izquierda,y:arriba,width:w,height:h}).forEach(([k,v])=>spriteMonstruo.setAttribute(k,v));
+  padre.appendChild(spriteMonstruo);
+  return {mano:[izquierda+w*.06,arriba+h*.35],cabeza:[x+w*.15,arriba+5]};
 }
 
 /* La persona: cabeza, pelo, tronco, dos brazos y dos piernas afianzadas. */
@@ -232,41 +165,36 @@ function persona(padre, x, base, col, estado, tiembla){
   }
 
   const suelta = estado === "suelta";
-  /* piernas: una adelante afianzada, otra atrás */
-  g("path", {d:`M${x} ${cad} L${x - 13} ${base - 2}`, stroke:col, "stroke-width":6,
-    "stroke-linecap":"round"});
-  g("path", {d:`M${x} ${cad} L${x + (suelta ? 11 : 16)} ${base - 2}`, stroke:col,
-    "stroke-width":6, "stroke-linecap":"round"});
-  g("path", {d:`M${x - 13} ${base - 2} l -7 0 M${x + (suelta ? 11 : 16)} ${base - 2} l 8 0`,
-    stroke:col, "stroke-width":5, "stroke-linecap":"round"});
-  /* tronco: inclinado hacia atrás mientras jala, recto al soltar. Con la cuerda
-     tensa el cuerpo tiembla del esfuerzo. */
   const inc = suelta ? 0 : -7 + tiembla;
-  g("path", {d:`M${x} ${cad} L${x + inc} ${hom}`, stroke:col, "stroke-width":8,
-    "stroke-linecap":"round"});
-  /* cabeza y pelo */
-  g("circle", {cx:x + inc, cy:cab, r:12, fill:col});
-  g("path", {d:`M${x + inc - 12} ${cab - 3} q 4 -13 12 -12 q 9 0 12 12 q -6 -6 -12 -5 q -7 1 -12 5 Z`,
-    fill:"#2c3a48"});
-  /* cara mirando al frente */
-  g("circle", {cx:x + inc + 6, cy:cab - 1, r:1.8, fill:"#fff", opacity:.9});
+  const piel="#b88c6c", pantalon="#455660", camisa=suelta?"#65907b":"#718ba0";
+  // Pantalón con volumen y botas; el cuerpo acompaña la tensión de la cuerda.
+  g("path",{d:`M${x-8} ${cad-3} L${x+9} ${cad-3} L${x+21} ${base-5} Q${x+16} ${base} ${x+10} ${base-4} L${x} ${cad+16} L${x-8} ${base-4} L${x-19} ${base-4} Z`,fill:pantalon});
+  g("path",{d:`M${x-19} ${base-7} Q${x-29} ${base-4} ${x-25} ${base} L${x-7} ${base} L${x-7} ${base-7} Z M${x+10} ${base-7} L${x+21} ${base-7} Q${x+31} ${base-4} ${x+28} ${base} L${x+10} ${base} Z`,fill:"#534c40"});
+  g("path",{d:`M${x+inc-10} ${hom+2} Q${x+inc} ${hom-4} ${x+inc+10} ${hom+3} L${x+10} ${cad+3} Q${x} ${cad+8} ${x-10} ${cad+2} Z`,fill:camisa,stroke:"#5c7582","stroke-width":.7});
+  g("path",{d:`M${x+inc-5} ${hom+9} Q${x+inc+1} ${hom+24} ${x-4} ${cad}`,stroke:"#fff","stroke-width":2,opacity:.17,fill:"none"});
+  g("path",{d:`M${x+inc-4} ${cab+8} L${x+inc-3} ${hom+3} Q${x+inc+4} ${hom+7} ${x+inc+6} ${hom} L${x+inc+5} ${cab+7} Z`,fill:piel});
+  g("ellipse",{cx:x+inc,cy:cab,rx:10,ry:13,fill:piel});
+  g("path",{d:`M${x+inc-9} ${cab+4} Q${x+inc-16} ${cab-12} ${x+inc-4} ${cab-15} Q${x+inc+10} ${cab-17} ${x+inc+11} ${cab-5} Q${x+inc+3} ${cab-10} ${x+inc-5} ${cab-5} L${x+inc-5} ${cab+4} Z`,fill:"#3d3e39"});
+  g("path",{d:`M${x+inc+8} ${cab-3} l4 6 -4 1`,fill:piel});
+  g("circle",{cx:x+inc+6,cy:cab-2,r:1.1,fill:"#3c3934"});
 
   let mano;
   if(suelta){
     /* un brazo relajado, el otro señalando hacia adelante */
-    g("path", {d:`M${x} ${hom + 5} q -12 12 -14 24`, stroke:col, "stroke-width":5.5,
+    g("path", {d:`M${x} ${hom + 5} q -12 12 -14 24`, stroke:camisa, "stroke-width":7,
       fill:"none", "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${hom + 5} q 14 8 20 2`, stroke:col, "stroke-width":5.5,
+    g("path", {d:`M${x} ${hom + 5} q 14 8 20 2`, stroke:camisa, "stroke-width":7,
       fill:"none", "stroke-linecap":"round"});
     mano = [x + 20, hom + 7];
   } else {
     /* las dos manos agarradas a la cuerda */
-    g("path", {d:`M${x + inc} ${hom + 4} L${x + 20} ${hom + 2}`, stroke:col, "stroke-width":5.5,
+    g("path", {d:`M${x + inc} ${hom + 4} L${x + 20} ${hom + 2}`, stroke:camisa, "stroke-width":7,
       "stroke-linecap":"round"});
-    g("path", {d:`M${x + inc} ${hom + 10} L${x + 26} ${hom + 6}`, stroke:col, "stroke-width":5.5,
+    g("path", {d:`M${x + inc} ${hom + 10} L${x + 26} ${hom + 6}`, stroke:camisa, "stroke-width":7,
       "stroke-linecap":"round"});
     mano = [x + 26, hom + 4];
   }
+  g("ellipse",{cx:mano[0],cy:mano[1],rx:4,ry:3,fill:piel});
   return {mano};
 }
 
@@ -283,9 +211,9 @@ function dibujar(){
 
   const SUELO = 250, HX0 = 260, HX1 = 440;
 
-  g("rect", {x:0, y:0, width:700, height:SUELO, fill:"#f5f9fb"});
-  g("rect", {x:0, y:SUELO, width:HX0, height:340 - SUELO, fill:"#c9b291"});
-  g("rect", {x:HX1, y:SUELO, width:700 - HX1, height:340 - SUELO, fill:"#c9b291"});
+  g("rect", {x:0, y:0, width:700, height:SUELO, fill:"#f8f5ea"});
+  g("rect", {x:0, y:SUELO, width:HX0, height:340 - SUELO, fill:"#c5af8a"});
+  g("rect", {x:HX1, y:SUELO, width:700 - HX1, height:340 - SUELO, fill:"#c5af8a"});
 
   const defs = Kit.svg("defs", {});
   const hoyo = Kit.svg("linearGradient", {id:"hoyo", x1:"0", y1:"0", x2:"0", y2:"1"});
@@ -296,6 +224,12 @@ function dibujar(){
   g("rect", {x:HX0, y:SUELO, width:HX1 - HX0, height:340 - SUELO, fill:"url(#hoyo)"});
   g("ellipse", {cx:(HX0 + HX1) / 2, cy:SUELO, rx:(HX1 - HX0) / 2, ry:11, fill:"#241e18"});
 
+  // Orillas orgánicas: el centro permanece despejado para leer la acción.
+  g("path", {d:"M0 248 Q55 242 107 250 T212 248 L260 250 L252 258 Q164 249 82 260 L0 259 Z",fill:"#71866b"});
+  g("path", {d:"M440 250 Q490 241 545 249 T700 246 L700 260 Q561 257 449 260 Z",fill:"#71866b"});
+  for(let k=0;k<9;k++){
+    const xx=18+k*27;g("path",{d:`M${xx} 255 q-4 -12 -7 -15 M${xx} 255 q2 -9 6 -13`,stroke:"#617a59","stroke-width":1.5,fill:"none",opacity:.6});
+  }
   const t = tamano();
   /* respira: el alto late un poco aunque nadie toque nada */
   const alto = (52 + t * 11) * (1 + Math.sin(fase * 1.7) * .018);

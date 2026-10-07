@@ -14,6 +14,7 @@ y les quita los campos de identificación, el crédito y el aviso.
 """
 import re, shutil
 from pathlib import Path
+import sesion
 
 AQUI = Path(__file__).resolve().parent
 DESTINO = AQUI.parent
@@ -387,7 +388,7 @@ def main():
         if nombre in ARREGLOS:
             d = ARREGLOS[nombre](d)
         d = armonizar(d, kit_js)
-        (DESTINO / nombre).write_text(d, encoding="utf-8")
+        (DESTINO / nombre).write_text(sesion.aplicar(d, nombre), encoding="utf-8")
         print(f"  {nombre:38s} rehecha desde el respaldo")
 
     # Rehechas desde el respaldo pierden el índice de hojas: se lo devuelve

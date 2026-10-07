@@ -15,6 +15,7 @@ from pathlib import Path
 
 import guia
 import rieles
+import sesion
 
 AQUI = Path(__file__).resolve().parent
 DESTINO = AQUI.parent
@@ -132,7 +133,8 @@ def construir(ruta, plantilla, kit_css, kit_js):
         raise SystemExit(f"{ruta.name}: quedaron marcadores sin reemplazar -> {set(quedan)}")
 
     destino = DESTINO / meta["archivo"]
-    destino.write_text(salida, encoding="utf-8")
+    destino.write_text(sesion.aplicar(salida, meta["archivo"]), encoding="utf-8")
+    meta["resumen"] = sesion.descripcion(meta["archivo"])
     return meta, destino
 
 
@@ -273,7 +275,7 @@ def main():
     kit_css = (AQUI / "kit.css").read_text(encoding="utf-8")
     kit_js = (AQUI / "kit.js").read_text(encoding="utf-8")
 
-    fichas = list(YA_HECHAS)
+    fichas = [dict(f, resumen=sesion.descripcion(f['archivo'])) for f in YA_HECHAS]
     hechas = 0
     for ruta in sorted(PARTES.glob("*.parte")):
         meta, destino = construir(ruta, plantilla, kit_css, kit_js)
@@ -296,6 +298,8 @@ def main():
 
     # La guía de uso se rehace con el resto: comparte los estilos del kit.
     en_guia = guia.construir(kit_css)
+    assert len(fichas) == len(sesion.REVISION), 'Falta revisar una herramienta'
+    sesion.documentar()
 
     print(f"\n{hechas} herramientas construidas + index.html con {len(fichas)} fichas"
           f" + guia.html con {en_guia}.")

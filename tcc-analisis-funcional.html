@@ -1,8 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Análisis funcional</title>
 <style>
   :root{
@@ -324,148 +325,188 @@
   .contingencia{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media (max-width:600px){.contingencia{grid-template-columns:1fr}}
 </style>
-</head>
-<body>
+<style>/* La superficie de trabajo y sus apoyos. Compartida con las tres hojas antiguas. */
+body[data-sesion]{--sesion-verde:#3f7568;--sesion-borde:#d8e3df;--sesion-papel:#fffefa}
+body[data-sesion] header.tapa{padding:20px 24px 15px;border-top:3px solid var(--sesion-verde)}
+body[data-sesion] .tapa .sub{max-width:90ch;font-size:15px;line-height:1.55}
+.sesion-fuente{font-size:12px;color:var(--tinta-suave);margin-top:8px}
+.sesion-fuente>summary{cursor:pointer;width:max-content}
+.sesion-fuente .fuente{font-size:12px;margin-top:6px}
+.sesion-principal{min-width:0}
+.sesion-principal .tablero>*,.sesion-principal .dosmedidores>*{min-width:0}
+body[data-sesion="act-brujula-de-valores"] .dosmedidores input[type=range]{width:100%;min-width:0}
+.sesion-principal>section{border-color:var(--sesion-borde)}
+.sesion-principal h2{color:#294c47}
+.sesion-mesa{display:grid;grid-template-columns:minmax(215px,.8fr) minmax(0,2fr);gap:16px;align-items:start}
+.sesion-preparacion{min-width:0}
+.sesion-preparacion section.paso,.sesion-preparacion section.bloque{padding:17px 18px}
+.sesion-preparacion h2{font-size:16px}
+.sesion-preparacion .medidor{flex-wrap:wrap}
+.sesion-preparacion .medidor label{flex-basis:100%}
+.sesion-preparacion .medidor input{min-width:0}
+.sesion-mesa>.escenario{min-width:0;padding:10px;border-color:var(--sesion-borde);box-shadow:0 5px 20px #234a3f08}
+.sesion-mesa .mandos{gap:7px}
+.sesion-mesa .mandos button{font-size:13px;padding:9px 12px;min-height:40px}
+.sesion-mesa .duracion .chip{font-size:12px;padding:7px 10px}
+.sesion-mesa .escenario>svg{border-radius:9px}
+.sesion-complementos{display:grid;gap:9px;margin:12px 0 20px}
+.sesion-complementos:empty{display:none}
+details.sesion-apoyo{border:1px solid var(--sesion-borde);border-radius:10px;background:#fafcfb;min-width:0}
+details.sesion-apoyo>summary{cursor:pointer;padding:13px 17px;font-size:14px;font-weight:600;color:#4c6560}
+details.sesion-apoyo[open]{background:#fff}
+details.sesion-apoyo[open]>summary{border-bottom:1px solid #e5ede9}
+details.sesion-apoyo>section,details.sesion-apoyo>div{margin:0!important;border:0!important;box-shadow:none!important}
+details.sesion-apoyo>.escenario{padding:16px}
+.sesion-titulo-repetido{display:none!important}
+.sesion-datos{margin:12px 0 0;border-top:1px solid #e8eeeb;padding:9px 5px 0}
+.sesion-datos>summary{cursor:pointer;font-size:12px;color:#647771}
+.sesion-datos .marcas .n{font-size:18px}
+.sesion-datos .marcas .r{font-size:10px}
+body[data-sesion] .sesion-seguridad{border-left:4px solid #a37840}
+body[data-sesion] [hidden]{display:none!important}
+body[data-sesion] button:focus-visible,body[data-sesion] summary:focus-visible{outline:3px solid #74a795;outline-offset:3px}
+body[data-sesion] .chip{min-height:33px}
+body[data-sesion] .matriz{border:0;gap:2px;background:#94aaa1;border-radius:14px}
+body[data-sesion] .cuad{padding:21px 20px;min-height:180px;border:0}
+body[data-sesion] .centro-yo{background:#fffefa;box-shadow:0 3px 12px #294c4720}
+body[data-sesion="fortalezas-del-caracter"] .panel-casillas{border-top:3px solid #b99a4f}
+body[data-sesion="fortalezas-del-caracter"] .casilla.llena{box-shadow:0 2px 8px #4b38110a}
+body[data-sesion="dbt-mente-sabia"] .tres-mentes{gap:14px}
+@media(max-width:900px){.sesion-mesa{grid-template-columns:1fr}.sesion-preparacion{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px}.sesion-preparacion section{margin-bottom:0}.sesion-mesa>.escenario{margin-top:2px}}
+@media(max-width:540px){body[data-sesion] header.tapa{padding:16px}body[data-sesion] h1{font-size:23px}.sesion-preparacion{display:block}.sesion-preparacion section{margin-bottom:10px}body[data-sesion] .cuad{padding:18px 15px;min-height:0}.sesion-mesa{gap:2px}.sesion-mesa .mandos button{flex:1 1 auto}.sesion-datos .marcas{gap:10px}}
+@media(max-width:540px){body[data-sesion="act-brujula-de-valores"] .ambito .cabeza{flex-wrap:wrap}body[data-sesion="act-brujula-de-valores"] .dosmedidores{grid-template-columns:1fr}}
+@media print{.sesion-mesa{display:block}.sesion-fuente>summary,.sesion-apoyo>summary,.sesion-datos{display:none!important}details.sesion-apoyo{border:0}.sesion-titulo-repetido{display:flex!important}.sesion-complementos{display:block}body[data-sesion] .sesion-seguridad{break-inside:avoid}}
+</style></head>
+<body data-sesion="tcc-analisis-funcional">
 <div class="envoltura">
-
 <header class="tapa">
-  <h1>Análisis funcional</h1>
-  <p class="sub">Esta hoja no es para el consultante: es para quien acompaña, y sobre todo para quien está aprendiendo a formular. La misma conducta puede tener funciones opuestas en dos personas distintas, y de eso —no de la topografía— depende toda la intervención. Aquí se arma la secuencia y la hoja propone la hipótesis funcional.</p>
-  <p class="fuente">El proceso en terapia de conducta y el análisis funcional en la evaluación conductual, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 2.</p>
-  <div class="campos-id">
-    <label>Nombre o iniciales <input type="text" id="nombre" placeholder="Opcional"></label>
-    <label>Fecha <input type="text" id="fecha"></label>
-    <label>Caso <input type="text" id="sesion" placeholder="Ej. Caso 3 / práctica"></label>
-    <label class="solo-clinica">Profesional <input type="text" id="profesional" placeholder="Quien acompaña"></label>
-  </div>
-</header>
-
-<section class="paso">
-  <h2><span class="num">1</span>La conducta a analizar</h2>
-  <p class="ayuda">Operativizada: qué hace, cuánto, con qué intensidad y cuánto dura. Si dos
+<h1>Análisis funcional</h1>
+<p class="sub">Un mapa de lo que sucede antes, lo que hace la persona y lo que ocurre después.</p>
+<details class="sesion-fuente"><summary>Fuente</summary><p class="fuente">El proceso en terapia de conducta y el análisis funcional en la evaluación conductual, en Ruiz, Díaz y Villalobos, Manual de técnicas de intervención cognitivo conductuales, cap. 2.</p></details>
+<details class="sesion-fuente"><summary>Datos del registro</summary><div class="campos-id">
+<label>Nombre o iniciales <input id="nombre" placeholder="Opcional" type="text"/></label>
+<label>Fecha <input id="fecha" type="text"/></label>
+<label>Caso <input id="sesion" placeholder="Ej. Caso 3 / práctica" type="text"/></label>
+<label class="solo-clinica">Profesional <input id="profesional" placeholder="Quien acompaña" type="text"/></label>
+</div></details>
+</header><div class="sesion-principal"><section class="paso">
+<h2>La conducta a analizar</h2>
+<p class="ayuda">Operativizada: qué hace, cuánto, con qué intensidad y cuánto dura. Si dos
   observadores no pudieran ponerse de acuerdo en si ocurrió, no está bien definida.</p>
-  <div class="cuerpo">
-    <div class="chips" id="conductaTipo"></div>
-    <details class="apunte">
-      <summary>Definirla operativamente (recomendado)</summary>
-      <textarea id="conductaDef" placeholder="Qué hace exactamente, frecuencia, intensidad y duración."></textarea>
-    </details>
-    <div class="contingencia" style="margin-top:14px">
-      <div><label class="etiqueta">Frecuencia</label><div class="chips" id="frecuencia"></div></div>
-      <div><label class="etiqueta">Antigüedad</label><div class="chips" id="antiguedad"></div></div>
-    </div>
-  </div>
-</section>
-
-<div class="columna-af ant">
-  <h3>A · Antecedentes</h3>
-  <p class="quees">Lo que precede a la conducta y aumenta su probabilidad. Se distinguen los
+<div class="cuerpo">
+<div class="chips" id="conductaTipo"></div>
+<details class="apunte">
+<summary>Definirla operativamente (recomendado)</summary>
+<textarea id="conductaDef" placeholder="Qué hace exactamente, frecuencia, intensidad y duración."></textarea>
+</details>
+<div class="contingencia" style="margin-top:14px">
+<div><label class="etiqueta">Frecuencia</label><div class="chips" id="frecuencia"></div></div>
+<div><label class="etiqueta">Antigüedad</label><div class="chips" id="antiguedad"></div></div>
+</div>
+</div>
+</section><div class="columna-af ant">
+<h3>A · Antecedentes</h3>
+<p class="quees">Lo que precede a la conducta y aumenta su probabilidad. Se distinguen los
   estímulos discriminativos —lo que señala que ahora la conducta va a funcionar— de las variables
   del organismo, que modulan sin desencadenar.</p>
-  <div class="subbloque">
-    <div class="titulin">Estímulo discriminativo · qué había justo antes</div>
-    <div class="chips" id="antE"></div>
-  </div>
-  <div class="subbloque">
-    <div class="titulin">Variables del organismo · con qué llegó la persona</div>
-    <div class="chips" id="antO"></div>
-  </div>
-  <div class="subbloque">
-    <div class="titulin">Contexto · dónde y con quién</div>
-    <div class="chips" id="antC"></div>
-  </div>
+<div class="subbloque">
+<div class="titulin">Estímulo discriminativo · qué había justo antes</div>
+<div class="chips" id="antE"></div>
 </div>
-
-<div class="columna-af con">
-  <h3>B · Conducta, en los tres sistemas</h3>
-  <p class="quees">La respuesta rara vez es solo motora. Separar los tres sistemas evita el error
+<div class="subbloque">
+<div class="titulin">Variables del organismo · con qué llegó la persona</div>
+<div class="chips" id="antO"></div>
+</div>
+<div class="subbloque">
+<div class="titulin">Contexto · dónde y con quién</div>
+<div class="chips" id="antC"></div>
+</div>
+</div><div class="columna-af con">
+<h3>B · Conducta, en los tres sistemas</h3>
+<p class="quees">La respuesta rara vez es solo motora. Separar los tres sistemas evita el error
   más común en formulación, que es tratar como una sola cosa lo que se piensa, lo que se siente en
   el cuerpo y lo que se hace, cuando muchas veces no van sincronizados.</p>
-  <div class="subbloque">
-    <div class="titulin">Motor · lo observable</div>
-    <div class="chips" id="sisMotor"></div>
-  </div>
-  <div class="subbloque">
-    <div class="titulin">Cognitivo · lo que pasa por la cabeza</div>
-    <div class="chips" id="sisCog"></div>
-  </div>
-  <div class="subbloque">
-    <div class="titulin">Fisiológico · lo que hace el cuerpo</div>
-    <div class="chips" id="sisFis"></div>
-  </div>
+<div class="subbloque">
+<div class="titulin">Motor · lo observable</div>
+<div class="chips" id="sisMotor"></div>
 </div>
-
-<div class="columna-af cons">
-  <h3>C · Consecuencias</h3>
-  <p class="quees">Lo que ocurre después y explica por qué la conducta se mantiene. La clave está
+<div class="subbloque">
+<div class="titulin">Cognitivo · lo que pasa por la cabeza</div>
+<div class="chips" id="sisCog"></div>
+</div>
+<div class="subbloque">
+<div class="titulin">Fisiológico · lo que hace el cuerpo</div>
+<div class="chips" id="sisFis"></div>
+</div>
+</div><div class="columna-af cons">
+<h3>C · Consecuencias</h3>
+<p class="quees">Lo que ocurre después y explica por qué la conducta se mantiene. La clave está
   en distinguir si algo <b>aparece</b> o algo <b>desaparece</b>, y si eso hace que la conducta
   aumente o disminuya. De ahí sale la función.</p>
-  <div class="subbloque">
-    <div class="titulin">Aparece algo · después de la conducta</div>
-    <div class="chips" id="consAparece"></div>
-  </div>
-  <div class="subbloque">
-    <div class="titulin">Desaparece o se evita algo</div>
-    <div class="chips" id="consDesaparece"></div>
-  </div>
-  <div class="subbloque">
-    <div class="titulin">A largo plazo</div>
-    <div class="chips" id="consLargo"></div>
-  </div>
-  <div class="contingencia" style="margin-top:8px">
-    <div><label class="etiqueta">Demora de la consecuencia</label><div class="chips" id="demora"></div></div>
-    <div><label class="etiqueta">Regularidad</label><div class="chips" id="regularidad"></div></div>
-  </div>
+<div class="subbloque">
+<div class="titulin">Aparece algo · después de la conducta</div>
+<div class="chips" id="consAparece"></div>
 </div>
-
-<div class="hipotesis" id="hipotesis"></div>
-
-<section class="paso">
-  <h2><span class="num">2</span>Hacia dónde va la intervención</h2>
-  <p class="ayuda">La función determina la técnica. Marcar aquí obliga a que el plan se derive del
+<div class="subbloque">
+<div class="titulin">Desaparece o se evita algo</div>
+<div class="chips" id="consDesaparece"></div>
+</div>
+<div class="subbloque">
+<div class="titulin">A largo plazo</div>
+<div class="chips" id="consLargo"></div>
+</div>
+<div class="contingencia" style="margin-top:8px">
+<div><label class="etiqueta">Demora de la consecuencia</label><div class="chips" id="demora"></div></div>
+<div><label class="etiqueta">Regularidad</label><div class="chips" id="regularidad"></div></div>
+</div>
+</div></div><div class="sesion-complementos"><details class="sesion-apoyo"><summary>Hipótesis de trabajo</summary><div class="hipotesis" id="hipotesis"></div></details><details class="sesion-apoyo"><summary>Hacia dónde va la intervención</summary><section class="paso">
+<h2 class="sesion-titulo-repetido">Hacia dónde va la intervención</h2>
+<p class="ayuda">La función determina la técnica. Marcar aquí obliga a que el plan se derive del
   análisis y no del repertorio favorito de quien lo hace.</p>
-  <div class="cuerpo">
-    <label class="etiqueta">Sobre los antecedentes</label>
-    <div class="chips" id="intAnt"></div>
-    <label class="etiqueta">Sobre la conducta</label>
-    <div class="chips" id="intCond"></div>
-    <label class="etiqueta">Sobre las consecuencias</label>
-    <div class="chips" id="intCons"></div>
-    <details class="apunte">
-      <summary>Notas del plan (opcional)</summary>
-      <textarea id="planNota" placeholder="Secuencia prevista y qué se mide para saber si funciona."></textarea>
-    </details>
-  </div>
-</section>
+<div class="cuerpo">
+<label class="etiqueta">Sobre los antecedentes</label>
+<div class="chips" id="intAnt"></div>
+<label class="etiqueta">Sobre la conducta</label>
+<div class="chips" id="intCond"></div>
+<label class="etiqueta">Sobre las consecuencias</label>
+<div class="chips" id="intCons"></div>
+<details class="apunte">
+<summary>Notas del plan (opcional)</summary>
+<textarea id="planNota" placeholder="Secuencia prevista y qué se mide para saber si funciona."></textarea>
+</details>
+</div>
+</section></details></div>
+
+
+
+
+
 
 <details class="notas-pro">
-  <summary>Notas del profesional</summary>
-  <div class="cuerpo">
-    <label class="etiqueta">Observaciones del proceso</label>
-    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
-    <label class="etiqueta">Hipótesis de trabajo</label>
-    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
-    <label class="etiqueta">Tarea acordada</label>
-    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
-    <label class="etiqueta">Para la próxima sesión</label>
-    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
-    <p class="ayuda" style="margin-top:12px">
-      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+<summary>Notas del profesional</summary>
+<div class="cuerpo">
+<label class="etiqueta">Observaciones del proceso</label>
+<textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+<label class="etiqueta">Hipótesis de trabajo</label>
+<textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+<label class="etiqueta">Tarea acordada</label>
+<textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+<label class="etiqueta">Para la próxima sesión</label>
+<textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+<p class="ayuda" style="margin-top:12px">
+<label style="cursor:pointer"><input id="proNoImprimir" style="width:auto;margin-right:7px" type="checkbox"/>
       No incluir estas notas al imprimir</label>
-    </p>
-  </div>
-</details>
-
-<div class="barra">
-  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
-  <button onclick="Kit.copiar()">Copiar resumen</button>
-  <button onclick="Kit.guardar(true)">Guardar</button>
-  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</p>
 </div>
-
+</details>
+<div class="barra">
+<button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+<button onclick="Kit.copiar()">Copiar resumen</button>
+<button onclick="Kit.guardar(true)">Guardar</button>
+<button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
 </div>
 <div class="brindis" id="brindis"></div>
-
 <script>
 /* ============================================================
    Kit común de las herramientas.
@@ -985,6 +1026,7 @@ var Kit = (function(){
      motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
      está trabajando. Al imprimir se abren todos. */
   function pasos(){
+    if(document.body.hasAttribute("data-sesion") && !document.body.hasAttribute("data-secuencia")) return;
     /* Un paso es una sección numerada, venga como .paso o como .bloque: la
        tarjeta de crisis lleva dos de sus tres pasos como bloque. */
     var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
@@ -1049,6 +1091,7 @@ var Kit = (function(){
     document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
       var h = s.querySelector("h2");
       if(!h) return;
+      if(h.classList.contains("sesion-titulo-repetido")) return;
       var sueltas = [].slice.call(s.children).filter(function(e){
         return e.classList && e.classList.contains("ayuda");
       });
@@ -1075,6 +1118,19 @@ var Kit = (function(){
     ayudas();
     pasos();
     laminaGuardada();
+    // Las ramas que se activan por respuestas clínicas siguen siendo visibles.
+    document.querySelectorAll(".sesion-apoyo > [hidden]").forEach(function(b){
+      var d = b.parentElement;
+      function sincronizar(){ d.hidden = b.hidden; if(!b.hidden) d.open = true; }
+      sincronizar();
+      new MutationObserver(sincronizar).observe(b,{attributes:true,attributeFilter:["hidden"]});
+    });
+    // Los resúmenes conservan el nombre del apoyo; ayudas independientes del recorrido.
+    document.querySelectorAll("details.sesion-apoyo").forEach(function(d){
+      d.addEventListener("toggle",function(){
+        if(d.open) window.dispatchEvent(new Event("resize"));
+      });
+    });
   }
 
   function iniciar(cfg){

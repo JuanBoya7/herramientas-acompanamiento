@@ -231,8 +231,7 @@ function terminar(){
     $("pesaDespues").value = $("pesaAntes").value;
     $("verdadDespues").value = $("verdadAntes").value;
     valores();
-    setTimeout(() => $("cajaDespues").scrollIntoView({behavior:"smooth", block:"center"}), 300);
-    Kit.brindis("Ahora vuelve a calibrarla");
+    Kit.brindis("Terminó el turno. ¿Qué notaste?");
   } else {
     Kit.brindis("Ese era el ensayo. Ahora con la tuya.");
   }

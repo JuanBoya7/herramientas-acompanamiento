@@ -1,8 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Registro de pensamientos</title>
 <style>
   :root{
@@ -116,148 +117,185 @@
     .combi .cual{border-right:0;border-bottom:1px solid var(--linea)}}
   @media print{ .brindis,.borrar{display:none !important} }
 </style>
-</head>
-<body>
+<style>/* La superficie de trabajo y sus apoyos. Compartida con las tres hojas antiguas. */
+body[data-sesion]{--sesion-verde:#3f7568;--sesion-borde:#d8e3df;--sesion-papel:#fffefa}
+body[data-sesion] header.tapa{padding:20px 24px 15px;border-top:3px solid var(--sesion-verde)}
+body[data-sesion] .tapa .sub{max-width:90ch;font-size:15px;line-height:1.55}
+.sesion-fuente{font-size:12px;color:var(--tinta-suave);margin-top:8px}
+.sesion-fuente>summary{cursor:pointer;width:max-content}
+.sesion-fuente .fuente{font-size:12px;margin-top:6px}
+.sesion-principal{min-width:0}
+.sesion-principal .tablero>*,.sesion-principal .dosmedidores>*{min-width:0}
+body[data-sesion="act-brujula-de-valores"] .dosmedidores input[type=range]{width:100%;min-width:0}
+.sesion-principal>section{border-color:var(--sesion-borde)}
+.sesion-principal h2{color:#294c47}
+.sesion-mesa{display:grid;grid-template-columns:minmax(215px,.8fr) minmax(0,2fr);gap:16px;align-items:start}
+.sesion-preparacion{min-width:0}
+.sesion-preparacion section.paso,.sesion-preparacion section.bloque{padding:17px 18px}
+.sesion-preparacion h2{font-size:16px}
+.sesion-preparacion .medidor{flex-wrap:wrap}
+.sesion-preparacion .medidor label{flex-basis:100%}
+.sesion-preparacion .medidor input{min-width:0}
+.sesion-mesa>.escenario{min-width:0;padding:10px;border-color:var(--sesion-borde);box-shadow:0 5px 20px #234a3f08}
+.sesion-mesa .mandos{gap:7px}
+.sesion-mesa .mandos button{font-size:13px;padding:9px 12px;min-height:40px}
+.sesion-mesa .duracion .chip{font-size:12px;padding:7px 10px}
+.sesion-mesa .escenario>svg{border-radius:9px}
+.sesion-complementos{display:grid;gap:9px;margin:12px 0 20px}
+.sesion-complementos:empty{display:none}
+details.sesion-apoyo{border:1px solid var(--sesion-borde);border-radius:10px;background:#fafcfb;min-width:0}
+details.sesion-apoyo>summary{cursor:pointer;padding:13px 17px;font-size:14px;font-weight:600;color:#4c6560}
+details.sesion-apoyo[open]{background:#fff}
+details.sesion-apoyo[open]>summary{border-bottom:1px solid #e5ede9}
+details.sesion-apoyo>section,details.sesion-apoyo>div{margin:0!important;border:0!important;box-shadow:none!important}
+details.sesion-apoyo>.escenario{padding:16px}
+.sesion-titulo-repetido{display:none!important}
+.sesion-datos{margin:12px 0 0;border-top:1px solid #e8eeeb;padding:9px 5px 0}
+.sesion-datos>summary{cursor:pointer;font-size:12px;color:#647771}
+.sesion-datos .marcas .n{font-size:18px}
+.sesion-datos .marcas .r{font-size:10px}
+body[data-sesion] .sesion-seguridad{border-left:4px solid #a37840}
+body[data-sesion] [hidden]{display:none!important}
+body[data-sesion] button:focus-visible,body[data-sesion] summary:focus-visible{outline:3px solid #74a795;outline-offset:3px}
+body[data-sesion] .chip{min-height:33px}
+body[data-sesion] .matriz{border:0;gap:2px;background:#94aaa1;border-radius:14px}
+body[data-sesion] .cuad{padding:21px 20px;min-height:180px;border:0}
+body[data-sesion] .centro-yo{background:#fffefa;box-shadow:0 3px 12px #294c4720}
+body[data-sesion="fortalezas-del-caracter"] .panel-casillas{border-top:3px solid #b99a4f}
+body[data-sesion="fortalezas-del-caracter"] .casilla.llena{box-shadow:0 2px 8px #4b38110a}
+body[data-sesion="dbt-mente-sabia"] .tres-mentes{gap:14px}
+@media(max-width:900px){.sesion-mesa{grid-template-columns:1fr}.sesion-preparacion{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px}.sesion-preparacion section{margin-bottom:0}.sesion-mesa>.escenario{margin-top:2px}}
+@media(max-width:540px){body[data-sesion] header.tapa{padding:16px}body[data-sesion] h1{font-size:23px}.sesion-preparacion{display:block}.sesion-preparacion section{margin-bottom:10px}body[data-sesion] .cuad{padding:18px 15px;min-height:0}.sesion-mesa{gap:2px}.sesion-mesa .mandos button{flex:1 1 auto}.sesion-datos .marcas{gap:10px}}
+@media(max-width:540px){body[data-sesion="act-brujula-de-valores"] .ambito .cabeza{flex-wrap:wrap}body[data-sesion="act-brujula-de-valores"] .dosmedidores{grid-template-columns:1fr}}
+@media print{.sesion-mesa{display:block}.sesion-fuente>summary,.sesion-apoyo>summary,.sesion-datos{display:none!important}details.sesion-apoyo{border:0}.sesion-titulo-repetido{display:flex!important}.sesion-complementos{display:block}body[data-sesion] .sesion-seguridad{break-inside:avoid}}
+</style></head>
+<body data-sesion="registro-de-pensamientos">
 <div class="envoltura">
-
 <header class="tapa">
-  <h1>Registro de pensamientos</h1>
-  <p class="sub">Herramienta de reestructuración cognitiva. Sirve para revisar, en frío, un momento
-  en que te sentiste mal, y comprobar si el pensamiento que lo disparó resiste la evidencia.</p>
-  <input type="hidden" id="nombre"><input type="hidden" id="fecha"><input type="hidden" id="sesion">
-
-  
-</header>
-
-<section class="paso">
-  <h2><span class="num">1</span>La situación</h2>
-  <p class="ayuda">Qué pasó, sin interpretar todavía. Como si lo describiera una cámara: dónde estabas,
+<h1>Registro de pensamientos</h1>
+<p class="sub">Una situación concreta, lo que sentiste y lo que pasó por tu mente.</p>
+<input id="nombre" type="hidden"/><input id="fecha" type="hidden"/><input id="sesion" type="hidden"/>
+</header><div class="sesion-principal"><section class="paso">
+<h2>La situación</h2>
+<p class="ayuda">Qué pasó, sin interpretar todavía. Como si lo describiera una cámara: dónde estabas,
   con quién, qué se dijo o qué ocurrió.</p>
-  <div class="cuerpo"><textarea id="situacion" placeholder="Ej. Ayer 4:00 p.m., salí de una reunión. Repasé lo que dije y me pareció que había quedado mal."></textarea></div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">2</span>La emoción</h2>
-  <p class="ayuda">Elige una o varias, y califica qué tan intensa fue en ese momento (0 = nada, 100 = lo más intenso que has sentido).</p>
-  <div class="cuerpo">
-    <div class="emociones" id="emociones"></div>
-    <input type="text" id="otraEmocion" placeholder="Otra emoción (opcional)">
-    <div class="medidor" style="margin-top:14px">
-      <label for="intensidad" style="font-size:14px;color:var(--tinta-suave)">Intensidad</label>
-      <input type="range" id="intensidad" min="0" max="100" value="70">
-      <span class="valor" id="vIntensidad">70</span>
-    </div>
-    <div class="medidor" style="margin-top:10px">
-      <label for="corporal" style="font-size:14px;color:var(--tinta-suave);flex:0 0 100%">¿Dónde lo sentiste en el cuerpo?</label>
-      <input type="text" id="corporal" placeholder="Ej. presión en el pecho, mandíbula apretada, insomnio esa noche">
-    </div>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">3</span>El pensamiento automático</h2>
-  <p class="ayuda">La frase exacta que te cruzó por la cabeza. En tus palabras, sin suavizarla.
+<div class="cuerpo"><textarea id="situacion" placeholder="Ej. Ayer 4:00 p.m., salí de una reunión. Repasé lo que dije y me pareció que había quedado mal."></textarea></div>
+</section><section class="paso">
+<h2>La emoción</h2>
+<p class="ayuda">Elige una o varias, y califica qué tan intensa fue en ese momento (0 = nada, 100 = lo más intenso que has sentido).</p>
+<div class="cuerpo">
+<div class="emociones" id="emociones"></div>
+<input id="otraEmocion" placeholder="Otra emoción (opcional)" type="text"/>
+<div class="medidor" style="margin-top:14px">
+<label for="intensidad" style="font-size:14px;color:var(--tinta-suave)">Intensidad</label>
+<input id="intensidad" max="100" min="0" type="range" value="70"/>
+<span class="valor" id="vIntensidad">70</span>
+</div>
+<div class="medidor" style="margin-top:10px">
+<label for="corporal" style="font-size:14px;color:var(--tinta-suave);flex:0 0 100%">¿Dónde lo sentiste en el cuerpo?</label>
+<input id="corporal" placeholder="Ej. presión en el pecho, mandíbula apretada, insomnio esa noche" type="text"/>
+</div>
+</div>
+</section><section class="paso">
+<h2>El pensamiento automático</h2>
+<p class="ayuda">La frase exacta que te cruzó por la cabeza. En tus palabras, sin suavizarla.
   Si hubo varias, quédate con la que más pesó ("el pensamiento caliente").</p>
-  <div class="cuerpo">
-    <textarea id="pensamiento" placeholder="Ej. 'Me salió mal, no sirvo para esto.'"></textarea>
-    <div class="medidor" style="margin-top:12px">
-      <label for="creencia" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo creíste, de 0 a 100?</label>
-      <input type="range" id="creencia" min="0" max="100" value="80">
-      <span class="valor" id="vCreencia">80</span>
-    </div>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">4</span>¿Qué trampa del pensamiento reconoces?</h2>
-  <p class="ayuda">Marca las que apliquen. No se trata de que el pensamiento sea "falso": se trata de
+<div class="cuerpo">
+<textarea id="pensamiento" placeholder="Ej. 'Me salió mal, no sirvo para esto.'"></textarea>
+<div class="medidor" style="margin-top:12px">
+<label for="creencia" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo creíste, de 0 a 100?</label>
+<input id="creencia" max="100" min="0" type="range" value="80"/>
+<span class="valor" id="vCreencia">80</span>
+</div>
+</div>
+</section></div><div class="sesion-complementos"><details class="sesion-apoyo"><summary>¿Qué trampa del pensamiento reconoces?</summary><section class="paso">
+<h2 class="sesion-titulo-repetido">¿Qué trampa del pensamiento reconoces?</h2>
+<p class="ayuda">Marca las que apliquen. No se trata de que el pensamiento sea "falso": se trata de
   ver si la mente tomó un atajo.</p>
-  <div class="cuerpo"><div class="distorsiones" id="distorsiones"></div></div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">5</span>La evidencia</h2>
-  <p class="ayuda">Aquí es donde el registro hace su trabajo. Sé tan honesto en la columna de la izquierda
+<div class="cuerpo"><div class="distorsiones" id="distorsiones"></div></div>
+</section></details><details class="sesion-apoyo"><summary>La evidencia</summary><section class="paso">
+<h2 class="sesion-titulo-repetido">La evidencia</h2>
+<p class="ayuda">Aquí es donde el registro hace su trabajo. Sé tan honesto en la columna de la izquierda
   como en la de la derecha.</p>
-  <div class="cuerpo">
-    <label style="font-size:14px;font-weight:600">Hechos que APOYAN el pensamiento</label>
-    <textarea id="aFavor" placeholder="Solo hechos verificables, no interpretaciones."></textarea>
-    <label style="font-size:14px;font-weight:600;display:block;margin-top:14px">Hechos que NO lo apoyan</label>
-    <div class="pistas">
-      <b>Si te cuesta encontrarlos, pregúntate:</b>
-      <ul>
-        <li>¿Qué le diría a un amigo que me contara exactamente esto?</li>
-        <li>¿Ha pasado antes algo parecido? ¿Cómo terminó realmente?</li>
-        <li>¿Estoy tomando un momento como si fuera toda la historia?</li>
-        <li>Dentro de un año, ¿qué tanto va a pesar esto?</li>
-        <li>¿Qué información me falta todavía?</li>
-      </ul>
-    </div>
-    <textarea id="enContra"></textarea>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">6</span>Un pensamiento alternativo</h2>
-  <p class="ayuda">No un pensamiento positivo: uno <em>más completo</em>, que incluya toda la evidencia
+<div class="cuerpo">
+<label style="font-size:14px;font-weight:600">Hechos que APOYAN el pensamiento</label>
+<textarea id="aFavor" placeholder="Solo hechos verificables, no interpretaciones."></textarea>
+<label style="font-size:14px;font-weight:600;display:block;margin-top:14px">Hechos que NO lo apoyan</label>
+<div class="pistas">
+<b>Si te cuesta encontrarlos, pregúntate:</b>
+<ul>
+<li>¿Qué le diría a un amigo que me contara exactamente esto?</li>
+<li>¿Ha pasado antes algo parecido? ¿Cómo terminó realmente?</li>
+<li>¿Estoy tomando un momento como si fuera toda la historia?</li>
+<li>Dentro de un año, ¿qué tanto va a pesar esto?</li>
+<li>¿Qué información me falta todavía?</li>
+</ul>
+</div>
+<textarea id="enContra"></textarea>
+</div>
+</section></details><details class="sesion-apoyo"><summary>Un pensamiento alternativo</summary><section class="paso">
+<h2 class="sesion-titulo-repetido">Un pensamiento alternativo</h2>
+<p class="ayuda">No un pensamiento positivo: uno <em>más completo</em>, que incluya toda la evidencia
   de arriba. Debe ser algo que puedas creerte de verdad.</p>
-  <div class="cuerpo">
-    <textarea id="alternativo" placeholder="Ej. 'Salió peor de lo que esperaba. Eso me preocupa y tiene solución: puedo hablarlo y todavía hay margen.'"></textarea>
-    <div class="medidor" style="margin-top:12px">
-      <label for="creenciaAlt" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo crees?</label>
-      <input type="range" id="creenciaAlt" min="0" max="100" value="50">
-      <span class="valor" id="vCreenciaAlt">50</span>
-    </div>
-  </div>
-</section>
+<div class="cuerpo">
+<textarea id="alternativo" placeholder="Ej. 'Salió peor de lo que esperaba. Eso me preocupa y tiene solución: puedo hablarlo y todavía hay margen.'"></textarea>
+<div class="medidor" style="margin-top:12px">
+<label for="creenciaAlt" style="font-size:14px;color:var(--tinta-suave)">¿Cuánto te lo crees?</label>
+<input id="creenciaAlt" max="100" min="0" type="range" value="50"/>
+<span class="valor" id="vCreenciaAlt">50</span>
+</div>
+</div>
+</section></details><details class="sesion-apoyo"><summary>Cómo quedé</summary><section class="paso cierre">
+<h2 class="sesion-titulo-repetido">Cómo quedé</h2>
+<p class="ayuda">Vuelve a calificar la emoción del paso 2, ahora, después de haber escrito todo esto.</p>
+<div class="cuerpo">
+<div class="medidor">
+<label for="intensidadFinal" style="font-size:14px;color:var(--tinta-suave)">Intensidad ahora</label>
+<input id="intensidadFinal" max="100" min="0" type="range" value="70"/>
+<span class="valor" id="vIntensidadFinal">70</span>
+</div>
+<div class="comparacion">
+<div><div class="etiqueta">Emoción antes</div><div class="cifra" id="cAntes">70</div></div>
+<div><div class="etiqueta">Emoción después</div><div class="cifra" id="cDespues">70</div></div>
+<div><div class="etiqueta">Creencia en el pensamiento</div><div class="cifra" id="cCreencia">80 → 50</div></div>
+</div>
+<div class="delta" id="delta"></div>
+<label style="font-size:14px;font-weight:600;display:block;margin-top:16px">Un paso concreto para esta semana</label>
+<textarea id="paso" placeholder="Pequeño, observable y con fecha. Ej. 'El martes le escribo para pedir una reunión corta.'"></textarea>
+</div>
+</section></details></div>
 
-<section class="paso cierre">
-  <h2><span class="num">7</span>Cómo quedé</h2>
-  <p class="ayuda">Vuelve a calificar la emoción del paso 2, ahora, después de haber escrito todo esto.</p>
-  <div class="cuerpo">
-    <div class="medidor">
-      <label for="intensidadFinal" style="font-size:14px;color:var(--tinta-suave)">Intensidad ahora</label>
-      <input type="range" id="intensidadFinal" min="0" max="100" value="70">
-      <span class="valor" id="vIntensidadFinal">70</span>
-    </div>
-    <div class="comparacion">
-      <div><div class="etiqueta">Emoción antes</div><div class="cifra" id="cAntes">70</div></div>
-      <div><div class="etiqueta">Emoción después</div><div class="cifra" id="cDespues">70</div></div>
-      <div><div class="etiqueta">Creencia en el pensamiento</div><div class="cifra" id="cCreencia">80 → 50</div></div>
-    </div>
-    <div class="delta" id="delta"></div>
-    <label style="font-size:14px;font-weight:600;display:block;margin-top:16px">Un paso concreto para esta semana</label>
-    <textarea id="paso" placeholder="Pequeño, observable y con fecha. Ej. 'El martes le escribo para pedir una reunión corta.'"></textarea>
-  </div>
-</section>
+
+
+
+
+
 
 <details class="notas-pro">
-  <summary>Notas del profesional</summary>
-  <div class="cuerpo">
-    <label class="etiqueta">Observaciones del proceso</label>
-    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
-    <label class="etiqueta">Hipótesis de trabajo</label>
-    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
-    <label class="etiqueta">Tarea acordada</label>
-    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
-    <label class="etiqueta">Para la próxima sesión</label>
-    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
-    <p class="ayuda" style="margin-top:12px">
-      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+<summary>Notas del profesional</summary>
+<div class="cuerpo">
+<label class="etiqueta">Observaciones del proceso</label>
+<textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+<label class="etiqueta">Hipótesis de trabajo</label>
+<textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+<label class="etiqueta">Tarea acordada</label>
+<textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+<label class="etiqueta">Para la próxima sesión</label>
+<textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+<p class="ayuda" style="margin-top:12px">
+<label style="cursor:pointer"><input id="proNoImprimir" style="width:auto;margin-right:7px" type="checkbox"/>
       No incluir estas notas al imprimir</label>
-    </p>
-  </div>
+</p>
+</div>
 </details>
-
 <div class="barra">
-  <button onclick="Kit.copiar()">Copiar resumen</button>
-  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
-  <button onclick="guardar()">Guardar en este equipo</button>
-  <button onclick="limpiar()">Registro nuevo</button>
+<button onclick="Kit.copiar()">Copiar resumen</button>
+<button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+<button onclick="guardar()">Guardar en este equipo</button>
+<button onclick="limpiar()">Registro nuevo</button>
 </div>
 </div>
 <div class="brindis" id="brindis"></div>
-
 <script>
 const EMOCIONES = ["Ansiedad","Tristeza","Rabia","Culpa","Vergüenza","Miedo","Frustración","Soledad","Desánimo","Angustia"];
 const DISTORSIONES = [
@@ -858,6 +896,7 @@ var Kit = (function(){
      motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
      está trabajando. Al imprimir se abren todos. */
   function pasos(){
+    if(document.body.hasAttribute("data-sesion") && !document.body.hasAttribute("data-secuencia")) return;
     /* Un paso es una sección numerada, venga como .paso o como .bloque: la
        tarjeta de crisis lleva dos de sus tres pasos como bloque. */
     var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
@@ -922,6 +961,7 @@ var Kit = (function(){
     document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
       var h = s.querySelector("h2");
       if(!h) return;
+      if(h.classList.contains("sesion-titulo-repetido")) return;
       var sueltas = [].slice.call(s.children).filter(function(e){
         return e.classList && e.classList.contains("ayuda");
       });
@@ -948,6 +988,19 @@ var Kit = (function(){
     ayudas();
     pasos();
     laminaGuardada();
+    // Las ramas que se activan por respuestas clínicas siguen siendo visibles.
+    document.querySelectorAll(".sesion-apoyo > [hidden]").forEach(function(b){
+      var d = b.parentElement;
+      function sincronizar(){ d.hidden = b.hidden; if(!b.hidden) d.open = true; }
+      sincronizar();
+      new MutationObserver(sincronizar).observe(b,{attributes:true,attributeFilter:["hidden"]});
+    });
+    // Los resúmenes conservan el nombre del apoyo; ayudas independientes del recorrido.
+    document.querySelectorAll("details.sesion-apoyo").forEach(function(d){
+      d.addEventListener("toggle",function(){
+        if(d.open) window.dispatchEvent(new Event("resize"));
+      });
+    });
   }
 
   function iniciar(cfg){

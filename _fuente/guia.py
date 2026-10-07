@@ -12,6 +12,7 @@ from pathlib import Path
 
 import guiones
 import rieles
+import sesion
 
 SALTO = chr(10)
 
@@ -886,6 +887,7 @@ def ficha(h, color, enfoque):
         <h3><a href="{h['archivo']}">{h['titulo']}</a></h3>
         <span class="etq" style="color:{color};background:{color}1a">{h['etq']}</span>
       </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> {sesion.descripcion(h['archivo'])}</p>
       <p class="paraque">{h['paraque']}</p>
       <div class="rot">Conviene en</div>
       <ul>

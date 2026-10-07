@@ -1,8 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Por dónde entrar</title>
 <style>
   :root{
@@ -335,71 +336,112 @@
     .panel-hex{position:static;break-inside:avoid}
   }
 </style>
-</head>
-<body>
+<style>/* La superficie de trabajo y sus apoyos. Compartida con las tres hojas antiguas. */
+body[data-sesion]{--sesion-verde:#3f7568;--sesion-borde:#d8e3df;--sesion-papel:#fffefa}
+body[data-sesion] header.tapa{padding:20px 24px 15px;border-top:3px solid var(--sesion-verde)}
+body[data-sesion] .tapa .sub{max-width:90ch;font-size:15px;line-height:1.55}
+.sesion-fuente{font-size:12px;color:var(--tinta-suave);margin-top:8px}
+.sesion-fuente>summary{cursor:pointer;width:max-content}
+.sesion-fuente .fuente{font-size:12px;margin-top:6px}
+.sesion-principal{min-width:0}
+.sesion-principal .tablero>*,.sesion-principal .dosmedidores>*{min-width:0}
+body[data-sesion="act-brujula-de-valores"] .dosmedidores input[type=range]{width:100%;min-width:0}
+.sesion-principal>section{border-color:var(--sesion-borde)}
+.sesion-principal h2{color:#294c47}
+.sesion-mesa{display:grid;grid-template-columns:minmax(215px,.8fr) minmax(0,2fr);gap:16px;align-items:start}
+.sesion-preparacion{min-width:0}
+.sesion-preparacion section.paso,.sesion-preparacion section.bloque{padding:17px 18px}
+.sesion-preparacion h2{font-size:16px}
+.sesion-preparacion .medidor{flex-wrap:wrap}
+.sesion-preparacion .medidor label{flex-basis:100%}
+.sesion-preparacion .medidor input{min-width:0}
+.sesion-mesa>.escenario{min-width:0;padding:10px;border-color:var(--sesion-borde);box-shadow:0 5px 20px #234a3f08}
+.sesion-mesa .mandos{gap:7px}
+.sesion-mesa .mandos button{font-size:13px;padding:9px 12px;min-height:40px}
+.sesion-mesa .duracion .chip{font-size:12px;padding:7px 10px}
+.sesion-mesa .escenario>svg{border-radius:9px}
+.sesion-complementos{display:grid;gap:9px;margin:12px 0 20px}
+.sesion-complementos:empty{display:none}
+details.sesion-apoyo{border:1px solid var(--sesion-borde);border-radius:10px;background:#fafcfb;min-width:0}
+details.sesion-apoyo>summary{cursor:pointer;padding:13px 17px;font-size:14px;font-weight:600;color:#4c6560}
+details.sesion-apoyo[open]{background:#fff}
+details.sesion-apoyo[open]>summary{border-bottom:1px solid #e5ede9}
+details.sesion-apoyo>section,details.sesion-apoyo>div{margin:0!important;border:0!important;box-shadow:none!important}
+details.sesion-apoyo>.escenario{padding:16px}
+.sesion-titulo-repetido{display:none!important}
+.sesion-datos{margin:12px 0 0;border-top:1px solid #e8eeeb;padding:9px 5px 0}
+.sesion-datos>summary{cursor:pointer;font-size:12px;color:#647771}
+.sesion-datos .marcas .n{font-size:18px}
+.sesion-datos .marcas .r{font-size:10px}
+body[data-sesion] .sesion-seguridad{border-left:4px solid #a37840}
+body[data-sesion] [hidden]{display:none!important}
+body[data-sesion] button:focus-visible,body[data-sesion] summary:focus-visible{outline:3px solid #74a795;outline-offset:3px}
+body[data-sesion] .chip{min-height:33px}
+body[data-sesion] .matriz{border:0;gap:2px;background:#94aaa1;border-radius:14px}
+body[data-sesion] .cuad{padding:21px 20px;min-height:180px;border:0}
+body[data-sesion] .centro-yo{background:#fffefa;box-shadow:0 3px 12px #294c4720}
+body[data-sesion="fortalezas-del-caracter"] .panel-casillas{border-top:3px solid #b99a4f}
+body[data-sesion="fortalezas-del-caracter"] .casilla.llena{box-shadow:0 2px 8px #4b38110a}
+body[data-sesion="dbt-mente-sabia"] .tres-mentes{gap:14px}
+@media(max-width:900px){.sesion-mesa{grid-template-columns:1fr}.sesion-preparacion{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px}.sesion-preparacion section{margin-bottom:0}.sesion-mesa>.escenario{margin-top:2px}}
+@media(max-width:540px){body[data-sesion] header.tapa{padding:16px}body[data-sesion] h1{font-size:23px}.sesion-preparacion{display:block}.sesion-preparacion section{margin-bottom:10px}body[data-sesion] .cuad{padding:18px 15px;min-height:0}.sesion-mesa{gap:2px}.sesion-mesa .mandos button{flex:1 1 auto}.sesion-datos .marcas{gap:10px}}
+@media(max-width:540px){body[data-sesion="act-brujula-de-valores"] .ambito .cabeza{flex-wrap:wrap}body[data-sesion="act-brujula-de-valores"] .dosmedidores{grid-template-columns:1fr}}
+@media print{.sesion-mesa{display:block}.sesion-fuente>summary,.sesion-apoyo>summary,.sesion-datos{display:none!important}details.sesion-apoyo{border:0}.sesion-titulo-repetido{display:flex!important}.sesion-complementos{display:block}body[data-sesion] .sesion-seguridad{break-inside:avoid}}
+</style></head>
+<body data-sesion="act-por-donde-entrar">
 <div class="envoltura">
-
 <header class="tapa">
-  <h1>Por dónde entrar</h1>
-  <p class="sub">Esta hoja no es para el consultante: es el mapa con el que se decide por dónde empezar. Se ubican los seis procesos del modelo hexagonal como continuos, el hexágono se deforma, y lo que devuelve es una sola cosa útil: cuál es la puerta de entrada y con qué hoja de estas seguir.</p>
-  <p class="fuente">Modelo hexagonal de la flexibilidad psicológica y estilos de respuesta, en Díaz Corbobés, MANUAL ACT §1.3 y §1.3.2.</p>
-
-</header>
-
-<section class="bloque">
-  <h2><span class="num">1</span>Los seis procesos</h2>
-  <p class="ayuda">Continuos, no casillas: a la izquierda el polo rígido, a la derecha el flexible.
+<h1>Por dónde entrar</h1>
+<p class="sub">Un mapa de los seis procesos para orientar la formulación y elegir por dónde trabajar.</p>
+<details class="sesion-fuente"><summary>Fuente</summary><p class="fuente">Modelo hexagonal de la flexibilidad psicológica y estilos de respuesta, en Díaz Corbobés, MANUAL ACT §1.3 y §1.3.2.</p></details>
+</header><div class="sesion-principal"><section class="bloque">
+<h2>Los seis procesos</h2>
+<p class="ayuda">Continuos, no casillas: a la izquierda el polo rígido, a la derecha el flexible.
   Se ubica dónde está esta persona hoy, con este problema.</p>
-</section>
-
-<div class="tablero">
-  <div class="panel-hex">
-    <svg class="hex" id="hex" viewBox="0 0 500 400" role="img"
-      aria-label="Hexágono de flexibilidad psicológica"></svg>
-    <div class="estilos" id="estilos"></div>
-  </div>
-  <div class="procesos" id="procesos"></div>
+</section><div class="tablero">
+<div class="panel-hex">
+<svg aria-label="Hexágono de flexibilidad psicológica" class="hex" id="hex" role="img" viewbox="0 0 500 400"></svg>
+<div class="estilos" id="estilos"></div>
 </div>
+<div class="procesos" id="procesos"></div>
+</div><section class="bloque lectura" id="lectura">
+<div class="campo" style="margin-bottom:6px"><div class="etq">Puerta de entrada</div></div>
+<div class="nombre" id="lNombre">—</div>
+<p class="metafora" id="lMetafora"></p>
+<div class="campo"><div class="etq">Por dónde empezar</div><p id="lFoco"></p></div>
+<div class="campo"><div class="etq">Con qué hoja seguir</div><p id="lSigue"></p></div>
+<div class="pregunta" id="lPregunta"></div>
+<div id="lBandera"></div>
+<div class="combinaciones" id="combinaciones"></div>
+</section></div><div class="sesion-complementos"></div>
 
-<section class="bloque lectura" id="lectura">
-  <div class="campo" style="margin-bottom:6px"><div class="etq">Puerta de entrada</div></div>
-  <div class="nombre" id="lNombre">—</div>
-  <p class="metafora" id="lMetafora"></p>
-  <div class="campo"><div class="etq">Por dónde empezar</div><p id="lFoco"></p></div>
-  <div class="campo"><div class="etq">Con qué hoja seguir</div><p id="lSigue"></p></div>
-  <div class="pregunta" id="lPregunta"></div>
-  <div id="lBandera"></div>
-  <div class="combinaciones" id="combinaciones"></div>
-</section>
+
 
 <details class="notas-pro">
-  <summary>Notas del profesional</summary>
-  <div class="cuerpo">
-    <label class="etiqueta">Observaciones del proceso</label>
-    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
-    <label class="etiqueta">Hipótesis de trabajo</label>
-    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
-    <label class="etiqueta">Tarea acordada</label>
-    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
-    <label class="etiqueta">Para la próxima sesión</label>
-    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
-    <p class="ayuda" style="margin-top:12px">
-      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+<summary>Notas del profesional</summary>
+<div class="cuerpo">
+<label class="etiqueta">Observaciones del proceso</label>
+<textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+<label class="etiqueta">Hipótesis de trabajo</label>
+<textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+<label class="etiqueta">Tarea acordada</label>
+<textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+<label class="etiqueta">Para la próxima sesión</label>
+<textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+<p class="ayuda" style="margin-top:12px">
+<label style="cursor:pointer"><input id="proNoImprimir" style="width:auto;margin-right:7px" type="checkbox"/>
       No incluir estas notas al imprimir</label>
-    </p>
-  </div>
-</details>
-
-<div class="barra">
-  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
-  <button onclick="Kit.copiar()">Copiar resumen</button>
-  <button onclick="Kit.guardar(true)">Guardar</button>
-  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</p>
 </div>
-
+</details>
+<div class="barra">
+<button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+<button onclick="Kit.copiar()">Copiar resumen</button>
+<button onclick="Kit.guardar(true)">Guardar</button>
+<button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
 </div>
 <div class="brindis" id="brindis"></div>
-
 <script>
 /* ============================================================
    Kit común de las herramientas.
@@ -919,6 +961,7 @@ var Kit = (function(){
      motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
      está trabajando. Al imprimir se abren todos. */
   function pasos(){
+    if(document.body.hasAttribute("data-sesion") && !document.body.hasAttribute("data-secuencia")) return;
     /* Un paso es una sección numerada, venga como .paso o como .bloque: la
        tarjeta de crisis lleva dos de sus tres pasos como bloque. */
     var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
@@ -983,6 +1026,7 @@ var Kit = (function(){
     document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
       var h = s.querySelector("h2");
       if(!h) return;
+      if(h.classList.contains("sesion-titulo-repetido")) return;
       var sueltas = [].slice.call(s.children).filter(function(e){
         return e.classList && e.classList.contains("ayuda");
       });
@@ -1009,6 +1053,19 @@ var Kit = (function(){
     ayudas();
     pasos();
     laminaGuardada();
+    // Las ramas que se activan por respuestas clínicas siguen siendo visibles.
+    document.querySelectorAll(".sesion-apoyo > [hidden]").forEach(function(b){
+      var d = b.parentElement;
+      function sincronizar(){ d.hidden = b.hidden; if(!b.hidden) d.open = true; }
+      sincronizar();
+      new MutationObserver(sincronizar).observe(b,{attributes:true,attributeFilter:["hidden"]});
+    });
+    // Los resúmenes conservan el nombre del apoyo; ayudas independientes del recorrido.
+    document.querySelectorAll("details.sesion-apoyo").forEach(function(d){
+      d.addEventListener("toggle",function(){
+        if(d.open) window.dispatchEvent(new Event("resize"));
+      });
+    });
   }
 
   function iniciar(cfg){

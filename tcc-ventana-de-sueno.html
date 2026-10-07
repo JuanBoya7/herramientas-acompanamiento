@@ -1,8 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Ventana de sueño</title>
 <style>
   :root{
@@ -312,125 +313,165 @@
   .ventana span{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--tinta-suave)}
   @media (max-width:520px){.ventana{grid-template-columns:1fr}}
 </style>
-</head>
-<body>
+<style>/* La superficie de trabajo y sus apoyos. Compartida con las tres hojas antiguas. */
+body[data-sesion]{--sesion-verde:#3f7568;--sesion-borde:#d8e3df;--sesion-papel:#fffefa}
+body[data-sesion] header.tapa{padding:20px 24px 15px;border-top:3px solid var(--sesion-verde)}
+body[data-sesion] .tapa .sub{max-width:90ch;font-size:15px;line-height:1.55}
+.sesion-fuente{font-size:12px;color:var(--tinta-suave);margin-top:8px}
+.sesion-fuente>summary{cursor:pointer;width:max-content}
+.sesion-fuente .fuente{font-size:12px;margin-top:6px}
+.sesion-principal{min-width:0}
+.sesion-principal .tablero>*,.sesion-principal .dosmedidores>*{min-width:0}
+body[data-sesion="act-brujula-de-valores"] .dosmedidores input[type=range]{width:100%;min-width:0}
+.sesion-principal>section{border-color:var(--sesion-borde)}
+.sesion-principal h2{color:#294c47}
+.sesion-mesa{display:grid;grid-template-columns:minmax(215px,.8fr) minmax(0,2fr);gap:16px;align-items:start}
+.sesion-preparacion{min-width:0}
+.sesion-preparacion section.paso,.sesion-preparacion section.bloque{padding:17px 18px}
+.sesion-preparacion h2{font-size:16px}
+.sesion-preparacion .medidor{flex-wrap:wrap}
+.sesion-preparacion .medidor label{flex-basis:100%}
+.sesion-preparacion .medidor input{min-width:0}
+.sesion-mesa>.escenario{min-width:0;padding:10px;border-color:var(--sesion-borde);box-shadow:0 5px 20px #234a3f08}
+.sesion-mesa .mandos{gap:7px}
+.sesion-mesa .mandos button{font-size:13px;padding:9px 12px;min-height:40px}
+.sesion-mesa .duracion .chip{font-size:12px;padding:7px 10px}
+.sesion-mesa .escenario>svg{border-radius:9px}
+.sesion-complementos{display:grid;gap:9px;margin:12px 0 20px}
+.sesion-complementos:empty{display:none}
+details.sesion-apoyo{border:1px solid var(--sesion-borde);border-radius:10px;background:#fafcfb;min-width:0}
+details.sesion-apoyo>summary{cursor:pointer;padding:13px 17px;font-size:14px;font-weight:600;color:#4c6560}
+details.sesion-apoyo[open]{background:#fff}
+details.sesion-apoyo[open]>summary{border-bottom:1px solid #e5ede9}
+details.sesion-apoyo>section,details.sesion-apoyo>div{margin:0!important;border:0!important;box-shadow:none!important}
+details.sesion-apoyo>.escenario{padding:16px}
+.sesion-titulo-repetido{display:none!important}
+.sesion-datos{margin:12px 0 0;border-top:1px solid #e8eeeb;padding:9px 5px 0}
+.sesion-datos>summary{cursor:pointer;font-size:12px;color:#647771}
+.sesion-datos .marcas .n{font-size:18px}
+.sesion-datos .marcas .r{font-size:10px}
+body[data-sesion] .sesion-seguridad{border-left:4px solid #a37840}
+body[data-sesion] [hidden]{display:none!important}
+body[data-sesion] button:focus-visible,body[data-sesion] summary:focus-visible{outline:3px solid #74a795;outline-offset:3px}
+body[data-sesion] .chip{min-height:33px}
+body[data-sesion] .matriz{border:0;gap:2px;background:#94aaa1;border-radius:14px}
+body[data-sesion] .cuad{padding:21px 20px;min-height:180px;border:0}
+body[data-sesion] .centro-yo{background:#fffefa;box-shadow:0 3px 12px #294c4720}
+body[data-sesion="fortalezas-del-caracter"] .panel-casillas{border-top:3px solid #b99a4f}
+body[data-sesion="fortalezas-del-caracter"] .casilla.llena{box-shadow:0 2px 8px #4b38110a}
+body[data-sesion="dbt-mente-sabia"] .tres-mentes{gap:14px}
+@media(max-width:900px){.sesion-mesa{grid-template-columns:1fr}.sesion-preparacion{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px}.sesion-preparacion section{margin-bottom:0}.sesion-mesa>.escenario{margin-top:2px}}
+@media(max-width:540px){body[data-sesion] header.tapa{padding:16px}body[data-sesion] h1{font-size:23px}.sesion-preparacion{display:block}.sesion-preparacion section{margin-bottom:10px}body[data-sesion] .cuad{padding:18px 15px;min-height:0}.sesion-mesa{gap:2px}.sesion-mesa .mandos button{flex:1 1 auto}.sesion-datos .marcas{gap:10px}}
+@media(max-width:540px){body[data-sesion="act-brujula-de-valores"] .ambito .cabeza{flex-wrap:wrap}body[data-sesion="act-brujula-de-valores"] .dosmedidores{grid-template-columns:1fr}}
+@media print{.sesion-mesa{display:block}.sesion-fuente>summary,.sesion-apoyo>summary,.sesion-datos{display:none!important}details.sesion-apoyo{border:0}.sesion-titulo-repetido{display:flex!important}.sesion-complementos{display:block}body[data-sesion] .sesion-seguridad{break-inside:avoid}}
+</style></head>
+<body data-sesion="tcc-ventana-de-sueno">
 <div class="envoltura">
-
 <header class="tapa">
-  <h1>Ventana de sueño</h1>
-  <p class="sub">Quedarse más tiempo en la cama para recuperar sueño produce un sueño superficial y cortado. La ventana hace lo contrario: el tiempo en cama se ajusta al tiempo que de verdad se duerme, con una hora fija para levantarse, y se va ampliando de a quince minutos a medida que el sueño se consolida. Menos cama, sueño más continuo.</p>
-  <p class="fuente">Terapia de restricción del sueño y control de estímulos, en Perlis, Jungquist, Smith y Posner, Cognitive Behavioral Treatment of Insomnia: A Session-by-Session Guide (2005), caps. 2 y 4 y apéndice 1.</p>
-  <div class="campos-id">
-    <label>Nombre o iniciales <input type="text" id="nombre" placeholder="Opcional"></label>
-    <label>Fecha <input type="text" id="fecha"></label>
-    <label>Sesión <input type="text" id="sesion" placeholder="Ej. Sesión 3"></label>
-    <label class="solo-clinica">Profesional <input type="text" id="profesional" placeholder="Quien acompaña"></label>
-  </div>
-</header>
-
-<section class="paso">
-  <h2><span class="num">1</span>La semana, en promedio</h2>
-  <p class="ayuda">Del diario de sueño de al menos una semana: cuánto tiempo se pasó en la cama y
+<h1>Ventana de sueño</h1>
+<p class="sub">Revisa el diario de sueño y los antecedentes con el profesional antes de acordar una ventana.</p>
+<details class="sesion-fuente"><summary>Fuente</summary><p class="fuente">Terapia de restricción del sueño y control de estímulos, en Perlis, Jungquist, Smith y Posner, Cognitive Behavioral Treatment of Insomnia: A Session-by-Session Guide (2005), caps. 2 y 4 y apéndice 1.</p></details>
+<details class="sesion-fuente"><summary>Datos del registro</summary><div class="campos-id">
+<label>Nombre o iniciales <input id="nombre" placeholder="Opcional" type="text"/></label>
+<label>Fecha <input id="fecha" type="text"/></label>
+<label>Sesión <input id="sesion" placeholder="Ej. Sesión 3" type="text"/></label>
+<label class="solo-clinica">Profesional <input id="profesional" placeholder="Quien acompaña" type="text"/></label>
+</div></details>
+</header><div class="sesion-principal"><section class="bloque sesion-seguridad"><h2>Antes de acordar la ventana</h2><label class="etiqueta">Antecedentes que obligan a consultar antes de restringir el sueño</label><div class="chips" id="antecedentes"></div><div id="bandera"></div></section><section class="paso">
+<h2>La semana, en promedio</h2>
+<p class="ayuda">Del diario de sueño de al menos una semana: cuánto tiempo se pasó en la cama y
   cuánto se durmió de verdad, en promedio por noche.</p>
-  <div class="cuerpo">
-    <div class="medidor">
-      <label for="tib">Tiempo en la cama</label>
-      <input type="range" id="tib" min="4" max="12" step="0.25" value="9">
-      <span class="valor" id="vTib">9 h</span>
-    </div>
-    <div class="medidor" style="margin-top:8px">
-      <label for="tst">Tiempo dormido</label>
-      <input type="range" id="tst" min="2" max="10" step="0.25" value="6">
-      <span class="valor" id="vTst">6 h</span>
-    </div>
-    <div class="ef"><b id="vEf">67 %</b><span id="lEf">de eficiencia: el tiempo dormido sobre el tiempo en la cama.</span></div>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">2</span>La ventana</h2>
-  <p class="ayuda">Primero se fija la hora de levantarse, igual los siete días. La hora de acostarse
-  se corre hacia más tarde hasta que el tiempo en la cama iguale el tiempo dormido.</p>
-  <div class="cuerpo">
-    <div class="medidor">
-      <label for="levantar">Hora de levantarse</label>
-      <input type="range" id="levantar" min="240" max="600" step="15" value="390">
-      <span class="valor" id="vLevantar">6:30</span>
-    </div>
-    <div class="ventana">
-      <div><b id="vAcostar">—</b><span>acostarse</span></div>
-      <div><b id="vLev2">—</b><span>levantarse</span></div>
-      <div><b id="vLargo">—</b><span>en la cama</span></div>
-    </div>
-    <div id="avisoMinimo"></div>
-  </div>
-</section>
-
-<div class="escenario">
-  <svg class="noche" id="noche" viewBox="0 0 680 210" role="img"
-    aria-label="El tiempo en la cama antes y dentro de la ventana, con los momentos de sueño y de vigilia"></svg>
-  <div class="fase" id="fase">Más tiempo en la cama no es más sueño</div>
-  <div class="fase-sub" id="faseSub">Arriba, una noche de hoy. Abajo, la ventana.</div>
-  <div class="mandos">
-    <button type="button" class="arrancar" id="btnArrancar" onclick="arrancar()">Ver cómo cambia</button>
-  </div>
+<div class="cuerpo">
+<div class="medidor">
+<label for="tib">Tiempo en la cama</label>
+<input id="tib" max="12" min="4" step="0.25" type="range" value="9"/>
+<span class="valor" id="vTib">9 h</span>
 </div>
+<div class="medidor" style="margin-top:8px">
+<label for="tst">Tiempo dormido</label>
+<input id="tst" max="10" min="2" step="0.25" type="range" value="6"/>
+<span class="valor" id="vTst">6 h</span>
+</div>
+<div class="ef"><b id="vEf">67 %</b><span id="lEf">de eficiencia: el tiempo dormido sobre el tiempo en la cama.</span></div>
+</div>
+</section><section class="paso">
+<h2>La ventana</h2>
+<p class="ayuda">Primero se fija la hora de levantarse, igual los siete días. La hora de acostarse
+  se corre hacia más tarde hasta que el tiempo en la cama iguale el tiempo dormido.</p>
+<div class="cuerpo">
+<div class="medidor">
+<label for="levantar">Hora de levantarse</label>
+<input id="levantar" max="600" min="240" step="15" type="range" value="390"/>
+<span class="valor" id="vLevantar">6:30</span>
+</div>
+<div class="ventana">
+<div><b id="vAcostar">—</b><span>acostarse</span></div>
+<div><b id="vLev2">—</b><span>levantarse</span></div>
+<div><b id="vLargo">—</b><span>en la cama</span></div>
+</div>
+<div id="avisoMinimo"></div>
+</div>
+</section><div class="escenario">
+<svg aria-label="El tiempo en la cama antes y dentro de la ventana, con los momentos de sueño y de vigilia" class="noche" id="noche" role="img" viewbox="0 0 680 210"></svg>
+<div class="fase" id="fase">Más tiempo en la cama no es más sueño</div>
+<div class="fase-sub" id="faseSub">Arriba, una noche de hoy. Abajo, la ventana.</div>
+<div class="mandos">
+<button class="arrancar" id="btnArrancar" onclick="arrancar()" type="button">Ver cómo cambia</button>
+</div>
+</div><section class="paso">
+<h2>Lo que acompaña a la ventana</h2>
+<p class="ayuda">Las instrucciones de control de estímulos, para que la cama vuelva a asociarse con
+  el sueño.</p>
+<div class="cuerpo">
+<div class="chips" id="reglas"></div>
 
-<section class="paso">
-  <h2><span class="num">3</span>El ajuste de cada semana</h2>
-  <p class="ayuda">Se revisa el diario al comienzo de cada sesión. Con 90 % o más, la hora de
+
+
+</div>
+</section></div><div class="sesion-complementos"><details class="sesion-apoyo"><summary>El ajuste de cada semana</summary><section class="paso">
+<h2 class="sesion-titulo-repetido">El ajuste de cada semana</h2>
+<p class="ayuda">Se revisa el diario al comienzo de cada sesión. Con 90 % o más, la hora de
   acostarse se adelanta quince minutos; entre 85 y 90 %, se mantiene; con menos de 85 %, se
   atrasa quince minutos.</p>
-  <div class="cuerpo">
-    <div class="medidor">
-      <label for="efSemana">Eficiencia de la semana siguiente</label>
-      <input type="range" id="efSemana" min="60" max="100" step="1" value="91">
-      <span class="valor" id="vEfSemana">91 %</span>
-    </div>
-    <div id="lecturaAjuste" style="margin-top:10px"></div>
-  </div>
-</section>
+<div class="cuerpo">
+<div class="medidor">
+<label for="efSemana">Eficiencia de la semana siguiente</label>
+<input id="efSemana" max="100" min="60" step="1" type="range" value="91"/>
+<span class="valor" id="vEfSemana">91 %</span>
+</div>
+<div id="lecturaAjuste" style="margin-top:10px"></div>
+</div>
+</section></details></div>
 
-<section class="paso">
-  <h2><span class="num">4</span>Lo que acompaña a la ventana</h2>
-  <p class="ayuda">Las instrucciones de control de estímulos, para que la cama vuelva a asociarse con
-  el sueño.</p>
-  <div class="cuerpo">
-    <div class="chips" id="reglas"></div>
-    <label class="etiqueta">Antecedentes que obligan a consultar antes de restringir el sueño</label>
-    <div class="chips" id="antecedentes"></div>
-    <div id="bandera"></div>
-  </div>
-</section>
+
+
+
 
 <details class="notas-pro">
-  <summary>Notas del profesional</summary>
-  <div class="cuerpo">
-    <label class="etiqueta">Observaciones del proceso</label>
-    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
-    <label class="etiqueta">Hipótesis de trabajo</label>
-    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
-    <label class="etiqueta">Tarea acordada</label>
-    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
-    <label class="etiqueta">Para la próxima sesión</label>
-    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
-    <p class="ayuda" style="margin-top:12px">
-      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+<summary>Notas del profesional</summary>
+<div class="cuerpo">
+<label class="etiqueta">Observaciones del proceso</label>
+<textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+<label class="etiqueta">Hipótesis de trabajo</label>
+<textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+<label class="etiqueta">Tarea acordada</label>
+<textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+<label class="etiqueta">Para la próxima sesión</label>
+<textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+<p class="ayuda" style="margin-top:12px">
+<label style="cursor:pointer"><input id="proNoImprimir" style="width:auto;margin-right:7px" type="checkbox"/>
       No incluir estas notas al imprimir</label>
-    </p>
-  </div>
-</details>
-
-<div class="barra">
-  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
-  <button onclick="Kit.copiar()">Copiar resumen</button>
-  <button onclick="Kit.guardar(true)">Guardar</button>
-  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</p>
 </div>
-
+</details>
+<div class="barra">
+<button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+<button onclick="Kit.copiar()">Copiar resumen</button>
+<button onclick="Kit.guardar(true)">Guardar</button>
+<button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
 </div>
 <div class="brindis" id="brindis"></div>
-
 <script>
 /* ============================================================
    Kit común de las herramientas.
@@ -950,6 +991,7 @@ var Kit = (function(){
      motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
      está trabajando. Al imprimir se abren todos. */
   function pasos(){
+    if(document.body.hasAttribute("data-sesion") && !document.body.hasAttribute("data-secuencia")) return;
     /* Un paso es una sección numerada, venga como .paso o como .bloque: la
        tarjeta de crisis lleva dos de sus tres pasos como bloque. */
     var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
@@ -1014,6 +1056,7 @@ var Kit = (function(){
     document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
       var h = s.querySelector("h2");
       if(!h) return;
+      if(h.classList.contains("sesion-titulo-repetido")) return;
       var sueltas = [].slice.call(s.children).filter(function(e){
         return e.classList && e.classList.contains("ayuda");
       });
@@ -1040,6 +1083,19 @@ var Kit = (function(){
     ayudas();
     pasos();
     laminaGuardada();
+    // Las ramas que se activan por respuestas clínicas siguen siendo visibles.
+    document.querySelectorAll(".sesion-apoyo > [hidden]").forEach(function(b){
+      var d = b.parentElement;
+      function sincronizar(){ d.hidden = b.hidden; if(!b.hidden) d.open = true; }
+      sincronizar();
+      new MutationObserver(sincronizar).observe(b,{attributes:true,attributeFilter:["hidden"]});
+    });
+    // Los resúmenes conservan el nombre del apoyo; ayudas independientes del recorrido.
+    document.querySelectorAll("details.sesion-apoyo").forEach(function(d){
+      d.addEventListener("toggle",function(){
+        if(d.open) window.dispatchEvent(new Event("resize"));
+      });
+    });
   }
 
   function iniciar(cfg){

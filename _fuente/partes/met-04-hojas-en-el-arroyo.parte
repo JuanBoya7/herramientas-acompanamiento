@@ -60,12 +60,12 @@ campo3ph: Ej. Sesión 5
     <button type="button" class="chip activa" id="d180">Tres minutos</button>
     <button type="button" class="chip" id="vLento">Corriente lenta</button>
     <button type="button" class="chip activa" id="vNormal">Corriente normal</button>
-    <button type="button" class="chip activa" id="cMarcar">Botón de enganche</button>
+    <button type="button" class="chip" id="cMarcar">Botón de enganche</button>
   </div>
   <div class="mandos">
     <button type="button" class="soltar" id="btnArrancar" onclick="arrancar()">Empezar la práctica</button>
     <button type="button" class="enganche" id="btnEnganche" onclick="engancharse()">Me enganché</button>
-    <button type="button" onclick="ponerLaMia()">Poner una hoja ahora</button>
+    <button type="button" onclick="detenerPractica()">Terminar y conversar</button>
     <button type="button" onclick="reiniciar()">Reiniciar</button>
   </div>
 </div>
@@ -81,7 +81,7 @@ const PENSAMIENTOS = ["No sirvo para esto","Voy a fallar","No soy suficiente","�
 let hojas = [], pasadas = 0, enganches = 0;
 let total = 180, restante = 180;
 let corriendo = false, animacion = null;
-let baraja = [], proxima = 0, lenta = false, conBoton = true;
+let baraja = [], proxima = 0, lenta = false, conBoton = false;
 
 const elegidos = () => Kit.activas("pensamientos");
 
@@ -148,7 +148,7 @@ function latido(dt){
 
   const antes = hojas.length;
   hojas.forEach(h => { h.x += h.vel * 100 * dt; h.giro += h.vel * 7 * dt; });
-  hojas = hojas.filter(h => h.x < 760);
+  hojas = hojas.filter(h => h.x < anchoArroyo() + 90);
   pasadas += antes - hojas.length;
 
   marcar();
@@ -185,39 +185,42 @@ function ponerBoton(hay){
 }
 
 /* ====================== EL ARROYO ====================== */
+// El fondo permanece montado: solo se actualizan las hojas, sin repintar la imagen.
+let capaHojas = null, fondoArroyo = null;
+const anchoArroyo = () => window.innerWidth < 540 ? 420 : 700;
 function dibujar(){
   const svg = $("arroyo");
-  svg.innerHTML = "";
-  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
-
-  g("rect", {x:0, y:0, width:700, height:300, fill:"#eef4f7"});
-  g("path", {d:"M0 0 L700 0 L700 62 Q 520 82 330 74 Q 150 66 0 88 Z", fill:"#dbe6d8"});
-  g("path", {d:"M0 300 L700 300 L700 236 Q 520 214 330 224 Q 150 234 0 210 Z", fill:"#dbe6d8"});
-  g("path", {d:"M0 88 Q 150 66 330 74 Q 520 82 700 62 L700 236 Q 520 214 330 224 Q 150 234 0 210 Z",
-    fill:"#bcd8e6"});
-  for(let k = 0; k < 5; k++)
-    g("path", {d:`M0 ${118 + k * 22} Q 175 ${106 + k * 22} 350 ${118 + k * 22} ` +
-      `T 700 ${118 + k * 22}`, stroke:"#a9cddd", "stroke-width":1.5, fill:"none", opacity:.7});
-
-  hojas.forEach(h => {
-    const gr = Kit.svg("g", {transform:`translate(${h.x},${h.y}) rotate(${h.giro})`});
-    svg.appendChild(gr);
-    gr.appendChild(Kit.svg("path", {d:"M0 0 Q 20 -14 40 0 Q 20 14 0 0 Z", fill:"#7fa86a",
-      stroke:"#5f8a4d", "stroke-width":1.2}));
-    gr.appendChild(Kit.svg("path", {d:"M2 0 L38 0", stroke:"#5f8a4d", "stroke-width":1}));
-    const t = Kit.svg("text", {x:20, y:-20, "text-anchor":"middle",
-      style:"font:600 11.5px system-ui,sans-serif;fill:#3f5163;" +
-            "paint-order:stroke;stroke:#eef4f7;stroke-width:3;stroke-linejoin:round"});
-    t.textContent = h.texto.length > 30 ? h.texto.slice(0, 29) + "…" : h.texto;
-    gr.appendChild(t);
-  });
-
-  if(!hojas.length && !corriendo){
-    const t = Kit.svg("text", {x:350, y:158, "text-anchor":"middle",
-      style:"font:14.5px system-ui,sans-serif;fill:#7fa0b2"});
-    t.textContent = "El agua baja. Las hojas empiezan a llegar cuando arranques.";
-    svg.appendChild(t);
+  if(!capaHojas){
+    fondoArroyo=Kit.svg("image", {href:"[[imagen:arroyo-acuarela.png]]", x:0,y:0,width:700,height:300,preserveAspectRatio:"xMidYMid slice"}); svg.appendChild(fondoArroyo);
+    capaHojas = Kit.svg("g", {}); svg.appendChild(capaHojas);
   }
+  const ancho=anchoArroyo();
+  svg.setAttribute("viewBox", `0 0 ${ancho} 300`); fondoArroyo.setAttribute("width", ancho);
+  capaHojas.replaceChildren();
+  hojas.forEach(h => {
+    const gr = Kit.svg("g", {transform:`translate(${h.x},${h.y})`});
+    capaHojas.appendChild(gr);
+    const hoja = Kit.svg("g", {transform:`rotate(${Math.sin(h.giro / 12)*12})`});
+    gr.appendChild(hoja);
+    hoja.appendChild(Kit.svg("ellipse", {cx:22,cy:5,rx:31,ry:7,fill:"#294f4c",opacity:.12}));
+    hoja.appendChild(Kit.svg("path", {d:"M-7 2 C4 -23 38 -24 55 -4 C44 1 41 15 26 17 C10 19 0 12 -7 2 Z",fill:"#b99848",stroke:"#786532","stroke-width":1}));
+    hoja.appendChild(Kit.svg("path", {d:"M-12 5 Q18 -3 48 -4 M9 0 L13 -11 M19 -1 L27 10 M31 -3 L37 -13",fill:"none",stroke:"#786532","stroke-width":1,opacity:.65}));
+    // Todo el pensamiento, en líneas: no se corta el contenido significativo.
+    const palabras=h.texto.split(/\s+/); const lineas=[]; let linea="";
+    palabras.forEach(p=>{if((linea+" "+p).trim().length>28 && linea){lineas.push(linea);linea=p;}else linea=(linea+" "+p).trim();});
+    if(linea) lineas.push(linea);
+    const t=Kit.svg("text",{x:22,y:-24-(lineas.length-1)*17,"text-anchor":"middle",style:"font:600 14px system-ui;fill:#24483f;paint-order:stroke;stroke:#fffdf3;stroke-width:4;stroke-linejoin:round"});
+    lineas.forEach((l,i)=>{const span=Kit.svg("tspan",{x:22,dy:i?17:0});span.textContent=l;t.appendChild(span);});gr.appendChild(t);
+  });
+  if(!hojas.length && !corriendo){
+    const t=Kit.svg("text",{x:ancho/2,y:154,"text-anchor":"middle",style:"font:14px system-ui;fill:#345e55;paint-order:stroke;stroke:#f7fbec;stroke-width:4"});
+    t.textContent=restante===0?"¿Qué notaste durante la práctica?":(elegidos().length?"Cuando quieras, empieza la práctica":"Elige un pensamiento para empezar");capaHojas.appendChild(t);
+  }
+}
+function detenerPractica(){
+  corriendo=false; escena.parar(); $("btnArrancar").disabled=false;
+  $("cajaPregunta").hidden=false; $("pregunta").textContent="¿Qué notaste durante la práctica?";
+  Kit.guardar();
 }
 
 /* ====================== PRÁCTICA ====================== */
@@ -242,6 +245,7 @@ function engancharse(){
 function arrancar(){
   if(corriendo) return;
   if(!elegidos().length){ Kit.brindis("Marca primero al menos un pensamiento"); return; }
+  if(restante <= 0) restante = total;
   corriendo = true;
   sobrante = 0;
   proxima = .8;                 /* la primera llega casi enseguida */
@@ -254,6 +258,7 @@ function arrancar(){
 function terminar(){
   corriendo = false;
   restante = 0;
+  escena.parar();
   $("btnArrancar").disabled = false;
   Kit.brindis("Se cumplió el tiempo");
   Kit.guardar();
@@ -297,11 +302,12 @@ function resumen(){
              `${total - restante} segundos practicados.`);
   l.push(conBoton
     ? `Veces que se enganchó y volvió: ${enganches} (marcadas en pantalla).`
-    : "Sin botón de enganche: los enganches se preguntaron en sesión.");
+    : "Práctica visual sin registro de enganches.");
   return l.join("\n");
 }
 
-Kit.chips("pensamientos", PENSAMIENTOS);
+Kit.chips("pensamientos", PENSAMIENTOS, dibujar);
+window.addEventListener("resize",dibujar);
 $("d90").onclick = () => ponerDuracion(90);
 $("d180").onclick = () => ponerDuracion(180);
 $("vLento").onclick = () => ponerRitmo(true);
@@ -314,7 +320,7 @@ Kit.iniciar({
   restaurar: d => {
     pasadas = d.pasadas || 0; enganches = d.enganches || 0;
     total = d.total || 180; restante = total; lenta = !!d.lenta;
-    conBoton = d.conBoton === undefined ? true : !!d.conBoton;
+    conBoton = d.conBoton === undefined ? false : !!d.conBoton;
   },
   alCambiar: () => { $("d90").classList.toggle("activa", total === 90);
                      $("d180").classList.toggle("activa", total === 180);

@@ -516,6 +516,7 @@ var Kit = (function(){
      motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
      está trabajando. Al imprimir se abren todos. */
   function pasos(){
+    if(document.body.hasAttribute("data-sesion") && !document.body.hasAttribute("data-secuencia")) return;
     /* Un paso es una sección numerada, venga como .paso o como .bloque: la
        tarjeta de crisis lleva dos de sus tres pasos como bloque. */
     var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
@@ -580,6 +581,7 @@ var Kit = (function(){
     document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
       var h = s.querySelector("h2");
       if(!h) return;
+      if(h.classList.contains("sesion-titulo-repetido")) return;
       var sueltas = [].slice.call(s.children).filter(function(e){
         return e.classList && e.classList.contains("ayuda");
       });
@@ -606,6 +608,19 @@ var Kit = (function(){
     ayudas();
     pasos();
     laminaGuardada();
+    // Las ramas que se activan por respuestas clínicas siguen siendo visibles.
+    document.querySelectorAll(".sesion-apoyo > [hidden]").forEach(function(b){
+      var d = b.parentElement;
+      function sincronizar(){ d.hidden = b.hidden; if(!b.hidden) d.open = true; }
+      sincronizar();
+      new MutationObserver(sincronizar).observe(b,{attributes:true,attributeFilter:["hidden"]});
+    });
+    // Los resúmenes conservan el nombre del apoyo; ayudas independientes del recorrido.
+    document.querySelectorAll("details.sesion-apoyo").forEach(function(d){
+      d.addEventListener("toggle",function(){
+        if(d.open) window.dispatchEvent(new Event("resize"));
+      });
+    });
   }
 
   function iniciar(cfg){

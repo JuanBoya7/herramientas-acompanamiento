@@ -1,8 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Verificar los hechos y acción opuesta</title>
 <style>
   :root{
@@ -335,120 +336,158 @@
   .tramo-op span{display:block;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
   @media (max-width:620px){.pregunta-v{grid-template-columns:1fr}}
 </style>
-</head>
-<body data-laminable="1">
+<style>/* La superficie de trabajo y sus apoyos. Compartida con las tres hojas antiguas. */
+body[data-sesion]{--sesion-verde:#3f7568;--sesion-borde:#d8e3df;--sesion-papel:#fffefa}
+body[data-sesion] header.tapa{padding:20px 24px 15px;border-top:3px solid var(--sesion-verde)}
+body[data-sesion] .tapa .sub{max-width:90ch;font-size:15px;line-height:1.55}
+.sesion-fuente{font-size:12px;color:var(--tinta-suave);margin-top:8px}
+.sesion-fuente>summary{cursor:pointer;width:max-content}
+.sesion-fuente .fuente{font-size:12px;margin-top:6px}
+.sesion-principal{min-width:0}
+.sesion-principal .tablero>*,.sesion-principal .dosmedidores>*{min-width:0}
+body[data-sesion="act-brujula-de-valores"] .dosmedidores input[type=range]{width:100%;min-width:0}
+.sesion-principal>section{border-color:var(--sesion-borde)}
+.sesion-principal h2{color:#294c47}
+.sesion-mesa{display:grid;grid-template-columns:minmax(215px,.8fr) minmax(0,2fr);gap:16px;align-items:start}
+.sesion-preparacion{min-width:0}
+.sesion-preparacion section.paso,.sesion-preparacion section.bloque{padding:17px 18px}
+.sesion-preparacion h2{font-size:16px}
+.sesion-preparacion .medidor{flex-wrap:wrap}
+.sesion-preparacion .medidor label{flex-basis:100%}
+.sesion-preparacion .medidor input{min-width:0}
+.sesion-mesa>.escenario{min-width:0;padding:10px;border-color:var(--sesion-borde);box-shadow:0 5px 20px #234a3f08}
+.sesion-mesa .mandos{gap:7px}
+.sesion-mesa .mandos button{font-size:13px;padding:9px 12px;min-height:40px}
+.sesion-mesa .duracion .chip{font-size:12px;padding:7px 10px}
+.sesion-mesa .escenario>svg{border-radius:9px}
+.sesion-complementos{display:grid;gap:9px;margin:12px 0 20px}
+.sesion-complementos:empty{display:none}
+details.sesion-apoyo{border:1px solid var(--sesion-borde);border-radius:10px;background:#fafcfb;min-width:0}
+details.sesion-apoyo>summary{cursor:pointer;padding:13px 17px;font-size:14px;font-weight:600;color:#4c6560}
+details.sesion-apoyo[open]{background:#fff}
+details.sesion-apoyo[open]>summary{border-bottom:1px solid #e5ede9}
+details.sesion-apoyo>section,details.sesion-apoyo>div{margin:0!important;border:0!important;box-shadow:none!important}
+details.sesion-apoyo>.escenario{padding:16px}
+.sesion-titulo-repetido{display:none!important}
+.sesion-datos{margin:12px 0 0;border-top:1px solid #e8eeeb;padding:9px 5px 0}
+.sesion-datos>summary{cursor:pointer;font-size:12px;color:#647771}
+.sesion-datos .marcas .n{font-size:18px}
+.sesion-datos .marcas .r{font-size:10px}
+body[data-sesion] .sesion-seguridad{border-left:4px solid #a37840}
+body[data-sesion] [hidden]{display:none!important}
+body[data-sesion] button:focus-visible,body[data-sesion] summary:focus-visible{outline:3px solid #74a795;outline-offset:3px}
+body[data-sesion] .chip{min-height:33px}
+body[data-sesion] .matriz{border:0;gap:2px;background:#94aaa1;border-radius:14px}
+body[data-sesion] .cuad{padding:21px 20px;min-height:180px;border:0}
+body[data-sesion] .centro-yo{background:#fffefa;box-shadow:0 3px 12px #294c4720}
+body[data-sesion="fortalezas-del-caracter"] .panel-casillas{border-top:3px solid #b99a4f}
+body[data-sesion="fortalezas-del-caracter"] .casilla.llena{box-shadow:0 2px 8px #4b38110a}
+body[data-sesion="dbt-mente-sabia"] .tres-mentes{gap:14px}
+@media(max-width:900px){.sesion-mesa{grid-template-columns:1fr}.sesion-preparacion{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px}.sesion-preparacion section{margin-bottom:0}.sesion-mesa>.escenario{margin-top:2px}}
+@media(max-width:540px){body[data-sesion] header.tapa{padding:16px}body[data-sesion] h1{font-size:23px}.sesion-preparacion{display:block}.sesion-preparacion section{margin-bottom:10px}body[data-sesion] .cuad{padding:18px 15px;min-height:0}.sesion-mesa{gap:2px}.sesion-mesa .mandos button{flex:1 1 auto}.sesion-datos .marcas{gap:10px}}
+@media(max-width:540px){body[data-sesion="act-brujula-de-valores"] .ambito .cabeza{flex-wrap:wrap}body[data-sesion="act-brujula-de-valores"] .dosmedidores{grid-template-columns:1fr}}
+@media print{.sesion-mesa{display:block}.sesion-fuente>summary,.sesion-apoyo>summary,.sesion-datos{display:none!important}details.sesion-apoyo{border:0}.sesion-titulo-repetido{display:flex!important}.sesion-complementos{display:block}body[data-sesion] .sesion-seguridad{break-inside:avoid}}
+</style></head>
+<body data-laminable="1" data-sesion="dbt-verificar-los-hechos">
 <div class="envoltura">
-
 <header class="tapa">
-  <h1>Verificar los hechos y acción opuesta</h1>
-  <p class="sub">Antes de cambiar una emoción hay que averiguar si sobra. Si se ajusta a los hechos, lo que toca es resolver el problema. Si no se ajusta —o su intensidad no—, lo que toca es hacer lo contrario de lo que pide, y hacerlo completo. La hoja bifurca sola según lo que se marque.</p>
-  <p class="fuente">Verificar los hechos, prepararse para la acción opuesta y actuar de forma opuesta a la emoción actual, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 9, fichas de regulación emocional 8 a 12.</p>
-
-</header>
-
-<section class="paso">
-  <h2><span class="num">1</span>¿Qué emoción es?</h2>
-  <p class="ayuda">Una sola, la que más pesa. La acción opuesta de la rabia y la del miedo son
+<h1>Verificar los hechos y acción opuesta</h1>
+<p class="sub">Una emoción, una situación y la diferencia entre lo que ocurrió y su interpretación.</p>
+<details class="sesion-fuente"><summary>Fuente</summary><p class="fuente">Verificar los hechos, prepararse para la acción opuesta y actuar de forma opuesta a la emoción actual, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 9, fichas de regulación emocional 8 a 12.</p></details>
+</header><div class="sesion-principal"><section class="paso">
+<h2><span class="num">1</span>¿Qué emoción es?</h2>
+<p class="ayuda">Una sola, la que más pesa. La acción opuesta de la rabia y la del miedo son
   contrarias: hacer las dos a la vez no lleva a ninguna parte.</p>
-  <div class="cuerpo">
-    <div class="chips" id="emociones"></div>
-    <div id="fichaEmocion"></div>
-    <div class="medidor" style="margin-top:14px">
-      <label for="intensidad">Intensidad ahora</label>
-      <input type="range" id="intensidad" min="0" max="100" value="70">
-      <span class="valor" id="vIntensidad">70</span>
-    </div>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">2</span>El hecho y la interpretación</h2>
-  <p class="ayuda">Primero lo que habría grabado una cámara. Aparte, lo que tu mente hizo con eso:
+<div class="cuerpo">
+<div class="chips" id="emociones"></div>
+<div id="fichaEmocion"></div>
+<div class="medidor" style="margin-top:14px">
+<label for="intensidad">Intensidad ahora</label>
+<input id="intensidad" max="100" min="0" type="range" value="70"/>
+<span class="valor" id="vIntensidad">70</span>
+</div>
+</div>
+</section><section class="paso">
+<h2><span class="num">2</span>El hecho y la interpretación</h2>
+<p class="ayuda">Primero lo que habría grabado una cámara. Aparte, lo que tu mente hizo con eso:
   la emoción que no se ajusta casi nunca responde al hecho.</p>
-  <div class="cuerpo">
-    <label class="etiqueta">Qué pasó, en términos de cámara</label>
-    <div class="chips" id="hechos"></div>
-    <label class="etiqueta">Qué dice mi mente que eso significa</label>
-    <div class="chips" id="interpretaciones"></div>
-    <details class="apunte">
-      <summary>Apuntar el hecho en una línea (opcional)</summary>
-      <input type="text" id="hechoNota" placeholder="Solo lo observable, sin interpretar.">
-    </details>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">3</span>Verificar los hechos</h2>
-  <p class="ayuda">Siete preguntas de la ficha RE 8. Sí o no, sin discutirlas: la primera
+<div class="cuerpo">
+<label class="etiqueta">Qué pasó, en términos de cámara</label>
+<div class="chips" id="hechos"></div>
+<label class="etiqueta">Qué dice mi mente que eso significa</label>
+<div class="chips" id="interpretaciones"></div>
+<details class="apunte">
+<summary>Apuntar el hecho en una línea (opcional)</summary>
+<input id="hechoNota" placeholder="Solo lo observable, sin interpretar." type="text"/>
+</details>
+</div>
+</section><section class="paso">
+<h2><span class="num">3</span>Verificar los hechos</h2>
+<p class="ayuda">Siete preguntas de la ficha RE 8. Sí o no, sin discutirlas: la primera
   respuesta suele ser la honesta.</p>
-  <div class="cuerpo"><div class="verificar" id="verificar"></div></div>
-</section>
-
-<div class="veredicto" id="veredicto"></div>
-
-<section class="paso" id="ramaProblemas" hidden>
-  <h2><span class="num">4</span>Resolución de problemas</h2>
-  <p class="ayuda">La emoción se ajusta: está avisando. No hay nada que cambiar por dentro; hay
+<div class="cuerpo"><div class="verificar" id="verificar"></div></div>
+</section><div class="veredicto" id="veredicto"></div><section class="paso" hidden="" id="ramaProblemas">
+<h2><span class="num">4</span>Resolución de problemas</h2>
+<p class="ayuda">La emoción se ajusta: está avisando. No hay nada que cambiar por dentro; hay
   algo que cambiar afuera. Ficha RE 12.</p>
-  <div class="cuerpo">
-    <label class="etiqueta">¿Qué se puede hacer con el problema?</label>
-    <div class="chips" id="opcionesProblema"></div>
-    <details class="apunte">
-      <summary>Apuntar el plan en una línea (opcional)</summary>
-      <input type="text" id="planProblema" placeholder="Qué, cuándo y con quién.">
-    </details>
-  </div>
-</section>
-
-<section class="paso" id="ramaOpuesta" hidden>
-  <h2><span class="num">4</span>Acción opuesta, hasta el final</h2>
-  <p class="ayuda">Se hace lo contrario de lo que la emoción pide, y se hace <b>completo</b>: media
+<div class="cuerpo">
+<label class="etiqueta">¿Qué se puede hacer con el problema?</label>
+<div class="chips" id="opcionesProblema"></div>
+<details class="apunte">
+<summary>Apuntar el plan en una línea (opcional)</summary>
+<input id="planProblema" placeholder="Qué, cuándo y con quién." type="text"/>
+</details>
+</div>
+</section><section class="paso" hidden="" id="ramaOpuesta">
+<h2><span class="num">4</span>Acción opuesta, hasta el final</h2>
+<p class="ayuda">Se hace lo contrario de lo que la emoción pide, y se hace <b>completo</b>: media
   acción opuesta le confirma a la emoción que tenía razón. Fichas RE 10 y 11.</p>
-  <div class="cuerpo">
-    <div id="tablaOpuesta"></div>
-    <label class="etiqueta" style="margin-top:16px">Todo el camino</label>
-    <p class="ayuda" style="margin-bottom:8px">Las cinco vías por las que se sostiene. Se dan
+<div class="cuerpo">
+<div id="tablaOpuesta"></div>
+<label class="etiqueta" style="margin-top:16px">Todo el camino</label>
+<p class="ayuda" style="margin-bottom:8px">Las cinco vías por las que se sostiene. Se dan
     vuelta todas, no solo la conducta visible.</p>
-    <div class="camino" id="camino"></div>
+<div class="camino" id="camino"></div>
+<div class="medidor" style="margin-top:16px">
+<label for="intensidadFinal">Intensidad después de practicarlo</label>
+<input id="intensidadFinal" max="100" min="0" type="range" value="70"/>
+<span class="valor" id="vIntensidadFinal">70</span>
+</div>
+<div id="lecturaFinal"></div>
+</div>
+</section></div><div class="sesion-complementos"></div>
 
-    <div class="medidor" style="margin-top:16px">
-      <label for="intensidadFinal">Intensidad después de practicarlo</label>
-      <input type="range" id="intensidadFinal" min="0" max="100" value="70">
-      <span class="valor" id="vIntensidadFinal">70</span>
-    </div>
-    <div id="lecturaFinal"></div>
-  </div>
-</section>
+
+
+
+
 
 <details class="notas-pro">
-  <summary>Notas del profesional</summary>
-  <div class="cuerpo">
-    <label class="etiqueta">Observaciones del proceso</label>
-    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
-    <label class="etiqueta">Hipótesis de trabajo</label>
-    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
-    <label class="etiqueta">Tarea acordada</label>
-    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
-    <label class="etiqueta">Para la próxima sesión</label>
-    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
-    <p class="ayuda" style="margin-top:12px">
-      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+<summary>Notas del profesional</summary>
+<div class="cuerpo">
+<label class="etiqueta">Observaciones del proceso</label>
+<textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+<label class="etiqueta">Hipótesis de trabajo</label>
+<textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+<label class="etiqueta">Tarea acordada</label>
+<textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+<label class="etiqueta">Para la próxima sesión</label>
+<textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+<p class="ayuda" style="margin-top:12px">
+<label style="cursor:pointer"><input id="proNoImprimir" style="width:auto;margin-right:7px" type="checkbox"/>
       No incluir estas notas al imprimir</label>
-    </p>
-  </div>
-</details>
-
-<div class="barra">
-  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
-  <button onclick="Kit.copiar()">Copiar resumen</button>
-  <button onclick="Kit.guardar(true)">Guardar</button>
-  <button class='botonLamina' onclick='Kit.lamina()'>Modo lámina</button>
-  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</p>
 </div>
-
+</details>
+<div class="barra">
+<button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+<button onclick="Kit.copiar()">Copiar resumen</button>
+<button onclick="Kit.guardar(true)">Guardar</button>
+<button class="botonLamina" onclick="Kit.lamina()">Modo lámina</button>
+<button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
 </div>
 <div class="brindis" id="brindis"></div>
-
 <script>
 /* ============================================================
    Kit común de las herramientas.
@@ -968,6 +1007,7 @@ var Kit = (function(){
      motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
      está trabajando. Al imprimir se abren todos. */
   function pasos(){
+    if(document.body.hasAttribute("data-sesion") && !document.body.hasAttribute("data-secuencia")) return;
     /* Un paso es una sección numerada, venga como .paso o como .bloque: la
        tarjeta de crisis lleva dos de sus tres pasos como bloque. */
     var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
@@ -1032,6 +1072,7 @@ var Kit = (function(){
     document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
       var h = s.querySelector("h2");
       if(!h) return;
+      if(h.classList.contains("sesion-titulo-repetido")) return;
       var sueltas = [].slice.call(s.children).filter(function(e){
         return e.classList && e.classList.contains("ayuda");
       });
@@ -1058,6 +1099,19 @@ var Kit = (function(){
     ayudas();
     pasos();
     laminaGuardada();
+    // Las ramas que se activan por respuestas clínicas siguen siendo visibles.
+    document.querySelectorAll(".sesion-apoyo > [hidden]").forEach(function(b){
+      var d = b.parentElement;
+      function sincronizar(){ d.hidden = b.hidden; if(!b.hidden) d.open = true; }
+      sincronizar();
+      new MutationObserver(sincronizar).observe(b,{attributes:true,attributeFilter:["hidden"]});
+    });
+    // Los resúmenes conservan el nombre del apoyo; ayudas independientes del recorrido.
+    document.querySelectorAll("details.sesion-apoyo").forEach(function(d){
+      d.addEventListener("toggle",function(){
+        if(d.open) window.dispatchEvent(new Event("resize"));
+      });
+    });
   }
 
   function iniciar(cfg){

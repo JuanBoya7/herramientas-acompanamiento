@@ -10,6 +10,9 @@ Esto sirve únicamente para cuando haya que cambiar algo en todas a la vez.
 |---|---|
 | `kit.css` | Los estilos que comparten todas las hojas: colores, fichas, calibradores, modo lámina, impresión. |
 | `kit.js` | El motor común: fichas con «+», guardado local, copiar resumen, mostrador de arrastre y el reloj de las escenas que se mueven. |
+| `sesion.py` / `sesion.css` | Jerarquía revisada para cada una de las 47 hojas: recurso principal primero y complementos accesibles por su nombre. |
+| `REVISION-SESION.md` | Entrada y bloques principales elegidos para cada herramienta; se regenera al construir. |
+| `imagenes/` | Ilustraciones originales que se incrustan en el HTML para conservar el uso sin conexión. |
 | `plantilla.html` | El esqueleto: cabecera, notas del profesional plegadas y barra de botones al final. |
 | `partes/*.parte` | El contenido propio de cada herramienta. Una por archivo. |
 | `construir.py` | Junta todo y escribe los `.html` autónomos, el `index.html` y la guía. |
@@ -21,12 +24,15 @@ Esto sirve únicamente para cuando haya que cambiar algo en todas a la vez.
 
 ## Cómo se reconstruye
 
+La construcción necesita Python y `beautifulsoup4` (`python -m pip install beautifulsoup4`).
+Esta dependencia pertenece al taller: las hojas terminadas no necesitan instalar nada.
+
 ```bash
 python construir.py
 ```
 
 Reescribe todas las herramientas, el índice y la guía de uso. Para trabajar sobre una sola, se le pasa un pedazo del
-nombre y solo esa se imprime en pantalla (igual se reconstruyen todas, que toma menos de un segundo):
+nombre y solo esa se imprime en pantalla (igual se reconstruyen todas):
 
 ```bash
 python construir.py brujula
@@ -151,19 +157,34 @@ Vale la pena tenerlo presente al agregar cualquier herramienta nueva:
 Al llamar a `Kit.iniciar` —o a `Kit.soloModo` en las tres antiguas— se aplican tres arreglos de
 presentación que no tocan el contenido de ninguna hoja:
 
-- **Un paso a la vez.** Si hay tres o más secciones numeradas —`.paso` o `.bloque`, lo que cuenta
-  es el `<span class="num">`— se pliegan todas menos la que se está trabajando, con un
-  «Siguiente» al pie. Los pasos siguen en el documento, así que el motor de cada hoja los sigue
-  encontrando, y al imprimir se abren todos. Los pasos que la hoja oculta con `hidden` —las dos
-  ramas de Verificar los hechos— no cuentan mientras no estén a la vista, y el que la hoja destape
-  se abre solo.
+- **El recurso principal primero.** `sesion.py` decide explícitamente qué bloques sostienen
+  la conversación en cada hoja. Permanecen disponibles aunque se abra un complemento.
+  Los complementos se conservan en desplegables con su propio nombre. Solo el jardín mantiene
+  la secuencia de pasos con «Siguiente», porque sembrar, enraizar y regar sí forman un recorrido
+  útil para su uso. Las ramas condicionales y las precauciones mantienen su funcionamiento.
 - **La ayuda detrás de un signo.** Los `<p class="ayuda">` que cuelgan directamente de la sección
   pasan a un «?» junto al título. Los que acompañan a un campo dentro del `.cuerpo` se quedan
   donde están: esos sí son indicaciones de uso.
 - **El botón de lámina**, en las hojas marcadas con `lamina: si`.
 
-Nada de esto hay que pedirlo desde la hoja. Al agregar una herramienta nueva, basta con numerar
-las secciones como siempre.
+Al agregar una herramienta hay que incluirla en `REVISION` de `sesion.py`: número de bloques
+originales, índices de los principales y frase de entrada. La construcción comprueba el número
+de bloques para impedir cambios de orden silenciosos.
+
+La pregunta de diseño es: **¿qué parte de esta hoja puede aportar a una conversación aunque
+no se continúe con lo demás?** Esa parte debe captar la atención al abrirla. No equivale a reducir
+todas las hojas a un único paso ni a eliminar sus funciones.
+
+## Comprobaciones de sesión
+
+Además de `revisar.py`, `verificar-sesion.cjs` recorre las 47 hojas sin servidor a 1600, 1000 y
+390 px, abre complementos y comprueba desbordamientos, identificadores duplicados y errores
+de JavaScript. `verificar-interacciones.cjs` comprueba recorridos de las herramientas principales
+y recuperación del estado guardado en un contexto vacío de navegador.
+
+Se ejecutan con Node, Playwright y Edge instalado. `PLAYWRIGHT_MODULE` permite indicar una
+instalación de Playwright fuera del proyecto. Los informes y capturas van en
+`_respaldos/2026-10-07-prioridad-en-sesion/qa/`, excluido de Git.
 
 ## Las funciones del kit que más se usan
 

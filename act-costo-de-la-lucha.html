@@ -1,8 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>El costo de la lucha</title>
 <style>
   :root{
@@ -340,124 +341,160 @@
     color:var(--tinta-suave)}
   .cierre .pregunta{margin-bottom:13px}
 </style>
-</head>
-<body>
+<style>/* La superficie de trabajo y sus apoyos. Compartida con las tres hojas antiguas. */
+body[data-sesion]{--sesion-verde:#3f7568;--sesion-borde:#d8e3df;--sesion-papel:#fffefa}
+body[data-sesion] header.tapa{padding:20px 24px 15px;border-top:3px solid var(--sesion-verde)}
+body[data-sesion] .tapa .sub{max-width:90ch;font-size:15px;line-height:1.55}
+.sesion-fuente{font-size:12px;color:var(--tinta-suave);margin-top:8px}
+.sesion-fuente>summary{cursor:pointer;width:max-content}
+.sesion-fuente .fuente{font-size:12px;margin-top:6px}
+.sesion-principal{min-width:0}
+.sesion-principal .tablero>*,.sesion-principal .dosmedidores>*{min-width:0}
+body[data-sesion="act-brujula-de-valores"] .dosmedidores input[type=range]{width:100%;min-width:0}
+.sesion-principal>section{border-color:var(--sesion-borde)}
+.sesion-principal h2{color:#294c47}
+.sesion-mesa{display:grid;grid-template-columns:minmax(215px,.8fr) minmax(0,2fr);gap:16px;align-items:start}
+.sesion-preparacion{min-width:0}
+.sesion-preparacion section.paso,.sesion-preparacion section.bloque{padding:17px 18px}
+.sesion-preparacion h2{font-size:16px}
+.sesion-preparacion .medidor{flex-wrap:wrap}
+.sesion-preparacion .medidor label{flex-basis:100%}
+.sesion-preparacion .medidor input{min-width:0}
+.sesion-mesa>.escenario{min-width:0;padding:10px;border-color:var(--sesion-borde);box-shadow:0 5px 20px #234a3f08}
+.sesion-mesa .mandos{gap:7px}
+.sesion-mesa .mandos button{font-size:13px;padding:9px 12px;min-height:40px}
+.sesion-mesa .duracion .chip{font-size:12px;padding:7px 10px}
+.sesion-mesa .escenario>svg{border-radius:9px}
+.sesion-complementos{display:grid;gap:9px;margin:12px 0 20px}
+.sesion-complementos:empty{display:none}
+details.sesion-apoyo{border:1px solid var(--sesion-borde);border-radius:10px;background:#fafcfb;min-width:0}
+details.sesion-apoyo>summary{cursor:pointer;padding:13px 17px;font-size:14px;font-weight:600;color:#4c6560}
+details.sesion-apoyo[open]{background:#fff}
+details.sesion-apoyo[open]>summary{border-bottom:1px solid #e5ede9}
+details.sesion-apoyo>section,details.sesion-apoyo>div{margin:0!important;border:0!important;box-shadow:none!important}
+details.sesion-apoyo>.escenario{padding:16px}
+.sesion-titulo-repetido{display:none!important}
+.sesion-datos{margin:12px 0 0;border-top:1px solid #e8eeeb;padding:9px 5px 0}
+.sesion-datos>summary{cursor:pointer;font-size:12px;color:#647771}
+.sesion-datos .marcas .n{font-size:18px}
+.sesion-datos .marcas .r{font-size:10px}
+body[data-sesion] .sesion-seguridad{border-left:4px solid #a37840}
+body[data-sesion] [hidden]{display:none!important}
+body[data-sesion] button:focus-visible,body[data-sesion] summary:focus-visible{outline:3px solid #74a795;outline-offset:3px}
+body[data-sesion] .chip{min-height:33px}
+body[data-sesion] .matriz{border:0;gap:2px;background:#94aaa1;border-radius:14px}
+body[data-sesion] .cuad{padding:21px 20px;min-height:180px;border:0}
+body[data-sesion] .centro-yo{background:#fffefa;box-shadow:0 3px 12px #294c4720}
+body[data-sesion="fortalezas-del-caracter"] .panel-casillas{border-top:3px solid #b99a4f}
+body[data-sesion="fortalezas-del-caracter"] .casilla.llena{box-shadow:0 2px 8px #4b38110a}
+body[data-sesion="dbt-mente-sabia"] .tres-mentes{gap:14px}
+@media(max-width:900px){.sesion-mesa{grid-template-columns:1fr}.sesion-preparacion{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px}.sesion-preparacion section{margin-bottom:0}.sesion-mesa>.escenario{margin-top:2px}}
+@media(max-width:540px){body[data-sesion] header.tapa{padding:16px}body[data-sesion] h1{font-size:23px}.sesion-preparacion{display:block}.sesion-preparacion section{margin-bottom:10px}body[data-sesion] .cuad{padding:18px 15px;min-height:0}.sesion-mesa{gap:2px}.sesion-mesa .mandos button{flex:1 1 auto}.sesion-datos .marcas{gap:10px}}
+@media(max-width:540px){body[data-sesion="act-brujula-de-valores"] .ambito .cabeza{flex-wrap:wrap}body[data-sesion="act-brujula-de-valores"] .dosmedidores{grid-template-columns:1fr}}
+@media print{.sesion-mesa{display:block}.sesion-fuente>summary,.sesion-apoyo>summary,.sesion-datos{display:none!important}details.sesion-apoyo{border:0}.sesion-titulo-repetido{display:flex!important}.sesion-complementos{display:block}body[data-sesion] .sesion-seguridad{break-inside:avoid}}
+</style></head>
+<body data-sesion="act-costo-de-la-lucha">
 <div class="envoltura">
-
 <header class="tapa">
-  <h1>El costo de la lucha</h1>
-  <p class="sub">Esta hoja no pregunta si has luchado con lo que sientes. Da por hecho que sí, y que lo has intentado con todo. Lo que hace es poner cada intento sobre la mesa y mirar dos cosas por separado: si alivió en el momento y si lo resolvió a la larga. La diferencia entre esas dos columnas es toda la conversación.</p>
-  <p class="fuente">Desesperanza creativa y el control como problema, en Díaz Corbobés, MANUAL ACT §3.1 y §3.2, con las metáforas del campo de hoyos, la lucha con el monstruo y el polígrafo.</p>
-
-</header>
-
-<section class="paso">
-  <h2><span class="num">1</span>Lo que llevas tiempo intentando no sentir</h2>
-  <p class="ayuda">No lo que te pasa por fuera: lo de adentro. La ansiedad antes de hablar en
+<h1>El costo de la lucha</h1>
+<p class="sub">Lo que has intentado: qué alivia en el momento y qué sucede con el tiempo.</p>
+<details class="sesion-fuente"><summary>Fuente</summary><p class="fuente">Desesperanza creativa y el control como problema, en Díaz Corbobés, MANUAL ACT §3.1 y §3.2, con las metáforas del campo de hoyos, la lucha con el monstruo y el polígrafo.</p></details>
+</header><div class="sesion-principal"><section class="paso">
+<h2>Lo que llevas tiempo intentando no sentir</h2>
+<p class="ayuda">No lo que te pasa por fuera: lo de adentro. La ansiedad antes de hablar en
   público, el recuerdo que vuelve, la sensación de vacío del domingo en la tarde, las ganas de
   consumir. Toca lo que aplique; lo demás se cuenta hablando.</p>
-  <div class="cuerpo">
-    <label class="etiqueta">Marca lo que aplique</label>
-    <div class="chips" id="quePelea"></div>
-
-    <label class="etiqueta">¿Cuándo aparece con más fuerza?</label>
-    <div class="chips" id="cuandoAparece"></div>
-
-    <details class="apunte">
-      <summary>Apuntarlo en una línea (opcional)</summary>
-      <input type="text" id="loQuePelea" placeholder="Ej. «la ansiedad de los domingos en la noche»">
-    </details>
-  </div>
-</section>
-
-<section class="paso">
-  <h2><span class="num">2</span>Todo lo que has hecho para que no esté</h2>
-  <p class="ayuda">Vale todo: lo que te recomendaron, lo que se te ocurrió, lo que te da vergüenza
+<div class="cuerpo">
+<label class="etiqueta">Marca lo que aplique</label>
+<div class="chips" id="quePelea"></div>
+<label class="etiqueta">¿Cuándo aparece con más fuerza?</label>
+<div class="chips" id="cuandoAparece"></div>
+<details class="apunte">
+<summary>Apuntarlo en una línea (opcional)</summary>
+<input id="loQuePelea" placeholder="Ej. «la ansiedad de los domingos en la noche»" type="text"/>
+</details>
+</div>
+</section><section class="paso">
+<h2>Todo lo que has hecho para que no esté</h2>
+<p class="ayuda">Vale todo: lo que te recomendaron, lo que se te ocurrió, lo que te da vergüenza
   contar, lo que funcionó por un rato. No estamos juzgando ninguna. Estamos haciendo el inventario
   completo, porque sin el inventario completo la conversación que sigue no sirve.</p>
-  <div class="cuerpo">
-    <div class="sugeridas">
-      <div class="titulin">Toca las que hayas usado. Se van sumando a la lista de abajo.</div>
-      <div class="chips" id="sugeridas"></div>
-    </div>
-    <details class="apunte">
-      <summary>Agregar una que no esté en la lista</summary>
-      <div class="agrega">
-        <input type="text" id="nuevaEstrategia" placeholder="Nómbrala y presiona Agregar">
-        <button type="button" onclick="agregar()">Agregar</button>
-      </div>
-    </details>
-    <div id="listaEstrategias" style="margin-top:16px"></div>
-    <div class="velo" id="veloLista">Todavía no hay ninguna estrategia en la lista.<br>
-      Empieza por la más obvia: ¿qué es lo primero que haces cuando eso aparece?</div>
-  </div>
-</section>
-
-<div class="panel-mapa">
-  <svg class="mapa" id="mapa" viewBox="0 0 560 420" role="img"
-    aria-label="Mapa de estrategias: alivio inmediato frente a resultado a largo plazo"></svg>
-  <div class="contadores">
-    <div><span class="n" id="cTotal">0</span><span class="r">estrategias</span></div>
-    <div><span class="n" id="cTrampa">0</span><span class="r">en la trampa</span></div>
-    <div><span class="n" id="cSirven">0</span><span class="r">sirven a la larga</span></div>
-    <div><span class="n" id="cCosto">0</span><span class="r">costos marcados</span></div>
-  </div>
+<div class="cuerpo">
+<div class="sugeridas">
+<div class="titulin">Toca las que hayas usado. Se van sumando a la lista de abajo.</div>
+<div class="chips" id="sugeridas"></div>
 </div>
-
-<section class="bloque lectura" id="lectura">
-  <div class="campo" style="margin-bottom:6px"><div class="etq">Lectura del inventario</div></div>
-  <div class="nombre" id="lNombre">—</div>
-  <p class="metafora" id="lMetafora"></p>
-  <div class="campo"><div class="etq">Qué suele verse así</div><p id="lConsulta"></p></div>
-  <div class="campo"><div class="etq">Hacia dónde lleva esto</div><p id="lFoco"></p></div>
-  <div class="pregunta" id="lPregunta"></div>
-  <div id="lBandera"></div>
-
-  <details class="catalogo">
-    <summary>Ver las lecturas posibles del inventario</summary>
-    <div class="lista-perfiles" id="catalogo"></div>
-  </details>
-</section>
-
-<section class="paso cierre">
-  <h2><span class="num">3</span>Para cerrar</h2>
-  <div class="cuerpo">
-    <div class="pregunta">Sumando todo lo de arriba: ¿cuánto tiempo de tu vida llevas en esto?</div>
-    <div class="pregunta" style="margin-top:11px">Si tuvieras que apostar tu propio dinero:
+<details class="apunte">
+<summary>Agregar una que no esté en la lista</summary>
+<div class="agrega">
+<input id="nuevaEstrategia" placeholder="Nómbrala y presiona Agregar" type="text"/>
+<button onclick="agregar()" type="button">Agregar</button>
+</div>
+</details>
+<div id="listaEstrategias" style="margin-top:16px"></div>
+<div class="velo" id="veloLista">Todavía no hay ninguna estrategia en la lista.<br/>
+      Empieza por la más obvia: ¿qué es lo primero que haces cuando eso aparece?</div>
+</div>
+</section></div><div class="sesion-complementos"><details class="sesion-apoyo"><summary>Mapa del inventario</summary><div class="panel-mapa">
+<svg aria-label="Mapa de estrategias: alivio inmediato frente a resultado a largo plazo" class="mapa" id="mapa" role="img" viewbox="0 0 560 420"></svg>
+<div class="contadores">
+<div><span class="n" id="cTotal">0</span><span class="r">estrategias</span></div>
+<div><span class="n" id="cTrampa">0</span><span class="r">en la trampa</span></div>
+<div><span class="n" id="cSirven">0</span><span class="r">sirven a la larga</span></div>
+<div><span class="n" id="cCosto">0</span><span class="r">costos marcados</span></div>
+</div>
+</div></details><details class="sesion-apoyo"><summary>Lectura del inventario</summary><section class="bloque lectura" id="lectura">
+<div class="campo" style="margin-bottom:6px"><div class="etq">Lectura del inventario</div></div>
+<div class="nombre" id="lNombre">—</div>
+<p class="metafora" id="lMetafora"></p>
+<div class="campo"><div class="etq">Qué suele verse así</div><p id="lConsulta"></p></div>
+<div class="campo"><div class="etq">Hacia dónde lleva esto</div><p id="lFoco"></p></div>
+<div class="pregunta" id="lPregunta"></div>
+<div id="lBandera"></div>
+<details class="catalogo">
+<summary>Ver las lecturas posibles del inventario</summary>
+<div class="lista-perfiles" id="catalogo"></div>
+</details>
+</section></details><details class="sesion-apoyo"><summary>Para cerrar</summary><section class="paso cierre">
+<h2 class="sesion-titulo-repetido">Para cerrar</h2>
+<div class="cuerpo">
+<div class="pregunta">Sumando todo lo de arriba: ¿cuánto tiempo de tu vida llevas en esto?</div>
+<div class="pregunta" style="margin-top:11px">Si tuvieras que apostar tu propio dinero:
     ¿esto va a funcionar en los próximos diez años?</div>
-    <div class="pregunta" style="margin-top:11px">¿Y si el problema no fuera lo que sientes, sino
+<div class="pregunta" style="margin-top:11px">¿Y si el problema no fuera lo que sientes, sino
     todo lo que has tenido que hacer para no sentirlo?</div>
-  </div>
-</section>
+</div>
+</section></details></div>
+
+
+
+
 
 <details class="notas-pro">
-  <summary>Notas del profesional</summary>
-  <div class="cuerpo">
-    <label class="etiqueta">Observaciones del proceso</label>
-    <textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
-    <label class="etiqueta">Hipótesis de trabajo</label>
-    <textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
-    <label class="etiqueta">Tarea acordada</label>
-    <textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
-    <label class="etiqueta">Para la próxima sesión</label>
-    <textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
-    <p class="ayuda" style="margin-top:12px">
-      <label style="cursor:pointer"><input type="checkbox" id="proNoImprimir" style="width:auto;margin-right:7px">
+<summary>Notas del profesional</summary>
+<div class="cuerpo">
+<label class="etiqueta">Observaciones del proceso</label>
+<textarea id="proObservaciones" placeholder="Qué se observó al trabajar la hoja: disposición, evitaciones, lo que costó, lo que se movió."></textarea>
+<label class="etiqueta">Hipótesis de trabajo</label>
+<textarea id="proHipotesis" placeholder="Cómo se lee esto dentro de la formulación del caso."></textarea>
+<label class="etiqueta">Tarea acordada</label>
+<textarea id="proTarea" placeholder="Qué se acordó practicar entre sesiones, con qué registro."></textarea>
+<label class="etiqueta">Para la próxima sesión</label>
+<textarea id="proProxima" placeholder="Qué revisar, qué habilidad sigue, qué quedó pendiente."></textarea>
+<p class="ayuda" style="margin-top:12px">
+<label style="cursor:pointer"><input id="proNoImprimir" style="width:auto;margin-right:7px" type="checkbox"/>
       No incluir estas notas al imprimir</label>
-    </p>
-  </div>
-</details>
-
-<div class="barra">
-  <button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
-  <button onclick="Kit.copiar()">Copiar resumen</button>
-  <button onclick="Kit.guardar(true)">Guardar</button>
-  <button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</p>
 </div>
-
+</details>
+<div class="barra">
+<button class="principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+<button onclick="Kit.copiar()">Copiar resumen</button>
+<button onclick="Kit.guardar(true)">Guardar</button>
+<button onclick="Kit.limpiar()">Empezar de nuevo</button>
+</div>
 </div>
 <div class="brindis" id="brindis"></div>
-
 <script>
 /* ============================================================
    Kit común de las herramientas.
@@ -977,6 +1014,7 @@ var Kit = (function(){
      motor de cada hoja los sigue encontrando— y solo se pliega lo que no se
      está trabajando. Al imprimir se abren todos. */
   function pasos(){
+    if(document.body.hasAttribute("data-sesion") && !document.body.hasAttribute("data-secuencia")) return;
     /* Un paso es una sección numerada, venga como .paso o como .bloque: la
        tarjeta de crisis lleva dos de sus tres pasos como bloque. */
     var secs = [].slice.call(document.querySelectorAll("section.paso,section.bloque"))
@@ -1041,6 +1079,7 @@ var Kit = (function(){
     document.querySelectorAll("section.paso,section.bloque").forEach(function(s){
       var h = s.querySelector("h2");
       if(!h) return;
+      if(h.classList.contains("sesion-titulo-repetido")) return;
       var sueltas = [].slice.call(s.children).filter(function(e){
         return e.classList && e.classList.contains("ayuda");
       });
@@ -1067,6 +1106,19 @@ var Kit = (function(){
     ayudas();
     pasos();
     laminaGuardada();
+    // Las ramas que se activan por respuestas clínicas siguen siendo visibles.
+    document.querySelectorAll(".sesion-apoyo > [hidden]").forEach(function(b){
+      var d = b.parentElement;
+      function sincronizar(){ d.hidden = b.hidden; if(!b.hidden) d.open = true; }
+      sincronizar();
+      new MutationObserver(sincronizar).observe(b,{attributes:true,attributeFilter:["hidden"]});
+    });
+    // Los resúmenes conservan el nombre del apoyo; ayudas independientes del recorrido.
+    document.querySelectorAll("details.sesion-apoyo").forEach(function(d){
+      d.addEventListener("toggle",function(){
+        if(d.open) window.dispatchEvent(new Event("resize"));
+      });
+    });
   }
 
   function iniciar(cfg){
