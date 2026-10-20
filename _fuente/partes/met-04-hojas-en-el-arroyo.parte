@@ -203,8 +203,9 @@ function dibujar(){
     const hoja = Kit.svg("g", {transform:`rotate(${Math.sin(h.giro / 12)*12})`});
     gr.appendChild(hoja);
     hoja.appendChild(Kit.svg("ellipse", {cx:22,cy:5,rx:31,ry:7,fill:"#294f4c",opacity:.12}));
-    hoja.appendChild(Kit.svg("path", {d:"M-7 2 C4 -23 38 -24 55 -4 C44 1 41 15 26 17 C10 19 0 12 -7 2 Z",fill:"#b99848",stroke:"#786532","stroke-width":1}));
-    hoja.appendChild(Kit.svg("path", {d:"M-12 5 Q18 -3 48 -4 M9 0 L13 -11 M19 -1 L27 10 M31 -3 L37 -13",fill:"none",stroke:"#786532","stroke-width":1,opacity:.65}));
+    /* la hoja seca en acuarela, del tamaño de la anterior; cada hoja es su propia imagen */
+    if(!h.img) h.img = Kit.svg("image", {href:"[[imagen:hoja.webp]]", x:-12, y:-19, width:70, height:34, preserveAspectRatio:"none"});
+    hoja.appendChild(h.img);
     // Todo el pensamiento, en líneas: no se corta el contenido significativo.
     const palabras=h.texto.split(/\s+/); const lineas=[]; let linea="";
     palabras.forEach(p=>{if((linea+" "+p).trim().length>28 && linea){lineas.push(linea);linea=p;}else linea=(linea+" "+p).trim();});

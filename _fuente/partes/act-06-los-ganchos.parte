@@ -138,18 +138,18 @@ function dibujar(){
   /* la meta */
   svg.appendChild(Kit.svg("line", {x1:668, y1:AGUA + 8, x2:668, y2:240, stroke:"#3f9b86", "stroke-width":2,
     "stroke-dasharray":"5 5"}));
-  const m = Kit.svg("text", {x:662, y:AGUA + 24, "text-anchor":"end", "font-size":13, "font-weight":700, fill:"#3f9b86"});
+  const m = Kit.svg("text", {x:662, y:AGUA + 24, "text-anchor":"end", "font-size":13, "font-weight":700, fill:"#2f7d6a", "paint-order":"stroke", stroke:"#f2f8f6", "stroke-width":3});
   m.textContent = destino().length > 34 ? destino().slice(0, 33) + "…" : destino();
   svg.appendChild(m);
   /* los ganchos */
   hooks.forEach((h, i) => {
     const tirando = pez.modo === "tirado" && pez.i === i;
     const yCebo = tirando ? Math.min(150, pez.y) : 150;
-    svg.appendChild(Kit.svg("line", {x1:h.x, y1:0, x2:h.x, y2:yCebo - 10, stroke:"#6b7280", "stroke-width":1.2}));
+    svg.appendChild(Kit.svg("line", {x1:h.x, y1:0, x2:h.x, y2:yCebo - 10, stroke:"#7c8a8c", "stroke-width":1.1, opacity:.85}));
     svg.appendChild(Kit.svg("path", {d:`M${h.x} ${yCebo - 10} v12 a6 6 0 0 1 -12 0`, fill:"none",
       stroke:"#6b7280", "stroke-width":2}));
     if(!tirando) svg.appendChild(Kit.svg("ellipse", {cx:h.x, cy:yCebo + 1, rx:7, ry:4,
-      fill:h.estado === "notado" ? "#b8c9c4" : "#c26a4e"}));
+      fill:h.estado === "notado" ? "#b8c9c4" : "#c26a4e", filter:Kit.acuarela(svg)}));
     const t = Kit.svg("text", {x:h.x > 460 ? h.x - 9 : h.x + 9, "text-anchor":h.x > 460 ? "end" : "start",
       y:120 - (i % 2) * 22, "font-size":12, fill:h.estado === "notado" ? "#7a8b86" : "#8a3d2e",
       "font-weight":600});
@@ -158,9 +158,8 @@ function dibujar(){
   });
   /* el pez */
   const g = Kit.svg("g", {transform:`translate(${pez.x} ${pez.y})` + (pez.modo === "tirado" ? " rotate(-35)" : "")});
-  g.appendChild(Kit.svg("path", {d:"M-16 0 L-30 -10 L-30 10 Z", fill:"#e0a34a"}));
-  g.appendChild(Kit.svg("ellipse", {cx:0, cy:0, rx:20, ry:11, fill:"#f0b75a", stroke:"#c98a2c", "stroke-width":1.2}));
-  g.appendChild(Kit.svg("circle", {cx:10, cy:-3, r:2.2, fill:"#333"}));
+  /* el pez en acuarela, del mismo largo que el dibujo anterior (de la cola a la boca) */
+  g.appendChild(Kit.figura("pez", "[[imagen:pez.webp]]", {x:-31, y:-18, width:58, height:34}));
   svg.appendChild(g);
 }
 

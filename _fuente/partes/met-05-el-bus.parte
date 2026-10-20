@@ -210,6 +210,9 @@ function dibujar(){
     width:700, height:394, preserveAspectRatio:"none"});
   svg.appendChild(fondoBus);
   g("rect", {x:0, y:CARRIL - 30, width:700, height:330 - CARRIL + 30, fill:"#cfd6da"});
+  /* el asfalto en acuarela */
+  svg.appendChild(Kit.figura("asfalto", "[[imagen:asfalto-acuarela.jpg]]", {x:0, y:CARRIL - 30, width:700,
+    height:330 - CARRIL + 30, preserveAspectRatio:"xMidYMid slice", opacity:.8}));
   g("rect", {x:0, y:CARRIL - 30, width:700, height:5, fill:"#b6bec3"});
   /* las rayas del asfalto corren hacia atrás: así se ve que el bus avanza */
   const corrida = quieto() ? 0 : (tiempo * 150) % 54;
@@ -218,8 +221,7 @@ function dibujar(){
 
   /* el destino, al final del camino */
   const dx = 640;
-  g("rect", {x:dx - 3, y:CARRIL - 96, width:5, height:96, fill:"#8a7f74"});
-  g("path", {d:`M${dx + 2} ${CARRIL - 96} l 44 13 l -44 13 Z`, fill:"#3f7d5a"});
+  svg.appendChild(Kit.figura("bandera", "[[imagen:bandera.webp]]", {x:dx - 4, y:CARRIL - 104, width:42, height:106}));
   const nomD = destinos().length ? destinos()[0] : "sin destino";
   texto(dx + 24, CARRIL - 108, nomD.length > 26 ? nomD.slice(0, 25) + "…" : nomD,
     "font:600 12px system-ui;fill:#3f7d5a", "end");
@@ -229,24 +231,26 @@ function dibujar(){
   const brinco = quieto() ? 0 : Math.sin(tiempo * 24) * .9;
   const bus = Kit.svg("g", {transform:`translate(${bx},${CARRIL - 62 + brinco})`});
   svg.appendChild(bus);
-  g("rect", {x:0, y:0, width:132, height:56, rx:9, fill:"#e8c15a", stroke:"#c9a03a",
-    "stroke-width":2}, bus);
-  g("rect", {x:96, y:9, width:28, height:21, rx:4, fill:"#bcd8e6"}, bus);
-  for(let v = 0; v < 3; v++)
-    g("rect", {x:12 + v * 27, y:9, width:21, height:21, rx:4, fill:"#bcd8e6"}, bus);
-  /* un pasajero asomado en cada ventana */
+  /* el bus en acuarela; sus medidas (132 × 57) son las del dibujo anterior, así
+     que ruedas, ventanas y globos conservan su lugar */
+  bus.appendChild(Kit.figura("bus", "[[imagen:bus-cuerpo.webp]]", {x:0, y:0, width:132, height:57}));
+  /* un pasajero asomado en cada ventana y el conductor: cabezas con textura de acuarela */
   const lista = pasajeros();
-  for(let v = 0; v < Math.min(3, lista.length); v++)
-    g("circle", {cx:22 + v * 27, cy:24, r:6.5, fill:"#a4756f"}, bus);
-  /* el conductor */
-  if(lista.length || destinos().length)
-    g("circle", {cx:110, cy:24, r:6.5, fill:"#3f5163"}, bus);
+  const cabezas = Kit.svg("g", {filter:Kit.acuarela(svg)});
+  bus.appendChild(cabezas);
+  const cabeza = (cx, piel, pelo) => {
+    cabezas.appendChild(Kit.svg("circle", {cx:cx, cy:21, r:5.6, fill:piel}));
+    cabezas.appendChild(Kit.svg("path", {d:`M${cx - 5.8} ${20} q 1 -7.5 5.8 -7.4 q 5 .2 5.8 7.4 q -3 -3.4 -5.8 -3.2 q -3 .2 -5.8 3.2 Z`,
+      fill:pelo}));
+  };
+  const PIEL = ["#c99876", "#a8755a", "#e0b896"], PELO = ["#3d2f28", "#5a4434", "#2f2a28"];
+  for(let v = 0; v < Math.min(3, lista.length); v++) cabeza(27.3 + v * 26.9, PIEL[v], PELO[v]);
+  if(lista.length || destinos().length) cabeza(105.8, "#b98a68", "#34404c");
   /* ruedas que giran solo cuando el bus se mueve */
   const giro = quieto() ? 0 : km * 26;
-  [28, 104].forEach(cx => {
-    g("circle", {cx:cx, cy:60, r:11, fill:"#3f4348"}, bus);
-    g("path", {d:"M-7 0 L7 0 M0 -7 L0 7", stroke:"#7d858c", "stroke-width":2,
-      transform:`translate(${cx},60) rotate(${giro})`}, bus);
+  [32.7, 107].forEach((cx, i) => {
+    bus.appendChild(Kit.figura("rueda" + i, "[[imagen:bus-rueda.webp]]", {x:cx - 12.5, y:45, width:25, height:25,
+      transform:`rotate(${giro} ${cx} 57.5)`}));
   });
   /* humo del escape mientras anda */
   if(!quieto() && escena.anda())

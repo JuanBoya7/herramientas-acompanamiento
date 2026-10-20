@@ -109,8 +109,10 @@ function dibujar(){
   }
   const x = Math.min(1, t / total);
   const cx = x * 640, cy = 220 - altura(x) * 170;
-  g("rect", {x:cx - 22, y:cy - 12, width:44, height:8, rx:4, fill:"#e8b04a", stroke:"#a8761f",
-    transform:"rotate(" + (Math.cos(Math.PI * x) * -18) + " " + cx + " " + (cy - 8) + ")"});
+  /* la persona sobre la tabla, en acuarela: la tabla apoya donde iba la tabla anterior
+     y se inclina igual con la pendiente de la ola */
+  svg.appendChild(Kit.figura("surfista", "[[imagen:surfista.webp]]", {x:cx - 30, y:cy - 58, width:60, height:54,
+    transform:"rotate(" + (Math.cos(Math.PI * x) * -18) + " " + cx + " " + (cy - 8) + ")"}));
 }
 
 function pintar(){

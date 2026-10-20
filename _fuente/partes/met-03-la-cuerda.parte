@@ -152,6 +152,7 @@ function persona(padre, x, base, col, estado, tiembla){
   const cad = base - 46, hom = base - 84, cab = base - 98;
 
   if(estado === "caido"){
+    padre.setAttribute("filter", Kit.acuarela(padre.ownerSVGElement || padre));
     /* dentro del hoyo, con los brazos arriba */
     const y = base + 26;
     g("circle", {cx:x, cy:y, r:11, fill:col});
@@ -164,38 +165,15 @@ function persona(padre, x, base, col, estado, tiembla){
     return {mano:[x, y - 2]};
   }
 
-  const suelta = estado === "suelta";
-  const inc = suelta ? 0 : -7 + tiembla;
-  const piel="#b88c6c", pantalon="#455660", camisa=suelta?"#65907b":"#718ba0";
-  // Pantalón con volumen y botas; el cuerpo acompaña la tensión de la cuerda.
-  g("path",{d:`M${x-8} ${cad-3} L${x+9} ${cad-3} L${x+21} ${base-5} Q${x+16} ${base} ${x+10} ${base-4} L${x} ${cad+16} L${x-8} ${base-4} L${x-19} ${base-4} Z`,fill:pantalon});
-  g("path",{d:`M${x-19} ${base-7} Q${x-29} ${base-4} ${x-25} ${base} L${x-7} ${base} L${x-7} ${base-7} Z M${x+10} ${base-7} L${x+21} ${base-7} Q${x+31} ${base-4} ${x+28} ${base} L${x+10} ${base} Z`,fill:"#534c40"});
-  g("path",{d:`M${x+inc-10} ${hom+2} Q${x+inc} ${hom-4} ${x+inc+10} ${hom+3} L${x+10} ${cad+3} Q${x} ${cad+8} ${x-10} ${cad+2} Z`,fill:camisa,stroke:"#5c7582","stroke-width":.7});
-  g("path",{d:`M${x+inc-5} ${hom+9} Q${x+inc+1} ${hom+24} ${x-4} ${cad}`,stroke:"#fff","stroke-width":2,opacity:.17,fill:"none"});
-  g("path",{d:`M${x+inc-4} ${cab+8} L${x+inc-3} ${hom+3} Q${x+inc+4} ${hom+7} ${x+inc+6} ${hom} L${x+inc+5} ${cab+7} Z`,fill:piel});
-  g("ellipse",{cx:x+inc,cy:cab,rx:10,ry:13,fill:piel});
-  g("path",{d:`M${x+inc-9} ${cab+4} Q${x+inc-16} ${cab-12} ${x+inc-4} ${cab-15} Q${x+inc+10} ${cab-17} ${x+inc+11} ${cab-5} Q${x+inc+3} ${cab-10} ${x+inc-5} ${cab-5} L${x+inc-5} ${cab+4} Z`,fill:"#3d3e39"});
-  g("path",{d:`M${x+inc+8} ${cab-3} l4 6 -4 1`,fill:piel});
-  g("circle",{cx:x+inc+6,cy:cab-2,r:1.1,fill:"#3c3934"});
-
-  let mano;
-  if(suelta){
-    /* un brazo relajado, el otro señalando hacia adelante */
-    g("path", {d:`M${x} ${hom + 5} q -12 12 -14 24`, stroke:camisa, "stroke-width":7,
-      fill:"none", "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${hom + 5} q 14 8 20 2`, stroke:camisa, "stroke-width":7,
-      fill:"none", "stroke-linecap":"round"});
-    mano = [x + 20, hom + 7];
-  } else {
-    /* las dos manos agarradas a la cuerda */
-    g("path", {d:`M${x + inc} ${hom + 4} L${x + 20} ${hom + 2}`, stroke:camisa, "stroke-width":7,
-      "stroke-linecap":"round"});
-    g("path", {d:`M${x + inc} ${hom + 10} L${x + 26} ${hom + 6}`, stroke:camisa, "stroke-width":7,
-      "stroke-linecap":"round"});
-    mano = [x + 26, hom + 4];
+  /* La persona en acuarela, de unos 112 px de alto como el dibujo anterior. Tirando,
+     se echa hacia atrás con las dos manos en la cuerda (y tiembla con la tensión);
+     soltada, se endereza y señala hacia adelante. La mano que devuelve es la del dibujo. */
+  if(estado === "suelta"){
+    padre.appendChild(Kit.figura("personaSuelta", "[[imagen:cuerda-suelta.webp]]", {x:x - 14, y:base - 112, width:55, height:112}));
+    return {mano:[x + 39, base - 84]};
   }
-  g("ellipse",{cx:mano[0],cy:mano[1],rx:4,ry:3,fill:piel});
-  return {mano};
+  padre.appendChild(Kit.figura("personaJala", "[[imagen:cuerda-jala.webp]]", {x:x - 41 + tiembla, y:base - 112, width:81, height:112}));
+  return {mano:[x + 26 + tiembla, base - 81]};
 }
 
 /* ====================== ESCENA ====================== */
@@ -214,6 +192,11 @@ function dibujar(){
   g("rect", {x:0, y:0, width:700, height:SUELO, fill:"#f8f5ea"});
   g("rect", {x:0, y:SUELO, width:HX0, height:340 - SUELO, fill:"#c5af8a"});
   g("rect", {x:HX1, y:SUELO, width:700 - HX1, height:340 - SUELO, fill:"#c5af8a"});
+  /* cielo, pradera y tierra en acuarela, de la misma mano que el monstruo y la persona */
+  svg.appendChild(Kit.figura("cielo", "[[imagen:campo-acuarela.jpg]]", {x:0, y:SUELO - 394, width:700, height:394}));
+  [["tierraIzq", 0, HX0], ["tierraDer", HX1, 700 - HX1]].forEach(([clave, x, w]) =>
+    svg.appendChild(Kit.figura(clave, "[[imagen:tierra-acuarela.jpg]]", {x:x, y:SUELO, width:w, height:340 - SUELO,
+      preserveAspectRatio:"xMidYMin slice", opacity:.92})));
 
   const defs = Kit.svg("defs", {});
   const hoyo = Kit.svg("linearGradient", {id:"hoyo", x1:"0", y1:"0", x2:"0", y2:"1"});
@@ -225,11 +208,8 @@ function dibujar(){
   g("ellipse", {cx:(HX0 + HX1) / 2, cy:SUELO, rx:(HX1 - HX0) / 2, ry:11, fill:"#241e18"});
 
   // Orillas orgánicas: el centro permanece despejado para leer la acción.
-  g("path", {d:"M0 248 Q55 242 107 250 T212 248 L260 250 L252 258 Q164 249 82 260 L0 259 Z",fill:"#71866b"});
-  g("path", {d:"M440 250 Q490 241 545 249 T700 246 L700 260 Q561 257 449 260 Z",fill:"#71866b"});
-  for(let k=0;k<9;k++){
-    const xx=18+k*27;g("path",{d:`M${xx} 255 q-4 -12 -7 -15 M${xx} 255 q2 -9 6 -13`,stroke:"#617a59","stroke-width":1.5,fill:"none",opacity:.6});
-  }
+  g("path", {d:"M0 248 Q55 242 107 250 T212 248 L260 250 L252 258 Q164 249 82 260 L0 259 Z",fill:"#71866b", filter:Kit.acuarela(svg), opacity:.85});
+  g("path", {d:"M440 250 Q490 241 545 249 T700 246 L700 260 Q561 257 449 260 Z",fill:"#71866b", filter:Kit.acuarela(svg), opacity:.85});
   const t = tamano();
   /* respira: el alto late un poco aunque nadie toque nada */
   const alto = (52 + t * 11) * (1 + Math.sin(fase * 1.7) * .018);

@@ -50,3 +50,26 @@ en JPEG (90–170 KB), sin transparencia, porque son fondos. Cada escena crea el
 
 En los pedidos se excluyen personas, animales, texto y los objetos que la escena dibuja
 encima (bus, ganchos, olas, globos), y se pide dejar despejada la zona central.
+
+## Figuras y suelos (2026-10-20)
+
+Figuras en acuarela con fondo transparente (WebP, 3–40 KB), generadas con GPT Image (Codex)
+con el arroyo o el monstruo como referencia de técnica. Se dibujan con `Kit.figura(clave, href,
+attrs)`, que crea cada `<image>` una sola vez. Cada figura conserva el tamaño y los puntos de
+apoyo del dibujo vectorial que reemplaza (manos, pies, ruedas, tabla), así que la lógica de
+cada escena no cambió.
+
+| Archivo | Escena | Notas |
+|---|---|---|
+| `bus-cuerpo.webp`, `bus-rueda.webp`, `bandera.webp` | `met-el-bus` | Ruedas aparte para que giren; las cabezas de los pasajeros siguen en vector |
+| `pez.webp` | `act-los-ganchos` | |
+| `surfista.webp` | `crisis-surfear-el-impulso` | Gira con la pendiente de la ola, como la tabla anterior |
+| `cavador.webp`, `soltado.webp` | `met-el-hoyo` | Cavando se inclina con cada palada; soltada, se endereza |
+| `caminante.webp`, `caminante-mano.webp` | `act-quien-lleva-los-globos` | La mano de atrás sostiene el ramo; la otra pose se estira hacia el globo de enfrente; apagada = gris |
+| `cuerda-jala.webp`, `cuerda-suelta.webp` | `met-la-cuerda` | La caída dentro del hoyo sigue en vector, con textura |
+| `hoja.webp` | `met-hojas-en-el-arroyo` | Cada hoja guarda su propia imagen |
+| `asfalto-`, `tierra-`, `sendero-acuarela.jpg` | bus, hoyo y cuerda, globos | Suelos |
+
+Lo que depende de lo que se elige (globos, clima, cabezas, cebos, orillas) sigue en vector,
+con el filtro `Kit.acuarela(svg)`: borde irregular y pigmento desparejo, un filtro por escena.
+La cuerda recibió además cielo y pradera (`campo-acuarela.jpg`) y tierra a los lados del hoyo.

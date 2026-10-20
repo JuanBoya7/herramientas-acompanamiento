@@ -481,6 +481,36 @@ var Kit = (function(){
         z = Math.round(n(a,2) + (n(b,2) - n(a,2)) * t);
     return "#" + [r,g,z].map(function(v){ return ("0"+v.toString(16)).slice(-2); }).join("");
   }
+  /* Textura de acuarela para lo que se dibuja en vector encima de un paisaje en
+     acuarela (globos, clima, cabezas, anzuelos): borde irregular por desplazamiento
+     y pigmento desparejo por un grano que modula la opacidad. Se agrega una vez a
+     cada svg (las escenas que se repintan borran su contenido, así que se llama en
+     cada cuadro) y devuelve el valor para el atributo filter. Un solo filtro por
+     escena y aplicado a grupos chicos: el costo por cuadro es bajo. */
+  function acuarela(lienzo){
+    if(!lienzo.querySelector("#kAcuarela")){
+      var defs = svg("defs", {});
+      defs.innerHTML = '<filter id="kAcuarela" x="-15%" y="-15%" width="130%" height="130%">' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="ondas"/>' +
+        '<feDisplacementMap in="SourceGraphic" in2="ondas" scale="3.5" xChannelSelector="R" yChannelSelector="G" result="borde"/>' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="3" result="grano"/>' +
+        '<feColorMatrix in="grano" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.35" result="granoA"/>' +
+        '<feComposite in="borde" in2="granoA" operator="in" result="pigmento"/>' +
+        '<feGaussianBlur in="pigmento" stdDeviation="0.45" result="suave"/>' +
+        '<feMerge><feMergeNode in="suave"/><feMergeNode in="suave"/></feMerge></filter>';
+      lienzo.insertBefore(defs, lienzo.firstChild);
+    }
+    return "url(#kAcuarela)";
+  }
+  /* Figura en acuarela (un <image> incrustado) que se reutiliza entre cuadros: las
+     escenas se repintan 25 veces por segundo y crear la imagen cada vez la volvería
+     a decodificar. Cada clave es una instancia (dos ruedas, dos claves). */
+  var figuras = {};
+  function figura(clave, href, attrs){
+    var e = figuras[clave] || (figuras[clave] = svg("image", {href: href, preserveAspectRatio: "none"}));
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
   function escapar(s){
     return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
       return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
@@ -1154,7 +1184,7 @@ var Kit = (function(){
     chips: chips, opciones: opciones, activas: activas, medidor: medidor,
     agregarLibre: agregarLibre, mostrador: mostrador, gota: gota,
     lamina: lamina,
-    $: $, svg: svg, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
+    $: $, svg: svg, acuarela: acuarela, figura: figura, mezcla: mezcla, escapar: escapar, crearEl: crearEl,
     reloj: reloj,
     brindis: brindis, modo: modo, texto: textoResumen
   };

@@ -158,7 +158,8 @@ function dibujar(){
   const base = {"Pequeño":.7, "Mediano":1, "Grande":1.35}[uno("tamano")] || 1;
   const s = base * escala;
   const x = 220 + Math.sin(deriva) * 26, y = 138 + Math.cos(deriva * .7) * 10;
-  const g = Kit.svg("g", {transform:`translate(${x} ${y}) scale(${s})`});
+  /* el clima en vector, con textura de acuarela para que no desentone con el cielo */
+  const g = Kit.svg("g", {transform:`translate(${x} ${y}) scale(${s})`, filter:Kit.acuarela(svg), opacity:.92});
   const forma = uno("forma") || "Nube";
   if(forma === "Ladrillo")
     g.appendChild(Kit.svg("rect", {x:-38, y:-18, width:76, height:36, rx:4, fill:col}));

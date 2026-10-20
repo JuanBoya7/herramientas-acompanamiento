@@ -141,9 +141,16 @@ function dibujar(){
     g("path", {d:`M0 ${y} L${HX0} ${y}`, stroke:"#b9a184", "stroke-width":1.4});
     g("path", {d:`M${HX1} ${y} L700 ${y}`, stroke:"#b9a184", "stroke-width":1.4});
   }
+  /* la tierra en acuarela, a los dos lados */
+  const tierraEn = (clave, x, w, op) => svg.appendChild(Kit.figura(clave, "[[imagen:tierra-acuarela.jpg]]",
+    {x:x, y:ySup, width:w, height:330 - ySup, preserveAspectRatio:"xMidYMin slice", opacity:op}));
+  tierraEn("tierraIzq", 0, HX0, .92);
+  tierraEn("tierraDer", HX1, 700 - HX1, .92);
   /* el fondo del hoyo */
   g("rect", {x:HX0, y:ySup, width:HX1 - HX0, height:330 - ySup, fill:"#7d674f"});
   g("rect", {x:HX0, y:SUELO_FIG, width:HX1 - HX0, height:330 - SUELO_FIG, fill:"#5f4d3a"});
+  /* dentro del hoyo, la misma tierra más oscura */
+  tierraEn("tierraHoyo", HX0, HX1 - HX0, .4);
   g("path", {d:`M${HX0} ${ySup} L${HX0} 330 M${HX1} ${ySup} L${HX1} 330`, stroke:"#8a7357",
     "stroke-width":3});
 
@@ -157,9 +164,9 @@ function dibujar(){
     g("path", {d:`M${HX0 - 26} 30 L${HX0 - 26} 12 M${HX0 - 32} 20 L${HX0 - 26} 12 L${HX0 - 20} 20`,
       stroke:"#3f5163", "stroke-width":2.4, fill:"none", "stroke-linecap":"round"});
     texto(HX0 - 26, 46, `la superficie, a ${prof.toFixed(1).replace(".", ",")} m`,
-      "font:600 12px system-ui;fill:#3f5163");
+      "font:600 12px system-ui;fill:#2f3f4e;paint-order:stroke;stroke:#f4f1e6;stroke-width:3");
   } else {
-    texto(HX0 - 76, ySup - 10, "la superficie", "font:600 12px system-ui;fill:#3f5163");
+    texto(HX0 - 76, ySup - 10, "la superficie", "font:600 12px system-ui;fill:#2f3f4e;paint-order:stroke;stroke:#f4f1e6;stroke-width:3");
   }
 
   /* la persona, dentro del hoyo */
@@ -189,42 +196,14 @@ function dibujar(){
 
 /* La figura: en el hoyo, con la pala en las manos o tirada en el suelo. */
 function persona(svg, x, base, golpe){
-  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
-  const col = soltada ? "#3f7d5a" : "#3f5163";
-  const cad = base - 40, hom = base - 72, cab = base - 86;
-
-  g("path", {d:`M${x} ${cad} L${x - 11} ${base - 2}`, stroke:col, "stroke-width":6,
-    "stroke-linecap":"round"});
-  g("path", {d:`M${x} ${cad} L${x + 13} ${base - 2}`, stroke:col, "stroke-width":6,
-    "stroke-linecap":"round"});
-  const inc = soltada ? 0 : -5 + golpe * 3;
-  g("path", {d:`M${x} ${cad} L${x + inc} ${hom}`, stroke:col, "stroke-width":8,
-    "stroke-linecap":"round"});
-  g("circle", {cx:x + inc, cy:cab, r:11, fill:col});
-  g("path", {d:`M${x + inc - 11} ${cab - 3} q 4 -12 11 -11 q 8 0 11 11 q -6 -5 -11 -4 q -6 1 -11 4 Z`,
-    fill:"#2c3a48"});
-
+  /* La persona en acuarela, de unos 100 px de alto como el dibujo anterior. Cavando,
+     el cuerpo acompaña cada palada inclinándose sobre los pies; soltada la pala, se
+     endereza y la pala queda en el piso. El estado se ve en la postura. */
   if(soltada){
-    /* los brazos sueltos, y la pala en el piso */
-    g("path", {d:`M${x} ${hom + 5} q -12 12 -13 22`, stroke:col, "stroke-width":5,
-      fill:"none", "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${hom + 5} q 13 11 14 22`, stroke:col, "stroke-width":5,
-      fill:"none", "stroke-linecap":"round"});
-    g("path", {d:`M${x + 26} ${base - 5} L${x + 62} ${base - 5}`, stroke:"#8a7357",
-      "stroke-width":4, "stroke-linecap":"round"});
-    g("rect", {x:x + 60, y:base - 13, width:15, height:17, rx:3, fill:"#9aa0a6"});
+    svg.appendChild(Kit.figura("soltado", "[[imagen:soltado.webp]]", {x:x - 19, y:base - 100, width:91, height:100}));
   } else {
-    /* las dos manos en el mango, y la pala clavada abajo */
-    const ang = -46 + golpe * 22;
-    const mango = Kit.svg("g", {transform:`translate(${x + 8},${hom + 6}) rotate(${ang})`});
-    svg.appendChild(mango);
-    mango.appendChild(Kit.svg("path", {d:"M0 0 L0 44", stroke:"#8a7357", "stroke-width":4,
-      "stroke-linecap":"round"}));
-    mango.appendChild(Kit.svg("rect", {x:-8, y:42, width:16, height:18, rx:3, fill:"#9aa0a6"}));
-    g("path", {d:`M${x + inc} ${hom + 4} L${x + 8} ${hom + 4}`, stroke:col, "stroke-width":5,
-      "stroke-linecap":"round"});
-    g("path", {d:`M${x + inc} ${hom + 12} L${x + 12} ${hom + 20}`, stroke:col, "stroke-width":5,
-      "stroke-linecap":"round"});
+    svg.appendChild(Kit.figura("cavador", "[[imagen:cavador.webp]]", {x:x - 33, y:base - 100 + Math.abs(golpe) * 1.5,
+      width:76, height:100, transform:`rotate(${golpe * 3} ${x} ${base})`}));
   }
 }
 

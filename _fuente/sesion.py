@@ -71,7 +71,7 @@ ESCENAS_LATERALES = {'met-la-cuerda','met-hojas-en-el-arroyo','met-el-hoyo',
 def incrustar_imagenes(texto):
     def imagen(m):
         p = AQUI / 'imagenes' / m[1]
-        tipo = 'jpeg' if p.suffix.lower() in ('.jpg', '.jpeg') else 'png'
+        tipo = {'.jpg': 'jpeg', '.jpeg': 'jpeg', '.webp': 'webp'}.get(p.suffix.lower(), 'png')
         return f'data:image/{tipo};base64,' + base64.b64encode(p.read_bytes()).decode('ascii')
     return re.sub(r'\[\[imagen:([\w.-]+)\]\]', imagen, texto)
 
