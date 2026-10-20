@@ -31,3 +31,22 @@ Especificación del prompt empleado, resumida:
 
 Uso: personaje en `met-la-cuerda.html`. El tamaño, la cuerda y la postura de la persona siguen
 respondiendo a las decisiones durante la práctica.
+
+## Paisajes de las escenas (2026-10-20)
+
+Acuarelas generadas con GPT Image a través de Codex, con `arroyo-acuarela.png` como
+referencia de técnica, para que todas las escenas se vean de una misma mano. Se guardan
+en JPEG (90–170 KB), sin transparencia, porque son fondos. Cada escena crea el elemento
+`<image>` una sola vez y lo reutiliza: el dibujo se repinta 25 veces por segundo.
+
+| Archivo | Escena | Cómo encaja |
+|---|---|---|
+| `bus-acuarela.jpg` | `met-el-bus` | Campo andino; el borde inferior del campo cae sobre la berma de la carretera |
+| `cielo-acuarela.jpg` | `act-el-cielo-y-el-clima` | Cielo despejado, recortado a la elipse que crece con cada ciclo |
+| `lago-acuarela.jpg` | `act-los-ganchos` | Lago visto de lado; la línea del agua cae en `AGUA` |
+| `campo-acuarela.jpg` | `met-el-hoyo` | Cielo y pradera; su borde inferior sigue a la superficie, que sube al cavar |
+| `mar-acuarela.jpg` | `crisis-surfear-el-impulso` | Mar en calma; el horizonte queda detrás de la ola dibujada |
+| `colinas-acuarela.jpg` | `act-quien-lleva-los-globos` | Colinas bajas; su borde inferior cae sobre el suelo del camino |
+
+En los pedidos se excluyen personas, animales, texto y los objetos que la escena dibuja
+encima (bus, ganchos, olas, globos), y se pide dejar despejada la zona central.

@@ -192,6 +192,8 @@ function latido(dt){
 }
 
 /* ====================== LA RUTA ====================== */
+/* el paisaje se crea una vez: la escena se repinta en cada cuadro */
+let fondoBus = null;
 function dibujar(){
   const svg = $("ruta");
   svg.innerHTML = "";
@@ -203,6 +205,10 @@ function dibujar(){
 
   const CARRIL = 232;
   g("rect", {x:0, y:0, width:700, height:CARRIL - 30, fill:"#eef4f7"});
+  /* paisaje en acuarela: el borde inferior del campo cae justo sobre la berma */
+  if(!fondoBus) fondoBus = Kit.svg("image", {href:"[[imagen:bus-acuarela.jpg]]", x:0, y:CARRIL - 30 - 245,
+    width:700, height:394, preserveAspectRatio:"none"});
+  svg.appendChild(fondoBus);
   g("rect", {x:0, y:CARRIL - 30, width:700, height:330 - CARRIL + 30, fill:"#cfd6da"});
   g("rect", {x:0, y:CARRIL - 30, width:700, height:5, fill:"#b6bec3"});
   /* las rayas del asfalto corren hacia atrás: así se ve que el bus avanza */

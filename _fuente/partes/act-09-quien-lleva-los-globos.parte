@@ -232,6 +232,8 @@ function latido(dt){
 }
 
 /* ====================== LA ESCENA ====================== */
+/* las colinas en acuarela se crean una vez; su borde inferior cae sobre el suelo */
+let fondoColinas = null;
 function dibujar(){
   const svg = $("camino");
   svg.innerHTML = "";
@@ -246,6 +248,8 @@ function dibujar(){
   const MENUDA = "font:11.5px system-ui,sans-serif;fill:#6d7f8f";
 
   g("rect", {x:0, y:0, width:700, height:300, fill:"#f3f7f9"});
+  if(!fondoColinas) fondoColinas = Kit.svg("image", {href:"[[imagen:colinas-acuarela.jpg]]", x:0, y:SUELO - 287, width:700, height:394, preserveAspectRatio:"none"});
+  svg.appendChild(fondoColinas);
 
   /* el sitio: cabe la figura, el globo de enfrente y todo el ramo */
   if(halo > .02){

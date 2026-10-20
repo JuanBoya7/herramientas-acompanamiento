@@ -122,7 +122,9 @@ function fase(){
   return [CICLO[0], 0];
 }
 
-/* el cielo: crece un poco con cada ciclo y respira; el clima va a su ritmo */
+/* el cielo: crece un poco con cada ciclo y respira; el clima va a su ritmo.
+   La acuarela se crea una vez y solo cambia de tamaño. */
+let acuarelaCielo = null;
 function dibujar(){
   const svg = $("cielo");
   svg.innerHTML = "";
@@ -139,6 +141,15 @@ function dibujar(){
   def.appendChild(grad);
   svg.appendChild(def);
   svg.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78, fill:"url(#gCielo)"}));
+  /* la acuarela del cielo, recortada a la elipse que crece con cada ciclo */
+  const recorte = Kit.svg("clipPath", {id:"rCielo"});
+  recorte.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78}));
+  def.appendChild(recorte);
+  if(!acuarelaCielo) acuarelaCielo = Kit.svg("image", {href:"[[imagen:cielo-acuarela.jpg]]",
+    preserveAspectRatio:"xMidYMid slice", "clip-path":"url(#rCielo)", opacity:.82});
+  for(const [k, v] of Object.entries({x:220 - r * 1.25, y:140 - r * .78, width:r * 2.5, height:r * 1.56}))
+    acuarelaCielo.setAttribute(k, v);
+  svg.appendChild(acuarelaCielo);
   svg.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78, fill:"none",
     stroke:"#8fbfdc", "stroke-width":1.5, "stroke-dasharray":"3 5"}));
 

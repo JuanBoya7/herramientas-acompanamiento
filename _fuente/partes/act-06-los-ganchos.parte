@@ -125,10 +125,14 @@ function armarGanchos(){
 }
 
 /* ---------- el lago ---------- */
+/* el lago en acuarela se crea una vez (la escena se repinta en cada cuadro); su línea de agua cae en AGUA */
+let fondoLago = null;
 function dibujar(){
   const svg = $("lago");
   svg.innerHTML = "";
   svg.appendChild(Kit.svg("rect", {x:0, y:AGUA, width:700, height:250 - AGUA, fill:"#e8f3f6"}));
+  if(!fondoLago) fondoLago = Kit.svg("image", {href:"[[imagen:lago-acuarela.jpg]]", x:0, y:0, width:700, height:300, preserveAspectRatio:"none"});
+  svg.appendChild(fondoLago);
   svg.appendChild(Kit.svg("path", {d:`M0 ${AGUA} Q 87 ${AGUA - 6} 175 ${AGUA} T 350 ${AGUA} T 525 ${AGUA} T 700 ${AGUA}`,
     fill:"none", stroke:"#8fbfcc", "stroke-width":2}));
   /* la meta */

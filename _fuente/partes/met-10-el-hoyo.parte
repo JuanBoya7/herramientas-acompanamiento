@@ -112,6 +112,8 @@ function latido(dt){
 }
 
 /* ====================== EL CORTE ====================== */
+/* cielo y campo en acuarela, creados una vez; su borde inferior sigue a la superficie, que sube al cavar */
+let fondoCampo = null;
 function dibujar(){
   const svg = $("corte");
   svg.innerHTML = "";
@@ -128,6 +130,9 @@ function dibujar(){
 
   /* cielo y tierra */
   g("rect", {x:0, y:0, width:700, height:330, fill:"#e8f0f4"});
+  if(!fondoCampo) fondoCampo = Kit.svg("image", {href:"[[imagen:campo-acuarela.jpg]]", x:0, width:700, height:394, preserveAspectRatio:"none"});
+  fondoCampo.setAttribute("y", ySup - 394);
+  svg.appendChild(fondoCampo);
   g("rect", {x:0, y:ySup, width:HX0, height:330 - ySup, fill:"#c9b291"});
   g("rect", {x:HX1, y:ySup, width:700 - HX1, height:330 - ySup, fill:"#c9b291"});
   /* las vetas del terreno */
