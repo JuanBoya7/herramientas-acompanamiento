@@ -42,21 +42,7 @@ campo3ph: Ej. Sesión 2
 
   .panel-mapa{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
     padding:16px 14px 10px;margin-bottom:16px}
-  .mapa-mesa{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:18px;
-    align-items:start}
-  @media (max-width:860px){.mapa-mesa{grid-template-columns:1fr}}
-  .mapa{display:block;width:100%;height:auto;max-width:680px;margin:0 auto}
-
-  /* lectura breve: frases para decir mientras se mira el mapa */
-  .breve{border-left:5px solid var(--acento);background:#f8fafc;border-radius:10px;
-    padding:14px 16px}
-  .breve .rotulo{font-size:11px;text-transform:uppercase;letter-spacing:.7px;
-    color:var(--tinta-suave);margin-bottom:4px}
-  .breve .lectura-nombre{font-size:13px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.6px;margin-bottom:10px}
-  .breve .dato{font-size:15px;font-weight:700;color:var(--tinta);margin:0 0 8px;line-height:1.35}
-  .breve .frase{font-size:19px;font-weight:700;line-height:1.3;margin:12px 0 0;color:var(--tinta)}
-  .breve .frase:first-of-type{margin-top:4px}
+  .mapa{display:block;width:100%;height:auto;max-width:900px;margin:0 auto}
 
   /* panorama: los cuatro cuadrantes en el mismo orden que el mapa */
   .panorama{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
@@ -127,16 +113,8 @@ campo3ph: Ej. Sesión 2
 </section>
 
 <div class="panel-mapa">
-  <div class="mapa-mesa">
-    <svg class="mapa" id="mapa" viewBox="0 0 560 420" role="img"
-      aria-label="Mapa de estrategias: alivio inmediato frente a resultado a largo plazo"></svg>
-    <aside class="breve" id="breve">
-      <div class="rotulo">En pocas palabras</div>
-      <div class="lectura-nombre" id="bNombre"></div>
-      <div id="bDatos"></div>
-      <div id="bFrases"></div>
-    </aside>
-  </div>
+  <svg class="mapa" id="mapa" viewBox="0 0 860 470" role="img"
+    aria-label="Mapa de estrategias: alivio inmediato frente a resultado a largo plazo"></svg>
   <div class="panorama" id="panorama"></div>
   <div class="pagado" id="pagado"></div>
   <div class="contadores">
@@ -328,7 +306,8 @@ function pintarLista(){
 }
 
 /* ====================== MAPA ====================== */
-const X0 = 68, X1 = 500, Y0 = 46, Y1 = 336;
+const ANCHO = 860, ALTO = 470;
+const X0 = 70, X1 = 830, Y0 = 30, Y1 = 396;
 const px = v => X0 + (X1 - X0) * v / 10;
 const py = v => Y1 - (Y1 - Y0) * v / 10;
 
@@ -382,15 +361,16 @@ function dibujar(){
     return;
   }
 
+  /* el círculo crece con lo que ha costado */
   const puntos = estrategias.map((e, i) => ({e:e, i:i, q:cuadrante(e),
-    x:px(e.alivio), y:py(e.largo), r:10 + e.costos.length * 2.2}));
+    x:px(e.alivio), y:py(e.largo), r:12 + e.costos.length * 2.2}));
   /* las que comparten valores se abren en corona alrededor del punto,
      para que ningún número quede tapado */
   const grupos = {};
   puntos.forEach(p => (grupos[p.e.alivio + "," + p.e.largo] = grupos[p.e.alivio + "," + p.e.largo] || []).push(p));
   Object.values(grupos).forEach(gr => {
     if(gr.length < 2) return;
-    const radio = Math.max(...gr.map(p => p.r)) * (gr.length > 2 ? 1.25 : 1.05);
+    const radio = Math.max(...gr.map(p => p.r)) * (gr.length > 2 ? 1.6 : 1.2);
     gr.forEach((p, k) => {
       const a = -Math.PI / 2 + 2 * Math.PI * k / gr.length;
       p.x += Math.cos(a) * radio;
@@ -398,50 +378,74 @@ function dibujar(){
     });
   });
   puntos.forEach(p => {
-    g("circle", {cx:p.x, cy:p.y, r:p.r, fill:p.q.color, "fill-opacity":.88,
-      stroke:"#fff", "stroke-width":2});
+    g("circle", {cx:p.x, cy:p.y, r:p.r, fill:p.q.color, stroke:"#fff", "stroke-width":2});
     texto(p.x, p.y + 4.5, p.i + 1, "font:700 12.5px system-ui;fill:#fff");
   });
-  /* el nombre al lado de cada número, en el primer sitio libre alrededor del
-     círculo: así el mapa se puede mostrar sin tener que buscar la lista */
+
+  /* junto a cada número, el nombre completo y debajo lo que ha costado;
+     se ubica en el sitio alrededor del círculo que menos tapa a los demás */
+  const FN = "600 14px system-ui", FC = "500 12.5px system-ui", LN = 16.5, LC = 15;
   const ocupados = puntos.map(p => ({x0:p.x-p.r, x1:p.x+p.r, y0:p.y-p.r, y1:p.y+p.r}));
+  [[(X0+px(6))/2, Y0+18], [(px(6)+X1)/2, Y0+18], [(X0+px(6))/2, Y1-12], [(px(6)+X1)/2, Y1-12]]
+    .forEach(([x, y]) => ocupados.push({x0:x-90, x1:x+90, y0:y-13, y1:y+4}));
   const solape = c => ocupados.reduce((s, o) =>
     s + Math.max(0, Math.min(c.x1, o.x1) - Math.max(c.x0, o.x0)) *
         Math.max(0, Math.min(c.y1, o.y1) - Math.max(c.y0, o.y0)), 0);
   /* de arriba abajo, para que las del mismo grupo se repartan los lados */
   puntos.slice().sort((a, b) => a.y - b.y).forEach(p => {
     const nombre = p.e.nombre.trim() || "(sin nombre)";
-    const corto = nombre.length > 28 ? nombre.slice(0, 27) + "…" : nombre;
-    const ancho = corto.length * 5.6, alto = 14;
+    const lineas = partir(nombre.split(/\s+/), " ", 30).map(s => ({s:s, f:FN, h:LN, nombre:true}))
+      .concat(partir(p.e.costos, " · ", 40).map(s => ({s:s, f:FC, h:LC})));
+    const ancho = Math.max(...lineas.map(l => medir(l.s, l.f)));
+    const alto = lineas.reduce((s, l) => s + l.h, 0);
+    const d = p.r + 6, R = p.r;
     const sitios = [
-      {x:p.x + p.r + 5, y:p.y + 4, ancla:"start"},
-      {x:p.x - p.r - 5, y:p.y + 4, ancla:"end"},
-      {x:p.x, y:p.y - p.r - 6, ancla:"middle"},
-      {x:p.x, y:p.y + p.r + 14, ancla:"middle"},
-      {x:p.x + p.r + 4, y:p.y - p.r + 2, ancla:"start"},
-      {x:p.x - p.r - 4, y:p.y - p.r + 2, ancla:"end"},
-      {x:p.x + p.r + 4, y:p.y + p.r + 8, ancla:"start"},
-      {x:p.x - p.r - 4, y:p.y + p.r + 8, ancla:"end"},
-      {x:p.x, y:p.y - p.r - 20, ancla:"middle"},
-      {x:p.x, y:p.y + p.r + 28, ancla:"middle"}
+      {x:p.x + d, y:p.y - alto / 2, ancla:"start"},
+      {x:p.x - d, y:p.y - alto / 2, ancla:"end"},
+      {x:p.x, y:p.y - d - alto, ancla:"middle"},
+      {x:p.x, y:p.y + d, ancla:"middle"},
+      {x:p.x + d - 4, y:p.y - R - alto + 4, ancla:"start"},
+      {x:p.x - d + 4, y:p.y - R - alto + 4, ancla:"end"},
+      {x:p.x + d - 4, y:p.y + R - 4, ancla:"start"},
+      {x:p.x - d + 4, y:p.y + R - 4, ancla:"end"},
+      {x:p.x, y:p.y - d - alto - 16, ancla:"middle"},
+      {x:p.x, y:p.y + d + 16, ancla:"middle"}
     ].map(s => {
       const x0 = s.ancla === "start" ? s.x : s.ancla === "end" ? s.x - ancho : s.x - ancho / 2;
-      return Object.assign(s, {caja:{x0:x0, x1:x0 + ancho, y0:s.y - alto + 3, y1:s.y + 3}});
+      return Object.assign(s, {caja:{x0:x0, x1:x0 + ancho, y0:s.y, y1:s.y + alto}});
     });
-    const dentro = s => s.caja.x0 >= 2 && s.caja.x1 <= 558 && s.caja.y0 >= 2 && s.caja.y1 <= 418;
-    /* el primer sitio libre; si no hay, el que menos tapa */
+    const dentro = s => s.caja.x0 >= 2 && s.caja.x1 <= ANCHO - 2 && s.caja.y0 >= 2 && s.caja.y1 <= Y1 + 2;
     const s = sitios.filter(dentro).map(s => ({s:s, v:solape(s.caja)}))
       .reduce((m, c) => (!m || c.v < m.v ? c : m), null)?.s || sitios[0];
     ocupados.push(s.caja);
-    const t = Kit.svg("text", {x:s.x, y:s.y, "text-anchor":s.ancla,
-      style:halo + "font:600 11.5px system-ui;fill:#1d2733"});
-    t.textContent = corto;
-    const tt = Kit.svg("title", {});
-    tt.textContent = `${p.i + 1}. ${nombre}`;
-    t.appendChild(tt);
+    const t = Kit.svg("text", {"text-anchor":s.ancla});
+    let y = s.y;
+    lineas.forEach(l => {
+      y += l.h;
+      const ts = Kit.svg("tspan", {x:s.x, y:y - 3.5,
+        style:halo + `font:${l.f};fill:${l.nombre ? "#1d2733" : p.q.color}`});
+      ts.textContent = l.s;
+      t.appendChild(ts);
+    });
     svg.appendChild(t);
   });
-  texto(X1, Y0-18, "el tamaño del círculo es el costo", "font:11.5px system-ui;fill:#8a98a6", "end");
+}
+
+/* reparte las piezas en renglones de hasta «max» caracteres */
+function partir(piezas, junta, max){
+  const r = [];
+  piezas.forEach(w => {
+    const u = r.length - 1;
+    if(u >= 0 && (r[u] + junta + w).length <= max) r[u] += junta + w;
+    else r.push(w);
+  });
+  return r;
+}
+let lienzo;
+function medir(s, fuente){
+  lienzo = lienzo || document.createElement("canvas").getContext("2d");
+  lienzo.font = fuente;
+  return lienzo.measureText(s).width;
 }
 
 /* ====================== PANORAMA ====================== */
@@ -469,24 +473,6 @@ function pintarPanorama(){
     : "";
 }
 
-/* ====================== LECTURA BREVE ====================== */
-function pintarBreve(c){
-  const total = estrategias.length, t = enTrampa().length, s = sirven().length;
-  const datos = [];
-  if(total >= 2 && t) datos.push(`${t} de ${total} alivian en el momento y no resuelven a la larga.`);
-  if(total >= 2 && !t && !s) datos.push(`Ninguna de las ${total} alivia y resuelve a la vez.`);
-  const cuenta = {};
-  estrategias.forEach(e => e.costos.forEach(k => { cuenta[k] = (cuenta[k] || 0) + 1; }));
-  const mayor = Object.keys(cuenta).sort((a, b) => cuenta[b] - cuenta[a])[0];
-  if(mayor) datos.push(`Lo que más se ha pagado: ${mayor.toLowerCase()}.`);
-
-  const color = c.color || "var(--acento)";
-  $("breve").style.borderLeftColor = color;
-  $("bNombre").textContent = c.nombre;
-  $("bNombre").style.color = color;
-  $("bDatos").innerHTML = datos.map(d => `<p class="dato">${Kit.escapar(d)}</p>`).join("");
-  $("bFrases").innerHTML = c.frases.map(f => `<p class="frase">${f}</p>`).join("");
-}
 
 /* ====================== LECTURAS ====================== */
 const enTrampa = () => estrategias.filter(e => cuadrante(e).clave === "trampa");
@@ -495,7 +481,6 @@ const costoTotal = () => estrategias.reduce((s, e) => s + e.costos.length, 0);
 
 const CASOS = [
 {clave:"vacio", nombre:"Inventario sin abrir",
- frases:["Antes de leer, hay que contarlo todo.", "Lo que haces sin pensarlo también cuenta."],
  resumen:"Menos de dos estrategias registradas.",
  condicion: () => estrategias.length < 2,
  metafora:"Todavía no hay nada que mirar.",
@@ -504,8 +489,6 @@ const CASOS = [
  pregunta:"¿Qué es lo primero que haces, sin pensarlo, apenas eso aparece?"},
 
 {clave:"trampa", nombre:"La trampa completa",
- color:"#c8492f",
- frases:["Lo que alivia hoy es lo que te mantiene atrapado.", "No fallaste tú: falló la herramienta.", "Cavar con más fuerza solo hace el hoyo más hondo."],
  resumen:"Tres o más estrategias que alivian rápido y no resuelven nada.",
  condicion: () => enTrampa().length >= 3 && sirven().length === 0,
  metafora:"Cada palada saca tierra y hace el hoyo más hondo.",
@@ -515,8 +498,6 @@ const CASOS = [
  bandera:"Antes de pasar a aceptación conviene revisar si alguna de estas estrategias es de riesgo (consumo, autolesión, restricción alimentaria) y atenderla por su propia vía."},
 
 {clave:"caro", nombre:"Alivio caro",
- color:"#c8492f",
- frases:["El alivio llega rápido; la factura, después.", "Cada vez el alivio cobra un poco más.", "¿Cuánto más vas a pagar por un rato de calma?"],
  resumen:"La trampa, con muchos costos marcados.",
  condicion: () => enTrampa().length >= 2 && costoTotal() >= 6,
  metafora:"El monstruo suelta la cuerda solo si le pagas, y cada vez cobra más.",
@@ -526,8 +507,6 @@ const CASOS = [
  bandera:"Costo alto sostenido merece explorar riesgo, red de apoyo y necesidad de derivación."},
 
 {clave:"esteril", nombre:"Ni siquiera alivia",
- color:"#7d62a8",
- frases:["Ya ni siquiera calma, y aun así se repite.", "Hacer algo no siempre es avanzar."],
  resumen:"La mayoría no alivia en el momento ni resuelve después.",
  condicion: () => estrategias.filter(e => cuadrante(e).clave === "nada").length >= Math.ceil(estrategias.length / 2),
  metafora:"Se sigue cavando aunque hace rato dejó de salir tierra.",
@@ -537,8 +516,6 @@ const CASOS = [
  bandera:"Ausencia de alivio con cualquier estrategia es un dato que conviene contrastar con tamizaje de sintomatología depresiva."},
 
 {clave:"hayalgo", nombre:"Hay algo que sí funciona",
- color:"#2b8a52",
- frases:["Ya tienes algo que funciona.", "Lo que más cuesta suele ser lo que más sostiene."],
  resumen:"Al menos una estrategia alivia y además resuelve.",
  condicion: () => sirven().length >= 1,
  metafora:"Entre todas las palas hay una escalera.",
@@ -547,7 +524,6 @@ const CASOS = [
  pregunta:"De toda esta lista, esa es la que sí te sostiene. ¿Qué tiene esa que no tienen las otras?"},
 
 {clave:"mixto", nombre:"Inventario mixto",
- frases:["Lo que alivia y lo que sostiene no siempre coinciden.", "Falta mirar el cuadro completo."],
  resumen:"Estrategias repartidas, sin un patrón claro todavía.",
  condicion: () => true,
  metafora:"Se lee por el contraste entre lo que alivia y lo que sostiene.",
@@ -571,7 +547,6 @@ function refrescar(){
   pintarPanorama();
 
   const c = CASOS.find(c => c.condicion());
-  pintarBreve(c);
   $("lNombre").textContent   = c.nombre;
   $("lMetafora").textContent = c.metafora;
   $("lConsulta").textContent = c.consulta;
