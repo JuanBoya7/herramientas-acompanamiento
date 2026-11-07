@@ -25,6 +25,7 @@ COLORES = {
     "Cognitivo-conductual":    "#2f6f8f",
     "DBT":                     "#5f77b8",
     "Compasión y mindfulness": "#4a8a7a",
+    "Vínculos y pareja":       "#9c5d6e",
     "Psicología positiva":     "#c9962f",
     "Crisis y consumo":        "#b0503f",
 }
@@ -720,6 +721,560 @@ GUIA = [
   "cuidado":"El número no se discute ni se corrige. Si se pregunta «¿por qué no un 10?», la persona "
             "responde con sus razones para no cambiar: la pregunta va siempre hacia el número más bajo."},
 ]),
+(
+  "Ampliación clínica (Lotes 1, 2 y 3)",
+  [{'archivo': 'act-echar-el-ancla.html',
+  'conviene': ['Desbordamiento emocional en sesión, crisis de ansiedad, oleadas de duelo o '
+               'recuerdos intrusivos.',
+               'Cuando una práctica contemplativa larga como el arroyo o el cielo queda grande por '
+               'el nivel de activación.',
+               'Rumiación o disociación incipiente donde hace falta recuperar contacto inmediato '
+               'con el cuerpo y el cuarto.',
+               'Como primera habilidad portátil antes de abordar exposición, defusión o valores.'],
+  'cuidado': 'El riesgo principal es que se use como técnica de distracción o relajación para '
+             'hacer desaparecer la emoción. Por eso el primer paso (A) nombra lo que sigue adentro '
+             'y en la escena el oleaje nunca se detiene: si la persona mide el éxito por haberse '
+             'calmado, al próximo pico sentirá que el ancla no sirve.',
+  'etq': 'Momento presente',
+  'paraque': 'Sujetar a la persona en medio de una tormenta emocional con la secuencia ACE '
+             '(reconocer lo que hay adentro, conectar con el cuerpo e involucrarse en lo que hay '
+             'aquí), dejando claro que el ancla no se echa para apagar el mar sino para no ser '
+             'arrastrado.',
+  'secuencia': [('Antes de',
+                 'Cualquier otra hoja experiencial si la persona llega muy activada o tomada por '
+                 'la tormenta.'),
+                ('Junto a', 'Los ganchos, que entrena el mismo retorno en la vida cotidiana.'),
+                ('Abre paso a',
+                 'El cielo y el clima o La cuerda y el monstruo una vez que hay piso firme.')],
+  'titulo': 'Echar el ancla'},
+ {'archivo': 'met-el-interruptor.html',
+  'conviene': ['Ansiedad por tener ansiedad, culpa por estar triste, rabia por sentir miedo o '
+               'vergüenza por seguir pasándolo mal.',
+               'Personas que se reprochan sentir lo que sienten y multiplican cada emoción con una '
+               'segunda capa de juicio.',
+               'Cuando El polígrafo resulta demasiado centrado en activación fisiológica y hace '
+               'falta incluir tristeza, culpa o fatiga.'],
+  'cuidado': 'Apagar el interruptor no apaga la onda primaria. Si la persona busca dónde está el '
+             'botón para apagar también la tristeza o el miedo inicial, conviene señalar en la '
+             'pantalla que la primera ola sigue moviéndose y que justamente por eso ya no hace '
+             'falta pelear.',
+  'etq': 'Aceptación',
+  'paraque': 'Separar de un vistazo el malestar limpio (la emoción primaria que sube y baja con la '
+             'vida) del malestar sucio (la pelea secundaria que se enciende encima) y mostrar '
+             'cuánta energía queda libre al soltar el interruptor.',
+  'secuencia': [('Después de',
+                 'El costo de la lucha, para ubicar el interruptor dentro de su repertorio '
+                 'habitual.'),
+                ('Junto a', 'El polígrafo o La cuerda y el monstruo.'),
+                ('Antes de',
+                 'El cielo y el clima o El bus y los pasajeros, para invertir la energía '
+                 'liberada.')],
+  'titulo': 'El interruptor de la lucha'},
+ {'archivo': 'met-las-manos.html',
+  'conviene': ['Fusión aguda con frases categóricas («no voy a poder», «siempre arruino todo») que '
+               'acaparan toda la conversación.',
+               'Cuando la persona cree que para poder actuar primero tiene que dejar de pensar '
+               'eso.',
+               'Personas muy concretas a las que observar hojas en un arroyo les resulta lejano o '
+               'abstracto.'],
+  'cuidado': 'Conviene hacerlo también con las manos reales en el consultorio antes o a la par de '
+             'mover el control en pantalla. Cuidar que al llegar al regazo no se interprete que '
+             'las manos desaparecieron: siguen ahí abajo con las mismas palabras escritas.',
+  'etq': 'Defusión',
+  'paraque': 'Hacer vivir en el cuerpo y en diez segundos qué es la fusión (las manos pegadas a la '
+             'cara tapando toda la habitación) y qué es la defusión (bajarlas al regazo sin que se '
+             'borre lo escrito, recuperando la vista y las manos).',
+  'secuencia': [('Antes de',
+                 'Soltar el anzuelo o Hojas en el arroyo, como introducción física e inmediata a '
+                 'la defusión.'),
+                ('Junto a',
+                 'Empujar el papel, que añade el gasto de energía al intento de apartarlas.'),
+                ('Abre paso a', 'De FEAR a DARE o El bus y los pasajeros.')],
+  'titulo': 'Las manos como pensamientos'},
+ {'archivo': 'met-el-escenario.html',
+  'conviene': ['Visión de túnel donde un único problema, síntoma o temor parece ocupar el cien por '
+               'ciento de la vida.',
+               'Autocrítica o dolor crónico que eclipsan vínculos, gustos y pequeños logros '
+               'cotidianos.',
+               'Como alternativa al tablero cuando la metáfora de una partida o pelea entre '
+               'blancas y negras no encaja con la vivencia.'],
+  'cuidado': 'Encender las luces generales no es pensamiento positivo ni tapar al actor difícil '
+             'con cosas bonitas. El personaje que gritaba se queda en el centro de las tablas; lo '
+             'que cambia es que deja de ser lo único iluminado.',
+  'etq': 'Yo observador',
+  'paraque': 'Mostrar cómo la atención estrecha funciona igual que un reflector cerrado sobre el '
+             'actor más ruidoso, y cómo abrir las luces de todo el escenario y notar la butaca del '
+             'observador devuelve proporción sin expulsar a nadie de las tablas.',
+  'secuencia': [('Alternativa a',
+                 'El tablero y El cielo y el clima dentro del trabajo con el yo como contexto.'),
+                ('Junto a',
+                 'Echar el ancla, cuyo tercer paso (E) equivale a encender las luces del '
+                 'escenario.'),
+                ('Antes de',
+                 'La brújula de valores o El jardín de valores, para mirar a los otros actores que '
+                 'estaban a oscuras.')],
+  'titulo': 'El escenario y el reflector'},
+ {'archivo': 'act-fear-a-dare.html',
+  'conviene': ['Cuando la persona ya clarificó valores en La brújula o El jardín, pero vuelve a la '
+               'sesión siguiente sin haber podido dar el paso.',
+               'Procrastinación persistente y planes de acción que se abandonan a mitad de semana.',
+               'Cierres de sesión donde hace falta blindar el compromiso frente a los obstáculos '
+               'previsibles.'],
+  'cuidado': 'No hace falta llenar las cuatro letras si solo una o dos están frenando el paso. Si '
+             'la barrera es E (Exceso en la meta o falta real de recursos), insistir con '
+             'aceptación o defusión sola sería invalidante: ahí toca partir la meta a la mitad.',
+  'etq': 'Acción comprometida',
+  'paraque': 'Diagnosticar qué barrera específica está frenando un paso valioso (Fusión, Exceso en '
+             'la meta, Aversión al malestar o quedar Remoto del valor) y encender su antídoto DARE '
+             '(Defusión, Aceptación, Realismo en la meta y Enlace con el valor).',
+  'secuencia': [('Después de',
+                 'La brújula de valores, El jardín de valores o El bus y los pasajeros.'),
+                ('Junto a',
+                 'Reglas irrompibles y metas de persona viva cuando la barrera principal es la '
+                 'exigencia de perfección.'),
+                ('Conecta con',
+                 'Soltar el anzuelo (si pesa la F) o El cielo y el clima (si pesa la A).')],
+  'titulo': 'De FEAR a DARE'},
+ {'archivo': 'act-camino-de-vida.html',
+  'conviene': ['Primera consulta o intervenciones breves de una a cuatro sesiones (enfoque FACT).',
+               'Personas que llegan atascadas en intentos repetidos de quitarse un malestar antes '
+               'de retomar su vida.',
+               'Cuando La matriz resulta demasiado esquemática y la imagen de un sendero con dos '
+               'extremos se entiende más rápido.'],
+  'cuidado': 'El giro de 180° es de orientación de los pies, no de resultados mágicos. Conviene '
+             'subrayar que uno gira en el mismo punto del camino en el que está y con el mismo '
+             'malestar encima: lo único que cambia hoy es hacia dónde da el primer paso corto.',
+  'etq': 'Formulación breve',
+  'paraque': 'Formular el caso en una sola sesión o en consulta breve situando los cuatro pilares '
+             'vitales, el costo de correr hacia el alivio inmediato y el giro de 180° en pequeños '
+             'movimientos de pies hacia una vida con sentido.',
+  'secuencia': [('Alternativa a',
+                 'La matriz y El costo de la lucha en contextos de atención breve o focalizada.'),
+                ('Abre paso a',
+                 'De FEAR a DARE o La brújula de valores para sostener el rumbo después del primer '
+                 'giro.')],
+  'titulo': 'El camino de vida y el giro'},
+ {'archivo': 'act-perfeccionismo.html',
+  'conviene': ['Parálisis por perfeccionismo, revisión interminable, miedo a entregar avances o a '
+               'hablar si no se tiene certeza total.',
+               'Autoexigencia rígida donde la persona cree que si suelta el látigo autocrítico '
+               'perderá todo su compromiso.',
+               'Sobrecontrol y miedo al error en el trabajo, en proyectos personales o en el trato '
+               'con otros.'],
+  'cuidado': 'La regla de la persona muerta tiene que presentarse con humor cálido y respeto, '
+             'nunca como burla. Y al presentar los dos maestros conviene dejar claro que el '
+             'maestro compasivo no es permisivo ni indiferente: sostiene el valor con firmeza, '
+             'pero cuenta con el error como parte de estar vivo.',
+  'etq': 'Acción comprometida',
+  'paraque': 'Desarmar el perfeccionismo clínico traduciendo metas de persona muerta («no '
+             'equivocarme», «no sentir duda») en metas de persona viva, y cambiando la voz del '
+             'crítico implacable por la del maestro firme y compasivo para ensayar un paso '
+             'deliberadamente imperfecto.',
+  'secuencia': [('Junto a', 'De FEAR a DARE y El yo compasivo.'),
+                ('Después de',
+                 'Los ochenta años o La brújula de valores, cuando el rendimiento tapó a los '
+                 'valores.'),
+                ('Antes de',
+                 'La escalera de exposición, usando pasos imperfectos como práctica conductual.')],
+  'titulo': 'Reglas irrompibles y metas de persona viva'},
+ {'archivo': 'met-las-dos-caras.html',
+  'conviene': ['Duelo, rupturas, pérdidas, enfermedad, cambios vitales dolorosos o distancia con '
+               'seres queridos.',
+               'Culpa o tristeza profunda en personas que intentan anestesiarse para no sufrir y '
+               'terminan sintiéndose vacías.',
+               'Cuando trabajar valores por separado parece frío y trabajar aceptación sola parece '
+               'pedir resignación.'],
+  'cuidado': 'No usarla para romantizar el sufrimiento ni para decir que el dolor «es bueno». El '
+             'dolor duele; lo que la moneda muestra es por qué vale la pena hacerle sitio cuando '
+             'del otro lado vive un vínculo o un valor que la persona no quiere apagar.',
+  'etq': 'Aceptación y valores',
+  'paraque': 'Conectar directamente aceptación y valores mostrando que el dolor y el amor son las '
+             'dos caras de una misma moneda: solo dejaría de doler si dejara de importar, y llevar '
+             'la moneda entera permite honrar lo que se ama.',
+  'secuencia': [('Después de', 'Echar el ancla si el dolor en sesión es muy intenso.'),
+                ('Junto a', 'El jardín de valores o Los ochenta años.'),
+                ('Abre paso a',
+                 'Pausa de autocompasión y un gesto pequeño de honra en la semana.')],
+  'titulo': 'Las dos caras de la moneda'},
+ {'archivo': 'dbt-aceptacion-radical.html',
+  'conviene': ['Pérdidas, rupturas, diagnósticos médicos o decisiones ajenas que la persona vive '
+               'como «no debería haber pasado».',
+               'Amargura o parálisis crónica donde toda la energía se va en exigir que el pasado '
+               'hubiera sido distinto.',
+               'Después de Verificar los hechos o Solución de problemas, cuando el hecho es real y '
+               'no admite cambio inmediato.'],
+  'cuidado': 'Nunca pedir aceptación radical sobre situaciones de abuso o riesgo actual que sí '
+             'requieren acción o protección. Y aclarar desde el inicio que aceptar no es aprobar, '
+             'perdonar ni rendirse: si no se hace esa distinción, la persona siente que le piden '
+             'resignarse.',
+  'etq': 'Tolerancia al malestar',
+  'paraque': 'Distinguir el dolor limpio de un hecho que hoy no se puede cambiar frente al '
+             'sufrimiento de pelear contra él, entrenando girar la mente una y otra vez con manos '
+             'dispuestas y media sonrisa.',
+  'secuencia': [('Después de',
+                 'Tarjeta de crisis si la activación está muy alta, o Solución de problemas cuando '
+                 'se comprueba que el hecho hoy no es modificable.'),
+                ('Junto a', 'Las dos caras de la moneda o El interruptor de la lucha.'),
+                ('Abre paso a',
+                 'Mente sabia y un paso pequeño con lo que sí depende de la persona hoy.')],
+  'titulo': 'Aceptación radical y girar la mente'},
+ {'archivo': 'dbt-abc-please.html',
+  'conviene': ['Desregulación emocional frecuente donde cualquier roce cotidiano dispara crisis '
+               'porque el cuerpo lleva días sin sueño o sin comida regular.',
+               'Agotamiento, apatía o sensación de que «todo me supera».',
+               'Prevención de recaídas y armado de rutinas mínimas de cuidado.'],
+  'cuidado': 'No convertir los ocho puntos en un pliego de exigencias nuevas para alguien agotado: '
+             'se revisa el panorama completo en el escudo y se acuerda proteger un solo ladrillo '
+             'sencillo esta semana.',
+  'etq': 'Regulación emocional',
+  'paraque': 'Hacer visible cómo el descuido del cuerpo (PLEASE) y la falta de momentos gratos, '
+             'competencia y ensayo previo (ABC) suben la línea base de reactividad, y elegir un '
+             'solo ladrillo concreto para proteger hoy.',
+  'secuencia': [('Se detecta en',
+                 'Análisis en cadena (como vulnerabilidad previa al episodio) y Tarjeta diaria.'),
+                ('Junto a', 'Activación conductual y Ventana de sueño.'),
+                ('Antes de',
+                 'Situaciones exigentes previsibles, usando la C de anticiparse y ensayar (Cope '
+                 'Ahead).')],
+  'titulo': 'Escudo ante la vulnerabilidad: ABC PLEASE'},
+ {'archivo': 'rodbt-autoinvestigacion.html',
+  'conviene': ['Rigidez, perfeccionismo interpersonal, necesidad de corregir a otros o desconexión '
+               'fría cuando algo incomoda.',
+               'Personas muy reflexivas que usan el análisis intelectual para defenderse y no '
+               'sentir vulnerabilidad.',
+               'Soledad emocional en personas que por fuera parecen funcionar de manera '
+               'impecable.'],
+  'cuidado': 'La autoinvestigación no es reestructuración cognitiva ni busca contestar rápido la '
+             'pregunta para quedarse tranquilo. Si la persona responde enseguida con una '
+             'explicación lógica, señalar con calidez que la mente volvió a cerrarse y volver a '
+             'dejar abierta la pregunta.',
+  'etq': 'Apertura radical (RO-DBT)',
+  'paraque': 'Desarmar el cierre del sobrecontrol (tener siempre razón en mente fija o apagarse en '
+             'mente fatalista) activando primero seguridad social en el cuerpo (Gran Tres + 1) y '
+             'sosteniendo abierta una pregunta en el propio borde.',
+  'secuencia': [('Junto a',
+                 'Reglas irrompibles y metas de persona viva, cuando el sobrecontrol domina el '
+                 'cuadro.'),
+                ('Conecta con',
+                 'Fuera y dentro de sesión (FAP), para llevar la apertura al vínculo en vivo.')],
+  'titulo': 'Mente fija, mente fatalista y autoinvestigación'},
+ {'archivo': 'fap-dentro-y-fuera.html',
+  'conviene': ['Dificultades interpersonales crónicas, miedo a la intimidad, complacencia excesiva '
+               'o evitación del conflicto.',
+               'Cuando en plena consulta se nota que la persona cambia de tema, pide disculpas por '
+               'sentir o habla solo en abstracto.',
+               'Procesos estancados donde se habla mucho sobre los vínculos de afuera sin que nada '
+               'cambie en vivo.'],
+  'cuidado': 'Requiere una alianza sólida y que el profesional reciba la CCR2 con autenticidad '
+             'cálida (Amor/Sintonía), sin ponerse técnico ni defensivo. Nunca señalar una CCR1 '
+             'como reproche: se nombra siempre como una protección comprensible que hoy podemos '
+             'ampliar juntos.',
+  'etq': 'Relación en vivo (FAP)',
+  'paraque': 'Trazar el paralelo entre cómo la persona se protege o se aísla en su vida cotidiana '
+             'y cómo asoma eso mismo en la sesión (CCR1), para ensayar aquí y ahora un movimiento '
+             'de Conciencia, Coraje y Amor (CCR2).',
+  'secuencia': [('Junto a',
+                 'La matriz o La brújula de valores (ámbito de relaciones íntimas y amistad).'),
+                ('Antes de',
+                 'Pedir y decir que no, usando primero el consultorio como lugar seguro de '
+                 'ensayo.')],
+  'titulo': 'Fuera y dentro de sesión: el puente interpersonal'},
+ {'archivo': 'cft-tres-circulos.html',
+  'conviene': ['Autoexigencia agotadora, ansiedad de desempeño y culpa al descansar.',
+               'Personas que confunden estar ocupadas o rendir con estar reguladas.',
+               'Inicio del trabajo en terapia centrada en la compasión (CFT) para desculpabilizar '
+               'por qué cuesta tanto calmarse.'],
+  'cuidado': 'En algunas personas abrir el círculo verde despierta al principio alerta o tristeza '
+             '(«bajar la guardia me da miedo»). Conviene anticiparlo: si el verde lleva años '
+             'apagado, se entra de a pocos segundos.',
+  'etq': 'Sistema de calma',
+  'paraque': 'Mapear de un vistazo el balance entre amenaza (rojo), impulso/logro (azul) y '
+             'calma/vínculo (verde), haciendo visible la trampa de usar el sobreesfuerzo azul para '
+             'intentar callar el miedo rojo.',
+  'secuencia': [('Abre paso a',
+                 'Ritmo tranquilizador, Pausa de autocompasión y El yo compasivo, que entrenan '
+                 'directamente el círculo verde.'),
+                ('Junto a', 'El crítico interno y las voces ante el tropiezo.')],
+  'titulo': 'Los tres círculos de regulación emocional'},
+ {'archivo': 'cft-voces-y-critico.html',
+  'conviene': ['Autocrítica feroz tras cualquier error, descuido o rechazo.',
+               'Cuando la persona teme que si deja de tratarse duro se volverá mediocre o '
+               'complaciente.',
+               'Mezcla confusa de rabia, miedo y tristeza tras un tropiezo.'],
+  'cuidado': 'No se trata de pelear contra el crítico ni de expulsarlo de la mesa (eso sería más '
+             'sistema de amenaza contra uno mismo), sino de agradecer su intento torpe de proteger '
+             'y retirarle el micrófono del maltrato.',
+  'etq': 'Autocrítica',
+  'paraque': 'Hacer el análisis funcional del crítico interno (de qué amenaza teme que nos dañen) '
+             'y sentar en la mesa a las partes ansiosa, triste y enfadada para que el yo compasivo '
+             'las coordine sin maltrato.',
+  'secuencia': [('Después de', 'Los tres círculos de regulación emocional y El yo compasivo.'),
+                ('Junto a',
+                 'Soltar el anzuelo o La palabra repetida cuando una frase del crítico es muy '
+                 'repetitiva.')],
+  'titulo': 'El crítico interno y las voces ante el tropiezo'},
+ {'archivo': 'par-el-baile-de-pareja.html',
+  'conviene': ['Parejas atrapadas en el ciclo persecución-retirada (uno reclama e insiste, el otro '
+               'se calla o se defiende con lógica).',
+               'Consultas individuales por conflicto de pareja recurrente donde todo el relato se '
+               'va en buscar quién tuvo la culpa.',
+               'Cuando cada intento de hablar termina exactamente en la misma pelea.'],
+  'cuidado': 'Cuidar la simetría: ni quien reclama es «el intenso culpable» ni quien se calla es '
+             '«el frío indiferente». Ambos hacen movimientos desesperados para protegerse del '
+             'dolor de apego. Contraindicado encuadrar como baile simétrico si hay violencia o '
+             'coacción.',
+  'etq': 'Ciclo emocional (EFT)',
+  'paraque': 'Desescalar el conflicto de pareja mostrando cómo el movimiento protector de uno en '
+             'la superficie dispara el del otro en un bucle infinito, y bajar juntos bajo el agua '
+             'hacia las emociones blandas y necesidades de apego.',
+  'secuencia': [('Junto a',
+                 'Tener razón o cuidar el vínculo (IBCT), que complementa el mapa con la '
+                 'separación unificada frente al «ESO».'),
+                ('Conecta con',
+                 'Pedir y decir que no, una vez que se habla desde abajo del agua y no desde el '
+                 'ataque.')],
+  'titulo': 'El baile negativo y el iceberg del vínculo'},
+ {'archivo': 'par-tener-razon-o-cuidar.html',
+  'conviene': ['Diferencias de temperamento, ritmo o estilo en la pareja que ya son conocidas y '
+               'vuelven una y otra vez.',
+               'Luchas de poder crónicas por tener la razón o demostrar quién aporta más.',
+               'Agotamiento por discusiones circulares donde ambos salen heridos.'],
+  'cuidado': 'Nombrar «el ESO» con humor o perspectiva nunca debe sonar a minimizar el dolor del '
+             'otro. Primero se valida por qué duele (unión empática) y junto con eso se mira el '
+             'patrón como equipo.',
+  'etq': 'Aceptación en pareja (IBCT)',
+  'paraque': 'Pasar de la polarización (intentar ganar el juicio y cambiar al otro) a la '
+             'separación unificada y la unión empática: sentarse del mismo lado del banco para '
+             'mirar al problema como «nuestro ESO» y hablar con revelación blanda.',
+  'secuencia': [('Junto a', 'El baile negativo y el iceberg del vínculo.'),
+                ('Conecta con',
+                 'La brújula de valores o Los ochenta años, para recordar qué clase de compañero '
+                 'se elige ser.')],
+  'titulo': 'Tener razón o cuidar el vínculo: frente al «ESO»'},
+ {'archivo': 'pp-afecto-positivo.html',
+  'conviene': ['Anhedonia, aplanamiento afectivo o depresión donde ya hay activación conductual '
+               'pero la persona «no siente gusto por nada».',
+               'Tendencia automática a descontar cualquier momento bueno («dura poco», «antes '
+               'disfrutaba más»).',
+               'Cuando el diario clásico de Tres cosas buenas se queda corto porque los '
+               'pensamientos aguafiestas anulan el registro.'],
+  'cuidado': 'El «hilo de luz» no es positivismo tóxico ni decir que «todo pasa por algo bueno». '
+             'Solo busca notar qué fortaleza o qué apoyo sobrevivió en medio de algo que sí fue '
+             'doloroso.',
+  'etq': 'Afecto positivo (PAT)',
+  'paraque': 'Reentrenar la sensibilidad a la recompensa en la anhedonia y el ánimo bajo '
+             'sosteniendo un instante grato sin que lo apaguen los «ladrones del saboreo», '
+             'encontrando un hilo de luz en lo difícil y haciendo un gesto pequeño hacia afuera.',
+  'secuencia': [('Después de',
+                 'Activación conductual, cuando la persona ya hace cosas pero su atención pasa de '
+                 'largo por el agrado.'),
+                ('Junto a', 'Tres cosas buenas y mi mejor versión.')],
+  'titulo': 'Saborear, hilo de luz y dar'},
+ {'archivo': 'pp-cuatro-fuentes-sentido.html',
+  'conviene': ['Enfermedad médica crónica o grave, pérdidas vitales, jubilación, duelos o crisis '
+               'existenciales.',
+               'Sensación de vacío o desmoralización cuando una fuente habitual (como el trabajo o '
+               'la salud física) se ve limitada.',
+               'Cierres de proceso para integrar historia, valores y legado.'],
+  'cuidado': 'Si la persona está atravesando una limitación severa, la fuente actitudinal y la '
+             'experiencial suelen ser las más accesibles en el día a día: no exigir grandes '
+             'proyectos creativos cuando el cuerpo pide presencia y dignidad.',
+  'etq': 'Sentido vital (IMCP)',
+  'paraque': 'Explorar de dónde beber sentido cuando la vida cambia o se estrecha, recorriendo las '
+             'cuatro fuentes de Breitbart y Frankl: histórica (legado), actitudinal (postura ante '
+             'el límite), creativa (lo que cuido) y experiencial (amor, belleza y humor).',
+  'secuencia': [('Junto a',
+                 'La brújula de valores, Los ochenta años y Las dos caras de la moneda.'),
+                ('Después de',
+                 'Aceptación radical, cuando ya se reconoció el límite real y se busca cómo '
+                 'habitarlo con dignidad.')],
+  'titulo': 'Las cuatro fuentes de sentido y el legado'},
+ {'archivo': 'pp-perdon-reach.html',
+  'conviene': ['Rencor crónico o rumia de injusticia hacia alguien del pasado que sigue '
+               'consumiendo el presente de la persona.',
+               'Cuando la persona quiere soltar el peso de la rabia pero teme que perdonar sea dar '
+               'la razón al otro o volver a exponerse.',
+               'Heridas familiares, de pareja o laborales antiguas ya cerradas en los hechos pero '
+               'abiertas en la memoria.'],
+  'cuidado': 'Dejar clarísimo desde el paso 1 que perdonar aquí no obliga a reconciliarse ni a '
+             'retomar vínculo con alguien dañino, y que la estación E (entender el contexto del '
+             'otro) jamás equivale a excusar ni minimizar el daño sufrido.',
+  'etq': 'Perdón (REACH)',
+  'paraque': 'Trabajar heridas interpersonales pasadas diferenciando el perdón de la justificación '
+             'y de la reconciliación, y recorriendo las cinco estaciones REACH para soltar la '
+             'rumia amarga.',
+  'secuencia': [('Después de',
+                 'Aceptación radical, que prepara el terreno reconociendo que el pasado no se '
+                 'puede reescribir.'),
+                ('Junto a',
+                 'Pausa de autocompasión para sostener el dolor de la herida antes de recorrer la '
+                 'estación E.')],
+  'titulo': 'Soltar el rencor: los cinco pasos REACH'},
+ {'archivo': 'esq-mapa-de-modos.html',
+  'conviene': ['Patrones antiguos de carácter o de relación donde la persona oscila entre apagarse '
+               '(protector desconectado), someterse o atacar.',
+               'Cuando la reestructuración cognitiva estándar no toca la herida emocional de '
+               'fondo.',
+               'Preparación visual antes del diálogo con sillas o de la reescritura en '
+               'imaginación.'],
+  'cuidado': 'Al modo protector desconectado nunca se lo ataca ni se le pide que desaparezca a la '
+             'fuerza: aprendió a levantar ese muro para proteger al niño cuando no había otra '
+             'defensa. Se le agradece su oficio y se le pide dar un paso al costado.',
+  'etq': 'Terapia de esquemas',
+  'paraque': 'Poner en un solo lienzo qué voz parental presionó o atacó, qué sintió la parte niño '
+             'vulnerable, qué muro levantó el modo de afrontamiento y cómo entra el Adulto sano a '
+             'poner límite y cuidar.',
+  'secuencia': [('Después de',
+                 'La flecha descendente, cuando aparecen creencias nucleares de abandono, defecto '
+                 'o exigencia implacable.'),
+                ('Junto a', 'El crítico interno y las voces ante el tropiezo (CFT).')],
+  'titulo': 'Mapa de modos en escena'},
+ {'archivo': 'tcc-experimento-conductual.html',
+  'conviene': ['Cuando la persona dice «entiendo con la cabeza que no va a pasar nada malo, pero '
+               'igual lo siento verdadero».',
+               'Ansiedad social, perfeccionismo, pánico o preocupación con muletas de seguridad '
+               'muy instaladas.',
+               'Para pasar del debate verbal en papel al aprendizaje por experiencia directa.'],
+  'cuidado': 'La predicción a probar tiene que ser concreta y observable («nadie me va a dirigir '
+             'la palabra»), no una lectura de mente imposible de verificar («pensarán mal de mí en '
+             'secreto»). Y sin soltar la muleta, el experimento se invalida.',
+  'etq': 'Comprobación empírica',
+  'paraque': 'Diseñar una prueba empírica en la vida real soltando deliberadamente la conducta de '
+             'seguridad para contrastar lo que la mente predijo frente a lo que ocurrió en los '
+             'hechos.',
+  'secuencia': [('Después de', 'Registro de pensamientos o La flecha descendente.'),
+                ('Junto a',
+                 'La escalera de exposición, convirtiendo cada peldaño en una prueba de '
+                 'hipótesis.')],
+  'titulo': 'El experimento conductual'},
+ {'archivo': 'tcc-arco-emocional.html',
+  'conviene': ['Cuadros mixtos de ansiedad, depresión o desregulación emocional (enfoque '
+               'transdiagnóstico de Barlow).',
+               'Para detectar evitaciones emocionales sutiles como mirar el celular, apurarse o '
+               'pedir reaseguro.',
+               'Como mapa de formulación compartido con el consultante desde las primeras '
+               'sesiones.'],
+  'cuidado': 'La acción alternativa no se hace para que la emoción desaparezca en el acto, sino '
+             'para cambiar la relación con ella y comprobar que no hacía falta escapar.',
+  'etq': 'Protocolo unificado',
+  'paraque': 'Formular cualquier episodio emocional intenso en sus tres engranajes (pensamientos, '
+             'sensaciones y conducta impulsada por la emoción) y entrenar el giro hacia una acción '
+             'alternativa que corte las evitaciones sutiles.',
+  'secuencia': [('Alternativa a',
+                 'Análisis funcional cuando se quiere trabajar el mapa directamente con el '
+                 'consultante.'),
+                ('Abre paso a',
+                 'Exposición a las sensaciones físicas y La escalera de exposición.')],
+  'titulo': 'El arco emocional y la acción alternativa'},
+ {'archivo': 'tcc-exposicion-interoceptiva.html',
+  'conviene': ['Pánico, agorafobia, ansiedad por la salud o miedo intenso a las propias reacciones '
+               'corporales.',
+               'Antes de las exposiciones en vivo, para perderle el miedo al cuerpo dentro del '
+               'consultorio.',
+               'Personas que monitorean constantemente su pulso, su respiración o su mareo.'],
+  'cuidado': 'Descartar antes condiciones médicas que contraindiquen el ejercicio (asma no '
+             'controlada, afecciones cardíacas, embarazo de riesgo, epilepsia). El profesional '
+             'hace el ejercicio a la par con la persona para modelar tranquilidad.',
+  'etq': 'Exposición interoceptiva',
+  'paraque': 'Inducir en el consultorio durante 30 o 60 segundos las sensaciones corporales '
+             'temidas (falta de aire, mareo, taquicardia, calor) y observar en el minuto siguiente '
+             'cómo bajan solas sin hacer conductas de rescate.',
+  'secuencia': [('Después de', 'El arco emocional o El polígrafo.'),
+                ('Antes de', 'La escalera de exposición en situaciones externas.')],
+  'titulo': 'Exposición a las sensaciones físicas'},
+ {'archivo': 'tcc-intolerancia-incertidumbre.html',
+  'conviene': ['Trastorno de ansiedad generalizada y preocupación crónica que salta de un tema a '
+               'otro.',
+               'Personas que revisan diez veces, piden garantías constantes o no delegan nada por '
+               'intolerancia a la incertidumbre.',
+               'Cuando Aplazar la preocupación necesita completarse con exposiciones conductuales '
+               'a la duda.'],
+  'cuidado': 'No entrar jamás a responderle el «¿y si…?» dándole garantías de que no va a pasar: '
+             'tranquilizar desde el sillón del profesional funciona como otra muleta y alimenta la '
+             'intolerancia a la incertidumbre.',
+  'etq': 'Incertidumbre (TAG)',
+  'paraque': 'Clasificar la preocupación entre problemas actuales modificables y escenarios '
+             'hipotéticos («¿y si…?»), detectar las muletas con las que se intenta comprar certeza '
+             'al 100 % y ensayar pequeños pasos conviviendo con la duda.',
+  'secuencia': [('Junto a', 'Aplazar la preocupación y Solución de problemas.'),
+                ('Conecta con',
+                 'El experimento conductual, soltando una muleta de certeza cada semana.')],
+  'titulo': 'El árbol de la preocupación y la incertidumbre'},
+ {'archivo': 'tcc-pastel-autoevaluacion.html',
+  'conviene': ['Perfeccionismo clínico donde cualquier error en el trabajo o en el desempeño '
+               'derrumba la autoestima entera.',
+               'Adicción al trabajo o vida estrechada alrededor de un único rol.',
+               'Rupturas o cambios vitales donde se perdió la única fuente de valía que la persona '
+               'cultivaba.'],
+  'cuidado': 'El pastel ampliado no cambia solo por dibujarlo en sesión: para que la tajada '
+             'dominante ceda espacio de verdad, hay que dedicar horas reales en la semana a las '
+             'tajadas pequeñas.',
+  'etq': 'Perfeccionismo y valía',
+  'paraque': 'Visualizar en un gráfico circular cuánto del valor personal depende hoy de una sola '
+             'tajada (rendir o no fallar) y construir un segundo pastel más estable activando '
+             'otras áreas de la vida.',
+  'secuencia': [('Junto a',
+                 'Reglas irrompibles y metas de persona viva (ACT) y La flecha descendente.'),
+                ('Abre paso a',
+                 'Activación conductual para poner en agenda acciones de las tajadas nuevas.')],
+  'titulo': 'El pastel de la autoevaluación'},
+ {'archivo': 'tcc-trap-a-trac.html',
+  'conviene': ['Depresión, apatía, retraimiento o bloqueo ante pendientes acumulados.',
+               'Cuando la persona programó actividades en Activación conductual pero no las hizo '
+               'porque esperó a tener ganas.',
+               'Rumiación en cama o aislamiento como respuesta automática al desánimo.'],
+  'cuidado': 'El paso TRAC tiene que ser lo bastante pequeño como para caber en un día malo (diez '
+             'minutos, una cuadra, un mensaje honesto). Si se diseña para un día con energía alta, '
+             'vuelve a alimentar el bucle TRAP.',
+  'etq': 'Activación conductual',
+  'paraque': 'Mapear el análisis funcional de la evitación depresiva (Disparador + Respuesta + '
+             'Patrón de evitación = TRAP) y accionar el cambio de aguja hacia un afrontamiento '
+             'alternativo pequeño (TRAC).',
+  'secuencia': [('Junto a',
+                 'Activación conductual, como su herramienta compañera para destrabar la '
+                 'evitación.'),
+                ('Conecta con',
+                 'El bus y los pasajeros (ACT): actuar de afuera hacia adentro llevando el desgano '
+                 'a bordo.')],
+  'titulo': 'Salir de la trampa: de TRAP a TRAC'},
+ {'archivo': 'tcc-episodio-de-ira.html',
+  'conviene': ['Estallidos verbales, discusiones recurrentes o irritabilidad que daña vínculos o '
+               'el trabajo.',
+               'Personas que sienten que la rabia les sube «de cero a cien en un segundo» sin '
+               'aviso previo.',
+               'También cuando la ira no explota hacia afuera sino que queda rumiándose por horas '
+               'con resentimiento.'],
+  'cuidado': 'En el eslabón 2 no se discute si el otro se portó mal o no: aunque el otro haya sido '
+             'injusto, la exigencia rígida («no debería haber pasado») es lo que incendia el '
+             'cuerpo y deja a la persona sin mando.',
+  'etq': 'Manejo de la ira',
+  'paraque': 'Desarmar en cinco eslabones un episodio de ira o irritabilidad para identificar la '
+             'exigencia rígida («no debería») y la primera señal corporal que permite cortar la '
+             'escalada a tiempo.',
+  'secuencia': [('Junto a', 'Autoinstrucciones e Inoculación de estrés.'),
+                ('Después va',
+                 'Pedir y decir que no (DBT) para expresar el límite de forma asertiva una vez que '
+                 'bajó la espuma.')],
+  'titulo': 'Anatomía del episodio de ira'},
+ {'archivo': 'tcc-dosificar-energia.html',
+  'conviene': ['Dolor crónico, fibromialgia, fatiga crónica, enfermedades médicas o agotamiento '
+               'por sobrecarga.',
+               'Personas todo-o-nada que en cuanto se sienten un poco mejor quieren recuperar toda '
+               'la semana atrasada.',
+               'Frustración repetida por recaídas físicas tras días de sobreesfuerzo.'],
+  'cuidado': 'Parar cuando todavía queda energía se siente antinatural y suele despertar culpa o '
+             'miedo a no terminar. Conviene ensayarlo en sesión y elegir cuotas muy modestas al '
+             'principio.',
+  'etq': 'Dolor y fatiga',
+  'paraque': 'Romper la montaña rusa de sobreexigirse en los días con menos dolor hasta colapsar '
+             'en cama, instalando cuotas de actividad guiadas por tiempo y pausas programadas '
+             'antes del agotamiento.',
+  'secuencia': [('Junto a', 'Activación conductual y El interruptor de la lucha.'),
+                ('Conecta con',
+                 'Los tres círculos de regulación emocional (CFT), cuando el círculo azul empuja a '
+                 'ignorar las señales del cuerpo.')],
+  'titulo': 'Dosificar la energía: salir del sobrecarga-colapso'}]
+),
 ]
 
 # Encadenamientos que se repiten. Cada uno es una secuencia de hojas.
@@ -771,7 +1326,6 @@ RUTAS = [
 ]
 
 CSS = """
-  .envoltura{max-width:1120px}
   .volver{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--acento);
     text-decoration:none;margin-bottom:14px}
   .volver:hover{text-decoration:underline}
@@ -784,26 +1338,26 @@ CSS = """
   .ruta .cuando{font-size:12.5px;color:var(--tinta-suave);margin:2px 0 9px}
   .ruta .cadena{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
   .ruta .cadena a{font-size:13px;text-decoration:none;color:var(--tinta);border:1px solid var(--linea);
-    border-radius:999px;padding:5px 12px;background:#fff;white-space:nowrap}
+    border-radius:999px;padding:5px 12px;background:#fff;white-space:normal;line-height:1.35}
   .ruta .cadena a:hover{border-color:var(--acento);color:var(--acento)}
   .ruta .cadena i{color:#b3bfca;font-style:normal;font-size:14px}
 
   h2.enfoque{margin:26px 0 2px;font-size:20px;display:flex;align-items:center;gap:10px}
   h2.enfoque::before{content:"";width:13px;height:13px;border-radius:50%;background:currentColor}
 
-  .fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:13px;
+  .fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:14px;
     margin-top:13px}
   .ficha-guia{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
-    border-radius:var(--radio);padding:16px 19px}
+    border-radius:var(--radio);padding:16px 19px;min-width:0;overflow-wrap:break-word}
   .ficha-guia.hx-item-vinculado{border-style:dashed;border-left-style:solid;background:#fafcfe}
   .ficha-guia .hx-tags{margin:0 0 10px}
-  .ficha-guia .cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  .ficha-guia .cab{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;
     margin-bottom:6px}
-  .ficha-guia h3{margin:0;font-size:17px;letter-spacing:-.2px}
+  .ficha-guia h3{margin:0;font-size:17px;line-height:1.3;letter-spacing:-.2px;min-width:0;flex:1 1 200px;overflow-wrap:break-word}
   .ficha-guia h3 a{color:inherit;text-decoration:none}
   .ficha-guia h3 a:hover{text-decoration:underline}
   .ficha-guia .etq{font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;
-    white-space:nowrap;border-radius:999px;padding:2px 9px}
+    white-space:normal;max-width:100%;overflow-wrap:anywhere;line-height:1.3;border-radius:999px;padding:3px 10px;flex:0 0 auto}
   .ficha-guia .paraque{margin:0 0 12px;font-size:14px;line-height:1.5}
   .ficha-guia .rot{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
     color:var(--tinta-suave);margin:11px 0 4px}

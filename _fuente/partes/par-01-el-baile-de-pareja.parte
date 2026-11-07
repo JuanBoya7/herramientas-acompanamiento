@@ -1,0 +1,204 @@
+@@meta
+archivo: par-el-baile-de-pareja.html
+titulo: El baile negativo y el iceberg del vínculo
+orden: 01
+enfoque: Vínculos y pareja
+etiqueta: Ciclo emocional (EFT)
+sub: Cuando una discusión de pareja se repite siempre igual, el problema ya no es el tema del día sino el baile que los atrapa a los dos. Por encima del agua se ven reclamos o silencios que disparan la defensa del otro; por debajo del agua viven el miedo a perderse y la necesidad de saber que uno sigue siendo importante.
+fuente: Desescalada del ciclo negativo persecución-retirada y emociones primarias de apego, en Johnson, The Practice of Emotionally Focused Couple Therapy (2004), caps. 4, 5 y 6.
+resumen: Visualiza el bucle infinito entre la posición que busca/presiona y la que se repliega/protege, conmuta entre la superficie del choque y el fondo de apego bajo el agua, y elige una frase para frenar la música juntos.
+@@css
+  .iceberg-svg{display:block;width:100%;max-width:700px;height:auto;margin:0 auto}
+  .conmutador-agua{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:11px}
+  .btn-agua{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--linea);border-radius:999px;
+    padding:7px 16px;background:#fff;color:var(--tinta-suave);cursor:pointer;transition:all .15s}
+  .btn-agua.activo{background:var(--acento);border-color:var(--acento);color:#fff}
+  .pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pos-caja{border:1px solid var(--linea);border-top:4px solid #c26a4e;border-radius:10px;padding:12px 14px;background:#fbfcfd}
+  .pos-caja.posB{border-top-color:#3f83a6}
+  .pos-caja h3{margin:0 0 4px;font-size:15px}
+  .pos-caja p{margin:0 0 9px;font-size:12.5px;color:var(--tinta-suave);line-height:1.4}
+  @media (max-width:740px){.pos-grid{grid-template-columns:1fr}}
+@@html
+<div class="escenario">
+  <svg class="iceberg-svg" id="svgBaile" viewBox="0 0 700 270" role="img"
+    aria-label="El bucle negativo de pareja sobre el agua y las necesidades de apego bajo el agua"></svg>
+  <div class="conmutador-agua">
+    <button type="button" class="btn-agua activa activo" id="btnSuperficie" onclick="verNivel('arriba')">Mirar la superficie (el choque)</button>
+    <button type="button" class="btn-agua" id="btnProfundo" onclick="verNivel('abajo')">Mirar bajo el agua (el apego)</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Por encima del agua: lo que se ve y dispara al otro</h2>
+  <p class="ayuda">Lo que uno hace para protegerse es exactamente lo que enciende la alarma del otro. Ninguno es el villano: el bucle se alimenta solo.</p>
+  <div class="cuerpo">
+    <div class="pos-grid">
+      <div class="pos-caja">
+        <h3 style="color:#a84e34">Posición A · Quien busca o presiona</h3>
+        <p>Sube el volumen o insiste para recuperar contacto.</p>
+        <div class="chips" id="arribaA"></div>
+      </div>
+      <div class="pos-caja posB">
+        <h3 style="color:#2d6585">Posición B · Quien se repliega o protege</h3>
+        <p>Baja la cortina o enfria para que la tensión no explote.</p>
+        <div class="chips" id="arribaB"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Por debajo del agua: lo que duele en silencio</h2>
+  <p class="ayuda">Debajo del reclamo y debajo del silencio hay temores blandos que rara vez se dicen en voz alta durante la pelea.</p>
+  <div class="cuerpo">
+    <div class="pos-grid">
+      <div class="pos-caja">
+        <h3 style="color:#a84e34">Bajo el agua en Posición A</h3>
+        <p>El dolor de apego detrás de la insistencia.</p>
+        <div class="chips" id="abajoA"></div>
+      </div>
+      <div class="pos-caja posB">
+        <h3 style="color:#2d6585">Bajo el agua en Posición B</h3>
+        <p>El dolor de apego detrás del repliegue.</p>
+        <div class="chips" id="abajoB"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Si el enemigo no es tu pareja sino este baile que los atrapa a los dos, ¿qué frase desde abajo del agua ayudaría hoy a frenar la música?</div>
+  <div class="cuerpo">
+    <div class="chips" id="fraseFreno"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const ARRIBA_A = [
+  "Reclamar con urgencia",
+  "Repetir la queja para que me escuche",
+  "Vigilar si está distante"
+];
+const ARRIBA_B = [
+  "Callarme para no empeorar todo",
+  "Defenderme dando argumentos lógicos",
+  "Cambiar de tema o encerrarme en mis cosas"
+];
+const ABAJO_A = [
+  "Miedo a no ser importante para ti",
+  "Sentirme solo aunque estemos juntos",
+  "Temor a que te vayas"
+];
+const ABAJO_B = [
+  "Miedo a no alcanzar nunca lo que esperas de mí",
+  "Sentir que siempre fallo o decepciono",
+  "Temor a ser rechazado si muestro mi fragilidad"
+];
+const FRASES_FRENO = [
+  "«Nos está agarrando otra vez nuestro baile; paremos un minuto»",
+  "«Cuando insisto así es porque me asusta sentirte lejos»",
+  "«Cuando me callo no es que no me importes, es que me bloqueo y temo empeorarlo»",
+  "«Quiero que estemos del mismo lado frente a este ciclo»"
+];
+
+let nivel = "arriba";
+
+function verNivel(cual){
+  nivel = cual;
+  refrescar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgBaile");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est) => {
+    const e = g("text", {x, y, "text-anchor":"middle", style:est});
+    e.textContent = s;
+    return e;
+  };
+
+  const esAbajo = nivel === "abajo";
+
+  // Cielo / superficie (0 a 128) y Agua profunda (128 a 270)
+  g("rect", {x:0, y:0, width:700, height:128, fill: esAbajo ? "#f3f6f8" : "#fffaf6"});
+  g("rect", {x:0, y:128, width:700, height:142, fill: esAbajo ? "#d9ecf5" : "#eaf2f7"});
+  g("path", {d:"M 0 128 Q 175 120 350 128 T 700 128", fill:"none", stroke:"#4f8fb5", "stroke-width":2.2});
+  txt(350, 122, "LÍNEA DEL AGUA", "font:700 10px system-ui;fill:#4f8fb5;letter-spacing:.9px");
+
+  // Bucle infinito en el centro (x=350, y=68)
+  const opSup = esAbajo ? 0.45 : 1;
+  g("path", {d:"M 350 68 C 280 22, 220 22, 220 68 C 220 112, 280 112, 350 68 C 420 22, 480 22, 480 68 C 480 112, 420 112, 350 68 Z",
+    fill:"none", stroke:"#c26a4e", "stroke-width":3, opacity:opSup});
+  txt(350, 22, "SUPERFICIE: Cuanto más reclama A, más se cierra B; cuanto más se cierra B, más reclama A",
+    `font:700 11.5px system-ui;fill:#9e472d;opacity:${opSup}`);
+
+  const aSup = Kit.activas("arribaA")[0] || "Reclama / insiste";
+  const bSup = Kit.activas("arribaB")[0] || "Se calla / se repliega";
+  g("rect", {x:42, y:44, width:165, height:50, rx:8, fill:"#ffffff", stroke:"#c26a4e", "stroke-width":1.8, opacity:opSup});
+  txt(124, 64, "Posición A (arriba)", "font:700 11.5px system-ui;fill:#a84e34");
+  txt(124, 81, aSup.length > 26 ? aSup.slice(0, 25) + "…" : aSup, "font:11px system-ui;fill:#4a5a68");
+
+  g("rect", {x:493, y:44, width:165, height:50, rx:8, fill:"#ffffff", stroke:"#3f83a6", "stroke-width":1.8, opacity:opSup});
+  txt(575, 64, "Posición B (arriba)", "font:700 11.5px system-ui;fill:#2d6585");
+  txt(575, 81, bSup.length > 26 ? bSup.slice(0, 25) + "…" : bSup, "font:11px system-ui;fill:#4a5a68");
+
+  // Zona bajo el agua
+  const opProf = esAbajo ? 1 : 0.48;
+  const aProf = Kit.activas("abajoA")[0] || "Miedo a no ser importante o quedar solo";
+  const bProf = Kit.activas("abajoB")[0] || "Miedo a fallar o no ser suficiente";
+
+  g("rect", {x:42, y:152, width:260, height:72, rx:10, fill:"#ffffff", stroke:"#c26a4e",
+    "stroke-width": esAbajo ? 2.6 : 1.5, opacity:opProf});
+  txt(172, 175, "Debajo del reclamo de A:", "font:700 12px system-ui;fill:#a84e34");
+  txt(172, 196, aProf.length > 38 ? aProf.slice(0, 37) + "…" : aProf, "font:600 11.5px system-ui;fill:#23404f");
+  txt(172, 213, "Necesita: saber que importa y que estás ahí", "font:11px system-ui;fill:#5a6a7d");
+
+  g("rect", {x:398, y:152, width:260, height:72, rx:10, fill:"#ffffff", stroke:"#3f83a6",
+    "stroke-width": esAbajo ? 2.6 : 1.5, opacity:opProf});
+  txt(528, 175, "Debajo del silencio de B:", "font:700 12px system-ui;fill:#2d6585");
+  txt(528, 196, bProf.length > 38 ? bProf.slice(0, 37) + "…" : bProf, "font:600 11.5px system-ui;fill:#23404f");
+  txt(528, 213, "Necesita: sentir que es aceptado y valioso", "font:11px system-ui;fill:#5a6a7d");
+
+  if(esAbajo){
+    g("path", {d:"M 302 188 L 398 188", stroke:"#2f7a58", "stroke-width":2.5, "stroke-dasharray":"4 3"});
+    txt(350, 252, "BAJO EL AGUA: Cuando hablan desde el temor blando, el baile se detiene y aparece el cuidado",
+      "font:700 12px system-ui;fill:#235c42");
+  }
+}
+
+function refrescar(){
+  $("btnSuperficie").classList.toggle("activo", nivel === "arriba");
+  $("btnProfundo").classList.toggle("activo", nivel === "abajo");
+  dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const aa = Kit.activas("arribaA"), ab = Kit.activas("arribaB");
+  if(aa.length) l.push("POR ENCIMA DEL AGUA (Posición A): " + aa.join(", "));
+  if(ab.length) l.push("POR ENCIMA DEL AGUA (Posición B): " + ab.join(", "));
+  const ba = Kit.activas("abajoA"), bb = Kit.activas("abajoB");
+  if(ba.length) l.push("POR DEBAJO DEL AGUA (Posición A): " + ba.join(", "));
+  if(bb.length) l.push("POR DEBAJO DEL AGUA (Posición B): " + bb.join(", "));
+  const ff = Kit.activas("fraseFreno");
+  if(ff.length) l.push("FRASE PARA FRENAR EL BAILE: " + ff.join(" · "));
+  return l.join("\n");
+}
+
+Kit.chips("arribaA", ARRIBA_A, refrescar);
+Kit.chips("arribaB", ARRIBA_B, refrescar);
+Kit.chips("abajoA", ABAJO_A, refrescar);
+Kit.chips("abajoB", ABAJO_B, refrescar);
+Kit.chips("fraseFreno", FRASES_FRENO, refrescar);
+
+Kit.iniciar({
+  clave: "par-el-baile-de-pareja",
+  extra: () => ({nivel}),
+  restaurar: d => { if(d.nivel) nivel = d.nivel; },
+  alCambiar: refrescar,
+  resumen: resumen
+});

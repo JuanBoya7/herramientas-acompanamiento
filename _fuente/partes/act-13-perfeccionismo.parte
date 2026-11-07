@@ -1,0 +1,149 @@
+@@meta
+archivo: act-perfeccionismo.html
+titulo: Reglas irrompibles y metas de persona viva
+orden: 16
+enfoque: ACT
+etiqueta: Acción comprometida
+sub: Cuando la mente impone «no equivocarse», «no sentir duda» o «hacerlo impecable», propone metas que una persona muerta cumpliría mejor que una viva. Cambiar la regla por una meta de persona viva y elegir desde qué maestro acompañarse permite dar hoy un paso deliberadamente imperfecto al servicio de lo que importa.
+fuente: Metas de persona muerta frente a metas valiosas, pasos imperfectos y los dos maestros, en Kemp, The ACT Workbook for Perfectionism (2021), caps. 1, 5 y 6; Ong y Twohig, The Anxious Perfectionist (2022), cap. 7.
+resumen: Se identifica la regla rígida que hoy bloquea la acción, se traduce la exigencia de «no fallar ni sentir» en una meta de persona viva y se elige entre la voz del crítico implacable y la del maestro firme y compasivo para ensayar un paso imperfecto.
+@@css
+  .traductor{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+  .col-meta{border:1px solid var(--linea);border-radius:10px;padding:14px 15px;background:#fbfcfd}
+  .col-meta.muerta{border-top:4px solid #b0503f;background:#fdf7f5}
+  .col-meta.viva{border-top:4px solid #3f7d5a;background:#f4faf6}
+  .col-meta .tit{font-size:14.5px;font-weight:700;margin-bottom:3px}
+  .col-meta.muerta .tit{color:#8a3d2e}
+  .col-meta.viva .tit{color:#2c5a44}
+  .col-meta .desc{font-size:12.5px;color:var(--tinta-suave);margin:0 0 10px;line-height:1.42}
+  .puente-vivo{margin-top:12px;border-radius:9px;padding:11px 14px;background:var(--acento-claro);
+    font-size:14px;color:#1d3b4f;line-height:1.5}
+  @media (max-width:650px){.traductor{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La regla que hoy no te deja moverte</h2>
+  <p class="ayuda">Cuando esta regla manda como si fuera una ley irrompible, cualquier paso parece
+  insuficiente o peligroso.</p>
+  <div class="cuerpo">
+    <div class="chips" id="reglasRigidas"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Traducir de meta de persona muerta a meta de persona viva</h2>
+  <p class="ayuda">Una meta de persona muerta es todo aquello que un cadáver haría mejor que tú (no
+  equivocarse nunca, no ponerse nervioso, no dudar). Una meta de persona viva dice qué sí vas a hacer
+  con tu cuerpo y tu voz hoy.</p>
+  <div class="cuerpo">
+    <div class="traductor">
+      <div class="col-meta muerta">
+        <div class="tit">Lo que un cadáver hace mejor (meta muerta)</div>
+        <p class="desc">Exige no sentir o no fallar antes de empezar.</p>
+        <div class="chips" id="metaMuerta"></div>
+      </div>
+      <div class="col-meta viva">
+        <div class="tit">Lo que solo alguien vivo puede hacer (meta viva)</div>
+        <p class="desc">Se mide por acercarte a lo que importa, con tachones y nervios incluidos.</p>
+        <div class="chips" id="metaViva"></div>
+      </div>
+    </div>
+    <div class="puente-vivo" id="lecturaTraduccion">Marca arriba la exigencia que te frena y su traducción a persona viva.</div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Los dos maestros: ¿desde qué voz te vas a acompañar?</h2>
+  <p class="ayuda">Ninguno de los dos baja tus valores, pero tienen maneras opuestas de tratarte
+  cuando estás aprendiendo o probando algo difícil.</p>
+  <div class="cuerpo">
+    <div id="vozMaestro"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta" id="pregunta">¿Qué paso pequeño y deliberadamente imperfecto estarías dispuesto a ensayar esta semana?</div>
+  <div class="cuerpo" style="padding:10px 0 0">
+    <div class="chips" id="pasoImperfecto"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const REGLAS = [
+  "«Si no sale impecable, no vale la pena»",
+  "«No puedo equivocarme ni dudar»",
+  "«Primero tengo que sentirme seguro»",
+  "«No debo decepcionar a nadie»",
+  "«Debo poder con todo sin ayuda»"
+];
+
+const META_MUERTA = [
+  "«No cometer ningún error»",
+  "«No sentir ansiedad ni duda»",
+  "«No postergar nunca»"
+];
+
+const META_VIVA = [
+  "«Aportar algo útil aunque lleve tachones»",
+  "«Presentarme y hablar aunque me tiemble la voz»",
+  "«Dedicar quince minutos con curiosidad»",
+  "«Pedir retroalimentación a tiempo»"
+];
+
+const MAESTROS = [
+  ["El crítico implacable",
+   "Cree que si no te castiga te vas a volver mediocre; mide solo el resultado y encoge el ánimo."],
+  ["El maestro firme y compasivo",
+   "Sostiene el compromiso con lo que te importa, pero espera que aprendas probando y equivocándote."]
+];
+
+const PASO_IMP = [
+  "Enviar o mostrar un borrador al 70 % sin seguir puliéndolo",
+  "Empezar por diez minutos sin esperar el momento ideal",
+  "Dejar un detalle sin revisar y observar qué pasa",
+  "Decir «no sé» o pedir ayuda en vez de esconder la duda"
+];
+
+function leer(){
+  const m = Kit.activas("metaMuerta");
+  const v = Kit.activas("metaViva");
+  const maestro = Kit.activas("vozMaestro")[0] || "";
+  const caja = $("lecturaTraduccion");
+
+  if(!m.length && !v.length){
+    caja.innerHTML = "Marca arriba la exigencia que te frena y cómo sonaría traducida a una meta de persona viva.";
+    return;
+  }
+  const txtM = m.length ? m.join(" / ") : "la exigencia de no fallar";
+  const txtV = v.length ? v.join(" / ") : "dar un paso vivo e imperfecto";
+  const colaM = maestro ? ` · Acompañado desde: <b>${Kit.escapar(maestro)}</b>.` : "";
+  caja.innerHTML = `En vez de esperar a <b>${Kit.escapar(txtM)}</b> (que solo cumpliría alguien que no está vivo), hoy elijo <b>${Kit.escapar(txtV)}</b>${colaM}`;
+}
+
+function resumen(){
+  const l = [];
+  const r = Kit.activas("reglasRigidas");
+  if(r.length) l.push("Regla rígida detectada: " + r.join(", "));
+  const mm = Kit.activas("metaMuerta");
+  if(mm.length) l.push("Meta de persona muerta: " + mm.join(", "));
+  const mv = Kit.activas("metaViva");
+  if(mv.length) l.push("Traducción a meta de persona viva: " + mv.join(", "));
+  const vm = Kit.activas("vozMaestro");
+  if(vm.length) l.push("Voz elegida para acompañarse: " + vm.join(", "));
+  const pi = Kit.activas("pasoImperfecto");
+  if(pi.length) l.push("Paso deliberadamente imperfecto a ensayar: " + pi.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("reglasRigidas", REGLAS, leer);
+Kit.chips("metaMuerta", META_MUERTA, leer);
+Kit.chips("metaViva", META_VIVA, leer);
+Kit.opciones("vozMaestro", MAESTROS, leer, true);
+Kit.chips("pasoImperfecto", PASO_IMP);
+leer();
+
+Kit.iniciar({
+  clave: "act-perfeccionismo",
+  alCambiar: leer,
+  resumen: resumen
+});

@@ -1,0 +1,175 @@
+@@meta
+archivo: tcc-exposicion-interoceptiva.html
+titulo: Exposición a las sensaciones físicas
+orden: 15
+enfoque: Cognitivo-conductual
+etiqueta: Exposición interoceptiva
+sub: Cuando el miedo principal es a las propias sensaciones del cuerpo (latidos, mareo, falta de aire, calor), provocar una dosis breve en consulta y observar cómo baja sola enseña que la sensación es incómoda pero segura.
+fuente: Conciencia y tolerancia a las sensaciones físicas (exposición interoceptiva), en Barlow et al., Protocolo unificado (2015), módulo 6; Craske y Barlow, Mastery of Your Anxiety and Panic (2007).
+resumen: Laboratorio en sesión con cronómetro para inducir de forma segura una sensación física temida y observar durante un minuto cómo se regula sola sin conductas de rescate.
+@@css
+  .intero-svg{display:block;width:100%;max-width:560px;height:auto;margin:0 auto}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:8px 0 2px;color:var(--acento);min-height:26px}
+  .fase-sub{text-align:center;font-size:13.5px;color:var(--tinta-suave);min-height:20px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Elegir el ejercicio para hacer ahora</h2>
+  <p class="ayuda">Se descartan antes contraindicaciones médicas y se elige el que más se parezca a las sensaciones temidas.</p>
+  <div class="cuerpo">
+    <div id="ejercicioIntero"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="intero-svg" id="svgIntero" viewBox="0 0 560 210" role="img"
+    aria-label="Reloj y curva de activación y recuperación natural del cuerpo"></svg>
+  <div class="fase" id="faseIntero">Elige un ejercicio arriba y empieza</div>
+  <div class="fase-sub" id="subIntero"></div>
+  <div class="marcas">
+    <div><span class="n" id="mSegundos" style="color:var(--acento)">60 s</span><span class="r">reloj</span></div>
+    <div><span class="n" id="mEtapa" style="color:#3f9b86">Listo</span><span class="r">etapa</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="principal" id="btnIniciarIntero" onclick="iniciarIntero()">1 · Empezar inducción</button>
+    <button type="button" id="btnObservarIntero" onclick="pasarObservacion()">2 · Parar y observar cómo baja sola (60 s)</button>
+    <button type="button" onclick="detenerIntero()">Reiniciar</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Qué apareció en el cuerpo y qué comprobaste</h2>
+  <p class="ayuda">La clave está en el segundo minuto: dejar que la sensación descienda sin abanicarse, tomar agua de urgencia ni controlar la respiración.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Sensaciones que aparecieron</label>
+    <div class="chips" id="sensacionesNotadas"></div>
+    <label class="etiqueta">Qué comprobé al no hacer nada para rescatarme</label>
+    <div class="chips" id="comprobadoIntero"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Qué cambia cuando compruebas aquí mismo que tu cuerpo sabe volver a la calma sin que tengas que rescatarlo?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const EJERCICIOS = [
+  ["Respirar por un pitillo o pajita fina (60 s)", "Provoca sensación de falta de aire o esfuerzo al inhalar, sin peligro real."],
+  ["Girar suavemente en la silla o mover la cabeza (30 s)", "Provoca mareo leve o inestabilidad parecida a la ansiedad."],
+  ["Trotar en el sitio o subir escalones (60 s)", "Acelera el pulso y el calor corporal para observar cómo bajan solos."],
+  ["Tensar todo el cuerpo sin aguantar el aire (60 s)", "Produce temblor o pesadez muscular similar a la tensión aguda."]
+];
+const SENSACIONES = ["Latidos más rápidos", "Sensación de falta de aire", "Mareo o inestabilidad", "Calor o sudoración", "Tensión o cosquilleo"];
+const COMPROBADO = [
+  "La sensación fue incómoda pero no peligrosa",
+  "Bajó sola sin que yo hiciera nada para controlarla",
+  "Lo que más asustaba era mi pelea contra la sensación",
+  "Puedo sentir esto y seguir presente en la sala"
+];
+
+let modo = "quieto", t = 0, metaSeg = 60;
+
+function duracionElegida(){
+  const act = Kit.activas("ejercicioIntero")[0] || "";
+  return act.indexOf("30 s") >= 0 ? 30 : 60;
+}
+
+function dibujar(){
+  const svg = $("svgIntero");
+  svg.innerHTML = "";
+  svg.appendChild(Kit.svg("rect", {x:10, y:10, width:540, height:190, rx:12, fill:"#f8fbfd", stroke:"#dde6ee"}));
+
+  /* Curva de referencia: subida durante inducción y bajada natural durante observación */
+  svg.appendChild(Kit.svg("path", {
+    d:"M 40 165 Q 150 155 240 50 Q 330 50 400 115 T 520 162",
+    fill:"none", stroke:"#cfdce6", "stroke-width":3, "stroke-dasharray":"5 5"
+  }));
+  svg.appendChild(Kit.svg("line", {x1:250, y1:24, x2:250, y2:184, stroke:"#d9e1ea", "stroke-width":1.5}));
+  const t1 = Kit.svg("text", {x:145, y:34, "text-anchor":"middle", "font-size":11.5, "font-weight":700, fill:"#c26a4e"});
+  t1.textContent = "1 · Provocar la sensación";
+  svg.appendChild(t1);
+  const t2 = Kit.svg("text", {x:385, y:34, "text-anchor":"middle", "font-size":11.5, "font-weight":700, fill:"#3f9b86"});
+  t2.textContent = "2 · Observar sin rescatarse (baja sola)";
+  svg.appendChild(t2);
+
+  /* Punto vivo sobre la curva */
+  let px = 40, py = 165, col = "#2f6f8f";
+  if(modo === "inducir"){
+    const p = Math.min(1, t / metaSeg);
+    px = 40 + p * 210;
+    py = 165 - Math.sin(p * Math.PI * 0.5) * 112;
+    col = "#c26a4e";
+  } else if(modo === "observar"){
+    const p = Math.min(1, t / 60);
+    px = 250 + p * 270;
+    py = 53 + (1 - Math.pow(1 - p, 1.8)) * 109;
+    col = "#3f9b86";
+  }
+  svg.appendChild(Kit.svg("circle", {cx:px, cy:py, r:9, fill:col, stroke:"#fff", "stroke-width":2.5}));
+}
+
+const reloj = Kit.reloj(dt => {
+  t += dt;
+  const rest = Math.max(0, Math.ceil(metaSeg - t));
+  $("mSegundos").textContent = rest + " s";
+  dibujar();
+  if(t >= metaSeg){
+    if(modo === "inducir"){
+      pasarObservacion();
+    } else {
+      reloj.parar();
+      modo = "quieto";
+      $("mEtapa").textContent = "Completado";
+      $("faseIntero").textContent = "Observación completada";
+      $("subIntero").textContent = "El cuerpo volvió a regularse sin hacer conductas de seguridad.";
+      Kit.brindis("Ejercicio completado");
+    }
+  }
+});
+
+function iniciarIntero(){
+  metaSeg = duracionElegida();
+  modo = "inducir"; t = 0;
+  $("mEtapa").textContent = "Inducción";
+  $("faseIntero").textContent = "Provocando la sensación…";
+  $("subIntero").textContent = "Nota qué aparece en el cuerpo sin pelear con ello.";
+  reloj.andar();
+}
+
+function pasarObservacion(){
+  modo = "observar"; t = 0; metaSeg = 60;
+  $("mEtapa").textContent = "Observando";
+  $("faseIntero").textContent = "Alto: ahora solo observa cómo baja sola";
+  $("subIntero").textContent = "Sin controlar la respiración ni buscar alivio rápido.";
+  if(!reloj.anda()) reloj.andar();
+}
+
+function detenerIntero(){
+  reloj.parar();
+  modo = "quieto"; t = 0; metaSeg = duracionElegida();
+  $("mSegundos").textContent = metaSeg + " s";
+  $("mEtapa").textContent = "Listo";
+  $("faseIntero").textContent = "Listo para empezar";
+  $("subIntero").textContent = "";
+  dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const ej = Kit.activas("ejercicioIntero"), s = Kit.activas("sensacionesNotadas"), c = Kit.activas("comprobadoIntero");
+  if(ej.length) l.push("Ejercicio interoceptivo: " + ej.join(", "));
+  if(s.length) l.push("Sensaciones provocadas: " + s.join(", "));
+  if(c.length) l.push("Qué comprobó al observar sin rescatarse: " + c.join(", "));
+  return l.join("\n");
+}
+
+Kit.opciones("ejercicioIntero", EJERCICIOS, detenerIntero, true);
+Kit.chips("sensacionesNotadas", SENSACIONES);
+Kit.chips("comprobadoIntero", COMPROBADO);
+dibujar();
+
+Kit.iniciar({
+  clave: "tcc-exposicion-interoceptiva",
+  alCambiar: dibujar,
+  resumen: resumen
+});

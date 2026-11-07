@@ -1,0 +1,146 @@
+@@meta
+archivo: pp-cuatro-fuentes-sentido.html
+titulo: Las cuatro fuentes de sentido y el legado
+orden: 05
+enfoque: Psicología positiva
+etiqueta: Sentido vital (IMCP)
+sub: Cuando una crisis, un cambio vital o una limitación sacuden lo que dábamos por sentado, el sentido no desaparece: puede beberse de cuatro fuentes distintas. Mirar la historia que nos trajo hasta aquí, la actitud ante lo que no podemos cambiar, lo que todavía creamos y lo que recibimos por los sentidos devuelve piso y dirección.
+fuente: Las cuatro fuentes de sentido (histórica, actitudinal, creativa y experiencial), en Breitbart y Poppito, Individual Meaning-Centered Psychotherapy (2014), sesiones 1 y 3 a 6.
+resumen: Enciende los cuatro cuadrantes de sentido vital (histórico, actitudinal, creativo y experiencial) en una brújula interactiva y señala qué fuente sigue viva hoy para acercarse a ella.
+@@css
+  .roseton-svg{display:block;width:100%;max-width:680px;height:auto;margin:0 auto}
+  .fuentes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fuente-caja{border:1px solid var(--linea);border-top:4px solid #c9962f;border-radius:10px;padding:13px 15px;background:#fbfcfd}
+  .fuente-caja h3{margin:0 0 3px;font-size:15px}
+  .fuente-caja p{margin:0 0 9px;font-size:12.5px;color:var(--tinta-suave);line-height:1.4}
+  @media (max-width:740px){.fuentes-grid{grid-template-columns:1fr}}
+@@html
+<div class="escenario">
+  <svg class="roseton-svg" id="svgSentido" viewBox="0 0 680 240" role="img"
+    aria-label="Brújula de las cuatro fuentes de sentido: histórica, actitudinal, creativa y experiencial"></svg>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Recorrer las cuatro fuentes de sentido</h2>
+  <p class="ayuda">Cuando una fuente se estrecha por las circunstancias, las otras tres pueden sostenerte. Marca lo que hoy sigue teniendo eco en ti.</p>
+  <div class="cuerpo">
+    <div class="fuentes-grid">
+      <div class="fuente-caja" style="border-top-color:#8a6a3f">
+        <h3 style="color:#70532d">1 · Fuente histórica (raíces y legado)</h3>
+        <p>El hilo de dónde vengo, lo que atravesé y la huella que dejo.</p>
+        <div class="chips" id="fHistorica"></div>
+      </div>
+      <div class="fuente-caja" style="border-top-color:#2f6f8f">
+        <h3 style="color:#255873">2 · Fuente actitudinal (ante el límite)</h3>
+        <p>Cómo elijo pararme frente a lo que hoy no puedo cambiar.</p>
+        <div class="chips" id="fActitudinal"></div>
+      </div>
+      <div class="fuente-caja" style="border-top-color:#3f7d5a">
+        <h3 style="color:#2d6345">3 · Fuente creativa (lo que doy al mundo)</h3>
+        <p>Lo que todavía cuido, construyo o sostengo con sello propio.</p>
+        <div class="chips" id="fCreativa"></div>
+      </div>
+      <div class="fuente-caja" style="border-top-color:#c9962f">
+        <h3 style="color:#9e721b">4 · Fuente experiencial (recibir el presente)</h3>
+        <p>Conectar hoy por medio del amor, la belleza o el humor.</p>
+        <div class="chips" id="fExperiencial"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">De estas cuatro fuentes, ¿cuál sigue viva hoy aunque todo lo demás esté revuelto, y cómo podrías acercarte a ella esta semana?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const F_HIST = [
+  "Un valor o ejemplo que aprendí de alguien importante",
+  "Una dificultad pasada que atravesé y me dio temple",
+  "La huella que quiero dejar en quienes me conocen"
+];
+const F_ACT = [
+  "Sostener la dignidad en medio de una limitación real",
+  "No reducir toda mi identidad a este problema o enfermedad",
+  "Elegir cómo trato a los demás incluso en un día difícil"
+];
+const F_CREA = [
+  "Un oficio, proyecto o responsabilidad que llevo con sello propio",
+  "Cuidar o acompañar el crecimiento de alguien",
+  "Ordenar o embellecer algo concreto en mi entorno"
+];
+const F_EXP = [
+  "Mirar el cielo, los árboles o escuchar música de verdad",
+  "Un rato de afecto o conversación sin prisa",
+  "Poder reírme un momento incluso con lo que pesa"
+];
+
+function dibujar(){
+  const svg = $("svgSentido");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est) => {
+    const e = g("text", {x, y, "text-anchor":"middle", style:est});
+    e.textContent = s;
+    return e;
+  };
+
+  const nH = Kit.activas("fHistorica").length;
+  const nA = Kit.activas("fActitudinal").length;
+  const nC = Kit.activas("fCreativa").length;
+  const nE = Kit.activas("fExperiencial").length;
+
+  g("rect", {x:0, y:0, width:680, height:240, rx:10, fill:"#faf8f4"});
+
+  const cuadrantes = [
+    ["1 · HISTÓRICA", "Legado y raíces", 170, 68, nH, "#8a6a3f"],
+    ["2 · ACTITUDINAL", "Postura ante el límite", 510, 68, nA, "#2f6f8f"],
+    ["3 · CREATIVA", "Cuidar y construir", 170, 174, nC, "#3f7d5a"],
+    ["4 · EXPERIENCIAL", "Amor, belleza y humor", 510, 174, nE, "#c9962f"]
+  ];
+
+  // Líneas al centro (340, 120)
+  cuadrantes.forEach(([, , x, y, n, col]) => {
+    g("line", {x1:340, y1:120, x2:x, y2:y, stroke: n ? col : "#d8d2c5", "stroke-width": n ? 3 : 1.5});
+  });
+
+  cuadrantes.forEach(([tit, sub, cx, cy, n, col]) => {
+    g("rect", {x:cx - 118, y:cy - 36, width:236, height:72, rx:11,
+      fill: n ? col : "#ffffff", "fill-opacity": n ? 0.14 : 0.9,
+      stroke: n ? col : "#d8d2c5", "stroke-width": n ? 2.4 : 1.4});
+    txt(cx, cy - 8, tit, `font:700 12.5px system-ui;fill:${col}`);
+    txt(cx, cy + 10, sub, "font:11.5px system-ui;fill:#5a6a7d");
+    txt(cx, cy + 26, n ? `${n} ${n === 1 ? "fuente activa" : "fuentes activas"}` : "Sin marcar aún",
+      `font:700 11px system-ui;fill:${n ? col : "#9aa6b2"}`);
+  });
+
+  const encendidas = (nH > 0) + (nA > 0) + (nC > 0) + (nE > 0);
+  g("circle", {cx:340, cy:120, r:36, fill:"#ffffff", stroke:"#c9962f", "stroke-width":2.5});
+  txt(340, 117, "SENTIDO", "font:700 11px system-ui;fill:#8a6418;letter-spacing:.7px");
+  txt(340, 133, `${encendidas} / 4`, "font:700 13.5px system-ui;fill:#4a3b18");
+}
+
+function refrescar(){ dibujar(); }
+
+function resumen(){
+  const l = [];
+  const h = Kit.activas("fHistorica"), a = Kit.activas("fActitudinal"),
+        c = Kit.activas("fCreativa"), e = Kit.activas("fExperiencial");
+  if(h.length) l.push("1. FUENTE HISTÓRICA: " + h.join(", "));
+  if(a.length) l.push("2. FUENTE ACTITUDINAL: " + a.join(", "));
+  if(c.length) l.push("3. FUENTE CREATIVA: " + c.join(", "));
+  if(e.length) l.push("4. FUENTE EXPERIENCIAL: " + e.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("fHistorica", F_HIST, refrescar);
+Kit.chips("fActitudinal", F_ACT, refrescar);
+Kit.chips("fCreativa", F_CREA, refrescar);
+Kit.chips("fExperiencial", F_EXP, refrescar);
+
+Kit.iniciar({
+  clave: "pp-cuatro-fuentes-sentido",
+  alCambiar: refrescar,
+  resumen: resumen
+});

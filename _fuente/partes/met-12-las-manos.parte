@@ -1,0 +1,244 @@
+@@meta
+archivo: met-las-manos.html
+titulo: Las manos como pensamientos
+orden: 12
+enfoque: ACT
+etiqueta: Defusión
+sub: Si imaginas que tus manos son tus pensamientos y las pegas a los ojos, casi no ves nada más del cuarto ni tienes las manos libres para hacer lo que importa. Bajarlas despacio hasta el regazo no borra lo que tienen escrito, pero devuelve la vista completa y deja las manos disponibles.
+fuente: El ejercicio de las manos como pensamientos (Hands as Thoughts), en Harris, ACT Made Simple (2009), caps. 2 y 7; Trauma-Focused ACT (2021), caps. 2 y 10.
+resumen: Se eligen las frases que hoy están escritas en las manos y lo valioso que hay enfrente. En la escena interactiva se alejan las manos desde los ojos hasta el regazo, comprobando que no hace falta borrar las palabras para recuperar el campo visual.
+@@css
+  .vista-manos{display:block;width:100%;height:auto;max-width:700px;margin:0 auto}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:8px auto 2px;color:var(--acento);
+    min-height:28px;max-width:600px;line-height:1.35}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:560px;margin:0 auto;
+    min-height:22px;line-height:1.5}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué dicen las manos y qué hay al frente</h2>
+  <p class="ayuda">Pon en las palmas los pensamientos que hoy te reclaman toda la atención, y nombra
+  qué hay frente a ti en tu vida que vale la pena ver.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué tienes escrito hoy en las manos</label>
+    <div class="chips" id="escritos"></div>
+    <label class="etiqueta">Qué hay al frente que te importa ver</label>
+    <div class="chips" id="frente"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="vista-manos" id="svgManos" viewBox="0 0 700 260" role="img"
+    aria-label="Dos manos con pensamientos escritos que se alejan de los ojos hasta el regazo dejando ver el paisaje"></svg>
+  <div class="fase" id="fase">Pegadas a los ojos: todo el paisaje son las palabras</div>
+  <div class="fase-sub" id="faseSub">Las manos tapan casi toda la vista y están ocupadas sosteniendo el cartel.</div>
+  <div class="medidor" style="max-width:540px;margin:10px auto 0">
+    <label for="distancia">Distancia de las manos</label>
+    <input type="range" id="distancia" min="0" max="100" value="0">
+    <span class="valor" id="vDistancia">0 %</span>
+  </div>
+  <div class="duracion" id="posiciones">
+    <button type="button" class="chip activa" id="pos0" onclick="irDistancia(0)">Pegadas a la cara</button>
+    <button type="button" class="chip" id="pos50" onclick="irDistancia(50)">A media distancia</button>
+    <button type="button" class="chip" id="pos100" onclick="irDistancia(100)">En el regazo</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta" id="pregunta">¿Qué vuelve a entrar en tu campo visual cuando bajas las manos sin esperar a que se borren las palabras?</div>
+  <div class="cuerpo" style="padding:10px 0 0">
+    <div class="chips" id="vuelveVer"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const ESCRITOS = [
+  "«No voy a poder»",
+  "«Siempre arruino todo»",
+  "«Se van a dar cuenta»",
+  "«Debería estar mejor»",
+  "«Algo malo va a pasar»"
+];
+const FRENTE = [
+  "La persona que tengo enfrente",
+  "Lo que estoy construyendo hoy",
+  "Mi descanso y mi salud",
+  "Una conversación pendiente"
+];
+const VUELVE = [
+  "Las palabras siguen ahí abajo, pero ya no tapan todo",
+  "Veo a las personas y lo que está pasando ahora",
+  "Mis manos quedan libres para hacer algo útil",
+  "No tuve que discutir con la frase para poder mirar"
+];
+
+let distActual = 0, distMeta = 0;
+let fondoColinas = null;
+
+function frasesManos(){
+  const e = Kit.activas("escritos");
+  if(!e.length) return ["«No voy a poder»", "«Debería estar mejor»"];
+  if(e.length === 1) return [e[0], "«Sigue dando vueltas»"];
+  return [e[0], e[1]];
+}
+
+function textoFrente(){
+  const f = Kit.activas("frente");
+  return f.length ? f.join(" · ") : "Lo que importa frente a ti";
+}
+
+function dibujar(){
+  const svg = $("svgManos");
+  svg.innerHTML = "";
+  const g = (tag, a) => svg.appendChild(Kit.svg(tag, a));
+  const p = distActual / 100; /* 0 = pegadas a la cara, 1 = en el regazo */
+
+  g("rect", {x:0, y:0, width:700, height:260, fill:"#eef5f8"});
+  if(!fondoColinas) fondoColinas = Kit.svg("image", {
+    href:"[[imagen:colinas-acuarela.jpg]]", x:0, y:0, width:700, height:260,
+    preserveAspectRatio:"none", opacity:.92
+  });
+  svg.appendChild(fondoColinas);
+
+  /* cartel / horizonte de lo que importa al frente (se ve claro conforme bajan las manos) */
+  const gFrente = Kit.svg("g", {opacity:(0.2 + 0.8 * p).toFixed(2)});
+  gFrente.appendChild(Kit.svg("rect", {
+    x:155, y:36, width:390, height:62, rx:12,
+    fill:"#ffffff", "fill-opacity":0.9, stroke:"#3f7d5a", "stroke-width":2
+  }));
+  const t1 = Kit.svg("text", {
+    x:350, y:58, "text-anchor":"middle",
+    style:"font:700 11px system-ui,sans-serif;fill:#3f7d5a;letter-spacing:.7px"
+  });
+  t1.textContent = "LO QUE HAY AL FRENTE Y TE IMPORTA VER";
+  gFrente.appendChild(t1);
+  const t2 = Kit.svg("text", {
+    x:350, y:80, "text-anchor":"middle",
+    style:"font:700 15px system-ui,sans-serif;fill:#1d3b2a"
+  });
+  const tf = textoFrente();
+  t2.textContent = tf.length > 48 ? tf.slice(0, 47) + "…" : tf;
+  gFrente.appendChild(t2);
+  svg.appendChild(gFrente);
+
+  /* velo de fusión cuando las manos están pegadas a los ojos */
+  if(p < 0.85){
+    g("rect", {
+      x:0, y:0, width:700, height:260, fill:"#25201d",
+      opacity:((1 - p) * 0.48).toFixed(2)
+    });
+  }
+
+  /* Las dos manos en acuarela vectorial: en p=0 son enormes y centradas;
+     en p=1 bajan al regazo (y=215), más pequeñas pero totalmente visibles con sus palabras */
+  const escala = 1.55 - 0.82 * p;
+  const yManos = 135 + 82 * p;
+  const sep = 112 - 22 * p;
+  const [fIzq, fDer] = frasesManos();
+
+  [[-1, fIzq], [1, fDer]].forEach(([lado, frase]) => {
+    const cx = 350 + lado * sep;
+    const gm = Kit.svg("g", {
+      transform:`translate(${cx.toFixed(1)} ${yManos.toFixed(1)}) scale(${escala.toFixed(2)})`,
+      filter:Kit.acuarela(svg)
+    });
+    /* silueta cálida de palma abierta y dedos */
+    gm.appendChild(Kit.svg("path", {
+      d: lado < 0
+        ? "M-68 70 L-68 -10 Q-68 -52 -52 -52 Q-38 -52 -38 -16 L-38 -68 Q-38 -96 -22 -96 Q-6 -96 -6 -22 L-6 -76 Q-6 -104 10 -104 Q26 -104 26 -22 L26 -62 Q26 -86 42 -86 Q56 -86 56 -12 L56 12 Q76 -8 88 4 Q98 16 68 48 L52 72 Z"
+        : "M68 70 L68 -10 Q68 -52 52 -52 Q38 -52 38 -16 L38 -68 Q38 -96 22 -96 Q6 -96 6 -22 L6 -76 Q6 -104 -10 -104 Q-26 -104 -26 -22 L-26 -62 Q-26 -86 -42 -86 Q-56 -86 -56 -12 L-56 12 Q-76 -8 -88 4 Q-98 16 -68 48 L-52 72 Z",
+      fill:"#e7c4aa", stroke:"#9c7258", "stroke-width":2.2
+    }));
+    svg.appendChild(gm);
+
+    /* texto escrito sobre la palma (sin filtro de desplazamiento para máxima nitidez) */
+    const gt = Kit.svg("g", {
+      transform:`translate(${cx.toFixed(1)} ${(yManos + 8 * escala).toFixed(1)})`
+    });
+    const limpia = frase.length > 26 ? frase.slice(0, 25) + "…" : frase;
+    const tx = Kit.svg("text", {
+      x:0, y:0, "text-anchor":"middle",
+      style:`font:700 ${(13.5 * Math.max(0.78, escala * 0.72)).toFixed(1)}px system-ui,sans-serif;fill:#3b2316;paint-order:stroke;stroke:#f7e5d7;stroke-width:3`
+    });
+    tx.textContent = limpia;
+    gt.appendChild(tx);
+    svg.appendChild(gt);
+  });
+}
+
+const reloj = Kit.reloj(dt => {
+  distActual += (distMeta - distActual) * Math.min(1, dt * 7);
+  if(Math.abs(distMeta - distActual) < 0.3){
+    distActual = distMeta;
+    reloj.parar();
+  }
+  dibujar();
+});
+
+function actualizarTextos(){
+  const v = Math.round(distMeta);
+  $("vDistancia").textContent = v + " %";
+  $("pos0").classList.toggle("activa", v < 25);
+  $("pos50").classList.toggle("activa", v >= 25 && v < 75);
+  $("pos100").classList.toggle("activa", v >= 75);
+  if(v < 25){
+    $("fase").textContent = "Pegadas a los ojos: todo el paisaje son las palabras";
+    $("faseSub").textContent = "Las manos tapan casi toda la vista y están ocupadas sosteniendo el cartel.";
+  } else if(v < 75){
+    $("fase").textContent = "A media distancia: entra aire entre tú y lo que dicen";
+    $("faseSub").textContent = "Las frases siguen legibles, pero empieza a verse qué hay alrededor.";
+  } else {
+    $("fase").textContent = "En el regazo: las palabras siguen ahí, y tienes vista y manos libres";
+    $("faseSub").textContent = "No se borró ni una letra, pero dejó de tapar lo que te importa.";
+  }
+}
+
+function irDistancia(val){
+  distMeta = val;
+  $("distancia").value = val;
+  actualizarTextos();
+  reloj.andar();
+  Kit.guardar();
+}
+
+$("distancia").addEventListener("input", () => {
+  distMeta = +$("distancia").value;
+  actualizarTextos();
+  reloj.andar();
+});
+
+function leer(){
+  distMeta = +$("distancia").value;
+  actualizarTextos();
+  dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const e = Kit.activas("escritos");
+  if(e.length) l.push("Escrito hoy en las manos: " + e.join(", "));
+  const f = Kit.activas("frente");
+  if(f.length) l.push("Qué importa ver al frente: " + f.join(", "));
+  l.push("Distancia de las manos ensayada: " + $("distancia").value + " % (del rostro al regazo)");
+  const v = Kit.activas("vuelveVer");
+  if(v.length) l.push("Qué vuelve al campo visual: " + v.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("escritos", ESCRITOS, leer);
+Kit.chips("frente", FRENTE, leer);
+Kit.chips("vuelveVer", VUELVE);
+dibujar();
+
+Kit.iniciar({
+  clave: "met-las-manos",
+  alCambiar: leer,
+  resumen: resumen,
+  extra: () => ({dist: distMeta}),
+  restaurar: d => {
+    if(d && d.dist !== undefined){
+      distActual = distMeta = +d.dist;
+      $("distancia").value = distMeta;
+    }
+  }
+});

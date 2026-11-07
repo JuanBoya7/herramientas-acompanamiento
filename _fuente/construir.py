@@ -48,18 +48,13 @@ YA_HECHAS = [
 ]
 
 ORDEN_ENFOQUES = [
-    ("ACT", "Terapia de aceptación y compromiso: diecinueve herramientas —metáforas vivas, ejercicios experienciales "
-            "y mapas de formulación— organizadas alrededor de los seis procesos del hexaflex."),
-    ("Cognitivo-conductual", "Recorrido clínico desde la formulación funcional y la motivación hasta el trabajo "
-                             "con pensamientos, la exposición, la activación y los hábitos."),
-    ("DBT", "Habilidades de terapia dialéctico-conductual —atención plena, tolerancia al malestar, regulación "
-            "emocional y efectividad interpersonal— junto con análisis en cadena y seguimiento semanal."),
-    ("Compasión y mindfulness", "Prácticas breves para activar el sistema de calma, abrir un espacio de respiración "
-                                "y responder a la autocrítica desde la autocompasión."),
-    ("Psicología positiva", "El punto de partida y los recursos disponibles: cómo está el bienestar hoy, con qué "
-                            "fortalezas cuenta la persona y hacia dónde construir."),
-    ("Crisis y consumo", "Para los momentos de riesgo y ambivalencia: el plan de seguridad ante la crisis suicida, "
-                         "el manejo del impulso de consumo y la exploración motivacional del cambio."),
+    ("ACT", "Terapia de aceptación y compromiso, terapia centrada en la compasión funcional y FAP: veintiocho herramientas —metáforas vivas, ejercicios experienciales y mapas de formulación— organizadas alrededor de los seis procesos del hexaflex."),
+    ("Cognitivo-conductual", "Recorrido clínico desde la formulación funcional, el protocolo unificado y el mapa de modos hasta los experimentos conductuales, la exposición interoceptiva y en vivo, la activación y la autorregulación."),
+    ("DBT", "Habilidades de terapia dialéctico-conductual y apertura radical (RO-DBT) —atención plena, aceptación radical, tolerancia al malestar, regulación emocional ABC PLEASE, efectividad interpersonal y autoinvestigación— junto con análisis en cadena y tarjeta diaria."),
+    ("Compasión y mindfulness", "Prácticas breves para equilibrar los tres sistemas de regulación emocional, activar el sistema de calma y responder al crítico interno desde el yo compasivo."),
+    ("Vínculos y pareja", "Terapia focalizada en las emociones (EFT) y terapia conductual integrativa de pareja (IBCT): desescalar el ciclo negativo persecución-retirada, escuchar el apego bajo el agua y cuidar el vínculo."),
+    ("Psicología positiva", "El punto de partida, el sentido y los recursos disponibles: bienestar PERMAH, fortalezas del carácter, afecto positivo, las cuatro fuentes de sentido y el proceso REACH del perdón."),
+    ("Crisis y consumo", "Para los momentos de riesgo y ambivalencia: el plan de seguridad ante la crisis suicida, el manejo del impulso de consumo y la exploración motivacional del cambio."),
 ]
 
 
@@ -207,9 +202,9 @@ def construir_indice(fichas, kit_css):
         )
 
     css_extra = """
-  .rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));
-    gap:11px;margin-top:10px}
-  a.ficha{display:flex;flex-direction:column;border:1px solid var(--linea);border-radius:10px;padding:14px 16px;
+  .rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));
+    gap:13px;margin-top:10px}
+  a.ficha{display:flex;flex-direction:column;min-width:0;overflow-wrap:break-word;border:1px solid var(--linea);border-radius:10px;padding:15px 17px;
     text-decoration:none;color:inherit;background:#fdfefe;transition:border-color .13s,
     transform .13s,box-shadow .13s}
   a.ficha:hover{border-color:var(--acento);transform:translateY(-2px);
@@ -217,8 +212,8 @@ def construir_indice(fichas, kit_css):
   a.ficha.hx-item-vinculado{border-style:dashed;background:#fafcfe}
   a.ficha .etq{align-self:flex-start;display:inline-block;font-size:10.5px;text-transform:uppercase;
     letter-spacing:.8px;font-weight:700;color:var(--acento);background:var(--acento-claro);
-    border-radius:999px;padding:2px 9px;margin-bottom:8px}
-  a.ficha b{display:block;font-size:16.5px;margin-bottom:5px;letter-spacing:-.2px}
+    border-radius:999px;padding:3px 10px;margin-bottom:8px;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.3}
+  a.ficha b{display:block;font-size:16.5px;line-height:1.3;margin-bottom:6px;letter-spacing:-.2px;overflow-wrap:break-word}
   a.ficha .dice{display:block;font-size:13.5px;color:var(--tinta-suave);line-height:1.45}
   a.ficha .ref{display:block;font-size:11.5px;color:var(--tinta-suave);font-style:italic;
     margin-top:auto;padding-top:8px;border-top:1px dashed var(--linea)}

@@ -8,12 +8,13 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--fondo);color:var(--tinta);
     font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
-  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+  .envoltura{max-width:1360px;margin:0 auto;padding:24px 22px 44px}
 
   /* ---------- cabecera ---------- */
   header.tapa,section.bloque,section.paso{background:var(--papel);border:1px solid var(--linea);
     border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
-  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  h1,h2,h3{overflow-wrap:break-word;word-break:normal}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px;line-height:1.25}
   .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:74ch}
   .fuente{margin:10px 0 0;font-size:12.5px;color:var(--tinta-suave);font-style:italic}
   .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
@@ -24,8 +25,8 @@
   .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
 
   /* ---------- pasos y bloques ---------- */
-  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;display:flex;
-    align-items:center;gap:11px}
+  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;line-height:1.3;display:flex;
+    align-items:center;flex-wrap:wrap;gap:10px}
   .num{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
     width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
     color:var(--acento);font-size:14px;font-weight:700}
@@ -215,7 +216,7 @@
      Menos texto por bloque, letra más grande y todo en fichas del mismo
      tamaño, para que se lea proyectado y no parezca un formulario. */
   body.lamina{font-size:17px}
-  body.lamina .envoltura{max-width:1080px}
+  body.lamina .envoltura{max-width:1280px}
   body.lamina h1{font-size:28px}
   body.lamina .sub{font-size:15.5px;max-width:70ch}
   body.lamina section.paso h2,body.lamina section.bloque h2{font-size:21px}
@@ -291,3 +292,9 @@
     .envoltura{padding:0;max-width:100%}
     textarea{min-height:0;height:auto}
   }
+
+  /* ---------- proteccion ante zoom y texto ampliado ---------- */
+  .opcion,.pieza,.ficha-l,.mini,.combi,.ranura,.lectura{min-width:0;overflow-wrap:break-word}
+  .opcion b,.pieza b,.ficha-l .t,.ranura .puesto b,.lectura .nombre,.combi .cual b,.mini b{
+    overflow-wrap:break-word;line-height:1.3}
+  .chip{white-space:normal;text-align:left;line-height:1.35;overflow-wrap:break-word}

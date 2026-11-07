@@ -1,0 +1,157 @@
+@@meta
+archivo: tcc-arco-emocional.html
+titulo: El arco emocional y la acción alternativa
+orden: 14
+enfoque: Cognitivo-conductual
+etiqueta: Protocolo unificado
+sub: Una emoción se dispara ante un antecedente, mueve tres engranajes a la vez (pensamientos, sensaciones físicas y conducta impulsada por la emoción) y deja consecuencias distintas a corto y a largo plazo. Girar el tercer engranaje hacia una acción alternativa corta el círculo de evitación.
+fuente: Registro ARCO de la experiencia emocional y conductas impulsadas por la emoción (CIE), en Barlow et al., Protocolo unificado para el tratamiento transdiagnóstico de los trastornos emocionales (2015), módulos 2, 5a y 5b.
+resumen: Mapa interactivo del modelo ARCO del Protocolo Unificado con los tres componentes de la respuesta emocional y el giro de la Conducta Impulsada por la Emoción (CIE) hacia la acción alternativa.
+@@css
+  .arco-svg{display:block;width:100%;height:auto}
+  .arco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px}
+  .arco-col{border:1px solid var(--linea);border-left-width:4px;border-radius:9px;padding:11px 13px;background:#fdfefe}
+  .arco-col h3{margin:0 0 6px;font-size:14.5px}
+@@html
+<div class="escenario">
+  <svg class="arco-svg" id="svgArco" viewBox="0 0 700 230" role="img"
+    aria-label="Diagrama del ARCO emocional y el giro hacia la acción alternativa"></svg>
+  <div class="mandos">
+    <button type="button" id="btnModoCIE" class="principal" onclick="cambiarVia('cie')">Vía habitual: seguir la CIE o evitación sutil</button>
+    <button type="button" id="btnModoAlt" onclick="cambiarVia('alt')">Girar el engranaje: Acción alternativa</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>A y R · El disparador y los tres engranajes</h2>
+  <p class="ayuda">Separar lo que encendió el episodio de los tres componentes que se alimentan entre sí.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">A · Antecedente o disparador</label>
+    <div class="chips" id="arcoAnt"></div>
+    <div class="arco-grid" style="margin-top:12px">
+      <div class="arco-col" style="border-left-color:#5f77b8">
+        <h3>R1 · Pensamientos</h3>
+        <div class="chips" id="arcoPens"></div>
+      </div>
+      <div class="arco-col" style="border-left-color:#c9962f">
+        <h3>R2 · Sensaciones físicas</h3>
+        <div class="chips" id="arcoSens"></div>
+      </div>
+      <div class="arco-col" style="border-left-color:#c26a4e">
+        <h3>R3 · Conducta impulsada (CIE)</h3>
+        <div class="chips" id="arcoCIE"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>C y Acción alternativa · Qué pasa después y cómo girar</h2>
+  <p class="ayuda">La CIE alivia en segundos pero mantiene la alarma; la acción alternativa hace espacio a la emoción sin escapar.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">C · Consecuencia de seguir la CIE (corto vs. largo plazo)</label>
+    <div class="chips" id="arcoCons"></div>
+    <label class="etiqueta">Acción alternativa para girar el tercer engranaje</label>
+    <div class="chips" id="accionAlt"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Cuál es esa evitación sutil que parece inofensiva pero le sigue enseñando a tu cerebro que sentir esto es peligroso?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const ANT = ["Una conversación difícil o imprevisto", "Un cambio de planes o incertidumbre", "Una sensación física incómoda", "Un recuerdo o pendiente acumulado"];
+const PENS = ["«Esto va a salir mal»", "«No lo voy a tolerar»", "«Tengo que salir de aquí»", "«Por mi culpa todo empeora»"];
+const SENS = ["Opresión en el pecho o garganta", "Calor o aceleración del pulso", "Pesadez y ganas de encerrarme", "Tensión en mandíbula y estómago"];
+const CIE = ["Salir o cancelar a último momento", "Distraerme con el teléfono para no sentir", "Buscar que me tranquilicen enseguida", "Hablar rápido o discutir para tapar el miedo"];
+const CONS = ["Alivio de pocos minutos y más miedo la próxima vez", "La emoción no termina de procesarse", "Se achica el margen de lo que hago en la semana"];
+const ALT = ["Quedarme presente cinco minutos más sin escapar", "Soltar el teléfono y dejar que la sensación suba y baje sola", "Acercarme a lo pendiente con ritmo tranquilo", "Hablar en tono pausado aunque sienta incomodidad"];
+
+let via = "cie";
+
+function cambiarVia(nueva){
+  via = nueva;
+  $("btnModoCIE").classList.toggle("principal", via === "cie");
+  $("btnModoAlt").classList.toggle("principal", via === "alt");
+  dibujar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgArco");
+  svg.innerHTML = "";
+  const f = Kit.acuarela(svg);
+  const esAlt = via === "alt";
+
+  /* Caja A */
+  svg.appendChild(Kit.svg("rect", {x:16, y:62, width:136, height:106, rx:11, fill:"#f4f8fb", stroke:"#2f6f8f", "stroke-width":2, filter:f}));
+  const tA = Kit.svg("text", {x:84, y:92, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#1d4e66"});
+  tA.textContent = "A · Antecedente";
+  svg.appendChild(tA);
+  const sA = Kit.svg("text", {x:84, y:118, "text-anchor":"middle", "font-size":11, fill:"#5a6a7d"});
+  sA.textContent = (Kit.activas("arcoAnt")[0] || "Disparador actual").slice(0, 20);
+  svg.appendChild(sA);
+
+  /* Caja R (3 engranajes) */
+  svg.appendChild(Kit.svg("rect", {x:178, y:18, width:310, height:194, rx:14, fill:"#fdfefe", stroke:"#b8c9d8", "stroke-width":1.8}));
+  const tR = Kit.svg("text", {x:333, y:39, "text-anchor":"middle", "font-size":12.5, "font-weight":700, fill:"#2f6f8f"});
+  tR.textContent = "R · Tres engranajes de la respuesta";
+  svg.appendChild(tR);
+
+  const nodos = [
+    {x:252, y:88, r:34, col:"#5f77b8", tit:"Pensar"},
+    {x:412, y:88, r:34, col:"#c9962f", tit:"Sentir"},
+    {x:333, y:158, r:38, col:esAlt ? "#3f9b86" : "#c26a4e", tit:esAlt ? "Acción alt." : "CIE / escape"}
+  ];
+  svg.appendChild(Kit.svg("line", {x1:252, y1:88, x2:412, y2:88, stroke:"#cfdce6", "stroke-width":2}));
+  svg.appendChild(Kit.svg("line", {x1:252, y1:88, x2:333, y2:158, stroke:"#cfdce6", "stroke-width":2}));
+  svg.appendChild(Kit.svg("line", {x1:412, y1:88, x2:333, y2:158, stroke:"#cfdce6", "stroke-width":2}));
+
+  nodos.forEach(n => {
+    svg.appendChild(Kit.svg("circle", {cx:n.x, cy:n.y, r:n.r, fill:n.col + "1f", stroke:n.col, "stroke-width":2.4, filter:f}));
+    const tx = Kit.svg("text", {x:n.x, y:n.y + 4, "text-anchor":"middle", "font-size":11.5, "font-weight":700, fill:n.col});
+    tx.textContent = n.tit;
+    svg.appendChild(tx);
+  });
+
+  /* Caja C */
+  const colC = esAlt ? "#3f9b86" : "#c26a4e";
+  svg.appendChild(Kit.svg("rect", {x:514, y:52, width:170, height:126, rx:11, fill:esAlt ? "#eef7f3" : "#fdf2ee", stroke:colC, "stroke-width":2.2, filter:f}));
+  const tC = Kit.svg("text", {x:599, y:82, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:colC});
+  tC.textContent = "C · Consecuencias";
+  svg.appendChild(tC);
+  const sC1 = Kit.svg("text", {x:599, y:108, "text-anchor":"middle", "font-size":11.5, fill:"#1d2733"});
+  sC1.textContent = esAlt ? "Corto: incomodidad" : "Corto: alivio rápido";
+  svg.appendChild(sC1);
+  const sC2 = Kit.svg("text", {x:599, y:132, "text-anchor":"middle", "font-size":11.5, "font-weight":700, fill:colC});
+  sC2.textContent = esAlt ? "Largo: mayor libertad" : "Largo: más alarma";
+  svg.appendChild(sC2);
+
+  /* Flechas A -> R -> C */
+  svg.appendChild(Kit.svg("line", {x1:152, y1:115, x2:178, y2:115, stroke:"#2f6f8f", "stroke-width":2.2}));
+  svg.appendChild(Kit.svg("line", {x1:488, y1:115, x2:514, y2:115, stroke:colC, "stroke-width":2.2}));
+}
+
+function resumen(){
+  const l = [];
+  [["A · Antecedente","arcoAnt"],["R1 · Pensamientos","arcoPens"],["R2 · Sensaciones físicas","arcoSens"],
+   ["R3 · CIE o evitación sutil","arcoCIE"],["C · Consecuencias","arcoCons"],["Acción alternativa","accionAlt"]].forEach(([rot, id]) => {
+    const v = Kit.activas(id);
+    if(v.length) l.push(rot + ": " + v.join(", "));
+  });
+  return l.join("\n");
+}
+
+["arcoAnt","arcoPens","arcoSens","arcoCIE","arcoCons","accionAlt"].forEach(id =>
+  Kit.chips(id, {arcoAnt:ANT,arcoPens:PENS,arcoSens:SENS,arcoCIE:CIE,arcoCons:CONS,accionAlt:ALT}[id], dibujar));
+dibujar();
+
+Kit.iniciar({
+  clave: "tcc-arco-emocional",
+  extra: () => ({via}),
+  restaurar: d => { via = (d && d.via) || "cie"; cambiarVia(via); },
+  alCambiar: dibujar,
+  resumen: resumen
+});

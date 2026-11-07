@@ -1,0 +1,176 @@
+@@meta
+archivo: par-tener-razon-o-cuidar.html
+titulo: Tener razón o cuidar el vínculo: frente al «ESO»
+orden: 02
+enfoque: Vínculos y pareja
+etiqueta: Aceptación en pareja (IBCT)
+sub: Todas las parejas tienen diferencias profundas que vuelven una y otra vez. Cuando intentamos ganar el juicio para que el otro cambie y sea igual a nosotros, la relación se desgasta. La separación unificada consiste en pasar al mismo lado del banco, mirar al problema como «nuestro ESO» y hablar desde lo que duele sin acusar.
+fuente: Polarización, unión empática y separación unificada en torno al problema, en Barraca Mairal, Terapia integral de pareja (2015), caps. 3, 5 y 6; Dahl, Stewart, Martell y Kaplan, ACT and RFT in Relationships (2013), caps. 5 y 7.
+resumen: Nombra «el ESO» recurrente y la trampa de buscar tener razón, cambia en escena de estar enfrentados a sentarse del mismo lado del banco (separación unificada) y ensaya una revelación blanda y un gesto de cuidado.
+@@css
+  .eso-svg{display:block;width:100%;max-width:700px;height:auto;margin:0 auto}
+  .modo-banco{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:11px}
+  .btn-banco{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--linea);border-radius:999px;
+    padding:7px 16px;background:#fff;color:var(--tinta-suave);cursor:pointer;transition:all .15s}
+  .btn-banco.activo{background:#3f7d5a;border-color:#3f7d5a;color:#fff}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Nombrar «el ESO» que vuelve una y otra vez</h2>
+  <p class="ayuda">Ponerle un nombre compartido al tema recurrente permite verlo como un visitante que les cae a los dos, no como un defecto de uno.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Cuál es «nuestro ESO» habitual</label>
+    <div class="chips" id="temaEso"></div>
+    <label class="etiqueta" style="margin-top:14px">La trampa de la polarización (pelear por tener razón)</label>
+    <div class="chips" id="trampaRazon"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="eso-svg" id="svgEso" viewBox="0 0 700 230" role="img"
+    aria-label="Cambio desde estar enfrentados uno contra el otro hasta sentarse del mismo lado mirando al ESO"></svg>
+  <div class="modo-banco">
+    <button type="button" class="btn-banco activo" id="btnEnfrentados" onclick="ponerModo('contra')">Enfrentados uno contra el otro</button>
+    <button type="button" class="btn-banco" id="btnJuntos" onclick="ponerModo('juntos')">Pasar al mismo lado del banco (Separación unificada)</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Del reproche duro a la revelación blanda y el valor de cuidar</h2>
+  <p class="ayuda">La unión empática ocurre cuando dejamos de explicar por qué el otro está equivocado y mostramos qué nos pasa por dentro cuando llega «el ESO».</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Revelación blanda (mostrar la herida sin atacar)</label>
+    <div class="chips" id="revelacionBlanda"></div>
+    <label class="etiqueta" style="margin-top:14px">Gesto de cuidado del vínculo hoy</label>
+    <div class="chips" id="gestoCuidado"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">En esta discusión que se repite, ¿qué ganas cuando ganas la razón y qué pierdes en la relación?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const TEMAS_ESO = [
+  "Nuestros ritmos distintos para hablar o decidir",
+  "El manejo del tiempo libre y las responsabilidades",
+  "La forma de demostrar afecto o cercanía",
+  "El trato con las familias o el dinero"
+];
+const TRAMPAS = [
+  "Intentar demostrar quién tiene la razón",
+  "Querer que el otro funcione igual que yo",
+  "Sacar la lista de fallos pasados",
+  "Cerrarme con frialdad para cobrarme la molestia"
+];
+const REVELACIONES = [
+  "«Cuando pasa esto no es que quiera controlarte, es que me asusta perder complicidad»",
+  "«Cuando me callo no es indiferencia, es que me abrumo y no sé cómo responderte»",
+  "«Detrás de mi enojo lo que hay es cansancio y ganas de que seamos equipo»"
+];
+const GESTOS = [
+  "Nombrar con humor «ahí llegó otra vez nuestro ESO»",
+  "Escuchar cinco minutos sin preparar mi defensa",
+  "Elegir hoy la cercanía por encima de ganar la discusión"
+];
+
+let modo = "contra";
+
+function ponerModo(m){
+  modo = m;
+  refrescar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgEso");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est) => {
+    const e = g("text", {x, y, "text-anchor":"middle", style:est});
+    e.textContent = s;
+    return e;
+  };
+
+  const juntos = modo === "juntos";
+  const tema = Kit.activas("temaEso")[0] || "«Nuestro ESO»";
+  const temaCorto = tema.length > 34 ? tema.slice(0, 33) + "…" : tema;
+
+  g("rect", {x:0, y:0, width:700, height:230, rx:10, fill: juntos ? "#f4fbf7" : "#fffaf7"});
+
+  if(!juntos){
+    // Modo enfrentados: figura izq (160, 145) y figura der (540, 145) apuntándose con el ESO en medio (350, 115)
+    txt(350, 28, "POLARIZACIÓN: Uno contra el otro con «el ESO» como proyectil en el medio",
+      "font:700 12.5px system-ui;fill:#9e472d");
+
+    // Nube del ESO en medio
+    g("ellipse", {cx:350, cy:118, rx:95, ry:36, fill:"#fdf0ea", stroke:"#c26a4e", "stroke-width":2.2});
+    txt(350, 114, "EL «ESO» EN MEDIO", "font:700 11px system-ui;fill:#a84e34");
+    txt(350, 130, temaCorto, "font:600 11px system-ui;fill:#5a3d33");
+
+    // Flechas de choque
+    g("line", {x1:200, y1:118, x2:248, y2:118, stroke:"#c26a4e", "stroke-width":3});
+    g("line", {x1:500, y1:118, x2:452, y2:118, stroke:"#c26a4e", "stroke-width":3});
+
+    [[155, "#b85a3e", "«Tú tienes la culpa»"], [545, "#2f6f8f", "«Tú eres quien exagera»"]].forEach(([x, col, fr]) => {
+      g("circle", {cx:x, cy:108, r:13, fill:col});
+      g("path", {d:`M ${x-16} 162 Q ${x} 124 ${x+16} 162 Z`, fill:col});
+      txt(x, 186, fr, "font:600 11.5px system-ui;fill:#5a6a7d");
+    });
+  } else {
+    // Modo Separación unificada: ambos sentados en el banco a la izquierda (195 y 245) mirando al ESO a la derecha (500, 115)
+    txt(350, 28, "SEPARACIÓN UNIFICADA + UNIÓN EMPÁTICA: Los dos del mismo lado mirando al «ESO»",
+      "font:700 12.5px system-ui;fill:#2c6645");
+
+    // Banco compartido
+    g("rect", {x:150, y:158, width:140, height:10, rx:4, fill:"#8a9a86"});
+    g("line", {x1:168, y1:168, x2:168, y2:186, stroke:"#8a9a86", "stroke-width":4});
+    g("line", {x1:272, y1:168, x2:272, y2:186, stroke:"#8a9a86", "stroke-width":4});
+
+    // Dos figuras hombro con hombro
+    [[196, "#3f7d5a"], [244, "#2f6f8f"]].forEach(([x, col]) => {
+      g("circle", {cx:x, cy:106, r:13, fill:col});
+      g("path", {d:`M ${x-15} 158 Q ${x} 122 ${x+15} 158 Z`, fill:col});
+    });
+    txt(220, 204, "Equipo: nosotros dos cuidando el vínculo", "font:700 11.5px system-ui;fill:#2c6645");
+
+    // Flecha de mirada conjunta hacia el ESO externo
+    g("path", {d:"M 278 122 L 382 122", stroke:"#3f7d5a", "stroke-width":2.5, "stroke-dasharray":"5 4"});
+
+    // El ESO puesto afuera como un objeto que observan juntos
+    g("rect", {x:395, y:82, width:230, height:74, rx:12, fill:"#ffffff", stroke:"#3f7d5a", "stroke-width":2.2});
+    txt(510, 108, "«Ahí apareció nuestro ESO»", "font:700 12px system-ui;fill:#2c6645");
+    txt(510, 127, temaCorto, "font:600 11.5px system-ui;fill:#3f5163");
+    txt(510, 144, "Un problema a atender sin dañarnos", "font:11px system-ui;fill:#5a6a7d");
+  }
+}
+
+function refrescar(){
+  $("btnEnfrentados").classList.toggle("activo", modo === "contra");
+  $("btnJuntos").classList.toggle("activo", modo === "juntos");
+  dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const t = Kit.activas("temaEso"), tr = Kit.activas("trampaRazon");
+  if(t.length) l.push("EL «ESO» RECURRENTE: " + t.join(", "));
+  if(tr.length) l.push("TRAMPA DE LA POLARIZACIÓN: " + tr.join(", "));
+  const rb = Kit.activas("revelacionBlanda"), gc = Kit.activas("gestoCuidado");
+  if(rb.length) l.push("REVELACIÓN BLANDA: " + rb.join(" · "));
+  if(gc.length) l.push("GESTO DE CUIDADO ELEGIDO: " + gc.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("temaEso", TEMAS_ESO, refrescar);
+Kit.chips("trampaRazon", TRAMPAS, refrescar);
+Kit.chips("revelacionBlanda", REVELACIONES, refrescar);
+Kit.chips("gestoCuidado", GESTOS, refrescar);
+
+Kit.iniciar({
+  clave: "par-tener-razon-o-cuidar",
+  extra: () => ({modo}),
+  restaurar: d => { if(d.modo) modo = d.modo; },
+  alCambiar: refrescar,
+  resumen: resumen
+});

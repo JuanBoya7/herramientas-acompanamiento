@@ -1,0 +1,100 @@
+@@meta
+archivo: tcc-intolerancia-incertidumbre.html
+titulo: El árbol de la preocupación y la incertidumbre
+orden: 16
+enfoque: Cognitivo-conductual
+etiqueta: Incertidumbre (TAG)
+sub: La preocupación crónica se alimenta de tratar cada «¿y si…?» como si exigiera certeza absoluta hoy. Aquí se bifurca el árbol entre problemas actuales modificables e incertidumbre futura, y se elige qué muleta soltar para entrenar tolerancia a la duda.
+fuente: Clasificación de preocupaciones y conductas de seguridad ante la intolerancia a la incertidumbre, en Robichaud, Koerner y Dugas, Cognitive Behavioral Treatment for Generalized Anxiety Disorder (2019), caps. 2 y 5; Seidah, Dugas y Leblanc (2007).
+resumen: Bifurcación del «¿y si…?» (problema actual modificable frente a escenario hipotético), detector de muletas para comprar certeza y práctica de tolerar la duda.
+@@css
+  .rama-tag{border-radius:10px;padding:13px 16px;margin-top:12px;border:1px solid var(--linea);background:#f6f9fb;font-size:14px;line-height:1.5}
+  .rama-tag b{color:var(--acento)}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La cadena del «¿Y si…?» y la bifurcación del árbol</h2>
+  <p class="ayuda">Primero se nombra la preocupación y se decide en cuál de las dos ramas cae hoy.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué «¿Y si…?» está dando vueltas</label>
+    <div class="chips" id="preocupacionYsi"></div>
+    <label class="etiqueta">En qué rama del árbol cae esta preocupación</label>
+    <div id="tipoProblema"></div>
+    <div id="lecturaRama"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Las muletas con las que intento comprar el 100 % de certeza</h2>
+  <p class="ayuda">Tranquilizan un rato, pero le confirman al cerebro que la duda es insoportable.</p>
+  <div class="cuerpo">
+    <div class="chips" id="muletasCerteza"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Ensayar un paso pequeño conviviendo con la duda</h2>
+  <p class="ayuda">Se entrena actuar como alguien que puede llevar un poco de «no sé» en el bolsillo.</p>
+  <div class="cuerpo">
+    <div class="chips" id="ensayoIncertidumbre"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Cuánto te está costando exigirle a la vida una garantía escrita antes de dar cada paso?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const YSI = [
+  "«¿Y si tomé la decisión equivocada?»",
+  "«¿Y si algo sale mal con la salud o el trabajo?»",
+  "«¿Y si se molestó conmigo por lo que dije?»",
+  "«¿Y si no logro resolver lo que viene más adelante?»"
+];
+const RAMAS = [
+  ["Problema actual con algo modificable hoy", "Hay una parte concreta en el presente sobre la que sí se puede dar un paso pequeño."],
+  ["Escenario hipotético futuro («¿Y si…?») fuera de mi control hoy", "Todavía no ocurrió o no depende de mí: darle vueltas es intentar comprar certeza imposible."]
+];
+const MULETAS = [
+  "Pedir a otros que me confirmen que todo saldrá bien",
+  "Buscar información o señales una y otra vez",
+  "Revisar mensajes o tareas diez veces antes de enviarlos",
+  "Hacer todo yo mismo sin delegar nada",
+  "Postergar la decisión hasta estar completamente seguro"
+];
+const ENSAYOS = [
+  "Enviar un mensaje o correo leyéndolo una sola vez",
+  "Tomar hoy una decisión pequeña sin consultar a nadie",
+  "Pasar el día sin buscar garantías sobre ese tema",
+  "Delegar una tarea pequeña y dejar que el otro la haga a su manera"
+];
+
+function refrescar(){
+  const r = Kit.activas("tipoProblema")[0] || "";
+  if(!r){ $("lecturaRama").innerHTML = ""; return; }
+  $("lecturaRama").innerHTML = r.indexOf("actual") >= 0
+    ? `<div class="rama-tag"><b>Rama de acción:</b> Si tiene una parte modificable hoy, la preocupación repetitiva se cambia por definir el primer paso concreto (ver <i>Solución de problemas</i>) y soltar el resto de garantías.</div>`
+    : `<div class="rama-tag"><b>Rama de incertidumbre:</b> Ninguna cantidad de vueltas mentales puede resolver hoy algo que aún no ocurrió. Aquí el entrenamiento es notar el «¿y si…?» (ver <i>Aplazar la preocupación</i>) y soltar las muletas del paso 2.</div>`;
+}
+
+function resumen(){
+  const l = [];
+  const y = Kit.activas("preocupacionYsi"), r = Kit.activas("tipoProblema"), m = Kit.activas("muletasCerteza"), e = Kit.activas("ensayoIncertidumbre");
+  if(y.length) l.push("Preocupación («¿Y si…?»): " + y.join(", "));
+  if(r.length) l.push("Rama del árbol: " + r.join(", "));
+  if(m.length) l.push("Conductas de búsqueda de certeza: " + m.join(", "));
+  if(e.length) l.push("Paso conviviendo con la duda: " + e.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("preocupacionYsi", YSI, refrescar);
+Kit.opciones("tipoProblema", RAMAS, refrescar, true);
+Kit.chips("muletasCerteza", MULETAS, refrescar);
+Kit.chips("ensayoIncertidumbre", ENSAYOS, refrescar);
+refrescar();
+
+Kit.iniciar({
+  clave: "tcc-intolerancia-incertidumbre",
+  alCambiar: refrescar,
+  resumen: resumen
+});

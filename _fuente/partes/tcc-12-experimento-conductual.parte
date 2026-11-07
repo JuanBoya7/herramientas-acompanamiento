@@ -1,0 +1,122 @@
+@@meta
+archivo: tcc-experimento-conductual.html
+titulo: El experimento conductual
+orden: 13
+enfoque: Cognitivo-conductual
+etiqueta: Comprobación empírica
+sub: Hay creencias que no cambian discutiéndolas con argumentos porque una muleta o conducta de seguridad impide comprobar qué pasaría sin ella. Aquí se diseña una prueba pequeña en la vida real y se contrasta lo que la mente aseguró frente a lo que ocurrió.
+fuente: Diseño de experimentos conductuales y abandono de conductas de seguridad, en Egan, Wade, Shafran y Antony, Cognitive-Behavioral Treatment of Perfectionism (2014), caps. 9 y 12; Beck, Cognitive Behavior Therapy: Basics and Beyond (2021).
+resumen: Cuatro pasos de laboratorio en la vida cotidiana: predicción concreta de la mente, conducta de seguridad que se suelta durante la prueba, experimento y contraste con lo que ocurrió.
+@@css
+  .balanza-exp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .lado-exp{border:1px solid var(--linea);border-top-width:4px;border-radius:10px;padding:13px 15px;background:#fdfefe}
+  .lado-exp.pred{border-top-color:#c26a4e}
+  .lado-exp.real{border-top-color:#3f9b86}
+  .lado-exp .rot{font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:var(--tinta-suave);margin-bottom:4px}
+  .lado-exp .txt{font-size:14.5px;font-weight:600;color:var(--tinta);line-height:1.45}
+  @media (max-width:620px){.balanza-exp{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La predicción y la muleta que la sostiene</h2>
+  <p class="ayuda">La predicción tiene que ser observable, y hay que nombrar qué conducta de seguridad se deja de lado para que la prueba valga.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué asegura mi mente que va a pasar</label>
+    <div class="chips" id="prediccionMente"></div>
+    <label class="etiqueta">Qué muleta o conducta de seguridad voy a soltar en la prueba</label>
+    <div class="chips" id="muletaSoltar"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>La prueba en el mundo real</h2>
+  <p class="ayuda">Pequeña, concreta y realizable sin depender de que otro adivine.</p>
+  <div class="cuerpo">
+    <div class="chips" id="tipoPrueba"></div>
+    <details class="apunte">
+      <summary>Apuntar en qué consiste el experimento (opcional)</summary>
+      <input type="text" id="disenoPrueba" placeholder="Qué voy a hacer exactamente y sin qué muleta.">
+    </details>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Contraste con lo que ocurrió</h2>
+  <p class="ayuda">Se compara como un científico: no si hubo nervios, sino si se cumplió la catástrofe predicha.</p>
+  <div class="cuerpo">
+    <div class="chips" id="resultadoReal"></div>
+    <div class="balanza-exp" id="panelContraste"></div>
+    <details class="apunte">
+      <summary>Apuntar qué aprendí de la prueba (opcional)</summary>
+      <input type="text" id="aprendizajePrueba" placeholder="Qué mostró la experiencia frente a lo que decía la mente.">
+    </details>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Qué tendría que pasar en esta prueba pequeña para que tu mente empiece a dudar de su predicción?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const PREDICCIONES = [
+  "«Si digo que no, se van a enojar y me van a rechazar»",
+  "«Si no reviso tres veces, voy a cometer un error grave»",
+  "«Si hablo cuando estoy nervioso, todos notarán que tiemblo y me juzgarán»",
+  "«Si descanso hoy, todo se va a descontrolar»"
+];
+const MULETAS = [
+  "Revisar y corregir una y otra vez",
+  "Pedir confirmación o reaseguro a otra persona",
+  "Disculparme de antemano o justificarse de más",
+  "Evitar el contacto visual o hablar muy corto"
+];
+const PRUEBAS = [
+  "Hacer la acción directamente sin usar la conducta de seguridad",
+  "Hacer una pequeña encuesta a tres personas de confianza",
+  "Dejar a propósito un detalle menor sin revisar de más y observar qué pasa",
+  "Expresar una opinión o pedido breve sosteniendo la mirada"
+];
+const RESULTADOS = [
+  "No ocurrió lo que mi mente daba por seguro",
+  "Hubo incomodidad al principio y pude sostenerla",
+  "La otra persona reaccionó con normalidad",
+  "Descubrí que la muleta era lo que mantenía vivo el miedo"
+];
+
+function refrescar(){
+  const pr = Kit.activas("prediccionMente"), mu = Kit.activas("muletaSoltar"), re = Kit.activas("resultadoReal");
+  $("panelContraste").innerHTML = `
+    <div class="lado-exp pred">
+      <div class="rot">Lo que predecía la mente</div>
+      <div class="txt">${pr.length ? pr.join(" · ") : "Elige una predicción en el paso 1."}</div>
+      ${mu.length ? `<div style="margin-top:6px;font-size:12.5px;color:var(--tinta-suave)">Soltando la muleta: ${mu.join(", ")}</div>` : ""}
+    </div>
+    <div class="lado-exp real">
+      <div class="rot">Lo que mostró la realidad</div>
+      <div class="txt">${re.length ? re.join(" · ") : "Se completa al observar qué ocurrió en la prueba."}</div>
+    </div>`;
+}
+
+function resumen(){
+  const l = [];
+  const pr = Kit.activas("prediccionMente"), mu = Kit.activas("muletaSoltar"), tp = Kit.activas("tipoPrueba"), re = Kit.activas("resultadoReal");
+  if(pr.length) l.push("Predicción a poner a prueba: " + pr.join(", "));
+  if(mu.length) l.push("Conducta de seguridad que se suelta: " + mu.join(", "));
+  if(tp.length) l.push("Experimento elegido: " + tp.join(", "));
+  if($("disenoPrueba").value.trim()) l.push("Diseño concreto: " + $("disenoPrueba").value.trim());
+  if(re.length) l.push("Resultado observado: " + re.join(", "));
+  if($("aprendizajePrueba").value.trim()) l.push("Conclusión: " + $("aprendizajePrueba").value.trim());
+  return l.join("\n");
+}
+
+Kit.chips("prediccionMente", PREDICCIONES, refrescar);
+Kit.chips("muletaSoltar", MULETAS, refrescar);
+Kit.chips("tipoPrueba", PRUEBAS, refrescar);
+Kit.chips("resultadoReal", RESULTADOS, refrescar);
+refrescar();
+
+Kit.iniciar({
+  clave: "tcc-experimento-conductual",
+  alCambiar: refrescar,
+  resumen: resumen
+});

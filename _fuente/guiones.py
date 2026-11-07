@@ -1151,4 +1151,374 @@ GUIONES = {
   "✗ «La próxima vez no te vas a estresar.»",
   "✗ Proponer diez técnicas a la vez."]),
 ],
+
+# ============================================================================
+# Guiones de las 28 herramientas nuevas (Lotes 1, 2 y 3)
+# ============================================================================
+
+'act-echar-el-ancla.html': [('Antes de proponerlo',
+  ['Se usa cuando la marejada ya está aquí, o para ensayar en frío qué hacer cuando llegue. No '
+   'hace falta esperar a que la persona entienda la teoría: se guía en vivo con voz pausada.',
+   'Aclarar desde el arranque para qué sirve un ancla. Si no se dice con todas las letras, la '
+   'persona la usará para intentar calmarse y sentirá que fracasó si la ansiedad sigue.']),
+ ('Cómo se presenta',
+  ['«Cuando llega una tormenta en alta mar, los barcos echan el ancla. ¿Para qué la echan? No es '
+   'para que pare la tormenta: las anclas no controlan el clima. La echan para sujetarse al fondo '
+   'y que las olas no los estrellen contra las rocas mientras pasa el temporal.»',
+   '«Vamos a hacer tres movimientos muy simples —reconocer lo que hay adentro, conectar con el '
+   'cuerpo y abrir la atención a este lugar— y los vamos a repetir un par de veces como quien '
+   'suelta cadena hasta tocar fondo.»']),
+ ('Durante (el ciclo A → C → E)',
+  ['En la A (Reconocer): «Nota con suavidad qué está pasando ahora mismo por dentro: qué '
+   'pensamiento, qué emoción o qué sensación hay en el pecho o en el estómago. No intentes '
+   'cambiarlo ni empujarlo; solo reconócelo, como quien dice: aquí hay tormenta.»',
+   'En la C (Conectar con el cuerpo): «Y mientras eso sigue ahí adentro, lleva el mando a tu '
+   'cuerpo. Empuja despacio los pies contra el suelo… siente la firmeza del piso… endereza un poco '
+   'la espalda… estira los dedos o suelta los hombros. No estás huyendo de la ola: estás notando '
+   'que además de la ola tienes cuerpo.»',
+   'En la E (Involucrarse): «Y ahora, manteniendo el contacto con tus pies y dejando que lo de '
+   'adentro siga donde está, mira alrededor. Nota tres cosas que puedas ver en este cuarto… '
+   'escucha dos sonidos… y nota que estamos tú y yo aquí, en esta conversación.»',
+   'Hacer clic en bajar un tramo del ancla y repetir dos ciclos más de treinta segundos. El efecto '
+   'suele aparecer en la segunda o tercera vuelta.']),
+ ('Al terminar',
+  ['«Fíjate en el barco de la pantalla: el mar no se apagó, las olas siguen pasando, pero ya no va '
+   'a la deriva. ¿Qué notas distinto ahora respecto a hace dos minutos?»']),
+ ('Lo que no se dice',
+  ['✗ «Respira profundo para que se te pase la ansiedad.» Eso convierte el ancla en otra '
+   'estrategia de control y dispara el interruptor de la lucha.',
+   '✗ «Concéntrate en la habitación para no pensar en eso.» Echar el ancla es ampliar el foco para '
+   'que quepan las dos cosas, no distraerse.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «sigo igual de angustiado»: «Es esperable, el ancla no apaga la tormenta. La pregunta es '
+   'si ahora mismo sientes un poco más de mando sobre tus manos, tus pies y lo que estás haciendo '
+   'aquí conmigo.»',
+   'Le cuesta cerrar los ojos o mirar hacia adentro: en trauma o pánico se hace siempre con los '
+   'ojos abiertos y pasando muy rápido por la A para apoyarse más tiempo en los pies (C) y en el '
+   'cuarto (E).'])],
+
+'met-el-interruptor.html': [('Antes de proponerlo',
+  ['Conviene cuando la persona no solo sufre por una emoción difícil, sino que además se pelea con '
+   'ella: se da rabia tener miedo, se culpa por estar triste o se asusta de estar ansiosa.']),
+ ('Cómo se presenta',
+  ['«Imagina que en el fondo de la mente tenemos un interruptor como este: el interruptor de la '
+   'lucha. En cuanto aparece una emoción incómoda, por costumbre el interruptor salta a ENCENDIDO '
+   'y empezamos a pelear contra lo que sentimos.»',
+   '«Vamos a poner primero qué emoción llegó hoy por su cuenta, y qué se encendió encima cuando '
+   'empezaste a pelear con ella.»']),
+ ('Durante',
+  ['Dejar correr unos segundos la escena con la lucha encendida: «Mira los anillos rojos y la '
+   'barra de energía de abajo. Tienes la emoción original y, encima, tienes la rabia por sentirla, '
+   'el miedo a que no se vaya y el agotamiento de pelear.»',
+   'Al apagar el interruptor: «Ahora suéltalo y mira con cuidado qué cambia y qué NO cambia en el '
+   'dibujo.» Callarse unos segundos para que vea que la onda azul sigue subiendo y bajando.']),
+ ('Al terminar',
+  ['«La ola de abajo sigue moviéndose porque estás vivo y las cosas te importan. Lo que '
+   'desapareció fue la tormenta roja de encima. Si hoy no tuvieras que gastar ese ochenta por '
+   'ciento de energía en pelearte con lo que sientes, ¿en qué te gustaría usarlo?»']),
+ ('Lo que no se dice',
+  ['✗ «Si aceptas la emoción se te va a quitar más rápido.» Eso es volver a encender el '
+   'interruptor con un disfraz más sutil.',
+   '✗ Dar a entender que el malestar limpio no duele. Duele de verdad; la diferencia es que no '
+   'lleva encima la paliza extra de la lucha.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «pero es que el interruptor se me enciende solo»: «Claro, lleva años en automático. No se '
+   'trata de que no se encienda nunca, sino de notar cuando saltó y bajarlo las veces que haga '
+   'falta.»'])],
+
+'met-las-manos.html': [('Antes de proponerlo',
+  ['Rinde muchísimo más si la persona hace el gesto con sus propias manos mientras mueve el '
+   'control de la hoja. Invitarla con naturalidad; si prefiere no hacerlo, la escena en pantalla '
+   'sostiene el ejercicio igual.']),
+ ('Cómo se presenta',
+  ['«Imagina por un momento que tus manos son tus pensamientos. Pon las palmas abiertas frente a '
+   'ti, como si fueran las dos páginas de un libro, y fíjate qué frases tendrían escritas hoy.»',
+   '«Ahora sube las manos despacio hasta taparte los ojos, casi tocando la cara, y quédate ahí '
+   'unos segundos.»']),
+ ('Durante',
+  ['Con las manos pegadas a la cara (distancia 0 %): «Mirando el mundo así, a un centímetro de '
+   'esas palabras, ¿cuánto alcanzas a ver de este cuarto o de mí? ¿Y qué tan fácil sería abrazar a '
+   'alguien, cocinar o manejar con las manos ocupadas ahí arriba?»',
+   'Al pasar a media distancia y luego al regazo (100 %): «Ahora bájalas muy despacio hasta '
+   'apoyarlas en el regazo. Fíjate bien: ¿se borraron las palabras que estaban escritas en tus '
+   'palmas?» Esperar la respuesta: siguen ahí.']),
+ ('Al terminar',
+  ['«No se borró ni una letra; siguen ahí abajo si miras hacia las manos. Pero ahora ves todo el '
+   'cuarto y tienes las manos libres. ¿Qué vuelve a entrar en tu vista cuando no esperas a que se '
+   'borren las frases para bajar las manos?»']),
+ ('Lo que no se dice',
+  ['✗ «¿Ves que esos pensamientos son falsos o no tienen importancia?» La defusión no discute si '
+   'son verdaderos o falsos: muestra qué pasa cuando los llevamos pegados a los ojos.',
+   '✗ «Tira esos pensamientos a la basura.» En la hoja las manos jamás se cortan ni se esconden: '
+   'quedan a la vista en el regazo.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «pero al rato se me vuelven a subir a la cara»: «Es lo más normal del mundo: los brazos '
+   'tienen ese hábito. Cada vez que notes que tienes el paisaje tapado, no te pelees con las '
+   'manos: solo vuelve a apoyarlas en el regazo.»'])],
+
+'met-el-escenario.html': [('Antes de proponerlo',
+  ['Útil cuando la persona siente que un problema o un pensamiento difícil es todo lo que existe '
+   'hoy, y también para introducir el yo observador sin lenguaje abstracto.']),
+ ('Cómo se presenta',
+  ['«Imagina que todo lo que piensas, sientes y vives hoy está ocurriendo sobre las tablas de un '
+   'teatro. En este momento hay un actor en el centro gritando a todo pulmón, y el técnico de '
+   'luces cerró el reflector únicamente sobre él.»']),
+ ('Durante',
+  ['Con el reflector cerrado: «Cuando toda la luz cae sobre ese personaje y el resto está a '
+   'oscuras, parece gigante y parece que fuera el único en la sala.»',
+   'Al encender las luces de todo el escenario: «Mira lo que ocurre cuando subimos la luz general. '
+   'No echamos al actor ruidoso de las tablas —sigue ahí en el medio—, pero ahora ves quiénes más '
+   'estaban en escena esperando en la penumbra.»',
+   'Al pasar a mirar desde la butaca: «Y da un paso más atrás: nota la butaca desde la que estás '
+   'viendo todo el espectáculo. Los actores cambian, entran y salen, pero tú eres quien los mira '
+   'desde el asiento.»']),
+ ('Al terminar',
+  ['«Sin tener que sacar a empujones al que grita, ¿a qué rincón del escenario eliges dirigir tu '
+   'mirada ahora?»']),
+ ('Lo que no se dice',
+  ['✗ «Ignora al actor negativo y piensa solo en las cosas lindas.» Eso es apagar un reflector '
+   'para cerrar otro, y en cuanto el problema grite más fuerte volverá a ganar.',
+   '✗ Explicar con jerga qué es el yo como contexto: la imagen de la butaca ya hizo el trabajo.']),
+ ('Qué hacer con lo que salga',
+  ['Le cuesta nombrar otros actores en las tablas: empezar por cosas mínimas y presentes («el '
+   'hecho de que viniste hoy», «el café de esta mañana», «alguien que te quiere»), sin forzar '
+   'grandes alegrías.'])],
+
+'met-las-dos-caras.html': [('Antes de proponerlo',
+  ['Es una metáfora delicada y profunda para momentos de pérdida, duelo, ruptura o dolor por '
+   'vínculos e ideales heridos. Requiere un ritmo pausado y mucha calidez.']),
+ ('Cómo se presenta',
+  ['«A veces tratamos el dolor como si fuera un error que no debería estar ahí. Pero míralo como '
+   'esta moneda: en una cara está lo que hoy te duele tanto, y en el reverso está lo que amas, lo '
+   'que cuidas o el tipo de persona que quieres ser.»',
+   '«Donde no importa nada, no duele nada. Solo te dejaría de doler si te dejara de importar.»']),
+ ('Durante',
+  ['Al girar entre la cara del dolor y la del valor: «Detrás de esta tristeza o de este vacío, '
+   '¿qué amor o qué cuidado está hablando? Si este dolor fuera un testigo de lo que para ti es '
+   'sagrado, ¿de qué daría fe?»',
+   'Al pulsar «Intentar partir o esconder la moneda»: «Imagina que tuviéramos un botón para '
+   'arrancarte hoy toda esta tristeza. Para lograrlo tendríamos que arrancarte también el cariño, '
+   'la historia compartida y el valor del otro lado. No se puede tirar media moneda.»',
+   'Al pulsar «Llevar la moneda completa en la mano»: dejar unos segundos de silencio mirando las '
+   'dos caras juntas sobre la palma.']),
+ ('Al terminar',
+  ['«Si eliges quedarte con la moneda entera —con el dolor que pesa en una cara y el amor que vive '
+   'en la otra—, ¿con qué gesto pequeño podrías honrar hoy ese lado valioso?»']),
+ ('Lo que no se dice',
+  ['✗ «Tienes que agradecer el dolor porque te hace más fuerte.» No se romantiza el daño: el dolor '
+   'duele; lo que se honra es el valor del reverso.',
+   '✗ Apurar el giro hacia el valor sin haber validado antes el peso real de la cara que duele.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «preferiría no sentir nada aunque se apague todo»: validarlo sin discutir. Cuando el '
+   'dolor es muy agudo, anestesiarse tienta de verdad; señalar con suavidad en la moneda qué ha '
+   'pasado en su vida las semanas en que intentó apagar la moneda entera.'])],
+
+'dbt-aceptacion-radical.html': [('Antes de proponerlo',
+  ['Asegurarse primero de que el hecho realmente no se puede cambiar hoy. Si el problema todavía '
+   'tiene arreglo práctico, toca Solución de problemas, no aceptación radical.',
+   'Validar a fondo el dolor antes de hablar de aceptar. Si se propone aceptar demasiado rápido, '
+   'suena a «supéralo ya».']),
+ ('Cómo se presenta',
+  ['«Hay cosas que duelen y que hoy ya son un hecho. Pelear con ellas diciendo que no deberían '
+   'haber pasado es muy humano, pero fíjate qué nos cobra: al dolor que ya estaba le suma la '
+   'amargura de la pelea.»',
+   '«Aceptar aquí no significa decir que estuvo bien, ni darle la razón a nadie, ni rendirse. '
+   'Significa dejar de pelear con el capítulo que ya ocurrió para tener las manos libres en el '
+   'capítulo de hoy.»']),
+ ('Durante (el giro en el cuerpo)',
+  ['Al mostrar la encrucijada: «Girar la mente no se logra discutiendo con uno mismo; ayuda mucho '
+   'más empezar por el cuerpo. Probemos ahora mismo: apoya las manos sobre los muslos con las '
+   'palmas abiertas hacia arriba y suelta los dedos.»',
+   'En la media sonrisa: «Afloja la mandíbula y la frente, y deja una media sonrisa casi '
+   'imperceptible, como quien le avisa al cuerpo que en este segundo no tiene que atacar ni '
+   'defenderse.»',
+   "Al pulsar girar otra vez: «En cinco minutos la mente va a volver al 'no debería'. Es normal. "
+   'No fallaste: solo toca notar que subiste al camino de arriba y volver a girar hacia abajo.»']),
+ ('Al terminar',
+  ['«Con las palmas abiertas y dejando ese hecho tal como fue, ¿cuál es el paso más pequeño que '
+   'hoy sí está en tus manos dar?»']),
+ ('Lo que no se dice',
+  ['✗ «Tienes que aceptar y pasar la página.» La aceptación radical se hace en pasos de un minuto, '
+   'no por decreto.',
+   '✗ «Todo pasa por algo.» Eso invalida el dolor real del hecho.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «si lo acepto siento que digo que no me importó»: señalar el recuadro de la hoja: aceptar '
+   'el hecho es el único punto de partida desde el que se puede cuidar de verdad lo que importa.'])],
+
+'rodbt-autoinvestigacion.html': [('Antes de proponerlo',
+  ['En RO-DBT no buscamos encontrar la respuesta correcta ni debatir pensamientos: buscamos '
+   'practicar la humildad de no saber todavía y sostener una pregunta abierta en el borde '
+   'personal.']),
+ ('Cómo se presenta',
+  ["«A veces nuestra mente se protege cerrándose de dos maneras: o poniéndose fija ('yo tengo "
+   "razón y punto') o poniéndose fatalista ('para qué intentarlo, nada sirve'). Las dos nos "
+   'ahorran la incomodidad de dudar, pero nos dejan solos.»',
+   '«Vamos a hacer algo distinto: primero le damos al cuerpo señal de seguridad y después abrimos '
+   'una pregunta sin apurarnos a contestarla.»']),
+ ('Durante (Gran Tres + 1 y el borde)',
+  ['Guiar primero la postura: «Recuéstate de verdad en el respaldo de la silla… haz una exhalación '
+   'larga… sube un milímetro las cejas y deja una sonrisa suave de boca cerrada. Fíjate qué cambia '
+   'en el pecho cuando dejas la postura de guardia.»',
+   'Al elegir la pregunta de autoinvestigación: «Ahora lee esa pregunta y quédate con ella unos '
+   'segundos. Si tu cabeza salta enseguida a justificarse o a explicarlo todo, solo nota cómo '
+   'apareció la defensa y vuelve a la pregunta.»']),
+ ('Al terminar',
+  ['«No la contestes ahora. ¿Cómo sería llevarte esa pregunta abierta esta semana y observar qué '
+   'te muestra cuando vuelva a aparecer la tensión?»']),
+ ('Lo que no se dice',
+  ['✗ Responderle nosotros la pregunta o darle una interpretación cerrada.',
+   '✗ Usar la autoinvestigación para que se culpe: el borde se mira con curiosidad y cejas '
+   'levantadas, nunca con látigo.']),
+ ('Qué hacer con lo que salga',
+  ['Intenta convertir la pregunta en una tarea intelectual perfecta: sonreír con calidez y '
+   'nombrarlo: «fíjate cómo hasta abrirnos queremos hacerlo con diez en calificación; respira en '
+   'el respaldo y déjala sin resolver».'])],
+
+'fap-dentro-y-fuera.html': [('Antes de proponerlo',
+  ['Se usa cuando ya hay calidez y confianza suficientes en la relación terapéutica, y cuando '
+   'notamos en vivo un gesto de evitación o una oportunidad de cercanía auténtica.']),
+ ('Cómo se presenta',
+  ['«Me doy cuenta de algo valioso: eso que me cuentas que te pasa afuera con la gente que '
+   'quieres, a veces también se asoma un poquito aquí entre nosotros. Y lejos de ser un problema, '
+   'nos da un puente seguro para ensayar algo distinto hoy mismo.»']),
+ ('Durante (Conciencia, Coraje y Amor)',
+  ['Al marcar el paralelo (Paso 1): validar con mucha suavidad por qué aprendió a protegerse así '
+   'afuera y aquí.',
+   'Al iluminar el puente ACL: «En este momento, ¿qué estás notando que te cuesta decirme o '
+   'mostrarme (Conciencia)? ¿Cómo sería animarte a decirlo un diez por ciento más directo aquí '
+   'conmigo (Coraje)?»',
+   'Cuando la persona da el paso (CCR2): recibirlo en vivo con sintonía genuina, nombrando el '
+   'impacto que tiene escucharlo sin disfraces (Amor / refuerzo natural).']),
+ ('Al terminar',
+  ['«Acabas de cruzar el puente aquí conmigo y no se rompió el vínculo; al contrario, estamos más '
+   'cerca. ¿Con quién de tu vida de afuera tendría sentido probar un paso parecido esta semana?»']),
+ ('Lo que no se dice',
+  ['✗ Señalar la conducta de sesión (CCR1) con tono de crítica o de interpretación fría de '
+   'experto.',
+   '✗ Pedir un acto de coraje (CCR2) y responderle después con un comentario neutro o cambiando de '
+   'tema.']),
+ ('Qué hacer con lo que salga',
+  ['Le da mucho pudor hablar de lo que pasa en la sesión: no forzar. Nombrar ese pudor con respeto '
+   'ya es en sí mismo el primer paso sobre el puente.'])],
+
+'cft-tres-circulos.html': [('Antes de proponerlo',
+  ['Ideal para quitar la vergüenza en personas que viven atrapadas entre la ansiedad (rojo) y la '
+   'hiperproductividad (azul).']),
+ ('Cómo se presenta',
+  ['«Nuestro cerebro no fue diseñado para hacernos fáciles las cosas, sino para sobrevivir. Por '
+   'eso trae tres sistemas: el rojo para detectar peligros, el azul para correr tras metas y '
+   'recursos, y el verde para descansar, digerir y sentirnos seguros con otros.»',
+   '«Mueve los tres controles para dibujar cómo han estado repartidos estos tres círculos en tu '
+   'vida últimamente.»']),
+ ('Durante',
+  ['Cuando dibuje un rojo y un azul grandes con un verde diminuto: «Mira ese dibujo: no es que '
+   'estés fallando, es que cuando el círculo rojo te asusta, usas el círculo azul de trabajar y '
+   'exigirte más para intentar sentirte a salvo. Pero el azul también gasta energía y nunca '
+   'enciende la calma.»']),
+ ('Al terminar',
+  ['«El círculo verde no se llena terminando diez pendientes más en el azul: solo se llena con '
+   'gestos de pausa, calidez y ritmo lento. ¿Cuál sería un gesto mínimo para darle de comer al '
+   'verde hoy?»']),
+ ('Lo que no se dice',
+  ['✗ «Tienes que apagar el círculo rojo.» El rojo es necesario; lo que buscamos es que el verde '
+   'tenga tamaño para regularlo.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «si entro al círculo verde siento que pierdo el tiempo o me da culpa»: nombrarlo como el '
+   'miedo a la calma y empezar con pausas de apenas treinta segundos.'])],
+
+'cft-voces-y-critico.html': [('Antes de proponerlo',
+  ['Sirve cuando tras un error la persona queda tomada por una sola voz punitiva o por un '
+   'torbellino confuso de emociones.']),
+ ('Cómo se presenta',
+  ['«Cuando algo sale mal, parece que adentro hubiera una sola voz gritando, pero en realidad hay '
+   'varias partes sentadas a la mesa. Vamos a escuchar primero qué te dijo el crítico, de qué '
+   'peligro teme que te pase algo, y cómo quedaron las otras partes.»']),
+ ('Durante',
+  ['En el paso 2 (función protectora): «Imagina que ese crítico interno es un guardia muy asustado '
+   'que aprendió un único método torpe: gritarte a ti primero antes de que el mundo te rechace o '
+   'te humille. ¿De qué amenaza está intentando cuidarte?»',
+   'En el paso 3 (mesa de las partes): dar un momento a la parte ansiosa, a la triste y a la '
+   'enfadada, y luego invitar al Yo compasivo a tomar la cabecera de la mesa.']),
+ ('Al terminar',
+  ['«Cuando el Yo compasivo se sienta a la cabecera, no echa a nadie a patadas: ve el miedo detrás '
+   'del crítico y cuida a la parte herida sin maltrato.»']),
+ ('Lo que no se dice',
+  ['✗ «Cállate a tu crítico interno.» Pelear con el crítico a gritos es seguir dentro del mismo '
+   'sistema de amenaza.']),
+ ('Qué hacer con lo que salga',
+  ['Teme que sin el crítico no avanzará: contrastar el látigo del crítico con la firmeza cálida de '
+   'un buen entrenador que sí quiere que aprendas, pero no te insulta cuando tropiezas.'])],
+
+'par-el-baile-de-pareja.html': [('Antes de proponerlo',
+  ['Funciona tanto con la pareja presente como en sesión individual para salir de la lógica de '
+   'tribunal (quién tiene la culpa) y pasar a la lógica del ciclo.']),
+ ('Cómo se presenta',
+  ['«Cuando una pelea importante se repite una y otra vez, deja de ser por los platos o por el '
+   'horario: es un baile que se activa solo. Vamos a mirar primero los pasos que se ven por encima '
+   'del agua y después qué hay debajo.»']),
+ ('Durante',
+  ['En la superficie: «Fíjate en el signo de infinito: cuanto más reclama o insiste la posición A '
+   'para sentir que importa, más se abruma y se cierra la posición B; y cuanto más se cierra B '
+   'para no empeorar todo, más sola se siente A y más fuerte golpea la puerta.»',
+   "Al pulsar 'Mirar bajo el agua': bajar el tono de voz: «Debajo del reclamo suele haber miedo a "
+   'quedarse solo o no importar; y debajo del silencio suele haber miedo a fallar y no ser nunca '
+   'suficiente para el otro.»']),
+ ('Al terminar',
+  ['«Si el adversario no es tu pareja sino este baile que los deja solos a los dos, ¿qué frase '
+   'dicha desde abajo del agua ayudaría a frenar la música apenas empiece a sonar?»']),
+ ('Lo que no se dice',
+  ['✗ Darle la razón a una de las dos posiciones como si fuera más madura que la otra: tanto '
+   'presionar como replegarse mantienen el bucle.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «pero es que él/ella empezó»: «En un círculo infinito cualquiera de los dos cree siempre '
+   'que solo está reaccionando al movimiento anterior del otro. Por eso la única salida es mirar '
+   'el baile juntos.»'])],
+
+'par-tener-razon-o-cuidar.html': [('Antes de proponerlo',
+  ['Muy útil cuando la pareja ya conoce de memoria su tema recurrente y cada conversación se '
+   'convierte en un juicio para cambiar al otro.']),
+ ('Cómo se presenta',
+  ['«Toda pareja tiene un par de temas de fondo que vuelven cada tanto porque son dos personas '
+   "distintas. En terapia de pareja lo llamamos 'el ESO'. Cuando aparece 'el ESO', podemos "
+   'ponernos uno frente al otro a dispararnos argumentos, o podemos sentarnos del mismo lado del '
+   'banco a mirarlo juntos.»']),
+ ('Durante',
+  ["Con el modo enfrentados: «Miren qué pasa cuando 'el ESO' queda en el medio como un proyectil: "
+   'aunque uno gane el debate lógico, la relación pierde.»',
+   "Al pulsar 'Pasar al mismo lado del banco': «Aquí sigue existiendo 'el ESO', nadie finge que "
+   'desapareció, pero ahora son ustedes dos hombro con hombro mirando un problema que les cae a '
+   'ambos, y hablando desde lo que duele en blando en vez de acusar en duro.»']),
+ ('Al terminar',
+  ["«La próxima vez que asome su 'ESO' en la semana, ¿cómo podrían avisarse con complicidad para "
+   'sentarse del mismo lado del banco antes de empezar el juicio?»']),
+ ('Lo que no se dice',
+  ['✗ Pedir aceptación como si fuera resignarse a cualquier maltrato: la aceptación de diferencias '
+   'va siempre sobre una base de respeto y cuidado mutuo.']),
+ ('Qué hacer con lo que salga',
+  ['Uno de los dos insiste en que su forma es la objetivamente correcta: preguntar con calma '
+   'cuánto le ha servido tener esa razón para sentirse cerca el sábado por la tarde.'])],
+
+'tcc-exposicion-interoceptiva.html': [('Antes de proponerlo',
+  ['Verificar siempre que no haya contraindicación médica para el ejercicio elegido.',
+   'El profesional lo hace al mismo tiempo que el consultante: respirar juntos por el pitillo o '
+   'girar juntos en la silla quita solemnidad y modela que la sensación es segura.']),
+ ('Cómo se presenta',
+  ['«Cuando aparece una sensación como falta de aire o latidos rápidos, la alarma del cerebro '
+   'grita peligro y corremos a controlarla. Hoy vamos a provocar a propósito una versión pequeña '
+   'de esa sensación aquí conmigo durante un minuto, y después vamos a hacer lo más importante: no '
+   'hacer absolutamente nada para bajarla y ver qué hace el cuerpo solo.»']),
+ ('Durante',
+  ['En el minuto de inducción: animar con calma a sostener el ejercicio sin distraerse.',
+   'Al pasar al minuto de observación: «Ahora suelta el ejercicio, apoya las manos tranquilas y '
+   'solo observa la sensación como quien mira bajar la espuma de una ola. No respires hondo a '
+   'propósito ni intentes apurarla.»']),
+ ('Al terminar',
+  ['«Fíjate en la curva: subió porque hicimos el ejercicio, y bajó sola sin que tuvieras que '
+   'rescatarte. ¿Qué le enseña esto a tu mente para la próxima vez que aparezca en la calle?»']),
+ ('Lo que no se dice',
+  ['✗ «Si te asustas mucho paramos enseguida e inhalamos profundo para calmarte.» Cortar en el '
+   'pico por miedo refuerza exactamente el temor a la sensación.']),
+ ('Qué hacer con lo que salga',
+  ['Dice «aquí en el consultorio no me da miedo porque estás tú»: excelente observación; después '
+   'de dominarlo juntos, el siguiente paso es practicarlo a solas.'])],
 }

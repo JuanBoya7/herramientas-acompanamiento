@@ -1,0 +1,112 @@
+@@meta
+archivo: pp-afecto-positivo.html
+titulo: Saborear, hilo de luz y dar
+orden: 04
+enfoque: Psicología positiva
+etiqueta: Afecto positivo (PAT)
+sub: Cuando el ánimo lleva tiempo apagado, las cosas gratas pasan de largo porque la mente las descuenta enseguida («no alcanza», «dura poco»). Reentrenar el sistema de recompensa requiere tres movimientos deliberados: quedarnos veinte segundos saboreando un instante concreto, encontrar un hilo de luz en lo difícil y hacer un gesto pequeño hacia afuera.
+fuente: Tratamiento del Afecto Positivo para la anhedonia (saborear, encontrar el lado luminoso y actos de generosidad), en Craske, Dour, Treanor y Meuret, Positive Affect Treatment for Depression and Anxiety (2022), módulo 2, caps. 5 a 7.
+resumen: Entrena tres habilidades para encender el afecto positivo: sostener un instante grato detectando los pensamientos ladrones del saboreo, ubicar un hilo de luz en medio de una dificultad y elegir un acto pequeño de dar.
+@@css
+  .pat-resumen{margin-top:12px;padding:12px 15px;border-radius:10px;background:#fffdf6;border:1px solid #ead9b0;
+    border-left:5px solid #c9962f;font-size:14px;color:#4a3b18;line-height:1.45}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Saborear un instante concreto sin que la mente lo apague</h2>
+  <p class="ayuda">No hace falta una gran alegría: basta un instante mínimo de hoy o de ayer, y notar qué frase automática intenta quitarte el gusto.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">El instante concreto que sí estuvo ahí</label>
+    <div class="chips" id="instanteGrato"></div>
+    <label class="etiqueta" style="margin-top:14px">Pensamientos «ladrones del saboreo» que intentan apagarlo</label>
+    <div class="chips" id="ladronesSaboreo"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Encontrar un hilo de luz en medio de una dificultad</h2>
+  <p class="ayuda">No se trata de negar que algo fue duro, sino de mirar qué recurso propio o qué vínculo quedó visible al atravesarlo.</p>
+  <div class="cuerpo">
+    <div class="chips" id="hiloLuz"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Dar o aportar algo pequeño hacia afuera</h2>
+  <p class="ayuda">El sistema de afecto positivo se enciende con más fuerza cuando nuestra acción toca la vida de otro o cuida algo vivo.</p>
+  <div class="cuerpo">
+    <div class="chips" id="actoDar"></div>
+    <div class="pat-resumen" id="lecturaPat">
+      Elige al menos un elemento en cada paso para armar tu tríada de afecto positivo de hoy.
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Si por treinta segundos le bajas el volumen al ladrón que dice «no alcanza», ¿en qué parte del cuerpo se siente ese instante pequeño?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const INSTANTES = [
+  "Un café o comida tranquila",
+  "Un gesto amable o una risa breve",
+  "El sol, el aire o el descanso en el cuerpo",
+  "Algo pequeño que sí logré terminar"
+];
+const LADRONES = [
+  "«No es para tanto, antes disfrutaba más»",
+  "«Seguro dura poco»",
+  "«Con todo lo que falta no debería alegrarme»",
+  "Pasar de largo pensando en el siguiente pendiente"
+];
+const HILOS = [
+  "Descubrí una fortaleza mía que no sabía que tenía",
+  "Alguien estuvo ahí cuando lo necesité",
+  "Aprendí qué cosas ya no quiero negociar",
+  "Me obligó a bajar el ritmo y escucharme"
+];
+const ACTOS_DAR = [
+  "Enviar un mensaje sincero de agradecimiento o aprecio",
+  "Escuchar con atención plena a alguien cercano",
+  "Hacer un favor pequeño sin esperar vuelta",
+  "Cuidar una planta, una mascota o un espacio común"
+];
+
+function refrescar(){
+  const ins = Kit.activas("instanteGrato");
+  const lad = Kit.activas("ladronesSaboreo");
+  const hil = Kit.activas("hiloLuz");
+  const dar = Kit.activas("actoDar");
+
+  const partes = [];
+  if(ins.length) partes.push(`<b>Saborear:</b> ${Kit.escapar(ins[0])}` + (lad.length ? ` (dejando pasar el ladrón <i>${Kit.escapar(lad[0])}</i>)` : ""));
+  if(hil.length) partes.push(`<b>Hilo de luz:</b> ${Kit.escapar(hil[0])}`);
+  if(dar.length) partes.push(`<b>Gesto hacia afuera:</b> ${Kit.escapar(dar[0])}`);
+
+  $("lecturaPat").innerHTML = partes.length
+    ? partes.join(" · ")
+    : "Elige al menos un elemento en cada paso para armar tu tríada de afecto positivo de hoy.";
+}
+
+function resumen(){
+  const l = [];
+  const i = Kit.activas("instanteGrato"), la = Kit.activas("ladronesSaboreo");
+  if(i.length) l.push("1. SABOREAR: " + i.join(", "));
+  if(la.length) l.push("   Ladrones del saboreo detectados: " + la.join(", "));
+  const h = Kit.activas("hiloLuz");
+  if(h.length) l.push("2. HILO DE LUZ EN LA DIFICULTAD: " + h.join(", "));
+  const d = Kit.activas("actoDar");
+  if(d.length) l.push("3. ACTO DE DAR HACIA AFUERA: " + d.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("instanteGrato", INSTANTES, refrescar);
+Kit.chips("ladronesSaboreo", LADRONES, refrescar);
+Kit.chips("hiloLuz", HILOS, refrescar);
+Kit.chips("actoDar", ACTOS_DAR, refrescar);
+
+Kit.iniciar({
+  clave: "pp-afecto-positivo",
+  alCambiar: refrescar,
+  resumen: resumen
+});

@@ -1,4 +1,4 @@
-# Revisión de las 47 herramientas para el uso en sesión
+# Revisión de las 75 herramientas para el uso en sesión
 
 Criterio acordado: protagonismo y acceso inicial al componente aprovechable en conversación. Los complementos se conservan y se abren por su nombre. No se exige completar la herramienta.
 
@@ -51,6 +51,34 @@ Criterio acordado: protagonismo y acceso inicial al componente aprovechable en c
 | tcc-ventana-de-sueno | Revisa el diario de sueño y los antecedentes con el profesional antes de acordar una ventana. | 0, 1, 2, 4 |
 | tcc-lista-abc | Reúne lo pendiente y distingue qué necesita tu atención primero. | 0, 2 |
 | tcc-inoculacion-de-estres | Distingue lo que puedes cambiar y los recursos con los que cuentas para afrontarlo. | 0, 1 |
+| act-echar-el-ancla | Reconocer lo que hay adentro, conectar con el cuerpo e involucrarse en lo que hay aquí mientras pasa el oleaje. | 0, 1, 2, 3, 4 |
+| met-el-interruptor | La diferencia entre la emoción que llega con vivir y la lucha que se enciende encima al pelear con ella. | 0, 1, 2 |
+| met-las-manos | Qué pasa con tu vista y con tus manos cuando los pensamientos se pegan a los ojos y cuando bajan al regazo. | 0, 1, 2 |
+| met-el-escenario | Quién grita bajo el reflector, qué más hay sobre las tablas y la butaca desde la que observas. | 0, 1, 2 |
+| act-fear-a-dare | Un paso valioso que se está frenando, qué barrera apareció y con qué movimiento destrabarlo hoy. | 0, 1, 2, 3 |
+| act-camino-de-vida | Lo que intentas quitar del camino para sentir alivio rápido y el giro de los pies hacia una vida con sentido. | 0, 1, 2 |
+| act-perfeccionismo | Traducir las reglas de no fallar ni dudar en metas de persona viva y ensayar un paso imperfecto. | 0, 1, 2, 3 |
+| met-las-dos-caras | Lo que hoy duele en una cara de la moneda y el amor o el valor que vive en su reverso. | 0, 1, 2, 3 |
+| dbt-aceptacion-radical | Reconocer el hecho que hoy no se puede cambiar, girar la mente cuando vuelva el reproche y elegir el siguiente paso posible. | 0, 1, 2 |
+| dbt-abc-please | Cómo está hoy la base del cuerpo y qué respaldo diario protege mejor frente a la reactividad emocional. | 0, 1, 2, 3 |
+| rodbt-autoinvestigacion | Notar dónde nos cerramos en mente fija o fatalista, activar seguridad social en el cuerpo y abrir una pregunta en el borde. | 0, 1, 2, 3 |
+| fap-dentro-y-fuera | Lo que ocurre en los vínculos de afuera, cómo asoma aquí en la consulta y qué paso valiente podemos ensayar hoy en vivo. | 0, 1, 2, 3 |
+| cft-tres-circulos | El tamaño que hoy ocupan la amenaza, el impulso de logro y la calma, y cómo abrir espacio para el círculo verde. | 0, 1, 2 |
+| cft-voces-y-critico | De qué amenaza intenta protegerte el crítico interno, qué sienten las demás partes y cómo responde el yo compasivo. | 0, 1, 2, 3 |
+| par-el-baile-de-pareja | El ciclo negativo que se ve en la superficie del choque y las necesidades de apego que duelen bajo el agua. | 0, 1, 2, 3 |
+| par-tener-razon-o-cuidar | Pasar de estar enfrentados por tener la razón a mirar juntos «el ESO» desde el mismo lado del banco. | 0, 1, 2, 3 |
+| pp-afecto-positivo | Saborear un instante concreto sin que la mente lo apague, hallar un hilo de luz en lo difícil y dar algo pequeño hacia afuera. | 0, 1, 2, 3 |
+| pp-cuatro-fuentes-sentido | Las cuatro fuentes de sentido —histórica, actitudinal, creativa y experiencial— y cuál sigue viva hoy. | 0, 1, 2 |
+| pp-perdon-reach | Recorrer las cinco estaciones REACH para soltar la carga del rencor sin justificar el daño ni forzar reconciliación. | 0, 1, 2 |
+| esq-mapa-de-modos | Las voces exigentes o punitivas, la parte niño vulnerable, el muro de afrontamiento y la respuesta del adulto sano. | 0, 1, 2, 3 |
+| tcc-experimento-conductual | Una predicción concreta de la mente, la muleta que se suelta durante la prueba y el contraste con lo que ocurre en la realidad. | 0, 1, 2, 3 |
+| tcc-arco-emocional | El disparador, los tres engranajes de la respuesta emocional y el giro hacia una acción alternativa. | 0, 1, 2, 3 |
+| tcc-exposicion-interoceptiva | Provocar en consulta una sensación física temida y observar durante un minuto cómo baja sola sin conductas de rescate. | 0, 1, 2, 3 |
+| tcc-intolerancia-incertidumbre | Distinguir problemas actuales de escenarios hipotéticos, soltar las muletas de certeza y ensayar un paso conviviendo con la duda. | 0, 1, 2, 3 |
+| tcc-pastel-autoevaluacion | Cuánto peso se lleva hoy una sola tajada en tu valía personal y qué otras áreas pueden equilibrar el pastel. | 0, 1, 2 |
+| tcc-trap-a-trac | El desvío ferroviario entre el bucle de evitación (TRAP) y un paso pequeño de afrontamiento alternativo (TRAC). | 0, 1, 2, 3 |
+| tcc-episodio-de-ira | Los cinco eslabones del episodio de ira y cómo cortar la escalada al notar la exigencia rígida y la señal en el cuerpo. | 0, 1, 2, 3 |
+| tcc-dosificar-energia | Pasar de la montaña rusa del sobrecarga-colapso en los días buenos a una cuota amable con pausa a tiempo. | 0, 1, 2, 3 |
 
 El jardín conserva su secuencia. El plan de seguridad conserva todos sus componentes visibles. Las ramas de Verificar los hechos siguen dependiendo de las respuestas. Las precauciones de sueño preceden al cálculo.
 

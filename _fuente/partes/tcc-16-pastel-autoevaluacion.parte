@@ -1,0 +1,137 @@
+@@meta
+archivo: tcc-pastel-autoevaluacion.html
+titulo: El pastel de la autoevaluación
+orden: 17
+enfoque: Cognitivo-conductual
+etiqueta: Perfeccionismo y valía
+sub: Cuando el ochenta por ciento de lo que valgo como persona depende de una sola tajada —rendir, no fallar o agradar—, cualquier tropiezo ahí se vive como una catástrofe total. Abrir y cuidar otras tajadas devuelve estabilidad.
+fuente: El gráfico circular de autoevaluación actual y ampliado, en Egan, Wade, Shafran y Antony, Cognitive-Behavioral Treatment of Perfectionism (2014), cap. 13.
+resumen: Dos gráficos circulares comparados en vivo: el pastel actual dominado por una sola fuente de valía y el pastel ampliado al sumar otras dimensiones de la vida.
+@@css
+  .pasteles-svg{display:block;width:100%;height:auto}
+@@html
+<div class="escenario">
+  <svg class="pasteles-svg" id="svgPasteles" viewBox="0 0 700 260" role="img"
+    aria-label="Comparación entre el pastel actual de autoevaluación y el pastel ampliado"></svg>
+  <div class="medidor" style="max-width:520px;margin:10px auto 0">
+    <label for="pesoDominante">Peso que hoy se lleva la tajada dominante en mi valía</label>
+    <input type="range" id="pesoDominante" min="50" max="90" step="5" value="75">
+    <span class="valor" id="vPesoDominante">75 %</span>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>La tajada dominante y las áreas que amplían el pastel</h2>
+  <p class="ayuda">Al marcar nuevas fuentes de valía abajo, el segundo gráfico reparte el peso para que tu valor no cuelgue de un solo clavo.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">La tajada que hoy se lleva casi todo el peso</label>
+    <div class="chips" id="tajadaUnica"></div>
+    <label class="etiqueta">Otras tajadas que también hacen parte de quién soy</label>
+    <div class="chips" id="tajadasNuevas"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Cuando tu valor como persona descansa en seis tajadas y no en una sola, ¿qué pasa si un día hay un tropiezo en el trabajo?</div>
+  <div class="cuerpo" style="padding:10px 0 0">
+    <div class="chips" id="nutrirTajada"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const UNICA = [
+  "Rendimiento y productividad en el trabajo",
+  "No equivocarme y cumplir estándares altos",
+  "La aprobación o satisfacción de los demás",
+  "La imagen física o el orden impecable"
+];
+const NUEVAS = [
+  "Cómo cuido a las personas que quiero",
+  "Mi curiosidad y ganas de aprender",
+  "El sentido del humor y el juego",
+  "El contacto con la naturaleza o el arte",
+  "El cuidado de mi cuerpo y mi descanso",
+  "Mi honestidad y lealtad como amigo"
+];
+const NUTRIR = [
+  "Dedicar tiempo esta semana a una tajada que no mida rendimiento",
+  "Recordar las otras tajadas cuando aparezca un error laboral",
+  "Conversar o compartir sin agenda de productividad"
+];
+const COLORES_P = ["#c26a4e", "#3f9b86", "#5f77b8", "#c9962f", "#3f83a6", "#8a6399", "#6ea24f"];
+
+function arcoSVG(cx, cy, r, a0, a1, col){
+  const r0 = (a0 - 90) * Math.PI / 180, r1 = (a1 - 90) * Math.PI / 180;
+  const x0 = cx + r * Math.cos(r0), y0 = cy + r * Math.sin(r0);
+  const x1 = cx + r * Math.cos(r1), y1 = cy + r * Math.sin(r1);
+  const grande = (a1 - a0) > 180 ? 1 : 0;
+  return Kit.svg("path", {
+    d:`M ${cx} ${cy} L ${x0.toFixed(1)} ${y0.toFixed(1)} A ${r} ${r} 0 ${grande} 1 ${x1.toFixed(1)} ${y1.toFixed(1)} Z`,
+    fill:col, stroke:"#fff", "stroke-width":2
+  });
+}
+
+function dibujar(){
+  const svg = $("svgPasteles");
+  svg.innerHTML = "";
+  const f = Kit.acuarela(svg);
+  const peso = +$("pesoDominante").value;
+  $("vPesoDominante").textContent = peso + " %";
+
+  const dom = (Kit.activas("tajadaUnica")[0] || "Rendimiento / no fallar").slice(0, 26);
+  const nuevas = Kit.activas("tajadasNuevas");
+  const listaAmpliada = [dom].concat(nuevas.length ? nuevas : ["Vínculos", "Descanso", "Curiosidad", "Humor"]);
+
+  /* Pastel 1: Actual */
+  const g1 = Kit.svg("g", {filter:f});
+  const aDom = 360 * (peso / 100);
+  g1.appendChild(arcoSVG(175, 132, 82, 0, aDom, "#c26a4e"));
+  g1.appendChild(arcoSVG(175, 132, 82, aDom, 360, "#dde6ee"));
+  svg.appendChild(g1);
+
+  const t1 = Kit.svg("text", {x:175, y:26, "text-anchor":"middle", "font-size":13.5, "font-weight":700, fill:"#8a3526"});
+  t1.textContent = `Hoy: ${peso} % en una sola canasta`;
+  svg.appendChild(t1);
+  const s1 = Kit.svg("text", {x:175, y:236, "text-anchor":"middle", "font-size":11.5, fill:"#5a6a7d"});
+  s1.textContent = dom;
+  svg.appendChild(s1);
+
+  /* Pastel 2: Ampliado */
+  const g2 = Kit.svg("g", {filter:f});
+  const n = listaAmpliada.length;
+  const pasoAng = 360 / n;
+  for(let i = 0; i < n; i++){
+    g2.appendChild(arcoSVG(525, 132, 82, i * pasoAng, (i + 1) * pasoAng, COLORES_P[i % COLORES_P.length]));
+  }
+  svg.appendChild(g2);
+
+  const t2 = Kit.svg("text", {x:525, y:26, "text-anchor":"middle", "font-size":13.5, "font-weight":700, fill:"#256656"});
+  t2.textContent = `Pastel ampliado (${n} tajadas equilibradas)`;
+  svg.appendChild(t2);
+  const s2 = Kit.svg("text", {x:525, y:236, "text-anchor":"middle", "font-size":11.5, fill:"#5a6a7d"});
+  s2.textContent = nuevas.length ? `${nuevas.length} áreas sumadas además del logro` : "Marca abajo las áreas para repartir el peso";
+  svg.appendChild(s2);
+}
+
+function resumen(){
+  const l = [];
+  l.push(`Peso actual de la tajada dominante: ${$("pesoDominante").value} %`);
+  const u = Kit.activas("tajadaUnica"), n = Kit.activas("tajadasNuevas"), a = Kit.activas("nutrirTajada");
+  if(u.length) l.push("Tajada dominante: " + u.join(", "));
+  if(n.length) l.push("Áreas incorporadas al pastel ampliado: " + n.join(", "));
+  if(a.length) l.push("Paso para nutrir otra tajada: " + a.join(", "));
+  return l.join("\n");
+}
+
+$("pesoDominante").addEventListener("input", dibujar);
+Kit.chips("tajadaUnica", UNICA, dibujar);
+Kit.chips("tajadasNuevas", NUEVAS, dibujar);
+Kit.chips("nutrirTajada", NUTRIR);
+dibujar();
+
+Kit.iniciar({
+  clave: "tcc-pastel-autoevaluacion",
+  alCambiar: dibujar,
+  resumen: resumen
+});

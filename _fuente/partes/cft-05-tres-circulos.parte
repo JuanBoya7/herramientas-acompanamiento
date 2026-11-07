@@ -1,0 +1,174 @@
+@@meta
+archivo: cft-tres-circulos.html
+titulo: Los tres círculos de regulación emocional
+orden: 05
+enfoque: Compasión y mindfulness
+etiqueta: Sistema de calma
+sub: Organizamos nuestras emociones en tres grandes sistemas: el rojo detecta amenazas y nos pone a salvo, el azul nos impulsa a lograr cosas y el verde nos permite sentir calma, seguridad y vínculo. El sufrimiento se dispara cuando usamos el sobreesfuerzo azul para intentar callar el miedo rojo y dejamos al verde sin espacio.
+fuente: Los tres sistemas de regulación del afecto (amenaza, impulso/logro y calma/afiliación), en Gilbert, Introducing Compassion-Focused Therapy (2009); Kolts, CFT Made Simple (2016), cap. 5.
+resumen: Dibuja en tiempo real el tamaño de los tres sistemas (amenaza, logro y calma) con deslizadores, explora qué alimenta hoy a cada círculo y busca un gesto concreto para darle lugar al verde.
+@@css
+  .circulos-svg{display:block;width:100%;max-width:700px;height:auto;margin:0 auto}
+  .controles-3c{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:12px}
+  .ctrl-c{border:1px solid var(--linea);border-top:4px solid #ccc;border-radius:9px;padding:10px 12px;background:#fff}
+  .ctrl-c.rojo{border-top-color:#c2594e}
+  .ctrl-c.azul{border-top-color:#3b76a6}
+  .ctrl-c.verde{border-top-color:#3f8f6b}
+  .ctrl-c label{display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;margin-bottom:5px}
+  .ctrl-c input[type=range]{width:100%}
+  .alim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+  .alim-col{border:1px solid var(--linea);border-radius:10px;padding:12px 14px;background:#fbfcfd}
+  .alim-col h3{margin:0 0 6px;font-size:14.5px}
+  @media (max-width:760px){.controles-3c,.alim-grid{grid-template-columns:1fr}}
+@@html
+<div class="escenario">
+  <svg class="circulos-svg" id="svgCirculos" viewBox="0 0 700 280" role="img"
+    aria-label="Los tres círculos de regulación emocional: Amenaza en rojo, Logro en azul y Calma en verde"></svg>
+  <div class="controles-3c">
+    <div class="ctrl-c rojo">
+      <label for="rAmenaza"><span style="color:#b5483c">Rojo · Amenaza</span><span id="vAmenaza">7</span></label>
+      <input type="range" id="rAmenaza" min="1" max="10" value="7">
+    </div>
+    <div class="ctrl-c azul">
+      <label for="rLogro"><span style="color:#2e6591">Azul · Impulso y logro</span><span id="vLogro">7</span></label>
+      <input type="range" id="rLogro" min="1" max="10" value="7">
+    </div>
+    <div class="ctrl-c verde">
+      <label for="rCalma"><span style="color:#2f7a58">Verde · Calma y vínculo</span><span id="vCalma">3</span></label>
+      <input type="range" id="rCalma" min="1" max="10" value="3">
+    </div>
+  </div>
+  <div id="lecturaCirculos" style="margin-top:11px"></div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Qué está alimentando hoy cada círculo</h2>
+  <p class="ayuda">Ningún círculo sobra: el problema es cuando dos acaparan todo el día y el tercero se queda sin alimento.</p>
+  <div class="cuerpo">
+    <div class="alim-grid">
+      <div class="alim-col" style="border-top:4px solid #c2594e">
+        <h3 style="color:#b5483c">Alimenta la amenaza</h3>
+        <div class="chips" id="alimAmenaza"></div>
+      </div>
+      <div class="alim-col" style="border-top:4px solid #3b76a6">
+        <h3 style="color:#2e6591">Alimenta el impulso</h3>
+        <div class="chips" id="alimLogro"></div>
+      </div>
+      <div class="alim-col" style="border-top:4px solid #3f8f6b">
+        <h3 style="color:#2f7a58">Alimenta la calma</h3>
+        <div class="chips" id="alimCalma"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Qué estás haciendo hoy desde el círculo azul solo por miedo al círculo rojo, y qué gesto pequeño abriría espacio para el verde?</div>
+  <div class="cuerpo">
+    <div class="chips" id="gestoVerde"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const ALIM_ROJO = ["Autocrítica constante", "Anticipar problemas", "Sentirme juzgado o solo"];
+const ALIM_AZUL = ["Llenar el día de pendientes", "Medir mi valor por lo que produzco", "No parar ni cansado"];
+const ALIM_VERDE = ["Bajar el ritmo de la respiración", "Hablarme como a alguien que quiero", "Compartir sin exigencia", "Descansar sin culpa"];
+const GESTOS_VERDE = [
+  "Hacer una pausa de cinco minutos sin pantallas ni pendientes",
+  "Reconocer que ya hice suficiente por hoy",
+  "Conversar un rato con alguien cercano sin hablar de obligaciones",
+  "Acompañarme con tono amable en vez de apurarme"
+];
+
+function dibujar(){
+  const svg = $("svgCirculos");
+  svg.innerHTML = "";
+  const filtro = Kit.acuarela(svg);
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est) => {
+    const e = g("text", {x, y, "text-anchor":"middle", style:est});
+    e.textContent = s;
+    return e;
+  };
+
+  const rA = +$("rAmenaza").value;
+  const rL = +$("rLogro").value;
+  const rC = +$("rCalma").value;
+
+  g("rect", {x:0, y:0, width:700, height:280, rx:10, fill:"#f8fafb"});
+
+  const rad = v => 28 + v * 6.4;
+  const cRojo = {x:160, y:142, r:rad(rA)};
+  const cAzul = {x:355, y:142, r:rad(rL)};
+  const cVerde = {x:548, y:142, r:rad(rC)};
+
+  // Flechas de influencia entre los círculos
+  if(rA >= 6 && rL >= 6){
+    g("path", {d:`M ${cRojo.x + cRojo.r - 6} 118 Q 258 76 ${cAzul.x - cAzul.r + 6} 118`,
+      fill:"none", stroke:"#a84c42", "stroke-width":2.4, "stroke-dasharray":"5 4"});
+    txt(258, 84, "Empuja a rendir por miedo", "font:700 10.5px system-ui;fill:#a84c42");
+  }
+  if(rC >= 4){
+    g("path", {d:`M ${cVerde.x - cVerde.r + 6} 166 Q 355 248 ${cRojo.x + cRojo.r - 6} 166`,
+      fill:"none", stroke:"#3f8f6b", "stroke-width":2.4});
+    txt(355, 252, "El verde regula al rojo y da descanso al azul", "font:700 11px system-ui;fill:#2f7a58");
+  }
+
+  const datos = [
+    [cRojo, "#c2594e", "AMENAZA", "Protección · ansiedad · rabia", rA],
+    [cAzul, "#3b76a6", "IMPULSO Y LOGRO", "Hacer · conseguir · competir", rL],
+    [cVerde, "#3f8f6b", "CALMA Y VÍNCULO", "Seguridad · descanso · cuidado", rC]
+  ];
+
+  datos.forEach(([c, col, tit, sub, val]) => {
+    g("circle", {cx:c.x, cy:c.y, r:c.r, fill:col, "fill-opacity":0.24, stroke:col, "stroke-width":2.6, filter:filtro});
+    txt(c.x, c.y - 4, tit, `font:700 12.5px system-ui;fill:${col};letter-spacing:.5px`);
+    txt(c.x, c.y + 14, `${val} / 10`, `font:700 14px system-ui;fill:${col}`);
+    txt(c.x, c.y + c.r + 18, sub, "font:11.5px system-ui;fill:#5a6a7d");
+  });
+}
+
+function refrescar(){
+  const rA = +$("rAmenaza").value, rL = +$("rLogro").value, rC = +$("rCalma").value;
+  $("vAmenaza").textContent = rA;
+  $("vLogro").textContent = rL;
+  $("vCalma").textContent = rC;
+  dibujar();
+
+  let msg = "";
+  if(rA >= 7 && rL >= 7 && rC <= 4){
+    msg = `<div class="bandera"><b>Bucle amenaza ↔ sobreesfuerzo:</b> cuando el rojo y el azul ocupan casi todo el mapa y el verde está pequeño, trabajar más ya no calma: agota. La salida no es exigirte otro logro azul, sino alimentar directamente el círculo verde.</div>`;
+  } else if(rA >= 7 && rL <= 4 && rC <= 4){
+    msg = `<div class="pistas"><b>Predominio del sistema de amenaza:</b> con el círculo rojo tan encendido es normal sentir bloqueo o cansancio. Antes de pedirte metas azules, hace falta construir piso en el sistema verde.</div>`;
+  } else if(rC >= 6){
+    msg = `<div class="logro"><b>Espacio para el sistema de calma:</b> cuando el círculo verde tiene presencia, el cuerpo puede descansar y el logro deja de ser una huida del miedo.</div>`;
+  } else {
+    msg = `<div class="pistas">Ajusta el tamaño que tuvo cada círculo en estos días y observa cómo se reparten tu energía.</div>`;
+  }
+  $("lecturaCirculos").innerHTML = msg;
+}
+
+function resumen(){
+  const l = [];
+  l.push(`TAMAÑO DE LOS TRES CÍRCULOS: Amenaza ${$("rAmenaza").value}/10 · Impulso y logro ${$("rLogro").value}/10 · Calma y vínculo ${$("rCalma").value}/10`);
+  const aA = Kit.activas("alimAmenaza"), aL = Kit.activas("alimLogro"), aC = Kit.activas("alimCalma");
+  if(aA.length) l.push("Alimenta la amenaza: " + aA.join(", "));
+  if(aL.length) l.push("Alimenta el impulso: " + aL.join(", "));
+  if(aC.length) l.push("Alimenta la calma: " + aC.join(", "));
+  const gv = Kit.activas("gestoVerde");
+  if(gv.length) l.push("GESTO PARA ABRIR ESPACIO AL VERDE: " + gv.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("alimAmenaza", ALIM_ROJO, refrescar);
+Kit.chips("alimLogro", ALIM_AZUL, refrescar);
+Kit.chips("alimCalma", ALIM_VERDE, refrescar);
+Kit.chips("gestoVerde", GESTOS_VERDE, refrescar);
+["rAmenaza", "rLogro", "rCalma"].forEach(id => $(id).addEventListener("input", refrescar));
+
+Kit.iniciar({
+  clave: "cft-tres-circulos",
+  alCambiar: refrescar,
+  resumen: resumen
+});

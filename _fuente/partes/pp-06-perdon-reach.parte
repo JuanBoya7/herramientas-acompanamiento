@@ -1,0 +1,131 @@
+@@meta
+archivo: pp-perdon-reach.html
+titulo: Soltar el rencor: los cinco pasos REACH
+orden: 06
+enfoque: Psicología positiva
+etiqueta: Perdón (REACH)
+sub: Perdonar no es olvidar, ni decir que lo que pasó estuvo bien, ni tampoco obliga a reconciliarse con quien no es seguro. Es una decisión para dejar de pagar todos los días con nuestra propia paz una herida del pasado, recorriendo las cinco estaciones del modelo REACH.
+fuente: Perdón decisional y emocional y los cinco pasos del modelo REACH, en Worthington, El camino hacia el perdón: Guía práctica REACH (2011), lecciones 1 a 8.
+resumen: Distingue el perdón de la justificación y la reconciliación, y recorre las cinco estaciones REACH (Recordar el hecho, Entender el contexto sin excusar, Regalo altruista, Comprometerse y Sostenerse cuando vuelva el recuerdo).
+@@css
+  .reach-lista{display:grid;gap:10px}
+  .estacion{border:1px solid var(--linea);border-left:5px solid #c9962f;border-radius:10px;padding:12px 15px;background:#fbfcfd}
+  .estacion.lista{border-left-color:#3f7d5a;background:#f5fbf7}
+  .estacion-cab{display:flex;align-items:baseline;gap:9px;margin-bottom:4px}
+  .estacion-letra{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;
+    border-radius:50%;background:#f7ebd2;color:#8a6418;font-weight:700;font-size:13.5px;flex:0 0 auto}
+  .estacion.lista .estacion-letra{background:#dff0e6;color:#2c6645}
+  .estacion h3{margin:0;font-size:15px}
+  .estacion p{margin:0 0 8px;font-size:12.5px;color:var(--tinta-suave);line-height:1.4}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué es y qué no es perdonar aquí</h2>
+  <p class="ayuda">Antes de dar cualquier paso, queda claro el límite: soltar el rencor es recuperar tu propia calma, no borrar los hechos ni volver a exponerte a un daño.</p>
+  <div class="cuerpo">
+    <div class="chips" id="aclararPerdon"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Recorrer las cinco estaciones REACH</h2>
+  <p class="ayuda">Cada letra abre una estación distinta para aflojar el nudo del rencor a tu propio ritmo.</p>
+  <div class="cuerpo">
+    <div class="reach-lista">
+      <div class="estacion" id="cajaR">
+        <div class="estacion-cab"><span class="estacion-letra">R</span><h3>Recordar el hecho sin revictimizarse</h3></div>
+        <p>Contar el daño como un observador honesto, sin minimizar lo que dolió ni agigantarlo para seguir sangrando.</p>
+        <div class="chips" id="rRecall"></div>
+      </div>
+      <div class="estacion" id="cajaE">
+        <div class="estacion-cab"><span class="estacion-letra">E</span><h3>Entender el contexto sin excusar</h3></div>
+        <p>Notar qué miedos, límites, heridas o cegueras tenía la otra persona, sin decir por eso que estuvo bien.</p>
+        <div class="chips" id="rEmpathy"></div>
+      </div>
+      <div class="estacion" id="cajaA">
+        <div class="estacion-cab"><span class="estacion-letra">A</span><h3>Regalo altruista para la propia paz</h3></div>
+        <p>Recordar alguna vez en que uno mismo necesitó ser perdonado y elegir soltar el anzuelo del rencor por el propio bienestar.</p>
+        <div class="chips" id="rAltruistic"></div>
+      </div>
+      <div class="estacion" id="cajaC">
+        <div class="estacion-cab"><span class="estacion-letra">C</span><h3>Comprometerse con la decisión dada hoy</h3></div>
+        <p>Dejar constancia ante uno mismo de que hoy se eligió empezar a soltar la deuda.</p>
+        <div class="chips" id="rCommit"></div>
+      </div>
+      <div class="estacion" id="cajaH">
+        <div class="estacion-cab"><span class="estacion-letra">H</span><h3>Sostenerse cuando el recuerdo vuelva a picar</h3></div>
+        <p>Recordar que si la memoria vuelve a doler otro día no significa que no hayas perdonado: se vuelve a sostener la decisión.</p>
+        <div class="chips" id="rHold"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Si soltar el rencor no es darle la razón al otro sino dejar de cargar la piedra, ¿qué parte de tu día recuperarías al bajarla?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const ACLARAR = [
+  "Soltar la rumia y el desgaste que me deja esta herida",
+  "Dejar de repasar la deuda sin justificar lo que pasó",
+  "Elegir mi paz aunque no haya reconciliación ni olvido"
+];
+const R_RECALL = [
+  "Reconozco con claridad qué pasó y qué me dolió, sin esconderlo",
+  "Elijo mirar el hecho respirando lento, sin volver a atacarme a mí"
+];
+const R_EMPATHY = [
+  "Puedo ver que actuó desde su propia torpeza, miedo o limitación",
+  "Entender de dónde vino su fallo no me obliga a aprobarlo"
+];
+const R_ALTRUISTIC = [
+  "Recuerdo una ocasión en que alguien me tuvo paciencia cuando me equivoqué",
+  "Me doy este regalo a mí para no seguir atado al ardor del rencor"
+];
+const R_COMMIT = [
+  "Hoy dejo por escrito mi decisión de empezar a soltar esta carga",
+  "Aunque la emoción tarde en bajar, mi dirección ya está elegida"
+];
+const R_HOLD = [
+  "Si vuelve el recuerdo amargo, me diré: «ya elegí soltar esta piedra»",
+  "Cuidaré mis límites en el presente mientras suelto el peso del pasado"
+];
+
+function refrescar(){
+  [["cajaR", "rRecall"], ["cajaE", "rEmpathy"], ["cajaA", "rAltruistic"], ["cajaC", "rCommit"], ["cajaH", "rHold"]]
+    .forEach(([cajaId, chipId]) => {
+      $(cajaId).classList.toggle("lista", Kit.activas(chipId).length > 0);
+    });
+}
+
+function resumen(){
+  const l = [];
+  const ac = Kit.activas("aclararPerdon");
+  if(ac.length) l.push("SENTIDO DEL PERDÓN HOY: " + ac.join(", "));
+  const pasos = [
+    ["R (Recordar)", "rRecall"],
+    ["E (Entender sin excusar)", "rEmpathy"],
+    ["A (Regalo altruista)", "rAltruistic"],
+    ["C (Compromiso)", "rCommit"],
+    ["H (Sostener)", "rHold"]
+  ];
+  pasos.forEach(([nom, id]) => {
+    const v = Kit.activas(id);
+    if(v.length) l.push(`${nom}: ${v.join(", ")}`);
+  });
+  return l.join("\n");
+}
+
+Kit.chips("aclararPerdon", ACLARAR, refrescar);
+Kit.chips("rRecall", R_RECALL, refrescar);
+Kit.chips("rEmpathy", R_EMPATHY, refrescar);
+Kit.chips("rAltruistic", R_ALTRUISTIC, refrescar);
+Kit.chips("rCommit", R_COMMIT, refrescar);
+Kit.chips("rHold", R_HOLD, refrescar);
+
+Kit.iniciar({
+  clave: "pp-perdon-reach",
+  alCambiar: refrescar,
+  resumen: resumen
+});

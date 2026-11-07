@@ -15,12 +15,13 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--fondo);color:var(--tinta);
     font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
-  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+  .envoltura{max-width:1360px;margin:0 auto;padding:24px 22px 44px}
 
   /* ---------- cabecera ---------- */
   header.tapa,section.bloque,section.paso{background:var(--papel);border:1px solid var(--linea);
     border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
-  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  h1,h2,h3{overflow-wrap:break-word;word-break:normal}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px;line-height:1.25}
   .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:74ch}
   .fuente{margin:10px 0 0;font-size:12.5px;color:var(--tinta-suave);font-style:italic}
   .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
@@ -31,8 +32,8 @@
   .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
 
   /* ---------- pasos y bloques ---------- */
-  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;display:flex;
-    align-items:center;gap:11px}
+  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;line-height:1.3;display:flex;
+    align-items:center;flex-wrap:wrap;gap:10px}
   .num{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
     width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
     color:var(--acento);font-size:14px;font-weight:700}
@@ -222,7 +223,7 @@
      Menos texto por bloque, letra más grande y todo en fichas del mismo
      tamaño, para que se lea proyectado y no parezca un formulario. */
   body.lamina{font-size:17px}
-  body.lamina .envoltura{max-width:1080px}
+  body.lamina .envoltura{max-width:1280px}
   body.lamina h1{font-size:28px}
   body.lamina .sub{font-size:15.5px;max-width:70ch}
   body.lamina section.paso h2,body.lamina section.bloque h2{font-size:21px}
@@ -299,8 +300,13 @@
     textarea{min-height:0;height:auto}
   }
 
+  /* ---------- proteccion ante zoom y texto ampliado ---------- */
+  .opcion,.pieza,.ficha-l,.mini,.combi,.ranura,.lectura{min-width:0;overflow-wrap:break-word}
+  .opcion b,.pieza b,.ficha-l .t,.ranura .puesto b,.lectura .nombre,.combi .cual b,.mini b{
+    overflow-wrap:break-word;line-height:1.3}
+  .chip{white-space:normal;text-align:left;line-height:1.35;overflow-wrap:break-word}
 
-  .envoltura{max-width:1120px}
+
   .volver{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--acento);
     text-decoration:none;margin-bottom:14px}
   .volver:hover{text-decoration:underline}
@@ -313,26 +319,26 @@
   .ruta .cuando{font-size:12.5px;color:var(--tinta-suave);margin:2px 0 9px}
   .ruta .cadena{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
   .ruta .cadena a{font-size:13px;text-decoration:none;color:var(--tinta);border:1px solid var(--linea);
-    border-radius:999px;padding:5px 12px;background:#fff;white-space:nowrap}
+    border-radius:999px;padding:5px 12px;background:#fff;white-space:normal;line-height:1.35}
   .ruta .cadena a:hover{border-color:var(--acento);color:var(--acento)}
   .ruta .cadena i{color:#b3bfca;font-style:normal;font-size:14px}
 
   h2.enfoque{margin:26px 0 2px;font-size:20px;display:flex;align-items:center;gap:10px}
   h2.enfoque::before{content:"";width:13px;height:13px;border-radius:50%;background:currentColor}
 
-  .fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:13px;
+  .fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:14px;
     margin-top:13px}
   .ficha-guia{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
-    border-radius:var(--radio);padding:16px 19px}
+    border-radius:var(--radio);padding:16px 19px;min-width:0;overflow-wrap:break-word}
   .ficha-guia.hx-item-vinculado{border-style:dashed;border-left-style:solid;background:#fafcfe}
   .ficha-guia .hx-tags{margin:0 0 10px}
-  .ficha-guia .cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  .ficha-guia .cab{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;
     margin-bottom:6px}
-  .ficha-guia h3{margin:0;font-size:17px;letter-spacing:-.2px}
+  .ficha-guia h3{margin:0;font-size:17px;line-height:1.3;letter-spacing:-.2px;min-width:0;flex:1 1 200px;overflow-wrap:break-word}
   .ficha-guia h3 a{color:inherit;text-decoration:none}
   .ficha-guia h3 a:hover{text-decoration:underline}
   .ficha-guia .etq{font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;
-    white-space:nowrap;border-radius:999px;padding:2px 9px}
+    white-space:normal;max-width:100%;overflow-wrap:anywhere;line-height:1.3;border-radius:999px;padding:3px 10px;flex:0 0 auto}
   .ficha-guia .paraque{margin:0 0 12px;font-size:14px;line-height:1.5}
   .ficha-guia .rot{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
     color:var(--tinta-suave);margin:11px 0 4px}
@@ -374,29 +380,30 @@
   }
 
 
-  /* ---- Distribución con columnas laterales ---- */
+  /* ---- Distribución con barra superior de filtros y riel único a la derecha ---- */
   .envoltura.con-rieles{display:grid;grid-template-columns:minmax(0,1fr);
-    grid-template-areas:"cab" "izq" "centro"}
-  .con-rieles > .cab{grid-area:cab}
-  .con-rieles > .riel-izq{grid-area:izq}
+    grid-template-areas:"cab" "top" "centro"}
+  .con-rieles > .cab{grid-area:cab;min-width:0}
+  .con-rieles > .riel-top{grid-area:top;min-width:0}
   .con-rieles > .centro{grid-area:centro;min-width:0}
   .con-rieles > .riel-der{display:none}
   .controles{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
-    padding:14px 16px;margin-bottom:16px}
-  .controles .fila{display:flex;flex-wrap:wrap;gap:6px}
-  .controles-r{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--tinta-suave);margin:12px 0 6px}
-  .buscador{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:8px 13px;
+    padding:14px 18px;margin-bottom:16px;display:flex;flex-direction:column;gap:10px}
+  .controles-sup{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .controles .fila{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+  .controles-r{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--tinta-suave);margin-right:4px}
+  .buscador{flex:1 1 280px;min-width:0;box-sizing:border-box;font:inherit;font-size:14.5px;padding:8px 14px;
     border:1px solid var(--linea);border-radius:999px;background:#fff}
   .buscador:focus{outline:none;border-color:var(--acento)}
-  .fchip{font:inherit;font-size:12.5px;border:1px solid var(--linea);border-radius:999px;
-    padding:5px 11px;background:#fff;color:var(--tinta-suave);cursor:pointer;
-    display:inline-flex;align-items:center;gap:6px}
+  .fchip{font:inherit;font-size:13px;border:1px solid var(--linea);border-radius:999px;
+    padding:5px 12px;background:#fff;color:var(--tinta-suave);cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;white-space:normal;line-height:1.3}
   .fchip:hover{border-color:var(--acento);color:var(--tinta)}
   .fchip[aria-pressed="true"]{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:600}
   .fchip[aria-pressed="true"] .hx-dot{box-shadow:0 0 0 1.5px #fff}
   .hx-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:0 0 auto}
-  .cuenta{margin-top:12px;font-size:12.5px;color:var(--tinta-suave);line-height:1.45}
+  .cuenta{font-size:13px;font-weight:600;color:var(--tinta-suave);line-height:1.4}
   [data-grupo][hidden],[data-subgrupo][hidden],[data-item][hidden]{display:none !important}
   .sin-resultados{border:1px dashed var(--linea);border-radius:var(--radio);padding:22px;
     text-align:center;color:var(--tinta-suave);font-size:14px}
@@ -405,24 +412,26 @@
   /* ---- Subgrupos clínicos y hexaflex ---- */
   .subgrupos{display:flex;flex-direction:column;gap:18px;margin-top:16px}
   .subgrupo{border:1px solid var(--linea);border-left:4px solid var(--sub-c,var(--acento));
-    border-radius:10px;padding:14px 16px 16px;background:#fbfcfd}
+    border-radius:10px;padding:15px 18px 17px;background:#fbfcfd;min-width:0}
   .subgrupo.hx-sub-primario{order:-2;background:#f7fbfa;box-shadow:0 2px 10px rgba(47,111,143,.09)}
   .subgrupo.hx-sub-vinculado{order:1;border-style:dashed;background:#fcfdfe}
-  .subgrupo-cab{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px}
-  .subgrupo-cab h3{margin:0;font-size:16px;color:var(--tinta);display:flex;align-items:center;gap:8px}
+  .subgrupo-cab{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .subgrupo-cab h3{margin:0;font-size:16.5px;line-height:1.3;color:var(--tinta);display:flex;align-items:center;
+    gap:8px;min-width:0;flex:1 1 240px;overflow-wrap:break-word}
   .subgrupo-cab .sub-punto{width:10px;height:10px;border-radius:50%;background:var(--sub-c,var(--acento));flex:0 0 auto}
   .subgrupo-cab .sub-est{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;
-    color:var(--sub-c,var(--tinta-suave));background:#fff;border:1px solid var(--linea);border-radius:999px;padding:2px 9px}
-  .subgrupo > .sub-desc{margin:0 0 12px;font-size:13px;color:var(--tinta-suave);line-height:1.45;max-width:82ch}
+    color:var(--sub-c,var(--tinta-suave));background:#fff;border:1px solid var(--linea);border-radius:999px;
+    padding:3px 10px;white-space:normal;line-height:1.3;flex:0 0 auto}
+  .subgrupo > .sub-desc{margin:0 0 12px;font-size:13.5px;color:var(--tinta-suave);line-height:1.48;max-width:88ch}
   .subgrupo > .sub-vinc-aviso{margin:0 0 10px;font-size:12.5px;font-weight:600;color:var(--acento);
     background:var(--acento-claro);border-radius:7px;padding:5px 10px;display:inline-block}
   .subgrupo > .sub-vinc-aviso[hidden]{display:none}
 
   /* ---- Panel interactivo del hexaflex ---- */
-  .hx-panel{display:grid;grid-template-columns:minmax(300px,470px) minmax(0,1fr);gap:20px;align-items:center;
+  .hx-panel{display:grid;grid-template-columns:minmax(310px,500px) minmax(0,1fr);gap:22px;align-items:center;
     background:linear-gradient(180deg,#f8fbfd,#ffffff);border:1px solid var(--linea);border-radius:12px;
-    padding:16px 18px;margin-top:14px}
-  .hx-svg{display:block;width:100%;max-width:480px;height:auto;margin:0 auto;user-select:none}
+    padding:16px 20px;margin-top:14px}
+  .hx-svg{display:block;width:100%;max-width:520px;height:auto;margin:0 auto;user-select:none}
   .hx-cols-etq text{font-size:9.5px;font-weight:700;letter-spacing:.11em;fill:#7b8c9d}
   .hx-fondo-poly{fill:#eef5f8;fill-opacity:.5;stroke:none}
   .hx-borde{stroke:#b8c9d8;stroke-width:2;transition:stroke .18s,stroke-width .18s,opacity .18s}
@@ -437,7 +446,7 @@
   .hx-nodo:hover .hx-caja,.hx-nodo:focus-visible .hx-caja{stroke-width:2.6;filter:drop-shadow(0 3px 8px rgba(31,75,102,.16))}
   .hx-nodo[aria-pressed="true"] .hx-caja{fill:var(--acento-claro);stroke-width:3;filter:drop-shadow(0 4px 10px rgba(31,75,102,.2))}
   .hx-svg.hx-filtrado .hx-nodo:not(.hx-nodo-rel):not([aria-pressed="true"]){opacity:.42}
-  .hx-t{font-size:12.5px;font-weight:700;fill:#1d2733}
+  .hx-t{font-size:12px;font-weight:700;fill:#1d2733}
   .hx-s{font-size:10.5px;fill:#5a6a7d}
   .hx-n{font-size:10px;font-weight:700;letter-spacing:.02em}
 
@@ -447,41 +456,43 @@
   .hx-reset{font:inherit;font-size:12px;font-weight:600;color:var(--acento);background:var(--acento-claro);
     border:1px solid var(--acento);border-radius:999px;padding:4px 12px;cursor:pointer}
   .hx-reset:hover{background:var(--acento);color:#fff}
-  .hx-estilos-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .hx-estilos-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
   .hx-est-btn{font:inherit;text-align:left;background:#fff;border:1px solid var(--linea);
-    border-top:3px solid var(--hx-c,var(--acento));border-radius:8px;padding:7px 10px;cursor:pointer;
-    transition:border-color .13s,background .13s}
-  .hx-est-btn b{display:block;font-size:12.5px;color:var(--tinta)}
-  .hx-est-btn span{display:block;font-size:11px;color:var(--tinta-suave);margin-top:1px}
+    border-top:3px solid var(--hx-c,var(--acento));border-radius:8px;padding:8px 11px;cursor:pointer;
+    transition:border-color .13s,background .13s;min-width:0;overflow-wrap:break-word}
+  .hx-est-btn b{display:block;font-size:12.5px;color:var(--tinta);line-height:1.3}
+  .hx-est-btn span{display:block;font-size:11px;color:var(--tinta-suave);margin-top:2px;line-height:1.3}
   .hx-est-btn:hover{border-color:var(--hx-c,var(--acento));background:#fafcfd}
   .hx-est-btn[aria-pressed="true"]{background:var(--acento-claro);border-color:var(--hx-c,var(--acento))}
   .hx-chips-bar{display:flex;flex-wrap:wrap;gap:6px}
   .hx-chip{font:inherit;font-size:12px;border:1px solid var(--linea);border-radius:999px;
     padding:4px 10px;background:#fff;color:var(--tinta-suave);cursor:pointer;
-    display:inline-flex;align-items:center;gap:5px}
+    display:inline-flex;align-items:center;gap:5px;white-space:normal;line-height:1.3}
   .hx-chip small{font-size:10.5px;opacity:.8}
   .hx-chip:hover{border-color:var(--hx-c,var(--acento));color:var(--tinta)}
   .hx-chip[aria-pressed="true"]{background:var(--hx-c,var(--acento));border-color:var(--hx-c,var(--acento));
     color:#fff;font-weight:600}
   .hx-chip[aria-pressed="true"] .hx-dot{background:#fff !important}
   .hx-lectura{background:#fff;border:1px solid var(--linea);border-left:4px solid var(--hx-lec-c,var(--acento));
-    border-radius:9px;padding:11px 14px}
+    border-radius:9px;padding:12px 15px}
   .hx-lec-top{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px}
-  .hx-lec-top b{font-size:14.5px;color:var(--tinta)}
+  .hx-lec-top b{font-size:14.5px;color:var(--tinta);line-height:1.3}
   .hx-lec-polos{font-size:11.5px;font-weight:600;color:var(--tinta-suave)}
   .hx-lectura p{margin:0;font-size:13px;color:var(--tinta-suave);line-height:1.45}
 
   /* ---- Etiquetas de hexaflex dentro de cada tarjeta ---- */
   .hx-tags{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px}
-  .hx-tag{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 8px;border:1px solid transparent;line-height:1.3}
+  .hx-tag{font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 8px;border:1px solid transparent;
+    line-height:1.3;white-space:normal;overflow-wrap:anywhere}
   .hx-tag.sec{color:var(--tinta-suave);background:#f3f6f9;border-color:var(--linea);font-weight:600}
   .hx-tag.sec.hx-sec-activo{color:#fff;background:var(--acento);border-color:var(--acento)}
-  .hx-tipo{font-size:10px;color:var(--tinta-suave);border:1px dashed var(--linea);border-radius:999px;padding:1px 7px;margin-left:auto}
+  .hx-tipo{font-size:10px;color:var(--tinta-suave);border:1px dashed var(--linea);border-radius:999px;
+    padding:1px 7px;white-space:normal;line-height:1.3}
   .hx-vinc-nota{display:block;margin-top:8px;padding:6px 9px;border-radius:7px;background:var(--acento-claro);
     color:#1f4356;font-size:12px;line-height:1.4}
   .hx-vinc-nota[hidden]{display:none !important}
 
-  @media (max-width:960px){
+  @media (max-width:1020px){
     .hx-panel{grid-template-columns:1fr}
     .hx-estilos-bar{grid-template-columns:1fr}
   }
@@ -491,56 +502,54 @@
   .mapa-g{margin-top:14px}
   .mapa-g[hidden],.mapa li[hidden]{display:none}
   .mapa-g > a{display:block;font-weight:700;font-size:14px;color:var(--tinta);text-decoration:none;
-    margin-bottom:4px}
+    margin-bottom:4px;overflow-wrap:break-word}
   .mapa ul{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--linea)}
   .mapa li.mapa-sub{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
     color:var(--tinta-suave);margin:8px 0 2px 4px;pointer-events:none}
   .mapa li a{display:block;font-size:12.5px;line-height:1.35;color:var(--tinta-suave);text-decoration:none;
-    padding:3px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent}
+    padding:3px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent;overflow-wrap:break-word}
   .mapa a:hover{color:var(--acento);background:var(--acento-claro)}
   .mapa li a.actual{color:var(--acento);border-left-color:var(--acento);background:var(--acento-claro);
     font-weight:600}
   .mapa .extra{display:block;margin-top:16px;font-size:13px;font-weight:600;color:var(--acento);
     text-decoration:none}
 
-  @media (min-width:1280px){
-    .envoltura.con-rieles{max-width:none;padding-left:clamp(20px,2vw,36px);
-      padding-right:clamp(20px,2vw,36px);
-      grid-template-columns:clamp(236px,17vw,290px) minmax(0,1fr) clamp(236px,17vw,290px);
-      grid-template-areas:"izq cab der" "izq centro der";grid-template-rows:auto 1fr;
-      column-gap:clamp(24px,2.4vw,44px)}
-    .con-rieles > .riel-der{display:block;grid-area:der}
-    .con-rieles .controles,.con-rieles .mapa{position:sticky;top:20px;max-height:calc(100vh - 40px);
-      overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
-    .con-rieles .controles{margin:0}
+  /* Escritorio: sin barra lateral izquierda; el contenido central aprovecha el ancho y
+     conserva únicamente la barra lateral derecha con el mapa de hojas. */
+  @media (min-width:1160px){
+    .envoltura.con-rieles{max-width:1620px;margin:0 auto;
+      padding-left:clamp(22px,2.6vw,44px);padding-right:clamp(22px,2.6vw,44px);
+      grid-template-columns:minmax(0,1fr) clamp(250px,19vw,310px);
+      grid-template-areas:"cab der" "top der" "centro der";
+      grid-template-rows:auto auto 1fr;
+      column-gap:clamp(24px,2.4vw,42px)}
+    .con-rieles > .riel-der{display:block;grid-area:der;min-width:0}
+    .con-rieles .mapa{position:sticky;top:20px;max-height:calc(100vh - 40px);
+      overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+      background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
+      padding:14px 16px}
     .con-rieles [id]{scroll-margin-top:18px}
   }
-  /* Celular, tableta y portátil: los rieles no caben al costado, así que dos
-     botones flotantes los abren como paneles: el mapa a la derecha y los
-     filtros a la izquierda. */
+  /* Pantallas angostas: el botón flotante abre la barra lateral derecha de hojas. */
   .nav-movil,.nm-cerrar{display:none}
-  @media (max-width:1279px){
+  @media (max-width:1159px){
     .nav-movil{display:flex;position:fixed;right:14px;bottom:14px;gap:8px;z-index:40}
     .nav-movil button{font:inherit;font-size:14px;font-weight:600;padding:10px 16px;border-radius:999px;
       border:1px solid var(--acento);background:var(--acento);color:#fff;
       box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer}
-    .nav-movil button.sec{background:#fff;color:var(--acento)}
     body.panel-mapa .con-rieles > .riel-der{display:block;position:fixed;top:0;right:0;bottom:0;
       width:min(86vw,340px);background:var(--papel);z-index:60;overflow-y:auto;overscroll-behavior:contain;
       padding:14px 16px 40px;box-shadow:-6px 0 24px rgba(0,0,0,.22);box-sizing:border-box}
-    body.panel-filtros .controles{position:fixed;top:0;left:0;bottom:0;width:min(86vw,340px);margin:0;
-      z-index:60;overflow-y:auto;overscroll-behavior:contain;border-radius:0;
-      padding:14px 16px 40px;box-shadow:6px 0 24px rgba(0,0,0,.22);box-sizing:border-box}
-    body.panel-mapa .nm-cerrar,body.panel-filtros .nm-cerrar{display:block;margin:0 0 8px auto;font:inherit;
+    body.panel-mapa .nm-cerrar{display:block;margin:0 0 8px auto;font:inherit;
       font-size:13px;font-weight:600;background:#fff;border:1px solid var(--linea);border-radius:8px;
       padding:5px 12px;color:var(--tinta-suave);cursor:pointer}
-    body.panel-mapa .nav-movil,body.panel-filtros .nav-movil{display:none}
+    body.panel-mapa .nav-movil{display:none}
     #nm-velo{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
     #nm-velo[hidden]{display:none}
   }
   @media print{
     .nav-movil,#nm-velo,.nm-cerrar{display:none !important}
-    .con-rieles > .riel-izq,.con-rieles > .riel-der{display:none !important}
+    .con-rieles > .riel-top,.con-rieles > .riel-der{display:none !important}
     .envoltura.con-rieles{display:block}
   }
 
@@ -554,26 +563,23 @@
 
 <header class="tapa">
   <h1>Guía rápida de uso</h1>
-  <p class="sub">Para qué sirve cada una de las 47 hojas, en qué casos rinde, con qué va
+  <p class="sub">Para qué sirve cada una de las 75 hojas, en qué casos rinde, con qué va
   antes o después, y dónde conviene tener cuidado. Los títulos abren la herramienta.</p>
 </header>
 </div>
 
-<aside class="riel-izq" aria-label="Filtros">
+<div class="riel-top" aria-label="Filtros">
   <div class="controles">
-    <input class="buscador" id="buscador" type="search" placeholder="Buscar una hoja por nombre, uso o cuidado…" autocomplete="off">
-    <div class="controles-r">Enfoque</div>
-    <div class="fila" id="f-enf">
-      <button class="fchip" type="button" data-enf="todos" aria-pressed="true">Todos</button><button class="fchip" type="button" data-enf="ACT" aria-pressed="false">ACT</button><button class="fchip" type="button" data-enf="Cognitivo-conductual" aria-pressed="false">Cognitivo-conductual</button><button class="fchip" type="button" data-enf="DBT" aria-pressed="false">DBT</button><button class="fchip" type="button" data-enf="Compasión y mindfulness" aria-pressed="false">Compasión y mindfulness</button><button class="fchip" type="button" data-enf="Psicología positiva" aria-pressed="false">Psicología positiva</button><button class="fchip" type="button" data-enf="Crisis y consumo" aria-pressed="false">Crisis y consumo</button>
+    <div class="controles-sup">
+      <input class="buscador" id="buscador" type="search" placeholder="Buscar una hoja por nombre, uso o cuidado…" autocomplete="off">
+      <div class="cuenta" id="cuenta"></div>
     </div>
-    <div class="controles-r" id="f-hx-rot">Proceso del hexaflex (ACT)</div>
-    <div class="fila" id="f-hx-riel">
-      <button class="fchip hx-rchip" type="button" data-hx-riel="todos" aria-pressed="true">Todos</button>
-      <button class="fchip hx-rchip" type="button" data-hx-riel="formulacion" aria-pressed="false"><span class="hx-dot" style="background:#2f6f8f"></span>Flexibilidad y matriz</button><button class="fchip hx-rchip" type="button" data-hx-riel="aceptacion" aria-pressed="false"><span class="hx-dot" style="background:#c26a4e"></span>Aceptación</button><button class="fchip hx-rchip" type="button" data-hx-riel="defusion" aria-pressed="false"><span class="hx-dot" style="background:#c05c78"></span>Defusión</button><button class="fchip hx-rchip" type="button" data-hx-riel="presente" aria-pressed="false"><span class="hx-dot" style="background:#5f77b8"></span>Momento presente</button><button class="fchip hx-rchip" type="button" data-hx-riel="yo" aria-pressed="false"><span class="hx-dot" style="background:#3f83a6"></span>Yo como contexto</button><button class="fchip hx-rchip" type="button" data-hx-riel="valores" aria-pressed="false"><span class="hx-dot" style="background:#3f9b86"></span>Valores</button><button class="fchip hx-rchip" type="button" data-hx-riel="accion" aria-pressed="false"><span class="hx-dot" style="background:#6ea24f"></span>Acción comprometida</button>
+    <div class="fila" id="f-enf" role="group" aria-label="Filtrar por enfoque">
+      <span class="controles-r">Enfoque:</span>
+      <button class="fchip" type="button" data-enf="todos" aria-pressed="true">Todos</button><button class="fchip" type="button" data-enf="ACT" aria-pressed="false">ACT</button><button class="fchip" type="button" data-enf="Cognitivo-conductual" aria-pressed="false">Cognitivo-conductual</button><button class="fchip" type="button" data-enf="DBT" aria-pressed="false">DBT</button><button class="fchip" type="button" data-enf="Compasión y mindfulness" aria-pressed="false">Compasión y mindfulness</button><button class="fchip" type="button" data-enf="Vínculos y pareja" aria-pressed="false">Vínculos y pareja</button><button class="fchip" type="button" data-enf="Psicología positiva" aria-pressed="false">Psicología positiva</button><button class="fchip" type="button" data-enf="Crisis y consumo" aria-pressed="false">Crisis y consumo</button>
     </div>
-    <div class="cuenta" id="cuenta"></div>
   </div>
-</aside>
+</div>
 
 <main class="centro">
 <section class="bloque" id="encadenamientos">
@@ -611,104 +617,104 @@
 
 <section data-grupo="ACT">
 <h2 class="enfoque" style="color:#3f9b86">ACT</h2>
-    <div class="hx-panel" id="hx-panel" data-hx-datos='{&quot;formulacion&quot;: {&quot;titulo&quot;: &quot;Centro del hexaflex · Flexibilidad psicológica y formulación&quot;, &quot;corto&quot;: &quot;Flexibilidad y matriz&quot;, &quot;estilo&quot;: &quot;Centro del hexaflex&quot;, &quot;polos&quot;: &quot;Rigidez psicológica ↔ Flexibilidad psicológica&quot;, &quot;color&quot;: &quot;#2f6f8f&quot;, &quot;desc&quot;: &quot;Mapas transversales para formular el caso en los seis procesos o integrar experiencia interna, cinco sentidos y dirección en un solo diagrama.&quot;, &quot;pri&quot;: 2, &quot;sec&quot;: 0}, &quot;aceptacion&quot;: {&quot;titulo&quot;: &quot;Aceptación y desesperanza creativa&quot;, &quot;corto&quot;: &quot;Aceptación&quot;, &quot;estilo&quot;: &quot;Estilo abierto&quot;, &quot;polos&quot;: &quot;Evitación experiencial ↔ Aceptación&quot;, &quot;color&quot;: &quot;#c26a4e&quot;, &quot;desc&quot;: &quot;Soltar la agenda de control al comprobar su costo a largo plazo y abrir espacio voluntario a emociones y sensaciones.&quot;, &quot;pri&quot;: 5, &quot;sec&quot;: 4}, &quot;defusion&quot;: {&quot;titulo&quot;: &quot;Defusión cognitiva&quot;, &quot;corto&quot;: &quot;Defusión&quot;, &quot;estilo&quot;: &quot;Estilo abierto&quot;, &quot;polos&quot;: &quot;Fusión cognitiva ↔ Defusión&quot;, &quot;color&quot;: &quot;#c05c78&quot;, &quot;desc&quot;: &quot;Cambiar la relación con los pensamientos: mirarlos como palabras o corriente que pasa sin tener que obedecerlos ni discutirlos.&quot;, &quot;pri&quot;: 3, &quot;sec&quot;: 5}, &quot;presente&quot;: {&quot;titulo&quot;: &quot;Contacto con el momento presente&quot;, &quot;corto&quot;: &quot;Momento presente&quot;, &quot;estilo&quot;: &quot;Estilo centrado&quot;, &quot;polos&quot;: &quot;Pasado y futuro ↔ Contacto con el presente&quot;, &quot;color&quot;: &quot;#5f77b8&quot;, &quot;desc&quot;: &quot;Advertir en el momento qué aparece por dentro y por los cinco sentidos, notar cuándo se mordió un anzuelo y volver a la situación.&quot;, &quot;pri&quot;: 1, &quot;sec&quot;: 3}, &quot;yo&quot;: {&quot;titulo&quot;: &quot;Yo como contexto (yo observador)&quot;, &quot;corto&quot;: &quot;Yo como contexto&quot;, &quot;estilo&quot;: &quot;Estilo centrado&quot;, &quot;polos&quot;: &quot;Yo conceptualizado ↔ Yo observador&quot;, &quot;color&quot;: &quot;#3f83a6&quot;, &quot;desc&quot;: &quot;Distinguir entre el contenido que aparece (piezas, clima, etiquetas, globos) y la perspectiva estable desde la que se nota.&quot;, &quot;pri&quot;: 3, &quot;sec&quot;: 3}, &quot;valores&quot;: {&quot;titulo&quot;: &quot;Clarificación de valores&quot;, &quot;corto&quot;: &quot;Valores&quot;, &quot;estilo&quot;: &quot;Estilo comprometido&quot;, &quot;polos&quot;: &quot;Valores difusos o impuestos ↔ Valores propios&quot;, &quot;color&quot;: &quot;#3f9b86&quot;, &quot;desc&quot;: &quot;Elegir direcciones propias de vida, diferenciarlas de las metas y del deber ajeno, y contrastar cuánto lugar tuvieron en la semana.&quot;, &quot;pri&quot;: 3, &quot;sec&quot;: 3}, &quot;accion&quot;: {&quot;titulo&quot;: &quot;Acción comprometida&quot;, &quot;corto&quot;: &quot;Acción comprometida&quot;, &quot;estilo&quot;: &quot;Estilo comprometido&quot;, &quot;polos&quot;: &quot;Inacción o impulsividad ↔ Acción con dirección&quot;, &quot;color&quot;: &quot;#6ea24f&quot;, &quot;desc&quot;: &quot;Sostener pasos concretos al servicio de lo que importa llevando el ruido o los pasajeros a bordo, sin esperar a que callen.&quot;, &quot;pri&quot;: 2, &quot;sec&quot;: 7}}' data-hx-estilos='{&quot;abierto&quot;: {&quot;nombre&quot;: &quot;Estilo abierto&quot;, &quot;corto&quot;: &quot;Abierto&quot;, &quot;color&quot;: &quot;#c26a4e&quot;, &quot;procesos&quot;: [&quot;aceptacion&quot;, &quot;defusion&quot;], &quot;desc&quot;: &quot;Aceptación y defusión: soltar la lucha con el malestar y desliteralizar los pensamientos.&quot;}, &quot;centrado&quot;: {&quot;nombre&quot;: &quot;Estilo centrado&quot;, &quot;corto&quot;: &quot;Centrado&quot;, &quot;color&quot;: &quot;#3f83a6&quot;, &quot;procesos&quot;: [&quot;presente&quot;, &quot;yo&quot;], &quot;desc&quot;: &quot;Momento presente y yo como contexto: notar aquí y ahora desde una perspectiva que contiene lo que aparece.&quot;}, &quot;comprometido&quot;: {&quot;nombre&quot;: &quot;Estilo comprometido&quot;, &quot;corto&quot;: &quot;Comprometido&quot;, &quot;color&quot;: &quot;#3f9b86&quot;, &quot;procesos&quot;: [&quot;valores&quot;, &quot;accion&quot;], &quot;desc&quot;: &quot;Valores y acción comprometida: elegir direcciones propias y sostener pasos concretos.&quot;}, &quot;centro&quot;: {&quot;nombre&quot;: &quot;Centro del hexaflex&quot;, &quot;corto&quot;: &quot;Transversal&quot;, &quot;color&quot;: &quot;#2f6f8f&quot;, &quot;procesos&quot;: [&quot;formulacion&quot;], &quot;desc&quot;: &quot;Flexibilidad psicológica y formulación: visión conjunta de los seis procesos y punto de vista.&quot;}}'>
+    <div class="hx-panel" id="hx-panel" data-hx-total="28" data-hx-datos='{&quot;formulacion&quot;: {&quot;titulo&quot;: &quot;Centro del hexaflex · Flexibilidad psicológica y formulación&quot;, &quot;corto&quot;: &quot;Flexibilidad y matriz&quot;, &quot;estilo&quot;: &quot;Centro del hexaflex&quot;, &quot;polos&quot;: &quot;Rigidez psicológica ↔ Flexibilidad psicológica&quot;, &quot;color&quot;: &quot;#2f6f8f&quot;, &quot;desc&quot;: &quot;Mapas transversales para formular el caso en los seis procesos o integrar experiencia interna, cinco sentidos y dirección en un solo diagrama.&quot;, &quot;pri&quot;: 3, &quot;sec&quot;: 0}, &quot;aceptacion&quot;: {&quot;titulo&quot;: &quot;Aceptación y desesperanza creativa&quot;, &quot;corto&quot;: &quot;Aceptación&quot;, &quot;estilo&quot;: &quot;Estilo abierto&quot;, &quot;polos&quot;: &quot;Evitación experiencial ↔ Aceptación&quot;, &quot;color&quot;: &quot;#c26a4e&quot;, &quot;desc&quot;: &quot;Soltar la agenda de control al comprobar su costo a largo plazo y abrir espacio voluntario a emociones y sensaciones.&quot;, &quot;pri&quot;: 7, &quot;sec&quot;: 9}, &quot;defusion&quot;: {&quot;titulo&quot;: &quot;Defusión cognitiva&quot;, &quot;corto&quot;: &quot;Defusión&quot;, &quot;estilo&quot;: &quot;Estilo abierto&quot;, &quot;polos&quot;: &quot;Fusión cognitiva ↔ Defusión&quot;, &quot;color&quot;: &quot;#c05c78&quot;, &quot;desc&quot;: &quot;Cambiar la relación con los pensamientos: mirarlos como palabras o corriente que pasa sin tener que obedecerlos ni discutirlos.&quot;, &quot;pri&quot;: 4, &quot;sec&quot;: 10}, &quot;presente&quot;: {&quot;titulo&quot;: &quot;Contacto con el momento presente&quot;, &quot;corto&quot;: &quot;Momento presente&quot;, &quot;estilo&quot;: &quot;Estilo centrado&quot;, &quot;polos&quot;: &quot;Pasado y futuro ↔ Contacto con el presente&quot;, &quot;color&quot;: &quot;#5f77b8&quot;, &quot;desc&quot;: &quot;Advertir en el momento qué aparece por dentro y por los cinco sentidos, notar cuándo se mordió un anzuelo y volver a la situación.&quot;, &quot;pri&quot;: 3, &quot;sec&quot;: 5}, &quot;yo&quot;: {&quot;titulo&quot;: &quot;Yo como contexto (yo observador)&quot;, &quot;corto&quot;: &quot;Yo como contexto&quot;, &quot;estilo&quot;: &quot;Estilo centrado&quot;, &quot;polos&quot;: &quot;Yo conceptualizado ↔ Yo observador&quot;, &quot;color&quot;: &quot;#3f83a6&quot;, &quot;desc&quot;: &quot;Distinguir entre el contenido que aparece (piezas, clima, etiquetas, globos) y la perspectiva estable desde la que se nota.&quot;, &quot;pri&quot;: 4, &quot;sec&quot;: 3}, &quot;valores&quot;: {&quot;titulo&quot;: &quot;Clarificación de valores&quot;, &quot;corto&quot;: &quot;Valores&quot;, &quot;estilo&quot;: &quot;Estilo comprometido&quot;, &quot;polos&quot;: &quot;Valores difusos o impuestos ↔ Valores propios&quot;, &quot;color&quot;: &quot;#3f9b86&quot;, &quot;desc&quot;: &quot;Elegir direcciones propias de vida, diferenciarlas de las metas y del deber ajeno, y contrastar cuánto lugar tuvieron en la semana.&quot;, &quot;pri&quot;: 3, &quot;sec&quot;: 8}, &quot;accion&quot;: {&quot;titulo&quot;: &quot;Acción comprometida&quot;, &quot;corto&quot;: &quot;Acción comprometida&quot;, &quot;estilo&quot;: &quot;Estilo comprometido&quot;, &quot;polos&quot;: &quot;Inacción o impulsividad ↔ Acción con dirección&quot;, &quot;color&quot;: &quot;#6ea24f&quot;, &quot;desc&quot;: &quot;Sostener pasos concretos al servicio de lo que importa llevando el ruido o los pasajeros a bordo, sin esperar a que callen.&quot;, &quot;pri&quot;: 4, &quot;sec&quot;: 11}}' data-hx-estilos='{&quot;abierto&quot;: {&quot;nombre&quot;: &quot;Estilo abierto&quot;, &quot;corto&quot;: &quot;Abierto&quot;, &quot;color&quot;: &quot;#c26a4e&quot;, &quot;procesos&quot;: [&quot;aceptacion&quot;, &quot;defusion&quot;], &quot;desc&quot;: &quot;Aceptación y defusión: soltar la lucha con el malestar y desliteralizar los pensamientos.&quot;}, &quot;centrado&quot;: {&quot;nombre&quot;: &quot;Estilo centrado&quot;, &quot;corto&quot;: &quot;Centrado&quot;, &quot;color&quot;: &quot;#3f83a6&quot;, &quot;procesos&quot;: [&quot;presente&quot;, &quot;yo&quot;], &quot;desc&quot;: &quot;Momento presente y yo como contexto: notar aquí y ahora desde una perspectiva que contiene lo que aparece.&quot;}, &quot;comprometido&quot;: {&quot;nombre&quot;: &quot;Estilo comprometido&quot;, &quot;corto&quot;: &quot;Comprometido&quot;, &quot;color&quot;: &quot;#3f9b86&quot;, &quot;procesos&quot;: [&quot;valores&quot;, &quot;accion&quot;], &quot;desc&quot;: &quot;Valores y acción comprometida: elegir direcciones propias y sostener pasos concretos.&quot;}, &quot;centro&quot;: {&quot;nombre&quot;: &quot;Centro del hexaflex&quot;, &quot;corto&quot;: &quot;Transversal&quot;, &quot;color&quot;: &quot;#2f6f8f&quot;, &quot;procesos&quot;: [&quot;formulacion&quot;], &quot;desc&quot;: &quot;Flexibilidad psicológica y formulación: visión conjunta de los seis procesos y punto de vista.&quot;}}'>
       <div class="hx-fig">
-        <svg class="hx-svg" id="hx-svg" viewBox="0 0 560 432" role="img" aria-label="Hexaflex de la flexibilidad psicológica: toca un proceso para filtrar sus herramientas">
+        <svg class="hx-svg" id="hx-svg" viewBox="0 0 600 440" role="img" aria-label="Hexaflex de la flexibilidad psicológica: toca un proceso para filtrar sus herramientas">
           <g class="hx-cols-etq" aria-hidden="true">
-            <text x="108" y="24" text-anchor="middle">ESTILO ABIERTO</text>
-            <text x="280" y="24" text-anchor="middle">ESTILO CENTRADO</text>
-            <text x="452" y="24" text-anchor="middle">ESTILO COMPROMETIDO</text>
+            <text x="118" y="24" text-anchor="middle">ESTILO ABIERTO</text>
+            <text x="300" y="24" text-anchor="middle">ESTILO CENTRADO</text>
+            <text x="482" y="24" text-anchor="middle">ESTILO COMPROMETIDO</text>
           </g>
-          <polygon class="hx-fondo-poly" points="280,72 452,152 452,298 280,378 108,298 108,152"/>
+          <polygon class="hx-fondo-poly" points="300,72 482,152 482,300 300,380 118,300 118,152"/>
           <g class="hx-red">
-                        <line class="hx-borde" data-a="presente" data-b="valores" x1="280" y1="72" x2="452" y2="152"/>
-            <line class="hx-cuerda" data-a="presente" data-b="accion" x1="280" y1="72" x2="452" y2="298"/>
-            <line class="hx-cuerda" data-a="presente" data-b="yo" x1="280" y1="72" x2="280" y2="378"/>
-            <line class="hx-cuerda" data-a="presente" data-b="defusion" x1="280" y1="72" x2="108" y2="298"/>
-            <line class="hx-borde" data-a="presente" data-b="aceptacion" x1="280" y1="72" x2="108" y2="152"/>
-            <line class="hx-borde" data-a="valores" data-b="accion" x1="452" y1="152" x2="452" y2="298"/>
-            <line class="hx-cuerda" data-a="valores" data-b="yo" x1="452" y1="152" x2="280" y2="378"/>
-            <line class="hx-cuerda" data-a="valores" data-b="defusion" x1="452" y1="152" x2="108" y2="298"/>
-            <line class="hx-cuerda" data-a="valores" data-b="aceptacion" x1="452" y1="152" x2="108" y2="152"/>
-            <line class="hx-borde" data-a="accion" data-b="yo" x1="452" y1="298" x2="280" y2="378"/>
-            <line class="hx-cuerda" data-a="accion" data-b="defusion" x1="452" y1="298" x2="108" y2="298"/>
-            <line class="hx-cuerda" data-a="accion" data-b="aceptacion" x1="452" y1="298" x2="108" y2="152"/>
-            <line class="hx-borde" data-a="yo" data-b="defusion" x1="280" y1="378" x2="108" y2="298"/>
-            <line class="hx-cuerda" data-a="yo" data-b="aceptacion" x1="280" y1="378" x2="108" y2="152"/>
-            <line class="hx-borde" data-a="defusion" data-b="aceptacion" x1="108" y1="298" x2="108" y2="152"/>
-            <line class="hx-radio" data-a="formulacion" data-b="presente" x1="280" y1="225" x2="280" y2="72"/>
-            <line class="hx-radio" data-a="formulacion" data-b="valores" x1="280" y1="225" x2="452" y2="152"/>
-            <line class="hx-radio" data-a="formulacion" data-b="accion" x1="280" y1="225" x2="452" y2="298"/>
-            <line class="hx-radio" data-a="formulacion" data-b="yo" x1="280" y1="225" x2="280" y2="378"/>
-            <line class="hx-radio" data-a="formulacion" data-b="defusion" x1="280" y1="225" x2="108" y2="298"/>
-            <line class="hx-radio" data-a="formulacion" data-b="aceptacion" x1="280" y1="225" x2="108" y2="152"/>
+                        <line class="hx-borde" data-a="presente" data-b="valores" x1="300" y1="72" x2="482" y2="152"/>
+            <line class="hx-cuerda" data-a="presente" data-b="accion" x1="300" y1="72" x2="482" y2="300"/>
+            <line class="hx-cuerda" data-a="presente" data-b="yo" x1="300" y1="72" x2="300" y2="380"/>
+            <line class="hx-cuerda" data-a="presente" data-b="defusion" x1="300" y1="72" x2="118" y2="300"/>
+            <line class="hx-borde" data-a="presente" data-b="aceptacion" x1="300" y1="72" x2="118" y2="152"/>
+            <line class="hx-borde" data-a="valores" data-b="accion" x1="482" y1="152" x2="482" y2="300"/>
+            <line class="hx-cuerda" data-a="valores" data-b="yo" x1="482" y1="152" x2="300" y2="380"/>
+            <line class="hx-cuerda" data-a="valores" data-b="defusion" x1="482" y1="152" x2="118" y2="300"/>
+            <line class="hx-cuerda" data-a="valores" data-b="aceptacion" x1="482" y1="152" x2="118" y2="152"/>
+            <line class="hx-borde" data-a="accion" data-b="yo" x1="482" y1="300" x2="300" y2="380"/>
+            <line class="hx-cuerda" data-a="accion" data-b="defusion" x1="482" y1="300" x2="118" y2="300"/>
+            <line class="hx-cuerda" data-a="accion" data-b="aceptacion" x1="482" y1="300" x2="118" y2="152"/>
+            <line class="hx-borde" data-a="yo" data-b="defusion" x1="300" y1="380" x2="118" y2="300"/>
+            <line class="hx-cuerda" data-a="yo" data-b="aceptacion" x1="300" y1="380" x2="118" y2="152"/>
+            <line class="hx-borde" data-a="defusion" data-b="aceptacion" x1="118" y1="300" x2="118" y2="152"/>
+            <line class="hx-radio" data-a="formulacion" data-b="presente" x1="300" y1="226" x2="300" y2="72"/>
+            <line class="hx-radio" data-a="formulacion" data-b="valores" x1="300" y1="226" x2="482" y2="152"/>
+            <line class="hx-radio" data-a="formulacion" data-b="accion" x1="300" y1="226" x2="482" y2="300"/>
+            <line class="hx-radio" data-a="formulacion" data-b="yo" x1="300" y1="226" x2="300" y2="380"/>
+            <line class="hx-radio" data-a="formulacion" data-b="defusion" x1="300" y1="226" x2="118" y2="300"/>
+            <line class="hx-radio" data-a="formulacion" data-b="aceptacion" x1="300" y1="226" x2="118" y2="152"/>
           </g>
-      <g class="hx-nodo hx-nodo-centro" data-hx="formulacion" data-estilo="centro" role="button" tabindex="0" aria-pressed="false" aria-label="Flexibilidad y matriz: 2 hojas">
-        <rect class="hx-caja" x="202" y="194" width="156" height="62" rx="14" style="--hx-c:#2f6f8f" stroke="#2f6f8f"/>
-        <circle cx="217" cy="212" r="5" fill="#2f6f8f"/>
-        <text class="hx-t" x="228" y="216">Flexibilidad</text>
-        <text class="hx-s" x="280" y="232" text-anchor="middle">Formulación y matriz</text>
-        <text class="hx-n" x="280" y="245" text-anchor="middle" fill="#2f6f8f">2 hojas</text>
+      <g class="hx-nodo hx-nodo-centro" data-hx="formulacion" data-estilo="centro" role="button" tabindex="0" aria-pressed="false" aria-label="Flexibilidad y matriz: 3 hojas">
+        <rect class="hx-caja" x="214" y="194" width="172" height="64" rx="14" style="--hx-c:#2f6f8f" stroke="#2f6f8f"/>
+        <circle cx="228" cy="213" r="4.5" fill="#2f6f8f"/>
+        <text class="hx-t" x="238" y="217">Flexibilidad</text>
+        <text class="hx-s" x="300" y="233" text-anchor="middle">Formulación y matriz</text>
+        <text class="hx-n" x="300" y="246" text-anchor="middle" fill="#2f6f8f">3 hojas</text>
       </g>
-      <g class="hx-nodo" data-hx="aceptacion" data-estilo="abierto" role="button" tabindex="0" aria-pressed="false" aria-label="Aceptación: 5 princ. · +4 vinc.">
-        <rect class="hx-caja" x="32" y="123" width="152" height="58" rx="11" style="--hx-c:#c26a4e" stroke="#c26a4e"/>
-        <circle cx="47" cy="141" r="5" fill="#c26a4e"/>
+      <g class="hx-nodo" data-hx="aceptacion" data-estilo="abierto" role="button" tabindex="0" aria-pressed="false" aria-label="Aceptación: 7 princ. · +9 vinc.">
+        <rect class="hx-caja" x="34" y="122" width="168" height="60" rx="11" style="--hx-c:#c26a4e" stroke="#c26a4e"/>
+        <circle cx="48" cy="141" r="4.5" fill="#c26a4e"/>
         <text class="hx-t" x="58" y="145">Aceptación</text>
-        <text class="hx-s" x="108" y="161" text-anchor="middle">Contactar sin evitar</text>
-        <text class="hx-n" x="108" y="174" text-anchor="middle" fill="#c26a4e">5 princ. · +4 vinc.</text>
+        <text class="hx-s" x="118" y="161" text-anchor="middle">Contactar sin evitar</text>
+        <text class="hx-n" x="118" y="174" text-anchor="middle" fill="#c26a4e">7 princ. · +9 vinc.</text>
       </g>
-      <g class="hx-nodo" data-hx="defusion" data-estilo="abierto" role="button" tabindex="0" aria-pressed="false" aria-label="Defusión: 3 princ. · +5 vinc.">
-        <rect class="hx-caja" x="32" y="269" width="152" height="58" rx="11" style="--hx-c:#c05c78" stroke="#c05c78"/>
-        <circle cx="47" cy="287" r="5" fill="#c05c78"/>
-        <text class="hx-t" x="58" y="291">Defusión</text>
-        <text class="hx-s" x="108" y="307" text-anchor="middle">Desliteralizar</text>
-        <text class="hx-n" x="108" y="320" text-anchor="middle" fill="#c05c78">3 princ. · +5 vinc.</text>
+      <g class="hx-nodo" data-hx="defusion" data-estilo="abierto" role="button" tabindex="0" aria-pressed="false" aria-label="Defusión: 4 princ. · +10 vinc.">
+        <rect class="hx-caja" x="34" y="270" width="168" height="60" rx="11" style="--hx-c:#c05c78" stroke="#c05c78"/>
+        <circle cx="48" cy="289" r="4.5" fill="#c05c78"/>
+        <text class="hx-t" x="58" y="293">Defusión</text>
+        <text class="hx-s" x="118" y="309" text-anchor="middle">Desliteralizar</text>
+        <text class="hx-n" x="118" y="322" text-anchor="middle" fill="#c05c78">4 princ. · +10 vinc.</text>
       </g>
-      <g class="hx-nodo" data-hx="presente" data-estilo="centrado" role="button" tabindex="0" aria-pressed="false" aria-label="Momento presente: 1 princ. · +3 vinc.">
-        <rect class="hx-caja" x="204" y="43" width="152" height="58" rx="11" style="--hx-c:#5f77b8" stroke="#5f77b8"/>
-        <circle cx="219" cy="61" r="5" fill="#5f77b8"/>
-        <text class="hx-t" x="230" y="65">Momento presente</text>
-        <text class="hx-s" x="280" y="81" text-anchor="middle">Contactar lo directo</text>
-        <text class="hx-n" x="280" y="94" text-anchor="middle" fill="#5f77b8">1 princ. · +3 vinc.</text>
+      <g class="hx-nodo" data-hx="presente" data-estilo="centrado" role="button" tabindex="0" aria-pressed="false" aria-label="Momento presente: 3 princ. · +5 vinc.">
+        <rect class="hx-caja" x="216" y="42" width="168" height="60" rx="11" style="--hx-c:#5f77b8" stroke="#5f77b8"/>
+        <circle cx="230" cy="61" r="4.5" fill="#5f77b8"/>
+        <text class="hx-t" x="240" y="65">Momento presente</text>
+        <text class="hx-s" x="300" y="81" text-anchor="middle">Contactar lo directo</text>
+        <text class="hx-n" x="300" y="94" text-anchor="middle" fill="#5f77b8">3 princ. · +5 vinc.</text>
       </g>
-      <g class="hx-nodo" data-hx="yo" data-estilo="centrado" role="button" tabindex="0" aria-pressed="false" aria-label="Yo como contexto: 3 princ. · +3 vinc.">
-        <rect class="hx-caja" x="204" y="349" width="152" height="58" rx="11" style="--hx-c:#3f83a6" stroke="#3f83a6"/>
-        <circle cx="219" cy="367" r="5" fill="#3f83a6"/>
-        <text class="hx-t" x="230" y="371">Yo como contexto</text>
-        <text class="hx-s" x="280" y="387" text-anchor="middle">Tomar perspectiva</text>
-        <text class="hx-n" x="280" y="400" text-anchor="middle" fill="#3f83a6">3 princ. · +3 vinc.</text>
+      <g class="hx-nodo" data-hx="yo" data-estilo="centrado" role="button" tabindex="0" aria-pressed="false" aria-label="Yo como contexto: 4 princ. · +3 vinc.">
+        <rect class="hx-caja" x="216" y="350" width="168" height="60" rx="11" style="--hx-c:#3f83a6" stroke="#3f83a6"/>
+        <circle cx="230" cy="369" r="4.5" fill="#3f83a6"/>
+        <text class="hx-t" x="240" y="373">Yo como contexto</text>
+        <text class="hx-s" x="300" y="389" text-anchor="middle">Tomar perspectiva</text>
+        <text class="hx-n" x="300" y="402" text-anchor="middle" fill="#3f83a6">4 princ. · +3 vinc.</text>
       </g>
-      <g class="hx-nodo" data-hx="valores" data-estilo="comprometido" role="button" tabindex="0" aria-pressed="false" aria-label="Valores: 3 princ. · +3 vinc.">
-        <rect class="hx-caja" x="376" y="123" width="152" height="58" rx="11" style="--hx-c:#3f9b86" stroke="#3f9b86"/>
-        <circle cx="391" cy="141" r="5" fill="#3f9b86"/>
-        <text class="hx-t" x="402" y="145">Valores</text>
-        <text class="hx-s" x="452" y="161" text-anchor="middle">Elegir dirección</text>
-        <text class="hx-n" x="452" y="174" text-anchor="middle" fill="#3f9b86">3 princ. · +3 vinc.</text>
+      <g class="hx-nodo" data-hx="valores" data-estilo="comprometido" role="button" tabindex="0" aria-pressed="false" aria-label="Valores: 3 princ. · +8 vinc.">
+        <rect class="hx-caja" x="398" y="122" width="168" height="60" rx="11" style="--hx-c:#3f9b86" stroke="#3f9b86"/>
+        <circle cx="412" cy="141" r="4.5" fill="#3f9b86"/>
+        <text class="hx-t" x="422" y="145">Valores</text>
+        <text class="hx-s" x="482" y="161" text-anchor="middle">Elegir dirección</text>
+        <text class="hx-n" x="482" y="174" text-anchor="middle" fill="#3f9b86">3 princ. · +8 vinc.</text>
       </g>
-      <g class="hx-nodo" data-hx="accion" data-estilo="comprometido" role="button" tabindex="0" aria-pressed="false" aria-label="Acción comprometida: 2 princ. · +7 vinc.">
-        <rect class="hx-caja" x="376" y="269" width="152" height="58" rx="11" style="--hx-c:#6ea24f" stroke="#6ea24f"/>
-        <circle cx="391" cy="287" r="5" fill="#6ea24f"/>
-        <text class="hx-t" x="402" y="291">Acción comprometida</text>
-        <text class="hx-s" x="452" y="307" text-anchor="middle">Construir patrones</text>
-        <text class="hx-n" x="452" y="320" text-anchor="middle" fill="#6ea24f">2 princ. · +7 vinc.</text>
+      <g class="hx-nodo" data-hx="accion" data-estilo="comprometido" role="button" tabindex="0" aria-pressed="false" aria-label="Acción comprometida: 4 princ. · +11 vinc.">
+        <rect class="hx-caja" x="398" y="270" width="168" height="60" rx="11" style="--hx-c:#6ea24f" stroke="#6ea24f"/>
+        <circle cx="412" cy="289" r="4.5" fill="#6ea24f"/>
+        <text class="hx-t" x="422" y="293">Acción comprometida</text>
+        <text class="hx-s" x="482" y="309" text-anchor="middle">Construir patrones</text>
+        <text class="hx-n" x="482" y="322" text-anchor="middle" fill="#6ea24f">4 princ. · +11 vinc.</text>
       </g>
         </svg>
       </div>
       <div class="hx-info">
         <div class="hx-info-cab">
           <span class="hx-kicker">Mapa interactivo del hexaflex</span>
-          <button type="button" class="hx-reset" id="hx-reset" hidden>Ver los 6 procesos (19 hojas)</button>
+          <button type="button" class="hx-reset" id="hx-reset" hidden>Ver los 6 procesos (28 hojas)</button>
         </div>
         <div class="hx-estilos-bar" role="group" aria-label="Filtrar por estilo de respuesta">
           <button type="button" class="hx-est-btn" data-hx-estilo="abierto" style="--hx-c:#c26a4e" aria-pressed="false"><b>Estilo abierto</b><span>Aceptación y defusión</span></button><button type="button" class="hx-est-btn" data-hx-estilo="centrado" style="--hx-c:#3f83a6" aria-pressed="false"><b>Estilo centrado</b><span>Momento presente y yo como contexto</span></button><button type="button" class="hx-est-btn" data-hx-estilo="comprometido" style="--hx-c:#3f9b86" aria-pressed="false"><b>Estilo comprometido</b><span>Valores y acción comprometida</span></button>
         </div>
         <div class="hx-chips-bar" role="group" aria-label="Filtrar por proceso del hexaflex">
-          <button type="button" class="hx-chip" data-hx-chip="todos" aria-pressed="true">Todos los procesos (19)</button><button type="button" class="hx-chip" data-hx-chip="formulacion" style="--hx-c:#2f6f8f" aria-pressed="false"><span class="hx-dot" style="background:#2f6f8f"></span>Flexibilidad y matriz <small>(2)</small></button><button type="button" class="hx-chip" data-hx-chip="aceptacion" style="--hx-c:#c26a4e" aria-pressed="false"><span class="hx-dot" style="background:#c26a4e"></span>Aceptación <small>(5+4)</small></button><button type="button" class="hx-chip" data-hx-chip="defusion" style="--hx-c:#c05c78" aria-pressed="false"><span class="hx-dot" style="background:#c05c78"></span>Defusión <small>(3+5)</small></button><button type="button" class="hx-chip" data-hx-chip="presente" style="--hx-c:#5f77b8" aria-pressed="false"><span class="hx-dot" style="background:#5f77b8"></span>Momento presente <small>(1+3)</small></button><button type="button" class="hx-chip" data-hx-chip="yo" style="--hx-c:#3f83a6" aria-pressed="false"><span class="hx-dot" style="background:#3f83a6"></span>Yo como contexto <small>(3+3)</small></button><button type="button" class="hx-chip" data-hx-chip="valores" style="--hx-c:#3f9b86" aria-pressed="false"><span class="hx-dot" style="background:#3f9b86"></span>Valores <small>(3+3)</small></button><button type="button" class="hx-chip" data-hx-chip="accion" style="--hx-c:#6ea24f" aria-pressed="false"><span class="hx-dot" style="background:#6ea24f"></span>Acción comprometida <small>(2+7)</small></button>
+          <button type="button" class="hx-chip" data-hx-chip="todos" aria-pressed="true">Todos los procesos (28)</button><button type="button" class="hx-chip" data-hx-chip="formulacion" style="--hx-c:#2f6f8f" aria-pressed="false"><span class="hx-dot" style="background:#2f6f8f"></span>Flexibilidad y matriz <small>(3)</small></button><button type="button" class="hx-chip" data-hx-chip="aceptacion" style="--hx-c:#c26a4e" aria-pressed="false"><span class="hx-dot" style="background:#c26a4e"></span>Aceptación <small>(7+9)</small></button><button type="button" class="hx-chip" data-hx-chip="defusion" style="--hx-c:#c05c78" aria-pressed="false"><span class="hx-dot" style="background:#c05c78"></span>Defusión <small>(4+10)</small></button><button type="button" class="hx-chip" data-hx-chip="presente" style="--hx-c:#5f77b8" aria-pressed="false"><span class="hx-dot" style="background:#5f77b8"></span>Momento presente <small>(3+5)</small></button><button type="button" class="hx-chip" data-hx-chip="yo" style="--hx-c:#3f83a6" aria-pressed="false"><span class="hx-dot" style="background:#3f83a6"></span>Yo como contexto <small>(4+3)</small></button><button type="button" class="hx-chip" data-hx-chip="valores" style="--hx-c:#3f9b86" aria-pressed="false"><span class="hx-dot" style="background:#3f9b86"></span>Valores <small>(3+8)</small></button><button type="button" class="hx-chip" data-hx-chip="accion" style="--hx-c:#6ea24f" aria-pressed="false"><span class="hx-dot" style="background:#6ea24f"></span>Acción comprometida <small>(4+11)</small></button>
         </div>
         <div class="hx-lectura" id="hx-lectura">
           <div class="hx-lec-top">
             <b id="hx-lec-titulo">Los seis procesos y el centro del hexaflex</b>
-            <span class="hx-lec-polos" id="hx-lec-polos">19 herramientas integradas (metáforas vivas y ejercicios ACT)</span>
+            <span class="hx-lec-polos" id="hx-lec-polos">28 herramientas integradas (metáforas vivas y ejercicios ACT)</span>
           </div>
           <p id="hx-lec-desc">Toca cualquier vértice del hexágono, el centro o uno de los tres estilos de respuesta para reunir arriba las herramientas principales de ese proceso junto con las hojas que tienden puentes hacia él.</p>
         </div>
@@ -800,6 +806,25 @@
         <p>Se va a un relato largo: se valida, y se invita a ubicarlo: «eso que acabas de decir, ¿dónde iría en la matriz?».</p>
       </div>
       </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="ACT" data-titulo="El camino de vida y el giro" data-href="act-camino-de-vida.html" data-proc="formulacion" data-proc-sec="aceptacion,valores,accion" data-estilo="centro">
+      <div class="cab">
+        <h3><a href="act-camino-de-vida.html">El camino de vida y el giro</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Formulación breve</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#2f6f8f;background:#2f6f8f18;border-color:#2f6f8f44">Flexibilidad y matriz</span><span class="hx-tag sec" data-sec-chip="aceptacion" title="También vinculada con Aceptación">+ Aceptación</span><span class="hx-tag sec" data-sec-chip="valores" title="También vinculada con Valores">+ Valores</span><span class="hx-tag sec" data-sec-chip="accion" title="También vinculada con Acción comprometida">+ Acción comprometida</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Formula en pocos minutos el contraste entre correr tras el alivio inmediato y girar los pies en pequeños tramos hacia una vida con sentido.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Lo que intentas quitar del camino para sentir alivio rápido y el giro de los pies hacia una vida con sentido.</p>
+      <p class="paraque">Formular el caso en una sola sesión o en consulta breve situando los cuatro pilares vitales, el costo de correr hacia el alivio inmediato y el giro de 180° en pequeños movimientos de pies hacia una vida con sentido.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Primera consulta o intervenciones breves de una a cuatro sesiones (enfoque FACT).</li>
+        <li>Personas que llegan atascadas en intentos repetidos de quitarse un malestar antes de retomar su vida.</li>
+        <li>Cuando La matriz resulta demasiado esquemática y la imagen de un sendero con dos extremos se entiende más rápido.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Alternativa a</b> La matriz y El costo de la lucha en contextos de atención breve o focalizada.</div>
+      <div class="paso"><b>Abre paso a</b> De FEAR a DARE o La brújula de valores para sostener el rumbo después del primer giro.</div>
+      <div class="aviso-uso"><b>Cuidado</b>El giro de 180° es de orientación de los pies, no de resultados mágicos. Conviene subrayar que uno gira en el mismo punto del camino en el que está y con el mismo malestar encima: lo único que cambia hoy es hacia dónde da el primer paso corto.</div>
     </div>
     </div>
   </div>
@@ -1051,6 +1076,95 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="ACT" data-titulo="El interruptor de la lucha" data-href="met-el-interruptor.html" data-proc="aceptacion" data-proc-sec="defusion" data-estilo="abierto">
+      <div class="cab">
+        <h3><a href="met-el-interruptor.html">El interruptor de la lucha</a></h3>
+        <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Aceptación</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#c26a4e;background:#c26a4e18;border-color:#c26a4e44">Aceptación</span><span class="hx-tag sec" data-sec-chip="defusion" title="También vinculada con Defusión">+ Defusión</span><span class="hx-tipo">Metáfora viva</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Distingue la onda primaria del malestar limpio frente a la amplificación secundaria que se enciende al pelear con lo que se siente.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> La diferencia entre la emoción que llega con vivir y la lucha que se enciende encima al pelear con ella.</p>
+      <p class="paraque">Separar de un vistazo el malestar limpio (la emoción primaria que sube y baja con la vida) del malestar sucio (la pelea secundaria que se enciende encima) y mostrar cuánta energía queda libre al soltar el interruptor.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Ansiedad por tener ansiedad, culpa por estar triste, rabia por sentir miedo o vergüenza por seguir pasándolo mal.</li>
+        <li>Personas que se reprochan sentir lo que sienten y multiplican cada emoción con una segunda capa de juicio.</li>
+        <li>Cuando El polígrafo resulta demasiado centrado en activación fisiológica y hace falta incluir tristeza, culpa o fatiga.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> El costo de la lucha, para ubicar el interruptor dentro de su repertorio habitual.</div>
+      <div class="paso"><b>Junto a</b> El polígrafo o La cuerda y el monstruo.</div>
+      <div class="paso"><b>Antes de</b> El cielo y el clima o El bus y los pasajeros, para invertir la energía liberada.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Apagar el interruptor no apaga la onda primaria. Si la persona busca dónde está el botón para apagar también la tristeza o el miedo inicial, conviene señalar en la pantalla que la primera ola sigue moviéndose y que justamente por eso ya no hace falta pelear.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Conviene cuando la persona no solo sufre por una emoción difícil, sino que además se pelea con ella: se da rabia tener miedo, se culpa por estar triste o se asusta de estar ansiosa.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Imagina que en el fondo de la mente tenemos un interruptor como este: el interruptor de la lucha. En cuanto aparece una emoción incómoda, por costumbre el interruptor salta a ENCENDIDO y empezamos a pelear contra lo que sentimos.»</p>
+        <p class="dice">«Vamos a poner primero qué emoción llegó hoy por su cuenta, y qué se encendió encima cuando empezaste a pelear con ella.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>Dejar correr unos segundos la escena con la lucha encendida: «Mira los anillos rojos y la barra de energía de abajo. Tienes la emoción original y, encima, tienes la rabia por sentirla, el miedo a que no se vaya y el agotamiento de pelear.»</p>
+        <p>Al apagar el interruptor: «Ahora suéltalo y mira con cuidado qué cambia y qué NO cambia en el dibujo.» Callarse unos segundos para que vea que la onda azul sigue subiendo y bajando.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«La ola de abajo sigue moviéndose porque estás vivo y las cosas te importan. Lo que desapareció fue la tormenta roja de encima. Si hoy no tuvieras que gastar ese ochenta por ciento de energía en pelearte con lo que sientes, ¿en qué te gustaría usarlo?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Si aceptas la emoción se te va a quitar más rápido.» Eso es volver a encender el interruptor con un disfraz más sutil.</p>
+        <p class="no">✗ Dar a entender que el malestar limpio no duele. Duele de verdad; la diferencia es que no lleva encima la paliza extra de la lucha.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «pero es que el interruptor se me enciende solo»: «Claro, lleva años en automático. No se trata de que no se encienda nunca, sino de notar cuando saltó y bajarlo las veces que haga falta.»</p>
+      </div>
+      </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#c26a4e" data-item data-enf="ACT" data-titulo="Las dos caras de la moneda" data-href="met-las-dos-caras.html" data-proc="aceptacion" data-proc-sec="valores,accion" data-estilo="abierto">
+      <div class="cab">
+        <h3><a href="met-las-dos-caras.html">Las dos caras de la moneda</a></h3>
+        <span class="etq" style="color:#c26a4e;background:#c26a4e1a">Aceptación y valores</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#c26a4e;background:#c26a4e18;border-color:#c26a4e44">Aceptación</span><span class="hx-tag sec" data-sec-chip="valores" title="También vinculada con Valores">+ Valores</span><span class="hx-tag sec" data-sec-chip="accion" title="También vinculada con Acción comprometida">+ Acción comprometida</span><span class="hx-tipo">Metáfora viva</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Muestra el dolor y los valores como anverso y reverso de una misma moneda: abrir sitio al dolor permite conservar y honrar el vínculo.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Lo que hoy duele en una cara de la moneda y el amor o el valor que vive en su reverso.</p>
+      <p class="paraque">Conectar directamente aceptación y valores mostrando que el dolor y el amor son las dos caras de una misma moneda: solo dejaría de doler si dejara de importar, y llevar la moneda entera permite honrar lo que se ama.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Duelo, rupturas, pérdidas, enfermedad, cambios vitales dolorosos o distancia con seres queridos.</li>
+        <li>Culpa o tristeza profunda en personas que intentan anestesiarse para no sufrir y terminan sintiéndose vacías.</li>
+        <li>Cuando trabajar valores por separado parece frío y trabajar aceptación sola parece pedir resignación.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> Echar el ancla si el dolor en sesión es muy intenso.</div>
+      <div class="paso"><b>Junto a</b> El jardín de valores o Los ochenta años.</div>
+      <div class="paso"><b>Abre paso a</b> Pausa de autocompasión y un gesto pequeño de honra en la semana.</div>
+      <div class="aviso-uso"><b>Cuidado</b>No usarla para romantizar el sufrimiento ni para decir que el dolor «es bueno». El dolor duele; lo que la moneda muestra es por qué vale la pena hacerle sitio cuando del otro lado vive un vínculo o un valor que la persona no quiere apagar.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Es una metáfora delicada y profunda para momentos de pérdida, duelo, ruptura o dolor por vínculos e ideales heridos. Requiere un ritmo pausado y mucha calidez.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«A veces tratamos el dolor como si fuera un error que no debería estar ahí. Pero míralo como esta moneda: en una cara está lo que hoy te duele tanto, y en el reverso está lo que amas, lo que cuidas o el tipo de persona que quieres ser.»</p>
+        <p class="dice">«Donde no importa nada, no duele nada. Solo te dejaría de doler si te dejara de importar.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>Al girar entre la cara del dolor y la del valor: «Detrás de esta tristeza o de este vacío, ¿qué amor o qué cuidado está hablando? Si este dolor fuera un testigo de lo que para ti es sagrado, ¿de qué daría fe?»</p>
+        <p>Al pulsar «Intentar partir o esconder la moneda»: «Imagina que tuviéramos un botón para arrancarte hoy toda esta tristeza. Para lograrlo tendríamos que arrancarte también el cariño, la historia compartida y el valor del otro lado. No se puede tirar media moneda.»</p>
+        <p>Al pulsar «Llevar la moneda completa en la mano»: dejar unos segundos de silencio mirando las dos caras juntas sobre la palma.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Si eliges quedarte con la moneda entera —con el dolor que pesa en una cara y el amor que vive en la otra—, ¿con qué gesto pequeño podrías honrar hoy ese lado valioso?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Tienes que agradecer el dolor porque te hace más fuerte.» No se romantiza el daño: el dolor duele; lo que se honra es el valor del reverso.</p>
+        <p class="no">✗ Apurar el giro hacia el valor sin haber validado antes el peso real de la cara que duele.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «preferiría no sentir nada aunque se apague todo»: validarlo sin discutir. Cuando el dolor es muy agudo, anestesiarse tienta de verdad; señalar con suavidad en la moneda qué ha pasado en su vida las semanas en que intentó apagar la moneda entera.</p>
+      </div>
+      </details>
+    </div>
     </div>
   </div>
   <div class="subgrupo" data-subgrupo="defusion" data-subcorto="Defusión" data-subproc="defusion" style="--sub-c:#c05c78">
@@ -1225,6 +1339,50 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#c05c78" data-item data-enf="ACT" data-titulo="Las manos como pensamientos" data-href="met-las-manos.html" data-proc="defusion" data-proc-sec="presente,accion" data-estilo="abierto">
+      <div class="cab">
+        <h3><a href="met-las-manos.html">Las manos como pensamientos</a></h3>
+        <span class="etq" style="color:#c05c78;background:#c05c781a">Defusión</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#c05c78;background:#c05c7818;border-color:#c05c7844">Defusión</span><span class="hx-tag sec" data-sec-chip="presente" title="También vinculada con Momento presente">+ Momento presente</span><span class="hx-tag sec" data-sec-chip="accion" title="También vinculada con Acción comprometida">+ Acción comprometida</span><span class="hx-tipo">Metáfora viva</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Pone en el cuerpo la diferencia entre mirar el mundo a través de las manos pegadas a la cara y bajarlas al regazo sin borrar lo escrito.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Qué pasa con tu vista y con tus manos cuando los pensamientos se pegan a los ojos y cuando bajan al regazo.</p>
+      <p class="paraque">Hacer vivir en el cuerpo y en diez segundos qué es la fusión (las manos pegadas a la cara tapando toda la habitación) y qué es la defusión (bajarlas al regazo sin que se borre lo escrito, recuperando la vista y las manos).</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Fusión aguda con frases categóricas («no voy a poder», «siempre arruino todo») que acaparan toda la conversación.</li>
+        <li>Cuando la persona cree que para poder actuar primero tiene que dejar de pensar eso.</li>
+        <li>Personas muy concretas a las que observar hojas en un arroyo les resulta lejano o abstracto.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Antes de</b> Soltar el anzuelo o Hojas en el arroyo, como introducción física e inmediata a la defusión.</div>
+      <div class="paso"><b>Junto a</b> Empujar el papel, que añade el gasto de energía al intento de apartarlas.</div>
+      <div class="paso"><b>Abre paso a</b> De FEAR a DARE o El bus y los pasajeros.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Conviene hacerlo también con las manos reales en el consultorio antes o a la par de mover el control en pantalla. Cuidar que al llegar al regazo no se interprete que las manos desaparecieron: siguen ahí abajo con las mismas palabras escritas.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Rinde muchísimo más si la persona hace el gesto con sus propias manos mientras mueve el control de la hoja. Invitarla con naturalidad; si prefiere no hacerlo, la escena en pantalla sostiene el ejercicio igual.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Imagina por un momento que tus manos son tus pensamientos. Pon las palmas abiertas frente a ti, como si fueran las dos páginas de un libro, y fíjate qué frases tendrían escritas hoy.»</p>
+        <p class="dice">«Ahora sube las manos despacio hasta taparte los ojos, casi tocando la cara, y quédate ahí unos segundos.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>Con las manos pegadas a la cara (distancia 0 %): «Mirando el mundo así, a un centímetro de esas palabras, ¿cuánto alcanzas a ver de este cuarto o de mí? ¿Y qué tan fácil sería abrazar a alguien, cocinar o manejar con las manos ocupadas ahí arriba?»</p>
+        <p>Al pasar a media distancia y luego al regazo (100 %): «Ahora bájalas muy despacio hasta apoyarlas en el regazo. Fíjate bien: ¿se borraron las palabras que estaban escritas en tus palmas?» Esperar la respuesta: siguen ahí.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«No se borró ni una letra; siguen ahí abajo si miras hacia las manos. Pero ahora ves todo el cuarto y tienes las manos libres. ¿Qué vuelve a entrar en tu vista cuando no esperas a que se borren las frases para bajar las manos?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «¿Ves que esos pensamientos son falsos o no tienen importancia?» La defusión no discute si son verdaderos o falsos: muestra qué pasa cuando los llevamos pegados a los ojos.</p>
+        <p class="no">✗ «Tira esos pensamientos a la basura.» En la hoja las manos jamás se cortan ni se esconden: quedan a la vista en el regazo.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «pero al rato se me vuelven a subir a la cara»: «Es lo más normal del mundo: los brazos tienen ese hábito. Cada vez que notes que tienes el paisaje tapado, no te pelees con las manos: solo vuelve a apoyarlas en el regazo.»</p>
+      </div>
+      </details>
+    </div>
     </div>
   </div>
   <div class="subgrupo" data-subgrupo="presente" data-subcorto="Momento presente" data-subproc="presente" style="--sub-c:#5f77b8">
@@ -1267,6 +1425,98 @@
       <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
         <p class="no">✗ «Eso es solo un pensamiento, no es real.»</p>
         <p class="no">✗ «Tienes que evitar esos ganchos.» Los ganchos siguen en el agua; se aprende a notarlos.</p>
+      </div>
+      </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="ACT" data-titulo="Echar el ancla" data-href="act-echar-el-ancla.html" data-proc="presente" data-proc-sec="aceptacion,defusion" data-estilo="centrado">
+      <div class="cab">
+        <h3><a href="act-echar-el-ancla.html">Echar el ancla</a></h3>
+        <span class="etq" style="color:#5f77b8;background:#5f77b81a">Momento presente</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#5f77b8;background:#5f77b818;border-color:#5f77b844">Momento presente</span><span class="hx-tag sec" data-sec-chip="aceptacion" title="También vinculada con Aceptación">+ Aceptación</span><span class="hx-tag sec" data-sec-chip="defusion" title="También vinculada con Defusión">+ Defusión</span><span class="hx-tipo">Metáfora viva</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Recorre la fórmula ACE (reconocer lo interno, conectar con el cuerpo, involucrarse en el entorno) para sujetarse al fondo durante una tormenta emocional.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Reconocer lo que hay adentro, conectar con el cuerpo e involucrarse en lo que hay aquí mientras pasa el oleaje.</p>
+      <p class="paraque">Sujetar a la persona en medio de una tormenta emocional con la secuencia ACE (reconocer lo que hay adentro, conectar con el cuerpo e involucrarse en lo que hay aquí), dejando claro que el ancla no se echa para apagar el mar sino para no ser arrastrado.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Desbordamiento emocional en sesión, crisis de ansiedad, oleadas de duelo o recuerdos intrusivos.</li>
+        <li>Cuando una práctica contemplativa larga como el arroyo o el cielo queda grande por el nivel de activación.</li>
+        <li>Rumiación o disociación incipiente donde hace falta recuperar contacto inmediato con el cuerpo y el cuarto.</li>
+        <li>Como primera habilidad portátil antes de abordar exposición, defusión o valores.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Antes de</b> Cualquier otra hoja experiencial si la persona llega muy activada o tomada por la tormenta.</div>
+      <div class="paso"><b>Junto a</b> Los ganchos, que entrena el mismo retorno en la vida cotidiana.</div>
+      <div class="paso"><b>Abre paso a</b> El cielo y el clima o La cuerda y el monstruo una vez que hay piso firme.</div>
+      <div class="aviso-uso"><b>Cuidado</b>El riesgo principal es que se use como técnica de distracción o relajación para hacer desaparecer la emoción. Por eso el primer paso (A) nombra lo que sigue adentro y en la escena el oleaje nunca se detiene: si la persona mide el éxito por haberse calmado, al próximo pico sentirá que el ancla no sirve.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Se usa cuando la marejada ya está aquí, o para ensayar en frío qué hacer cuando llegue. No hace falta esperar a que la persona entienda la teoría: se guía en vivo con voz pausada.</p>
+        <p>Aclarar desde el arranque para qué sirve un ancla. Si no se dice con todas las letras, la persona la usará para intentar calmarse y sentirá que fracasó si la ansiedad sigue.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Cuando llega una tormenta en alta mar, los barcos echan el ancla. ¿Para qué la echan? No es para que pare la tormenta: las anclas no controlan el clima. La echan para sujetarse al fondo y que las olas no los estrellen contra las rocas mientras pasa el temporal.»</p>
+        <p class="dice">«Vamos a hacer tres movimientos muy simples —reconocer lo que hay adentro, conectar con el cuerpo y abrir la atención a este lugar— y los vamos a repetir un par de veces como quien suelta cadena hasta tocar fondo.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante (el ciclo A → C → E)</div>
+        <p>En la A (Reconocer): «Nota con suavidad qué está pasando ahora mismo por dentro: qué pensamiento, qué emoción o qué sensación hay en el pecho o en el estómago. No intentes cambiarlo ni empujarlo; solo reconócelo, como quien dice: aquí hay tormenta.»</p>
+        <p>En la C (Conectar con el cuerpo): «Y mientras eso sigue ahí adentro, lleva el mando a tu cuerpo. Empuja despacio los pies contra el suelo… siente la firmeza del piso… endereza un poco la espalda… estira los dedos o suelta los hombros. No estás huyendo de la ola: estás notando que además de la ola tienes cuerpo.»</p>
+        <p>En la E (Involucrarse): «Y ahora, manteniendo el contacto con tus pies y dejando que lo de adentro siga donde está, mira alrededor. Nota tres cosas que puedas ver en este cuarto… escucha dos sonidos… y nota que estamos tú y yo aquí, en esta conversación.»</p>
+        <p>Hacer clic en bajar un tramo del ancla y repetir dos ciclos más de treinta segundos. El efecto suele aparecer en la segunda o tercera vuelta.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Fíjate en el barco de la pantalla: el mar no se apagó, las olas siguen pasando, pero ya no va a la deriva. ¿Qué notas distinto ahora respecto a hace dos minutos?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Respira profundo para que se te pase la ansiedad.» Eso convierte el ancla en otra estrategia de control y dispara el interruptor de la lucha.</p>
+        <p class="no">✗ «Concéntrate en la habitación para no pensar en eso.» Echar el ancla es ampliar el foco para que quepan las dos cosas, no distraerse.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «sigo igual de angustiado»: «Es esperable, el ancla no apaga la tormenta. La pregunta es si ahora mismo sientes un poco más de mando sobre tus manos, tus pies y lo que estás haciendo aquí conmigo.»</p>
+        <p>Le cuesta cerrar los ojos o mirar hacia adentro: en trauma o pánico se hace siempre con los ojos abiertos y pasando muy rápido por la A para apoyarse más tiempo en los pies (C) y en el cuarto (E).</p>
+      </div>
+      </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="ACT" data-titulo="Fuera y dentro de sesión: el puente interpersonal" data-href="fap-dentro-y-fuera.html" data-proc="presente" data-proc-sec="aceptacion,valores,accion" data-estilo="centrado">
+      <div class="cab">
+        <h3><a href="fap-dentro-y-fuera.html">Fuera y dentro de sesión: el puente interpersonal</a></h3>
+        <span class="etq" style="color:#5f77b8;background:#5f77b81a">Relación en vivo (FAP)</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#5f77b8;background:#5f77b818;border-color:#5f77b844">Momento presente</span><span class="hx-tag sec" data-sec-chip="aceptacion" title="También vinculada con Aceptación">+ Aceptación</span><span class="hx-tag sec" data-sec-chip="valores" title="También vinculada con Valores">+ Valores</span><span class="hx-tag sec" data-sec-chip="accion" title="También vinculada con Acción comprometida">+ Acción comprometida</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Trae al momento presente de la relación terapéutica lo que la persona evita afuera (CCR1) y ensaya en vivo un acto de apertura, coraje y sintonía (CCR2 / ACL).</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Lo que ocurre en los vínculos de afuera, cómo asoma aquí en la consulta y qué paso valiente podemos ensayar hoy en vivo.</p>
+      <p class="paraque">Trazar el paralelo entre cómo la persona se protege o se aísla en su vida cotidiana y cómo asoma eso mismo en la sesión (CCR1), para ensayar aquí y ahora un movimiento de Conciencia, Coraje y Amor (CCR2).</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Dificultades interpersonales crónicas, miedo a la intimidad, complacencia excesiva o evitación del conflicto.</li>
+        <li>Cuando en plena consulta se nota que la persona cambia de tema, pide disculpas por sentir o habla solo en abstracto.</li>
+        <li>Procesos estancados donde se habla mucho sobre los vínculos de afuera sin que nada cambie en vivo.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> La matriz o La brújula de valores (ámbito de relaciones íntimas y amistad).</div>
+      <div class="paso"><b>Antes de</b> Pedir y decir que no, usando primero el consultorio como lugar seguro de ensayo.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Requiere una alianza sólida y que el profesional reciba la CCR2 con autenticidad cálida (Amor/Sintonía), sin ponerse técnico ni defensivo. Nunca señalar una CCR1 como reproche: se nombra siempre como una protección comprensible que hoy podemos ampliar juntos.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Se usa cuando ya hay calidez y confianza suficientes en la relación terapéutica, y cuando notamos en vivo un gesto de evitación o una oportunidad de cercanía auténtica.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Me doy cuenta de algo valioso: eso que me cuentas que te pasa afuera con la gente que quieres, a veces también se asoma un poquito aquí entre nosotros. Y lejos de ser un problema, nos da un puente seguro para ensayar algo distinto hoy mismo.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante (Conciencia, Coraje y Amor)</div>
+        <p>Al marcar el paralelo (Paso 1): validar con mucha suavidad por qué aprendió a protegerse así afuera y aquí.</p>
+        <p>Al iluminar el puente ACL: «En este momento, ¿qué estás notando que te cuesta decirme o mostrarme (Conciencia)? ¿Cómo sería animarte a decirlo un diez por ciento más directo aquí conmigo (Coraje)?»</p>
+        <p>Cuando la persona da el paso (CCR2): recibirlo en vivo con sintonía genuina, nombrando el impacto que tiene escucharlo sin disfraces (Amor / refuerzo natural).</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Acabas de cruzar el puente aquí conmigo y no se rompió el vínculo; al contrario, estamos más cerca. ¿Con quién de tu vida de afuera tendría sentido probar un paso parecido esta semana?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ Señalar la conducta de sesión (CCR1) con tono de crítica o de interpretación fría de experto.</p>
+        <p class="no">✗ Pedir un acto de coraje (CCR2) y responderle después con un comentario neutro o cambiando de tema.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Le da mucho pudor hablar de lo que pasa en la sesión: no forzar. Nombrar ese pudor con respeto ya es en sí mismo el primer paso sobre el puente.</p>
       </div>
       </details>
     </div>
@@ -1433,6 +1683,50 @@
         <p>Mandó el globo varias veces: es su patrón dibujado, no un fallo. «¿Se parece a algo de esta semana?»</p>
         <p>Dice «pero es que es verdad»: no se discute. «Puede ser verdad. ¿Quién lo está mirando?»</p>
         <p>Se queda en «no sé quién mira» o se angustia con la pregunta: no se insiste. Se vuelve a la respiración y a lo que hay alrededor.</p>
+      </div>
+      </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#3f83a6" data-item data-enf="ACT" data-titulo="El escenario y el reflector" data-href="met-el-escenario.html" data-proc="yo" data-proc-sec="presente,defusion" data-estilo="centrado">
+      <div class="cab">
+        <h3><a href="met-el-escenario.html">El escenario y el reflector</a></h3>
+        <span class="etq" style="color:#3f83a6;background:#3f83a61a">Yo observador</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#3f83a6;background:#3f83a618;border-color:#3f83a644">Yo como contexto</span><span class="hx-tag sec" data-sec-chip="presente" title="También vinculada con Momento presente">+ Momento presente</span><span class="hx-tag sec" data-sec-chip="defusion" title="También vinculada con Defusión">+ Defusión</span><span class="hx-tipo">Metáfora viva</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Amplía el foco desde el reflector cerrado sobre el problema hacia todo el escenario y la butaca estable desde la que se observa.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Quién grita bajo el reflector, qué más hay sobre las tablas y la butaca desde la que observas.</p>
+      <p class="paraque">Mostrar cómo la atención estrecha funciona igual que un reflector cerrado sobre el actor más ruidoso, y cómo abrir las luces de todo el escenario y notar la butaca del observador devuelve proporción sin expulsar a nadie de las tablas.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Visión de túnel donde un único problema, síntoma o temor parece ocupar el cien por ciento de la vida.</li>
+        <li>Autocrítica o dolor crónico que eclipsan vínculos, gustos y pequeños logros cotidianos.</li>
+        <li>Como alternativa al tablero cuando la metáfora de una partida o pelea entre blancas y negras no encaja con la vivencia.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Alternativa a</b> El tablero y El cielo y el clima dentro del trabajo con el yo como contexto.</div>
+      <div class="paso"><b>Junto a</b> Echar el ancla, cuyo tercer paso (E) equivale a encender las luces del escenario.</div>
+      <div class="paso"><b>Antes de</b> La brújula de valores o El jardín de valores, para mirar a los otros actores que estaban a oscuras.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Encender las luces generales no es pensamiento positivo ni tapar al actor difícil con cosas bonitas. El personaje que gritaba se queda en el centro de las tablas; lo que cambia es que deja de ser lo único iluminado.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Útil cuando la persona siente que un problema o un pensamiento difícil es todo lo que existe hoy, y también para introducir el yo observador sin lenguaje abstracto.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Imagina que todo lo que piensas, sientes y vives hoy está ocurriendo sobre las tablas de un teatro. En este momento hay un actor en el centro gritando a todo pulmón, y el técnico de luces cerró el reflector únicamente sobre él.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>Con el reflector cerrado: «Cuando toda la luz cae sobre ese personaje y el resto está a oscuras, parece gigante y parece que fuera el único en la sala.»</p>
+        <p>Al encender las luces de todo el escenario: «Mira lo que ocurre cuando subimos la luz general. No echamos al actor ruidoso de las tablas —sigue ahí en el medio—, pero ahora ves quiénes más estaban en escena esperando en la penumbra.»</p>
+        <p>Al pasar a mirar desde la butaca: «Y da un paso más atrás: nota la butaca desde la que estás viendo todo el espectáculo. Los actores cambian, entran y salen, pero tú eres quien los mira desde el asiento.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Sin tener que sacar a empujones al que grita, ¿a qué rincón del escenario eliges dirigir tu mirada ahora?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Ignora al actor negativo y piensa solo en las cosas lindas.» Eso es apagar un reflector para cerrar otro, y en cuanto el problema grite más fuerte volverá a ganar.</p>
+        <p class="no">✗ Explicar con jerga qué es el yo como contexto: la imagen de la butaca ya hizo el trabajo.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Le cuesta nombrar otros actores en las tablas: empezar por cosas mínimas y presentes («el hecho de que viniste hoy», «el café de esta mañana», «alguien que te quiere»), sin forzar grandes alegrías.</p>
       </div>
       </details>
     </div>
@@ -1689,6 +1983,46 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#6ea24f" data-item data-enf="ACT" data-titulo="De FEAR a DARE" data-href="act-fear-a-dare.html" data-proc="accion" data-proc-sec="defusion,aceptacion,valores" data-estilo="comprometido">
+      <div class="cab">
+        <h3><a href="act-fear-a-dare.html">De FEAR a DARE</a></h3>
+        <span class="etq" style="color:#6ea24f;background:#6ea24f1a">Acción comprometida</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#6ea24f;background:#6ea24f18;border-color:#6ea24f44">Acción comprometida</span><span class="hx-tag sec" data-sec-chip="defusion" title="También vinculada con Defusión">+ Defusión</span><span class="hx-tag sec" data-sec-chip="aceptacion" title="También vinculada con Aceptación">+ Aceptación</span><span class="hx-tag sec" data-sec-chip="valores" title="También vinculada con Valores">+ Valores</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Cruza cada barrera a la acción (Fusión, Exceso en la meta, Aversión al malestar, Remoto del valor) con su respuesta DARE y un paso pequeño.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Un paso valioso que se está frenando, qué barrera apareció y con qué movimiento destrabarlo hoy.</p>
+      <p class="paraque">Diagnosticar qué barrera específica está frenando un paso valioso (Fusión, Exceso en la meta, Aversión al malestar o quedar Remoto del valor) y encender su antídoto DARE (Defusión, Aceptación, Realismo en la meta y Enlace con el valor).</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Cuando la persona ya clarificó valores en La brújula o El jardín, pero vuelve a la sesión siguiente sin haber podido dar el paso.</li>
+        <li>Procrastinación persistente y planes de acción que se abandonan a mitad de semana.</li>
+        <li>Cierres de sesión donde hace falta blindar el compromiso frente a los obstáculos previsibles.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> La brújula de valores, El jardín de valores o El bus y los pasajeros.</div>
+      <div class="paso"><b>Junto a</b> Reglas irrompibles y metas de persona viva cuando la barrera principal es la exigencia de perfección.</div>
+      <div class="paso"><b>Conecta con</b> Soltar el anzuelo (si pesa la F) o El cielo y el clima (si pesa la A).</div>
+      <div class="aviso-uso"><b>Cuidado</b>No hace falta llenar las cuatro letras si solo una o dos están frenando el paso. Si la barrera es E (Exceso en la meta o falta real de recursos), insistir con aceptación o defusión sola sería invalidante: ahí toca partir la meta a la mitad.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#6ea24f" data-item data-enf="ACT" data-titulo="Reglas irrompibles y metas de persona viva" data-href="act-perfeccionismo.html" data-proc="accion" data-proc-sec="defusion,valores,aceptacion" data-estilo="comprometido">
+      <div class="cab">
+        <h3><a href="act-perfeccionismo.html">Reglas irrompibles y metas de persona viva</a></h3>
+        <span class="etq" style="color:#6ea24f;background:#6ea24f1a">Acción comprometida</span>
+      </div>
+      <span class="hx-tags"><span class="hx-tag pri" style="color:#6ea24f;background:#6ea24f18;border-color:#6ea24f44">Acción comprometida</span><span class="hx-tag sec" data-sec-chip="defusion" title="También vinculada con Defusión">+ Defusión</span><span class="hx-tag sec" data-sec-chip="valores" title="También vinculada con Valores">+ Valores</span><span class="hx-tag sec" data-sec-chip="aceptacion" title="También vinculada con Aceptación">+ Aceptación</span></span><span class="hx-vinc-nota" hidden><b>Vínculo en el hexaflex:</b> Traduce reglas rígidas y metas de persona muerta en metas de persona viva acompañadas desde un maestro firme y compasivo.</span>
+      <p class="paraque"><b>Para abrir la conversación:</b> Traducir las reglas de no fallar ni dudar en metas de persona viva y ensayar un paso imperfecto.</p>
+      <p class="paraque">Desarmar el perfeccionismo clínico traduciendo metas de persona muerta («no equivocarme», «no sentir duda») en metas de persona viva, y cambiando la voz del crítico implacable por la del maestro firme y compasivo para ensayar un paso deliberadamente imperfecto.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Parálisis por perfeccionismo, revisión interminable, miedo a entregar avances o a hablar si no se tiene certeza total.</li>
+        <li>Autoexigencia rígida donde la persona cree que si suelta el látigo autocrítico perderá todo su compromiso.</li>
+        <li>Sobrecontrol y miedo al error en el trabajo, en proyectos personales o en el trato con otros.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> De FEAR a DARE y El yo compasivo.</div>
+      <div class="paso"><b>Después de</b> Los ochenta años o La brújula de valores, cuando el rendimiento tapó a los valores.</div>
+      <div class="paso"><b>Antes de</b> La escalera de exposición, usando pasos imperfectos como práctica conductual.</div>
+      <div class="aviso-uso"><b>Cuidado</b>La regla de la persona muerta tiene que presentarse con humor cálido y respeto, nunca como burla. Y al presentar los dos maestros conviene dejar claro que el maestro compasivo no es permisivo ni indiferente: sostiene el valor con firmeza, pero cuenta con el error como parte de estar vivo.</div>
+    </div>
     </div>
   </div>
   </div>
@@ -1696,12 +2030,12 @@
 <section data-grupo="Cognitivo-conductual">
 <h2 class="enfoque" style="color:#2f6f8f">Cognitivo-conductual</h2>
   <div class="subgrupos">
-  <div class="subgrupo" data-subgrupo="tcc-formulacion" data-subcorto="Formulación funcional y motivación" style="--sub-c:#2f6f8f">
+  <div class="subgrupo" data-subgrupo="tcc-formulacion" data-subcorto="Formulación funcional, modos y motivación" style="--sub-c:#2f6f8f">
     <div class="subgrupo-cab">
-      <h3><span class="sub-punto"></span>1 · Formulación funcional y motivación</h3>
+      <h3><span class="sub-punto"></span>1 · Formulación funcional, modos y motivación</h3>
       <span class="sub-est">Evaluación y arranque</span>
     </div>
-    <p class="sub-desc">Entender qué mantiene la conducta en sus tres sistemas de respuesta y explorar la ambivalencia antes de pedir esfuerzo.</p>
+    <p class="sub-desc">Entender qué mantiene la conducta en sus tres sistemas de respuesta, ubicar modos en escena y explorar la ambivalencia.</p>
     
     <div class="fichas">
     <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Análisis funcional" data-href="tcc-analisis-funcional.html">
@@ -1781,14 +2115,50 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Mapa de modos en escena" data-href="esq-mapa-de-modos.html">
+      <div class="cab">
+        <h3><a href="esq-mapa-de-modos.html">Mapa de modos en escena</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Terapia de esquemas</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Las voces exigentes o punitivas, la parte niño vulnerable, el muro de afrontamiento y la respuesta del adulto sano.</p>
+      <p class="paraque">Poner en un solo lienzo qué voz parental presionó o atacó, qué sintió la parte niño vulnerable, qué muro levantó el modo de afrontamiento y cómo entra el Adulto sano a poner límite y cuidar.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Patrones antiguos de carácter o de relación donde la persona oscila entre apagarse (protector desconectado), someterse o atacar.</li>
+        <li>Cuando la reestructuración cognitiva estándar no toca la herida emocional de fondo.</li>
+        <li>Preparación visual antes del diálogo con sillas o de la reescritura en imaginación.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> La flecha descendente, cuando aparecen creencias nucleares de abandono, defecto o exigencia implacable.</div>
+      <div class="paso"><b>Junto a</b> El crítico interno y las voces ante el tropiezo (CFT).</div>
+      <div class="aviso-uso"><b>Cuidado</b>Al modo protector desconectado nunca se lo ataca ni se le pide que desaparezca a la fuerza: aprendió a levantar ese muro para proteger al niño cuando no había otra defensa. Se le agradece su oficio y se le pide dar un paso al costado.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="El arco emocional y la acción alternativa" data-href="tcc-arco-emocional.html">
+      <div class="cab">
+        <h3><a href="tcc-arco-emocional.html">El arco emocional y la acción alternativa</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Protocolo unificado</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> El disparador, los tres engranajes de la respuesta emocional y el giro hacia una acción alternativa.</p>
+      <p class="paraque">Formular cualquier episodio emocional intenso en sus tres engranajes (pensamientos, sensaciones y conducta impulsada por la emoción) y entrenar el giro hacia una acción alternativa que corte las evitaciones sutiles.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Cuadros mixtos de ansiedad, depresión o desregulación emocional (enfoque transdiagnóstico de Barlow).</li>
+        <li>Para detectar evitaciones emocionales sutiles como mirar el celular, apurarse o pedir reaseguro.</li>
+        <li>Como mapa de formulación compartido con el consultante desde las primeras sesiones.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Alternativa a</b> Análisis funcional cuando se quiere trabajar el mapa directamente con el consultante.</div>
+      <div class="paso"><b>Abre paso a</b> Exposición a las sensaciones físicas y La escalera de exposición.</div>
+      <div class="aviso-uso"><b>Cuidado</b>La acción alternativa no se hace para que la emoción desaparezca en el acto, sino para cambiar la relación con ella y comprobar que no hacía falta escapar.</div>
+    </div>
     </div>
   </div>
-  <div class="subgrupo" data-subgrupo="tcc-cognitivo" data-subcorto="Pensamientos, creencias y preocupación" style="--sub-c:#3b7a9e">
+  <div class="subgrupo" data-subgrupo="tcc-cognitivo" data-subcorto="Pensamientos, creencias, autoevaluación e incertidumbre" style="--sub-c:#3b7a9e">
     <div class="subgrupo-cab">
-      <h3><span class="sub-punto"></span>2 · Pensamientos, creencias y preocupación</h3>
+      <h3><span class="sub-punto"></span>2 · Pensamientos, creencias, autoevaluación e incertidumbre</h3>
       <span class="sub-est">Trabajo cognitivo y metacognitivo</span>
     </div>
-    <p class="sub-desc">Cuestionar pensamientos automáticos, descender a creencias nucleares o aplazar el proceso repetitivo de preocuparse.</p>
+    <p class="sub-desc">Cuestionar pensamientos automáticos, descender a creencias nucleares, redistribuir el pastel de valía o trabajar la intolerancia a la incertidumbre.</p>
     
     <div class="fichas">
     <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Registro de pensamientos" data-href="registro-de-pensamientos.html">
@@ -1891,14 +2261,50 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="El árbol de la preocupación y la incertidumbre" data-href="tcc-intolerancia-incertidumbre.html">
+      <div class="cab">
+        <h3><a href="tcc-intolerancia-incertidumbre.html">El árbol de la preocupación y la incertidumbre</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Incertidumbre (TAG)</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Distinguir problemas actuales de escenarios hipotéticos, soltar las muletas de certeza y ensayar un paso conviviendo con la duda.</p>
+      <p class="paraque">Clasificar la preocupación entre problemas actuales modificables y escenarios hipotéticos («¿y si…?»), detectar las muletas con las que se intenta comprar certeza al 100 % y ensayar pequeños pasos conviviendo con la duda.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Trastorno de ansiedad generalizada y preocupación crónica que salta de un tema a otro.</li>
+        <li>Personas que revisan diez veces, piden garantías constantes o no delegan nada por intolerancia a la incertidumbre.</li>
+        <li>Cuando Aplazar la preocupación necesita completarse con exposiciones conductuales a la duda.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> Aplazar la preocupación y Solución de problemas.</div>
+      <div class="paso"><b>Conecta con</b> El experimento conductual, soltando una muleta de certeza cada semana.</div>
+      <div class="aviso-uso"><b>Cuidado</b>No entrar jamás a responderle el «¿y si…?» dándole garantías de que no va a pasar: tranquilizar desde el sillón del profesional funciona como otra muleta y alimenta la intolerancia a la incertidumbre.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="El pastel de la autoevaluación" data-href="tcc-pastel-autoevaluacion.html">
+      <div class="cab">
+        <h3><a href="tcc-pastel-autoevaluacion.html">El pastel de la autoevaluación</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Perfeccionismo y valía</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Cuánto peso se lleva hoy una sola tajada en tu valía personal y qué otras áreas pueden equilibrar el pastel.</p>
+      <p class="paraque">Visualizar en un gráfico circular cuánto del valor personal depende hoy de una sola tajada (rendir o no fallar) y construir un segundo pastel más estable activando otras áreas de la vida.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Perfeccionismo clínico donde cualquier error en el trabajo o en el desempeño derrumba la autoestima entera.</li>
+        <li>Adicción al trabajo o vida estrechada alrededor de un único rol.</li>
+        <li>Rupturas o cambios vitales donde se perdió la única fuente de valía que la persona cultivaba.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> Reglas irrompibles y metas de persona viva (ACT) y La flecha descendente.</div>
+      <div class="paso"><b>Abre paso a</b> Activación conductual para poner en agenda acciones de las tajadas nuevas.</div>
+      <div class="aviso-uso"><b>Cuidado</b>El pastel ampliado no cambia solo por dibujarlo en sesión: para que la tajada dominante ceda espacio de verdad, hay que dedicar horas reales en la semana a las tajadas pequeñas.</div>
+    </div>
     </div>
   </div>
-  <div class="subgrupo" data-subgrupo="tcc-exposicion" data-subcorto="Exposición y activación conductual" style="--sub-c:#2c7c6c">
+  <div class="subgrupo" data-subgrupo="tcc-exposicion" data-subcorto="Exposición, experimentos y activación conductual" style="--sub-c:#2c7c6c">
     <div class="subgrupo-cab">
-      <h3><span class="sub-punto"></span>3 · Exposición y activación conductual</h3>
+      <h3><span class="sub-punto"></span>3 · Exposición, experimentos y activación conductual</h3>
       <span class="sub-est">Cambio conductual directo</span>
     </div>
-    <p class="sub-desc">Acercarse de forma graduada sin conductas de seguridad y recuperar fuentes de agrado y dominio en la semana.</p>
+    <p class="sub-desc">Poner a prueba predicciones sin muletas de seguridad, exponer a situaciones o sensaciones físicas y cambiar evitación (TRAP) por afrontamiento (TRAC).</p>
     
     <div class="fichas">
     <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="La escalera de exposición" data-href="tcc-escalera-de-exposicion.html">
@@ -1980,14 +2386,91 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="El experimento conductual" data-href="tcc-experimento-conductual.html">
+      <div class="cab">
+        <h3><a href="tcc-experimento-conductual.html">El experimento conductual</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Comprobación empírica</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Una predicción concreta de la mente, la muleta que se suelta durante la prueba y el contraste con lo que ocurre en la realidad.</p>
+      <p class="paraque">Diseñar una prueba empírica en la vida real soltando deliberadamente la conducta de seguridad para contrastar lo que la mente predijo frente a lo que ocurrió en los hechos.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Cuando la persona dice «entiendo con la cabeza que no va a pasar nada malo, pero igual lo siento verdadero».</li>
+        <li>Ansiedad social, perfeccionismo, pánico o preocupación con muletas de seguridad muy instaladas.</li>
+        <li>Para pasar del debate verbal en papel al aprendizaje por experiencia directa.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> Registro de pensamientos o La flecha descendente.</div>
+      <div class="paso"><b>Junto a</b> La escalera de exposición, convirtiendo cada peldaño en una prueba de hipótesis.</div>
+      <div class="aviso-uso"><b>Cuidado</b>La predicción a probar tiene que ser concreta y observable («nadie me va a dirigir la palabra»), no una lectura de mente imposible de verificar («pensarán mal de mí en secreto»). Y sin soltar la muleta, el experimento se invalida.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Exposición a las sensaciones físicas" data-href="tcc-exposicion-interoceptiva.html">
+      <div class="cab">
+        <h3><a href="tcc-exposicion-interoceptiva.html">Exposición a las sensaciones físicas</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Exposición interoceptiva</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Provocar en consulta una sensación física temida y observar durante un minuto cómo baja sola sin conductas de rescate.</p>
+      <p class="paraque">Inducir en el consultorio durante 30 o 60 segundos las sensaciones corporales temidas (falta de aire, mareo, taquicardia, calor) y observar en el minuto siguiente cómo bajan solas sin hacer conductas de rescate.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Pánico, agorafobia, ansiedad por la salud o miedo intenso a las propias reacciones corporales.</li>
+        <li>Antes de las exposiciones en vivo, para perderle el miedo al cuerpo dentro del consultorio.</li>
+        <li>Personas que monitorean constantemente su pulso, su respiración o su mareo.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> El arco emocional o El polígrafo.</div>
+      <div class="paso"><b>Antes de</b> La escalera de exposición en situaciones externas.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Descartar antes condiciones médicas que contraindiquen el ejercicio (asma no controlada, afecciones cardíacas, embarazo de riesgo, epilepsia). El profesional hace el ejercicio a la par con la persona para modelar tranquilidad.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Verificar siempre que no haya contraindicación médica para el ejercicio elegido.</p>
+        <p>El profesional lo hace al mismo tiempo que el consultante: respirar juntos por el pitillo o girar juntos en la silla quita solemnidad y modela que la sensación es segura.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Cuando aparece una sensación como falta de aire o latidos rápidos, la alarma del cerebro grita peligro y corremos a controlarla. Hoy vamos a provocar a propósito una versión pequeña de esa sensación aquí conmigo durante un minuto, y después vamos a hacer lo más importante: no hacer absolutamente nada para bajarla y ver qué hace el cuerpo solo.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>En el minuto de inducción: animar con calma a sostener el ejercicio sin distraerse.</p>
+        <p>Al pasar al minuto de observación: «Ahora suelta el ejercicio, apoya las manos tranquilas y solo observa la sensación como quien mira bajar la espuma de una ola. No respires hondo a propósito ni intentes apurarla.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Fíjate en la curva: subió porque hicimos el ejercicio, y bajó sola sin que tuvieras que rescatarte. ¿Qué le enseña esto a tu mente para la próxima vez que aparezca en la calle?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Si te asustas mucho paramos enseguida e inhalamos profundo para calmarte.» Cortar en el pico por miedo refuerza exactamente el temor a la sensación.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «aquí en el consultorio no me da miedo porque estás tú»: excelente observación; después de dominarlo juntos, el siguiente paso es practicarlo a solas.</p>
+      </div>
+      </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Salir de la trampa: de TRAP a TRAC" data-href="tcc-trap-a-trac.html">
+      <div class="cab">
+        <h3><a href="tcc-trap-a-trac.html">Salir de la trampa: de TRAP a TRAC</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Activación conductual</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> El desvío ferroviario entre el bucle de evitación (TRAP) y un paso pequeño de afrontamiento alternativo (TRAC).</p>
+      <p class="paraque">Mapear el análisis funcional de la evitación depresiva (Disparador + Respuesta + Patrón de evitación = TRAP) y accionar el cambio de aguja hacia un afrontamiento alternativo pequeño (TRAC).</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Depresión, apatía, retraimiento o bloqueo ante pendientes acumulados.</li>
+        <li>Cuando la persona programó actividades en Activación conductual pero no las hizo porque esperó a tener ganas.</li>
+        <li>Rumiación en cama o aislamiento como respuesta automática al desánimo.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> Activación conductual, como su herramienta compañera para destrabar la evitación.</div>
+      <div class="paso"><b>Conecta con</b> El bus y los pasajeros (ACT): actuar de afuera hacia adentro llevando el desgano a bordo.</div>
+      <div class="aviso-uso"><b>Cuidado</b>El paso TRAC tiene que ser lo bastante pequeño como para caber en un día malo (diez minutos, una cuadra, un mensaje honesto). Si se diseña para un día con energía alta, vuelve a alimentar el bucle TRAP.</div>
+    </div>
     </div>
   </div>
-  <div class="subgrupo" data-subgrupo="tcc-afrontamiento" data-subcorto="Afrontamiento, autorregulación y hábitos" style="--sub-c:#4e6b8c">
+  <div class="subgrupo" data-subgrupo="tcc-afrontamiento" data-subcorto="Afrontamiento, autorregulación, ira y hábitos" style="--sub-c:#4e6b8c">
     <div class="subgrupo-cab">
-      <h3><span class="sub-punto"></span>4 · Afrontamiento, autorregulación y hábitos</h3>
+      <h3><span class="sub-punto"></span>4 · Afrontamiento, autorregulación, ira y hábitos</h3>
       <span class="sub-est">Habilidades y autorregulación</span>
     </div>
-    <p class="sub-desc">Resolver problemas modificables, preparar autoinstrucciones y dosis de estrés, organizar pendientes y consolidar el sueño.</p>
+    <p class="sub-desc">Resolver problemas modificables, regular episodios de ira, dosificar energía sin caer en sobrecarga-colapso, organizar pendientes y consolidar el sueño.</p>
     
     <div class="fichas">
     <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Solución de problemas" data-href="tcc-solucion-de-problemas.html">
@@ -2174,6 +2657,42 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Anatomía del episodio de ira" data-href="tcc-episodio-de-ira.html">
+      <div class="cab">
+        <h3><a href="tcc-episodio-de-ira.html">Anatomía del episodio de ira</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Manejo de la ira</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Los cinco eslabones del episodio de ira y cómo cortar la escalada al notar la exigencia rígida y la señal en el cuerpo.</p>
+      <p class="paraque">Desarmar en cinco eslabones un episodio de ira o irritabilidad para identificar la exigencia rígida («no debería») y la primera señal corporal que permite cortar la escalada a tiempo.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Estallidos verbales, discusiones recurrentes o irritabilidad que daña vínculos o el trabajo.</li>
+        <li>Personas que sienten que la rabia les sube «de cero a cien en un segundo» sin aviso previo.</li>
+        <li>También cuando la ira no explota hacia afuera sino que queda rumiándose por horas con resentimiento.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> Autoinstrucciones e Inoculación de estrés.</div>
+      <div class="paso"><b>Después va</b> Pedir y decir que no (DBT) para expresar el límite de forma asertiva una vez que bajó la espuma.</div>
+      <div class="aviso-uso"><b>Cuidado</b>En el eslabón 2 no se discute si el otro se portó mal o no: aunque el otro haya sido injusto, la exigencia rígida («no debería haber pasado») es lo que incendia el cuerpo y deja a la persona sin mando.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#2f6f8f" data-item data-enf="Cognitivo-conductual" data-titulo="Dosificar la energía: salir del sobrecarga-colapso" data-href="tcc-dosificar-energia.html">
+      <div class="cab">
+        <h3><a href="tcc-dosificar-energia.html">Dosificar la energía: salir del sobrecarga-colapso</a></h3>
+        <span class="etq" style="color:#2f6f8f;background:#2f6f8f1a">Dolor y fatiga</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Pasar de la montaña rusa del sobrecarga-colapso en los días buenos a una cuota amable con pausa a tiempo.</p>
+      <p class="paraque">Romper la montaña rusa de sobreexigirse en los días con menos dolor hasta colapsar en cama, instalando cuotas de actividad guiadas por tiempo y pausas programadas antes del agotamiento.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Dolor crónico, fibromialgia, fatiga crónica, enfermedades médicas o agotamiento por sobrecarga.</li>
+        <li>Personas todo-o-nada que en cuanto se sienten un poco mejor quieren recuperar toda la semana atrasada.</li>
+        <li>Frustración repetida por recaídas físicas tras días de sobreesfuerzo.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> Activación conductual y El interruptor de la lucha.</div>
+      <div class="paso"><b>Conecta con</b> Los tres círculos de regulación emocional (CFT), cuando el círculo azul empuja a ignorar las señales del cuerpo.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Parar cuando todavía queda energía se siente antinatural y suele despertar culpa o miedo a no terminar. Conviene ensayarlo en sesión y elegir cuotas muy modestas al principio.</div>
+    </div>
     </div>
   </div>
   </div>
@@ -2267,12 +2786,12 @@
     </div>
     </div>
   </div>
-  <div class="subgrupo" data-subgrupo="dbt-habilidades" data-subcorto="Módulos de habilidades" style="--sub-c:#4c64a6">
+  <div class="subgrupo" data-subgrupo="dbt-habilidades" data-subcorto="Módulos de habilidades y apertura radical" style="--sub-c:#4c64a6">
     <div class="subgrupo-cab">
-      <h3><span class="sub-punto"></span>2 · Módulos de habilidades</h3>
+      <h3><span class="sub-punto"></span>2 · Módulos de habilidades y apertura radical</h3>
       <span class="sub-est">Entrenamiento de habilidades</span>
     </div>
-    <p class="sub-desc">Atención plena (mente sabia), tolerancia al malestar, regulación emocional y efectividad interpersonal.</p>
+    <p class="sub-desc">Atención plena, tolerancia al malestar y aceptación radical, regulación emocional (ABC PLEASE), efectividad interpersonal y autoinvestigación RO-DBT.</p>
     
     <div class="fichas">
     <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Mente sabia" data-href="dbt-mente-sabia.html">
@@ -2438,6 +2957,112 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Aceptación radical y girar la mente" data-href="dbt-aceptacion-radical.html">
+      <div class="cab">
+        <h3><a href="dbt-aceptacion-radical.html">Aceptación radical y girar la mente</a></h3>
+        <span class="etq" style="color:#5f77b8;background:#5f77b81a">Tolerancia al malestar</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Reconocer el hecho que hoy no se puede cambiar, girar la mente cuando vuelva el reproche y elegir el siguiente paso posible.</p>
+      <p class="paraque">Distinguir el dolor limpio de un hecho que hoy no se puede cambiar frente al sufrimiento de pelear contra él, entrenando girar la mente una y otra vez con manos dispuestas y media sonrisa.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Pérdidas, rupturas, diagnósticos médicos o decisiones ajenas que la persona vive como «no debería haber pasado».</li>
+        <li>Amargura o parálisis crónica donde toda la energía se va en exigir que el pasado hubiera sido distinto.</li>
+        <li>Después de Verificar los hechos o Solución de problemas, cuando el hecho es real y no admite cambio inmediato.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> Tarjeta de crisis si la activación está muy alta, o Solución de problemas cuando se comprueba que el hecho hoy no es modificable.</div>
+      <div class="paso"><b>Junto a</b> Las dos caras de la moneda o El interruptor de la lucha.</div>
+      <div class="paso"><b>Abre paso a</b> Mente sabia y un paso pequeño con lo que sí depende de la persona hoy.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Nunca pedir aceptación radical sobre situaciones de abuso o riesgo actual que sí requieren acción o protección. Y aclarar desde el inicio que aceptar no es aprobar, perdonar ni rendirse: si no se hace esa distinción, la persona siente que le piden resignarse.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Asegurarse primero de que el hecho realmente no se puede cambiar hoy. Si el problema todavía tiene arreglo práctico, toca Solución de problemas, no aceptación radical.</p>
+        <p>Validar a fondo el dolor antes de hablar de aceptar. Si se propone aceptar demasiado rápido, suena a «supéralo ya».</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Hay cosas que duelen y que hoy ya son un hecho. Pelear con ellas diciendo que no deberían haber pasado es muy humano, pero fíjate qué nos cobra: al dolor que ya estaba le suma la amargura de la pelea.»</p>
+        <p class="dice">«Aceptar aquí no significa decir que estuvo bien, ni darle la razón a nadie, ni rendirse. Significa dejar de pelear con el capítulo que ya ocurrió para tener las manos libres en el capítulo de hoy.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante (el giro en el cuerpo)</div>
+        <p>Al mostrar la encrucijada: «Girar la mente no se logra discutiendo con uno mismo; ayuda mucho más empezar por el cuerpo. Probemos ahora mismo: apoya las manos sobre los muslos con las palmas abiertas hacia arriba y suelta los dedos.»</p>
+        <p>En la media sonrisa: «Afloja la mandíbula y la frente, y deja una media sonrisa casi imperceptible, como quien le avisa al cuerpo que en este segundo no tiene que atacar ni defenderse.»</p>
+        <p>Al pulsar girar otra vez: «En cinco minutos la mente va a volver al 'no debería'. Es normal. No fallaste: solo toca notar que subiste al camino de arriba y volver a girar hacia abajo.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Con las palmas abiertas y dejando ese hecho tal como fue, ¿cuál es el paso más pequeño que hoy sí está en tus manos dar?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Tienes que aceptar y pasar la página.» La aceptación radical se hace en pasos de un minuto, no por decreto.</p>
+        <p class="no">✗ «Todo pasa por algo.» Eso invalida el dolor real del hecho.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «si lo acepto siento que digo que no me importó»: señalar el recuadro de la hoja: aceptar el hecho es el único punto de partida desde el que se puede cuidar de verdad lo que importa.</p>
+      </div>
+      </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Escudo ante la vulnerabilidad: ABC PLEASE" data-href="dbt-abc-please.html">
+      <div class="cab">
+        <h3><a href="dbt-abc-please.html">Escudo ante la vulnerabilidad: ABC PLEASE</a></h3>
+        <span class="etq" style="color:#5f77b8;background:#5f77b81a">Regulación emocional</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Cómo está hoy la base del cuerpo y qué respaldo diario protege mejor frente a la reactividad emocional.</p>
+      <p class="paraque">Hacer visible cómo el descuido del cuerpo (PLEASE) y la falta de momentos gratos, competencia y ensayo previo (ABC) suben la línea base de reactividad, y elegir un solo ladrillo concreto para proteger hoy.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Desregulación emocional frecuente donde cualquier roce cotidiano dispara crisis porque el cuerpo lleva días sin sueño o sin comida regular.</li>
+        <li>Agotamiento, apatía o sensación de que «todo me supera».</li>
+        <li>Prevención de recaídas y armado de rutinas mínimas de cuidado.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Se detecta en</b> Análisis en cadena (como vulnerabilidad previa al episodio) y Tarjeta diaria.</div>
+      <div class="paso"><b>Junto a</b> Activación conductual y Ventana de sueño.</div>
+      <div class="paso"><b>Antes de</b> Situaciones exigentes previsibles, usando la C de anticiparse y ensayar (Cope Ahead).</div>
+      <div class="aviso-uso"><b>Cuidado</b>No convertir los ocho puntos en un pliego de exigencias nuevas para alguien agotado: se revisa el panorama completo en el escudo y se acuerda proteger un solo ladrillo sencillo esta semana.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#5f77b8" data-item data-enf="DBT" data-titulo="Mente fija, mente fatalista y autoinvestigación" data-href="rodbt-autoinvestigacion.html">
+      <div class="cab">
+        <h3><a href="rodbt-autoinvestigacion.html">Mente fija, mente fatalista y autoinvestigación</a></h3>
+        <span class="etq" style="color:#5f77b8;background:#5f77b81a">Apertura radical (RO-DBT)</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Notar dónde nos cerramos en mente fija o fatalista, activar seguridad social en el cuerpo y abrir una pregunta en el borde.</p>
+      <p class="paraque">Desarmar el cierre del sobrecontrol (tener siempre razón en mente fija o apagarse en mente fatalista) activando primero seguridad social en el cuerpo (Gran Tres + 1) y sosteniendo abierta una pregunta en el propio borde.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Rigidez, perfeccionismo interpersonal, necesidad de corregir a otros o desconexión fría cuando algo incomoda.</li>
+        <li>Personas muy reflexivas que usan el análisis intelectual para defenderse y no sentir vulnerabilidad.</li>
+        <li>Soledad emocional en personas que por fuera parecen funcionar de manera impecable.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> Reglas irrompibles y metas de persona viva, cuando el sobrecontrol domina el cuadro.</div>
+      <div class="paso"><b>Conecta con</b> Fuera y dentro de sesión (FAP), para llevar la apertura al vínculo en vivo.</div>
+      <div class="aviso-uso"><b>Cuidado</b>La autoinvestigación no es reestructuración cognitiva ni busca contestar rápido la pregunta para quedarse tranquilo. Si la persona responde enseguida con una explicación lógica, señalar con calidez que la mente volvió a cerrarse y volver a dejar abierta la pregunta.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>En RO-DBT no buscamos encontrar la respuesta correcta ni debatir pensamientos: buscamos practicar la humildad de no saber todavía y sostener una pregunta abierta en el borde personal.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«A veces nuestra mente se protege cerrándose de dos maneras: o poniéndose fija ('yo tengo razón y punto') o poniéndose fatalista ('para qué intentarlo, nada sirve'). Las dos nos ahorran la incomodidad de dudar, pero nos dejan solos.»</p>
+        <p class="dice">«Vamos a hacer algo distinto: primero le damos al cuerpo señal de seguridad y después abrimos una pregunta sin apurarnos a contestarla.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante (Gran Tres + 1 y el borde)</div>
+        <p>Guiar primero la postura: «Recuéstate de verdad en el respaldo de la silla… haz una exhalación larga… sube un milímetro las cejas y deja una sonrisa suave de boca cerrada. Fíjate qué cambia en el pecho cuando dejas la postura de guardia.»</p>
+        <p>Al elegir la pregunta de autoinvestigación: «Ahora lee esa pregunta y quédate con ella unos segundos. Si tu cabeza salta enseguida a justificarse o a explicarlo todo, solo nota cómo apareció la defensa y vuelve a la pregunta.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«No la contestes ahora. ¿Cómo sería llevarte esa pregunta abierta esta semana y observar qué te muestra cuando vuelva a aparecer la tensión?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ Responderle nosotros la pregunta o darle una interpretación cerrada.</p>
+        <p class="no">✗ Usar la autoinvestigación para que se culpe: el borde se mira con curiosidad y cejas levantadas, nunca con látigo.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Intenta convertir la pregunta en una tarea intelectual perfecta: sonreír con calidez y nombrarlo: «fíjate cómo hasta abrirnos queremos hacerlo con diez en calificación; respira en el respaldo y déjala sin resolver».</p>
+      </div>
+      </details>
+    </div>
     </div>
   </div>
   </div>
@@ -2445,12 +3070,12 @@
 <section data-grupo="Compasión y mindfulness">
 <h2 class="enfoque" style="color:#4a8a7a">Compasión y mindfulness</h2>
   <div class="subgrupos">
-  <div class="subgrupo" data-subgrupo="cft-calma" data-subcorto="Sistema de calma y atención al presente" style="--sub-c:#4a8a7a">
+  <div class="subgrupo" data-subgrupo="cft-calma" data-subcorto="Tres sistemas emocionales, calma y atención al presente" style="--sub-c:#4a8a7a">
     <div class="subgrupo-cab">
-      <h3><span class="sub-punto"></span>1 · Sistema de calma y atención al presente</h3>
+      <h3><span class="sub-punto"></span>1 · Tres sistemas emocionales, calma y atención al presente</h3>
       <span class="sub-est">Regulación y presencia</span>
     </div>
-    <p class="sub-desc">Bajar la activación fisiológica con un ritmo respiratorio tranquilo y abrir una pausa de tres minutos en el día.</p>
+    <p class="sub-desc">Equilibrar amenaza, logro y calma, bajar la activación con un ritmo respiratorio tranquilo y abrir una pausa de tres minutos en el día.</p>
     
     <div class="fichas">
     <div class="ficha-guia" style="border-left-color:#4a8a7a" data-item data-enf="Compasión y mindfulness" data-titulo="Respiración de ritmo tranquilizador" data-href="cft-ritmo-tranquilizador.html">
@@ -2489,14 +3114,54 @@
       <div class="paso"><b>Abre paso a</b> Las puertas del cuerpo, del pensamiento y de la acción hábil.</div>
       <div class="aviso-uso"><b>Cuidado</b>No es un tiempo muerto para escapar de la crisis: si se usa para que lo desagradable se vaya, se vuelve a la modalidad «hacer». Tampoco importa que dure exactamente tres minutos.</div>
     </div>
+    <div class="ficha-guia" style="border-left-color:#4a8a7a" data-item data-enf="Compasión y mindfulness" data-titulo="Los tres círculos de regulación emocional" data-href="cft-tres-circulos.html">
+      <div class="cab">
+        <h3><a href="cft-tres-circulos.html">Los tres círculos de regulación emocional</a></h3>
+        <span class="etq" style="color:#4a8a7a;background:#4a8a7a1a">Sistema de calma</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> El tamaño que hoy ocupan la amenaza, el impulso de logro y la calma, y cómo abrir espacio para el círculo verde.</p>
+      <p class="paraque">Mapear de un vistazo el balance entre amenaza (rojo), impulso/logro (azul) y calma/vínculo (verde), haciendo visible la trampa de usar el sobreesfuerzo azul para intentar callar el miedo rojo.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Autoexigencia agotadora, ansiedad de desempeño y culpa al descansar.</li>
+        <li>Personas que confunden estar ocupadas o rendir con estar reguladas.</li>
+        <li>Inicio del trabajo en terapia centrada en la compasión (CFT) para desculpabilizar por qué cuesta tanto calmarse.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Abre paso a</b> Ritmo tranquilizador, Pausa de autocompasión y El yo compasivo, que entrenan directamente el círculo verde.</div>
+      <div class="paso"><b>Junto a</b> El crítico interno y las voces ante el tropiezo.</div>
+      <div class="aviso-uso"><b>Cuidado</b>En algunas personas abrir el círculo verde despierta al principio alerta o tristeza («bajar la guardia me da miedo»). Conviene anticiparlo: si el verde lleva años apagado, se entra de a pocos segundos.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Ideal para quitar la vergüenza en personas que viven atrapadas entre la ansiedad (rojo) y la hiperproductividad (azul).</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Nuestro cerebro no fue diseñado para hacernos fáciles las cosas, sino para sobrevivir. Por eso trae tres sistemas: el rojo para detectar peligros, el azul para correr tras metas y recursos, y el verde para descansar, digerir y sentirnos seguros con otros.»</p>
+        <p class="dice">«Mueve los tres controles para dibujar cómo han estado repartidos estos tres círculos en tu vida últimamente.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>Cuando dibuje un rojo y un azul grandes con un verde diminuto: «Mira ese dibujo: no es que estés fallando, es que cuando el círculo rojo te asusta, usas el círculo azul de trabajar y exigirte más para intentar sentirte a salvo. Pero el azul también gasta energía y nunca enciende la calma.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«El círculo verde no se llena terminando diez pendientes más en el azul: solo se llena con gestos de pausa, calidez y ritmo lento. ¿Cuál sería un gesto mínimo para darle de comer al verde hoy?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Tienes que apagar el círculo rojo.» El rojo es necesario; lo que buscamos es que el verde tenga tamaño para regularlo.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «si entro al círculo verde siento que pierdo el tiempo o me da culpa»: nombrarlo como el miedo a la calma y empezar con pausas de apenas treinta segundos.</p>
+      </div>
+      </details>
+    </div>
     </div>
   </div>
-  <div class="subgrupo" data-subgrupo="cft-compasion" data-subcorto="Autocompasión y trabajo con la autocrítica" style="--sub-c:#3d7668">
+  <div class="subgrupo" data-subgrupo="cft-compasion" data-subcorto="Autocompasión y trabajo con el crítico interno" style="--sub-c:#3d7668">
     <div class="subgrupo-cab">
-      <h3><span class="sub-punto"></span>2 · Autocompasión y trabajo con la autocrítica</h3>
+      <h3><span class="sub-punto"></span>2 · Autocompasión y trabajo con el crítico interno</h3>
       <span class="sub-est">Perspectiva compasiva</span>
     </div>
-    <p class="sub-desc">Responder al sufrimiento y a la voz autocrítica desde una perspectiva cálida, sabia y firme.</p>
+    <p class="sub-desc">Diferenciar las voces internas ante un tropiezo y responder al sufrimiento desde una perspectiva cálida, sabia y firme.</p>
     
     <div class="fichas">
     <div class="ficha-guia" style="border-left-color:#4a8a7a" data-item data-enf="Compasión y mindfulness" data-titulo="Pausa de autocompasión" data-href="cft-pausa-de-autocompasion.html">
@@ -2576,8 +3241,133 @@
       </div>
       </details>
     </div>
+    <div class="ficha-guia" style="border-left-color:#4a8a7a" data-item data-enf="Compasión y mindfulness" data-titulo="El crítico interno y las voces ante el tropiezo" data-href="cft-voces-y-critico.html">
+      <div class="cab">
+        <h3><a href="cft-voces-y-critico.html">El crítico interno y las voces ante el tropiezo</a></h3>
+        <span class="etq" style="color:#4a8a7a;background:#4a8a7a1a">Autocrítica</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> De qué amenaza intenta protegerte el crítico interno, qué sienten las demás partes y cómo responde el yo compasivo.</p>
+      <p class="paraque">Hacer el análisis funcional del crítico interno (de qué amenaza teme que nos dañen) y sentar en la mesa a las partes ansiosa, triste y enfadada para que el yo compasivo las coordine sin maltrato.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Autocrítica feroz tras cualquier error, descuido o rechazo.</li>
+        <li>Cuando la persona teme que si deja de tratarse duro se volverá mediocre o complaciente.</li>
+        <li>Mezcla confusa de rabia, miedo y tristeza tras un tropiezo.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> Los tres círculos de regulación emocional y El yo compasivo.</div>
+      <div class="paso"><b>Junto a</b> Soltar el anzuelo o La palabra repetida cuando una frase del crítico es muy repetitiva.</div>
+      <div class="aviso-uso"><b>Cuidado</b>No se trata de pelear contra el crítico ni de expulsarlo de la mesa (eso sería más sistema de amenaza contra uno mismo), sino de agradecer su intento torpe de proteger y retirarle el micrófono del maltrato.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Sirve cuando tras un error la persona queda tomada por una sola voz punitiva o por un torbellino confuso de emociones.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Cuando algo sale mal, parece que adentro hubiera una sola voz gritando, pero en realidad hay varias partes sentadas a la mesa. Vamos a escuchar primero qué te dijo el crítico, de qué peligro teme que te pase algo, y cómo quedaron las otras partes.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>En el paso 2 (función protectora): «Imagina que ese crítico interno es un guardia muy asustado que aprendió un único método torpe: gritarte a ti primero antes de que el mundo te rechace o te humille. ¿De qué amenaza está intentando cuidarte?»</p>
+        <p>En el paso 3 (mesa de las partes): dar un momento a la parte ansiosa, a la triste y a la enfadada, y luego invitar al Yo compasivo a tomar la cabecera de la mesa.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Cuando el Yo compasivo se sienta a la cabecera, no echa a nadie a patadas: ve el miedo detrás del crítico y cuida a la parte herida sin maltrato.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ «Cállate a tu crítico interno.» Pelear con el crítico a gritos es seguir dentro del mismo sistema de amenaza.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Teme que sin el crítico no avanzará: contrastar el látigo del crítico con la firmeza cálida de un buen entrenador que sí quiere que aprendas, pero no te insulta cuando tropiezas.</p>
+      </div>
+      </details>
+    </div>
     </div>
   </div>
+  </div>
+</section>
+<section data-grupo="Vínculos y pareja">
+<h2 class="enfoque" style="color:#9c5d6e">Vínculos y pareja</h2>
+  <div class="fichas">
+    <div class="ficha-guia" style="border-left-color:#9c5d6e" data-item data-enf="Vínculos y pareja" data-titulo="El baile negativo y el iceberg del vínculo" data-href="par-el-baile-de-pareja.html">
+      <div class="cab">
+        <h3><a href="par-el-baile-de-pareja.html">El baile negativo y el iceberg del vínculo</a></h3>
+        <span class="etq" style="color:#9c5d6e;background:#9c5d6e1a">Ciclo emocional (EFT)</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> El ciclo negativo que se ve en la superficie del choque y las necesidades de apego que duelen bajo el agua.</p>
+      <p class="paraque">Desescalar el conflicto de pareja mostrando cómo el movimiento protector de uno en la superficie dispara el del otro en un bucle infinito, y bajar juntos bajo el agua hacia las emociones blandas y necesidades de apego.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Parejas atrapadas en el ciclo persecución-retirada (uno reclama e insiste, el otro se calla o se defiende con lógica).</li>
+        <li>Consultas individuales por conflicto de pareja recurrente donde todo el relato se va en buscar quién tuvo la culpa.</li>
+        <li>Cuando cada intento de hablar termina exactamente en la misma pelea.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> Tener razón o cuidar el vínculo (IBCT), que complementa el mapa con la separación unificada frente al «ESO».</div>
+      <div class="paso"><b>Conecta con</b> Pedir y decir que no, una vez que se habla desde abajo del agua y no desde el ataque.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Cuidar la simetría: ni quien reclama es «el intenso culpable» ni quien se calla es «el frío indiferente». Ambos hacen movimientos desesperados para protegerse del dolor de apego. Contraindicado encuadrar como baile simétrico si hay violencia o coacción.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Funciona tanto con la pareja presente como en sesión individual para salir de la lógica de tribunal (quién tiene la culpa) y pasar a la lógica del ciclo.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Cuando una pelea importante se repite una y otra vez, deja de ser por los platos o por el horario: es un baile que se activa solo. Vamos a mirar primero los pasos que se ven por encima del agua y después qué hay debajo.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>En la superficie: «Fíjate en el signo de infinito: cuanto más reclama o insiste la posición A para sentir que importa, más se abruma y se cierra la posición B; y cuanto más se cierra B para no empeorar todo, más sola se siente A y más fuerte golpea la puerta.»</p>
+        <p>Al pulsar 'Mirar bajo el agua': bajar el tono de voz: «Debajo del reclamo suele haber miedo a quedarse solo o no importar; y debajo del silencio suele haber miedo a fallar y no ser nunca suficiente para el otro.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«Si el adversario no es tu pareja sino este baile que los deja solos a los dos, ¿qué frase dicha desde abajo del agua ayudaría a frenar la música apenas empiece a sonar?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ Darle la razón a una de las dos posiciones como si fuera más madura que la otra: tanto presionar como replegarse mantienen el bucle.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Dice «pero es que él/ella empezó»: «En un círculo infinito cualquiera de los dos cree siempre que solo está reaccionando al movimiento anterior del otro. Por eso la única salida es mirar el baile juntos.»</p>
+      </div>
+      </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#9c5d6e" data-item data-enf="Vínculos y pareja" data-titulo="Tener razón o cuidar el vínculo: frente al «ESO»" data-href="par-tener-razon-o-cuidar.html">
+      <div class="cab">
+        <h3><a href="par-tener-razon-o-cuidar.html">Tener razón o cuidar el vínculo: frente al «ESO»</a></h3>
+        <span class="etq" style="color:#9c5d6e;background:#9c5d6e1a">Aceptación en pareja (IBCT)</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Pasar de estar enfrentados por tener la razón a mirar juntos «el ESO» desde el mismo lado del banco.</p>
+      <p class="paraque">Pasar de la polarización (intentar ganar el juicio y cambiar al otro) a la separación unificada y la unión empática: sentarse del mismo lado del banco para mirar al problema como «nuestro ESO» y hablar con revelación blanda.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Diferencias de temperamento, ritmo o estilo en la pareja que ya son conocidas y vuelven una y otra vez.</li>
+        <li>Luchas de poder crónicas por tener la razón o demostrar quién aporta más.</li>
+        <li>Agotamiento por discusiones circulares donde ambos salen heridos.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> El baile negativo y el iceberg del vínculo.</div>
+      <div class="paso"><b>Conecta con</b> La brújula de valores o Los ochenta años, para recordar qué clase de compañero se elige ser.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Nombrar «el ESO» con humor o perspectiva nunca debe sonar a minimizar el dolor del otro. Primero se valida por qué duele (unión empática) y junto con eso se mira el patrón como equipo.</div>
+      <details class="guion">
+        <summary>Guion para proponerlo en sesión</summary>
+      <div class="tramo-guion"><div class="rot">Antes de proponerlo</div>
+        <p>Muy útil cuando la pareja ya conoce de memoria su tema recurrente y cada conversación se convierte en un juicio para cambiar al otro.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Cómo se presenta</div>
+        <p class="dice">«Toda pareja tiene un par de temas de fondo que vuelven cada tanto porque son dos personas distintas. En terapia de pareja lo llamamos 'el ESO'. Cuando aparece 'el ESO', podemos ponernos uno frente al otro a dispararnos argumentos, o podemos sentarnos del mismo lado del banco a mirarlo juntos.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Durante</div>
+        <p>Con el modo enfrentados: «Miren qué pasa cuando 'el ESO' queda en el medio como un proyectil: aunque uno gane el debate lógico, la relación pierde.»</p>
+        <p>Al pulsar 'Pasar al mismo lado del banco': «Aquí sigue existiendo 'el ESO', nadie finge que desapareció, pero ahora son ustedes dos hombro con hombro mirando un problema que les cae a ambos, y hablando desde lo que duele en blando en vez de acusar en duro.»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Al terminar</div>
+        <p class="dice">«La próxima vez que asome su 'ESO' en la semana, ¿cómo podrían avisarse con complicidad para sentarse del mismo lado del banco antes de empezar el juicio?»</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Lo que no se dice</div>
+        <p class="no">✗ Pedir aceptación como si fuera resignarse a cualquier maltrato: la aceptación de diferencias va siempre sobre una base de respeto y cuidado mutuo.</p>
+      </div>
+      <div class="tramo-guion"><div class="rot">Qué hacer con lo que salga</div>
+        <p>Uno de los dos insiste en que su forma es la objetivamente correcta: preguntar con calma cuánto le ha servido tener esa razón para sentirse cerca el sábado por la tarde.</p>
+      </div>
+      </details>
+    </div>
   </div>
 </section>
 <section data-grupo="Psicología positiva">
@@ -2656,6 +3446,60 @@
         <p class="no">✗ «Tienes que ser más positivo.»</p>
       </div>
       </details>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#c9962f" data-item data-enf="Psicología positiva" data-titulo="Saborear, hilo de luz y dar" data-href="pp-afecto-positivo.html">
+      <div class="cab">
+        <h3><a href="pp-afecto-positivo.html">Saborear, hilo de luz y dar</a></h3>
+        <span class="etq" style="color:#c9962f;background:#c9962f1a">Afecto positivo (PAT)</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Saborear un instante concreto sin que la mente lo apague, hallar un hilo de luz en lo difícil y dar algo pequeño hacia afuera.</p>
+      <p class="paraque">Reentrenar la sensibilidad a la recompensa en la anhedonia y el ánimo bajo sosteniendo un instante grato sin que lo apaguen los «ladrones del saboreo», encontrando un hilo de luz en lo difícil y haciendo un gesto pequeño hacia afuera.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Anhedonia, aplanamiento afectivo o depresión donde ya hay activación conductual pero la persona «no siente gusto por nada».</li>
+        <li>Tendencia automática a descontar cualquier momento bueno («dura poco», «antes disfrutaba más»).</li>
+        <li>Cuando el diario clásico de Tres cosas buenas se queda corto porque los pensamientos aguafiestas anulan el registro.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> Activación conductual, cuando la persona ya hace cosas pero su atención pasa de largo por el agrado.</div>
+      <div class="paso"><b>Junto a</b> Tres cosas buenas y mi mejor versión.</div>
+      <div class="aviso-uso"><b>Cuidado</b>El «hilo de luz» no es positivismo tóxico ni decir que «todo pasa por algo bueno». Solo busca notar qué fortaleza o qué apoyo sobrevivió en medio de algo que sí fue doloroso.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#c9962f" data-item data-enf="Psicología positiva" data-titulo="Las cuatro fuentes de sentido y el legado" data-href="pp-cuatro-fuentes-sentido.html">
+      <div class="cab">
+        <h3><a href="pp-cuatro-fuentes-sentido.html">Las cuatro fuentes de sentido y el legado</a></h3>
+        <span class="etq" style="color:#c9962f;background:#c9962f1a">Sentido vital (IMCP)</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Las cuatro fuentes de sentido —histórica, actitudinal, creativa y experiencial— y cuál sigue viva hoy.</p>
+      <p class="paraque">Explorar de dónde beber sentido cuando la vida cambia o se estrecha, recorriendo las cuatro fuentes de Breitbart y Frankl: histórica (legado), actitudinal (postura ante el límite), creativa (lo que cuido) y experiencial (amor, belleza y humor).</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Enfermedad médica crónica o grave, pérdidas vitales, jubilación, duelos o crisis existenciales.</li>
+        <li>Sensación de vacío o desmoralización cuando una fuente habitual (como el trabajo o la salud física) se ve limitada.</li>
+        <li>Cierres de proceso para integrar historia, valores y legado.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Junto a</b> La brújula de valores, Los ochenta años y Las dos caras de la moneda.</div>
+      <div class="paso"><b>Después de</b> Aceptación radical, cuando ya se reconoció el límite real y se busca cómo habitarlo con dignidad.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Si la persona está atravesando una limitación severa, la fuente actitudinal y la experiencial suelen ser las más accesibles en el día a día: no exigir grandes proyectos creativos cuando el cuerpo pide presencia y dignidad.</div>
+    </div>
+    <div class="ficha-guia" style="border-left-color:#c9962f" data-item data-enf="Psicología positiva" data-titulo="Soltar el rencor: los cinco pasos REACH" data-href="pp-perdon-reach.html">
+      <div class="cab">
+        <h3><a href="pp-perdon-reach.html">Soltar el rencor: los cinco pasos REACH</a></h3>
+        <span class="etq" style="color:#c9962f;background:#c9962f1a">Perdón (REACH)</span>
+      </div>
+      <p class="paraque"><b>Para abrir la conversación:</b> Recorrer las cinco estaciones REACH para soltar la carga del rencor sin justificar el daño ni forzar reconciliación.</p>
+      <p class="paraque">Trabajar heridas interpersonales pasadas diferenciando el perdón de la justificación y de la reconciliación, y recorriendo las cinco estaciones REACH para soltar la rumia amarga.</p>
+      <div class="rot">Conviene en</div>
+      <ul>
+        <li>Rencor crónico o rumia de injusticia hacia alguien del pasado que sigue consumiendo el presente de la persona.</li>
+        <li>Cuando la persona quiere soltar el peso de la rabia pero teme que perdonar sea dar la razón al otro o volver a exponerse.</li>
+        <li>Heridas familiares, de pareja o laborales antiguas ya cerradas en los hechos pero abiertas en la memoria.</li>
+      </ul>
+      <div class="rot">Secuencia</div>
+      <div class="paso"><b>Después de</b> Aceptación radical, que prepara el terreno reconociendo que el pasado no se puede reescribir.</div>
+      <div class="paso"><b>Junto a</b> Pausa de autocompasión para sostener el dolor de la herida antes de recorrer la estación E.</div>
+      <div class="aviso-uso"><b>Cuidado</b>Dejar clarísimo desde el paso 1 que perdonar aquí no obliga a reconciliarse ni a retomar vínculo con alguien dañino, y que la estación E (entender el contexto del otro) jamás equivale a excusar ni minimizar el daño sufrido.</div>
     </div>
   </div>
 </section>
@@ -2742,8 +3586,7 @@
   <nav class="mapa" id="mapa" aria-label="Mapa de las hojas"></nav>
 </aside>
 <div class="nav-movil">
-  <button type="button" class="sec" id="nm-filtros">Filtros</button>
-  <button type="button" id="nm-mapa">Hojas</button>
+  <button type="button" id="nm-mapa">&#9776; Las hojas</button>
 </div>
 <div id="nm-velo" hidden></div>
 
@@ -2792,6 +3635,7 @@
   const hxPanel = $("hx-panel");
   const hxDatos = hxPanel ? JSON.parse(hxPanel.dataset.hxDatos || "{}") : {};
   const hxEstilos = hxPanel ? JSON.parse(hxPanel.dataset.hxEstilos || "{}") : {};
+  const hxTotal = hxPanel ? (hxPanel.dataset.hxTotal || "28") : "28";
 
   function coincideHex(it) {
     if (it.dataset.enf !== "ACT" || hxModo === "todos") return { ok: true, rol: "pri" };
@@ -2810,15 +3654,6 @@
   }
 
   function actualizarUIHex() {
-    const rotRiel = $("f-hx-rot"), cajaRiel = $("f-hx-riel");
-    if (rotRiel && cajaRiel) {
-      const mostrarHx = (enf === "todos" || enf === "ACT");
-      rotRiel.hidden = !mostrarHx;
-      cajaRiel.hidden = !mostrarHx;
-      cajaRiel.querySelectorAll("[data-hx-riel]").forEach(b => {
-        b.setAttribute("aria-pressed", String(b.dataset.hxRiel === hxModo));
-      });
-    }
     if (!hxPanel) return;
     const svg = $("hx-svg");
     const activos = hxModo === "todos" ? [] : (
@@ -2828,7 +3663,6 @@
     );
     svg.classList.toggle("hx-filtrado", activos.length > 0);
 
-    // Qué otros procesos quedan conectados por herramientas secundarias
     const relacionados = new Set(activos);
     if (activos.length) {
       items.filter(it => it.dataset.enf === "ACT").forEach(it => {
@@ -2868,7 +3702,7 @@
     if (hxModo === "todos") {
       lec.style.setProperty("--hx-lec-c", "#2f6f8f");
       t.textContent = "Los seis procesos y el centro del hexaflex";
-      p.textContent = "19 herramientas integradas (metáforas vivas y ejercicios ACT)";
+      p.textContent = hxTotal + " herramientas integradas (metáforas vivas y ejercicios ACT)";
       d.textContent = "Toca cualquier vértice del hexágono, el centro o uno de los tres estilos de respuesta para reunir arriba las herramientas principales de ese proceso junto con las hojas que tienden puentes hacia él.";
     } else if (hxModo.startsWith("estilo:")) {
       const est = hxEstilos[hxModo.slice(7)];
@@ -2902,7 +3736,6 @@
       it.hidden = !ok;
       it.classList.toggle("hx-item-vinculado", ok && hx.rol === "sec");
 
-      // Mostrar nota de vínculo cuando actúa como herramienta secundaria del proceso elegido
       const nota = it.querySelector(".hx-vinc-nota");
       if (nota) nota.hidden = !(ok && hx.rol === "sec");
       it.querySelectorAll("[data-sec-chip]").forEach(ch => {
@@ -2967,13 +3800,6 @@
     aplicar();
   });
 
-  if ($("f-hx-riel")) {
-    $("f-hx-riel").addEventListener("click", ev => {
-      const b = ev.target.closest("[data-hx-riel]"); if (!b) return;
-      fijarHx(b.dataset.hxRiel);
-    });
-  }
-
   if (hxPanel) {
     hxPanel.addEventListener("click", ev => {
       const nodo = ev.target.closest(".hx-nodo");
@@ -2994,8 +3820,6 @@
   $("buscador").addEventListener("input", aplicar);
   aplicar();
 
-  // La hoja o el bloque que está en pantalla se marca en el mapa: el último
-  // cuyo comienzo ya pasó por el tercio superior de la ventana.
   function marcar(){
     const limite = innerHeight / 3;
     let actual = null;
@@ -3009,21 +3833,21 @@
     const r = a.getBoundingClientRect(), rm = m.getBoundingClientRect();
     if (r.top < rm.top || r.bottom > rm.bottom) m.scrollTop += r.top - rm.top - rm.height / 3;
   }
-  // Paneles en pantallas angostas.
-  const velo = $("nm-velo"), riel = document.querySelector(".riel-der"), filtros = document.querySelector(".controles");
-  function cerrar(){ document.body.classList.remove("panel-mapa", "panel-filtros"); velo.hidden = true; }
+
+  // Panel derecho en pantallas angostas.
+  const velo = $("nm-velo"), riel = document.querySelector(".riel-der");
+  function cerrar(){ document.body.classList.remove("panel-mapa"); velo.hidden = true; }
   function abrir(c){ cerrar(); document.body.classList.add(c); velo.hidden = false; }
-  [riel, filtros].forEach(p => {
+  if (riel) {
     const x = document.createElement("button");
     x.type = "button"; x.className = "nm-cerrar"; x.textContent = "Cerrar ×";
     x.addEventListener("click", cerrar);
-    p.prepend(x);
-  });
+    riel.prepend(x);
+    riel.addEventListener("click", ev => { if (ev.target.closest("a")) cerrar(); });
+  }
   $("nm-mapa").addEventListener("click", () => abrir("panel-mapa"));
-  $("nm-filtros").addEventListener("click", () => abrir("panel-filtros"));
   velo.addEventListener("click", cerrar);
   document.addEventListener("keydown", ev => { if (ev.key === "Escape") cerrar(); });
-  riel.addEventListener("click", ev => { if (ev.target.closest("a")) cerrar(); });
 
   let pendiente = false;
   addEventListener("scroll", () => {

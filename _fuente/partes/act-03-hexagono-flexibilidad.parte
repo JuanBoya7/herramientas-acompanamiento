@@ -23,10 +23,10 @@ campo3ph: Ej. Formulación inicial
   .procesos{display:flex;flex-direction:column;gap:10px}
   .proceso{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
     border-radius:var(--radio);padding:13px 16px}
-  .proceso .cabeza{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .proceso .cabeza{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
   .proceso h3{margin:0;font-size:15.5px}
   .proceso .estilo{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;
-    color:var(--tinta-suave);white-space:nowrap}
+    color:var(--tinta-suave);white-space:normal}
   .proceso .def{margin:5px 0 10px;font-size:13px;color:var(--tinta-suave)}
   .polos{display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;
     margin-bottom:2px}
@@ -62,7 +62,7 @@ campo3ph: Ej. Formulación inicial
 
 <div class="tablero">
   <div class="panel-hex">
-    <svg class="hex" id="hex" viewBox="0 0 500 400" role="img"
+    <svg class="hex" id="hex" viewBox="0 0 560 400" role="img"
       aria-label="Hexágono de flexibilidad psicológica"></svg>
     <div class="estilos" id="estilos"></div>
   </div>
@@ -97,7 +97,10 @@ const PROCESOS = [
     ["El polígrafo","met-el-poligrafo.html",0],
     ["La cuerda y el monstruo","met-la-cuerda.html",0],
     ["Empujar el papel","act-empujar-el-papel.html",0],
-    ["El cielo y el clima","act-el-cielo-y-el-clima.html",1]
+    ["El interruptor de la lucha","met-el-interruptor.html",0],
+    ["Las dos caras de la moneda","met-las-dos-caras.html",0],
+    ["El cielo y el clima","act-el-cielo-y-el-clima.html",1],
+    ["Echar el ancla","act-echar-el-ancla.html",1]
   ],
   sondas:["Todo el repertorio está montado para no sentir. Aquí entra desesperanza creativa antes que cualquier técnica.",
           "Acepta algunas cosas y con otras sigue peleando. Vale identificar cuál es la que no se puede tocar.",
@@ -110,7 +113,9 @@ const PROCESOS = [
     ["Soltar el anzuelo","act-soltar-el-anzuelo.html",0],
     ["La palabra repetida","met-la-palabra-repetida.html",0],
     ["Hojas en el arroyo","met-hojas-en-el-arroyo.html",0],
+    ["Pensamientos como manos","met-las-manos.html",0],
     ["Los ganchos","act-los-ganchos.html",1],
+    ["El interruptor de la lucha","met-el-interruptor.html",1],
     ["Empujar el papel","act-empujar-el-papel.html",1],
     ["Quién lleva los globos","act-quien-lleva-los-globos.html",1]
   ],
@@ -123,6 +128,8 @@ const PROCESOS = [
   def:"Dónde vive la atención: rumiando lo que pasó, anticipando lo que viene, o en lo que está ocurriendo.",
   hojas:[
     ["Los ganchos","act-los-ganchos.html",0],
+    ["Echar el ancla","act-echar-el-ancla.html",0],
+    ["Lo que pasa afuera y aquí","fap-dentro-y-fuera.html",0],
     ["Hojas en el arroyo","met-hojas-en-el-arroyo.html",1],
     ["La matriz","act-matriz.html",1],
     ["El cielo y el clima","act-el-cielo-y-el-clima.html",1]
@@ -138,6 +145,7 @@ const PROCESOS = [
     ["El tablero","met-el-tablero.html",0],
     ["El cielo y el clima","act-el-cielo-y-el-clima.html",0],
     ["Quién lleva los globos","act-quien-lleva-los-globos.html",0],
+    ["El escenario","met-el-escenario.html",0],
     ["La matriz","act-matriz.html",1],
     ["La palabra repetida","met-la-palabra-repetida.html",1]
   ],
@@ -152,7 +160,9 @@ const PROCESOS = [
     ["La brújula de valores","act-brujula-de-valores.html",0],
     ["El jardín de valores","met-jardin-de-valores.html",0],
     ["Los ochenta años","met-los-ochenta-anos.html",0],
-    ["La matriz","act-matriz.html",1]
+    ["La matriz","act-matriz.html",1],
+    ["El camino de vida","act-camino-de-vida.html",1],
+    ["Las dos caras de la moneda","met-las-dos-caras.html",1]
   ],
   sondas:["No hay dirección declarada, o la que hay es prestada. Antes de programar conductas hay que clarificar.",
           "Tiene direcciones, todavía mezcladas con metas y con expectativas ajenas.",
@@ -164,6 +174,9 @@ const PROCESOS = [
   hojas:[
     ["La radio que no se apaga","met-la-radio.html",0],
     ["El bus y los pasajeros","met-el-bus.html",0],
+    ["De FEAR a DARE","act-fear-a-dare.html",0],
+    ["La trampa del perfeccionismo","act-perfeccionismo.html",0],
+    ["El camino de vida","act-camino-de-vida.html",1],
     ["Quién lleva los globos","act-quien-lleva-los-globos.html",1],
     ["La brújula de valores","act-brujula-de-valores.html",1]
   ],
@@ -214,7 +227,7 @@ $("estilos").innerHTML = Object.keys(ESTILOS).map(k => `
   </div>`).join("");
 
 /* ====================== HEXÁGONO ====================== */
-const CX = 250, CY = 190, R = 128, RETQ = 148;
+const CX = 280, CY = 190, R = 126, RETQ = 144;
 const rad = p => p.ang * Math.PI / 180;
 const pt = (p, r) => [CX + Math.cos(rad(p)) * r, CY + Math.sin(rad(p)) * r];
 

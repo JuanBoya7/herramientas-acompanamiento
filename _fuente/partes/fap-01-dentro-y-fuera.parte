@@ -1,0 +1,170 @@
+@@meta
+archivo: fap-dentro-y-fuera.html
+titulo: Fuera y dentro de sesión: el puente interpersonal
+orden: 18
+enfoque: ACT
+etiqueta: Relación en vivo (FAP)
+sub: Lo que nos cuesta en los vínculos de todos los días suele asomar también, más pequeño o más sutil, aquí mismo en la consulta. Notar ese paralelo sin juicio convierte la sesión en un puente vivo donde ensayar una respuesta más auténtica y valiente aquí y ahora.
+fuente: Paralelo fuera-dentro, conductas clínicamente relevantes (CCR1 y CCR2) y el modelo Conciencia, Coraje y Amor (ACL), en Holman, Kanter, Tsai y Kohlenberg, Functional Analytic Psychotherapy Made Simple (2017), caps. 2, 3 y 4.
+resumen: Conecta lo que se evita o protege en las relaciones cotidianas con cómo aparece en vivo en la sesión (CCR1), ilumina los tres eslabones del puente ACL (Conciencia, Coraje y Amor) y elige un intento valiente (CCR2) para ensayar hoy.
+@@css
+  .paralelo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .orilla{border:1px solid var(--linea);border-top:4px solid #5f77b8;border-radius:10px;padding:13px 15px;background:#fbfcfd}
+  .orilla.adentro{border-top-color:#c26a4e;background:#fffaf8}
+  .orilla h3{margin:0 0 4px;font-size:15px}
+  .orilla p{margin:0 0 10px;font-size:12.5px;color:var(--tinta-suave);line-height:1.42}
+  .puente-svg{display:block;width:100%;max-width:700px;height:auto;margin:0 auto}
+  .acl-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+  .acl-btn{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--linea);border-radius:999px;
+    padding:6px 14px;background:#fff;color:var(--tinta-suave);cursor:pointer;transition:all .15s}
+  .acl-btn.on{background:#3f9b86;border-color:#3f9b86;color:#fff}
+  @media (max-width:720px){.paralelo-grid{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Afuera en mis vínculos y aquí entre nosotros</h2>
+  <p class="ayuda">No es un fallo que el patrón entre al consultorio: cuando aparece aquí en vivo tenemos la oportunidad de hacer algo distinto juntos.</p>
+  <div class="cuerpo">
+    <div class="paralelo-grid">
+      <div class="orilla">
+        <h3>Afuera, en mi vida cotidiana</h3>
+        <p>Cómo me protejo o me alejo cuando hay cercanía, roce o vulnerabilidad.</p>
+        <div class="chips" id="afueraEvita"></div>
+      </div>
+      <div class="orilla adentro">
+        <h3>Aquí, en nuestra sesión (CCR1)</h3>
+        <p>Cómo asoma esa misma protección entre nosotros hoy.</p>
+        <div class="chips" id="adentroCCR1"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="puente-svg" id="svgPuente" viewBox="0 0 700 220" role="img"
+    aria-label="Puente interpersonal entre las dos orillas con las tres estaciones Conciencia, Coraje y Amor"></svg>
+  <div class="acl-bar">
+    <button type="button" class="acl-btn" id="btnA" onclick="toggleACL('A')">1 · Conciencia (notar qué siento aquí)</button>
+    <button type="button" class="acl-btn" id="btnC" onclick="toggleACL('C')">2 · Coraje (arriesgarme a mostrarlo)</button>
+    <button type="button" class="acl-btn" id="btnL" onclick="toggleACL('L')">3 · Amor / Sintonía (recibir la respuesta)</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>El paso valiente que podemos ensayar hoy aquí (CCR2)</h2>
+  <p class="ayuda">Un intento pequeño en vivo vale más que hablar durante una hora sobre cómo ser distinto afuera.</p>
+  <div class="cuerpo">
+    <div class="chips" id="ensayoCCR2"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Si este consultorio es el lugar seguro para ensayar, ¿qué verdad pequeña te animarías a poner hoy sobre el puente?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const AFUERA = [
+  "Me guardo lo que me molesta para evitar conflicto",
+  "Cambio de tema o bromeo cuando algo me duele",
+  "Intento adivinar qué espera el otro para complacerlo",
+  "Pongo distancia antes de que me fallen"
+];
+const ADENTRO = [
+  "Digo que «todo está bien» aunque algo me incomode",
+  "Hablo mucho en abstracto para no tocar lo que duele",
+  "Me disculpo por sentir o por ocupar tiempo",
+  "Me cuesta mirar o pedir lo que necesito hoy en la sesión"
+];
+const CCR2 = [
+  "Decir en voz alta qué parte de esta conversación me dio miedo o pudor",
+  "Quedarme unos segundos con la emoción sin cambiar de tema",
+  "Pedirte directamente qué necesito de esta sesión hoy",
+  "Expresar un desacuerdo o incomodidad con calma"
+];
+
+let acl = { A: true, C: false, L: false };
+
+function toggleACL(k){
+  acl[k] = !acl[k];
+  refrescar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgPuente");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est, anc) => {
+    const e = g("text", {x, y, "text-anchor": anc || "middle", style: est});
+    e.textContent = s;
+    return e;
+  };
+
+  const nCcr2 = Kit.activas("ensayoCCR2").length;
+  if(nCcr2 > 0){ acl.A = true; acl.C = true; }
+
+  g("rect", {x:0, y:0, width:700, height:220, rx:10, fill:"#f7fafc"});
+  // Agua bajo el puente
+  g("path", {d:"M 150 182 Q 350 168 550 182 L 550 220 L 150 220 Z", fill:"#dfeef6"});
+
+  // Orillas
+  g("path", {d:"M 0 155 L 175 155 L 155 220 L 0 220 Z", fill:"#d7e3ec"});
+  g("path", {d:"M 525 155 L 700 155 L 700 220 L 545 220 Z", fill:"#d7e3ec"});
+  txt(85, 192, "Orilla propia", "font:700 12px system-ui;fill:#3f5163");
+  txt(615, 192, "Quien acompaña", "font:700 12px system-ui;fill:#3f5163");
+
+  // Arco del puente
+  const todas = acl.A && acl.C && acl.L;
+  g("path", {d:"M 145 155 Q 350 48 555 155", fill:"none",
+    stroke: todas ? "#3f9b86" : "#9db1c4", "stroke-width": 10, "stroke-linecap":"round"});
+
+  //Tres eslabones ACL sobre el arco
+  const estaciones = [
+    ["A", "Conciencia", "Notar qué siento frente a ti", 230, 114, acl.A, "#2f6f8f"],
+    ["C", "Coraje (CCR2)", "Arriesgarme a decirlo sin disfraz", 350, 92, acl.C, "#c26a4e"],
+    ["L", "Amor / Sintonía", "Recibir la respuesta sin huir", 470, 114, acl.L, "#3f9b86"]
+  ];
+
+  estaciones.forEach(([letra, nom, desc, cx, cy, on, col]) => {
+    g("circle", {cx, cy, r: on ? 22 : 16, fill: on ? col : "#ffffff", stroke: col, "stroke-width": 2.5});
+    txt(cx, cy + 5, letra, `font:700 14px system-ui;fill:${on ? "#ffffff" : col}`);
+    txt(cx, cy - 30, nom, `font:700 12px system-ui;fill:${on ? col : "#5a6a7d"}`);
+    txt(cx, cy + 38, desc, "font:11px system-ui;fill:#5a6a7d");
+  });
+
+  // Dos figuras acercándose a las orillas del puente
+  const f1x = acl.C ? 168 : 112;
+  const f2x = acl.L ? 532 : 578;
+  [[f1x, "#2f6f8f"], [f2x, "#3f9b86"]].forEach(([x, col]) => {
+    g("circle", {cx:x, cy:118, r:9, fill:col});
+    g("path", {d:`M ${x-10} 154 Q ${x} 128 ${x+10} 154 Z`, fill:col});
+  });
+}
+
+function refrescar(){
+  ["A", "C", "L"].forEach(k => $("btn" + k).classList.toggle("on", !!acl[k]));
+  dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const af = Kit.activas("afueraEvita");
+  if(af.length) l.push("AFUERA EN LOS VÍNCULOS: " + af.join(", "));
+  const ad = Kit.activas("adentroCCR1");
+  if(ad.length) l.push("AQUÍ EN LA SESIÓN (CCR1): " + ad.join(", "));
+  const c2 = Kit.activas("ensayoCCR2");
+  if(c2.length) l.push("PASO VALIENTE EN VIVO (CCR2): " + c2.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("afueraEvita", AFUERA, refrescar);
+Kit.chips("adentroCCR1", ADENTRO, refrescar);
+Kit.chips("ensayoCCR2", CCR2, refrescar);
+
+Kit.iniciar({
+  clave: "fap-dentro-y-fuera",
+  extra: () => ({acl}),
+  restaurar: d => { if(d.acl) acl = Object.assign(acl, d.acl); },
+  alCambiar: refrescar,
+  resumen: resumen
+});

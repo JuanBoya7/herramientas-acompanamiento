@@ -1,0 +1,266 @@
+@@meta
+archivo: dbt-abc-please.html
+titulo: Escudo ante la vulnerabilidad: ABC PLEASE
+orden: 08
+enfoque: DBT
+etiqueta: Regulación emocional
+lamina: si
+sub: Cuando el cuerpo está agotado, con hambre o sin descanso, y los días pasan sin momentos gratos ni sensación de avance, cualquier chispa dispara la mente emocional. Cuidar la base física (PLEASE) y sostener tres respaldos cotidianos (ABC) baja la sensibilidad al disparo antes de que llegue la tormenta.
+fuente: Reducir la vulnerabilidad a la mente emocional (ABC PLEASE), en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 9, fichas de regulación emocional 14 a 20.
+resumen: Revisa los cinco pilares de cuidado físico PLEASE, construye los tres respaldos ABC (experiencias positivas, competencia y anticiparse con plan) y muestra en el escudo de vulnerabilidad qué ladrillo proteger hoy.
+@@css
+  .please-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:9px;margin-bottom:12px}
+  .pilar{border:1px solid var(--linea);border-top:4px solid #b87a5f;border-radius:10px;padding:11px 13px;
+    background:#fffaf7;cursor:pointer;text-align:left;font:inherit;transition:all .15s}
+  .pilar:hover{border-color:var(--acento)}
+  .pilar.firme{border-top-color:#3f7d5a;background:#f4fbf7}
+  .pilar .est{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+    padding:2px 8px;border-radius:999px;background:#f7e4dc;color:#8a4a2c;margin-bottom:5px}
+  .pilar.firme .est{background:#dff0e6;color:#2c6645}
+  .pilar b{display:block;font-size:14px;color:var(--tinta);margin-bottom:2px}
+  .pilar span{display:block;font-size:12px;color:var(--tinta-suave);line-height:1.4}
+  .abc-cajas{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+  .abc-col{border:1px solid var(--linea);border-top:4px solid var(--acento);border-radius:10px;padding:12px 14px;background:#fbfcfd}
+  .abc-col h3{margin:0 0 3px;font-size:15px;color:var(--tinta)}
+  .abc-col p{margin:0 0 9px;font-size:12.5px;color:var(--tinta-suave);line-height:1.4}
+  .escudo-svg{display:block;width:100%;max-width:680px;height:auto;margin:0 auto}
+  @media (max-width:780px){.abc-cajas{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>PLEASE · Cómo está hoy la base del cuerpo</h2>
+  <p class="ayuda">Toca los pilares que hoy están atendidos. Los que queden abiertos muestran por dónde entra más fácil la reactividad emocional.</p>
+  <div class="cuerpo">
+    <div class="please-grid" id="gridPlease">
+      <button type="button" class="pilar" id="plSalud" onclick="togglePilar('salud')">
+        <span class="est" id="estSalud">Frágil hoy</span>
+        <b>PL · Salud y medicación</b>
+        <span>Atender malestares físicos, controles y tratamientos indicados.</span>
+      </button>
+      <button type="button" class="pilar" id="plComida" onclick="togglePilar('comida')">
+        <span class="est" id="estComida">Frágil hoy</span>
+        <b>E · Alimentación equilibrada</b>
+        <span>Comer a tiempo, sin saltarse comidas ni comer por desborde.</span>
+      </button>
+      <button type="button" class="pilar" id="plSustancias" onclick="togglePilar('sustancias')">
+        <span class="est" id="estSustancias">Frágil hoy</span>
+        <b>A · Libre de sustancias</b>
+        <span>Cuidarse del alcohol, exceso de cafeína o sustancias que alteran el ánimo.</span>
+      </button>
+      <button type="button" class="pilar" id="plSueno" onclick="togglePilar('sueno')">
+        <span class="est" id="estSueno">Frágil hoy</span>
+        <b>S · Sueño suficiente</b>
+        <span>Dormir las horas que el cuerpo necesita para regularse al día siguiente.</span>
+      </button>
+      <button type="button" class="pilar" id="plEjercicio" onclick="togglePilar('ejercicio')">
+        <span class="est" id="estEjercicio">Frágil hoy</span>
+        <b>E · Movimiento físico</b>
+        <span>Caminar o mover el cuerpo un rato para descargar tensión acumulada.</span>
+      </button>
+    </div>
+    <label class="etiqueta">¿Cuál eslabón del cuerpo te está dejando más expuesto hoy?</label>
+    <div class="chips" id="grietasPlease"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="escudo-svg" id="svgEscudo" viewBox="0 0 680 210" role="img"
+    aria-label="Escudo de vulnerabilidad emocional con ladrillos PLEASE y ABC"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mLadrillos" style="color:#2f6f8f">0 / 8</span><span class="r">respaldos activos hoy</span></div>
+    <div><span class="n" id="mSensibilidad" style="color:#b85a3e">Alta</span><span class="r">vulnerabilidad al disparo</span></div>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>ABC · Tres respaldos para el ánimo y los retos</h2>
+  <p class="ayuda">No hace falta hacer grandes cambios: un gesto en cada letra engrosa el colchón emocional del día.</p>
+  <div class="cuerpo">
+    <div class="abc-cajas">
+      <div class="abc-col" style="border-top-color:#3f9b86">
+        <h3>A · Acumular lo positivo</h3>
+        <p>Sumar momentos gratos hoy y pasos cortos hacia una vida en la que valga la pena estar.</p>
+        <div class="chips" id="abcA"></div>
+      </div>
+      <div class="abc-col" style="border-top-color:#5f77b8">
+        <h3>B · Construir competencia</h3>
+        <p>Hacer algo que implique un reto alcanzable para recuperar sensación de eficacia.</p>
+        <div class="chips" id="abcB"></div>
+      </div>
+      <div class="abc-col" style="border-top-color:#c9962f">
+        <h3>C · Anticiparse y ensayar</h3>
+        <p>Prever qué situación difícil viene pronto y ensayar con qué habilidad atravesarla.</p>
+        <div class="chips" id="abcC"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Cuál es el ladrillo más sencillo de tu cuidado diario que hoy haría más diferencia proteger?</div>
+  <div class="cuerpo">
+    <div class="chips" id="ladrilloElegido"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const GRIETAS = [
+  "Mal dormir o cansancio acumulado",
+  "Saltarme comidas o comer a destiempo",
+  "Exceso de café, alcohol o pantallas de noche",
+  "Dolor o malestar físico desatendido",
+  "Llevar días encerrado sin mover el cuerpo"
+];
+const ABC_A = [
+  "Un momento grato hoy sin multitarea",
+  "Un paso corto hacia algo que quiero construir a largo plazo",
+  "Reconocer algo pequeño que sí disfruté hoy"
+];
+const ABC_B = [
+  "Hacer hoy algo que me cueste un poco pero sí esté a mi alcance",
+  "Terminar un pendiente pequeño que venía postergando",
+  "Organizar una sola cosa práctica de mi entorno"
+];
+const ABC_C = [
+  "Nombrar la situación difícil que viene pronto",
+  "Decidir de antemano qué habilidad voy a usar ahí",
+  "Imaginarme atravesándola con calma en lugar de catastrofizar"
+];
+const LADRILLOS = [
+  "Acostarme a una hora digna hoy",
+  "Hacer una comida tranquila y completa",
+  "Caminar quince minutos al aire libre",
+  "Darme un rato grato sin culpa (A)",
+  "Cerrar un pendiente corto hoy (B)",
+  "Ensayar mi respuesta para la conversación que viene (C)"
+];
+
+let pilares = { salud:false, comida:false, sustancias:false, sueno:false, ejercicio:false };
+const MAPA_PILAR = [
+  ["salud", "plSalud", "estSalud", "Salud"],
+  ["comida", "plComida", "estComida", "Comida"],
+  ["sustancias", "plSustancias", "estSustancias", "Sustancias"],
+  ["sueno", "plSueno", "estSueno", "Sueño"],
+  ["ejercicio", "plEjercicio", "estEjercicio", "Movimiento"]
+];
+
+function togglePilar(k){
+  pilares[k] = !pilares[k];
+  refrescar();
+  Kit.guardar();
+}
+
+function dibujar(nPlease, hasA, hasB, hasC, total){
+  const svg = $("svgEscudo");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est, anc) => {
+    const e = g("text", {x, y, "text-anchor": anc || "middle", style: est});
+    e.textContent = s;
+    return e;
+  };
+
+  g("rect", {x:0, y:0, width:680, height:210, rx:10, fill:"#f7fafc"});
+
+  // Chispa externa a la izquierda
+  g("circle", {cx:78, cy:105, r:26, fill:"#fdf3ef", stroke:"#c26a4e", "stroke-width":2});
+  g("path", {d:"M 78 72 L 84 96 L 108 92 L 88 108 L 98 130 L 78 116 L 58 130 L 68 108 L 48 92 L 72 96 Z",
+    fill:"#c26a4e", opacity:0.85});
+  txt(78, 156, "Chispa del día", "font:700 11.5px system-ui;fill:#8a4a2c");
+
+  // Flechas desde la chispa hacia el escudo
+  g("line", {x1:115, y1:105, x2:218, y2:105, stroke:"#c26a4e", "stroke-width":3, "stroke-dasharray":"5 4"});
+
+  // Escudo central (8 ladrillos: 5 PLEASE + 3 ABC)
+  const items = [
+    ["PL · Salud", pilares.salud, "#3f7d5a"],
+    ["E · Comida", pilares.comida, "#3f7d5a"],
+    ["A · Sustancias", pilares.sustancias, "#3f7d5a"],
+    ["S · Sueño", pilares.sueno, "#3f7d5a"],
+    ["E · Cuerpo", pilares.ejercicio, "#3f7d5a"],
+    ["A · Positivo", hasA, "#3f9b86"],
+    ["B · Competencia", hasB, "#5f77b8"],
+    ["C · Ensayar", hasC, "#c9962f"]
+  ];
+
+  txt(330, 24, "ESCUDO ABC PLEASE", "font:700 12px system-ui;fill:#2f6f8f;letter-spacing:.7px");
+  items.forEach((it, i) => {
+    const col = i < 5 ? 0 : 1;
+    const row = i < 5 ? i : i - 5;
+    const x = col === 0 ? 232 : 342;
+    const y = col === 0 ? 36 + row * 31 : 48 + row * 42;
+    const h = col === 0 ? 26 : 34;
+    const on = it[1];
+    g("rect", {x, y, width:98, height:h, rx:6,
+      fill: on ? it[2] : "#ffffff",
+      "fill-opacity": on ? 0.88 : 0.7,
+      stroke: on ? it[2] : "#cbd6e2",
+      "stroke-width": on ? 2 : 1.5,
+      "stroke-dasharray": on ? "none" : "4 3"});
+    txt(x + 49, y + h/2 + 4, it[0], `font:700 11px system-ui;fill:${on ? "#ffffff" : "#7a8a99"}`);
+  });
+
+  // Línea base de reactividad a la derecha
+  const pisoY = 165 - (8 - total) * 13; // más alto cuando faltan ladrillos
+  const umbralY = 58;
+  g("rect", {x:485, y:36, width:165, height:146, rx:9, fill:"#ffffff", stroke:"#d9e1ea"});
+  g("line", {x1:498, y1:umbralY, x2:636, y2:umbralY, stroke:"#c26a4e", "stroke-width":1.5, "stroke-dasharray":"4 4"});
+  txt(567, umbralY - 6, "Umbral de desborde", "font:700 10.5px system-ui;fill:#c26a4e");
+
+  const colOnda = total >= 6 ? "#3f7d5a" : total >= 3 ? "#c9962f" : "#c26a4e";
+  const pico = Math.max(44, pisoY - (9 - total) * 5);
+  g("path", {d:`M 500 ${pisoY} Q 535 ${pisoY} 552 ${pico} Q 570 ${pisoY + 6} 634 ${pisoY}`,
+    fill:"none", stroke:colOnda, "stroke-width":3.2, "stroke-linecap":"round"});
+  txt(567, 174, total >= 5 ? "Base protegida: margen amplio" : "Base alta: cerca del disparo",
+    `font:600 11px system-ui;fill:${colOnda}`);
+}
+
+function refrescar(){
+  let nPlease = 0;
+  MAPA_PILAR.forEach(([k, idBtn, idEst]) => {
+    const on = !!pilares[k];
+    if(on) nPlease++;
+    $(idBtn).classList.toggle("firme", on);
+    $(idEst).textContent = on ? "Atendido hoy" : "Frágil hoy";
+  });
+  const hasA = Kit.activas("abcA").length > 0;
+  const hasB = Kit.activas("abcB").length > 0;
+  const hasC = Kit.activas("abcC").length > 0;
+  const total = nPlease + (hasA ? 1 : 0) + (hasB ? 1 : 0) + (hasC ? 1 : 0);
+
+  $("mLadrillos").textContent = `${total} / 8`;
+  $("mSensibilidad").textContent = total >= 6 ? "Baja" : total >= 3 ? "Media" : "Alta";
+  $("mSensibilidad").style.color = total >= 6 ? "#3f7d5a" : total >= 3 ? "#c9962f" : "#b85a3e";
+  dibujar(nPlease, hasA, hasB, hasC, total);
+}
+
+function resumen(){
+  const l = [];
+  const firmes = MAPA_PILAR.filter(x => pilares[x[0]]).map(x => x[3]);
+  const fragiles = MAPA_PILAR.filter(x => !pilares[x[0]]).map(x => x[3]);
+  l.push("PLEASE (pilares atendidos hoy): " + (firmes.join(", ") || "ninguno marcado"));
+  if(fragiles.length) l.push("PLEASE (por cuidar): " + fragiles.join(", "));
+  const gr = Kit.activas("grietasPlease");
+  if(gr.length) l.push("Eslabón más frágil hoy: " + gr.join(", "));
+  const a = Kit.activas("abcA"), b = Kit.activas("abcB"), c = Kit.activas("abcC");
+  if(a.length) l.push("A (Acumular experiencias positivas): " + a.join(", "));
+  if(b.length) l.push("B (Construir competencia): " + b.join(", "));
+  if(c.length) l.push("C (Anticiparse y ensayar): " + c.join(", "));
+  const el = Kit.activas("ladrilloElegido");
+  if(el.length) l.push("LADRILLO ELEGIDO PARA PROTEGER HOY: " + el.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("grietasPlease", GRIETAS, refrescar);
+Kit.chips("abcA", ABC_A, refrescar);
+Kit.chips("abcB", ABC_B, refrescar);
+Kit.chips("abcC", ABC_C, refrescar);
+Kit.chips("ladrilloElegido", LADRILLOS, refrescar);
+
+Kit.iniciar({
+  clave: "dbt-abc-please",
+  extra: () => ({pilares}),
+  restaurar: d => { if(d.pilares) pilares = Object.assign(pilares, d.pilares); },
+  alCambiar: refrescar,
+  resumen: resumen
+});

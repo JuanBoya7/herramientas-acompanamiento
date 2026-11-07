@@ -1,0 +1,163 @@
+@@meta
+archivo: rodbt-autoinvestigacion.html
+titulo: Mente fija, mente fatalista y autoinvestigación
+orden: 09
+enfoque: DBT
+etiqueta: Apertura radical (RO-DBT)
+lamina: si
+sub: Cuando el sobrecontrol toma el mando, la seguridad se busca teniendo siempre razón (mente fija) o apagándose antes de intentar nada (mente fatalista). La apertura radical no consiste en aprobar todo ni en culparse: consiste en activar seguridad social en el cuerpo y hacer una pregunta honesta en el propio borde para aprender.
+fuente: Apertura radical, mente fija frente a mente fatalista, el Gran Tres + 1 y autoinvestigación (Self-Enquiry), en Lynch, The Skills Training Manual for Radically Open Dialectical Behavior Therapy (2018), lecciones 1, 3 y 11.
+resumen: Identifica las señales de cierre, ubica la posición actual en el triángulo de RO-DBT (mente fija, fatalista o flexible), activa el Gran Tres + 1 en el cuerpo y elige una pregunta de autoinvestigación para sostener abierta.
+@@css
+  .ro-triangulo{display:block;width:100%;max-width:560px;height:auto;margin:10px auto 0}
+  .borde-nota{margin-top:12px;padding:11px 14px;border-radius:9px;background:#f4f9f8;border-left:4px solid #3f9b86;
+    font-size:13.5px;color:#23443c;line-height:1.45}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué señal avisa que me cerré</h2>
+  <p class="ayuda">La incomodidad, el juicio rápido o las ganas de desconectarse suelen anunciar que tocamos algo que vale la pena investigar.</p>
+  <div class="cuerpo">
+    <div class="chips" id="senalCierre"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>El triángulo de RO-DBT: ¿dónde estoy parado hoy?</h2>
+  <p class="ayuda">Tanto la mente fija como la fatalista evitan la incertidumbre de aprender. Elige desde cuál estás mirando esta situación.</p>
+  <div class="cuerpo">
+    <div id="estadoMente"></div>
+    <svg class="ro-triangulo" id="svgTriangulo" viewBox="0 0 560 225" role="img"
+      aria-label="Triángulo entre Mente fija, Mente fatalista y Mente flexible"></svg>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>Activar seguridad social (Gran Tres + 1) y encontrar el borde</h2>
+  <p class="ayuda">Antes de preguntarte nada, cambia la postura: cuando el cuerpo señaliza calma social, la mente deja de defenderse como si estuviera en peligro.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">El Gran Tres + 1 en el cuerpo ahora mismo</label>
+    <div class="chips" id="granTres"></div>
+    <label class="etiqueta" style="margin-top:14px">Preguntas de autoinvestigación (encontrar el borde sin resolverlo rápido)</label>
+    <div class="chips" id="preguntaBorde"></div>
+    <div class="borde-nota" id="lecturaBorde">
+      En autoinvestigación no buscamos una respuesta tranquilizadora inmediata: si aparece un «sí, pero…» automático, obsérvalo y vuelve a dejar abierta la pregunta.
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Qué pregunta te llevas hoy para sostener abierta, sin apurarte a contestarla con la cabeza?</div>
+  <div class="cuerpo">
+    <details class="apunte">
+      <summary>Escribir mi propia pregunta de autoinvestigación (opcional)</summary>
+      <input type="text" id="preguntaPropia" placeholder="Ej. ¿Qué estoy intentando controlar o no sentir cuando me pongo tan rígido aquí?">
+    </details>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const SENALES = [
+  "Tensión al sentir que alguien hace las cosas «mal»",
+  "Necesidad de tener razón o corregir",
+  "Callarme y poner cara neutra para que no noten lo que siento",
+  "Pensar «para qué explicarlo, nadie me entiende»"
+];
+
+const ESTADOS = [
+  ["Mente fija", "«Ya sé cómo son las cosas; el cambio es innecesario porque tengo razón»."],
+  ["Mente fatalista", "«El cambio es innecesario porque no hay respuesta ni salida; me rindo o me apago»."],
+  ["Mente flexible (Apertura radical)", "«Puedo dudar de mi primera certeza y preguntarme qué hay para aprender aquí»."]
+];
+
+const GRAN_TRES = [
+  "Recostarme en el respaldo de la silla",
+  "Exhalación lenta y profunda",
+  "Levantar ligeramente las cejas",
+  "Sonrisa suave de boca cerrada"
+];
+
+const PREGUNTAS_BORDE = [
+  "«¿Qué estoy intentando defender o no sentir en este momento?»",
+  "«¿Es posible que mi regla me esté alejando de quien quiero tener cerca?»",
+  "«¿Qué podría aprender si me abro a estar equivocado aquí?»",
+  "«¿Estoy buscando tener razón o estoy buscando cercanía?»"
+];
+
+function dibujar(){
+  const svg = $("svgTriangulo");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est, anc) => {
+    const e = g("text", {x, y, "text-anchor": anc || "middle", style: est});
+    e.textContent = s;
+    return e;
+  };
+
+  const act = Kit.activas("estadoMente")[0] || "";
+  const esFija = act.indexOf("Mente fija") === 0;
+  const esFatal = act.indexOf("Mente fatalista") === 0;
+  const esFlex = act.indexOf("Mente flexible") === 0;
+  const nG3 = Kit.activas("granTres").length;
+
+  g("rect", {x:0, y:0, width:560, height:225, rx:10, fill:"#f7fafc"});
+
+  // Triángulo: arriba Mente flexible (280, 42), izq Mente fija (115, 178), der Mente fatalista (445, 178)
+  g("polygon", {points:"280,44 115,176 445,176", fill:"#eef4f8", stroke:"#b8c9d8", "stroke-width":2});
+
+  const nodos = [
+    ["Mente fija", "Rigidez · «Tengo razón»", 115, 176, esFija, "#c26a4e"],
+    ["Mente fatalista", "Apagón · «Para qué»", 445, 176, esFatal, "#7a6a9c"],
+    ["Mente flexible", "Apertura radical + Gran Tres+1", 280, 44, esFlex, "#3f9b86"]
+  ];
+
+  nodos.forEach(([tit, sub, cx, cy, on, col]) => {
+    g("circle", {cx, cy, r: on ? 26 : 18, fill: on ? col : "#ffffff",
+      "fill-opacity": on ? 0.18 : 1, stroke: col, "stroke-width": on ? 3 : 2});
+    g("circle", {cx, cy, r: 7, fill: col});
+    const ty = cy < 100 ? cy - 22 : cy + 30;
+    txt(cx, ty, tit, `font:700 12.5px system-ui;fill:${col}`);
+    txt(cx, ty + 14, sub, "font:11px system-ui;fill:#5a6a7d");
+  });
+
+  if(nG3 > 0){
+    txt(280, 128, `Gran Tres + 1 activo (${nG3}/4)`, "font:700 11.5px system-ui;fill:#3f9b86");
+  } else {
+    txt(280, 128, "Toca un vértice y activa el cuerpo", "font:11.5px system-ui;fill:#7b8c9d");
+  }
+}
+
+function refrescar(){
+  dibujar();
+  const pb = Kit.activas("preguntaBorde");
+  const pp = $("preguntaPropia").value.trim();
+  const elegida = pp || pb[0] || "";
+  $("lecturaBorde").innerHTML = elegida
+    ? `<b>Pregunta abierta en el borde:</b> ${Kit.escapar(elegida)} — Sostenla unos segundos con la espalda apoyada en el respaldo y las cejas sueltas, sin apurarte a defenderte.`
+    : `En autoinvestigación no buscamos una respuesta tranquilizadora inmediata: si aparece un «sí, pero…» automático, obsérvalo y vuelve a dejar abierta la pregunta.`;
+}
+
+function resumen(){
+  const l = [];
+  const sc = Kit.activas("senalCierre");
+  if(sc.length) l.push("SEÑAL DE CIERRE: " + sc.join(", "));
+  const em = Kit.activas("estadoMente");
+  if(em.length) l.push("POSICIÓN EN EL TRIÁNGULO RO-DBT: " + em.join(", "));
+  const g3 = Kit.activas("granTres");
+  if(g3.length) l.push("GRAN TRES + 1 ACTIVADO: " + g3.join(", "));
+  const pb = Kit.activas("preguntaBorde"), pp = $("preguntaPropia").value.trim();
+  if(pb.length || pp) l.push("PREGUNTA DE AUTOINVESTIGACIÓN: " + pb.concat(pp ? [pp] : []).join(" · "));
+  return l.join("\n");
+}
+
+Kit.chips("senalCierre", SENALES, refrescar);
+Kit.opciones("estadoMente", ESTADOS, refrescar, true);
+Kit.chips("granTres", GRAN_TRES, refrescar);
+Kit.chips("preguntaBorde", PREGUNTAS_BORDE, refrescar);
+$("preguntaPropia").addEventListener("input", refrescar);
+
+Kit.iniciar({
+  clave: "rodbt-autoinvestigacion",
+  alCambiar: refrescar,
+  resumen: resumen
+});

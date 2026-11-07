@@ -1,0 +1,128 @@
+@@meta
+archivo: tcc-dosificar-energia.html
+titulo: Dosificar la energía: salir del sobrecarga-colapso
+orden: 20
+enfoque: Cognitivo-conductual
+etiqueta: Dolor y fatiga
+sub: En el dolor crónico y la fatiga es muy común aprovechar un «día bueno» para hacer todo de golpe hasta que el cuerpo colapsa varios días en cama. Dosificar el paso consiste en parar por una cuota amable antes de que el agotamiento obligue a parar.
+fuente: Regulación del ritmo de actividad (Activity Pacing) frente al ciclo sobrecarga-colapso en dolor crónico y fatiga, en Thorn, Cognitive Therapy for Chronic Pain (2017); Safren, Gonzalez y Soroudi, CBT for Chronic Illness and Disability (2007).
+resumen: Comparación interactiva entre la montaña rusa del ciclo sobrecarga-colapso y la curva constante de actividad dosificada por cuota y pausa a tiempo.
+@@css
+  .pacing-svg{display:block;width:100%;height:auto}
+@@html
+<div class="escenario">
+  <svg class="pacing-svg" id="svgPacing" viewBox="0 0 700 240" role="img"
+    aria-label="Comparación entre la curva de sobrecarga-colapso y la actividad dosificada con pausas a tiempo"></svg>
+  <div class="mandos">
+    <button type="button" id="btnCicloColapso" class="principal" onclick="fijarCurva('colapso')">Guiarme por cuánto duele hoy (Sobrecarga-colapso)</button>
+    <button type="button" id="btnCicloPacing" onclick="fijarCurva('pacing')">Guiarme por cuota y pausar a tiempo (Paso constante)</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Cómo funciona hoy la trampa del «día bueno»</h2>
+  <p class="ayuda">Cuando el dolor o el agotamiento son los únicos que deciden cuándo parar, la montaña rusa se perpetúa sola.</p>
+  <div class="cuerpo">
+    <div class="chips" id="trampaDiaBueno"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Armar una cuota realista (parar antes del límite)</h2>
+  <p class="ayuda">Se elige una actividad cotidiana y una regla de pausa que no espere al derrumbe.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">En qué actividad voy a practicar la cuota</label>
+    <div class="chips" id="actividadCuota"></div>
+    <label class="etiqueta">Cómo voy a pausar a tiempo</label>
+    <div class="chips" id="reglaPausa"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Qué es lo que más te cuesta de parar a descansar cinco minutos cuando todavía sientes que «podrías aguantar un poco más»?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const TRAMPA = [
+  "Cuando amanezco mejor, intento recuperar todo lo atrasado de golpe",
+  "Sigo haciendo hasta que el dolor o el agotamiento me obligan a parar",
+  "Después paso uno o varios días sin poder levantarme",
+  "Me culpo en el bajón y vuelvo a exigirme de más en cuanto mejoro"
+];
+const ACTIVIDAD = [
+  "Tareas de la casa o trámites",
+  "Trabajo frente a la pantalla o lectura",
+  "Caminata o movimiento físico suave",
+  "Encuentro o conversación social"
+];
+const PAUSA = [
+  "Parar a descansar a los 20 minutos aunque todavía me sienta con cuerda",
+  "Dividir la actividad en dos tramos cortos con pausa en medio",
+  "Cambiar de postura antes de que empiece el pico de dolor"
+];
+
+let curva = "colapso";
+
+function fijarCurva(nueva){
+  curva = nueva;
+  $("btnCicloColapso").classList.toggle("principal", curva === "colapso");
+  $("btnCicloPacing").classList.toggle("principal", curva === "pacing");
+  dibujar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgPacing");
+  svg.innerHTML = "";
+  const esPacing = curva === "pacing";
+
+  svg.appendChild(Kit.svg("rect", {x:10, y:10, width:680, height:220, rx:12, fill:"#f9fbfd", stroke:"#dde6ee"}));
+  /* Línea de umbral de agotamiento */
+  svg.appendChild(Kit.svg("line", {x1:30, y1:58, x2:670, y2:58, stroke:"#c26a4e", "stroke-width":1.5, "stroke-dasharray":"5 5"}));
+  const tUmb = Kit.svg("text", {x:664, y:49, "text-anchor":"end", "font-size":11, "font-weight":700, fill:"#c26a4e"});
+  tUmb.textContent = "Umbral de sobrecarga / disparo de dolor";
+  svg.appendChild(tUmb);
+
+  /* Curva roja (Sobrecarga-colapso) */
+  svg.appendChild(Kit.svg("path", {
+    d:"M 40 165 L 130 28 L 195 204 L 300 204 L 385 32 L 450 206 L 570 206 L 650 185",
+    fill:"none", stroke:"#c26a4e", "stroke-width":esPacing ? 1.8 : 3.6,
+    opacity:esPacing ? 0.35 : 1
+  }));
+
+  /* Curva verde (Paso constante con pausas antes del umbral) */
+  svg.appendChild(Kit.svg("path", {
+    d:"M 40 160 Q 95 92 140 135 Q 190 88 240 132 Q 295 85 350 128 Q 410 82 465 125 Q 530 80 590 122 L 655 96",
+    fill:"none", stroke:"#3f9b86", "stroke-width":esPacing ? 3.8 : 1.8,
+    opacity:esPacing ? 1 : 0.4
+  }));
+
+  const rot = Kit.svg("text", {x:42, y:218, "font-size":12.5, "font-weight":700, fill:esPacing ? "#256656" : "#8a3526"});
+  rot.textContent = esPacing
+    ? "Paso constante: pausas programadas antes del pico → más actividad acumulada sin derrumbes"
+    : "Montaña rusa: hacer de más en el día bueno → colapso prolongado y menos capacidad semana a semana";
+  svg.appendChild(rot);
+}
+
+function resumen(){
+  const l = [];
+  const t = Kit.activas("trampaDiaBueno"), a = Kit.activas("actividadCuota"), p = Kit.activas("reglaPausa");
+  if(t.length) l.push("Ciclo sobrecarga-colapso identificado: " + t.join(", "));
+  if(a.length) l.push("Actividad para dosificar: " + a.join(", "));
+  if(p.length) l.push("Regla de pausa acordada: " + p.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("trampaDiaBueno", TRAMPA, dibujar);
+Kit.chips("actividadCuota", ACTIVIDAD, dibujar);
+Kit.chips("reglaPausa", PAUSA, dibujar);
+dibujar();
+
+Kit.iniciar({
+  clave: "tcc-dosificar-energia",
+  extra: () => ({curva}),
+  restaurar: d => { curva = (d && d.curva) || "colapso"; fijarCurva(curva); },
+  alCambiar: dibujar,
+  resumen: resumen
+});

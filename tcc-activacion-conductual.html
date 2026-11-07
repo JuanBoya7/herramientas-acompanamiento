@@ -16,12 +16,13 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--fondo);color:var(--tinta);
     font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
-  .envoltura{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+  .envoltura{max-width:1360px;margin:0 auto;padding:24px 22px 44px}
 
   /* ---------- cabecera ---------- */
   header.tapa,section.bloque,section.paso{background:var(--papel);border:1px solid var(--linea);
     border-radius:var(--radio);padding:20px 24px;margin-bottom:16px}
-  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px}
+  h1,h2,h3{overflow-wrap:break-word;word-break:normal}
+  h1{margin:0 0 6px;font-size:25px;letter-spacing:-.2px;line-height:1.25}
   .sub{margin:0;color:var(--tinta-suave);font-size:14.5px;max-width:74ch}
   .fuente{margin:10px 0 0;font-size:12.5px;color:var(--tinta-suave);font-style:italic}
   .campos-id{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
@@ -32,8 +33,8 @@
   .campos-id input:focus{outline:2px solid var(--acento-claro);border-color:var(--acento)}
 
   /* ---------- pasos y bloques ---------- */
-  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;display:flex;
-    align-items:center;gap:11px}
+  section.paso h2,section.bloque h2{margin:0 0 4px;font-size:18px;line-height:1.3;display:flex;
+    align-items:center;flex-wrap:wrap;gap:10px}
   .num{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
     width:27px;height:27px;border-radius:50%;background:var(--acento-claro);
     color:var(--acento);font-size:14px;font-weight:700}
@@ -223,7 +224,7 @@
      Menos texto por bloque, letra más grande y todo en fichas del mismo
      tamaño, para que se lea proyectado y no parezca un formulario. */
   body.lamina{font-size:17px}
-  body.lamina .envoltura{max-width:1080px}
+  body.lamina .envoltura{max-width:1280px}
   body.lamina h1{font-size:28px}
   body.lamina .sub{font-size:15.5px;max-width:70ch}
   body.lamina section.paso h2,body.lamina section.bloque h2{font-size:21px}
@@ -299,6 +300,12 @@
     .envoltura{padding:0;max-width:100%}
     textarea{min-height:0;height:auto}
   }
+
+  /* ---------- proteccion ante zoom y texto ampliado ---------- */
+  .opcion,.pieza,.ficha-l,.mini,.combi,.ranura,.lectura{min-width:0;overflow-wrap:break-word}
+  .opcion b,.pieza b,.ficha-l .t,.ranura .puesto b,.lectura .nombre,.combi .cual b,.mini b{
+    overflow-wrap:break-word;line-height:1.3}
+  .chip{white-space:normal;text-align:left;line-height:1.35;overflow-wrap:break-word}
 
   .panel-mapa{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
     padding:16px 14px 10px;margin-bottom:16px}
@@ -1531,10 +1538,10 @@ Kit.iniciar({
 .ih-boton{position:fixed;bottom:14px;right:14px;z-index:40;font:inherit;font-size:13.5px;font-weight:600;
   padding:8px 14px;border-radius:999px;border:1px solid var(--acento,#2f6f8f);background:#fff;
   color:var(--acento,#2f6f8f);box-shadow:0 3px 10px rgba(0,0,0,.15);cursor:pointer}
-.ih-panel{position:fixed;top:0;left:0;bottom:0;width:min(86vw,300px);box-sizing:border-box;
-  background:var(--papel,#fff);border-right:1px solid var(--linea,#dde);z-index:60;overflow-y:auto;
-  overscroll-behavior:contain;padding:16px 16px 40px;transform:translateX(-105%);
-  transition:transform .2s;box-shadow:6px 0 24px rgba(0,0,0,.2);font-size:14px}
+.ih-panel{position:fixed;top:0;right:0;bottom:0;width:min(86vw,300px);box-sizing:border-box;
+  background:var(--papel,#fff);border-left:1px solid var(--linea,#dde);z-index:60;overflow-y:auto;
+  overscroll-behavior:contain;padding:16px 16px 40px;transform:translateX(105%);
+  transition:transform .2s;box-shadow:-6px 0 24px rgba(0,0,0,.2);font-size:14px}
 body.ih-abierto .ih-panel{transform:none}
 .ih-velo{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
 .ih-velo[hidden]{display:none}
@@ -1542,24 +1549,24 @@ body.ih-abierto .ih-panel{transform:none}
   border:1px solid var(--linea,#dde);border-radius:8px;padding:5px 12px;color:var(--tinta-suave,#667);cursor:pointer}
 .ih-panel .ih-top{display:block;font-weight:700;color:var(--acento,#2f6f8f);text-decoration:none;margin:2px 0 4px}
 .ih-panel .ih-g{margin-top:14px}
-.ih-panel .ih-g > b{display:block;font-size:13.5px;color:var(--tinta,#223);margin-bottom:4px}
+.ih-panel .ih-g > b{display:block;font-size:13.5px;color:var(--tinta,#223);margin-bottom:4px;overflow-wrap:break-word}
 .ih-panel ul{list-style:none;margin:0;padding:0 0 0 10px;border-left:2px solid var(--linea,#dde)}
 .ih-panel li.ih-sub{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
   color:var(--tinta-suave,#667);margin:8px 0 2px 4px}
 .ih-panel li a{display:block;font-size:13px;line-height:1.35;color:var(--tinta-suave,#667);text-decoration:none;
-  padding:4px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent}
+  padding:4px 8px;border-radius:6px;margin-left:-2px;border-left:2px solid transparent;overflow-wrap:break-word}
 .ih-panel li a:hover{color:var(--acento,#2f6f8f);background:var(--acento-claro,#eef5f8)}
 .ih-panel li a.actual{color:var(--acento,#2f6f8f);border-left-color:var(--acento,#2f6f8f);
   background:var(--acento-claro,#eef5f8);font-weight:600}
 @media (min-width:1500px){
   .ih-boton,.ih-cerrar,.ih-velo{display:none !important}
-  .ih-panel{transform:none;box-shadow:none;width:260px;padding-top:22px}
-  body{padding-left:260px;box-sizing:border-box}
+  .ih-panel{transform:none;box-shadow:none;width:270px;padding-top:22px}
+  body{padding-right:270px;box-sizing:border-box}
 }
 @media print{.ih-boton,.ih-panel,.ih-velo{display:none !important}}
 </style>
 <button type="button" class="ih-boton" id="ih-boton">&#9776; Hojas</button>
-<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>ACT</b><ul><li class="ih-sub">Flexibilidad y matriz</li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-matriz.html">La matriz</a></li><li class="ih-sub">Aceptación</li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="act-empujar-el-papel.html">Empujar el papel</a></li><li class="ih-sub">Defusión</li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li class="ih-sub">Momento presente</li><li><a href="act-los-ganchos.html">Los ganchos</a></li><li class="ih-sub">Yo como contexto</li><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="act-el-cielo-y-el-clima.html">El cielo y el clima</a></li><li><a href="act-quien-lleva-los-globos.html">Quién lleva los globos</a></li><li class="ih-sub">Valores</li><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li class="ih-sub">Acción comprometida</li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li class="ih-sub">Formulación funcional y motivación</li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li><li><a href="tcc-balance-decisional.html">Balance decisional</a></li><li class="ih-sub">Pensamientos, creencias y preocupación</li><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-aplazar-la-preocupacion.html">Aplazar la preocupación</a></li><li class="ih-sub">Exposición y activación conductual</li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html" class="actual" aria-current="page">Activación conductual</a></li><li class="ih-sub">Afrontamiento, autorregulación y hábitos</li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-inoculacion-de-estres.html">Inoculación de estrés</a></li><li><a href="tcc-lista-abc.html">Lista de tareas A-B-C</a></li><li><a href="tcc-ventana-de-sueno.html">Ventana de sueño</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li class="ih-sub">Análisis conductual y seguimiento</li><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li><li class="ih-sub">Módulos de habilidades</li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li class="ih-sub">Sistema de calma y atención al presente</li><li><a href="cft-ritmo-tranquilizador.html">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li><li class="ih-sub">Autocompasión y trabajo con la autocrítica</li><li><a href="cft-pausa-de-autocompasion.html">Pausa de autocompasión</a></li><li><a href="cft-el-yo-compasivo.html">El yo compasivo</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li><li><a href="pp-tres-cosas-buenas.html">Tres cosas buenas y mi mejor versión</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li><li><a href="crisis-importancia-y-confianza.html">Importancia y confianza</a></li></ul></div></nav>
+<nav class="ih-panel" aria-label="Índice de hojas"><button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button><a class="ih-top" href="index.html">&larr; Todas las hojas</a><a class="ih-top" href="guia.html">Guía rápida de uso</a><div class="ih-g"><b>ACT</b><ul><li class="ih-sub">Flexibilidad y matriz</li><li><a href="act-por-donde-entrar.html">Por dónde entrar</a></li><li><a href="act-matriz.html">La matriz</a></li><li><a href="act-camino-de-vida.html">El camino de vida y el giro</a></li><li class="ih-sub">Aceptación</li><li><a href="met-el-hoyo.html">El hombre en el hoyo</a></li><li><a href="act-costo-de-la-lucha.html">El costo de la lucha</a></li><li><a href="met-el-poligrafo.html">El polígrafo</a></li><li><a href="met-la-cuerda.html">La cuerda y el monstruo</a></li><li><a href="act-empujar-el-papel.html">Empujar el papel</a></li><li><a href="met-el-interruptor.html">El interruptor de la lucha</a></li><li><a href="met-las-dos-caras.html">Las dos caras de la moneda</a></li><li class="ih-sub">Defusión</li><li><a href="act-soltar-el-anzuelo.html">Soltar el anzuelo</a></li><li><a href="met-la-palabra-repetida.html">La palabra repetida</a></li><li><a href="met-hojas-en-el-arroyo.html">Hojas en el arroyo</a></li><li><a href="met-las-manos.html">Las manos como pensamientos</a></li><li class="ih-sub">Momento presente</li><li><a href="act-los-ganchos.html">Los ganchos</a></li><li><a href="act-echar-el-ancla.html">Echar el ancla</a></li><li><a href="fap-dentro-y-fuera.html">Fuera y dentro de sesión: el puente interpersonal</a></li><li class="ih-sub">Yo como contexto</li><li><a href="met-el-tablero.html">El tablero</a></li><li><a href="act-el-cielo-y-el-clima.html">El cielo y el clima</a></li><li><a href="act-quien-lleva-los-globos.html">Quién lleva los globos</a></li><li><a href="met-el-escenario.html">El escenario y el reflector</a></li><li class="ih-sub">Valores</li><li><a href="act-brujula-de-valores.html">La brújula de valores</a></li><li><a href="met-jardin-de-valores.html">El jardín de valores</a></li><li><a href="met-los-ochenta-anos.html">Los ochenta años</a></li><li class="ih-sub">Acción comprometida</li><li><a href="met-la-radio.html">La radio que no se apaga</a></li><li><a href="met-el-bus.html">El bus y los pasajeros</a></li><li><a href="act-fear-a-dare.html">De FEAR a DARE</a></li><li><a href="act-perfeccionismo.html">Reglas irrompibles y metas de persona viva</a></li></ul></div><div class="ih-g"><b>Cognitivo-conductual</b><ul><li class="ih-sub">Formulación funcional, modos y motivación</li><li><a href="tcc-analisis-funcional.html">Análisis funcional</a></li><li><a href="tcc-balance-decisional.html">Balance decisional</a></li><li><a href="esq-mapa-de-modos.html">Mapa de modos en escena</a></li><li><a href="tcc-arco-emocional.html">El arco emocional y la acción alternativa</a></li><li class="ih-sub">Pensamientos, creencias, autoevaluación e incertidumbre</li><li><a href="registro-de-pensamientos.html">Registro de pensamientos</a></li><li><a href="tcc-flecha-descendente.html">La flecha descendente</a></li><li><a href="tcc-aplazar-la-preocupacion.html">Aplazar la preocupación</a></li><li><a href="tcc-intolerancia-incertidumbre.html">El árbol de la preocupación y la incertidumbre</a></li><li><a href="tcc-pastel-autoevaluacion.html">El pastel de la autoevaluación</a></li><li class="ih-sub">Exposición, experimentos y activación conductual</li><li><a href="tcc-escalera-de-exposicion.html">La escalera de exposición</a></li><li><a href="tcc-activacion-conductual.html" class="actual" aria-current="page">Activación conductual</a></li><li><a href="tcc-experimento-conductual.html">El experimento conductual</a></li><li><a href="tcc-exposicion-interoceptiva.html">Exposición a las sensaciones físicas</a></li><li><a href="tcc-trap-a-trac.html">Salir de la trampa: de TRAP a TRAC</a></li><li class="ih-sub">Afrontamiento, autorregulación, ira y hábitos</li><li><a href="tcc-solucion-de-problemas.html">Solución de problemas</a></li><li><a href="tcc-autoinstrucciones.html">Autoinstrucciones</a></li><li><a href="tcc-inoculacion-de-estres.html">Inoculación de estrés</a></li><li><a href="tcc-lista-abc.html">Lista de tareas A-B-C</a></li><li><a href="tcc-ventana-de-sueno.html">Ventana de sueño</a></li><li><a href="tcc-episodio-de-ira.html">Anatomía del episodio de ira</a></li><li><a href="tcc-dosificar-energia.html">Dosificar la energía: salir del sobrecarga-colapso</a></li></ul></div><div class="ih-g"><b>DBT</b><ul><li class="ih-sub">Análisis conductual y seguimiento</li><li><a href="dbt-analisis-en-cadena.html">Análisis en cadena</a></li><li><a href="dbt-tarjeta-diaria.html">Tarjeta diaria</a></li><li class="ih-sub">Módulos de habilidades y apertura radical</li><li><a href="dbt-mente-sabia.html">Mente sabia</a></li><li><a href="dbt-tarjeta-de-crisis.html">Tarjeta de crisis</a></li><li><a href="dbt-verificar-los-hechos.html">Verificar los hechos y acción opuesta</a></li><li><a href="dbt-pedir-y-decir-no.html">Pedir y decir que no</a></li><li><a href="dbt-aceptacion-radical.html">Aceptación radical y girar la mente</a></li><li><a href="dbt-abc-please.html">Escudo ante la vulnerabilidad: ABC PLEASE</a></li><li><a href="rodbt-autoinvestigacion.html">Mente fija, mente fatalista y autoinvestigación</a></li></ul></div><div class="ih-g"><b>Compasión y mindfulness</b><ul><li class="ih-sub">Tres sistemas emocionales, calma y atención al presente</li><li><a href="cft-ritmo-tranquilizador.html">Respiración de ritmo tranquilizador</a></li><li><a href="cft-espacio-de-respiracion.html">Espacio de respiración de tres minutos</a></li><li><a href="cft-tres-circulos.html">Los tres círculos de regulación emocional</a></li><li class="ih-sub">Autocompasión y trabajo con el crítico interno</li><li><a href="cft-pausa-de-autocompasion.html">Pausa de autocompasión</a></li><li><a href="cft-el-yo-compasivo.html">El yo compasivo</a></li><li><a href="cft-voces-y-critico.html">El crítico interno y las voces ante el tropiezo</a></li></ul></div><div class="ih-g"><b>Vínculos y pareja</b><ul><li><a href="par-el-baile-de-pareja.html">El baile negativo y el iceberg del vínculo</a></li><li><a href="par-tener-razon-o-cuidar.html">Tener razón o cuidar el vínculo: frente al «ESO»</a></li></ul></div><div class="ih-g"><b>Psicología positiva</b><ul><li><a href="flor-permah.html">Mi flor PERMAH</a></li><li><a href="fortalezas-del-caracter.html">Mis fortalezas del carácter</a></li><li><a href="pp-tres-cosas-buenas.html">Tres cosas buenas y mi mejor versión</a></li><li><a href="pp-afecto-positivo.html">Saborear, hilo de luz y dar</a></li><li><a href="pp-cuatro-fuentes-sentido.html">Las cuatro fuentes de sentido y el legado</a></li><li><a href="pp-perdon-reach.html">Soltar el rencor: los cinco pasos REACH</a></li></ul></div><div class="ih-g"><b>Crisis y consumo</b><ul><li><a href="crisis-plan-de-seguridad.html">Plan de seguridad</a></li><li><a href="crisis-surfear-el-impulso.html">Surfear el impulso</a></li><li><a href="crisis-importancia-y-confianza.html">Importancia y confianza</a></li></ul></div></nav>
 <div class="ih-velo" id="ih-velo" hidden></div>
 <script>
 (function(){

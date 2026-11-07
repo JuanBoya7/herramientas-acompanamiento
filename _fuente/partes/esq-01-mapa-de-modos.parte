@@ -1,0 +1,230 @@
+@@meta
+archivo: esq-mapa-de-modos.html
+titulo: Mapa de modos en escena
+orden: 12
+enfoque: Cognitivo-conductual
+etiqueta: Terapia de esquemas
+sub: Cuando algo toca una herida antigua, no respondemos como una sola pieza: se encienden voces duras aprendidas, duele una parte vulnerable, se levanta un muro protector y queda esperando el adulto sano que puede cuidar y poner límite.
+fuente: Conceptualización y trabajo con el modelo de modos de esquema, en Arntz y Jacob, Schema Therapy in Practice (2013), caps. 1 y 2; Young, Klosko y Weishaar, Terapia de esquemas: Guía práctica (2015), caps. 1 y 8.
+resumen: Un lienzo interactivo con las cuatro familias de modos (voces parentales, niño vulnerable o enfadado, modos de afrontamiento y adulto sano) para ver quién tomó el volante hoy y cómo responder desde el cuidado firme.
+@@css
+  .mapa-modos{display:block;width:100%;height:auto}
+  .modos-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+  .modos-bar button{font-size:13px;padding:7px 14px;border-radius:999px;font-weight:600}
+  .modos-bar button.activo{background:var(--acento);border-color:var(--acento);color:#fff}
+  .rejilla-modos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+  .caja-modo{border:1px solid var(--linea);border-top-width:4px;border-radius:10px;padding:12px 14px;background:#fdfefe}
+  .caja-modo h3{margin:0 0 4px;font-size:15px}
+  .caja-modo p{margin:0 0 9px;font-size:12.5px;color:var(--tinta-suave);line-height:1.4}
+@@html
+<div class="escenario">
+  <svg class="mapa-modos" id="svgModos" viewBox="0 0 720 270" role="img"
+    aria-label="Mapa de modos de esquema: voces exigentes o punitivas, modos niño, muro de afrontamiento y adulto sano"></svg>
+  <div class="modos-bar" id="barModos">
+    <button type="button" class="activo" data-foco="ciclo" onclick="fijarFoco('ciclo')">Ver el choque y el muro protector</button>
+    <button type="button" data-foco="adulto" onclick="fijarFoco('adulto')">Intervención del Adulto sano</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Qué se encendió en la situación reciente</h2>
+  <p class="ayuda">Marca lo que reconoces en cada rincón del mapa. El muro del medio casi siempre intenta proteger al niño de abajo de la voz dura de arriba.</p>
+  <div class="cuerpo">
+    <div class="rejilla-modos">
+      <div class="caja-modo" style="border-top-color:#b0503f">
+        <h3>1 · Voz exigente o punitiva</h3>
+        <p>Presiona, culpa o descalifica desde arriba.</p>
+        <div class="chips" id="modoParental"></div>
+      </div>
+      <div class="caja-modo" style="border-top-color:#5f77b8">
+        <h3>2 · Parte niño y su necesidad</h3>
+        <p>Lo que sintió por debajo y lo que necesitaba.</p>
+        <div class="chips" id="modoNino"></div>
+      </div>
+      <div class="caja-modo" style="border-top-color:#c9962f">
+        <h3>3 · Muro de afrontamiento</h3>
+        <p>Cómo intentó sobrevivir o tapar el dolor.</p>
+        <div class="chips" id="modoAfronta"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>La entrada del Adulto sano</h2>
+  <p class="ayuda">El adulto sano hace tres movimientos: frena el maltrato de la voz punitiva, agradece al protector sin dejarlo al volante y atiende la necesidad del niño.</p>
+  <div class="cuerpo">
+    <div class="chips" id="adultoSano"></div>
+    <div id="lecturaModos"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Detrás del muro del protector desconectado o de la autoexigencia, ¿qué está necesitando hoy esa parte vulnerable tuya?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const PARENTAL = [
+  "Voz punitiva («fue tu culpa, no vales»)",
+  "Voz exigente («tienes que poder con todo sin fallar»)",
+  "«No deberías necesitar a nadie»",
+  "«Si muestras debilidad te van a rechazar»"
+];
+const NINO = [
+  "Niño vulnerable (miedo a quedar solo o rechazado)",
+  "Niño enfadado (rabia por trato injusto)",
+  "Necesidad de seguridad, afecto o validación",
+  "Necesidad de descanso y de que me escuchen"
+];
+const AFRONTA = [
+  "Protector desconectado (apagarme, enfriarme, distraerme)",
+  "Rendido sumiso (callar, ceder y disculparme)",
+  "Sobrecompensador (controlar todo o ponerme duro)"
+];
+const ADULTO = [
+  "Ponerle freno a la voz punitiva sin discutir con ella",
+  "Reconocer que la parte vulnerable tiene derecho a necesitar apoyo",
+  "Agradecerle al protector desconectado pero pedirle dar un paso de contacto hoy",
+  "Pedir con calma lo que necesito sin atacar ni esconderme"
+];
+
+let foco = "ciclo";
+
+function fijarFoco(nuevo){
+  foco = nuevo;
+  $("barModos").querySelectorAll("button").forEach(b =>
+    b.classList.toggle("activo", b.dataset.foco === foco));
+  dibujar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgModos");
+  svg.innerHTML = "";
+  const f = Kit.acuarela(svg);
+  const pAct = Kit.activas("modoParental");
+  const nAct = Kit.activas("modoNino");
+  const aAct = Kit.activas("modoAfronta");
+  const sAct = Kit.activas("adultoSano");
+
+  /* Fondo suave */
+  svg.appendChild(Kit.svg("rect", {x:6, y:6, width:708, height:258, rx:14, fill:"#f9fbfd", stroke:"#dde6ee"}));
+
+  /* 1. Parental (arriba izq) */
+  const gPar = Kit.svg("g", {});
+  gPar.appendChild(Kit.svg("rect", {x:22, y:20, width:205, height:92, rx:12,
+    fill:foco === "adulto" ? "#f7f2f0" : "#fdf1ee", stroke:"#b0503f", "stroke-width":foco === "adulto" ? 1.4 : 2.2,
+    opacity:foco === "adulto" ? 0.65 : 1, filter:f}));
+  const t1 = Kit.svg("text", {x:36, y:44, "font-size":13, "font-weight":700, fill:"#8a3526"});
+  t1.textContent = "1 · Voz exigente / punitiva";
+  gPar.appendChild(t1);
+  const s1 = Kit.svg("text", {x:36, y:64, "font-size":11.5, fill:"#5a6a7d"});
+  s1.textContent = (pAct[0] || "Presiona o ataca desde arriba").slice(0, 31);
+  gPar.appendChild(s1);
+  if(foco === "adulto"){
+    const lim = Kit.svg("text", {x:36, y:92, "font-size":11, "font-weight":700, fill:"#2f7d6a"});
+    lim.textContent = "✋ Límite puesto por el Adulto sano";
+    gPar.appendChild(lim);
+  }
+  svg.appendChild(gPar);
+
+  /* 2. Niño (abajo izq) */
+  const gNin = Kit.svg("g", {});
+  gNin.appendChild(Kit.svg("rect", {x:22, y:152, width:205, height:96, rx:12,
+    fill:"#eef3fb", stroke:"#5f77b8", "stroke-width":2.2, filter:f}));
+  const t2 = Kit.svg("text", {x:36, y:176, "font-size":13, "font-weight":700, fill:"#3c528f"});
+  t2.textContent = "2 · Parte niño vulnerable";
+  gNin.appendChild(t2);
+  const s2 = Kit.svg("text", {x:36, y:196, "font-size":11.5, fill:"#5a6a7d"});
+  s2.textContent = (nAct[0] || "Siente miedo, soledad o rabia").slice(0, 31);
+  gNin.appendChild(s2);
+  const s2b = Kit.svg("text", {x:36, y:218, "font-size":11, "font-weight":600, fill:"#3c528f"});
+  s2b.textContent = foco === "adulto" ? "Recibe cuidado y validación" : "Necesita seguridad y vínculo";
+  gNin.appendChild(s2b);
+  svg.appendChild(gNin);
+
+  /* 3. Muro de afrontamiento (centro) */
+  const gAfr = Kit.svg("g", {});
+  gAfr.appendChild(Kit.svg("rect", {x:268, y:66, width:196, height:138, rx:12,
+    fill:"#fdf8ec", stroke:"#c9962f", "stroke-width":foco === "ciclo" ? 2.4 : 1.5,
+    "stroke-dasharray":foco === "adulto" ? "5 4" : "none", filter:f}));
+  const t3 = Kit.svg("text", {x:366, y:94, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#8f6514"});
+  t3.textContent = "3 · Muro de afrontamiento";
+  gAfr.appendChild(t3);
+  const s3 = Kit.svg("text", {x:366, y:118, "text-anchor":"middle", "font-size":11.5, fill:"#5a6a7d"});
+  s3.textContent = (aAct[0] || "Protector / Sumiso / Control").slice(0, 29);
+  gAfr.appendChild(s3);
+  const s3b = Kit.svg("text", {x:366, y:146, "text-anchor":"middle", "font-size":11, fill:"#7a5c1e"});
+  s3b.textContent = foco === "adulto" ? "Da un paso al costado" : "Tapa el dolor pero aísla";
+  gAfr.appendChild(s3b);
+  svg.appendChild(gAfr);
+
+  /* 4. Adulto sano (derecha) */
+  const gAd = Kit.svg("g", {});
+  gAd.appendChild(Kit.svg("rect", {x:502, y:44, width:196, height:182, rx:14,
+    fill:foco === "adulto" ? "#eaf6f1" : "#f3f8f6", stroke:"#3f9b86",
+    "stroke-width":foco === "adulto" ? 2.8 : 1.8, filter:f}));
+  const t4 = Kit.svg("text", {x:600, y:74, "text-anchor":"middle", "font-size":14, "font-weight":700, fill:"#256656"});
+  t4.textContent = "4 · Adulto sano";
+  gAd.appendChild(t4);
+  const s4 = Kit.svg("text", {x:600, y:100, "text-anchor":"middle", "font-size":11.5, fill:"#355c52"});
+  s4.textContent = "Frena la voz punitiva";
+  gAd.appendChild(s4);
+  const s4b = Kit.svg("text", {x:600, y:122, "text-anchor":"middle", "font-size":11.5, fill:"#355c52"});
+  s4b.textContent = "Negocia con el protector";
+  gAd.appendChild(s4b);
+  const s4c = Kit.svg("text", {x:600, y:144, "text-anchor":"middle", "font-size":11.5, "font-weight":600, fill:"#256656"});
+  s4c.textContent = "Cuida la necesidad del niño";
+  gAd.appendChild(s4c);
+  if(sAct.length){
+    const s4d = Kit.svg("text", {x:600, y:182, "text-anchor":"middle", "font-size":11, fill:"#1f4e42"});
+    s4d.textContent = "✓ " + sAct[0].slice(0, 26) + "…";
+    gAd.appendChild(s4d);
+  }
+  svg.appendChild(gAd);
+
+  /* Flechas dinámicas */
+  if(foco === "ciclo"){
+    svg.appendChild(Kit.svg("path", {d:"M124 112 L124 148", stroke:"#b0503f", "stroke-width":2.4}));
+    svg.appendChild(Kit.svg("path", {d:"M227 195 L264 150", stroke:"#5f77b8", "stroke-width":2, "stroke-dasharray":"4 3"}));
+  } else {
+    svg.appendChild(Kit.svg("path", {d:"M502 82 C400 30, 300 30, 230 58", fill:"none", stroke:"#3f9b86", "stroke-width":2.4}));
+    svg.appendChild(Kit.svg("path", {d:"M502 190 C400 245, 300 245, 230 212", fill:"none", stroke:"#3f9b86", "stroke-width":2.6}));
+  }
+}
+
+function refrescar(){
+  dibujar();
+  const p = Kit.activas("modoParental"), n = Kit.activas("modoNino"), a = Kit.activas("modoAfronta"), s = Kit.activas("adultoSano");
+  let html = "";
+  if(p.length || n.length || a.length){
+    html = `<div class="pistas" style="margin-top:12px"><b>En escena:</b> Cuando asoma <i>${(p[0] || "la exigencia dura").toLowerCase()}</i>, se activa <i>${(n[0] || "la parte vulnerable").toLowerCase()}</i> y sale a cubrirla <i>${(a[0] || "el muro protector").toLowerCase()}</i>.` +
+      (s.length ? ` El <b>Adulto sano</b> responde: «${s[0]}».` : "") + `</div>`;
+  }
+  $("lecturaModos").innerHTML = html;
+}
+
+function resumen(){
+  const l = [];
+  const p = Kit.activas("modoParental"), n = Kit.activas("modoNino"), a = Kit.activas("modoAfronta"), s = Kit.activas("adultoSano");
+  if(p.length) l.push("Voz exigente o punitiva: " + p.join(", "));
+  if(n.length) l.push("Modo niño y necesidad: " + n.join(", "));
+  if(a.length) l.push("Modo de afrontamiento: " + a.join(", "));
+  if(s.length) l.push("Respuesta del Adulto sano: " + s.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("modoParental", PARENTAL, refrescar);
+Kit.chips("modoNino", NINO, refrescar);
+Kit.chips("modoAfronta", AFRONTA, refrescar);
+Kit.chips("adultoSano", ADULTO, refrescar);
+dibujar();
+
+Kit.iniciar({
+  clave: "esq-mapa-de-modos",
+  extra: () => ({foco}),
+  restaurar: d => { foco = (d && d.foco) || "ciclo"; fijarFoco(foco); },
+  alCambiar: refrescar,
+  resumen: resumen
+});

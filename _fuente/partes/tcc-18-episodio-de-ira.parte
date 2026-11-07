@@ -1,0 +1,117 @@
+@@meta
+archivo: tcc-episodio-de-ira.html
+titulo: Anatomía del episodio de ira
+orden: 19
+enfoque: Cognitivo-conductual
+etiqueta: Manejo de la ira
+sub: La ira rara vez explota de la nada: recorre cinco eslabones desde el disparador, la exigencia rígida («no debería») y el encendido del cuerpo hasta el modo de expresión y la huella posterior. Cortar la cadena en los eslabones 2 y 3 cambia el desenlace.
+fuente: El modelo del episodio de ira en cinco componentes (Anger Episode Model), en Kassinove y Tafrate, Anger Management: The Complete Treatment Guidebook for Practitioners (2002), cap. 3.
+resumen: Los cinco eslabones del episodio de ira con punto de corte interactivo para desactivar la exigencia rígida y elegir una expresión firme sin ataque.
+@@css
+  .ira-svg{display:block;width:100%;height:auto}
+@@html
+<div class="escenario">
+  <svg class="ira-svg" id="svgIra" viewBox="0 0 700 220" role="img"
+    aria-label="Los cinco eslabones del episodio de ira y el punto de corte"></svg>
+  <div class="mandos">
+    <button type="button" id="btnEscalada" class="principal" onclick="fijarCorte(false)">Ver la escalada automática</button>
+    <button type="button" id="btnCorte" onclick="fijarCorte(true)">Cortar en los eslabones 2 y 3 (pausa y flexibilidad)</button>
+  </div>
+</div>
+
+<section class="paso">
+  <h2><span class="num">1</span>Eslabones 1, 2 y 3 · Qué pasó, qué exigió la mente y cómo avisó el cuerpo</h2>
+  <p class="ayuda">El disparador prende la chispa, pero la gasolina la pone la exigencia rígida del segundo eslabón.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">1 · Disparador</label>
+    <div class="chips" id="iraDisparador"></div>
+    <label class="etiqueta">2 · Evaluación y exigencia rígida</label>
+    <div class="chips" id="iraExigencia"></div>
+    <label class="etiqueta">3 · Encendido en el cuerpo (la señal de aviso)</label>
+    <div class="chips" id="iraCuerpo"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Eslabones 4 y 5 · Cómo salió afuera y cómo ensayar otra salida</h2>
+  <p class="ayuda">Bajar la velocidad y cambiar el «no debería» por una preferencia firme permite cuidar el vínculo.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">4 · Salida habitual en caliente (y su costo en el eslabón 5)</label>
+    <div class="chips" id="iraSalidaVieja"></div>
+    <label class="etiqueta">Nueva salida al cortar a tiempo en los eslabones 2 y 3</label>
+    <div class="chips" id="iraSalidaNueva"></div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">¿Cuál es la primera señal en tu cuerpo que te avisa a tiempo, tres minutos antes de decir algo de lo que después te arrepientes?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const DISP = ["Sentir que no me escuchan o me interrumpen", "Un retraso, obstáculo o error de otra persona", "Sentirme tratado de forma injusta o desconsiderada"];
+const EXIG = ["«No debería haberse comportado así jamás»", "«Lo hace a propósito para perjudicarme»", "«Es intolerable y tiene que pagarlo»"];
+const CUERPO = ["Mandíbula y puños apretados", "Calor en la cara y pecho", "Voz que sube de volumen y velocidad", "Impulso de cortar o atacar"];
+const VIEJA = ["Levantar la voz o decir algo hiriente", "Sarcasmo, portazo o silencio de castigo", "Quedarme rumiando la bronca durante horas"];
+const NUEVA = ["Pedir una pausa de diez minutos antes de contestar", "Cambiar «no debería» por «no me gusta que pase esto, y puedo manejarlo»", "Hablar más lento y expresar solo el pedido concreto sin atacar"];
+
+let cortado = false;
+
+function fijarCorte(v){
+  cortado = v;
+  $("btnEscalada").classList.toggle("principal", !cortado);
+  $("btnCorte").classList.toggle("principal", cortado);
+  dibujar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgIra");
+  svg.innerHTML = "";
+  const f = Kit.acuarela(svg);
+  const cajas = [
+    {x:14, tit:"1 · Disparador", sub:"El hecho inicial", col:"#5f77b8"},
+    {x:150, tit:"2 · Exigencia", sub:cortado ? "Preferencia flexible" : "«No debería…»", col:cortado ? "#3f9b86" : "#c9962f"},
+    {x:286, tit:"3 · Cuerpo", sub:cortado ? "Pausa y exhalación" : "Calor y tensión", col:cortado ? "#3f9b86" : "#c26a4e"},
+    {x:422, tit:"4 · Expresión", sub:cortado ? "Pedido firme sin ataque" : "Explosión o encierro", col:cortado ? "#3f9b86" : "#b0503f"},
+    {x:558, tit:"5 · Huella", sub:cortado ? "Vínculo y respeto" : "Culpa y desgaste", col:cortado ? "#2f6f8f" : "#8a3526"}
+  ];
+
+  cajas.forEach((c, i) => {
+    if(i > 0){
+      svg.appendChild(Kit.svg("line", {x1:c.x - 16, y1:110, x2:c.x, y2:110, stroke:c.col, "stroke-width":2.4}));
+    }
+    svg.appendChild(Kit.svg("rect", {x:c.x, y:56, width:126, height:108, rx:11, fill:c.col + "14", stroke:c.col, "stroke-width":2, filter:f}));
+    const t = Kit.svg("text", {x:c.x + 63, y:92, "text-anchor":"middle", "font-size":12.5, "font-weight":700, fill:c.col});
+    t.textContent = c.tit;
+    svg.appendChild(t);
+    const s = Kit.svg("text", {x:c.x + 63, y:120, "text-anchor":"middle", "font-size":11, fill:"#1d2733"});
+    s.textContent = c.sub;
+    svg.appendChild(s);
+  });
+}
+
+function resumen(){
+  const l = [];
+  [["1 · Disparador","iraDisparador"],["2 · Exigencia rígida","iraExigencia"],["3 · Señal en el cuerpo","iraCuerpo"],
+   ["4 · Salida habitual","iraSalidaVieja"],["Salida alternativa acordada","iraSalidaNueva"]].forEach(([rot, id]) => {
+    const v = Kit.activas(id);
+    if(v.length) l.push(rot + ": " + v.join(", "));
+  });
+  return l.join("\n");
+}
+
+Kit.chips("iraDisparador", DISP, dibujar);
+Kit.chips("iraExigencia", EXIG, dibujar);
+Kit.chips("iraCuerpo", CUERPO, dibujar);
+Kit.chips("iraSalidaVieja", VIEJA, dibujar);
+Kit.chips("iraSalidaNueva", NUEVA, dibujar);
+dibujar();
+
+Kit.iniciar({
+  clave: "tcc-episodio-de-ira",
+  extra: () => ({cortado}),
+  restaurar: d => { cortado = !!(d && d.cortado); fijarCorte(cortado); },
+  alCambiar: dibujar,
+  resumen: resumen
+});

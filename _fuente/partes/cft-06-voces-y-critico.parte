@@ -1,0 +1,146 @@
+@@meta
+archivo: cft-voces-y-critico.html
+titulo: El crítico interno y las voces ante el tropiezo
+orden: 06
+enfoque: Compasión y mindfulness
+etiqueta: Autocrítica
+sub: Ante un tropiezo o un rechazo no habla una sola voz adentro: suele saltar primero el crítico interno con tono duro, y a la vez reaccionan partes nuestras que sienten miedo, tristeza o enfado. Entender de qué amenaza intenta protegernos el crítico permite que el yo compasivo tome la cabecera de la mesa sin maltrato.
+fuente: Análisis funcional de la autocrítica y práctica de los múltiples yoes (Multiple Selves), en Kolts, CFT Made Simple (2016), caps. 8, 12 y 14; Gilbert y Simos, Compassion Focused Therapy (2022), caps. 9 y 17.
+resumen: Identifica el tropiezo y las frases del crítico interno, explora su función protectora, escucha en la mesa de las partes a la voz ansiosa, triste y enfadada, y formula la respuesta del yo compasivo.
+@@css
+  .mesa-partes{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px}
+  .silla{border:1px solid var(--linea);border-top:4px solid #888;border-radius:10px;padding:12px 14px;background:#fbfcfd}
+  .silla.ansiosa{border-top-color:#c9962f}
+  .silla.triste{border-top-color:#5f77b8}
+  .silla.enfadada{border-top-color:#c2594e}
+  .silla h3{margin:0 0 3px;font-size:14.5px}
+  .silla p{margin:0 0 9px;font-size:12px;color:var(--tinta-suave);line-height:1.4}
+  .cabecera-compasiva{border:1px solid #bfe0d2;border-left:5px solid #3f8f6b;border-radius:10px;padding:13px 16px;background:#f4fbf8}
+  .cabecera-compasiva h3{margin:0 0 4px;font-size:15.5px;color:#265e46}
+  .cabecera-compasiva p{margin:0 0 9px;font-size:13px;color:#3b6955}
+  @media (max-width:760px){.mesa-partes{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>El tropiezo y el ataque del crítico</h2>
+  <p class="ayuda">Ubica el momento reciente en que saltó el látigo interno y qué frases exactas usó.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué situación o tropiezo lo disparó</label>
+    <div class="chips" id="tropiezo"></div>
+    <label class="etiqueta" style="margin-top:14px">Qué te dijo el crítico interno</label>
+    <div class="chips" id="ataqueCritico"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Análisis funcional del crítico: ¿de qué amenaza intenta protegerte?</h2>
+  <p class="ayuda">El crítico suele haber nacido en el sistema de amenaza: usa un método dañino, pero detrás casi siempre hay miedo a que te rechacen, te humillen o fracases.</p>
+  <div class="cuerpo">
+    <div class="chips" id="miedoCritico"></div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">3</span>La mesa de las partes y la respuesta del yo compasivo</h2>
+  <p class="ayuda">Cuando el crítico grita, otras partes adentro también sienten el golpe. Escúchalas un momento antes de responder desde el yo compasivo.</p>
+  <div class="cuerpo">
+    <div class="mesa-partes">
+      <div class="silla ansiosa">
+        <h3>Parte ansiosa</h3>
+        <p>Qué teme que pase ahora mismo.</p>
+        <div class="chips" id="parteAnsiosa"></div>
+      </div>
+      <div class="silla triste">
+        <h3>Parte triste</h3>
+        <p>Qué le duele o qué siente que perdió.</p>
+        <div class="chips" id="parteTriste"></div>
+      </div>
+      <div class="silla enfadada">
+        <h3>Parte enfadada</h3>
+        <p>Qué siente injusto o cansado de aguantar.</p>
+        <div class="chips" id="parteEnfadada"></div>
+      </div>
+    </div>
+    <div class="cabecera-compasiva">
+      <h3>La voz del Yo compasivo en la cabecera</h3>
+      <p>Reconoce el miedo del crítico y acompaña a las demás partes con firmeza y calidez.</p>
+      <div class="chips" id="respuestaCompasiva"></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta">Cuando notas que detrás del crítico hay miedo a que te dañen, ¿cómo cambia la forma en que le respondes?</div>
+</section>
+@@js
+const $ = Kit.$;
+
+const TROPIEZOS = [
+  "Algo que no salió como esperaba",
+  "Un error o descuido mío",
+  "Un rechazo o distancia de alguien",
+  "Sentirme cansado y sin rendir"
+];
+const ATAQUES = [
+  "«Siempre haces todo mal»",
+  "«No deberías equivocarte en esto»",
+  "«Los demás sí pueden y tú no»",
+  "«No mereces descanso»"
+];
+const MIEDOS_CRITICO = [
+  "Teme que si no me exige primero, otros me rechacen o humillen",
+  "Cree que si me trata con amabilidad me voy a quedar estancado",
+  "Intenta mantenerme alerta para que nada me tome por sorpresa",
+  "Repite un tono duro que aprendió hace muchos años"
+];
+const P_ANSIOSA = [
+  "Miedo a quedar mal o ser juzgado",
+  "Urgencia por arreglar todo ya",
+  "Temor a que esto no tenga arreglo"
+];
+const P_TRISTE = [
+  "Sentirme solo y agotado de tanta exigencia",
+  "Pena por cómo me hablo cuando fallo",
+  "Necesidad de un abrazo o tregua"
+];
+const P_ENFADADA = [
+  "Harto de vivir rindiendo examen todo el día",
+  "Rabia porque nadie ve cuánto me esfuerzo",
+  "Ganas de mandar todo lejos"
+];
+const RESP_COMPASIVA = [
+  "«Veo que intentas protegerme del rechazo, pero gritarme me paraliza; hoy voy a acompañarme con firmeza y sin maltrato»",
+  "«Equivocarme duele, y es parte de estar vivo; puedo aprender de esto sin destruirme»",
+  "«Escucho mi miedo, mi tristeza y mi cansancio: hoy me toca estar de mi propio lado»"
+];
+
+function refrescar(){}
+
+function resumen(){
+  const l = [];
+  const t = Kit.activas("tropiezo"), a = Kit.activas("ataqueCritico");
+  if(t.length) l.push("TROPIEZO O DISPARADOR: " + t.join(", "));
+  if(a.length) l.push("ATAQUE DEL CRÍTICO: " + a.join(", "));
+  const m = Kit.activas("miedoCritico");
+  if(m.length) l.push("FUNCIÓN PROTECTORA DEL CRÍTICO: " + m.join(", "));
+  const pa = Kit.activas("parteAnsiosa"), pt = Kit.activas("parteTriste"), pe = Kit.activas("parteEnfadada");
+  if(pa.length) l.push("Parte ansiosa: " + pa.join(", "));
+  if(pt.length) l.push("Parte triste: " + pt.join(", "));
+  if(pe.length) l.push("Parte enfadada: " + pe.join(", "));
+  const rc = Kit.activas("respuestaCompasiva");
+  if(rc.length) l.push("RESPUESTA DEL YO COMPASIVO: " + rc.join(" · "));
+  return l.join("\n");
+}
+
+Kit.chips("tropiezo", TROPIEZOS, refrescar);
+Kit.chips("ataqueCritico", ATAQUES, refrescar);
+Kit.chips("miedoCritico", MIEDOS_CRITICO, refrescar);
+Kit.chips("parteAnsiosa", P_ANSIOSA, refrescar);
+Kit.chips("parteTriste", P_TRISTE, refrescar);
+Kit.chips("parteEnfadada", P_ENFADADA, refrescar);
+Kit.chips("respuestaCompasiva", RESP_COMPASIVA, refrescar);
+
+Kit.iniciar({
+  clave: "cft-voces-y-critico",
+  alCambiar: refrescar,
+  resumen: resumen
+});

@@ -1,0 +1,251 @@
+@@meta
+archivo: dbt-aceptacion-radical.html
+titulo: Aceptación radical y girar la mente
+orden: 07
+enfoque: DBT
+etiqueta: Tolerancia al malestar
+lamina: si
+sub: Hay hechos dolorosos que hoy no se pueden cambiar. Pelear contra lo que ya ocurrió no borra el pasado: añade amargura y parálisis encima del dolor. Aceptar radicalmente no es aprobar ni rendirse; es reconocer la realidad tal como es en este instante para poder dar el siguiente paso.
+fuente: Aceptación radical, redireccionar la mente y media sonrisa y manos dispuestas, en Linehan, Manual de entrenamiento en habilidades DBT (trad. Gagliesi, 2020), cap. 10, fichas de tolerancia al malestar 11 a 14.
+resumen: Ubica el hecho que hoy no se puede cambiar y cómo se ve pelear contra él, recorre la encrucijada de girar la mente con media sonrisa y manos dispuestas, y abre el siguiente paso posible.
+@@css
+  .encrucijada{display:block;width:100%;max-width:700px;height:auto;margin:0 auto}
+  .giro-fase{font-size:18.5px;font-weight:700;text-align:center;margin:8px auto 3px;color:var(--acento);max-width:620px}
+  .giro-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:600px;margin:0 auto;line-height:1.5;min-height:40px}
+  .gestos-cuerpo{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:9px;margin-top:12px}
+  .gesto-btn{font:inherit;text-align:left;border:1px solid var(--linea);border-left:4px solid #5f77b8;
+    border-radius:9px;padding:10px 13px;background:#fdfefe;cursor:pointer;transition:all .15s}
+  .gesto-btn:hover{border-color:var(--acento);background:#f7fafd}
+  .gesto-btn.activo{background:var(--acento-claro);border-color:var(--acento);border-left-color:#3f7d5a}
+  .gesto-btn b{display:block;font-size:13.5px;color:var(--tinta);margin-bottom:2px}
+  .gesto-btn span{display:block;font-size:12px;color:var(--tinta-suave);line-height:1.4}
+  .distincion{margin-top:11px;padding:10px 14px;border-radius:8px;background:#f4f8fb;border:1px solid var(--linea);
+    font-size:13.5px;color:#2c4657;text-align:center}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>El hecho que hoy no se puede cambiar y la pelea</h2>
+  <p class="ayuda">La aceptación radical se aplica a los hechos del pasado y del presente que ya son así, no a lo que todavía depende de ti cambiar.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">El hecho que hoy ya está aquí</label>
+    <div class="chips" id="hechoReal"></div>
+    <details class="apunte">
+      <summary>Nombrar el hecho en una frase sin juicios (opcional)</summary>
+      <input type="text" id="hechoTexto" placeholder="Solo el hecho observable, sin «no debería»…">
+    </details>
+    <label class="etiqueta" style="margin-top:14px">Cómo se ve hoy pelear contra esa realidad</label>
+    <div class="chips" id="peleaRealidad"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="encrucijada" id="svgGiro" viewBox="0 0 700 230" role="img"
+    aria-label="Encrucijada de girar la mente entre rechazar la realidad y aceptarla"></svg>
+  <div class="giro-fase" id="giroFase">En la bifurcación del camino</div>
+  <div class="giro-sub" id="giroSub">Cada vez que la mente vuelve al «no debería haber pasado», estás otra vez frente a los dos senderos.</div>
+  <div class="gestos-cuerpo">
+    <button type="button" class="gesto-btn" id="btnManos" onclick="alternarGesto('manos')">
+      <b>Manos dispuestas</b>
+      <span>Apoyar las palmas abiertas hacia arriba sobre los muslos y soltar los dedos.</span>
+    </button>
+    <button type="button" class="gesto-btn" id="btnSonrisa" onclick="alternarGesto('sonrisa')">
+      <b>Media sonrisa y mandíbula suelta</b>
+      <span>Relajar la frente, los hombros y esbozar una serenidad suave en los labios.</span>
+    </button>
+    <button type="button" class="gesto-btn" id="btnGirar" onclick="girarOtraVez()">
+      <b>Girar la mente otra vez</b>
+      <span>Notar que volvió el reproche y elegir de nuevo el sendero de los hechos.</span>
+    </button>
+  </div>
+  <div class="marcas">
+    <div><span class="n" id="mGiros" style="color:#3f7d5a">0</span><span class="r">veces que giré la mente hoy</span></div>
+  </div>
+  <div class="distincion" id="distincionCaja">
+    <b>Aceptar ≠ aprobar ni rendirse:</b> aceptar es dejar de pelear con lo que ya pasó para poder actuar hoy con lo que sí depende de ti.
+  </div>
+</div>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta" id="preguntaFinal">Si hoy dejaras de pelear con lo que ya ocurrió, ¿cuál sería el siguiente paso posible con las manos abiertas?</div>
+  <div class="cuerpo">
+    <div class="chips" id="pasoAceptando"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const HECHOS = [
+  "Algo que ya ocurrió y no tiene vuelta atrás",
+  "Una decisión o respuesta de otra persona",
+  "Una limitación o pérdida real en el presente",
+  "Un resultado que no salió como esperaba"
+];
+const PELEAS = [
+  "«No debería haber pasado así»",
+  "Darle vueltas buscando culpables",
+  "Quedarme paralizado o amargado",
+  "Negarme a dar el siguiente paso hasta que sea justo"
+];
+const PASOS = [
+  "Atender lo que sí está en mis manos hoy",
+  "Cuidar mi cuerpo aunque el hecho duela",
+  "Tener la conversación pendiente sin exigir cambiar el pasado",
+  "Pedir apoyo o ajustar mi plan a la realidad actual"
+];
+
+let gestos = { manos: false, sonrisa: false };
+let giros = 0;
+
+function nivelAceptacion(){
+  let n = (gestos.manos ? 1 : 0) + (gestos.sonrisa ? 1 : 0) + (giros > 0 ? 1 : 0);
+  return n; // 0 a 3
+}
+
+function alternarGesto(cual){
+  gestos[cual] = !gestos[cual];
+  if(gestos[cual] && giros === 0) giros = 1;
+  refrescar();
+  Kit.guardar();
+}
+
+function girarOtraVez(){
+  giros++;
+  refrescar();
+  Kit.guardar();
+}
+
+function dibujar(){
+  const svg = $("svgGiro");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const txt = (x, y, s, est, anc) => {
+    const e = g("text", {x, y, "text-anchor": anc || "middle", style: est});
+    e.textContent = s;
+    return e;
+  };
+
+  const niv = nivelAceptacion();
+  const enAbajo = niv > 0;
+
+  g("rect", {x:0, y:0, width:700, height:230, rx:10, fill:"#f7fafc"});
+
+  // Sendero inicial hasta la bifurcación (x=210, y=115)
+  g("path", {d:"M 30 115 L 210 115", fill:"none", stroke:"#9aa8b5", "stroke-width":14, "stroke-linecap":"round"});
+
+  // Camino superior: Rechazar la realidad
+  const opArriba = enAbajo ? 0.42 : 0.95;
+  g("path", {d:"M 210 115 C 310 115, 340 52, 650 52", fill:"none", stroke:"#c26a4e",
+    "stroke-width": enAbajo ? 8 : 13, "stroke-linecap":"round", opacity:opArriba});
+  // Espinas / nudos en el camino superior
+  [360, 440, 520].forEach(x => {
+    g("circle", {cx:x, cy:55, r:11, fill:"#fdf3ef", stroke:"#c26a4e", "stroke-width":1.8, opacity:opArriba});
+    g("path", {d:`M ${x-4} 51 L ${x+4} 59 M ${x+4} 51 L ${x-4} 59`, stroke:"#c26a4e", "stroke-width":1.8, opacity:opArriba});
+  });
+
+  // Camino inferior: Aceptar los hechos
+  const opAbajo = enAbajo ? 1 : 0.45;
+  g("path", {d:"M 210 115 C 310 115, 340 176, 650 176", fill:"none", stroke:"#3f7d5a",
+    "stroke-width": enAbajo ? 13 : 8, "stroke-linecap":"round", opacity:opAbajo});
+
+  // Flechas de retorno / bifurcación repetida (girar una y otra vez)
+  [330, 460, 580].forEach((x, idx) => {
+    const activoArco = giros > idx;
+    g("path", {d:`M ${x} 66 Q ${x+18} 115 ${x} 162`, fill:"none",
+      stroke: activoArco ? "#3f7d5a" : "#b8c7d4",
+      "stroke-width": activoArco ? 2.4 : 1.5,
+      "stroke-dasharray": activoArco ? "none" : "4 4"});
+    g("polygon", {points:`${x-4},157 ${x+5},159 ${x},166`, fill: activoArco ? "#3f7d5a" : "#b8c7d4"});
+  });
+
+  // Letreros de ambos senderos
+  txt(475, 28, "RECHAZAR LA REALIDAD: Dolor + No aceptación = Sufrimiento",
+    `font:700 12px system-ui;fill:#9e472d;opacity:${enAbajo ? .65 : 1}`);
+  const pelea = Kit.activas("peleaRealidad")[0] || "«No debería ser así»";
+  txt(475, 84, pelea.length > 52 ? pelea.slice(0, 51) + "…" : pelea,
+    "font:600 11.5px system-ui;fill:#8a4a2c");
+
+  txt(475, 206, "ACEPTAR LOS HECHOS TAL COMO SON HOY: Dolor limpio + Manos libres",
+    `font:700 12px system-ui;fill:#2d6345;opacity:${enAbajo ? 1 : .7}`);
+  const paso = Kit.activas("pasoAceptando")[0] || "Reconocer lo que hay y elegir el siguiente paso";
+  txt(475, 152, paso.length > 54 ? paso.slice(0, 53) + "…" : paso,
+    "font:600 11.5px system-ui;fill:#3f7d5a");
+
+  // Punto de encrucijada
+  g("circle", {cx:210, cy:115, r:9, fill:"#fff", stroke:"#2f6f8f", "stroke-width":3});
+  txt(120, 92, "El hecho hoy", "font:700 11.5px system-ui;fill:#3f5163");
+
+  // Figura caminante
+  const fx = enAbajo ? Math.min(615, 290 + niv * 75 + Math.min(giros, 4) * 20) : 250;
+  const fy = enAbajo ? 172 : 62;
+  const colFig = enAbajo ? "#3f7d5a" : "#b85a3e";
+
+  // Halo suave si tiene manos dispuestas y media sonrisa
+  if(gestos.manos || gestos.sonrisa){
+    g("circle", {cx:fx, cy:fy - 18, r:28 + (gestos.manos && gestos.sonrisa ? 8 : 0),
+      fill:"#3f7d5a", "fill-opacity":0.14, stroke:"#3f7d5a", "stroke-width":1.2, "stroke-dasharray":"3 3"});
+  }
+  // Cuerpo y cabeza
+  g("circle", {cx:fx, cy:fy - 30, r:9.5, fill:colFig});
+  g("path", {d:`M ${fx-11} ${fy-6} Q ${fx} ${fy-21} ${fx+11} ${fy-6} L ${fx+8} ${fy+8} L ${fx-8} ${fy+8} Z`, fill:colFig});
+  // Brazos: cerrados si pelea, abiertos con palmas arriba si manos dispuestas
+  if(gestos.manos){
+    g("path", {d:`M ${fx-9} ${fy-14} Q ${fx-22} ${fy-6} ${fx-25} ${fy-12}`, fill:"none", stroke:colFig, "stroke-width":3, "stroke-linecap":"round"});
+    g("path", {d:`M ${fx+9} ${fy-14} Q ${fx+22} ${fy-6} ${fx+25} ${fy-12}`, fill:"none", stroke:colFig, "stroke-width":3, "stroke-linecap":"round"});
+  } else {
+    g("path", {d:`M ${fx-10} ${fy-12} L ${fx+10} ${fy-12}`, stroke:"#fff", "stroke-width":2});
+  }
+}
+
+function refrescar(){
+  $("btnManos").classList.toggle("activo", gestos.manos);
+  $("btnSonrisa").classList.toggle("activo", gestos.sonrisa);
+  $("btnGirar").classList.toggle("activo", giros > 0);
+  $("mGiros").textContent = giros;
+
+  const niv = nivelAceptacion();
+  if(niv === 0){
+    $("giroFase").textContent = "En la bifurcación del camino";
+    $("giroSub").textContent = "Prueba abrir las palmas hacia arriba o soltar la mandíbula y girar hacia el sendero de abajo.";
+  } else if(niv === 1){
+    $("giroFase").textContent = "Primer giro hacia la aceptación";
+    $("giroSub").textContent = "El dolor del hecho sigue ahí, pero dejaste de sumar la pelea contra el pasado.";
+  } else if(niv === 2){
+    $("giroFase").textContent = "Cuerpo dispuesto y mente girada";
+    $("giroSub").textContent = "Cuando las manos se abren y la cara se afloja, el cuerpo le avisa al cerebro que puede dejar de luchar.";
+  } else {
+    $("giroFase").textContent = "Girar la mente una y otra vez";
+    $("giroSub").textContent = "Aceptar no se hace una sola vez: se elige cada vez que la mente intenta subir al reproche.";
+  }
+  dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const h = Kit.activas("hechoReal"), ht = $("hechoTexto").value.trim();
+  if(h.length || ht) l.push("HECHO QUE HOY NO SE PUEDE CAMBIAR: " + h.join(", ") + (ht ? (h.length ? " — " : "") + ht : ""));
+  const p = Kit.activas("peleaRealidad");
+  if(p.length) l.push("CÓMO SE VE PELEAR CONTRA LA REALIDAD: " + p.join(", "));
+  const gs = [];
+  if(gestos.manos) gs.push("Manos dispuestas");
+  if(gestos.sonrisa) gs.push("Media sonrisa y mandíbula suelta");
+  if(giros > 0) gs.push(`Giró la mente ${giros} ${giros === 1 ? "vez" : "veces"}`);
+  if(gs.length) l.push("PRÁCTICA EN SESIÓN: " + gs.join(" · "));
+  const pa = Kit.activas("pasoAceptando");
+  if(pa.length) l.push("SIGUIENTE PASO CON LAS MANOS ABIERTAS: " + pa.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("hechoReal", HECHOS, refrescar);
+Kit.chips("peleaRealidad", PELEAS, refrescar);
+Kit.chips("pasoAceptando", PASOS, refrescar);
+$("hechoTexto").addEventListener("input", refrescar);
+
+Kit.iniciar({
+  clave: "dbt-aceptacion-radical",
+  extra: () => ({gestos, giros}),
+  restaurar: d => {
+    if(d.gestos) gestos = d.gestos;
+    if(typeof d.giros === "number") giros = d.giros;
+  },
+  alCambiar: refrescar,
+  resumen: resumen
+});

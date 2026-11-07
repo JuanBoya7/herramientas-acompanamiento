@@ -1,0 +1,277 @@
+@@meta
+archivo: met-el-escenario.html
+titulo: El escenario y el reflector
+orden: 13
+enfoque: ACT
+etiqueta: Yo observador
+sub: Sobre el escenario están todos tus pensamientos, emociones, recuerdos y también lo que te importa. Cuando el reflector se cierra sobre el actor más ruidoso, parece que no existiera nada más en la sala. Encender las luces de todo el escenario y notar la butaca desde la que miras no echa a nadie de las tablas, pero devuelve la proporción.
+fuente: La metáfora del espectáculo en el escenario (The Stage Show Metaphor), en Harris, ACT Made Simple (2009), caps. 4 y 10; When Life Hits Hard (2021), cap. 19.
+resumen: Se identifica qué voz acapara hoy el centro del escenario y qué otros elementos siguen sobre las tablas aunque a oscuras. Los mandos de iluminación permiten abrir la luz general y distinguir la perspectiva desde la butaca.
+@@css
+  .teatro{display:block;width:100%;height:auto;max-width:700px;margin:0 auto}
+  .fase{font-size:19px;font-weight:700;text-align:center;margin:8px auto 2px;color:var(--acento);
+    min-height:28px;max-width:600px;line-height:1.35}
+  .fase-sub{text-align:center;font-size:14px;color:var(--tinta-suave);max-width:560px;margin:0 auto;
+    min-height:22px;line-height:1.5}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Quiénes están hoy sobre las tablas</h2>
+  <p class="ayuda">En el espectáculo hay un personaje que hoy grita bajo el reflector y varios más que
+  siguen en escena aunque queden en penumbra.</p>
+  <div class="cuerpo">
+    <label class="etiqueta">Quién grita en el centro del escenario</label>
+    <div class="chips" id="actorGrita"></div>
+    <label class="etiqueta">Quiénes más están sobre las tablas aunque a oscuras</label>
+    <div class="chips" id="otrosActores"></div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg class="teatro" id="svgTeatro" viewBox="0 0 700 260" role="img"
+    aria-label="Un escenario teatral visto desde la butaca con controles para abrir la luz a toda la escena"></svg>
+  <div class="fase" id="fase">Reflector cerrado sobre el problema</div>
+  <div class="fase-sub" id="faseSub">El cono de luz dura agiganta a un solo actor y deja el resto del escenario en la oscuridad.</div>
+  <div class="duracion" id="luces">
+    <button type="button" class="chip activa" id="luzCerrada" onclick="ponerLuz('cerrada')">Reflector cerrado sobre el problema</button>
+    <button type="button" class="chip" id="luzAbierta" onclick="ponerLuz('abierta')">Encender las luces de todo el escenario</button>
+    <button type="button" class="chip" id="luzButaca" onclick="ponerLuz('butaca')">Mirar desde la butaca</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola">
+  <div class="pregunta" id="pregunta">Sin echar a nadie de las tablas, ¿a qué parte del escenario quieres prestarle atención ahora?</div>
+  <div class="cuerpo" style="padding:10px 0 0">
+    <div class="chips" id="focoElegido"></div>
+  </div>
+</section>
+@@js
+const $ = Kit.$;
+
+const GRITA = [
+  "El miedo a fallar",
+  "El reproche por el pasado",
+  "La urgencia de controlar todo",
+  "El cansancio en el cuerpo"
+];
+const OTROS = [
+  "El afecto por los míos",
+  "El gusto por aprender o crear",
+  "La calma de este momento",
+  "Lo que sí salió bien hoy",
+  "La persona que me acompaña"
+];
+const FOCO = [
+  "Mirar todo el escenario sin quedarme pegado a un solo grito",
+  "Acercar la atención a lo que valoro aunque el otro actor siga ahí",
+  "Recordar que yo soy quien mira desde la butaca, no el espectáculo",
+  "Dejar que el personaje ruidoso esté en un costado sin discutirle"
+];
+
+let modoLuz = "cerrada"; /* cerrada | abierta | butaca */
+let apertura = 0;        /* 0 = cerrada, 1 = abierta */
+let verButaca = 0;       /* 0 = sin foco en butaca, 1 = butaca destacada */
+
+function nombreGrita(){
+  const a = Kit.activas("actorGrita");
+  return a.length ? a[0] : "El miedo a fallar";
+}
+function listaOtros(){
+  const o = Kit.activas("otrosActores");
+  if(o.length >= 2) return o.slice(0, 4);
+  if(o.length === 1) return [o[0], "Lo que importa hoy", "Este momento presente"];
+  return ["El afecto por los míos", "Lo que sí salió bien hoy", "La calma de este momento"];
+}
+
+function dibujar(){
+  const svg = $("svgTeatro");
+  svg.innerHTML = "";
+  const g = (tag, a) => svg.appendChild(Kit.svg(tag, a));
+
+  /* fondo del teatro: pasa de negro cerrado a azul cálido iluminado */
+  const colFondo = Kit.mezcla("#1c2029", "#304459", apertura);
+  g("rect", {x:0, y:0, width:700, height:260, fill:colFondo});
+
+  /* telones laterales en acuarela vectorial */
+  g("path", {
+    d:"M0 0 L62 0 Q48 100 32 195 L0 195 Z",
+    fill:"#6e2b2b", opacity:.85, filter:Kit.acuarela(svg)
+  });
+  g("path", {
+    d:"M700 0 L638 0 Q652 100 668 195 L700 195 Z",
+    fill:"#6e2b2b", opacity:.85, filter:Kit.acuarela(svg)
+  });
+
+  /* tablas del escenario */
+  const colTablas = Kit.mezcla("#382c22", "#8f6d4f", apertura);
+  g("path", {
+    d:"M28 190 L672 190 L700 232 L0 232 Z",
+    fill:colTablas, stroke:"#241b14", "stroke-width":1.5
+  });
+
+  /* luz general cálida cuando se enciende todo el escenario */
+  if(apertura > 0.02){
+    g("ellipse", {
+      cx:350, cy:135, rx:300 * apertura, ry:95 * apertura,
+      fill:"#f9eed2", opacity:(0.32 * apertura).toFixed(2)
+    });
+  }
+
+  /* cono del reflector estrecho cuando está cerrado */
+  if(apertura < 0.98){
+    g("polygon", {
+      points:"350,6 250,195 450,195",
+      fill:"#fff3c4", opacity:((1 - apertura) * 0.36).toFixed(2)
+    });
+  }
+
+  /* otros actores en las tablas (visibles al encender las luces generales) */
+  const otros = listaOtros();
+  const posOtros = [
+    {x:145, col:"#3f9b86"},
+    {x:235, col:"#4f7ea8"},
+    {x:475, col:"#c9962f"},
+    {x:565, col:"#5a8a65"}
+  ];
+  otros.forEach((txt, i) => {
+    const p = posOtros[i % posOtros.length];
+    const op = 0.14 + 0.86 * apertura;
+    const ga = Kit.svg("g", {
+      transform:`translate(${p.x} 188)`,
+      opacity:op.toFixed(2)
+    });
+    ga.appendChild(Kit.svg("circle", {cx:0, cy:-54, r:11, fill:p.col, filter:Kit.acuarela(svg)}));
+    ga.appendChild(Kit.svg("path", {
+      d:"M-14 0 L-10 -38 Q0 -44 10 -38 L14 0 Z",
+      fill:p.col, filter:Kit.acuarela(svg)
+    }));
+    const et = Kit.svg("text", {
+      x:0, y:-72 - (i % 2) * 14, "text-anchor":"middle",
+      style:"font:600 11.5px system-ui,sans-serif;fill:#f3f7fa;paint-order:stroke;stroke:#1c2530;stroke-width:3"
+    });
+    et.textContent = txt.length > 22 ? txt.slice(0, 21) + "…" : txt;
+    ga.appendChild(et);
+    svg.appendChild(ga);
+  });
+
+  /* actor que grita en el centro: no se va al abrir la luz, pero recupera su tamaño proporcional */
+  const escGrita = 1.38 - 0.38 * apertura;
+  const gc = Kit.svg("g", {
+    transform:`translate(350 190) scale(${escGrita.toFixed(2)})`
+  });
+  gc.appendChild(Kit.svg("circle", {cx:0, cy:-58, r:13, fill:"#b0503f", filter:Kit.acuarela(svg)}));
+  gc.appendChild(Kit.svg("path", {
+    d:"M-18 0 L-13 -42 Q0 -48 13 -42 L18 0 Z",
+    fill:"#b0503f", filter:Kit.acuarela(svg)
+  }));
+  const etG = Kit.svg("text", {
+    x:0, y:-80, "text-anchor":"middle",
+    style:"font:700 12px system-ui,sans-serif;fill:#ffd8cf;paint-order:stroke;stroke:#2b1612;stroke-width:3.2"
+  });
+  const ng = nombreGrita();
+  etG.textContent = "«" + (ng.length > 26 ? ng.slice(0, 25) + "…" : ng) + "»";
+  gc.appendChild(etG);
+  svg.appendChild(gc);
+
+  /* fila de butacas abajo y la silueta del observador */
+  [120, 210, 490, 580].forEach(bx => {
+    g("path", {
+      d:`M${bx - 24} 260 L${bx - 20} 234 Q${bx} 226 ${bx + 20} 234 L${bx + 24} 260 Z`,
+      fill:"#25303d", opacity:.85
+    });
+  });
+
+  /* la butaca central del yo observador */
+  const gObs = Kit.svg("g", {});
+  if(verButaca > 0.05){
+    gObs.appendChild(Kit.svg("ellipse", {
+      cx:350, cy:234, rx:78, ry:24,
+      fill:"none", stroke:"#7fd1b9", "stroke-width":2, "stroke-dasharray":"4 4",
+      opacity:verButaca.toFixed(2)
+    }));
+  }
+  gObs.appendChild(Kit.svg("path", {
+    d:"M316 260 L322 226 Q350 218 378 226 L384 260 Z",
+    fill:verButaca > 0.5 ? "#2f6f5e" : "#2c3b4a", stroke:"#7fd1b9",
+    "stroke-width":verButaca > 0.5 ? 2 : 0.8
+  }));
+  gObs.appendChild(Kit.svg("circle", {
+    cx:350, cy:214, r:12,
+    fill:verButaca > 0.5 ? "#a8e6cf" : "#6c7f91"
+  }));
+  const etObs = Kit.svg("text", {
+    x:350, y:254, "text-anchor":"middle",
+    style:`font:700 11.5px system-ui,sans-serif;fill:${verButaca > 0.5 ? "#e6fff5" : "#b5c4d1"}`
+  });
+  etObs.textContent = verButaca > 0.5 ? "Tú en la butaca, notando todo el escenario" : "La butaca desde donde miras";
+  gObs.appendChild(etObs);
+  svg.appendChild(gObs);
+}
+
+const reloj = Kit.reloj(dt => {
+  const metaA = modoLuz === "cerrada" ? 0 : 1;
+  const metaB = modoLuz === "butaca" ? 1 : 0;
+  apertura += (metaA - apertura) * Math.min(1, dt * 5);
+  verButaca += (metaB - verButaca) * Math.min(1, dt * 5);
+  if(Math.abs(metaA - apertura) < 0.01 && Math.abs(metaB - verButaca) < 0.01){
+    apertura = metaA; verButaca = metaB;
+    reloj.parar();
+  }
+  dibujar();
+});
+
+function actualizarUI(){
+  $("luzCerrada").classList.toggle("activa", modoLuz === "cerrada");
+  $("luzAbierta").classList.toggle("activa", modoLuz === "abierta");
+  $("luzButaca").classList.toggle("activa", modoLuz === "butaca");
+  if(modoLuz === "cerrada"){
+    $("fase").textContent = "Reflector cerrado sobre el problema";
+    $("faseSub").textContent = "El cono de luz dura agiganta a un solo actor y deja el resto del escenario en la oscuridad.";
+  } else if(modoLuz === "abierta"){
+    $("fase").textContent = "Luces de todo el escenario encendidas";
+    $("faseSub").textContent = "Quien gritaba sigue en las tablas, pero ahora comparte el espacio con todo lo demás que vive en tu vida.";
+  } else {
+    $("fase").textContent = "Mirando el espectáculo desde la butaca";
+    $("faseSub").textContent = "Distintas voces suben y bajan en las tablas; tú eres quien las observa desde el asiento.";
+  }
+}
+
+function ponerLuz(m){
+  modoLuz = m;
+  actualizarUI();
+  reloj.andar();
+  Kit.guardar();
+}
+
+function leer(){
+  actualizarUI();
+  dibujar();
+}
+
+function resumen(){
+  const l = [];
+  const g = Kit.activas("actorGrita");
+  if(g.length) l.push("Quién grita en el centro: " + g.join(", "));
+  const o = Kit.activas("otrosActores");
+  if(o.length) l.push("Quiénes más están sobre las tablas: " + o.join(", "));
+  l.push("Iluminación explorada: " + (modoLuz === "cerrada" ? "Reflector cerrado" : modoLuz === "abierta" ? "Todo el escenario iluminado" : "Perspectiva desde la butaca"));
+  const f = Kit.activas("focoElegido");
+  if(f.length) l.push("Dónde poner la atención ahora: " + f.join(", "));
+  return l.join("\n");
+}
+
+Kit.chips("actorGrita", GRITA, leer);
+Kit.chips("otrosActores", OTROS, leer);
+Kit.chips("focoElegido", FOCO);
+dibujar();
+
+Kit.iniciar({
+  clave: "met-el-escenario",
+  alCambiar: leer,
+  resumen: resumen,
+  extra: () => ({modoLuz}),
+  restaurar: d => {
+    modoLuz = (d && d.modoLuz) || "cerrada";
+    apertura = modoLuz === "cerrada" ? 0 : 1;
+    verButaca = modoLuz === "butaca" ? 1 : 0;
+  }
+});
