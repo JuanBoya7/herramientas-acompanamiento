@@ -105,7 +105,7 @@ Se crea un archivo en `partes/` con extensión `.parte` y cuatro secciones:
 archivo: tcc-mi-herramienta.html     ← nombre del HTML que se genera
 titulo: Mi herramienta
 orden: 07                            ← posición dentro de su enfoque en el índice
-enfoque: Cognitivo-conductual        ← uno de los cuatro de ORDEN_ENFOQUES en construir.py
+enfoque: Cognitivo-conductual        ← uno de los seis de ORDEN_ENFOQUES en construir.py
 etiqueta: Exposición                 ← la etiqueta de color de la ficha del índice
 identificacion: si                   ← opcional; solo si la hoja existe para dejar registro
 lamina: si                           ← opcional; para las hojas que se exponen o se proyectan
@@ -167,9 +167,10 @@ presentación que no tocan el contenido de ninguna hoja:
   donde están: esos sí son indicaciones de uso.
 - **El botón de lámina**, en las hojas marcadas con `lamina: si`.
 
-Al agregar una herramienta hay que incluirla en `REVISION` de `sesion.py`: número de bloques
-originales, índices de los principales y frase de entrada. La construcción comprueba el número
-de bloques para impedir cambios de orden silenciosos.
+Al agregar una herramienta hay que incluirla en `REVISION` de `sesion.py` (número de bloques
+originales, índices de los principales y frase de entrada) y en `ORGANIZACION` de `rieles.py`
+(enfoque, subgrupo clínico o proceso principal del hexaflex y vínculos secundarios si es ACT).
+La construcción comprueba el número de bloques para impedir cambios de orden silenciosos.
 
 La pregunta de diseño es: **¿qué parte de esta hoja puede aportar a una conversación aunque
 no se continúe con lo demás?** Esa parte debe captar la atención al abrirla. No equivale a reducir

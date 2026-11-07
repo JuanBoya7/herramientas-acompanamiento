@@ -9,6 +9,7 @@ ni guardado, ni notas. Se reconstruye sola al correr construir.py.
     python guia.py
 """
 from pathlib import Path
+import html as _h
 
 import guiones
 import rieles
@@ -20,13 +21,12 @@ AQUI = Path(__file__).resolve().parent
 DESTINO = AQUI.parent
 
 COLORES = {
-    "Metáforas vivas":      "#c26a4e",
-    "Psicología positiva":  "#c9962f",
-    "ACT":                  "#3f9b86",
-    "DBT":                  "#5f77b8",
-    "Cognitivo-conductual": "#2f6f8f",
+    "ACT":                     "#3f9b86",
+    "Cognitivo-conductual":    "#2f6f8f",
+    "DBT":                     "#5f77b8",
     "Compasión y mindfulness": "#4a8a7a",
-    "Crisis y consumo": "#b0503f",
+    "Psicología positiva":     "#c9962f",
+    "Crisis y consumo":        "#b0503f",
 }
 
 # Cada hoja: archivo, título, para qué (el mecanismo, en una línea),
@@ -795,6 +795,8 @@ CSS = """
     margin-top:13px}
   .ficha-guia{background:var(--papel);border:1px solid var(--linea);border-left-width:5px;
     border-radius:var(--radio);padding:16px 19px}
+  .ficha-guia.hx-item-vinculado{border-style:dashed;border-left-style:solid;background:#fafcfe}
+  .ficha-guia .hx-tags{margin:0 0 10px}
   .ficha-guia .cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
     margin-bottom:6px}
   .ficha-guia h3{margin:0;font-size:17px;letter-spacing:-.2px}
@@ -876,17 +878,27 @@ def guion(bloques):
 
 
 def ficha(h, color, enfoque):
+    info = rieles.info_organizacion(h["archivo"])
+    atrs_hx = ""
+    if info["proc"]:
+        atrs_hx = (
+            f' data-proc="{info["proc"]}"'
+            f' data-proc-sec="{",".join(info["sec"])}"'
+            f' data-estilo="{info["estilo"]}"'
+        )
+    insignias = rieles.insignias_hexaflex(h["archivo"])
+    bloque_insignias = f"\n      {insignias}" if insignias else ""
     conviene = "\n".join("        <li>%s</li>" % c for c in h["conviene"])
     pasos = "\n".join('      <div class="paso"><b>%s</b> %s</div>' % (r, t)
                       for r, t in h["secuencia"])
     aviso = ('\n      <div class="aviso-uso"><b>Cuidado</b>%s</div>' % h["cuidado"]) \
         if h.get("cuidado") else ""
     libreto = guion(h["guion"]) if h.get("guion") else ""
-    return f"""    <div class="ficha-guia" style="border-left-color:{color}" data-item data-enf="{enfoque}" data-titulo="{h['titulo']}">
+    return f"""    <div class="ficha-guia" style="border-left-color:{color}" data-item data-enf="{enfoque}" data-titulo="{_h.escape(h['titulo'])}" data-href="{h['archivo']}"{atrs_hx}>
       <div class="cab">
         <h3><a href="{h['archivo']}">{h['titulo']}</a></h3>
         <span class="etq" style="color:{color};background:{color}1a">{h['etq']}</span>
-      </div>
+      </div>{bloque_insignias}
       <p class="paraque"><b>Para abrir la conversación:</b> {sesion.descripcion(h['archivo'])}</p>
       <p class="paraque">{h['paraque']}</p>
       <div class="rot">Conviene en</div>
@@ -912,19 +924,56 @@ def construir(kit_css=None):
     if kit_css is None:
         kit_css = (AQUI / "kit.css").read_text(encoding="utf-8")
 
+    todas = []
+    for _, hojas in con_guiones(GUIA):
+        todas.extend(hojas)
+    todas.sort(key=lambda h: (rieles.info_organizacion(h["archivo"])["orden_org"], h["archivo"]))
+
     bloques = []
-    for enfoque, hojas in con_guiones(GUIA):
+    for enfoque in rieles.ENFOQUES:
         color = COLORES[enfoque]
-        fichas = "\n".join(ficha(h, color, enfoque) for h in hojas)
-        bloques.append(f"""<section data-grupo="{enfoque}">
-<h2 class="enfoque" style="color:{color}">{enfoque}</h2>
-  <div class="fichas">
+        propias = [h for h in todas if rieles.info_organizacion(h["archivo"])["enfoque"] == enfoque]
+        if not propias:
+            continue
+        subs = rieles.SUBGRUPOS.get(enfoque, [])
+        panel_hx = ("\n" + rieles.bloque_hexaflex()) if enfoque == "ACT" else ""
+
+        if len(subs) > 1:
+            bloques_sub = []
+            for sub_id, sub_titulo, sub_desc, sub_color, sub_est in subs:
+                de_sub = [h for h in propias if rieles.info_organizacion(h["archivo"])["subgrupo"] == sub_id]
+                if not de_sub:
+                    continue
+                fichas = "\n".join(ficha(h, sub_color if enfoque == "ACT" else color, enfoque) for h in de_sub)
+                corto = rieles.PROC_POR_ID[sub_id]["corto"] if sub_id in rieles.PROC_POR_ID else sub_titulo.split("·")[-1].strip()
+                atr_proc = f' data-subproc="{sub_id}"' if enfoque == "ACT" else ""
+                aviso_vinc = (
+                    '<p class="sub-vinc-aviso" hidden>También vinculadas con el proceso elegido desde este vértice del hexaflex</p>'
+                    if enfoque == "ACT" else ""
+                )
+                bloques_sub.append(f"""  <div class="subgrupo" data-subgrupo="{sub_id}" data-subcorto="{_h.escape(corto)}"{atr_proc} style="--sub-c:{sub_color}">
+    <div class="subgrupo-cab">
+      <h3><span class="sub-punto"></span>{_h.escape(sub_titulo)}</h3>
+      <span class="sub-est">{_h.escape(sub_est)}</span>
+    </div>
+    <p class="sub-desc">{_h.escape(sub_desc)}</p>
+    {aviso_vinc}
+    <div class="fichas">
 {fichas}
-  </div>
+    </div>
+  </div>""")
+            interior = f'  <div class="subgrupos">\n{chr(10).join(bloques_sub)}\n  </div>'
+        else:
+            fichas = "\n".join(ficha(h, color, enfoque) for h in propias)
+            interior = f'  <div class="fichas">\n{fichas}\n  </div>'
+
+        bloques.append(f"""<section data-grupo="{enfoque}">
+<h2 class="enfoque" style="color:{color}">{enfoque}</h2>{panel_hx}
+{interior}
 </section>""")
 
     rutas = "\n".join(ruta(r) for r in RUTAS)
-    cuantas = sum(len(h) for _, h in GUIA)
+    cuantas = len(todas)
 
     salida = f"""<!doctype html>
 <html lang="es">

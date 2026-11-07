@@ -10,6 +10,7 @@ carpeta Herramientas. Al final genera index.html con todas las fichas.
     python construir.py            -> construye todo
     python construir.py brujula    -> solo las partes que contengan "brujula"
 """
+import html as _h
 import sys, re
 from pathlib import Path
 
@@ -47,16 +48,18 @@ YA_HECHAS = [
 ]
 
 ORDEN_ENFOQUES = [
-    ("Metáforas vivas", "Recursos experienciales, no clasificadores: la metáfora se juega y se "
-                        "atraviesa dentro de la hoja, y el cambio ocurre al usarla."),
-    ("Psicología positiva", "El punto de partida: cómo está la vida hoy y con qué cuenta la persona."),
-    ("ACT", "Terapia de aceptación y compromiso: dejar de pelear con lo interno y moverse hacia lo que importa."),
-    ("DBT", "Habilidades de terapia dialéctico-conductual, en módulos que se pueden trabajar sueltos."),
-    ("Cognitivo-conductual", "Técnicas clásicas de evaluación, reestructuración, exposición y activación."),
-    ("Compasión y mindfulness", "Prácticas breves para bajar el ritmo y cambiar la relación con lo que aparece: "
-                                "el sistema de calma de la terapia centrada en la compasión y el espacio de respiración."),
-    ("Crisis y consumo", "Para los momentos de riesgo: el plan de seguridad ante la crisis suicida y el manejo del "
-                         "impulso en la prevención de recaídas."),
+    ("ACT", "Terapia de aceptación y compromiso: diecinueve herramientas —metáforas vivas, ejercicios experienciales "
+            "y mapas de formulación— organizadas alrededor de los seis procesos del hexaflex."),
+    ("Cognitivo-conductual", "Recorrido clínico desde la formulación funcional y la motivación hasta el trabajo "
+                             "con pensamientos, la exposición, la activación y los hábitos."),
+    ("DBT", "Habilidades de terapia dialéctico-conductual —atención plena, tolerancia al malestar, regulación "
+            "emocional y efectividad interpersonal— junto con análisis en cadena y seguimiento semanal."),
+    ("Compasión y mindfulness", "Prácticas breves para activar el sistema de calma, abrir un espacio de respiración "
+                                "y responder a la autocrítica desde la autocompasión."),
+    ("Psicología positiva", "El punto de partida y los recursos disponibles: cómo está el bienestar hoy, con qué "
+                            "fortalezas cuenta la persona y hacia dónde construir."),
+    ("Crisis y consumo", "Para los momentos de riesgo y ambivalencia: el plan de seguridad ante la crisis suicida, "
+                         "el manejo del impulso de consumo y la exploración motivacional del cambio."),
 ]
 
 
@@ -138,12 +141,23 @@ def construir(ruta, plantilla, kit_css, kit_js):
     return meta, destino
 
 
-TARJETA = """      <a class="ficha" href="{archivo}" data-item data-enf="{enfoque}" data-titulo="{titulo}" data-href="{archivo}">
-        <span class="etq">{etiqueta}</span>
-        <b>{titulo}</b>
-        <span class="dice">{resumen}</span>
-        <span class="ref">{fuente}</span>
-      </a>"""
+def _tarjeta_indice(f):
+    info = rieles.info_organizacion(f["archivo"])
+    atrs_hx = ""
+    if info["proc"]:
+        atrs_hx = (
+            f' data-proc="{info["proc"]}"'
+            f' data-proc-sec="{",".join(info["sec"])}"'
+            f' data-estilo="{info["estilo"]}"'
+        )
+    insignias = rieles.insignias_hexaflex(f["archivo"])
+    return f"""        <a class="ficha" href="{f['archivo']}" data-item data-enf="{f['enfoque']}" data-titulo="{_h.escape(f['titulo'])}" data-href="{f['archivo']}"{atrs_hx}>
+          <span class="etq">{_h.escape(f.get('etiqueta', f['enfoque']))}</span>
+          <b>{_h.escape(f['titulo'])}</b>
+          <span class="dice">{_h.escape(f['resumen'])}</span>
+          {insignias}
+          <span class="ref">{_h.escape(f['fuente'])}</span>
+        </a>"""
 
 
 def construir_indice(fichas, kit_css):
@@ -152,42 +166,63 @@ def construir_indice(fichas, kit_css):
         propias = [f for f in fichas if f["enfoque"] == enfoque]
         if not propias:
             continue
-        tarjetas = "\n".join(
-            TARJETA.format(
-                archivo=f["archivo"],
-                enfoque=f["enfoque"],
-                etiqueta=f.get("etiqueta", f["enfoque"]),
-                titulo=f["titulo"],
-                resumen=f["resumen"],
-                fuente=f["fuente"],
-            )
-            for f in propias
-        )
+        subs = rieles.SUBGRUPOS.get(enfoque, [])
+        panel_hx = ("\n" + rieles.bloque_hexaflex()) if enfoque == "ACT" else ""
+
+        if len(subs) > 1:
+            bloques_sub = []
+            for sub_id, sub_titulo, sub_desc, sub_color, sub_est in subs:
+                de_sub = [f for f in propias if rieles.info_organizacion(f["archivo"])["subgrupo"] == sub_id]
+                if not de_sub:
+                    continue
+                tarjetas = "\n".join(_tarjeta_indice(f) for f in de_sub)
+                corto = rieles.PROC_POR_ID[sub_id]["corto"] if sub_id in rieles.PROC_POR_ID else sub_titulo.split("·")[-1].strip()
+                atr_proc = f' data-subproc="{sub_id}"' if enfoque == "ACT" else ""
+                aviso_vinc = (
+                    '<p class="sub-vinc-aviso" hidden>También vinculadas con el proceso elegido desde este vértice del hexaflex</p>'
+                    if enfoque == "ACT" else ""
+                )
+                bloques_sub.append(f"""      <div class="subgrupo" data-subgrupo="{sub_id}" data-subcorto="{_h.escape(corto)}"{atr_proc} style="--sub-c:{sub_color}">
+        <div class="subgrupo-cab">
+          <h3><span class="sub-punto"></span>{_h.escape(sub_titulo)}</h3>
+          <span class="sub-est">{_h.escape(sub_est)}</span>
+        </div>
+        <p class="sub-desc">{_h.escape(sub_desc)}</p>
+        {aviso_vinc}
+        <div class="rejilla">
+{tarjetas}
+        </div>
+      </div>""")
+            interior = f'    <div class="subgrupos">\n{chr(10).join(bloques_sub)}\n    </div>'
+        else:
+            tarjetas = "\n".join(_tarjeta_indice(f) for f in propias)
+            interior = f'    <div class="rejilla">\n{tarjetas}\n    </div>'
+
         bloques.append(
             f"""  <section class="bloque" data-grupo="{enfoque}">
     <h2>{enfoque}</h2>
-    <p class="ayuda">{descripcion}</p>
-    <div class="rejilla">
-{tarjetas}
-    </div>
+    <p class="ayuda">{descripcion}</p>{panel_hx}
+{interior}
   </section>"""
         )
 
     css_extra = """
   .rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));
-    gap:11px;margin-top:15px}
-  a.ficha{display:block;border:1px solid var(--linea);border-radius:10px;padding:14px 16px;
+    gap:11px;margin-top:10px}
+  a.ficha{display:flex;flex-direction:column;border:1px solid var(--linea);border-radius:10px;padding:14px 16px;
     text-decoration:none;color:inherit;background:#fdfefe;transition:border-color .13s,
     transform .13s,box-shadow .13s}
   a.ficha:hover{border-color:var(--acento);transform:translateY(-2px);
     box-shadow:0 3px 12px rgba(47,111,143,.12)}
-  a.ficha .etq{display:inline-block;font-size:10.5px;text-transform:uppercase;
+  a.ficha.hx-item-vinculado{border-style:dashed;background:#fafcfe}
+  a.ficha .etq{align-self:flex-start;display:inline-block;font-size:10.5px;text-transform:uppercase;
     letter-spacing:.8px;font-weight:700;color:var(--acento);background:var(--acento-claro);
     border-radius:999px;padding:2px 9px;margin-bottom:8px}
   a.ficha b{display:block;font-size:16.5px;margin-bottom:5px;letter-spacing:-.2px}
   a.ficha .dice{display:block;font-size:13.5px;color:var(--tinta-suave);line-height:1.45}
   a.ficha .ref{display:block;font-size:11.5px;color:var(--tinta-suave);font-style:italic;
-    margin-top:9px;padding-top:8px;border-top:1px dashed var(--linea)}
+    margin-top:auto;padding-top:8px;border-top:1px dashed var(--linea)}
+  a.ficha .hx-tags{margin-bottom:8px}
   .comoUsar{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;
     margin-top:14px}
   .comoUsar div{font-size:13.5px;color:var(--tinta-suave)}
@@ -231,13 +266,13 @@ def construir_indice(fichas, kit_css):
   <span class="quees">
     <b>Guía rápida de uso</b>
     <span>Para qué sirve cada hoja, en qué casos rinde, con qué va antes o después, y dónde
-    conviene tener cuidado. Incluye los encadenamientos que suelen funcionar.</span>
+    conviene tener cuidado. Incluye el mapa del hexaflex y los encadenamientos que suelen funcionar.</span>
   </span>
   <span class="flecha">&rarr;</span>
 </a>
 </div>
 
-{rieles.controles("Buscar una hoja por nombre, técnica o uso…")}
+{rieles.controles("Buscar una hoja por nombre, proceso o técnica…")}
 
 <main class="centro">
 {chr(10).join(bloques)}
@@ -284,8 +319,11 @@ def main():
         if not filtro or filtro in ruta.name:
             print(f"  {destino.name}  ({destino.stat().st_size // 1024} KB)")
 
-    orden = {n: i for i, (n, _) in enumerate(ORDEN_ENFOQUES)}
-    fichas.sort(key=lambda f: (orden.get(f["enfoque"], 99), f.get("orden", "99")))
+    orden_enf = {n: i for i, (n, _) in enumerate(ORDEN_ENFOQUES)}
+    fichas.sort(key=lambda f: (
+        orden_enf.get(f["enfoque"], 99),
+        rieles.info_organizacion(f["archivo"])["orden_org"],
+    ))
 
     # Cada herramienta lleva el índice de todas las hojas.
     for f in fichas:
