@@ -88,17 +88,37 @@ REVISION = {
  'tcc-trap-a-trac': (4, [0, 1, 2, 3], 'El desvío ferroviario entre el bucle de evitación (TRAP) y un paso pequeño de afrontamiento alternativo (TRAC).'),
  'tcc-episodio-de-ira': (4, [0, 1, 2, 3], 'Los cinco eslabones del episodio de ira y cómo cortar la escalada al notar la exigencia rígida y la señal en el cuerpo.'),
  'tcc-dosificar-energia': (4, [0, 1, 2, 3], 'Pasar de la montaña rusa del sobrecarga-colapso en los días buenos a una cuota amable con pausa a tiempo.'),
+ 'met-trampa-china': (3, [0, 1, 2], 'Qué ocurre al jalar hacia afuera para escapar del malestar y qué cambia al acercarse con suavidad hacia adentro.'),
+ 'met-invitado-incomodo': (3, [0, 1, 2], 'Quién toca a la puerta sin ser invitado, cuánto cuesta vigilar la entrada y qué fiesta valiosa se recupera al abrir.'),
+ 'met-arenas-movedizas': (3, [0, 1, 2], 'El reflejo automático de patalear para salir rápido frente a extender el cuerpo y aumentar la superficie de contacto.'),
+ 'act-pasear-la-mente': (3, [0, 1, 2], 'La charla incesante de la mente anotada en su globo y la dirección que eligen tus pies con libertad.'),
+ 'act-pero-por-y': (3, [0, 1, 2], 'Cambiar el «pero» que frena la vida por el «y» que permite sentir lo que hay y aun así caminar hacia lo valioso.'),
+ 'met-cinta-de-sushi': (3, [0, 1, 2], 'Los platillos mentales que desfilan por la cinta transportadora sin obligación de comprarlos ni tragarlos.'),
+ 'act-piloto-automatico': (3, [0, 1, 2], 'Identificar una rutina cotidiana hecha en piloto automático y encender los cinco sentidos para habitar el presente.'),
+ 'act-hecho-o-juicio': (3, [0, 1, 2], 'Separar lo que una cámara de video registraría (hecho descriptivo) de la etiqueta valorativa que añade la mente (juicio).'),
+ 'act-observador-en-el-tiempo': (3, [0, 1, 2], 'Tres momentos distintos de la vida conectados por el mismo testigo silencioso que mira por detrás de los ojos.'),
+ 'met-dos-montanas': (3, [0, 1, 2], 'La roca que de cerca parece tapar todo el camino y el sendero completo visto desde la montaña de enfrente.'),
+ 'met-la-casa-y-los-muebles': (3, [0, 1, 2], 'Los muebles incómodos o antiguos que ocupan un rincón y la casa amplia que los contiene sin volverse mueble.'),
+ 'act-diana-de-valores': (4, [0, 1, 2, 3], 'La ubicación del dardo en los cuatro cuadrantes vitales esta semana y el paso concreto hacia el centro de la diana.'),
+ 'act-punto-dulce': (3, [0, 1, 2], 'Un momento real de plenitud y presencia evocado con los sentidos para descubrir qué valor latía ahí dentro.'),
+ 'act-dial-disposicion': (3, [0, 1, 2], 'Soltar la perilla trabada del malestar para subir la perilla de la disposición a abrir espacio y actuar.'),
 }
 
 # Las escenas con preparación larga se mantienen a ancho completo.
 ESCENAS_LATERALES = {
  'act-camino-de-vida',
+ 'act-diana-de-valores',
  'act-echar-el-ancla',
  'act-el-cielo-y-el-clima',
  'act-los-ganchos',
+ 'act-observador-en-el-tiempo',
+ 'act-pasear-la-mente',
  'act-quien-lleva-los-globos',
  'crisis-surfear-el-impulso',
  'dbt-aceptacion-radical',
+ 'met-arenas-movedizas',
+ 'met-cinta-de-sushi',
+ 'met-dos-montanas',
  'met-el-bus',
  'met-el-escenario',
  'met-el-hoyo',
@@ -106,11 +126,13 @@ ESCENAS_LATERALES = {
  'met-el-poligrafo',
  'met-el-tablero',
  'met-hojas-en-el-arroyo',
+ 'met-invitado-incomodo',
  'met-la-cuerda',
  'met-la-palabra-repetida',
  'met-la-radio',
  'met-las-dos-caras',
  'met-las-manos',
+ 'met-trampa-china',
  'par-tener-razon-o-cuidar',
  'tcc-aplazar-la-preocupacion',
  'tcc-exposicion-interoceptiva'
@@ -230,7 +252,7 @@ def descripcion(archivo):
     return REVISION[Path(archivo).stem][2]
 
 def documentar():
-    lineas = ['# Revisión de las 75 herramientas para el uso en sesión', '',
+    lineas = ['# Revisión de las 89 herramientas para el uso en sesión', '',
       'Criterio acordado: protagonismo y acceso inicial al componente aprovechable en conversación. '
       'Los complementos se conservan y se abren por su nombre. No se exige completar la herramienta.', '',
       '| Herramienta | Entrada principal | Bloques centrales (índices de fuente) |',

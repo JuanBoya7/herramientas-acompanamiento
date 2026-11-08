@@ -265,6 +265,15 @@ def construir_indice(fichas, kit_css):
   </span>
   <span class="flecha">&rarr;</span>
 </a>
+
+<a class="aGuia" href="lecturas-act.html" style="border-color:#c26a4e">
+  <span class="quees">
+    <b>Lecturas ACT para leer y reflexionar</b>
+    <span>Tablero alterno con 48 metáforas, ejercicios y hojas de reflexión ilustradas, organizadas por el
+    hexaflex. Cada lectura trae preguntas para conversar y se envía como PDF por WhatsApp o por correo.</span>
+  </span>
+  <span class="flecha" style="color:#c26a4e">&rarr;</span>
+</a>
 </div>
 
 {rieles.controles("Buscar una hoja por nombre, proceso o técnica…")}

@@ -1,0 +1,137 @@
+@@meta
+archivo: met-invitado-incomodo.html
+titulo: El invitado incómodo en la fiesta
+enfoque: ACT
+etiqueta: Aceptación
+sub: Mira dónde queda el anfitrión cuando pasa la noche trancando la puerta y dónde queda cuando deja pasar al visitante sin entregarle la casa.
+fuente: Metáfora de Joe el vagabundo / El invitado no deseado (Hayes, Strosahl y Wilson, 1999, cap. 8; Oliver, 2011; Harris, 2019).
+resumen: Contrastar el costo de vigilar la puerta para que no entre una emoción difícil frente a permitirle estar y volver a la reunión valiosa.
+@@css
+  .ii-estado{background:#f7faf9;border:1px solid var(--linea);border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La reunión que te importa y quién toca a la puerta</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué hay adentro de tu casa que sí quieres vivir</label>
+    <div class="chips" id="fiesta">
+      <button class="chip" data-v="Compartir con presencia con las personas que quiero">Compartir con presencia con las personas que quiero</button>
+      <button class="chip" data-v="Sacar adelante un proyecto propio con sentido">Sacar adelante un proyecto propio con sentido</button>
+      <button class="chip" data-v="Construir intimidad y confianza en mis vínculos">Construir intimidad y confianza en mis vínculos</button>
+      <button class="chip" data-v="Disfrutar mi tiempo de descanso sin estar en guardia">Disfrutar mi tiempo de descanso sin estar en guardia</button>
+    </div>
+    <label class="etiqueta">Qué invitado ruidoso golpea la puerta sin invitación</label>
+    <div class="chips" id="invitado">
+      <button class="chip" data-v="La duda de «no soy suficiente»">La duda de «no soy suficiente»</button>
+      <button class="chip" data-v="El miedo a que algo salga mal">El miedo a que algo salga mal</button>
+      <button class="chip" data-v="La tristeza o el vacío que llega de golpe">La tristeza o el vacío que llega de golpe</button>
+      <button class="chip" data-v="La incomodidad física de la ansiedad">La incomodidad física de la ansiedad</button>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="escenaFiesta" viewBox="0 0 680 280" role="img" aria-label="Plano de la casa: puerta de entrada y sala de la fiesta"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mPuerta">En la puerta</span><span class="r">dónde estás tú</span></div>
+    <div><span class="n" id="mContacto">15%</span><span class="r">presencia en tu fiesta</span></div>
+    <div><span class="n" id="mRuido">Sigue ahí</span><span class="r">el invitado</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" id="bTrancar">Trancar la puerta y vigilar que no entre</button>
+    <button type="button" class="principal" id="bAbrir">Abrir la puerta y volver con tus invitados</button>
+  </div>
+  <div class="ii-estado" id="notaFiesta">Elige qué hacer con la puerta para ver qué ocurre con el anfitrión y con la fiesta.</div>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="qFiesta">Cuando te quedas sosteniendo la puerta con el hombro para que ese invitado no pase, ¿quién se está perdiendo la fiesta?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Cómo sería dejarle un rincón en la sala y volver a la mesa..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("fiesta", {multiple:false, libre:true});
+Kit.chips("invitado", {multiple:false, libre:true});
+
+let postura = "trancar"; // trancar | abrir
+
+function pintar(){
+  const svg = $("escenaFiesta");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+
+  const nomFiesta = Kit.activas("fiesta")[0] || "Lo que te importa vivir";
+  const nomInv = Kit.activas("invitado")[0] || "El invitado incómodo";
+
+  // Fondo general: porche izquierdo + salón cálido derecho
+  g("rect", {x:0, y:0, width:210, height:280, fill:"#e8eef3"});
+  g("rect", {x:210, y:0, width:470, height:280, fill:"#fdf8ef"});
+  g("line", {x1:210, y1:0, x2:210, y2:280, stroke:"#8a6d4b", "stroke-width":5});
+
+  // Luces cálidas y mesa en la fiesta (derecha)
+  for(let x = 270; x <= 620; x += 70){
+    g("circle", {cx:x, cy:34, r:7, fill:"#f3b64c", "fill-opacity":0.85});
+  }
+  g("ellipse", {cx:475, cy:170, rx:115, ry:52, fill:"#e9d3b0", stroke:"#b59264", "stroke-width":2});
+  const tMesa = g("text", {x:475, y:174, "text-anchor":"middle", fill:"#4f3b22", style:"font:600 12.5px system-ui,sans-serif"});
+  tMesa.textContent = nomFiesta.length > 36 ? nomFiesta.slice(0, 34) + "…" : nomFiesta;
+
+  // Personas queridas alrededor de la mesa
+  [[400,115],[550,115],[405,228],[548,228]].forEach(([cx, cy]) => {
+    g("circle", {cx, cy, r:16, fill:"#3f9b86", "fill-opacity":0.85});
+  });
+
+  if(postura === "trancar"){
+    // Puerta cerrada, invitado golpeando afuera, anfitrión pegado a la puerta de espaldas a la fiesta
+    g("rect", {x:205, y:95, width:10, height:95, fill:"#6e4726"});
+    // Invitado afuera golpeando
+    g("circle", {cx:135, cy:142, r:24, fill:"#8c564b"});
+    const tInv = g("text", {x:115, y:192, "text-anchor":"middle", fill:"#6b372d", style:"font:700 11.5px system-ui,sans-serif"});
+    tInv.textContent = "¡BAM! ¡BAM!";
+    // Anfitrión empujando la puerta lejos de su propia mesa
+    g("circle", {cx:245, cy:142, r:20, fill:"#2f6f8f"});
+    const tYo = g("text", {x:258, y:102, "text-anchor":"middle", fill:"#1f4b66", style:"font:700 12px system-ui,sans-serif"});
+    tYo.textContent = "Tú (vigilando)";
+    // Línea punteada mostrando la distancia a la mesa
+    g("line", {x1:268, y1:142, x2:360, y2:165, stroke:"#b84a39", "stroke-width":2, "stroke-dasharray":"5 5"});
+
+    $("mPuerta").textContent = "Trancando la puerta";
+    $("mContacto").textContent = "15%";
+    $("mRuido").textContent = "Golpea más fuerte";
+    $("notaFiesta").innerHTML = `<b>Vigilando la puerta:</b> «${nomInv}» no entra a la sala, pero tú tampoco estás en tu fiesta. Toda tu energía se va en sostener el picaporte.`;
+  } else {
+    // Puerta abierta, invitado en un rincón con un canapé, anfitrión sentado en la mesa principal
+    g("line", {x1:210, y1:95, x2:255, y2:68, stroke:"#6e4726", "stroke-width":6});
+    // Invitado en una esquina de la sala rezongando bajito
+    g("circle", {cx:268, cy:226, r:21, fill:"#8c564b", "fill-opacity":0.8});
+    const tInv = g("text", {x:278, y:260, "text-anchor":"middle", fill:"#6b372d", style:"font:600 11px system-ui,sans-serif"});
+    tInv.textContent = nomInv.length > 26 ? nomInv.slice(0, 24) + "…" : nomInv;
+    // Anfitrión en la cabecera de la mesa compartiendo
+    g("circle", {cx:475, cy:106, r:21, fill:"#2f6f8f", stroke:"#fff", "stroke-width":2.5});
+    const tYo = g("text", {x:475, y:76, "text-anchor":"middle", fill:"#1f4b66", style:"font:700 12.5px system-ui,sans-serif"});
+    tYo.textContent = "Tú (en la fiesta)";
+
+    $("mPuerta").textContent = "En la mesa con los tuyos";
+    $("mContacto").textContent = "90%";
+    $("mRuido").textContent = "En un rincón";
+    $("notaFiesta").innerHTML = `<b>Con la puerta destrancada:</b> «${nomInv}» sigue teniendo modales molestos en una esquina, pero tus manos y tu atención volvieron a «${nomFiesta}».`;
+    $("qFiesta").textContent = "No hace falta que el invitado te caiga bien ni que apruebes su visita. ¿Qué puedes hacer hoy en tu propia mesa aunque él siga rondando por la sala?";
+  }
+}
+
+$("bTrancar").addEventListener("click", () => { postura = "trancar"; pintar(); Kit.guardar(); });
+$("bAbrir").addEventListener("click", () => { postura = "abrir"; pintar(); Kit.guardar(); });
+
+Kit.iniciar({
+  clave: "met-invitado-incomodo",
+  alCambiar: pintar,
+  resumen: () => [
+    "EL INVITADO INCÓMODO EN LA FIESTA",
+    `La fiesta que importa: ${Kit.activas("fiesta")[0] || "—"}`,
+    `El invitado incómodo: ${Kit.activas("invitado")[0] || "—"}`,
+    `Posición explorada: ${postura === "abrir" ? "Dejar la puerta abierta y volver a la mesa" : "Trancar la puerta y vigilar"}`,
+    $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
+  ].filter(Boolean).join("\n")
+});

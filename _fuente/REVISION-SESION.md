@@ -1,4 +1,4 @@
-# Revisión de las 75 herramientas para el uso en sesión
+# Revisión de las 89 herramientas para el uso en sesión
 
 Criterio acordado: protagonismo y acceso inicial al componente aprovechable en conversación. Los complementos se conservan y se abren por su nombre. No se exige completar la herramienta.
 
@@ -79,6 +79,20 @@ Criterio acordado: protagonismo y acceso inicial al componente aprovechable en c
 | tcc-trap-a-trac | El desvío ferroviario entre el bucle de evitación (TRAP) y un paso pequeño de afrontamiento alternativo (TRAC). | 0, 1, 2, 3 |
 | tcc-episodio-de-ira | Los cinco eslabones del episodio de ira y cómo cortar la escalada al notar la exigencia rígida y la señal en el cuerpo. | 0, 1, 2, 3 |
 | tcc-dosificar-energia | Pasar de la montaña rusa del sobrecarga-colapso en los días buenos a una cuota amable con pausa a tiempo. | 0, 1, 2, 3 |
+| met-trampa-china | Qué ocurre al jalar hacia afuera para escapar del malestar y qué cambia al acercarse con suavidad hacia adentro. | 0, 1, 2 |
+| met-invitado-incomodo | Quién toca a la puerta sin ser invitado, cuánto cuesta vigilar la entrada y qué fiesta valiosa se recupera al abrir. | 0, 1, 2 |
+| met-arenas-movedizas | El reflejo automático de patalear para salir rápido frente a extender el cuerpo y aumentar la superficie de contacto. | 0, 1, 2 |
+| act-pasear-la-mente | La charla incesante de la mente anotada en su globo y la dirección que eligen tus pies con libertad. | 0, 1, 2 |
+| act-pero-por-y | Cambiar el «pero» que frena la vida por el «y» que permite sentir lo que hay y aun así caminar hacia lo valioso. | 0, 1, 2 |
+| met-cinta-de-sushi | Los platillos mentales que desfilan por la cinta transportadora sin obligación de comprarlos ni tragarlos. | 0, 1, 2 |
+| act-piloto-automatico | Identificar una rutina cotidiana hecha en piloto automático y encender los cinco sentidos para habitar el presente. | 0, 1, 2 |
+| act-hecho-o-juicio | Separar lo que una cámara de video registraría (hecho descriptivo) de la etiqueta valorativa que añade la mente (juicio). | 0, 1, 2 |
+| act-observador-en-el-tiempo | Tres momentos distintos de la vida conectados por el mismo testigo silencioso que mira por detrás de los ojos. | 0, 1, 2 |
+| met-dos-montanas | La roca que de cerca parece tapar todo el camino y el sendero completo visto desde la montaña de enfrente. | 0, 1, 2 |
+| met-la-casa-y-los-muebles | Los muebles incómodos o antiguos que ocupan un rincón y la casa amplia que los contiene sin volverse mueble. | 0, 1, 2 |
+| act-diana-de-valores | La ubicación del dardo en los cuatro cuadrantes vitales esta semana y el paso concreto hacia el centro de la diana. | 0, 1, 2, 3 |
+| act-punto-dulce | Un momento real de plenitud y presencia evocado con los sentidos para descubrir qué valor latía ahí dentro. | 0, 1, 2 |
+| act-dial-disposicion | Soltar la perilla trabada del malestar para subir la perilla de la disposición a abrir espacio y actuar. | 0, 1, 2 |
 
 El jardín conserva su secuencia. El plan de seguridad conserva todos sus componentes visibles. Las ramas de Verificar los hechos siguen dependiendo de las respuestas. Las precauciones de sueño preceden al cálculo.
 

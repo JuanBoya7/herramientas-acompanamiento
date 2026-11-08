@@ -268,6 +268,20 @@ ORGANIZACION = {
     'tcc-trap-a-trac.html': ('Cognitivo-conductual', 'tcc-exposicion', 19, '', [], ''),
     'tcc-episodio-de-ira.html': ('Cognitivo-conductual', 'tcc-afrontamiento', 20, '', [], ''),
     'tcc-dosificar-energia.html': ('Cognitivo-conductual', 'tcc-afrontamiento', 21, '', [], ''),
+    'met-trampa-china.html': ('ACT', 'aceptacion', 28, 'aceptacion', ['defusion'], 'Muestra por qué el intento lógico de jalar para librarse de la ansiedad aprieta más las fibras, mientras que inclinarse con suavidad hacia la sensación crea espacio.'),
+    'met-invitado-incomodo.html': ('ACT', 'aceptacion', 29, 'aceptacion', ['valores', 'accion'], 'Contrasta el agotamiento de quedarse trancando la puerta al visitante molesto frente a dejarlo entrar sin darle el timón de la celebración valiosa.'),
+    'met-arenas-movedizas.html': ('ACT', 'aceptacion', 30, 'aceptacion', ['presente'], 'Ilustra cómo patalear contra el pánico o la tristeza hunde más rápido, y cómo tenderse de espaldas en contacto amplio con el presente devuelve la flotación.'),
+    'act-pasear-la-mente.html': ('ACT', 'defusion', 31, 'defusion', ['yo', 'accion'], 'Pone en práctica el ejercicio clásico de caminar escuchando a la mente opinar, juzgar y predecir en voz alta sin obedecer ni discutir con ella.'),
+    'act-pero-por-y.html': ('ACT', 'defusion', 32, 'defusion', ['aceptacion', 'accion'], 'Transforma la trampa verbal del «pero» (que convierte a la emoción en un freno) en la conjunción «y», integrando malestar y movimiento valioso.'),
+    'met-cinta-de-sushi.html': ('ACT', 'defusion', 33, 'defusion', ['presente', 'yo'], 'Representa el flujo continuo de ideas e imágenes como platillos que desfilan por una cinta transportadora sin que tengamos que consumirlos.'),
+    'act-piloto-automatico.html': ('ACT', 'presente', 34, 'presente', ['defusion', 'valores'], 'Entrena el paso de hacer tareas cotidianas perdidos en la rumiación hacia el contacto sensorial directo con una sola acción a la vez.'),
+    'act-hecho-o-juicio.html': ('ACT', 'presente', 35, 'presente', ['defusion'], 'Enseña a separar las propiedades observables de una situación (descripción limpia) de las valoraciones globales que la mente pega sobre ella.'),
+    'act-observador-en-el-tiempo.html': ('ACT', 'yo', 36, 'yo', ['presente', 'aceptacion'], 'Recorre tres etapas biográficas para contactar con la conciencia testigo («yo, aquí, ahora») que permanece estable a través de todos los cambios.'),
+    'met-dos-montanas.html': ('ACT', 'yo', 37, 'yo', ['aceptacion', 'valores'], 'Ubica a terapeuta y consultante como dos escaladores en montañas vecinas y aprovecha la perspectiva externa para mirar el propio sendero con amplitud.'),
+    'met-la-casa-y-los-muebles.html': ('ACT', 'yo', 38, 'yo', ['defusion', 'aceptacion'], 'Diferencia entre los muebles transitorios (pensamientos, estados de ánimo, etiquetas) y la casa firme que los hospeda sin confundirse con ninguno.'),
+    'act-diana-de-valores.html': ('ACT', 'valores', 39, 'valores', ['accion'], "Evalúa en los cuatro cuadrantes del Bull's-Eye cuán cerca del centro valioso se está viviendo hoy y define un movimiento hacia el blanco."),
+    'act-punto-dulce.html': ('ACT', 'valores', 40, 'valores', ['presente', 'aceptacion'], 'Conecta con los valores propios por vía experiencial evocando un momento real de plenitud y sabor vital, lejos del «debería» racional.'),
+    'act-dial-disposicion.html': ('ACT', 'accion', 41, 'accion', ['aceptacion', 'valores'], 'Distingue la perilla incontrolable del malestar frente a la perilla de la disposición a abrir espacio y actuar, que sí está en nuestras manos.'),
 }
 
 
@@ -1005,6 +1019,7 @@ def indice_hojas(fichas, actual):
         '<button type="button" class="ih-cerrar" id="ih-cerrar">Cerrar &times;</button>'
         '<a class="ih-top" href="index.html">&larr; Todas las hojas</a>'
         '<a class="ih-top" href="guia.html">Guía rápida de uso</a>'
+        '<a class="ih-top" href="lecturas-act.html">Lecturas ACT</a>'
         + "".join(grupos) + '</nav>\n<div class="ih-velo" id="ih-velo" hidden></div>\n'
         "<script>" + INDICE_JS + "</script>\n" + FIN
     )

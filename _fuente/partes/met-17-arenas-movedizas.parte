@@ -1,0 +1,123 @@
+@@meta
+archivo: met-arenas-movedizas.html
+titulo: Las arenas movedizas
+enfoque: ACT
+etiqueta: Aceptación
+sub: Prueba qué pasa con el hundimiento cuando pataleas para sacar un pie y cuando te tiendes de espaldas abriendo los brazos sobre la superficie.
+fuente: Metáfora de las arenas movedizas (Hayes y Smith, 2005, cap. 1; Luoma, Hayes y Walser, 2017).
+resumen: Experimentar cómo la lucha vertical hunde más rápido y cómo ampliar la superficie de contacto permite flotar.
+@@css
+  .am-nota{background:#f7faf9;border:1px solid var(--linea);border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>En qué arena sientes que hoy pataleas</h2>
+  <div class="cuerpo">
+    <div class="chips" id="arena">
+      <button class="chip" data-v="El insomnio y el enojo por no dormirme">El insomnio y el enojo por no dormirme</button>
+      <button class="chip" data-v="Una oleada de pánico o mareo en el cuerpo">Una oleada de pánico o mareo en el cuerpo</button>
+      <button class="chip" data-v="La pena por una pérdida o cambio difícil">La pena por una pérdida o cambio difícil</button>
+      <button class="chip" data-v="La rumia cuando cometo un error en el trabajo">La rumia cuando cometo un error en el trabajo</button>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="svgArena" viewBox="0 0 680 270" role="img" aria-label="Figura en las arenas movedizas: vertical pataleando o flotando horizontal"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mProf">45 cm</span><span class="r">hundimiento</span></div>
+    <div><span class="n" id="mContacto">Poca (solo los pies)</span><span class="r">superficie de contacto</span></div>
+    <div><span class="n" id="mGasto">Alto</span><span class="r">gasto de energía</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" id="bPatalear">Patalear y hacer fuerza para salir</button>
+    <button type="button" class="principal" id="bFlotar">Tenderse de espaldas y abrir los brazos</button>
+    <button type="button" id="bReset">Volver al inicio</button>
+  </div>
+  <div class="am-nota" id="amLectura">En las arenas movedizas todo el peso apoyado en dos pies hunde el cuerpo. Prueba ambos movimientos.</div>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="qArena">Tenderse sobre la arena parece lo opuesto a salvarse, porque te pone más en contacto con ella; sin embargo, es lo único que te saca a flote. ¿Cómo se vería hoy «abrir los brazos» ante lo que sientes?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Qué gesto concreto sería dejar de patalear y aumentar el contacto..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("arena", {multiple:false, libre:true});
+
+let prof = 45; // cm de hundimiento (10 a 110)
+let postura = "vertical"; // vertical | flotar
+
+function dibujar(){
+  const svg = $("svgArena");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+
+  // Cielo y banco de arena
+  g("rect", {x:0, y:0, width:680, height:135, fill:"#e9f2f7"});
+  g("rect", {x:0, y:135, width:680, height:135, fill:"#df89e"});
+  g("rect", {x:0, y:135, width:680, height:135, fill:"#dfc496"});
+  g("ellipse", {cx:340, cy:140, rx:240, ry:22, fill:"#c8a66c"});
+
+  const nom = Kit.activas("arena")[0] || "La arena movediza";
+  const tNom = g("text", {x:340, y:248, "text-anchor":"middle", fill:"#5b4421", style:"font:700 13px system-ui,sans-serif"});
+  tNom.textContent = nom;
+
+  if(postura === "vertical"){
+    const yCuerpo = 70 + (prof - 45) * 0.85;
+    // Figura vertical hundiéndose
+    g("circle", {cx:340, cy:yCuerpo, r:16, fill:"#2f6f8f"});
+    g("rect", {x:326, y:yCuerpo + 18, width:28, height:58, rx:10, fill:"#2f6f8f"});
+    // Salpicaduras de esfuerzo
+    if(prof > 50){
+      g("line", {x1:295, y1:130, x2:275, y2:110, stroke:"#b84a39", "stroke-width":2.5});
+      g("line", {x1:385, y1:130, x2:405, y2:110, stroke:"#b84a39", "stroke-width":2.5});
+    }
+    // Capa de arena que cubre la mitad inferior
+    g("rect", {x:260, y:138, width:160, height:85, fill:"#c8a66c"});
+  } else {
+    // Figura horizontal flotando sobre la superficie con brazos extendidos
+    g("ellipse", {cx:340, cy:134, rx:72, ry:13, fill:"#2f6f8f"});
+    g("circle", {cx:262, cy:130, r:14, fill:"#2f6f8f"});
+    g("line", {x1:290, y1:134, x2:405, y2:134, stroke:"#e8f1f6", "stroke-width":3});
+  }
+
+  $("mProf").textContent = prof + " cm";
+  $("mContacto").textContent = postura === "flotar" ? "Amplia (todo el cuerpo)" : "Mínima (solo los pies)";
+  $("mGasto").textContent = postura === "flotar" ? "Sereno y estable" : (prof > 70 ? "Agotador" : "Alto");
+}
+
+$("bPatalear").addEventListener("click", () => {
+  postura = "vertical";
+  prof = Math.min(105, prof + 20);
+  $("amLectura").innerHTML = "<b>Al patalear:</b> cuando levantas un pie para zafarte, todo tu peso recae en el otro y la succión te lleva más abajo.";
+  dibujar();
+  Kit.guardar();
+});
+
+$("bFlotar").addEventListener("click", () => {
+  postura = "flotar";
+  prof = 12;
+  $("amLectura").innerHTML = "<b>Al tenderte de espaldas y abrir los brazos:</b> aumentas el contacto con la superficie sin pelear contra ella; el cuerpo deja de hundirse y puedes desplazarte hacia la orilla.";
+  dibujar();
+  Kit.guardar();
+});
+
+$("bReset").addEventListener("click", () => {
+  postura = "vertical";
+  prof = 45;
+  dibujar();
+});
+
+Kit.iniciar({
+  clave: "met-arenas-movedizas",
+  alCambiar: dibujar,
+  resumen: () => [
+    "LAS ARENAS MOVEDIZAS",
+    `Situación: ${Kit.activas("arena")[0] || "—"}`,
+    `Movimiento ensayado: ${postura === "flotar" ? "Tenderse y ampliar el contacto para flotar" : "Patalear verticalmente"}`,
+    $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
+  ].filter(Boolean).join("\n")
+});

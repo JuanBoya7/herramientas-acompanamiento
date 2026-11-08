@@ -1275,6 +1275,372 @@ GUIA = [
                  'ignorar las señales del cuerpo.')],
   'titulo': 'Dosificar la energía: salir del sobrecarga-colapso'}]
 ),
+(
+  "Ampliación ACT en literatura clásica (Lote 4)",
+  [{'archivo': 'met-trampa-china.html',
+  'conviene': ['Cuando la persona dice «he intentado de todo para quitarme esta ansiedad y cada '
+               'vez es peor».',
+               'Comparar la lucha contra el malestar con meter los índices en el cilindro tejido y '
+               'tirar con fuerza hacia afuera.',
+               'Mover el deslizador de tensión para contrastar el reflejo de escapar con el gesto '
+               'de empujar suavemente hacia adentro.',
+               'Escribir a qué sensación concreta se le puede dar hoy un milímetro de holgura en '
+               'lugar de jalar.'],
+  'cuidado': 'Cuanto más fuerte tiras para escapar de lo que sientes, más se cierra el tejido; '
+             'acercarte con suavidad te devuelve el espacio.',
+  'etq': 'Aceptación · Metáfora viva',
+  'paraque': 'Mostrar en segundos por qué la respuesta intuitiva de jalar hacia afuera para '
+             'librarse de la ansiedad o los recuerdos dolorosos aprieta más el tubo de bambú, y '
+             'cómo el movimiento contraintuitivo de acercarse con suavidad hacia la experiencia '
+             'afloja la presión.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona dice «he intentado de todo para quitarme esta ansiedad y cada '
+                 'vez es peor».'),
+                ('En sesión',
+                 'Comparar la lucha contra el malestar con meter los índices en el cilindro tejido '
+                 'y tirar con fuerza hacia afuera. · Mover el deslizador de tensión para '
+                 'contrastar el reflejo de escapar con el gesto de empujar suavemente hacia '
+                 'adentro. · Escribir a qué sensación concreta se le puede dar hoy un milímetro de '
+                 'holgura en lugar de jalar.'),
+                ('Abre paso a', 'Arenas movedizas, El dial de la disposición')],
+  'titulo': 'La Trampa China para Dedos'},
+ {'archivo': 'met-invitado-incomodo.html',
+  'conviene': ['Cuando la persona pospone su vida social, afectiva o vocacional hasta el día en '
+               'que «ya no sienta incomodidad».',
+               'Ponerle nombre a la fiesta valiosa que hoy está en marcha y al invitado molesto '
+               'que tocó el timbre.',
+               'Alternar entre «Cerrar la puerta y vigilar» y «Permitir que entre y volver a mi '
+               'fiesta» para ver qué pasa con el anfitrión.',
+               'Acordar cómo atender a los invitados que sí importan aunque el visitante ruidoso '
+               'siga merodeando cerca del bufé.'],
+  'cuidado': 'No hace falta que te caiga bien el invitado incómodo; solo hace falta que dejes de '
+             'abandonar tu propia fiesta por vigilarle la puerta.',
+  'etq': 'Aceptación y valores',
+  'paraque': 'Evidenciar el costo vital de abandonar la propia fiesta (los valores y vínculos) por '
+             'quedarse en la puerta forcejeando para que no entre un vecino ruidoso (la '
+             'inseguridad, el miedo o la tristeza).',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona pospone su vida social, afectiva o vocacional hasta el día en '
+                 'que «ya no sienta incomodidad».'),
+                ('En sesión',
+                 'Ponerle nombre a la fiesta valiosa que hoy está en marcha y al invitado molesto '
+                 'que tocó el timbre. · Alternar entre «Cerrar la puerta y vigilar» y «Permitir '
+                 'que entre y volver a mi fiesta» para ver qué pasa con el anfitrión. · Acordar '
+                 'cómo atender a los invitados que sí importan aunque el visitante ruidoso siga '
+                 'merodeando cerca del bufé.'),
+                ('Abre paso a', 'La diana de valores, El bus y los pasajeros')],
+  'titulo': 'El Invitado Incómodo en la Fiesta'},
+ {'archivo': 'met-arenas-movedizas.html',
+  'conviene': ['En crisis de ansiedad, rumiación nocturna o hipervigilancia corporal donde el '
+               'esfuerzo por calmarse multiplica la agitación.',
+               'Identificar las formas de «pataleo» actuales (revisar el cuerpo, pelear con la '
+               'mente, buscar garantías).',
+               'Cambiar el selector a la postura de flotación: abrir los brazos, soltar el peso y '
+               'aumentar el área de contacto con la sensación presente.',
+               'Definir cómo sería hoy «flotar con lo que hay» durante cinco minutos sin exigir '
+               'que desaparezca.'],
+  'cuidado': 'En las arenas movedizas, patalear hunde; extender los brazos y apoyarte por completo '
+             'sobre la superficie es lo que te permite flotar.',
+  'etq': 'Aceptación · Metáfora viva',
+  'paraque': 'Explicar por qué las maniobras de urgencia para «salir ya» del pánico, el insomnio o '
+             'el bajón emocional hunden un pie mientras intentan levantar el otro, y cómo extender '
+             'el cuerpo sobre la superficie permite flotar.',
+  'secuencia': [('Cuándo introducirla',
+                 'En crisis de ansiedad, rumiación nocturna o hipervigilancia corporal donde el '
+                 'esfuerzo por calmarse multiplica la agitación.'),
+                ('En sesión',
+                 'Identificar las formas de «pataleo» actuales (revisar el cuerpo, pelear con la '
+                 'mente, buscar garantías). · Cambiar el selector a la postura de flotación: abrir '
+                 'los brazos, soltar el peso y aumentar el área de contacto con la sensación '
+                 'presente. · Definir cómo sería hoy «flotar con lo que hay» durante cinco minutos '
+                 'sin exigir que desaparezca.'),
+                ('Abre paso a', 'Echar el ancla, La trampa china')],
+  'titulo': 'Las Arenas Movedizas'},
+ {'archivo': 'act-pasear-la-mente.html',
+  'conviene': ['Cuando la persona confunde tener un pensamiento de duda o desgano con una orden '
+               'obligatoria de detenerse.',
+               'Escribir o pulsar los comentarios típicos que la mente suelta cuando se intenta '
+               'dar un paso importante.',
+               'Colocar a la par la dirección que eligen los pies de la persona que camina.',
+               'Practicar agradecerle a la mente su charla («gracias, mente, por avisarme») sin '
+               'pedirle que se calle para poder avanzar.'],
+  'cuidado': 'Tu mente puede ir todo el paseo diciendo que no vas a poder, y tus pies pueden '
+             'seguir caminando exactamente hacia donde tú eliges.',
+  'etq': 'Defusión en movimiento',
+  'paraque': 'Llevar la defusión del sillón a la acción cotidiana: notar cómo la mente opina, '
+             'compara, advierte y critica sin descanso mientras los pies eligen libremente por qué '
+             'calle caminar.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona confunde tener un pensamiento de duda o desgano con una orden '
+                 'obligatoria de detenerse.'),
+                ('En sesión',
+                 'Escribir o pulsar los comentarios típicos que la mente suelta cuando se intenta '
+                 'dar un paso importante. · Colocar a la par la dirección que eligen los pies de '
+                 'la persona que camina. · Practicar agradecerle a la mente su charla («gracias, '
+                 'mente, por avisarme») sin pedirle que se calle para poder avanzar.'),
+                ('Abre paso a', 'Cambiar «pero» por «y», La cinta de sushi')],
+  'titulo': 'Sacar a Pasear a tu Mente'},
+ {'archivo': 'act-pero-por-y.html',
+  'conviene': ['Cuando el discurso en sesión está lleno de «sí, pero...» donde el malestar aparece '
+               'como requisito que debe resolverse antes de actuar.',
+               'Anotar la acción valiosa en el primer bloque y la sensación o pensamiento difícil '
+               'en el segundo.',
+               'Conmutar el interruptor central de «PERO» a «Y» para observar cómo pasan de '
+               'excluirse a coexistir.',
+               'Llevarse escrita la frase con «Y» como recordatorio de bolsillo para la semana.'],
+  'cuidado': 'Un simple «y» devuelve la verdad de la experiencia: puedes sentir miedo y al mismo '
+             'tiempo dar el paso que te importa.',
+  'etq': 'Defusión · Desliteralización',
+  'paraque': 'Desactivar la trampa gramatical del «pero» —que convierte cualquier emoción o '
+             'pensamiento en una contradicción que bloquea la acción («quiero ir, pero estoy '
+             'ansioso»)— sustituyéndolo por «y» («quiero ir, y estoy ansioso»).',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando el discurso en sesión está lleno de «sí, pero...» donde el malestar '
+                 'aparece como requisito que debe resolverse antes de actuar.'),
+                ('En sesión',
+                 'Anotar la acción valiosa en el primer bloque y la sensación o pensamiento '
+                 'difícil en el segundo. · Conmutar el interruptor central de «PERO» a «Y» para '
+                 'observar cómo pasan de excluirse a coexistir. · Llevarse escrita la frase con '
+                 '«Y» como recordatorio de bolsillo para la semana.'),
+                ('Abre paso a', 'Sacar a pasear a tu mente, El dial de la disposición')],
+  'titulo': 'Cambiar «Pero» por «Y»'},
+ {'archivo': 'met-cinta-de-sushi.html',
+  'conviene': ['Cuando la persona se siente culpable por el solo hecho de que un pensamiento '
+               'aparezca en su cabeza o cree que pensarlo equivale a desearlo.',
+               'Mirar la banda en movimiento y agregar los platillos repetitivos que la cocina de '
+               'la mente ha estado sacando hoy.',
+               'Distinguir qué pasa cuando se «compra» el platillo frente a dejarlo seguir su '
+               'recorrido por el riel.',
+               'Nombrar qué conversación o tarea valiosa sigue en la mesa mientras la cinta '
+               'continúa girando al fondo.'],
+  'cuidado': 'La cocina de la mente saca platillos de todo tipo sin preguntarte; tu libertad está '
+             'en decidir cuáles dejas pasar de largo por el riel.',
+  'etq': 'Defusión · Metáfora viva',
+  'paraque': 'Observar los pensamientos intrusivos, catastróficos o autocríticos como platillos '
+             'que desfilan solos por la banda transportadora de un restaurante: verlos pasar no '
+             'obliga a levantarlos ni a tragarlos.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona se siente culpable por el solo hecho de que un pensamiento '
+                 'aparezca en su cabeza o cree que pensarlo equivale a desearlo.'),
+                ('En sesión',
+                 'Mirar la banda en movimiento y agregar los platillos repetitivos que la cocina '
+                 'de la mente ha estado sacando hoy. · Distinguir qué pasa cuando se «compra» el '
+                 'platillo frente a dejarlo seguir su recorrido por el riel. · Nombrar qué '
+                 'conversación o tarea valiosa sigue en la mesa mientras la cinta continúa girando '
+                 'al fondo.'),
+                ('Abre paso a', 'Hojas en el arroyo, Describir vs. evaluar')],
+  'titulo': 'El Tren de Sushi de los Pensamientos'},
+ {'archivo': 'act-piloto-automatico.html',
+  'conviene': ['Cuando la persona siente que los días se le pasan en blanco, atrapada en '
+               'preocupaciones futuras o reproches del pasado mientras su cuerpo funciona en '
+               'automático.',
+               'Elegir una actividad cotidiana breve que suele hacerse mirando pantallas o '
+               'rumiando.',
+               'Marcar las cinco anclas sensoriales (vista, tacto/temperatura, sonido, aroma/sabor '
+               'y postura) para encender la presencia.',
+               'Registrar dónde tiende a irse la mente y cómo invitarla de vuelta con amabilidad '
+               'una y otra vez.'],
+  'cuidado': 'Salir del piloto automático no requiere irse a una montaña; empieza la próxima vez '
+             'que tomes un vaso de agua notando de verdad su temperatura.',
+  'etq': 'Momento presente',
+  'paraque': 'Entrenar la atención flexible en las actividades reales del día a día (caminar, '
+             'ducharse, tomar café, escuchar), pasando de hacer las cosas ausente en la rumiación '
+             'a habitar el presente con los cinco sentidos.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona siente que los días se le pasan en blanco, atrapada en '
+                 'preocupaciones futuras o reproches del pasado mientras su cuerpo funciona en '
+                 'automático.'),
+                ('En sesión',
+                 'Elegir una actividad cotidiana breve que suele hacerse mirando pantallas o '
+                 'rumiando. · Marcar las cinco anclas sensoriales (vista, tacto/temperatura, '
+                 'sonido, aroma/sabor y postura) para encender la presencia. · Registrar dónde '
+                 'tiende a irse la mente y cómo invitarla de vuelta con amabilidad una y otra '
+                 'vez.'),
+                ('Abre paso a', 'Echar el ancla, El punto dulce')],
+  'titulo': 'Salir del Piloto Automático'},
+ {'archivo': 'act-hecho-o-juicio.html',
+  'conviene': ['Cuando la persona relata situaciones o se describe a sí misma usando adjetivos '
+               'globales condenatorios como si fueran hechos físicos.',
+               'Resolver juntos las cinco tarjetas de entrenamiento distinguiendo hecho observable '
+               'de juicio valorativo.',
+               'Tomar la frase autocrítica actual y dividirla en dos columnas: lo que registraría '
+               'una cámara de video y lo que la mente añade encima.',
+               'Redactar una descripción limpia desde el presente que reconozca el juicio como un '
+               'producto mental.'],
+  'cuidado': '«Tembló mi voz dos veces» es un hecho; «fue un desastre y soy un incapaz» es una '
+             'evaluación que tu mente pegó encima.',
+  'etq': 'Momento presente y defusión',
+  'paraque': 'Separar las propiedades primarias observables de un suceso (lo que vería una cámara) '
+             'de las evaluaciones secundarias («desastre», «fracaso», «insoportable») que la mente '
+             'funde con la realidad.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona relata situaciones o se describe a sí misma usando adjetivos '
+                 'globales condenatorios como si fueran hechos físicos.'),
+                ('En sesión',
+                 'Resolver juntos las cinco tarjetas de entrenamiento distinguiendo hecho '
+                 'observable de juicio valorativo. · Tomar la frase autocrítica actual y dividirla '
+                 'en dos columnas: lo que registraría una cámara de video y lo que la mente añade '
+                 'encima. · Redactar una descripción limpia desde el presente que reconozca el '
+                 'juicio como un producto mental.'),
+                ('Abre paso a', 'La cinta de sushi, Soltar el anzuelo')],
+  'titulo': 'Describir vs. Evaluar: ¿Hecho o Juicio?'},
+ {'archivo': 'act-observador-en-el-tiempo.html',
+  'conviene': ['Cuando la persona se siente rota, definida por una crisis reciente o fusionada con '
+               'un autoconcepto rígido («yo soy así y no puedo cambiar»).',
+               'Evocar con detalle una escena de la niñez, otra de años atrás y la experiencia '
+               'corporal de este mismo instante.',
+               'Notar el hilo continuo: el cuerpo, los roles y los miedos cambiaron por completo, '
+               'pero el testigo que los observó es el mismo «Yo».',
+               'Mirar la dificultad actual desde ese espacio consciente que no se daña con lo que '
+               'contiene.'],
+  'cuidado': 'Todo lo que has pensado y sentido ha cambiado miles de veces, pero quien mira detrás '
+             'de tus ojos ha estado ahí entero desde el principio.',
+  'etq': 'Yo como contexto',
+  'paraque': 'Guiar de forma estructurada el ejercicio clásico del Observador de Hayes et al. '
+             '(1999): recorrer un recuerdo infantil, uno de hace unos años y el instante actual '
+             'para notar que quien mira detrás de los ojos es más amplio y continuo que cualquier '
+             'etapa o emoción.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona se siente rota, definida por una crisis reciente o fusionada '
+                 'con un autoconcepto rígido («yo soy así y no puedo cambiar»).'),
+                ('En sesión',
+                 'Evocar con detalle una escena de la niñez, otra de años atrás y la experiencia '
+                 'corporal de este mismo instante. · Notar el hilo continuo: el cuerpo, los roles '
+                 'y los miedos cambiaron por completo, pero el testigo que los observó es el mismo '
+                 '«Yo». · Mirar la dificultad actual desde ese espacio consciente que no se daña '
+                 'con lo que contiene.'),
+                ('Abre paso a', 'La casa y los muebles, El tablero de ajedrez')],
+  'titulo': 'El Observador Continuo a través del Tiempo'},
+ {'archivo': 'met-dos-montanas.html',
+  'conviene': ['Al encuadrar el trabajo terapéutico o cuando la persona se siente en un callejón '
+               'sin salida y se juzga con dureza por no ver la solución.',
+               'Observar el gráfico de las dos montañas y distinguir qué sabe quien lleva las '
+               'botas puestas frente a qué se ve desde la ladera de enfrente.',
+               'Describir la roca que hoy parece bloquear todo el paso vista de cerca.',
+               'Cambiar de montaña para mirar el propio recorrido con la amplitud y el respeto con '
+               'que se miraría a un ser querido.'],
+  'cuidado': 'Nadie está libre de subir su propia montaña; mirar desde la montaña de enfrente solo '
+             'nos regala el ángulo para ver que el sendero continúa.',
+  'etq': 'Yo-contexto y perspectiva',
+  'paraque': 'Horizontalizar la relación clínica y entrenar la toma de perspectiva hacia uno '
+             'mismo: comprender que mirar desde afuera (como desde una montaña vecina) permite ver '
+             'senderos que la roca pegada a la cara nos oculta.',
+  'secuencia': [('Cuándo introducirla',
+                 'Al encuadrar el trabajo terapéutico o cuando la persona se siente en un callejón '
+                 'sin salida y se juzga con dureza por no ver la solución.'),
+                ('En sesión',
+                 'Observar el gráfico de las dos montañas y distinguir qué sabe quien lleva las '
+                 'botas puestas frente a qué se ve desde la ladera de enfrente. · Describir la '
+                 'roca que hoy parece bloquear todo el paso vista de cerca. · Cambiar de montaña '
+                 'para mirar el propio recorrido con la amplitud y el respeto con que se miraría a '
+                 'un ser querido.'),
+                ('Abre paso a', 'El observador en el tiempo, El yo compasivo')],
+  'titulo': 'La Metáfora de las Dos Montañas'},
+ {'archivo': 'met-la-casa-y-los-muebles.html',
+  'conviene': ['Cuando un recuerdo doloroso, una etiqueta diagnóstica o un estado de ánimo se vive '
+               'como si ocupara el cien por ciento de la identidad.',
+               'Ubicar en el plano de la casa qué mueble incómodo y qué mueble viejo están hoy en '
+               'un rincón, junto con los muebles valiosos que también habitan ahí.',
+               'Revisar cuánto cuesta encerrarse en una sola esquina peleando con el mueble '
+               'molesto.',
+               'Elegir qué habitación valiosa de la casa se va a habitar hoy aunque ese mueble '
+               'siga en su rincón.'],
+  'cuidado': 'Por más pesado o ruidoso que sea un mueble, un mueble jamás se vuelve la casa ni '
+             'estropea el espacio de las habitaciones.',
+  'etq': 'Yo como contexto · Metáfora viva',
+  'paraque': 'Distinguir entre los contenidos psicológicos transitorios (muebles que entran, '
+             'envejecen o incomodan) y el contexto consciente que los aloja (la casa), mostrando '
+             'que ningún mueble convierte a la casa en mueble.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando un recuerdo doloroso, una etiqueta diagnóstica o un estado de ánimo se '
+                 'vive como si ocupara el cien por ciento de la identidad.'),
+                ('En sesión',
+                 'Ubicar en el plano de la casa qué mueble incómodo y qué mueble viejo están hoy '
+                 'en un rincón, junto con los muebles valiosos que también habitan ahí. · Revisar '
+                 'cuánto cuesta encerrarse en una sola esquina peleando con el mueble molesto. · '
+                 'Elegir qué habitación valiosa de la casa se va a habitar hoy aunque ese mueble '
+                 'siga en su rincón.'),
+                ('Abre paso a', 'El observador en el tiempo, El cielo y el clima')],
+  'titulo': 'La Casa y los Muebles'},
+ {'archivo': 'act-diana-de-valores.html',
+  'conviene': ['En evaluación inicial de valores, revisión periódica de proceso o cuando la '
+               'persona siente que su semana está desbalanceada.',
+               'Nombrar qué cualidad personal importa en cada uno de los cuatro cuadrantes '
+               '(trabajo/vocación, relaciones, salud y tiempo libre).',
+               'Mover los cuatro deslizadores para ver en tiempo real dónde caen los dardos sobre '
+               'la diana.',
+               'Identificar el obstáculo interno del cuadrante más alejado y diseñar una acción '
+               'concreta para acercar ese dardo un anillo hacia el centro.'],
+  'cuidado': 'El blanco de la diana no es que todo salga fácil; es que tu conducta de hoy apunte '
+             'hacia la persona que eliges ser.',
+  'etq': 'Valores y acción',
+  'paraque': "Aplicar visualmente el Bull's-Eye Values Survey (Lundgren et al., 2012): ubicar en "
+             'cuatro cuadrantes vitales qué tan cerca del centro valioso están hoy las propias '
+             'acciones (no los resultados externos) y elegir un paso hacia el centro.',
+  'secuencia': [('Cuándo introducirla',
+                 'En evaluación inicial de valores, revisión periódica de proceso o cuando la '
+                 'persona siente que su semana está desbalanceada.'),
+                ('En sesión',
+                 'Nombrar qué cualidad personal importa en cada uno de los cuatro cuadrantes '
+                 '(trabajo/vocación, relaciones, salud y tiempo libre). · Mover los cuatro '
+                 'deslizadores para ver en tiempo real dónde caen los dardos sobre la diana. · '
+                 'Identificar el obstáculo interno del cuadrante más alejado y diseñar una acción '
+                 'concreta para acercar ese dardo un anillo hacia el centro.'),
+                ('Abre paso a', 'Brújula de valores, El punto dulce')],
+  'titulo': "La Diana de Valores (Bull's-Eye)"},
+ {'archivo': 'act-punto-dulce.html',
+  'conviene': ['Cuando la persona dice «no sé qué me importa, nada me entusiasma» o enumera '
+               'únicamente obligaciones impuestas desde afuera.',
+               'Evocar sin prisa una escena real —grande o cotidiana— donde sintió que la vida '
+               'tenía sabor y presencia.',
+               'Notar la resonancia corporal de ese recuerdo y pulsar los ingredientes de valor '
+               'que estaban vivos ahí dentro.',
+               'Diseñar una forma pequeña de sembrar hoy una gota de esa misma cualidad en la '
+               'semana actual.'],
+  'cuidado': 'Tus valores más profundos no se inventan con la cabeza; se descubren al mirar qué '
+             'momentos de tu vida tuvieron verdadero sabor.',
+  'etq': 'Valores experienciales',
+  'paraque': 'Conectar con los valores propios cuando las preguntas directas («¿cuáles son tus '
+             'valores?») disparan respuestas racionales, complacientes o llenas de «deberías», '
+             'entrando en cambio por un recuerdo vivo de plenitud y dulzura (Wilson y DuFrene, '
+             '2009).',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona dice «no sé qué me importa, nada me entusiasma» o enumera '
+                 'únicamente obligaciones impuestas desde afuera.'),
+                ('En sesión',
+                 'Evocar sin prisa una escena real —grande o cotidiana— donde sintió que la vida '
+                 'tenía sabor y presencia. · Notar la resonancia corporal de ese recuerdo y pulsar '
+                 'los ingredientes de valor que estaban vivos ahí dentro. · Diseñar una forma '
+                 'pequeña de sembrar hoy una gota de esa misma cualidad en la semana actual.'),
+                ('Abre paso a', 'La diana de valores, Las dos caras de la moneda')],
+  'titulo': 'El Ejercicio del Punto Dulce (Sweet Spot)'},
+ {'archivo': 'act-dial-disposicion.html',
+  'conviene': ['Cuando la persona mide el éxito de su semana por «cuánta ansiedad sentí» en vez de '
+               'por «cuánta apertura tuve para vivir lo que me importa».',
+               'Ubicar en la primera perilla el nivel actual de malestar reconociendo que no '
+               'obedece al control directo.',
+               'Mover la segunda perilla (disposición) para comprobar cómo cambia la ecuación del '
+               'sufrimiento añadido.',
+               'Dejar por escrito en qué situación valiosa se subirá hoy el dial de la disposición '
+               'y qué sensación se llevará en la mochila.'],
+  'cuidado': 'La perilla del malestar no tiene cable directo a tu voluntad, pero la perilla de tu '
+             'disposición a avanzar está cien por ciento en tus manos.',
+  'etq': 'Acción comprometida y aceptación',
+  'paraque': 'Mostrar con dos perillas interactivas la metáfora de las dos escalas de Hayes et al. '
+             '(1999): dejar de forcejear con la perilla del malestar (que se traba al intentar '
+             'bajarla) para subir la perilla de la disposición a abrir espacio y actuar.',
+  'secuencia': [('Cuándo introducirla',
+                 'Cuando la persona mide el éxito de su semana por «cuánta ansiedad sentí» en vez '
+                 'de por «cuánta apertura tuve para vivir lo que me importa».'),
+                ('En sesión',
+                 'Ubicar en la primera perilla el nivel actual de malestar reconociendo que no '
+                 'obedece al control directo. · Mover la segunda perilla (disposición) para '
+                 'comprobar cómo cambia la ecuación del sufrimiento añadido. · Dejar por escrito '
+                 'en qué situación valiosa se subirá hoy el dial de la disposición y qué sensación '
+                 'se llevará en la mochila.'),
+                ('Abre paso a', 'De FEAR a DARE, El interruptor de la lucha')],
+  'titulo': 'El Dial de la Disposición vs. el Dial del Dolor'}]
+),
 ]
 
 # Encadenamientos que se repiten. Cada uno es una secuencia de hojas.
@@ -1545,7 +1911,7 @@ def construir(kit_css=None):
 <div class="envoltura con-rieles">
 
 <div class="cab">
-<a class="volver" href="index.html">Volver a las herramientas</a>
+<a class="volver" href="index.html">&larr; Volver a las herramientas</a> <a class="volver" href="lecturas-act.html" style="margin-left:8px">Lecturas ACT &rarr;</a>
 
 <header class="tapa">
   <h1>Guía rápida de uso</h1>

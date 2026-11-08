@@ -99,6 +99,9 @@ const PROCESOS = [
     ["Empujar el papel","act-empujar-el-papel.html",0],
     ["El interruptor de la lucha","met-el-interruptor.html",0],
     ["Las dos caras de la moneda","met-las-dos-caras.html",0],
+    ["La trampa china","met-trampa-china.html",0],
+    ["El invitado incómodo","met-invitado-incomodo.html",0],
+    ["Las arenas movedizas","met-arenas-movedizas.html",0],
     ["El cielo y el clima","act-el-cielo-y-el-clima.html",1],
     ["Echar el ancla","act-echar-el-ancla.html",1]
   ],
@@ -114,6 +117,9 @@ const PROCESOS = [
     ["La palabra repetida","met-la-palabra-repetida.html",0],
     ["Hojas en el arroyo","met-hojas-en-el-arroyo.html",0],
     ["Pensamientos como manos","met-las-manos.html",0],
+    ["Sacar a pasear a tu mente","act-pasear-la-mente.html",0],
+    ["Cambiar «pero» por «y»","act-pero-por-y.html",0],
+    ["La cinta de sushi","met-cinta-de-sushi.html",0],
     ["Los ganchos","act-los-ganchos.html",1],
     ["El interruptor de la lucha","met-el-interruptor.html",1],
     ["Empujar el papel","act-empujar-el-papel.html",1],
@@ -129,6 +135,8 @@ const PROCESOS = [
   hojas:[
     ["Los ganchos","act-los-ganchos.html",0],
     ["Echar el ancla","act-echar-el-ancla.html",0],
+    ["Salir del piloto automático","act-piloto-automatico.html",0],
+    ["Describir vs. evaluar","act-hecho-o-juicio.html",0],
     ["Lo que pasa afuera y aquí","fap-dentro-y-fuera.html",0],
     ["Hojas en el arroyo","met-hojas-en-el-arroyo.html",1],
     ["La matriz","act-matriz.html",1],
@@ -146,6 +154,9 @@ const PROCESOS = [
     ["El cielo y el clima","act-el-cielo-y-el-clima.html",0],
     ["Quién lleva los globos","act-quien-lleva-los-globos.html",0],
     ["El escenario","met-el-escenario.html",0],
+    ["El observador en el tiempo","act-observador-en-el-tiempo.html",0],
+    ["Las dos montañas","met-dos-montanas.html",0],
+    ["La casa y los muebles","met-la-casa-y-los-muebles.html",0],
     ["La matriz","act-matriz.html",1],
     ["La palabra repetida","met-la-palabra-repetida.html",1]
   ],
@@ -160,6 +171,8 @@ const PROCESOS = [
     ["La brújula de valores","act-brujula-de-valores.html",0],
     ["El jardín de valores","met-jardin-de-valores.html",0],
     ["Los ochenta años","met-los-ochenta-anos.html",0],
+    ["La diana de valores","act-diana-de-valores.html",0],
+    ["El punto dulce","act-punto-dulce.html",0],
     ["La matriz","act-matriz.html",1],
     ["El camino de vida","act-camino-de-vida.html",1],
     ["Las dos caras de la moneda","met-las-dos-caras.html",1]
@@ -176,6 +189,7 @@ const PROCESOS = [
     ["El bus y los pasajeros","met-el-bus.html",0],
     ["De FEAR a DARE","act-fear-a-dare.html",0],
     ["La trampa del perfeccionismo","act-perfeccionismo.html",0],
+    ["El dial de la disposición","act-dial-disposicion.html",0],
     ["El camino de vida","act-camino-de-vida.html",1],
     ["Quién lleva los globos","act-quien-lleva-los-globos.html",1],
     ["La brújula de valores","act-brujula-de-valores.html",1]

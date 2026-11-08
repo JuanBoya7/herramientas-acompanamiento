@@ -1,0 +1,49 @@
+@@meta
+archivo: act-punto-dulce.html
+titulo: El ejercicio del punto dulce
+enfoque: ACT
+etiqueta: Valores
+sub: Conecta con tus valores más auténticos evocando un momento real en el que sentiste plenitud, presencia y sabor vital, lejos del «debería».
+fuente: Sweet Spot Exercise de Kelly G. Wilson y Troy DuFrene (2009, Mindfulness for Two, New Harbinger).
+resumen: Descubrir los valores propios por vía experiencial a partir de un recuerdo vivo de plenitud y sembrar esa cualidad en la semana actual.
+@@css
+  .pd-caja{border:1.5px solid #deb873;border-radius:12px;padding:15px;background:linear-gradient(135deg,#fffdf8 0%,#fef6e6 100%);margin-top:10px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Evocar un momento real de «punto dulce»</h2>
+  <div class="cuerpo">
+    <p class="ayuda">Cuando pensamos en valores desde la cabeza, suelen salir obligaciones («debería rendir más»). Kelly Wilson propone entrar por otra puerta: <b>recordar un momento real —grande o cotidiano— en el que sentiste que la vida tenía sabor y sentido</b>, donde no hacía falta estar en ningún otro lugar.</p>
+    <div class="pd-caja">
+      <label class="etiqueta">Describe esa escena como si estuviera ocurriendo ahora mismo (dónde estabas, haciendo qué o con quién, qué percibían tus sentidos)</label>
+      <textarea id="pdEscena" placeholder="Ej.: Una tarde tranquila conversando sin prisa, un momento en la naturaleza, o el día que acompañé a alguien de corazón..."></textarea>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>El ingrediente vivo dentro de ese recuerdo</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué cualidades tuyas estaban encendidas en ese instante (esos son tus valores reales)</label>
+    <div class="chips" id="ingredientes">
+      <button class="chip" data-v="Conexión y cercanía genuina">Conexión y cercanía genuina</button>
+      <button class="chip" data-v="Presencia plena sin prisa">Presencia plena sin prisa</button>
+      <button class="chip" data-v="Cuidado y ternura">Cuidado y ternura</button>
+      <button class="chip" data-v="Libertad y autenticidad">Libertad y autenticidad</button>
+      <button class="chip" data-v="Asombro, aprendizaje o creatividad">Asombro, aprendizaje o creatividad</button>
+      <button class="chip" data-v="Contribución generosa">Contribución generosa</button>
+    </div>
+    <label class="etiqueta">Cómo sembrar hoy una gota de ese mismo ingrediente en tu semana actual</label>
+    <textarea id="pdSemilla" placeholder="Un gesto pequeño y concreto que traiga ese mismo sabor a tu día de hoy..."></textarea>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">¿Notas cómo dentro de lo que nos conmueve o nos duele extrañar habita exactamente lo que más amamos e importa cuidar?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Qué descubriste sobre tus valores al entrar por este recuerdo..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("ingredientes", {multiple:true, libre:true});

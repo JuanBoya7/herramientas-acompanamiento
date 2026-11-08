@@ -1,0 +1,93 @@
+@@meta
+archivo: met-dos-montanas.html
+titulo: Las dos montañas
+enfoque: ACT
+etiqueta: Yo como contexto
+sub: Descubre cómo mirar tu propio camino desde la montaña de enfrente permite ver senderos que la roca pegada a la cara te oculta.
+fuente: Metáfora de las dos montañas (Two Mountains Metaphor) de Hayes, Strosahl y Wilson (1999, cap. 1; 2012) y Luoma, Hayes y Walser (2017).
+resumen: Tomar perspectiva desde la montaña vecina para salir del túnel visual del problema inmediato y mirar el propio recorrido con amplitud.
+@@css
+  .dm-panel{background:#f5f9fb;border:1px solid var(--linea);border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>La roca vista de cerca frente al sendero visto desde enfrente</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">La roca que hoy tienes tan cerca de los ojos que parece tapar todo el camino</label>
+    <div class="chips" id="roca">
+      <button class="chip" data-v="El temor a equivocarme en este paso">El temor a equivocarme en este paso</button>
+      <button class="chip" data-v="La sensación de estar estancado y cansado">La sensación de estar estancado y cansado</button>
+      <button class="chip" data-v="Una discusión o herida que me dolió">Una discusión o herida que me dolió</button>
+      <button class="chip" data-v="La duda de no saber si resultará bien">La duda de no saber si resultará bien</button>
+    </div>
+    <label class="etiqueta">Qué aparece cuando miras tu subida desde la montaña de enfrente (como mirarías a alguien que quieres)</label>
+    <div class="chips" id="sendero">
+      <button class="chip" data-v="Que ya he superado tramos difíciles antes">Que ya he superado tramos difíciles antes</button>
+      <button class="chip" data-v="Que hay un sendero lateral para rodear esta roca">Que hay un sendero lateral para rodear esta roca</button>
+      <button class="chip" data-v="Que tropezar en una piedra no borra todo lo subido">Que tropezar en una piedra no borra todo lo subido</button>
+      <button class="chip" data-v="Que basta con apoyar el pie en el siguiente escalón">Que basta con apoyar el pie en el siguiente escalón</button>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="lienzo" viewBox="0 0 680 250" role="img" aria-label="Dos montañas con escaladores y línea de perspectiva"></svg>
+  <div class="mandos">
+    <button type="button" id="bCerca">Mirar pegado a la roca (túnel)</button>
+    <button type="button" class="principal" id="bEnfrente">Mirar desde la montaña de enfrente (perspectiva)</button>
+  </div>
+  <div class="dm-panel" id="lectura">Alterna entre ambas vistas para comprobar qué cambia cuando tomas distancia.</div>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">Si hoy te miraras a ti mismo desde la montaña de enfrente con respeto y perspectiva, ¿qué indicación amable te darías para el siguiente paso?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Escribe la indicación que te darías desde esa mirada amplia..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("roca", {multiple:false, libre:true});
+Kit.chips("sendero", {multiple:false, libre:true});
+
+let vista = "enfrente";
+
+function dibujar(){
+  const svg = $("lienzo");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  g("rect", {x:0, y:0, width:680, height:250, rx:12, fill:"#f3f8fb"});
+
+  // Montaña 1 (izquierda) y Montaña 2 (derecha)
+  g("polygon", {points:"25,225 185,42 335,225", fill:"#cfe5dc", stroke:"#2c6e58", "stroke-width":2.2});
+  g("polygon", {points:"345,225 505,46 655,225", fill:"#d8e4f0", stroke:"#3c5a78", "stroke-width":2.2});
+
+  // Senderos punteados
+  g("path", {d:"M110,225 Q155,165 145,130 T185,52", fill:"none", stroke:"#2c6e58", "stroke-width":3, "stroke-dasharray":"6,4"});
+  g("path", {d:"M435,225 Q480,160 470,125 T505,56", fill:"none", stroke:"#3c5a78", "stroke-width":3, "stroke-dasharray":"6,4"});
+
+  // Roca en la montaña 1
+  const rTam = vista === "cerca" ? 28 : 13;
+  g("circle", {cx:152, cy:122, r:rTam, fill:"#b8621b", opacity:0.88});
+  // Escalador 1 y 2
+  g("circle", {cx:142, cy:136, r:8, fill:"#1f4e3d"});
+  g("circle", {cx:472, cy:125, r:8, fill:"#2c445e"});
+
+  if(vista === "enfrente"){
+    g("line", {x1:472, y1:125, x2:152, y2:122, stroke:"#c9962f", "stroke-width":2.5, "stroke-dasharray":"5,4"});
+    $("lectura").innerHTML = "<b>Vista desde la montaña de enfrente:</b> La roca sigue ahí, pero ahora se ve que es solo una piedra del tramo y que el sendero continúa hacia la cima.";
+  } else {
+    $("lectura").innerHTML = "<b>Vista pegada a la roca:</b> Cuando tienes la frente apoyada contra el obstáculo, la piedra parece del tamaño de toda la montaña.";
+  }
+
+  const t1 = g("text", {x:185, y:26, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#1f4e3d"});
+  t1.textContent = "Tu montaña (quien lleva las botas puestas)";
+  const t2 = g("text", {x:505, y:26, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#2c445e"});
+  t2.textContent = "La montaña de enfrente (perspectiva)";
+}
+
+$("bCerca").addEventListener("click", () => { vista = "cerca"; dibujar(); });
+$("bEnfrente").addEventListener("click", () => { vista = "enfrente"; dibujar(); });
+$("roca").addEventListener("click", dibujar);
+$("sendero").addEventListener("click", dibujar);
+dibujar();

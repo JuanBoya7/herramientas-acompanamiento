@@ -1,0 +1,63 @@
+@@meta
+archivo: met-la-casa-y-los-muebles.html
+titulo: La casa y los muebles
+enfoque: ACT
+etiqueta: Yo como contexto
+sub: Distingue entre los muebles que entran, se desgastan o incomodan (pensamientos, emociones, historias) y la casa amplia que los aloja sin volverse mueble.
+fuente: Metáfora de la casa y los muebles de Wilson y Luciano (2002, Terapia de Aceptación y Compromiso: Un tratamiento conductual orientado a los valores, Pirámide).
+resumen: Diferenciar los contenidos transitorios (muebles) de la identidad continente (la casa) para habitar todas las habitaciones valiosas.
+@@css
+  .cm-plano{border:2px solid #2d7a5e;border-radius:12px;padding:15px;background:#f7fbf9;margin-top:12px}
+  .cm-techo{text-align:center;font-weight:700;color:#1b5e46;padding-bottom:10px;border-bottom:1.5px dashed #99c4b3;margin-bottom:12px;font-size:14.5px}
+  .cm-hab{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:760px){.cm-hab{grid-template-columns:1fr}}
+  .cm-mueble{background:#fff;border:1px solid var(--linea);border-radius:10px;padding:12px}
+  .cm-mueble b{display:block;font-size:12.5px;text-transform:uppercase;color:#5a6e66;margin-bottom:6px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Inventariar los muebles sin confundirlos con la casa</h2>
+  <div class="cuerpo">
+    <p class="ayuda">Imagina una casa firme y espaciosa. Dentro hay muebles que tú elegiste, otros heredados y algunos que hoy estorban. <b>Por más pesado o ruidoso que sea un mueble, jamás se convierte en la casa</b> ni daña el espacio de las habitaciones.</p>
+    <div class="cm-plano">
+      <div class="cm-techo">LA CASA: Tu espacio consciente («Yo, aquí, ahora» que hospeda toda tu experiencia)</div>
+      <div class="cm-hab">
+        <div class="cm-mueble">
+          <b>Mueble incómodo hoy</b>
+          <textarea id="cmIncomodo" placeholder="¿Qué emoción, sensación o preocupación ocupa hoy un rincón de la sala?"></textarea>
+        </div>
+        <div class="cm-mueble">
+          <b>Mueble viejo (historia repetida)</b>
+          <textarea id="cmViejo" placeholder="¿Qué etiqueta o relato antiguo sobre ti lleva años guardado ahí?"></textarea>
+        </div>
+        <div class="cm-mueble">
+          <b>Mueble valioso que sí eliges</b>
+          <textarea id="cmValioso" placeholder="¿Qué vínculo, capacidad o propósito con sentido también habita hoy en tu casa?"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Salir del rincón del mueble molesto para habitar toda la casa</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué habitación valiosa de tu vida quieres usar hoy aunque ese mueble incómodo siga en su esquina</label>
+    <div class="chips" id="habitacion">
+      <button class="chip" data-v="Compartir con presencia con las personas que quiero">Compartir con presencia con las personas que quiero</button>
+      <button class="chip" data-v="Avanzar en mi proyecto o actividad significativa">Avanzar en mi proyecto o actividad significativa</button>
+      <button class="chip" data-v="Cuidar mi cuerpo y mi descanso hoy">Cuidar mi cuerpo y mi descanso hoy</button>
+      <button class="chip" data-v="Abrir un espacio de curiosidad o recreación">Abrir un espacio de curiosidad o recreación</button>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">¿Qué pasa con tu día cuando te quedas encerrado vigilando el mueble incómodo y qué cambia cuando recuerdas que tú eres toda la casa?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Cómo vas a habitar hoy el resto de tu casa..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("habitacion", {multiple:false, libre:true});

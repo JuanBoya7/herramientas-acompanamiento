@@ -1,0 +1,130 @@
+@@meta
+archivo: act-diana-de-valores.html
+titulo: La diana de valores (Bull's-Eye)
+enfoque: ACT
+etiqueta: Valores y acción
+sub: Ubica tu dardo en los cuatro cuadrantes vitales según qué tan cerca del centro valioso estás actuando esta semana y elige un paso hacia el blanco.
+fuente: Bull's-Eye Values Survey (BEVS) de Lundgren, Luoma, Dahl, Strosahl y Melin (2012, Cognitive and Behavioral Practice) y Harris (2009, ACT Made Simple).
+resumen: Evaluar visualmente en los cuatro cuadrantes del Bull's-Eye la congruencia conductual con los valores y diseñar un movimiento hacia el centro.
+@@css
+  .dv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  @media(max-width:720px){.dv-grid{grid-template-columns:1fr}}
+  .dv-cuad{border:1px solid var(--linea);border-radius:10px;padding:12px;background:#fff}
+  .dv-cuad b{display:block;font-size:14px;margin-bottom:6px;color:#1f4e3d}
+  .dv-fila{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .dv-fila input[type=range]{flex:1}
+  .dv-num{font-weight:700;font-size:13.5px;min-width:48px;text-align:right;color:#2d7a5e}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Coloca tus cuatro dardos en la diana de esta semana</h2>
+  <div class="cuerpo">
+    <p class="ayuda">El <b>centro de la diana (7 = En el blanco)</b> significa «mi conducta de esta semana refleja plenamente la persona que quiero ser en esta área»; el <b>borde exterior (1 = Lejos)</b> significa «he actuado desconectado de lo que me importa».</p>
+    <div class="dv-grid">
+      <div class="dv-cuad">
+        <b>1. Trabajo, vocación o contribución</b>
+        <input type="text" id="dvVal1" placeholder="Valor clave aquí (ej. dedicación, honestidad)">
+        <div class="dv-fila">
+          <input type="range" id="dvR1" min="1" max="7" value="4">
+          <span class="dv-num" id="dvL1">4 / 7</span>
+        </div>
+      </div>
+      <div class="dv-cuad">
+        <b>2. Relaciones (pareja, familia, amistades)</b>
+        <input type="text" id="dvVal2" placeholder="Valor clave aquí (ej. presencia, ternura)">
+        <div class="dv-fila">
+          <input type="range" id="dvR2" min="1" max="7" value="4">
+          <span class="dv-num" id="dvL2">4 / 7</span>
+        </div>
+      </div>
+      <div class="dv-cuad">
+        <b>3. Salud física y cuidado personal</b>
+        <input type="text" id="dvVal3" placeholder="Valor clave aquí (ej. vitalidad, respeto al cuerpo)">
+        <div class="dv-fila">
+          <input type="range" id="dvR3" min="1" max="7" value="4">
+          <span class="dv-num" id="dvL3">4 / 7</span>
+        </div>
+      </div>
+      <div class="dv-cuad">
+        <b>4. Tiempo libre, recreación y comunidad</b>
+        <input type="text" id="dvVal4" placeholder="Valor clave aquí (ej. curiosidad, descanso)">
+        <div class="dv-fila">
+          <input type="range" id="dvR4" min="1" max="7" value="4">
+          <span class="dv-num" id="dvL4">4 / 7</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="lienzo" viewBox="0 0 680 280" role="img" aria-label="Diana de valores dividida en cuatro cuadrantes"></svg>
+</div>
+
+<section class="paso">
+  <h2><span class="num">2</span>Obstáculo interno y paso para acercar el dardo un anillo hacia el centro</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Qué acción concreta en las próximas 48 horas acercará tu dardo más alejado un anillo hacia el centro</label>
+    <div class="chips" id="pasoDiana">
+      <button class="chip" data-v="Dedicar 20 minutos sin pantallas a conversar con presencia">Dedicar 20 minutos sin pantallas a conversar con presencia</button>
+      <button class="chip" data-v="Dar el primer paso de 15 minutos en la tarea postergada">Dar el primer paso de 15 minutos en la tarea postergada</button>
+      <button class="chip" data-v="Salir a caminar o cuidar mi descanso esta noche">Salir a caminar o cuidar mi descanso esta noche</button>
+      <button class="chip" data-v="Reservar un rato de esta semana para una actividad que me nutra">Reservar un rato de esta semana para una actividad que me nutra</button>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">¿Qué pensamiento o incomodidad estarías dispuesto a hacerle espacio para que ese dardo se acerque un anillo al centro?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Obstáculo interno observado y compromiso concreto..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("pasoDiana", {multiple:false, libre:true});
+
+function dibujar(){
+  const svg = $("lienzo");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  g("rect", {x:0, y:0, width:680, height:280, rx:12, fill:"#f6f9fb"});
+
+  const CX = 340, CY = 140;
+  [115, 86, 57, 28].forEach((r, idx) => {
+    const fills = ["#f7fbf9", "#edf7f2", "#dcf0e6", "#bce3d1"];
+    g("circle", {cx:CX, cy:CY, r:r, fill:fills[idx], stroke:"#5da088", "stroke-width":1.5});
+  });
+  g("circle", {cx:CX, cy:CY, r:7, fill:"#1b664e"});
+  g("line", {x1:CX, y1:18, x2:CX, y2:262, stroke:"#2c6e58", "stroke-width":1.5, "stroke-dasharray":"4,3"});
+  g("line", {x1:218, y1:CY, x2:462, y2:CY, stroke:"#2c6e58", "stroke-width":1.5, "stroke-dasharray":"4,3"});
+
+  const etqs = [
+    {x:115, y:55, t:"1. Trabajo / Vocación", col:"#c2593f"},
+    {x:565, y:55, t:"2. Relaciones", col:"#2b6cb0"},
+    {x:115, y:235, t:"3. Salud / Cuidado", col:"#b7791f"},
+    {x:565, y:235, t:"4. Ocio / Comunidad", col:"#6b46c1"},
+  ];
+  etqs.forEach(e => {
+    const tx = g("text", {x:e.x, y:e.y, "text-anchor":"middle", "font-size":12.5, "font-weight":700, fill:e.col});
+    tx.textContent = e.t;
+  });
+
+  const cfg = [
+    {r:$("dvR1"), l:$("dvL1"), dx:-1, dy:-1, col:"#c2593f"},
+    {r:$("dvR2"), l:$("dvL2"), dx:1, dy:-1, col:"#2b6cb0"},
+    {r:$("dvR3"), l:$("dvL3"), dx:-1, dy:1, col:"#b7791f"},
+    {r:$("dvR4"), l:$("dvL4"), dx:1, dy:1, col:"#6b46c1"},
+  ];
+  cfg.forEach(c => {
+    const v = parseInt(c.r.value, 10) || 4;
+    c.l.textContent = v + " / 7";
+    const dist = (7 - v) * 12 + 9;
+    const x = CX + c.dx * dist;
+    const y = CY + c.dy * dist;
+    g("circle", {cx:x, cy:y, r:8, fill:c.col, stroke:"#fff", "stroke-width":2});
+  });
+}
+
+["dvR1", "dvR2", "dvR3", "dvR4"].forEach(id => $(id).addEventListener("input", dibujar));
+dibujar();

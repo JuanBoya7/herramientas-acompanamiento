@@ -1521,4 +1521,345 @@ GUIONES = {
  ('Qué hacer con lo que salga',
   ['Dice «aquí en el consultorio no me da miedo porque estás tú»: excelente observación; después '
    'de dominarlo juntos, el siguiente paso es practicarlo a solas.'])],
+
+# ============================================================================
+# Guiones de las 14 herramientas nuevas ACT (Lote 4)
+# ============================================================================
+
+'met-trampa-china.html': [('Antes de proponerlo',
+  ['Consultantes agotados de emplear estrategias de control y evitación experiencial que han '
+   'estrechado su vida.',
+   'Objetivo clínico: Experienciar por qué la lucha directa por eliminar el malestar aprieta más '
+   'el problema y cómo inclinarse con suavidad hacia la sensación abre espacio para moverse.']),
+ ('1. Presentar el cilindro de bambú y el reflejo de jalar',
+  ['Invite a imaginar ambos dedos índices dentro de una trampa china de bambú tejido. Diga: '
+   '«Cuando sentimos ansiedad o un recuerdo punzante, lo más lógico parece tirar hacia afuera con '
+   'fuerza para zafarnos rápido. Pero miremos qué le hace ese tirón al tejido de bambú».',
+   'Pregunta guía: «¿Qué estrategias ha usado últimamente para «tirar hacia afuera» y sacarse esta '
+   'sensación de encima?»',
+   'Pregunta guía: «Cuando jala con más fuerza, ¿el tubo se afloja o le aprieta más los dedos?»',
+   'Mueva el deslizador hacia la derecha para visualizar cómo el intento de escapar reduce el '
+   'espacio vital.']),
+ ('2. Ensayar el movimiento contraintuitivo: acercarse hacia adentro',
+  ['Deslice ahora el control hacia la izquierda. Explique: «La única forma de aflojar las fibras '
+   'es hacer lo opuesto a lo que grita el reflejo: empujar los dedos suavemente hacia el centro '
+   'del tubo. No para quedarse atrapado, sino para crear holgura y poder moverse».',
+   'Pregunta guía: «¿A qué sensación física o emoción podría hoy darle un milímetro de holgura en '
+   'lugar de jalar?»',
+   'Pregunta guía: «¿Cómo se siente en los hombros y en la respiración dejar de tirar por un '
+   'instante?»',
+   'Cierre anotando el gesto concreto de apertura que la persona practicará cuando note el tirón '
+   'automático.'])],
+
+'met-invitado-incomodo.html': [('Antes de proponerlo',
+  ['Evitación social, postergación de proyectos valiosos o espera pasiva a «sentirse seguro» antes '
+   'de actuar.',
+   'Objetivo clínico: Separar la presencia de emociones o pensamientos desagradables de la '
+   'capacidad de seguir participando en una vida guiada por valores.']),
+ ('1. Nombrar la fiesta valiosa y al visitante molesto',
+  ['Plantee la escena de Joe the Bum (Hayes et al., 1999): «Usted organizó una celebración con las '
+   'personas y proyectos que más quiere, y de pronto se cuela un vecino ruidoso y malvestido. Si '
+   'usted decide que la fiesta no puede seguir mientras él esté ahí, termina pasando toda la noche '
+   'en la puerta empujándolo».',
+   'Pregunta guía: «¿Cuál es la fiesta valiosa que usted quiere vivir en esta etapa?»',
+   'Pregunta guía: «¿Cómo se llama y qué dice ese invitado incómodo cuando aparece sin '
+   'invitación?»',
+   'Compare ambos botones de la hoja para ver cómo vigilar la puerta deja al anfitrión fuera de su '
+   'propia fiesta.']),
+ ('2. Volver a la sala aunque el invitado siga cerca del bufé',
+  ['Subraye que abrir la puerta no significa que el visitante nos guste ni aplaudir sus modales: '
+   'significa elegir estar con los invitados que sí amamos aunque él siga en un rincón.',
+   'Pregunta guía: «Si hoy deja de custodiar el picaporte, ¿a qué conversación o actividad de su '
+   'fiesta puede regresar ahora mismo?»',
+   'Pregunta guía: «¿Está dispuesto a que el invitado incómodo murmure en un rincón con tal de no '
+   'perderse su propia vida?»',
+   'Deje registrada la acción concreta de participación que realizará esta semana sin esperar a '
+   'que el visitante se marche.'])],
+
+'met-arenas-movedizas.html': [('Antes de proponerlo',
+  ['Crisis de pánico, insomnio por hiperalerta, rumiación acelerada o miedo al miedo.',
+   'Objetivo clínico: Desactivar las respuestas de urgencia y agitación ante el malestar agudo, '
+   'entrenando una postura de contacto amplio y apertura corporal.']),
+ ('1. Detectar el pataleo que hunde',
+  ['Explique la física de las arenas movedizas: «En tierra firme, correr o empujar hacia abajo nos '
+   'saca del peligro. Pero en arenas movedizas, cuando usted levanta un pie desesperado, todo el '
+   'peso recae en el otro pie y la succión se duplica».',
+   'Pregunta guía: «Cuando empieza a sentir el oleaje de ansiedad o tristeza, ¿cuál es su forma '
+   'habitual de patalear?»',
+   'Pregunta guía: «¿Ese esfuerzo urgente lo ha sacado a la orilla o lo ha dejado más exhausto y '
+   'hundido?»',
+   'Use el selector en modo «Luchar y patalear» para nombrar sin juicio los intentos de control '
+   'que multiplican la presión.']),
+ ('2. Extender el cuerpo y flotar sobre la experiencia',
+  ['Cambie a «Extender el cuerpo y flotar»: «Quienes salen de las arenas movedizas hacen algo que '
+   'parece absurdo: dejan de patalear, abren los brazos y se tienden de espaldas para tocar más '
+   'superficie, no menos».',
+   'Pregunta guía: «¿Cómo sería hoy «tenderse de espaldas» con esta sensación durante cinco '
+   'minutos, respirando con ella sin exigirle que baje?»',
+   'Pregunta guía: «Una vez que su cuerpo flota sin gastar fuerzas en pelear, ¿hacia qué orilla '
+   'valiosa quiere deslizarse despacio?»',
+   'Practique en vivo treinta segundos de soltar los hombros y abrir espacio físico a la sensación '
+   'presente.'])],
+
+'act-pasear-la-mente.html': [('Antes de proponerlo',
+  ['Fusión con pensamientos de incapacidad («no voy a poder», «no tiene caso») que paralizan la '
+   'iniciativa.',
+   'Objetivo clínico: Practicar en vivo la independencia entre el flujo verbal de la mente '
+   '(evaluaciones, advertencias, excusas) y la conducta elegida por la persona.']),
+ ('1. Separar al hablante incesante de quien camina',
+  ['Introduzca el ejercicio de Kelly Wilson: «En el paseo de la vida caminamos junto a nuestra '
+   'mente. Ella nunca se calla: opina del clima, advierte peligros, critica y compara. El problema '
+   'no es que hable, sino creer que no podemos dar un paso hasta que ella esté de acuerdo».',
+   'Pregunta guía: «¿Cuál es el comentario favorito que su mente le repite apenas usted intenta '
+   'hacer algo nuevo?»',
+   'Pregunta guía: «Si escuchamos esa frase como el parloteo habitual de un acompañante ruidoso, '
+   '¿hace falta discutir con ella?»',
+   'Use los botones de charla rápida o escriba la frase exacta en el globo de voz de la mente.']),
+ ('2. Elegir la calle con los pies mientras la mente opina',
+  ['Complete el recuadro de la derecha: «Mientras su mente dice exactamente eso, ¿hacia dónde '
+   'deciden caminar sus pies hoy?».',
+   'Pregunta guía: «¿Qué le diría a su mente con cortesía («gracias por el dato, mente») antes de '
+   'dar el paso?»',
+   'Pregunta guía: «¿Qué pequeña acción hará hoy llevando a su mente de paseo aunque ella siga '
+   'protestando todo el camino?»',
+   'Refuerce que el éxito del ejercicio es caminar con la mente hablando, no lograr que se '
+   'calle.'])],
+
+'act-pero-por-y.html': [('Antes de proponerlo',
+  ['Cuando el consultante justifica la inacción con fórmulas del tipo «quiero hacerlo, pero siento '
+   'miedo / cansancio / duda».',
+   'Objetivo clínico: Transformar la conjunción adversativa «pero» (que coloca a las emociones '
+   'como barreras incompatibles con la acción) en la conjunción copulativa «y».']),
+ ('1. Desmontar la trampa del «pero»',
+  ['Explique cómo funciona la palabra «pero» (Hayes et al., 1999): «En nuestro idioma, lo que va '
+   "después del 'pero' anula a lo que iba antes. Si digo 'quiero ir a la reunión, pero estoy "
+   "nervioso', mi mente escucha que hasta que no se quite el nervio es imposible ir».",
+   'Pregunta guía: «¿Cuál es hoy su frase con «pero» más frecuente?»',
+   'Pregunta guía: «¿Qué pasa con su libertad de moverse cuando el «pero» pone a la emoción como '
+   'guardián de la puerta?»',
+   'Escriba ambos lados en la tarjeta y observe el efecto de bloqueo con el interruptor en '
+   '«PERO».']),
+ ('2. Activar el «Y» e integrar ambas verdades',
+  ['Conmute el botón hacia «Y» y lea en voz alta la nueva frase: «Quiero hacer X, Y estoy '
+   'sintiendo Y». Ambas cosas son cien por ciento ciertas al mismo tiempo.',
+   'Pregunta guía: «Al leer la frase con «Y» en lugar de «pero», ¿qué cambia en su postura '
+   'corporal?»',
+   'Pregunta guía: «¿Dónde puede aplicar este cambio de una sola palabra hoy mismo cuando su mente '
+   'le proponga posponer algo?»',
+   'Invite a llevarse la frase con «Y» como recordatorio práctico para los momentos de '
+   'indecisión.'])],
+
+'met-cinta-de-sushi.html': [('Antes de proponerlo',
+  ['Rumiación, pensamientos intrusivos o tendencia a engancharse a debatir cada idea que cruza por '
+   'la mente.',
+   'Objetivo clínico: Desliteralizar pensamientos repetitivos o intrusivos observándolos desfilar '
+   'como eventos transitorios que no requieren respuesta ni análisis.']),
+ ('1. Poner los pensamientos sobre los platillos de la banda',
+  ['Presente la imagen del restaurante de sushi con banda transportadora (Harris, 2009): «El chef '
+   'de la cocina —su mente— prepara platillos todo el día: recuerdos, comparaciones, escenarios '
+   'catastróficos. Que un platillo pase frente a usted no significa que usted lo haya pedido ni '
+   'que esté obligado a comérselo».',
+   'Pregunta guía: «¿Qué tres platillos ha estado sacando la cocina de su mente con más '
+   'insistencia esta semana?»',
+   'Pregunta guía: «¿Qué le pasa a su tarde cuando levanta ese platillo de la cinta y se pone a '
+   'masticarlo durante horas?»',
+   'Agregue los pensamientos de la persona para que los vea desfilar gráficamente por la banda.']),
+ ('2. Dejar girar el riel y volver a la mesa',
+  ['Destaque que tampoco sirve golpear la banda ni gritarle al chef para que deje de cocinar; '
+   'basta con mirar el platillo, notar su etiqueta y dejar que siga su vuelta.',
+   'Pregunta guía: «Si hoy deja que ese platillo siga rodando por el riel sin tocarlo, ¿a qué '
+   'conversación o actividad de su mesa puede volver?»',
+   'Pregunta guía: «¿Cómo puede notar la próxima aparición de ese pensamiento con un simple «ahí '
+   'va otra vez el platillo de siempre»?»',
+   'Cierre vinculando la observación desapegada con la atención puesta en la tarea presente.'])],
+
+'act-piloto-automatico.html': [('Antes de proponerlo',
+  ['Sensación de vivir acelerado, desconectado, en rumiación constante o sin disfrutar las '
+   'actividades cotidianas.',
+   'Objetivo clínico: Pasar de la desconexión habitual (actuar perdido en preocupaciones) al '
+   'contacto directo con la experiencia sensorial presente en rutinas diarias.']),
+ ('1. Detectar dónde se enciende el piloto automático',
+  ['Normalice que la mente humana viaja al futuro y al pasado mientras el cuerpo hace tareas '
+   'conocidas, pero señale el costo: nos perdemos la vida real y alimentamos la rumiación.',
+   'Pregunta guía: «¿Qué actividad de todos los días suele hacer con el cuerpo aquí y la cabeza a '
+   'mil kilómetros?»',
+   'Pregunta guía: «Mientras hace esa actividad en automático, ¿en qué preocupaciones o pendientes '
+   'suele quedarse atrapada su mente?»',
+   'Elija una actividad sencilla y cotidiana que ocurrirá con certeza en las próximas 24 horas.']),
+ ('2. Encender las cinco anclas sensoriales',
+  ['Recorra y marque las cinco casillas sensoriales preparando el ensayo concreto: qué mirará, qué '
+   'textura o temperatura notará, qué sonidos escuchará y cómo sentirá el apoyo del cuerpo.',
+   'Pregunta guía: «Cuando note que a los diez segundos la mente vuelve a irse a los pendientes, '
+   '¿cómo la traerá de regreso sin regañarse?»',
+   'Pregunta guía: «¿En qué momento exacto de mañana practicará estos tres minutos de presencia '
+   'plena?»',
+   'Recuerde que notar que uno se distrajo y volver con amabilidad es el corazón mismo del '
+   'entrenamiento.'])],
+
+'act-hecho-o-juicio.html': [('Antes de proponerlo',
+  ['Autocrítica severa, etiquetado global («soy un fracaso», «todo está mal») o fusión con '
+   'evaluaciones catastróficas.',
+   'Objetivo clínico: Distinguir entre las propiedades descriptivas observables de la realidad '
+   '(hechos) y las valoraciones que la mente añade y toma como verdades absolutas (juicios).']),
+ ('1. Entrenar el oído clínico con las cinco frases',
+  ['Explique la distinción de Hayes y Smith (2005): «Las propiedades primarias están en las cosas '
+   '(la mesa es de madera); las evaluaciones están en nuestra relación verbal con ellas (la mesa '
+   'es horrible). Nuestra mente pega la evaluación sobre el hecho y luego reacciona como si el '
+   'juicio fuera físico».',
+   'Pregunta guía: «Recorramos estas cinco frases: ¿cuáles registraría una cámara de video y '
+   'cuáles requieren una mente que califique?»',
+   'Pregunta guía: «¿Qué diferencia siente en el cuerpo entre decir «me tembló la voz dos veces» y '
+   'decir «fue un desastre total»?»',
+   'Complete las cinco tarjetas interactivas comentando por qué cada una es hecho o evaluación.']),
+ ('2. Desarmar la evaluación propia actual',
+  ['Pida escribir la frase dura con la que llegó hoy a sesión y sepárenla juntos en las dos '
+   'columnas: hechos puros a la izquierda y etiquetas añadidas a la derecha.',
+   'Pregunta guía: «Si dejamos únicamente lo que vería una cámara sin adjetivos, ¿qué queda del '
+   'suceso?»',
+   'Pregunta guía: «¿Cómo suena reformular la frase diciendo: «El hecho es X, y noto que mi mente '
+   'está produciendo el juicio de Y»?»',
+   'Verifique que la reformulación final mantenga el juicio etiquetado explícitamente como '
+   'juicio.'])],
+
+'act-observador-en-el-tiempo.html': [('Antes de proponerlo',
+  ['Fusión con el autoconcepto dañado, duelos de rol, vergüenza intensa o temor a ser destruido '
+   'por las propias emociones.',
+   'Objetivo clínico: Facilitar el contacto experiencial con el Yo como contexto (la perspectiva '
+   'continua «yo, aquí, ahora») a través de distintas etapas de la biografía.']),
+ ('1. Recorrer las tres escenas vitales',
+  ['Con voz pausada, invite a recorrer las tres tarjetas: primero un recuerdo claro de la '
+   'infancia, luego una escena significativa de hace unos años y finalmente las sensaciones de '
+   'este preciso instante.',
+   'Pregunta guía: «En aquel recuerdo de su niñez, ¿quién estaba mirando por detrás de sus ojos?»',
+   'Pregunta guía: «Aunque su cuerpo, sus ideas y sus problemas de entonces cambiaron por '
+   'completo, ¿es o no es el mismo «Yo» quien está notando esta hoja hoy?»',
+   'Permita que la persona escriba brevemente cada escena para activar el indicador del testigo '
+   'continuo.']),
+ ('2. Habitar el espacio que no se rompe con lo que contiene',
+  ['Subraye la conclusión experiencial: «Si usted puede notar sus pensamientos y su dolor de hoy, '
+   'usted no puede ser esos pensamientos ni ese dolor; usted es el espacio consciente donde ellos '
+   'aparecen y pasan».',
+   'Pregunta guía: «Desde ese testigo que ha atravesado décadas enteras sin romperse, ¿cómo se ve '
+   'la dificultad de esta semana?»',
+   'Pregunta guía: «¿Qué cambia cuando recuerda que esta emoción es un contenido más pasando por '
+   'usted, y no la totalidad de quien usted es?»',
+   'Cierre conectando esa amplitud del Yo observador con un gesto amable hacia sí mismo hoy.'])],
+
+'met-dos-montanas.html': [('Antes de proponerlo',
+  ['Al establecer la alianza terapéutica o cuando la persona se siente atascada y se reprocha no '
+   'encontrar la salida sola.',
+   'Objetivo clínico: Cultivar una perspectiva amplia, horizontal y compasiva sobre el propio '
+   'proceso vital, saliendo del túnel visual que produce el problema inmediato.']),
+ ('1. Presentar a los dos escaladores en montañas vecinas',
+  ['Comparta la metáfora clásica de Hayes et al. (1999): «Ni yo ni nadie está sentado en la cima '
+   'de su montaña sin problemas. Cada uno sube la suya. La única razón por la que a veces puedo '
+   'señalarle un sendero es porque desde la montaña de enfrente se ve el mapa que la roca pegada a '
+   'su cara le tapa».',
+   'Pregunta guía: «¿Cuál es la roca que hoy tiene tan cerca de los ojos que parece ocupar todo el '
+   'paisaje?»',
+   'Pregunta guía: «¿Cómo cambia la sensación de soledad o exigencia al recordar que todos estamos '
+   'subiendo nuestra propia montaña?»',
+   'Observe juntos el esquema de las dos montañas y la línea de perspectiva entre ambas.']),
+ ('2. Mirar mi propia subida desde la montaña de enfrente',
+  ['Invite a la persona a cruzar imaginariamente al mirador de enfrente —como si mirara a un buen '
+   'amigo que está en su lugar— para contemplar toda la ladera.',
+   'Pregunta guía: «Vista desde enfrente, ¿cuánto camino ha logrado subir ya que desde cerca se le '
+   'olvida reconocer?»',
+   'Pregunta guía: «¿Qué indicación realista y respetuosa se daría hoy desde esa perspectiva '
+   'amplia para el siguiente paso?»',
+   'Deje escrita esa frase de perspectiva en el último campo como ancla para la semana.'])],
+
+'met-la-casa-y-los-muebles.html': [('Antes de proponerlo',
+  ['Cuando la persona se define por su síntoma («soy depresivo», «soy mi ansiedad») o dedica el '
+   'día a pelear con un recuerdo.',
+   'Objetivo clínico: Diferenciar la identidad continente (la casa / Yo como contexto) de los '
+   'contenidos psicológicos transitorios (los muebles / pensamientos y emociones).']),
+ ('1. Inventariar los muebles sin confundirlos con la casa',
+  ['Presente la metáfora de Wilson y Luciano (2002): «Imagine que usted es una casa amplia. '
+   'Adentro hay muebles cómodos, muebles viejos heredados y algún mueble pesado que hoy estorba. '
+   'Pero por más feo que sea un sillón, el sillón jamás es la casa».',
+   'Pregunta guía: «¿Qué mueble incómodo y qué relato viejo ocupan hoy un rincón de su sala?»',
+   'Pregunta guía: «¿Qué otros muebles valiosos (afectos, capacidades, propósitos) también están '
+   'hoy dentro de su casa aunque casi no los mire?»',
+   'Complete las tres casillas dentro del plano de la casa para ampliar el campo de atención.']),
+ ('2. Habitar las habitaciones valiosas de la casa',
+  ['Explore qué ocurre cuando el dueño de la casa se queda todo el día encerrado frente al mueble '
+   'feo intentando destruirlo, en lugar de usar la cocina, el jardín o el estudio.',
+   'Pregunta guía: «¿Cuánto le está costando quedarse vigilando ese rincón incómodo?»',
+   'Pregunta guía: «Si hoy permite que ese mueble esté ahí sin confundirse con él, ¿qué habitación '
+   'valiosa de su vida elige habitar hoy?»',
+   'Acuerde una acción concreta que represente «usar toda la casa» durante los próximos días.'])],
+
+'act-diana-de-valores.html': [('Antes de proponerlo',
+  ['Clarificación de valores, monitoreo de progreso en ACT o reactivación conductual guiada por '
+   'sentido.',
+   'Objetivo clínico: Evaluar de forma gráfica y conductual la congruencia actual con los valores '
+   'en las cuatro áreas vitales y comprometer un movimiento hacia el centro.']),
+ ("1. Colocar los cuatro dardos en el Bull's-Eye",
+  ["Aclare la regla de oro del Bull's-Eye (Lundgren et al., 2012): «El centro de la diana no mide "
+   'si los demás se portan bien ni si todo resulta fácil; mide cuánto se parece su conducta de '
+   'esta semana a la persona que usted elige ser en cada cuadrante».',
+   'Pregunta guía: «¿Qué cualidad suya quiere poner en juego en trabajo, relaciones, salud y '
+   'tiempo personal?»',
+   'Pregunta guía: «Al mover los deslizadores y ver sus cuatro dardos en la diana, ¿qué cuadrante '
+   'pide hoy su atención con más cariño?»',
+   'Ajuste los cuatro controles para que los puntos de colores reflejen el mapa real de esta '
+   'semana.']),
+ ('2. Nombrar el obstáculo interno y acercar el dardo un anillo',
+  ['Ponga el foco en el cuadrante más alejado del centro sin culpa, preguntando qué pensamiento o '
+   'emoción ha actuado como viento en contra y qué paso pequeño acerca el dardo.',
+   'Pregunta guía: «¿Qué excusa de la mente o qué incomodidad corporal lo ha alejado del centro en '
+   'esa área?»',
+   'Pregunta guía: «¿Qué acción observable en las próximas 48 horas movería ese dardo un solo '
+   'anillo hacia el centro de la diana?»',
+   'Verifique que el paso elegido dependa de las manos de la persona y no del resultado externo.'])],
+
+'act-punto-dulce.html': [('Antes de proponerlo',
+  ['Consultantes desconectados emocionalmente de sus valores, muy autoexigentes o atrapados en '
+   'mandatos ajenos.',
+   'Objetivo clínico: Contactar experiencialmente con los valores personales a través de un '
+   'recuerdo vivo de plenitud y sentido, sorteando la intelectualización y el «debería».']),
+ ('1. Evocar sin prisa una escena de «punto dulce»',
+  ['Guíe el ejercicio de Kelly Wilson (2009): «Dejemos por un momento las listas de metas. Busque '
+   'en su memoria un momento real —puede ser sencillo o cotidiano— en el que sintió que la vida '
+   'tenía sabor, que usted estaba plenamente ahí y no hacía falta nada más».',
+   'Pregunta guía: «¿Dónde estaba, qué percibían sus sentidos y qué estaba haciendo usted en ese '
+   'momento?»',
+   'Pregunta guía: «Al traer esa escena aquí y ahora, ¿qué sensación aparece en su pecho o en su '
+   'rostro?»',
+   'Invite a redactar la escena en primera persona y a notar la resonancia emocional presente.']),
+ ('2. Extraer el ingrediente activo y sembrarlo hoy',
+  ['Toque los botones de cualidades para identificar qué valor vivo latía dentro de ese recuerdo, '
+   'notando también que si evocar ese momento conmueve o duele es justamente porque eso sigue '
+   'importando mucho.',
+   'Pregunta guía: «¿Cuál era el ingrediente secreto de vitalidad que estaba encendido en usted en '
+   'aquel instante?»',
+   'Pregunta guía: «¿Con qué gesto pequeño puede traer hoy una gota de ese mismo ingrediente a su '
+   'semana actual?»',
+   'Cierre diferenciando el sabor cálido del valor elegido frente a la frialdad de las '
+   'obligaciones impuestas.'])],
+
+'act-dial-disposicion.html': [('Antes de proponerlo',
+  ['Cuando el consultante condiciona sus pasos a que primero baje la ansiedad o se frustra porque '
+   'el malestar reaparece.',
+   'Objetivo clínico: Cambiar el objetivo del consultante desde el control emocional (bajar el '
+   'dial del malestar) hacia la apertura conductual (subir el dial de la disposición).']),
+ ('1. Contrastar las dos perillas del tablero',
+  ['Presente la metáfora de las dos escalas (Hayes et al., 1999): «Imagine dos perillas de 0 a 10. '
+   'La primera es el malestar; no tiene cable directo a su voluntad y cuando intenta forzarla a '
+   'cero se traba y sube. La segunda es la disposición: cuánto espacio elige abrir hoy para dar el '
+   'paso que le importa».',
+   'Pregunta guía: «¿En qué número está hoy la perilla de su malestar y cuánta energía ha gastado '
+   'tratando de bajarla a la fuerza?»',
+   'Pregunta guía: «¿Qué pasa en el tablero cuando sube la perilla de la disposición a 8 o 9 '
+   'aunque el malestar siga presente?»',
+   'Mueva ambos deslizadores para observar cómo cambia el mensaje clínico según la combinación.']),
+ ('2. Comprometer la mano con la perilla que sí responde',
+  ['Invite a definir en qué situación concreta de esta semana pondrá su mano sobre el dial de la '
+   'disposición en lugar de vigilar el termómetro emocional.',
+   'Pregunta guía: «¿En qué situación valiosa elige hoy subir su disposición?»',
+   'Pregunta guía: «¿Qué sensación física o qué pensamiento está dispuesto a llevar consigo en la '
+   'mochila mientras da ese paso?»',
+   'Refuerce que la disposición no es resignarse ni querer sufrir, sino elegir vivir con las manos '
+   'libres.'])],
 }

@@ -1,0 +1,120 @@
+@@meta
+archivo: met-cinta-de-sushi.html
+titulo: El tren de sushi de los pensamientos
+enfoque: ACT
+etiqueta: Defusión
+sub: La cocina de la mente saca platos sin parar; observa cómo desfilan por la cinta sin obligación de bajar cada plato a tu mesa.
+fuente: Metáfora del tren de sushi (Harris, 2009/2019, ACT Made Simple; Hayes et al., 1999, Buying a Thought).
+resumen: Mirar los pensamientos como platos que pasan por una cinta transportadora y distinguir entre verlos pasar y comprarlos.
+@@css
+  .cs-mesa{background:#f7faf9;border:1px solid var(--linea);border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué platos saca hoy la cocina de tu mente</h2>
+  <div class="cuerpo">
+    <div class="chips" id="platos">
+      <button class="chip" data-v="«Seguro van a pensar que no sé nada»">«Seguro van a pensar que no sé nada»</button>
+      <button class="chip" data-v="«Todo lo demás le sale mejor a otros»">«Todo lo demás le sale mejor a otros»</button>
+      <button class="chip" data-v="«Y si más adelante me arrepiento»">«Y si más adelante me arrepiento»</button>
+      <button class="chip" data-v="«Debería tener todo bajo control»">«Debería tener todo bajo control»</button>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="svgSushi" viewBox="0 0 680 250" role="img" aria-label="Cinta transportadora de sushi con platos de pensamientos"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mPasaron">0</span><span class="r">platos que viste pasar</span></div>
+    <div><span class="n" id="mComprados">0</span><span class="r">platos bajados a tu mesa</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" id="bComprar">Bajar el plato a mi mesa (engancharme)</button>
+    <button type="button" class="principal" id="bDejarPasar">Dejar que siga en la cinta y mirar el siguiente</button>
+  </div>
+  <div class="cs-mesa" id="notaSushi">El chef detrás de la barra no acepta pedidos: saca platos dulces, neutros y amargos todo el día. Tú decides cuáles bajas a tu mesa.</div>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta">Que un plato pase frente a tus ojos en la cinta no te obliga a pagarlo ni a comértelo. ¿Cuál es el plato que más rápido sueles bajar a tu mesa casi sin darte cuenta?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Cómo reconocer ese plato esta semana y dejar que dé la vuelta..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("platos", {multiple:true, libre:true});
+
+let idx = 0;
+let pasaron = 0;
+let comprados = 0;
+let enMesa = "";
+
+function listaPlatos(){
+  const act = Kit.activas("platos");
+  return act.length ? act : [
+    "«Seguro van a pensar que no sé nada»",
+    "«Debería tener todo resuelto hoy»",
+    "«Y si algo sale mal mañana»"
+  ];
+}
+
+function pintar(){
+  const svg = $("svgSushi");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+
+  const lista = listaPlatos();
+  const actual = lista[idx % lista.length];
+
+  g("rect", {x:0, y:0, width:680, height:250, rx:12, fill:"#f7f5f0"});
+  // Cinta transportadora ovalada
+  g("rect", {x:45, y:56, width:590, height:58, rx:29, fill:"#d8dee4", stroke:"#8b99a7", "stroke-width":3});
+  for(let x = 85; x <= 595; x += 45){
+    g("line", {x1:x, y1:58, x2:x, y2:112, stroke:"#b6c2ce", "stroke-width":2});
+  }
+
+  // Plato actual sobre la cinta
+  g("ellipse", {cx:340, cy:85, rx:165, ry:24, fill:"#ffffff", stroke:"#c26a4e", "stroke-width":3});
+  const tPlato = g("text", {x:340, y:90, "text-anchor":"middle", fill:"#1d2733", style:"font:600 13px system-ui,sans-serif"});
+  tPlato.textContent = actual.length > 44 ? actual.slice(0, 42) + "…" : actual;
+
+  // Tu mesa abajo
+  g("rect", {x:165, y:152, width:350, height:76, rx:10, fill:"#ead7bd", stroke:"#b8956a", "stroke-width":2});
+  const tMesa = g("text", {x:340, y:176, "text-anchor":"middle", fill:"#594124", style:"font:700 12px system-ui,sans-serif"});
+  tMesa.textContent = "TU MESA (ATENCIÓN Y ENERGÍA)";
+  const tCont = g("text", {x:340, y:204, "text-anchor":"middle", fill:enMesa ? "#a3342b" : "#3f7d5a", style:"font:600 12.5px system-ui,sans-serif"});
+  tCont.textContent = enMesa ? ("Masticando: " + (enMesa.length > 36 ? enMesa.slice(0,34)+"…" : enMesa)) : "Mesa despejada para lo que te importa hoy";
+
+  $("mPasaron").textContent = pasaron;
+  $("mComprados").textContent = comprados;
+}
+
+$("bComprar").addEventListener("click", () => {
+  const lista = listaPlatos();
+  enMesa = lista[idx % lista.length];
+  comprados++;
+  $("notaSushi").innerHTML = `<b>Bajaste el plato a tu mesa:</b> ahora toda tu atención está ocupada masticando ${enMesa}.`;
+  pintar();
+  Kit.guardar();
+});
+
+$("bDejarPasar").addEventListener("click", () => {
+  pasaron++;
+  idx++;
+  enMesa = "";
+  $("notaSushi").innerHTML = "<b>Lo dejaste seguir por la cinta:</b> notaste qué decía el plato sin comprarlo ni pelear con el cocinero, y tu mesa sigue libre.";
+  pintar();
+  Kit.guardar();
+});
+
+Kit.iniciar({
+  clave: "met-cinta-de-sushi",
+  alCambiar: pintar,
+  resumen: () => [
+    "EL TREN DE SUSHI DE LOS PENSAMIENTOS",
+    `Platos identificados: ${Kit.activas("platos").join(" · ") || "—"}`,
+    `Platos dejados pasar: ${pasaron} · Platos bajados a la mesa: ${comprados}`,
+    $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
+  ].filter(Boolean).join("\n")
+});

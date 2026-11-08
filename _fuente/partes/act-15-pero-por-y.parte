@@ -1,0 +1,110 @@
+@@meta
+archivo: act-pero-por-y.html
+titulo: Cambiar «pero» por «y»
+enfoque: ACT
+etiqueta: Defusión
+sub: Observa qué hace la palabra «pero» con tus direcciones valiosas y cómo cambia el peso de la frase cuando la sustituyes por «y».
+fuente: Convenciones del lenguaje en ACT: «Pero» frente a «Y» (Hayes, Strosahl y Wilson, 1999, cap. 6, pp. 166-168; Wilson y Luciano, 2002).
+resumen: Desarmar la trampa verbal en la que una emoción difícil («pero tengo miedo») parece prohibir la acción valiosa («y tengo miedo»).
+@@css
+  .py-comparador{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .py-caja{border:1px solid var(--linea);border-radius:10px;padding:15px 17px;background:#fff}
+  .py-caja.pero{border-top:4px solid var(--alerta);background:#fdf7f5}
+  .py-caja.y{border-top:4px solid var(--logro);background:#f4faf6}
+  .py-caja .rot{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+  .py-caja.pero .rot{color:var(--alerta)}
+  .py-caja.y .rot{color:var(--logro)}
+  .py-frase{font-size:16px;line-height:1.45;font-weight:600;margin:6px 0 10px}
+  .py-efecto{font-size:13.5px;color:var(--tinta-suave)}
+  @media (max-width:700px){.py-comparador{grid-template-columns:1fr}}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Las dos partes de tu frase de hoy</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Lo que quieres hacer porque te importa (primera mitad)</label>
+    <div class="chips" id="mitad1">
+      <button class="chip" data-v="Quiero expresar lo que pienso en la reunión">Quiero expresar lo que pienso en la reunión</button>
+      <button class="chip" data-v="Quiero poner un límite claro en casa">Quiero poner un límite claro en casa</button>
+      <button class="chip" data-v="Quiero salir y retomar mis actividades">Quiero salir y retomar mis actividades</button>
+      <button class="chip" data-v="Quiero acercarme y pedir disculpas">Quiero acercarme y pedir disculpas</button>
+    </div>
+    <label class="etiqueta">Lo que aparece por dentro al mismo tiempo (segunda mitad)</label>
+    <div class="chips" id="mitad2">
+      <button class="chip" data-v="siento ansiedad en el estómago">siento ansiedad en el estómago</button>
+      <button class="chip" data-v="tengo miedo de que se incomoden">tengo miedo de que se incomoden</button>
+      <button class="chip" data-v="estoy cansado y con pocas ganas">estoy cansado y con pocas ganas</button>
+      <button class="chip" data-v="mi mente dice que no va a funcionar">mi mente dice que no va a funcionar</button>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2><span class="num">2</span>Prueba las dos bisagras en voz alta</h2>
+  <svg id="svgBalanza" viewBox="0 0 680 170" role="img" aria-label="Balanza verbal comparando PERO frente a Y"></svg>
+  <div class="py-comparador">
+    <div class="py-caja pero">
+      <div class="rot">Con «PERO» (oposición que frena)</div>
+      <div class="py-frase" id="frasePero">«…»</div>
+      <div class="py-efecto">El «pero» significa «olvida lo primero: lo segundo manda». Para poder actuar tendrías que esperar a que desaparezca lo que sientes.</div>
+    </div>
+    <div class="py-caja y">
+      <div class="rot">Con «Y» (dos verdades que caben juntas)</div>
+      <div class="py-frase" id="fraseY">«…»</div>
+      <div class="py-efecto">El «y» reconoce que ambas cosas son ciertas a la vez: te importa dar el paso <b>y</b> llevas esa sensación contigo al hacerlo.</div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta">Al leer ambas frases en voz alta, ¿qué pasa en tu cuerpo cuando cambias el «pero» por «y»?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Escribe aquí tu frase con «Y» para esta semana..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("mitad1", {multiple:false, libre:true});
+Kit.chips("mitad2", {multiple:false, libre:true});
+
+function actualizar(){
+  const a = Kit.activas("mitad1")[0] || "Quiero hacer lo que me importa";
+  const b = Kit.activas("mitad2")[0] || "siento incomodidad al pensarlo";
+
+  $("frasePero").innerHTML = `«${a}, <span style="color:#a3342b;text-decoration:underline">pero</span> ${b}.»`;
+  $("fraseY").innerHTML = `«${a} <span style="color:#2f7d5b;text-decoration:underline">y</span> ${b}.»`;
+
+  const svg = $("svgBalanza");
+  svg.innerHTML = "";
+  const g = (t, at) => svg.appendChild(Kit.svg(t, at));
+  g("rect", {x:0, y:0, width:680, height:170, rx:10, fill:"#f7fafb"});
+
+  // Izquierda: PERO tacha la primera mitad
+  g("rect", {x:28, y:36, width:275, height:98, rx:9, fill:"#fff", stroke:"#e4c4bc"});
+  const t1 = g("text", {x:165, y:70, "text-anchor":"middle", fill:"#9aa5b1", style:"font:600 12.5px system-ui,sans-serif;text-decoration:line-through"});
+  t1.textContent = a.length > 34 ? a.slice(0, 32) + "…" : a;
+  const t2 = g("text", {x:165, y:105, "text-anchor":"middle", fill:"#a3342b", style:"font:700 13.5px system-ui,sans-serif"});
+  t2.textContent = "PERO " + (b.length > 28 ? b.slice(0, 26) + "…" : b);
+
+  // Derecha: Y sostiene ambas en paralelo
+  g("rect", {x:377, y:36, width:275, height:98, rx:9, fill:"#fff", stroke:"#b9dec8"});
+  const t3 = g("text", {x:514, y:70, "text-anchor":"middle", fill:"#1f4b66", style:"font:700 12.5px system-ui,sans-serif"});
+  t3.textContent = a.length > 34 ? a.slice(0, 32) + "…" : a;
+  const t4 = g("text", {x:514, y:105, "text-anchor":"middle", fill:"#2f7d5b", style:"font:700 13.5px system-ui,sans-serif"});
+  t4.textContent = "Y ADEMÁS " + (b.length > 25 ? b.slice(0, 23) + "…" : b);
+}
+
+Kit.iniciar({
+  clave: "act-pero-por-y",
+  alCambiar: actualizar,
+  resumen: () => {
+    const a = Kit.activas("mitad1")[0] || "Quiero hacer lo que me importa";
+    const b = Kit.activas("mitad2")[0] || "siento incomodidad";
+    return [
+      "CAMBIAR «PERO» POR «Y»",
+      `Frase con PERO: «${a}, pero ${b}.»`,
+      `Frase con Y: «${a} y ${b}.»`,
+      $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

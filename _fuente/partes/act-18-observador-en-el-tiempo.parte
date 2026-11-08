@@ -1,0 +1,91 @@
+@@meta
+archivo: act-observador-en-el-tiempo.html
+titulo: El observador continuo en el tiempo
+enfoque: ACT
+etiqueta: Yo como contexto
+sub: Conecta tres momentos distintos de tu biografía para notar al testigo silencioso («yo, aquí, ahora») que ha estado presente en todos ellos sin romperse.
+fuente: Ejercicio clásico del Observador (Observer Exercise) de Hayes, Strosahl y Wilson (1999, cap. 7; 2012) y Wilson y Luciano (2002).
+resumen: Recorrer tres épocas vitales para distinguir los contenidos cambiantes de la conciencia estable que los observa.
+@@css
+  .ot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  @media(max-width:780px){.ot-grid{grid-template-columns:1fr}}
+  .ot-card{border:1px solid var(--linea);border-radius:10px;padding:13px;background:#fff}
+  .ot-card .etapa{display:inline-block;padding:2px 9px;border-radius:999px;background:#e6f4ef;color:#1b664e;font-size:11.5px;font-weight:700;margin-bottom:6px}
+  .ot-puente{margin-top:12px;padding:13px 16px;border-radius:10px;background:linear-gradient(90deg,#eff8f4,#fff8eb);border:1px solid #8ec2ae;font-size:14px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Tres escenas de tu vida, un mismo testigo detrás de tus ojos</h2>
+  <div class="cuerpo">
+    <p class="ayuda">Tus células, tu edad, tus roles y tus pensamientos han cambiado por completo una y otra vez, pero <b>quien mira por detrás de tus ojos</b> ha estado ahí todo el tiempo.</p>
+    <div class="ot-grid">
+      <div class="ot-card">
+        <span class="etapa">1. En la niñez</span>
+        <label class="etiqueta">Un recuerdo claro de cuando tenías entre 7 y 10 años</label>
+        <textarea id="otNinez" placeholder="¿Dónde estabas? ¿Qué veían tus ojos o qué sentías en aquel momento?"></textarea>
+      </div>
+      <div class="ot-card">
+        <span class="etapa">2. Hace unos años</span>
+        <label class="etiqueta">Un momento importante de hace algunos años</label>
+        <textarea id="otAyer" placeholder="¿Qué te preocupaba o parecía gigantesco entonces?"></textarea>
+      </div>
+      <div class="ot-card">
+        <span class="etapa">3. Aquí y ahora</span>
+        <label class="etiqueta">Lo que está presente en este preciso instante</label>
+        <textarea id="otHoy" placeholder="¿Qué sensaciones corporales, emociones y pensamientos notas ahora mismo?"></textarea>
+      </div>
+    </div>
+    <div class="ot-puente" id="otPuente">
+      <b>El hilo continuo:</b> Nota que la persona que miraba el mundo en aquel recuerdo infantil es <i>exactamente el mismo «Yo»</i> que está leyendo estas palabras hoy.
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="lienzo" viewBox="0 0 680 220" role="img" aria-label="Tres siluetas temporales unidas por un hilo luminoso"></svg>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">Desde este «Yo observador» que ha atravesado décadas enteras sin destruirse por lo que sintió: ¿cómo se ve la dificultad que hoy estás atravesando?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Qué cambia al recordar que eres el espacio donde pasa esta emoción y no la emoción misma..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+function dibujar(){
+  const svg = $("lienzo");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+  g("rect", {x:0, y:0, width:680, height:220, rx:12, fill:"#f6f9fb"});
+
+  const lleno1 = $("otNinez").value.trim().length > 0;
+  const lleno2 = $("otAyer").value.trim().length > 0;
+  const lleno3 = $("otHoy").value.trim().length > 0;
+
+  // Línea continua del observador
+  g("line", {x1:120, y1:105, x2:560, y2:105, stroke:"#c9962f", "stroke-width":4, "stroke-dasharray":"7,5"});
+
+  const nodos = [
+    {x:130, r:38, etq:"Aquella niñez", sub:"Otro cuerpo, otros miedos", ok:lleno1},
+    {x:340, r:44, etq:"Hace unos años", sub:"Otros roles, otras metas", ok:lleno2},
+    {x:550, r:50, etq:"Aquí y ahora", sub:"Lo que sientes hoy", ok:lleno3},
+  ];
+  nodos.forEach(n => {
+    g("circle", {cx:n.x, cy:105, r:n.r, fill:n.ok ? "#dff1ea" : "#eef3f6", stroke:"#2d7a5e", "stroke-width":2.2});
+    g("circle", {cx:n.x, cy:105, r:10, fill:"#c9962f"});
+    const t1 = g("text", {x:n.x, y:175, "text-anchor":"middle", "font-size":13.5, "font-weight":700, fill:"#1f3b33"});
+    t1.textContent = n.etq;
+    const t2 = g("text", {x:n.x, y:194, "text-anchor":"middle", "font-size":11.5, fill:"#5c7068"});
+    t2.textContent = n.sub;
+  });
+
+  const tit = g("text", {x:340, y:30, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#8a6214"});
+  tit.textContent = "EL MISMO TESTIGO CONSCIENTE («YO, AQUÍ, AHORA») A TRAVÉS DEL TIEMPO";
+
+  if(lleno1 && lleno2 && lleno3){
+    $("otPuente").innerHTML = "<b>Testigo continuo presente:</b> Has conectado tres momentos muy distintos de tu historia. Todo lo que pensaste y sentiste cambió, pero el espacio consciente que lo notó permanece intacto aquí y ahora.";
+  }
+}
+["otNinez", "otAyer", "otHoy"].forEach(id => $(id).addEventListener("input", dibujar));
+dibujar();

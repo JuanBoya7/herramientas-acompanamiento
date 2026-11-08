@@ -1,0 +1,132 @@
+@@meta
+archivo: act-pasear-la-mente.html
+titulo: Sacar la mente a pasear
+enfoque: ACT
+etiqueta: Defusión
+sub: Camina eligiendo el rumbo en cada cruce mientras tu mente va un paso atrás comentando, advirtiendo y opinando sin parar.
+fuente: Ejercicio clásico «Taking Your Mind for a Walk» (Hayes, Strosahl y Wilson, 1999, cap. 6; 2012; Luoma, Hayes y Walser, 2017).
+resumen: Entrenar la elección de rumbo en cada bifurcación llevando al lado el parloteo de la mente sin discutirle ni obedecerle.
+@@css
+  .pm-globo{background:#fff8eb;border:1px solid #ebcfa0;border-left:4px solid #c9962f;border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14.5px;color:#4a3918}
+  .pm-tramo{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:12px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Hacia dónde quieres caminar hoy y qué suele ir diciendo tu mente</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Dirección elegida para este paseo</label>
+    <div class="chips" id="rumbo">
+      <button class="chip" data-v="Hacer esa llamada o conversación pendiente">Hacer esa llamada o conversación pendiente</button>
+      <button class="chip" data-v="Retomar mi actividad física o cuidado personal">Retomar mi actividad física o cuidado personal</button>
+      <button class="chip" data-v="Presentar mi trabajo sin seguir postergándolo">Presentar mi trabajo sin seguir postergándolo</button>
+      <button class="chip" data-v="Acercarme a compartir con alguien importante">Acercarme a compartir con alguien importante</button>
+    </div>
+    <label class="etiqueta">El comentario favorito de tu mente cuando das el primer paso</label>
+    <div class="chips" id="parloteo">
+      <button class="chip" data-v="«Hoy no estás listo, mejor déjalo para mañana»">«Hoy no estás listo, mejor déjalo para mañana»</button>
+      <button class="chip" data-v="«Te va a salir mal y van a notar tu inseguridad»">«Te va a salir mal y van a notar tu inseguridad»</button>
+      <button class="chip" data-v="«Para qué intentarlo si ya fallaste antes»">«Para qué intentarlo si ya fallaste antes»</button>
+      <button class="chip" data-v="«Primero tienes que resolver todas tus dudas»">«Primero tienes que resolver todas tus dudas»</button>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="svgPaseo" viewBox="0 0 680 240" role="img" aria-label="Dos figuras caminando por un sendero con tres cruces"></svg>
+  <div class="pm-globo" id="globoMente"><b>La mente va diciendo al oído:</b> «Elige primero un rumbo arriba y demos el primer paso…»</div>
+  <div class="marcas">
+    <div><span class="n" id="mPasos">0 / 3</span><span class="r">cruces avanzados</span></div>
+    <div><span class="n" id="mDiscusiones">0</span><span class="r">veces que te paraste a discutir</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" id="bDiscutir">Detenerme a discutir o hacerle caso</button>
+    <button type="button" class="principal" id="bSeguir">Decirle «gracias, mente» y dar el siguiente paso</button>
+    <button type="button" id="bReiniciar">Empezar el paseo de nuevo</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta">En el paseo la mente nunca se calló del todo, y sin embargo tus pies llegaron al tercer cruce. ¿Qué cambia cuando descubres que no necesitas convencer a tu mente para que tus pies caminen?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Qué paso darás esta semana llevando a tu mente de paseo..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("rumbo", {multiple:false, libre:true});
+Kit.chips("parloteo", {multiple:false, libre:true});
+
+let cruce = 0; // 0, 1, 2, 3
+let discusiones = 0;
+
+const COMENTARIOS_EXTRA = [
+  "«¿Ves qué incómodo se siente? Si fuera el camino correcto te sentirías seguro.»",
+  "«Mira todo lo que te falta todavía; más vale dar media vuelta ahora.»",
+  "«Llegaste hasta aquí, pero igual no fue suficiente.»"
+];
+
+function dibujar(){
+  const svg = $("svgPaseo");
+  svg.innerHTML = "";
+  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+
+  g("rect", {x:0, y:0, width:680, height:240, rx:12, fill:"#f4f8f6"});
+  // Camino
+  g("path", {d:"M 50 180 Q 220 140 360 175 T 630 145", fill:"none", stroke:"#d5ccb8", "stroke-width":26, "stroke-linecap":"round"});
+
+  const pts = [[95, 175], [255, 156], [435, 172], [600, 148]];
+  pts.forEach(([x, y], i) => {
+    const activo = i <= cruce;
+    g("circle", {cx:x, cy:y, r:11, fill:activo ? "#3f9b86" : "#ccd6d2", stroke:"#fff", "stroke-width":2});
+  });
+
+  const [px, py] = pts[cruce];
+  // Figura de la Mente (un paso atrás con megáfono/nube)
+  g("circle", {cx:px - 38, cy:py - 36, r:14, fill:"#c9962f"});
+  g("rect", {x:px - 48, y:py - 20, width:20, height:32, rx:6, fill:"#c9962f"});
+  const tM = g("text", {x:px - 38, y:py - 56, "text-anchor":"middle", fill:"#8a6214", style:"font:700 11px system-ui,sans-serif"});
+  tM.textContent = "La mente";
+
+  // Figura del Caminante (adelante eligiendo con los pies)
+  g("circle", {cx:px, cy:py - 40, r:15, fill:"#2f6f8f"});
+  g("rect", {x:px - 11, y:py - 23, width:22, height:36, rx:7, fill:"#2f6f8f"});
+  const tY = g("text", {x:px, y:py - 62, "text-anchor":"middle", fill:"#1f4b66", style:"font:700 12px system-ui,sans-serif"});
+  tY.textContent = "Tú (pies)";
+
+  const fraseBase = Kit.activas("parloteo")[0] || "«No va a resultar, mejor quédate quieto»";
+  const msg = cruce === 0 ? fraseBase : COMENTARIOS_EXTRA[cruce - 1];
+  $("globoMente").innerHTML = `<b>En el tramo ${cruce + 1}, la mente comenta:</b> ${msg}`;
+  $("mPasos").textContent = `${cruce} / 3`;
+  $("mDiscusiones").textContent = discusiones;
+}
+
+$("bDiscutir").addEventListener("click", () => {
+  discusiones++;
+  $("globoMente").innerHTML = "<b>Te detuviste a discutir con la mente:</b> por cada argumento que le das, ella saca tres objeciones nuevas y tus pies siguen en el mismo sitio.";
+  $("mDiscusiones").textContent = discusiones;
+  Kit.guardar();
+});
+
+$("bSeguir").addEventListener("click", () => {
+  if(cruce < 3) cruce++;
+  dibujar();
+  Kit.guardar();
+});
+
+$("bReiniciar").addEventListener("click", () => {
+  cruce = 0;
+  discusiones = 0;
+  dibujar();
+});
+
+Kit.iniciar({
+  clave: "act-pasear-la-mente",
+  alCambiar: dibujar,
+  resumen: () => [
+    "SACAR LA MENTE A PASEAR",
+    `Rumbo elegido: ${Kit.activas("rumbo")[0] || "—"}`,
+    `Parloteo habitual de la mente: ${Kit.activas("parloteo")[0] || "—"}`,
+    `Cruces avanzados: ${cruce}/3 · Paradas a discutir: ${discusiones}`,
+    $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
+  ].filter(Boolean).join("\n")
+});

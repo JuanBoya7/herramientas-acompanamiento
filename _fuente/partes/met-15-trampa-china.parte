@@ -1,0 +1,160 @@
+@@meta
+archivo: met-trampa-china.html
+titulo: La trampa china de dedos
+enfoque: ACT
+etiqueta: Aceptación
+sub: Explora qué ocurre con el cilindro trenzado cuando tiras hacia afuera para zafarte y cuando das un pequeño paso hacia adentro.
+fuente: Metáfora de la trampa china de dedos (Hayes, Strosahl y Wilson, 1999, cap. 3; Eifert y Forsyth, 2005; Díaz Corbobés, MANUAL ACT).
+resumen: Comprobar en el cilindro de bambú cómo el esfuerzo por escapar aprieta el malestar y cómo acercarse afloja el tejido.
+@@css
+  .tc-panel{background:#f7faf9;border:1px solid var(--linea);border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14px;color:var(--tinta)}
+  .tc-panel b{color:var(--acento)}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué sensación o emoción tienes hoy en los dedos</h2>
+  <div class="cuerpo">
+    <div class="chips" id="siente">
+      <button class="chip" data-v="La opresión en el pecho antes de hablar">La opresión en el pecho antes de hablar</button>
+      <button class="chip" data-v="El nudo de incertidumbre por lo que va a pasar">El nudo de incertidumbre por lo que va a pasar</button>
+      <button class="chip" data-v="El recuerdo incómodo que vuelve sin permiso">El recuerdo incómodo que vuelve sin permiso</button>
+      <button class="chip" data-v="El temor a equivocarme frente a otros">El temor a equivocarme frente a otros</button>
+    </div>
+    <label class="etiqueta">Cómo intentas tirar hacia afuera cuando aparece</label>
+    <div class="chips" id="tiron">
+      <button class="chip" data-v="Revisar mentalmente mil veces qué voy a decir">Revisar mentalmente mil veces qué voy a decir</button>
+      <button class="chip" data-v="Exigirme estar tranquilo ya mismo">Exigirme estar tranquilo ya mismo</button>
+      <button class="chip" data-v="Posponer o cancelar el encuentro">Posponer o cancelar el encuentro</button>
+      <button class="chip" data-v="Distraerme con el teléfono para no sentirlo">Distraerme con el teléfono para no sentirlo</button>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="lienzo" viewBox="0 0 680 260" role="img" aria-label="Cilindro trenzado de bambú entre dos dedos"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mTirones">0</span><span class="r">tirones hacia afuera</span></div>
+    <div><span class="n" id="mPresion">35%</span><span class="r">apriete del tejido</span></div>
+    <div><span class="n" id="mEspacio">30%</span><span class="r">espacio para moverse</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" id="bTirar">Tirar hacia afuera (escapar)</button>
+    <button type="button" class="principal" id="bAcercar">Acercar los dedos hacia adentro</button>
+    <button type="button" id="bReiniciar">Soltar y probar de nuevo</button>
+  </div>
+  <div class="tc-panel" id="lecturaEscena">Toca los botones para comprobar cómo responde la fibra trenzada a cada movimiento.</div>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">¿Qué pasa con el cilindro cuando haces exactamente lo que el instinto pide —tirar hacia afuera— y qué cambia cuando te acercas un milímetro a lo que sientes?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Qué significaría hoy dar un pequeño paso hacia adentro en vez de jalar..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("siente", {multiple:false, libre:true});
+Kit.chips("tiron", {multiple:false, libre:true});
+
+let tirones = 0;
+let modo = "neutro"; // neutro | tirar | acercar
+let tension = 35;    // 10 a 95
+
+function dibujar(){
+  const svg = $("lienzo");
+  svg.innerHTML = "";
+  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
+
+  g("rect", {x:0, y:0, width:680, height:260, rx:12, fill:"#f6f9fb"});
+
+  const s = Kit.activas("siente")[0] || "Malestar presente";
+  const Mitad = 340, Y = 122;
+  // Con más tensión, el tubo es más largo y más angosto; al acercar, es más corto y ancho
+  const largo = Math.round(190 + (tension - 35) * 1.9);
+  const alto = Math.round(64 - (tension - 35) * 0.45);
+  const xIzq = Mitad - largo / 2, xDer = Mitad + largo / 2;
+  const ySup = Y - alto / 2, yInf = Y + alto / 2;
+
+  // Dedo izquierdo y dedo derecho entrando al tubo
+  const dPen = modo === "acercar" ? 42 : (modo === "tirar" ? 16 : 26);
+  g("rect", {x:xIzq - 115, y:Y - 19, width:115 + dPen, height:38, rx:19, fill:"#eab89b", stroke:"#b88467", "stroke-width":2});
+  g("rect", {x:xDer - dPen, y:Y - 19, width:115 + dPen, height:38, rx:19, fill:"#eab89b", stroke:"#b88467", "stroke-width":2});
+
+  // Flechas de dirección
+  const colF = modo === "tirar" ? "#b84a39" : (modo === "acercar" ? "#2f7d5b" : "#7c8d9e");
+  const dirTxt = modo === "tirar" ? "← JALANDO HACIA AFUERA →" : (modo === "acercar" ? "→ ACERCÁNDOSE HACIA ADENTRO ←" : "En espera de tu movimiento");
+  const tDir = g("text", {x:Mitad, y:34, "text-anchor":"middle", fill:colF, style:"font:700 12.5px system-ui,sans-serif;letter-spacing:.08em"});
+  tDir.textContent = dirTxt;
+
+  // Cilindro de bambú trenzado
+  const colTubo = tension > 60 ? "#c2593f" : (tension < 25 ? "#3f9b86" : "#b88a4b");
+  g("rect", {x:xIzq, y:ySup, width:largo, height:alto, rx:10, fill:colTubo, "fill-opacity":0.16, stroke:colTubo, "stroke-width":2.5});
+
+  const pasos = 10;
+  for(let i = 0; i < pasos; i++){
+    const x1 = xIzq + (largo / pasos) * i;
+    const x2 = xIzq + (largo / pasos) * (i + 1);
+    g("line", {x1, y1:ySup, x2, y2:yInf, stroke:colTubo, "stroke-width":1.8, "stroke-opacity":0.75});
+    g("line", {x1, y1:yInf, x2, y2:ySup, stroke:colTubo, "stroke-width":1.8, "stroke-opacity":0.75});
+  }
+
+  // Anillos de presión en los extremos cuando se tira
+  if(tension > 50){
+    g("line", {x1:xIzq + 4, y1:ySup - 6, x2:xIzq + 4, y2:yInf + 6, stroke:"#b84a39", "stroke-width":3});
+    g("line", {x1:xDer - 4, y1:ySup - 6, x2:xDer - 4, y2:yInf + 6, stroke:"#b84a39", "stroke-width":3});
+  }
+
+  // Etiqueta de la emoción en el centro
+  const etq = g("text", {x:Mitad, y:yInf + 34, "text-anchor":"middle", fill:"#243646", style:"font:600 13.5px system-ui,sans-serif"});
+  etq.textContent = s.length > 56 ? s.slice(0, 54) + "…" : s;
+
+  const espacio = Math.max(5, 100 - tension);
+  $("mTirones").textContent = tirones;
+  $("mPresion").textContent = tension + "%";
+  $("mEspacio").textContent = espacio + "%";
+}
+
+$("bTirar").addEventListener("click", () => {
+  tirones++;
+  modo = "tirar";
+  tension = Math.min(95, tension + 18);
+  $("lecturaEscena").innerHTML = "<b>Al tirar hacia afuera:</b> la malla trenzada se estira y se cierra sobre los dedos. Cuanta más fuerza haces para no sentir, menos margen queda.";
+  dibujar();
+  Kit.guardar();
+});
+
+$("bAcercar").addEventListener("click", () => {
+  modo = "acercar";
+  tension = Math.max(14, tension - 24);
+  $("lecturaEscena").innerHTML = "<b>Al acercar los dedos hacia adentro:</b> el tejido de bambú se ensancha. No desaparece el cilindro, pero deja de cortar la circulación y aparece espacio para elegir.";
+  $("textoPregunta").textContent = "El cilindro sigue ahí, pero ya no aprieta. Si hoy dejaras de jalar contra esa sensación, ¿qué movimiento pequeño te quedaría disponible?";
+  dibujar();
+  Kit.guardar();
+});
+
+$("bReiniciar").addEventListener("click", () => {
+  modo = "neutro";
+  tension = 35;
+  $("lecturaEscena").textContent = "Posición inicial: prueba la diferencia entre jalar para escapar y acercarte para ganar holgura.";
+  dibujar();
+});
+
+function actualizar(){
+  dibujar();
+}
+
+Kit.iniciar({
+  clave: "met-trampa-china",
+  alCambiar: actualizar,
+  resumen: () => {
+    const s = Kit.activas("siente")[0] || "—";
+    const t = Kit.activas("tiron")[0] || "—";
+    return [
+      "LA TRAMPA CHINA DE DEDOS",
+      `Sensación o experiencia en el cilindro: ${s}`,
+      `Forma habitual de tirar hacia afuera: ${t}`,
+      `Tirones ensayados: ${tirones} · Apriete final: ${tension}%`,
+      $("apunte").value.trim() ? `Lo conversado: ${$("apunte").value.trim()}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

@@ -1,0 +1,81 @@
+@@meta
+archivo: act-dial-disposicion.html
+titulo: El dial de la disposición y el dial del malestar
+enfoque: ACT
+etiqueta: Acción comprometida y aceptación
+sub: Suelta la perilla trabada del control emocional («dial del malestar») para mover la única perilla que sí responde a tu mano («dial de la disposición»).
+fuente: Metáfora de las dos escalas (Two Scales Metaphor) de Hayes, Strosahl y Wilson (1999, cap. 5; 2012) y Hayes y Smith (2005).
+resumen: Contrastar la perilla incontrolable del malestar con la perilla elegida de la disposición a abrir espacio y avanzar hacia lo valioso.
+@@css
+  .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+  @media(max-width:720px){.dd-grid{grid-template-columns:1fr}}
+  .dd-caja{border:1px solid var(--linea);border-radius:12px;padding:15px;background:#fff}
+  .dd-caja.dolor{border-top:4px solid #c2593f;background:#fdf8f6}
+  .dd-caja.disp{border-top:4px solid #2d7a5e;background:#f4fbf8}
+  .dd-num{font-size:24px;font-weight:800;margin:6px 0}
+  .dd-aviso{margin-top:8px;padding:10px 12px;border-radius:8px;font-size:13.5px;background:#fff;border:1px solid var(--linea)}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Las dos perillas del tablero</h2>
+  <div class="cuerpo">
+    <p class="ayuda">Imagina dos perillas graduadas de 0 a 10. Solemos intentar bajar a la fuerza la primera (<b>Malestar / Ansiedad / Tristeza</b>), pero cuanto más la forzamos, más se traba. La segunda perilla (<b>Disposición / Apertura</b>) es la única que tiene cable directo a tus manos.</p>
+    <div class="dd-grid">
+      <div class="dd-caja dolor">
+        <b>Perilla 1: Nivel de malestar hoy (0 a 10)</b>
+        <p class="ayuda" style="margin:4px 0 8px">No obedece a órdenes directas; sube o baja según el clima interno.</p>
+        <input type="range" id="ddDolor" min="0" max="10" value="7" style="width:100%">
+        <div class="dd-num" id="ddValDolor" style="color:#c2593f">7 / 10</div>
+        <div class="dd-aviso" id="ddMsgDolor">Si exiges que esta perilla baje a 0 antes de vivir, tu día queda en pausa.</div>
+      </div>
+      <div class="dd-caja disp">
+        <b>Perilla 2: Mi disposición a hacer espacio y actuar (0 a 10)</b>
+        <p class="ayuda" style="margin:4px 0 8px">Sí depende de tu elección: ¿cuánto espacio abres hoy para dar tu paso valioso?</p>
+        <input type="range" id="ddDisp" min="0" max="10" value="8" style="width:100%">
+        <div class="dd-num" id="ddValDisp" style="color:#2d7a5e">8 / 10</div>
+        <div class="dd-aviso" id="ddMsgDisp">Con disposición alta, el malestar deja de multiplicarse y recuperas el timón.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Dónde elijo poner mi mano hoy</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Situación valiosa en la que hoy eliges subir tu perilla de disposición</label>
+    <div class="chips" id="situacionDisp">
+      <button class="chip" data-v="Sostener esa conversación importante aunque sienta nervios">Sostener esa conversación importante aunque sienta nervios</button>
+      <button class="chip" data-v="Presentar o avanzar en mi tarea sin esperar a sentirme seguro">Presentar o avanzar en mi tarea sin esperar a sentirme seguro</button>
+      <button class="chip" data-v="Salir al encuentro social llevando mi incomodidad conmigo">Salir al encuentro social llevando mi incomodidad conmigo</button>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">¿Qué cambia cuando dejas de medir tu día por «cuánto malestar sentí» y empiezas a medirlo por «cuánta disposición tuve para vivir lo que me importa»?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Qué sensación estás dispuesto a llevar en la mochila mientras das este paso..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("situacionDisp", {multiple:false, libre:true});
+const rD = $("ddDolor"), vD = $("ddValDolor"), mD = $("ddMsgDolor");
+const rW = $("ddDisp"), vW = $("ddValDisp"), mW = $("ddMsgDisp");
+
+function actualizar(){
+  const d = parseInt(rD.value, 10) || 0;
+  const w = parseInt(rW.value, 10) || 0;
+  vD.textContent = d + " / 10";
+  vW.textContent = w + " / 10";
+  if(w <= 3 && d >= 5){
+    mD.textContent = "Disposición baja + malestar presente = lucha activa (el malestar limpio se multiplica en sufrimiento añadido).";
+    mW.textContent = "Cuando bajas la disposición, toda tu energía se gasta en vigilar la primera perilla.";
+  } else {
+    mD.textContent = "El malestar está en " + d + "/10, pero ya no gobierna tus manos ni tus pies.";
+    mW.textContent = "Disposición en " + w + "/10: tú eliges hacia dónde caminas hoy aunque el clima interno sea intenso.";
+  }
+}
+rD.addEventListener("input", actualizar);
+rW.addEventListener("input", actualizar);
+actualizar();

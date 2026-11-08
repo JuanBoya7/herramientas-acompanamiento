@@ -1,0 +1,128 @@
+@@meta
+archivo: act-hecho-o-juicio.html
+titulo: Describir o evaluar: hecho o juicio
+enfoque: ACT
+etiqueta: Momento presente y defusión
+sub: Separa las propiedades observables de una situación (lo que vería una cámara) de las etiquetas valorativas que la mente le pega encima.
+fuente: Distinción entre propiedades primarias (descripción) y secundarias (evaluación) de Hayes y Smith (2005, Sal de tu mente, entra en tu vida) y Hayes, Strosahl y Wilson (2012).
+resumen: Distinguir hechos observables de evaluaciones mentales para desarmar la autocrítica global y volver al presente.
+@@css
+  .hj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+  @media(max-width:720px){.hj-grid{grid-template-columns:1fr}}
+  .hj-col{border:1px solid var(--linea);border-radius:10px;padding:14px;background:#fff}
+  .hj-col.hecho{border-top:4px solid #2d7a5e;background:#f5fbf8}
+  .hj-col.juicio{border-top:4px solid #c26a4e;background:#fdf8f5}
+  .hj-col h3{margin:0 0 6px;font-size:15.5px}
+  .hj-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border:1px solid var(--linea);border-radius:9px;background:#fff;margin-bottom:8px;font-size:14.5px}
+  .hj-btns{display:flex;gap:6px;flex-shrink:0}
+  .hj-btn{padding:5px 11px;border-radius:999px;border:1px solid var(--linea);background:#fff;cursor:pointer;font-size:12.5px;font-weight:600}
+  .hj-btn.sel-h{background:#2d7a5e;color:#fff;border-color:#2d7a5e}
+  .hj-btn.sel-j{background:#c26a4e;color:#fff;border-color:#c26a4e}
+  .hj-res{margin-top:10px;padding:12px 15px;border-radius:10px;background:#eef7f3;border:1px solid var(--linea);font-size:14px}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Entrenamiento rápido: ¿está en el objeto o en la evaluación de la mente?</h2>
+  <div class="cuerpo">
+    <p class="ayuda">Si todos los seres parlantes desaparecieran hoy de la Tierra, las <b>propiedades descriptivas (hechos)</b> seguirían ahí; las <b>evaluaciones (juicios)</b> desaparecerían con nosotros. Clasifica cada frase:</p>
+    <div id="hjLista">
+      <div class="hj-item" data-tipo="H">
+        <span>«La mesa mide un metro veinte y está hecha de madera de pino.»</span>
+        <div class="hj-btns">
+          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
+          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
+        </div>
+      </div>
+      <div class="hj-item" data-tipo="J">
+        <span>«Mi intervención en la reunión fue un completo desastre.»</span>
+        <div class="hj-btns">
+          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
+          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
+        </div>
+      </div>
+      <div class="hj-item" data-tipo="H">
+        <span>«Durante la reunión me tembló la voz dos veces y olvidé mencionar un punto.»</span>
+        <div class="hj-btns">
+          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
+          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
+        </div>
+      </div>
+      <div class="hj-item" data-tipo="J">
+        <span>«Soy una persona débil e incapaz de sostener la presión.»</span>
+        <div class="hj-btns">
+          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
+          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
+        </div>
+      </div>
+      <div class="hj-item" data-tipo="H">
+        <span>«Hoy siento opresión en el pecho, latidos rápidos y ganas de cancelar la cita.»</span>
+        <div class="hj-btns">
+          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
+          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
+        </div>
+      </div>
+    </div>
+    <div class="hj-res" id="hjFeedback">Clasifica las 5 frases para comprobar cómo la mente pega evaluaciones sobre los hechos.</div>
+  </div>
+</section>
+
+<section class="paso">
+  <h2><span class="num">2</span>Desarmar mi propia evaluación de hoy</h2>
+  <div class="cuerpo">
+    <label class="etiqueta">Frase difícil o autocrítica que hoy te está atrapando</label>
+    <div class="chips" id="fraseDura">
+      <button class="chip" data-v="«Soy un pésimo profesional y todo me sale mal»">«Soy un pésimo profesional y todo me sale mal»</button>
+      <button class="chip" data-v="«Mi relación está arruinada y no tiene arreglo»">«Mi relación está arruinada y no tiene arreglo»</button>
+      <button class="chip" data-v="«No debería sentirme tan inseguro a esta altura»">«No debería sentirme tan inseguro a esta altura»</button>
+    </div>
+    <div class="hj-grid">
+      <div class="hj-col hecho">
+        <h3>Lo que una cámara de video vería (Hechos descriptivos)</h3>
+        <textarea id="hjHechos" placeholder="¿Qué ocurrió exactamente en el mundo físico o en tu cuerpo sin adjetivos calificativos?"></textarea>
+      </div>
+      <div class="hj-col juicio">
+        <h3>Lo que la mente añade encima (Juicios y etiquetas)</h3>
+        <textarea id="hjJuicios" placeholder="¿Qué adjetivos globales, predicciones o condenas está pegando tu mente sobre ese hecho?"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta" id="textoPregunta">¿Cómo suena reformular hoy tu experiencia diciendo: «El hecho observable es X, y noto que mi mente está produciendo el juicio de Y»?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Escribe aquí la descripción limpia reconociendo el juicio como juicio..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("fraseDura", {multiple:false, libre:true});
+const items = document.querySelectorAll("#hjLista .hj-item");
+const fb = $("hjFeedback");
+
+function actualizar(){
+  let resp = 0, ok = 0;
+  items.forEach(it => {
+    const esp = it.getAttribute("data-tipo");
+    const bH = it.querySelector('.hj-btn[data-val="H"]');
+    const bJ = it.querySelector('.hj-btn[data-val="J"]');
+    const selH = bH.classList.contains("sel-h");
+    const selJ = bJ.classList.contains("sel-j");
+    if(selH || selJ){
+      resp++;
+      if((selH ? "H" : "J") === esp) ok++;
+    }
+  });
+  if(!resp){
+    fb.textContent = "Clasifica las 5 frases para comprobar cómo la mente pega evaluaciones sobre los hechos.";
+  } else {
+    fb.innerHTML = "<b>Resultado:</b> " + ok + " de " + resp + " identificadas con precisión. Notar que una evaluación es un juicio de la mente —y no una propiedad física tuya— devuelve la libertad de actuar.";
+  }
+}
+
+items.forEach(it => {
+  const bH = it.querySelector('.hj-btn[data-val="H"]');
+  const bJ = it.querySelector('.hj-btn[data-val="J"]');
+  bH.addEventListener("click", () => { bH.classList.add("sel-h"); bJ.classList.remove("sel-j"); actualizar(); });
+  bJ.addEventListener("click", () => { bJ.classList.add("sel-j"); bH.classList.remove("sel-h"); actualizar(); });
+});
