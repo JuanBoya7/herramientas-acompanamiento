@@ -91,3 +91,20 @@ $("bEnfrente").addEventListener("click", () => { vista = "enfrente"; dibujar(); 
 $("roca").addEventListener("click", dibujar);
 $("sendero").addEventListener("click", dibujar);
 dibujar();
+
+Kit.iniciar({
+  clave: "met-dos-montanas",
+  alCambiar: dibujar,
+  resumen: () => {
+    const r = Kit.activas("roca")[0] || "—";
+    const s = Kit.activas("sendero")[0] || "—";
+    const ap = $("apunte").value.trim();
+    return [
+      "LA METÁFORA DE LAS DOS MONTAÑAS",
+      `Roca que hoy parece tapar el camino: ${r}`,
+      `Sendero o perspectiva visible desde enfrente: ${s}`,
+      `Perspectiva ensayada: ${vista === "enfrente" ? "Desde enfrente (sendero completo)" : "Pegado a la roca"}`,
+      ap ? `Lo conversado: ${ap}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

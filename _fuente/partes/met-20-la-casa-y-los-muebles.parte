@@ -61,3 +61,22 @@ resumen: Diferenciar los contenidos transitorios (muebles) de la identidad conti
 @@js
 const $ = Kit.$;
 Kit.chips("habitacion", {multiple:false, libre:true});
+
+Kit.iniciar({
+  clave: "met-la-casa-y-los-muebles",
+  resumen: () => {
+    const inc = $("cmIncomodo").value.trim() || "—";
+    const vie = $("cmViejo").value.trim() || "—";
+    const val = $("cmValioso").value.trim() || "—";
+    const hab = Kit.activas("habitacion")[0] || "—";
+    const ap = $("apunte").value.trim();
+    return [
+      "LA CASA Y LOS MUEBLES (YO COMO CONTEXTO)",
+      `Mueble incómodo hoy: ${inc}`,
+      `Mueble viejo / historia repetida: ${vie}`,
+      `Mueble valioso elegido: ${val}`,
+      `Habitación valiosa a habitar hoy: ${hab}`,
+      ap ? `Lo conversado / perspectiva de casa: ${ap}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

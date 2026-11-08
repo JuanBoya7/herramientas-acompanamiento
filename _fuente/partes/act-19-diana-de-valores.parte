@@ -128,3 +128,25 @@ function dibujar(){
 
 ["dvR1", "dvR2", "dvR3", "dvR4"].forEach(id => $(id).addEventListener("input", dibujar));
 dibujar();
+
+Kit.iniciar({
+  clave: "act-diana-de-valores",
+  alCambiar: dibujar,
+  resumen: () => {
+    const v1 = $("dvR1").value;
+    const v2 = $("dvR2").value;
+    const v3 = $("dvR3").value;
+    const v4 = $("dvR4").value;
+    const p = Kit.activas("pasoDiana")[0] || "—";
+    const a = $("apunte").value.trim();
+    return [
+      "LA DIANA DE VALORES (BULL'S EYE)",
+      `1. Trabajo / Aprendizaje / Vocación: ${v1}/7`,
+      `2. Relaciones personales / Familia: ${v2}/7`,
+      `3. Salud / Cuidado personal: ${v3}/7`,
+      `4. Ocio / Descanso / Comunidad: ${v4}/7`,
+      `Paso concreto de aproximación: ${p}`,
+      a ? `Lo conversado / barreras y compromiso: ${a}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

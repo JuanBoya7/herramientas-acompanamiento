@@ -47,3 +47,20 @@ resumen: Descubrir los valores propios por vía experiencial a partir de un recu
 @@js
 const $ = Kit.$;
 Kit.chips("ingredientes", {multiple:true, libre:true});
+
+Kit.iniciar({
+  clave: "act-punto-dulce",
+  resumen: () => {
+    const esc = $("pdEscena").value.trim() || "—";
+    const ing = Kit.activas("ingredientes");
+    const sem = $("pdSemilla").value.trim() || "—";
+    const ap = $("apunte").value.trim();
+    return [
+      "EL EJERCICIO DEL PUNTO DULCE (SWEET SPOT)",
+      `Recuerdo de plenitud o sabor vital: ${esc}`,
+      `Ingredientes / valores encendidos: ${ing.length ? ing.join(", ") : "—"}`,
+      `Gota / semilla para la semana: ${sem}`,
+      ap ? `Lo conversado / puente de sentido: ${ap}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

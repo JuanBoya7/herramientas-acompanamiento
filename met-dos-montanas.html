@@ -505,7 +505,7 @@ var Kit = (function(){
   var LIBRES = {};      // contenedorId -> [texto, ...]
   var REG = {};         // contenedorId -> {lista, alCambiar, sinMas}
 
-  function unChip(contId, txt, id, alCambiar, libre){
+  function unChip(contId, txt, id, alCambiar, libre, multiple){
     var b = crearEl("button", "chip" + (libre ? " libre" : ""));
     b.type = "button";
     b.id = id;
@@ -525,6 +525,16 @@ var Kit = (function(){
       b.appendChild(x);
     }
     b.onclick = function(){
+      if(multiple === false){
+        var c = b.parentElement;
+        if(c){
+          for(var j=0; j<c.children.length; j++){
+            if(c.children[j] !== b && c.children[j].classList.contains("chip")){
+              c.children[j].classList.remove("activa");
+            }
+          }
+        }
+      }
       b.classList.toggle("activa");
       if(alCambiar) alCambiar();
       guardar();
@@ -578,33 +588,93 @@ var Kit = (function(){
 
   function redibujar(contId){
     var r = REG[contId];
-    if(r) chips(contId, r.lista, r.alCambiar, r.sinMas);
+    if(r) chips(contId, r.lista || r.opts, r.alCambiar, r.sinMas);
   }
 
   /* chips("miCaja", ["Una","Otra"], alCambiar)  -> con boton "+"
-     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"          */
+     chips("miCaja", [...], alCambiar, true)     -> sin boton "+"
+     chips("miCaja", {multiple:false, libre:true, alCambiar}) -> modo opciones/existentes */
   function chips(contenedorId, lista, alCambiar, sinMas){
     var c = $(contenedorId);
     if(!c) return;
-    REG[contenedorId] = {lista:lista, alCambiar:alCambiar, sinMas:sinMas};
-    var marcadas = {};
-    for(var k = 0; k < c.children.length; k++)
-      if(c.children[k].classList.contains("activa"))
-        marcadas[c.children[k].getAttribute("data-txt")] = 1;
 
-    c.innerHTML = "";
-    c.classList.add("chips");
-    lista.forEach(function(txt, i){
-      var b = unChip(contenedorId, txt, contenedorId + "-" + i, alCambiar);
-      if(marcadas[txt]) b.classList.add("activa");
-      c.appendChild(b);
-    });
-    (LIBRES[contenedorId] || []).forEach(function(txt, i){
-      var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, alCambiar, true);
-      if(marcadas[txt]) b.classList.add("activa");
-      c.appendChild(b);
-    });
-    if(!sinMas) c.appendChild(botonMas(contenedorId, alCambiar));
+    var opts = {};
+    if(lista && !Array.isArray(lista) && typeof lista === "object"){
+      opts = lista;
+      lista = null;
+    }
+    var multiple = opts.multiple !== undefined ? opts.multiple : true;
+    var permitirLibre = opts.libre !== undefined ? opts.libre : !sinMas;
+    var cb = opts.alCambiar || alCambiar;
+
+    REG[contenedorId] = {lista: lista, alCambiar: cb, sinMas: !permitirLibre, opts: opts};
+
+    var marcadas = {};
+    for(var k = 0; k < c.children.length; k++){
+      var ch = c.children[k];
+      if(ch.classList.contains("activa")){
+        var t = ch.getAttribute("data-txt") || ch.getAttribute("data-v") || ch.textContent.replace(/×$/, "").trim();
+        marcadas[t] = 1;
+      }
+    }
+
+    if(Array.isArray(lista)){
+      c.innerHTML = "";
+      c.classList.add("chips");
+      lista.forEach(function(txt, i){
+        var b = unChip(contenedorId, txt, contenedorId + "-" + i, cb, false, multiple);
+        if(marcadas[txt]) b.classList.add("activa");
+        c.appendChild(b);
+      });
+      (LIBRES[contenedorId] || []).forEach(function(txt, i){
+        var b = unChip(contenedorId, txt, contenedorId + "-libre-" + i, cb, true, multiple);
+        if(marcadas[txt]) b.classList.add("activa");
+        c.appendChild(b);
+      });
+      if(permitirLibre) c.appendChild(botonMas(contenedorId, cb));
+    } else {
+      // Elementos preexistentes en el DOM
+      c.classList.add("chips");
+      var existentes = [];
+      for(var i = 0; i < c.children.length; i++){
+        var el = c.children[i];
+        if(el.classList.contains("chip") && !el.classList.contains("mas") && !el.classList.contains("chipNuevo")){
+          existentes.push(el);
+        }
+      }
+      existentes.forEach(function(b, i){
+        var txt = b.getAttribute("data-txt") || b.getAttribute("data-v") || b.textContent.replace(/×$/, "").trim();
+        b.setAttribute("data-txt", txt);
+        if(!b.id) b.id = contenedorId + "-" + i;
+        if(marcadas[txt]) b.classList.add("activa");
+        b.onclick = function(){
+          if(multiple === false){
+            for(var j=0; j<c.children.length; j++){
+              if(c.children[j] !== b && c.children[j].classList.contains("chip")){
+                c.children[j].classList.remove("activa");
+              }
+            }
+          }
+          b.classList.toggle("activa");
+          if(cb) cb();
+          guardar();
+        };
+      });
+
+      // Añadir chips libres si hubiera
+      (LIBRES[contenedorId] || []).forEach(function(txt, i){
+        var bId = contenedorId + "-libre-" + i;
+        if(!$(bId)){
+          var b = unChip(contenedorId, txt, bId, cb, true, multiple);
+          if(marcadas[txt]) b.classList.add("activa");
+          c.appendChild(b);
+        }
+      });
+
+      if(permitirLibre && !c.querySelector(".chip.mas")){
+        c.appendChild(botonMas(contenedorId, cb));
+      }
+    }
   }
 
   /* Tarjetas con título y descripción. lista: [["Título","Descripción"], ...] */
@@ -761,7 +831,9 @@ var Kit = (function(){
       var h = c.children[i];
       if(!h.classList.contains("activa")) continue;
       var t = h.getAttribute("data-txt");
-      if(t == null) t = h.tagName === "DIV" ? h.querySelector("b").textContent : h.textContent;
+      if(t == null) t = h.getAttribute("data-v");
+      if(t == null) t = h.tagName === "DIV" ? (h.querySelector("b") ? h.querySelector("b").textContent : h.textContent) : h.textContent;
+      if(t) t = t.replace(/×$/, "").trim();
       fuera.push(t);
     }
     return fuera;
@@ -1159,6 +1231,12 @@ var Kit = (function(){
     return fuera.join("\n");
   }
 
+  if(typeof window !== "undefined"){
+    window.addEventListener("DOMContentLoaded", function(){
+      if(!listo) soloModo();
+    });
+  }
+
   return {
     iniciar: iniciar, soloModo: soloModo, guardar: guardar, limpiar: limpiar, copiar: copiar,
     chips: chips, opciones: opciones, activas: activas, medidor: medidor,
@@ -1217,6 +1295,23 @@ $("bEnfrente").addEventListener("click", () => { vista = "enfrente"; dibujar(); 
 $("roca").addEventListener("click", dibujar);
 $("sendero").addEventListener("click", dibujar);
 dibujar();
+
+Kit.iniciar({
+  clave: "met-dos-montanas",
+  alCambiar: dibujar,
+  resumen: () => {
+    const r = Kit.activas("roca")[0] || "—";
+    const s = Kit.activas("sendero")[0] || "—";
+    const ap = $("apunte").value.trim();
+    return [
+      "LA METÁFORA DE LAS DOS MONTAÑAS",
+      `Roca que hoy parece tapar el camino: ${r}`,
+      `Sendero o perspectiva visible desde enfrente: ${s}`,
+      `Perspectiva ensayada: ${vista === "enfrente" ? "Desde enfrente (sendero completo)" : "Pegado a la roca"}`,
+      ap ? `Lo conversado: ${ap}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});
 </script>
 <!--indice-hojas-->
 <style>

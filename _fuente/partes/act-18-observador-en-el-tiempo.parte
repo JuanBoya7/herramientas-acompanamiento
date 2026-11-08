@@ -89,3 +89,21 @@ function dibujar(){
 }
 ["otNinez", "otAyer", "otHoy"].forEach(id => $(id).addEventListener("input", dibujar));
 dibujar();
+
+Kit.iniciar({
+  clave: "act-observador-en-el-tiempo",
+  alCambiar: dibujar,
+  resumen: () => {
+    const n = $("otNinez").value.trim() || "—";
+    const a = $("otAyer").value.trim() || "—";
+    const h = $("otHoy").value.trim() || "—";
+    const ap = $("apunte").value.trim();
+    return [
+      "EL OBSERVADOR EN EL TIEMPO (YO COMO CONTEXTO)",
+      `Aquella niñez: ${n}`,
+      `Hace unos años: ${a}`,
+      `Aquí y ahora: ${h}`,
+      ap ? `Lo conversado / perspectiva de testigo: ${ap}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

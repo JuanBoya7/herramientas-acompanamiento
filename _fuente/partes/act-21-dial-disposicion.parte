@@ -79,3 +79,21 @@ function actualizar(){
 rD.addEventListener("input", actualizar);
 rW.addEventListener("input", actualizar);
 actualizar();
+
+Kit.iniciar({
+  clave: "act-dial-disposicion",
+  alCambiar: actualizar,
+  resumen: () => {
+    const s = Kit.activas("situacionDisp")[0] || "—";
+    const d = $("ddDolor").value;
+    const w = $("ddDisp").value;
+    const ap = $("apunte").value.trim();
+    return [
+      "EL DIAL DE LA DISPOSICIÓN",
+      `Situación elegida: ${s}`,
+      `Perilla 1 (Intensidad del malestar limpio): ${d}/10`,
+      `Perilla 2 (Nivel de disposición voluntaria): ${w}/10`,
+      ap ? `Lo conversado / compromiso: ${ap}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

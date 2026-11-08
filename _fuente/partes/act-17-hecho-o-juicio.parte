@@ -126,3 +126,21 @@ items.forEach(it => {
   bH.addEventListener("click", () => { bH.classList.add("sel-h"); bJ.classList.remove("sel-j"); actualizar(); });
   bJ.addEventListener("click", () => { bJ.classList.add("sel-j"); bH.classList.remove("sel-h"); actualizar(); });
 });
+
+Kit.iniciar({
+  clave: "act-hecho-o-juicio",
+  alCambiar: actualizar,
+  resumen: () => {
+    const f = Kit.activas("fraseDura")[0] || "—";
+    const h = $("hjHechos").value.trim() || "—";
+    const j = $("hjJuicios").value.trim() || "—";
+    const a = $("apunte").value.trim();
+    return [
+      "DESCRIPCIÓN VS EVALUACIÓN: HECHO O JUICIO",
+      `Frase o autocrítica inicial: ${f}`,
+      `Hechos observables (lo que vería una cámara): ${h}`,
+      `Juicios y etiquetas mentales: ${j}`,
+      a ? `Lo conversado / reformulación limpia: ${a}` : ""
+    ].filter(Boolean).join("\n");
+  }
+});

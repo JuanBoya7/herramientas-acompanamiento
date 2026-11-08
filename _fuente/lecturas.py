@@ -1,3 +1,4 @@
+import base64
 # -*- coding: utf-8 -*-
 """
 Construye `lecturas-act.html`: tablero alterno e independiente de lecturas
@@ -102,7 +103,7 @@ PLANTILLA = r"""<!doctype html>
     border-radius:var(--radio);overflow:hidden;padding:0;color:inherit;transition:transform .14s,box-shadow .14s,border-color .14s}
   .tarjeta:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(31,45,43,.10);border-color:var(--color)}
   .tarjeta[hidden]{display:none}
-  .tarjeta .img{aspect-ratio:4/3;background:#fff center/cover no-repeat;border-bottom:1px solid var(--linea)}
+  .tarjeta .img{aspect-ratio:4/3;background:#ffffff center/contain no-repeat;border-bottom:1px solid var(--linea);padding:6px}
   .tarjeta .cuerpo{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
   .tarjeta .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11.5px}
   .tarjeta .tipo{font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color);background:var(--suave);border-radius:999px;padding:2px 9px}
@@ -121,7 +122,8 @@ PLANTILLA = r"""<!doctype html>
     box-shadow:0 20px 60px rgba(0,0,0,.25);align-self:flex-start}
   .l-hero{display:grid;grid-template-columns:260px 1fr;gap:0;background:var(--suave);border-bottom:1px solid var(--borde)}
   @media(max-width:680px){.l-hero{grid-template-columns:1fr}}
-  .l-hero .img{min-height:220px;background:#fff center/cover no-repeat}
+  .l-hero .img{min-height:220px;background:#ffffff center/contain no-repeat;padding:12px}
+  @media(max-width:680px){.l-hero .img{height:220px;min-height:220px;padding:8px}}
   .l-hero .txt{padding:24px 28px}
   .l-hero .estilo{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color)}
   .l-hero h2{font-family:var(--serif);font-weight:600;font-size:clamp(23px,2.6vw,30px);line-height:1.18;margin:6px 0 10px}
@@ -175,43 +177,59 @@ PLANTILLA = r"""<!doctype html>
   body.paciente .cerrar,body.paciente .solo-pro{display:none !important}
   body.paciente .hoja-l{box-shadow:0 8px 30px rgba(0,0,0,.08)}
 
-  /* ---------- Hoja PDF (estética de historias clínicas JB) ---------- */
-  .pdf-hoja{width:794px;background:#fff;color:#22302e;font-family:var(--sans);font-size:12.5px;line-height:1.55;position:relative}
-  .pdf-pag{position:relative;padding:46px 54px 64px;min-height:1122px;overflow:hidden}
-  .pdf-pag .f-arriba{position:absolute;top:0;right:0;width:330px;height:250px;background:url("arte/fondo-act-arriba.webp") right top/contain no-repeat;opacity:.9}
-  .pdf-pag .f-abajo{position:absolute;bottom:0;right:0;width:300px;height:220px;background:url("arte/fondo-act-abajo.webp") right bottom/contain no-repeat;opacity:.85}
-  .pdf-pag > *{position:relative}
-  .h-cab{border-radius:12px;padding:16px 20px;margin-bottom:18px;
-    background:linear-gradient(90deg,var(--suave) 0%,rgba(255,255,255,.6) 58%,rgba(255,255,255,0) 88%);border-left:5px solid var(--color)}
-  .h-cab .k{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--color)}
-  .h-cab h1{font-family:var(--serif);font-weight:600;font-size:24px;line-height:1.2;margin:4px 0 4px;color:#1d2a28;max-width:520px}
-  .h-cab .sub{font-size:11.5px;color:#5b6b68;max-width:540px}
-  .h-cab .para{margin-top:8px;font-size:11px;color:#3f4e4b}
-  .h-intro{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:start;margin-bottom:6px}
-  .h-intro img{width:190px;height:190px;object-fit:cover;border-radius:12px;border:1px solid var(--borde)}
-  .h-intro .res{font-family:var(--serif);font-size:14px;line-height:1.55;color:#2c3a38;margin:0 0 8px}
-  .h-intro .chips-p{display:flex;gap:6px;flex-wrap:wrap}
-  .h-intro .chips-p span{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color);background:var(--suave);border:1px solid var(--borde);border-radius:999px;padding:2px 9px}
-  .pdf-hoja h2{font-family:var(--serif);font-weight:600;font-size:15.5px;margin:18px 0 8px;color:#1d2a28;display:flex;align-items:center;gap:9px;page-break-after:avoid}
-  .pdf-hoja h2::before{content:"";width:9px;height:9px;background:var(--color);transform:rotate(45deg);flex:0 0 auto}
-  .pdf-hoja .lect p{font-family:var(--serif);font-size:13.3px;line-height:1.68;margin:0 0 9px;text-align:justify}
-  .pdf-hoja .clave-p{margin:12px 0 4px;padding:11px 15px;border-radius:9px;background:var(--suave);border-left:4px solid var(--color);
-    font-family:var(--serif);font-style:italic;font-size:13.6px;line-height:1.5;page-break-inside:avoid}
-  .pdf-hoja .q{margin:0 0 12px;page-break-inside:avoid}
-  .pdf-hoja .q b{display:flex;gap:8px;font-size:12.5px;line-height:1.45}
-  .pdf-hoja .q b i{font-style:normal;flex:0 0 19px;height:19px;border-radius:50%;background:var(--color);color:#fff;font-size:10.5px;display:flex;align-items:center;justify-content:center}
-  .pdf-hoja .q .resp{margin:6px 0 0 27px;font-family:var(--serif);font-size:12.8px;color:#2c3a38;white-space:pre-wrap;
-    background:rgba(255,255,255,.75);border:1px solid var(--borde);border-radius:8px;padding:8px 11px}
-  .pdf-hoja .q .lineas{margin:6px 0 0 27px;height:58px;background:repeating-linear-gradient(transparent 0 18px,var(--borde) 18px 19px)}
-  .pdf-hoja .prac{padding:10px 14px;border:1px dashed var(--color);border-radius:9px;background:rgba(255,255,255,.8);page-break-inside:avoid}
-  .pdf-hoja .fte{margin-top:16px;font-size:9.8px;color:#6a7976}
-  .pdf-hoja .firma{margin-top:22px;padding-top:10px;border-top:1px solid var(--borde);display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#5b6b68;page-break-inside:avoid}
-  .pdf-hoja .firma b{display:block;font-size:11.5px;color:#22302e}
+  /* ---------- Hoja PDF (estética de historias clínicas JB, 2 páginas A4 calibradas) ---------- */
+  .pdf-hoja{width:210mm;margin:0 auto;background:#fff;color:#22302e;font-family:var(--sans)}
+  .pdf-pag{
+    width:210mm;
+    height:296.8mm;
+    box-sizing:border-box;
+    padding:12mm 14mm 13mm;
+    position:relative;
+    overflow:hidden;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+  }
+  .pdf-pag.pag-1{page-break-after:always}
+  .pdf-pag.pag-2{page-break-after:auto}
+  .pdf-pag .f-arriba{position:absolute;top:0;right:0;width:85mm;height:60mm;background:url("__FONDO_ARRIBA__") right top/contain no-repeat;opacity:.85;pointer-events:none}
+  .pdf-pag .f-abajo{position:absolute;bottom:0;right:0;width:80mm;height:55mm;background:url("__FONDO_ABAJO__") right bottom/contain no-repeat;opacity:.85;pointer-events:none}
+  .pdf-pag > *{position:relative;z-index:1}
+  .h-cab{border-radius:3mm;padding:3.5mm 5mm;margin-bottom:3.5mm;
+    background:linear-gradient(90deg,var(--suave) 0%,rgba(255,255,255,.6) 60%,rgba(255,255,255,0) 90%);border-left:1.5mm solid var(--color)}
+  .h-cab.mini{margin-bottom:4mm;padding:2.5mm 4mm}
+  .h-cab .k{font-size:7.5pt;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--color)}
+  .h-cab h1{font-family:var(--serif);font-weight:600;font-size:17pt;line-height:1.18;margin:2px 0;color:#1d2a28}
+  .h-cab.mini h1{font-size:14pt}
+  .h-cab .sub{font-size:8.5pt;color:#5b6b68}
+  .h-cab .para{margin-top:1.5mm;font-size:8pt;color:#3f4e4b}
+  .h-intro{display:grid;grid-template-columns:36mm 1fr;gap:4mm;align-items:center;margin-bottom:3.5mm}
+  .h-intro img{width:36mm;height:36mm;object-fit:contain;background:#fff;border-radius:2.5mm;border:1px solid var(--borde);padding:1mm}
+  .h-intro .res{font-family:var(--serif);font-size:10pt;line-height:1.45;color:#2c3a38;margin:0 0 2mm}
+  .h-intro .chips-p{display:flex;gap:2mm;flex-wrap:wrap}
+  .h-intro .chips-p span{font-size:7.5pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color);background:var(--suave);border:1px solid var(--borde);border-radius:999px;padding:1px 7px}
+  .h-intro .desc-p{margin-top:1.5mm;font-size:8.5pt;color:#5b6b68;line-height:1.35}
+  .pdf-hoja h2{font-family:var(--serif);font-weight:600;font-size:11pt;margin:3mm 0 2mm;color:#1d2a28;display:flex;align-items:center;gap:2mm}
+  .pdf-hoja h2::before{content:"";width:2.2mm;height:2.2mm;background:var(--color);transform:rotate(45deg);flex:0 0 auto}
+  .pdf-hoja .lect{font-family:var(--serif);font-size:9.8pt;line-height:1.58;color:#24312f}
+  .pdf-hoja .lect p{margin:0 0 2.5mm;text-align:justify}
+  .pdf-hoja .clave-p{margin:3mm 0 0;padding:2.8mm 4mm;border-radius:2.5mm;background:var(--suave);border-left:1.2mm solid var(--color);
+    font-family:var(--serif);font-style:italic;font-size:9.6pt;line-height:1.45;color:#263331}
+  .pdf-hoja .pie-pag{margin-top:auto;padding-top:2.5mm;border-top:1px solid #e2ece9;font-size:7.5pt;color:#728280;display:flex;justify-content:space-between}
+  .pdf-hoja .q{margin:0 0 3.5mm}
+  .pdf-hoja .q b{display:flex;gap:2mm;font-size:9.5pt;line-height:1.4;color:#1e2c2a}
+  .pdf-hoja .q b i{font-style:normal;flex:0 0 4.5mm;height:4.5mm;border-radius:50%;background:var(--color);color:#fff;font-size:7.5pt;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .pdf-hoja .q .resp{margin:1.5mm 0 0 6.5mm;font-family:var(--serif);font-size:9pt;color:#2c3a38;white-space:pre-wrap;background:rgba(255,255,255,.8);border:1px solid var(--borde);border-radius:2mm;padding:2mm 3mm}
+  .pdf-hoja .q .lineas{margin:1.5mm 0 0 6.5mm;height:12mm;background:repeating-linear-gradient(transparent 0 3.8mm,var(--borde) 3.8mm 4mm)}
+  .pdf-hoja .prac{padding:3mm 4mm;border:1px dashed var(--color);border-radius:2.5mm;background:rgba(255,255,255,.85);font-size:9pt;line-height:1.48;color:#22302e}
+  .pdf-hoja .fte{margin-top:3mm;font-size:7.5pt;color:#6a7976;line-height:1.35}
+  .pdf-hoja .firma{margin-top:3.5mm;padding-top:2mm;border-top:1px solid var(--borde);display:flex;justify-content:space-between;gap:3mm;font-size:8pt;color:#5b6b68}
+  .pdf-hoja .firma b{display:block;font-size:9pt;color:#22302e}
 
   @media print{
     body.imprimiendo > *:not(#zona-impresion){display:none !important}
     body.imprimiendo #zona-impresion{display:block !important}
-    @page{size:A4;margin:0}
+    @page{size:A4 portrait;margin:0}
   }
   #zona-impresion{display:none}
 </style>
@@ -294,7 +312,7 @@ __SECCIONES__
 const PROCESOS = __PROCESOS_JSON__;
 const LECTURAS = __LECTURAS_JSON__;
 const PROF = __PROF_JSON__, CRED = __CRED_JSON__;
-const H2PDF = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+
 
 const por = id => document.getElementById(id);
 const P = Object.fromEntries(PROCESOS.map(p => [p.id, p]));
@@ -410,31 +428,71 @@ function construirHoja(l){
   const d = document.createElement("div");
   d.className = "pdf-hoja"; colores(d, p);
   d.innerHTML =
-    '<div class="pdf-pag"><div class="f-arriba"></div><div class="f-abajo"></div>' +
-      '<div class="h-cab"><div class="k">Terapia de Aceptación y Compromiso · ' + esc(p.nombre) + '</div>' +
+    '<div class="pdf-pag pag-1">' +
+      '<div class="f-arriba"></div>' +
+      '<div class="h-cab">' +
+        '<div class="k">Terapia de Aceptación y Compromiso · ' + esc(p.nombre) + '</div>' +
         '<h1>' + esc(l.titulo) + '</h1>' +
         '<div class="sub">' + esc(p.estilo_nombre) + ' · ' + esc(l.tipo) + ' · ' + esc(l.tiempo) + ' de lectura</div>' +
-        '<div class="para">' + (nombre ? "Preparado para: <b>" + esc(nombre) + "</b> · " : "") + esc(fecha) + '</div></div>' +
-      '<div class="h-intro"><img src="arte/lecturas/' + l.slug + '.webp" alt="">' +
-        '<div><p class="res">' + esc(l.resumen) + '</p><div class="chips-p"><span>' + esc(p.corto) + '</span><span>' + esc(l.tipo) + '</span></div>' +
-        '<p class="res" style="margin-top:10px;font-size:12.5px;color:#5b6b68">' + esc(p.desc) + '</p></div></div>' +
-      '<h2>Lectura</h2><div class="lect">' + l.lectura.map(x => "<p>" + esc(x) + "</p>").join("") + '</div>' +
+        '<div class="para">' + (nombre ? "Preparado para: <b>" + esc(nombre) + "</b> · " : "") + esc(fecha) + '</div>' +
+      '</div>' +
+      '<div class="h-intro">' +
+        '<img src="arte/lecturas/' + l.slug + '.webp" alt="Ilustración">' +
+        '<div>' +
+          '<p class="res">' + esc(l.resumen) + '</p>' +
+          '<div class="chips-p"><span>' + esc(p.corto) + '</span><span>' + esc(l.tipo) + '</span></div>' +
+          '<p class="desc-p">' + esc(p.desc) + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<h2>Lectura</h2>' +
+      '<div class="lect">' + l.lectura.map(x => "<p>" + esc(x) + "</p>").join("") + '</div>' +
       '<div class="clave-p">' + esc(l.clave) + '</div>' +
-      '<h2>Para reflexionar</h2>' +
+      '<div class="pie-pag">' +
+        '<span>Lecturas ACT · Material de consulta y reflexión</span>' +
+        '<span>Página 1 de 2 · Continúa con las preguntas de reflexión y práctica &rarr;</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="pdf-pag pag-2">' +
+      '<div class="f-abajo"></div>' +
+      '<div class="h-cab mini">' +
+        '<div class="k">Terapia de Aceptación y Compromiso · Taller de reflexión</div>' +
+        '<h1>' + esc(l.titulo) + '</h1>' +
+        '<div class="sub">Preguntas de reflexión y práctica personal</div>' +
+      '</div>' +
+      '<h2>Para reflexionar en sesión o en casa</h2>' +
       l.preguntas.map((q, i) => '<div class="q"><b><i>' + (i + 1) + '</i>' + esc(q) + '</b>' +
         (resp[i] ? '<div class="resp">' + esc(resp[i]) + '</div>' : '<div class="lineas"></div>') + '</div>').join("") +
-      '<h2>Práctica sugerida</h2><div class="prac">' + esc(l.practica) + '</div>' +
-      '<div class="fte"><b>Fuente:</b> ' + esc(l.fuente) + '</div>' +
-      '<div class="firma"><div><b>' + esc(PROF) + '</b>' + esc(CRED) + '</div><div style="text-align:right">Material de acompañamiento terapéutico<br>Uso personal del paciente</div></div>' +
+      '<h2>Práctica sugerida para la semana</h2>' +
+      '<div class="prac">' + esc(l.practica) + '</div>' +
+      '<div class="fte"><b>Fuente clínica:</b> ' + esc(l.fuente) + '</div>' +
+      '<div class="firma">' +
+        '<div><b>' + esc(PROF) + '</b>' + esc(CRED) + '</div>' +
+        '<div style="text-align:right">Material de acompañamiento terapéutico<br>Uso personal del paciente</div>' +
+      '</div>' +
+      '<div class="pie-pag">' +
+        '<span>Lecturas ACT · Reflexión y práctica</span>' +
+        '<span>Página 2 de 2</span>' +
+      '</div>' +
     '</div>';
   return d;
 }
+const H2PDF_LOCAL = "arte/html2pdf.bundle.min.js";
+const H2PDF_CDN = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
 let cargaLib = null;
 function cargarH2P(){
   if(window.html2pdf) return Promise.resolve();
   if(cargaLib) return cargaLib;
   cargaLib = new Promise((ok, mal) => {
-    const s = document.createElement("script"); s.src = H2PDF; s.onload = ok; s.onerror = () => { cargaLib = null; mal(new Error("sin conexión")); };
+    const s = document.createElement("script");
+    s.src = H2PDF_LOCAL;
+    s.onload = ok;
+    s.onerror = () => {
+      const s2 = document.createElement("script");
+      s2.src = H2PDF_CDN;
+      s2.onload = ok;
+      s2.onerror = () => { cargaLib = null; mal(new Error("sin conexión")); };
+      document.head.appendChild(s2);
+    };
     document.head.appendChild(s);
   });
   return cargaLib;
@@ -442,14 +500,31 @@ function cargarH2P(){
 async function generarPdf(l){
   await cargarH2P();
   const hoja = construirHoja(l);
-  const opts = {
-    margin: 0, filename: nombreArchivo(l),
-    image: {type: "jpeg", quality: 0.94},
-    html2canvas: {scale: 2, useCORS: true, backgroundColor: "#ffffff"},
-    jsPDF: {unit: "px", format: [794, 1123], orientation: "portrait", hotfixes: ["px_scaling"]},
-    pagebreak: {mode: ["css", "legacy"], avoid: [".q", ".clave-p", ".prac", ".firma", "h2"]}
-  };
-  return html2pdf().set(opts).from(hoja).outputPdf("blob");
+  const wrap = document.createElement("div");
+  wrap.style.cssText = "position:fixed;left:-9999px;top:0;width:210mm;z-index:-9999;background:#ffffff;visibility:visible;";
+  wrap.appendChild(hoja);
+  document.body.appendChild(wrap);
+
+  try {
+    const imgs = hoja.querySelectorAll("img");
+    await Promise.all(Array.from(imgs).map(img => {
+      if(img.complete) return Promise.resolve();
+      return new Promise(res => { img.onload = res; img.onerror = res; });
+    }));
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+
+    const opts = {
+      margin: 0,
+      filename: nombreArchivo(l),
+      image: {type: "jpeg", quality: 0.95},
+      html2canvas: {scale: 2, useCORS: true, backgroundColor: "#ffffff"},
+      jsPDF: {unit: "mm", format: "a4", orientation: "portrait"},
+      pagebreak: {mode: "css"}
+    };
+    return await html2pdf().set(opts).from(hoja).outputPdf("blob");
+  } finally {
+    wrap.remove();
+  }
 }
 function descargar(blob, nombre){
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nombre;
@@ -458,7 +533,7 @@ function descargar(blob, nombre){
 function imprimir(l){
   const z = por("zona-impresion"); z.innerHTML = ""; z.appendChild(construirHoja(l));
   document.body.classList.add("imprimiendo");
-  setTimeout(() => { window.print(); document.body.classList.remove("imprimiendo"); }, 350);
+  setTimeout(() => { window.print(); document.body.classList.remove("imprimiendo"); }, 400);
 }
 async function conBoton(btn, fn){
   btn.disabled = true; const t = btn.innerHTML; btn.innerHTML = "Preparando PDF…";
@@ -601,8 +676,12 @@ def construir():
     def js(o):
         return json.dumps(o, ensure_ascii=False).replace("</", "<\\/")
 
+    fondo_arriba = "data:image/webp;base64," + base64.b64encode((DESTINO.parent / "arte" / "fondo-act-arriba.webp").read_bytes()).decode("ascii")
+    fondo_abajo = "data:image/webp;base64," + base64.b64encode((DESTINO.parent / "arte" / "fondo-act-abajo.webp").read_bytes()).decode("ascii")
     out = PLANTILLA
     reemplazos = {
+        "__FONDO_ARRIBA__": fondo_arriba,
+        "__FONDO_ABAJO__": fondo_abajo,
         "__N__": str(len(datos.LECTURAS)),
         "__HEX__": hexaflex(),
         "__CHIPS_PROC__": chips_proc,
