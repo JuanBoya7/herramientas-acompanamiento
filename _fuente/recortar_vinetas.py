@@ -13,7 +13,7 @@ import numpy as np
 from PIL import Image
 
 HERR = r"C:\Users\User\Documents\Varios\FUAA\2026\2026-2\RUTA DE ATENCIÓN CLÍNICA\Recursos, ruta de atención\Herramientas"
-GRIDS = os.path.join(HERR, "_fuente", "imagenes", "grids_act")
+GRIDS = os.path.join(HERR, "_fuente", "imagenes", "grids_v2")
 OUT = os.path.join(HERR, "arte", "lecturas")
 LADO = 560
 

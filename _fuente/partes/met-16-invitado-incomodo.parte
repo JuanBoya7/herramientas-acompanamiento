@@ -3,44 +3,46 @@ archivo: met-invitado-incomodo.html
 titulo: El invitado incómodo en la fiesta
 enfoque: ACT
 etiqueta: Aceptación
-sub: Mira dónde queda el anfitrión cuando pasa la noche trancando la puerta y dónde queda cuando deja pasar al visitante sin entregarle la casa.
+sub: La fiesta está en marcha y alguien que no invitaste golpea la puerta. Puedes pasar la noche sosteniéndola o dejarlo entrar y volver a tu mesa aunque siga rondando.
 fuente: Metáfora de Joe el vagabundo / El invitado no deseado (Hayes, Strosahl y Wilson, 1999, cap. 8; Oliver, 2011; Harris, 2019).
-resumen: Contrastar el costo de vigilar la puerta para que no entre una emoción difícil frente a permitirle estar y volver a la reunión valiosa.
+resumen: El visitante golpea solo, cada tanto y sin aviso. Trancar la puerta deja al anfitrión de espaldas a su fiesta, que se enfría; dejarlo pasar no lo vuelve simpático, pero devuelve al anfitrión a la mesa. El marcador cuenta las veces que se vuelve a la mesa.
 @@css
-  .ii-estado{background:#f7faf9;border:1px solid var(--linea);border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14px}
+  .marcas div{min-width:120px}
+  .mandos button.trancar{background:#7a4b3a;border-color:#7a4b3a;color:#fff;font-weight:600}
+  .mandos button.trancar:hover{background:#673e30;border-color:#673e30}
+  .mandos button.volver{background:#2f7a5f;border-color:#2f7a5f;color:#fff;font-weight:600}
+  .mandos button.volver:hover{background:#27674f;border-color:#27674f}
 @@html
 <section class="paso">
-  <h2><span class="num">1</span>La reunión que te importa y quién toca a la puerta</h2>
+  <h2><span class="num">1</span>La fiesta y quién toca a la puerta</h2>
   <div class="cuerpo">
-    <label class="etiqueta">Qué hay adentro de tu casa que sí quieres vivir</label>
+    <label class="etiqueta">Lo que está pasando en tu mesa</label>
     <div class="chips" id="fiesta">
-      <button class="chip" data-v="Compartir con presencia con las personas que quiero">Compartir con presencia con las personas que quiero</button>
-      <button class="chip" data-v="Sacar adelante un proyecto propio con sentido">Sacar adelante un proyecto propio con sentido</button>
-      <button class="chip" data-v="Construir intimidad y confianza en mis vínculos">Construir intimidad y confianza en mis vínculos</button>
-      <button class="chip" data-v="Disfrutar mi tiempo de descanso sin estar en guardia">Disfrutar mi tiempo de descanso sin estar en guardia</button>
+      <button class="chip" data-v="Estar con la gente que quiero">Estar con la gente que quiero</button>
+      <button class="chip" data-v="Sacar adelante un proyecto propio">Sacar adelante un proyecto propio</button>
+      <button class="chip" data-v="Construir confianza en mis vínculos">Construir confianza en mis vínculos</button>
+      <button class="chip" data-v="Descansar sin estar en guardia">Descansar sin estar en guardia</button>
     </div>
-    <label class="etiqueta">Qué invitado ruidoso golpea la puerta sin invitación</label>
+    <label class="etiqueta">Quién golpea sin invitación</label>
     <div class="chips" id="invitado">
-      <button class="chip" data-v="La duda de «no soy suficiente»">La duda de «no soy suficiente»</button>
+      <button class="chip" data-v="«No soy suficiente»">«No soy suficiente»</button>
       <button class="chip" data-v="El miedo a que algo salga mal">El miedo a que algo salga mal</button>
-      <button class="chip" data-v="La tristeza o el vacío que llega de golpe">La tristeza o el vacío que llega de golpe</button>
-      <button class="chip" data-v="La incomodidad física de la ansiedad">La incomodidad física de la ansiedad</button>
+      <button class="chip" data-v="La tristeza que llega de golpe">La tristeza que llega de golpe</button>
+      <button class="chip" data-v="La ansiedad en el cuerpo">La ansiedad en el cuerpo</button>
     </div>
   </div>
 </section>
 
 <div class="escenario">
-  <svg id="escenaFiesta" viewBox="0 0 680 280" role="img" aria-label="Plano de la casa: puerta de entrada y sala de la fiesta"></svg>
+  <svg id="escenaFiesta" viewBox="0 0 700 350" role="img" aria-label="Corte de una casa: el porche con la puerta y la sala donde está la fiesta"></svg>
   <div class="marcas">
-    <div><span class="n" id="mPuerta">En la puerta</span><span class="r">dónde estás tú</span></div>
-    <div><span class="n" id="mContacto">15%</span><span class="r">presencia en tu fiesta</span></div>
-    <div><span class="n" id="mRuido">Sigue ahí</span><span class="r">el invitado</span></div>
+    <div><span class="n" id="mVolvi" style="color:#2f7a5f">0</span><span class="r">veces que volví a la mesa</span></div>
   </div>
   <div class="mandos">
-    <button type="button" id="bTrancar">Trancar la puerta y vigilar que no entre</button>
-    <button type="button" class="principal" id="bAbrir">Abrir la puerta y volver con tus invitados</button>
+    <button type="button" class="trancar" id="bTrancar">Ir a trancar la puerta</button>
+    <button type="button" class="volver" id="bVolver">Volver a la mesa aunque toque</button>
+    <button type="button" id="bReiniciar">Empezar la noche de nuevo</button>
   </div>
-  <div class="ii-estado" id="notaFiesta">Elige qué hacer con la puerta para ver qué ocurre con el anfitrión y con la fiesta.</div>
 </div>
 
 <section class="bloque pregunta-sola" id="cierre">
@@ -55,83 +57,163 @@ const $ = Kit.$;
 Kit.chips("fiesta", {multiple:false, libre:true});
 Kit.chips("invitado", {multiple:false, libre:true});
 
-let postura = "trancar"; // trancar | abrir
+/* ----- geometría del fondo en acuarela (700 x 350) ----- */
+const PISO = 293;          // donde apoyan los pies (piso de la sala en el fondo)
+const PUERTA = 305;        // muro cortado entre el porche y la sala
+const MESA = 462;          // cabecera de la mesa, junto a los amigos
+const RINCON = 360;        // junto al sillón, cerca de la entrada
+const ALTO = 158;          // alto de las figuras (a escala de los amigos sentados)
+/* proporciones (ancho/alto) de cada figura recortada */
+const FIG = {
+  empuja:  {href:"[[imagen:invitado-anfitrion-empuja.webp]]",  r:0.84},
+  mesa:    {href:"[[imagen:invitado-anfitrion-mesa.webp]]",    r:0.453},
+  camina:  {href:"[[imagen:invitado-anfitrion-camina.webp]]",  r:0.513},
+  toca:    {href:"[[imagen:invitado-toca.webp]]",              r:0.693},
+  rezonga: {href:"[[imagen:invitado-rezonga.webp]]",           r:0.36},
+  ronda:   {href:"[[imagen:invitado-ronda.webp]]",             r:0.473},
+};
 
-function pintar(){
-  const svg = $("escenaFiesta");
-  svg.innerHTML = "";
-  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+const AFUERA = PUERTA - 10 - ALTO * FIG.toca.r / 2;     // el puño llega a la puerta
+const EN_PUERTA = PUERTA + 9 + ALTO * FIG.empuja.r / 2;  // las palmas contra la puerta
+/* ----- estado de la noche ----- */
+let anf, inv, calidez, volvi, golpe, proximoGolpe, t, quejas;
+function reiniciar(){
+  anf = {x:MESA, meta:MESA, modo:"mesa"};          // mesa | puerta | camino
+  inv = {x:AFUERA, meta:AFUERA, modo:"afuera"};          // afuera | entrando | adentro
+  calidez = 1; volvi = 0; golpe = 0; t = 0; quejas = [];
+  proximoGolpe = 2.5;
+  $("qFiesta").textContent = "Cuando te quedas sosteniendo la puerta con el hombro para que ese invitado no pase, ¿quién se está perdiendo la fiesta?";
+}
+reiniciar();
 
-  const nomFiesta = Kit.activas("fiesta")[0] || "Lo que te importa vivir";
-  const nomInv = Kit.activas("invitado")[0] || "El invitado incómodo";
+const escena = Kit.reloj(latido);
 
-  // Fondo general: porche izquierdo + salón cálido derecho
-  g("rect", {x:0, y:0, width:210, height:280, fill:"#e8eef3"});
-  g("rect", {x:210, y:0, width:470, height:280, fill:"#fdf8ef"});
-  g("line", {x1:210, y1:0, x2:210, y2:280, stroke:"#8a6d4b", "stroke-width":5});
-
-  // Luces cálidas y mesa en la fiesta (derecha)
-  for(let x = 270; x <= 620; x += 70){
-    g("circle", {cx:x, cy:34, r:7, fill:"#f3b64c", "fill-opacity":0.85});
+function latido(dt){
+  t += dt;
+  /* el anfitrión camina hacia donde decidió estar */
+  if(anf.modo === "camino"){
+    const d = anf.meta - anf.x, paso = 120 * dt;
+    if(Math.abs(d) <= paso){ anf.x = anf.meta; anf.modo = anf.meta === MESA ? "mesa" : "puerta"; }
+    else anf.x += Math.sign(d) * paso;
   }
-  g("ellipse", {cx:475, cy:170, rx:115, ry:52, fill:"#e9d3b0", stroke:"#b59264", "stroke-width":2});
-  const tMesa = g("text", {x:475, y:174, "text-anchor":"middle", fill:"#4f3b22", style:"font:600 12.5px system-ui,sans-serif"});
-  tMesa.textContent = nomFiesta.length > 36 ? nomFiesta.slice(0, 34) + "…" : nomFiesta;
+  /* la fiesta se entibia con el anfitrión en su mesa y se enfría con él en la puerta */
+  const objetivo = anf.modo === "mesa" ? 1 : anf.modo === "puerta" ? 0.15 : 0.55;
+  calidez += (objetivo - calidez) * Math.min(1, dt * 0.6);
 
-  // Personas queridas alrededor de la mesa
-  [[400,115],[550,115],[405,228],[548,228]].forEach(([cx, cy]) => {
-    g("circle", {cx, cy, r:16, fill:"#3f9b86", "fill-opacity":0.85});
-  });
-
-  if(postura === "trancar"){
-    // Puerta cerrada, invitado golpeando afuera, anfitrión pegado a la puerta de espaldas a la fiesta
-    g("rect", {x:205, y:95, width:10, height:95, fill:"#6e4726"});
-    // Invitado afuera golpeando
-    g("circle", {cx:135, cy:142, r:24, fill:"#8c564b"});
-    const tInv = g("text", {x:115, y:192, "text-anchor":"middle", fill:"#6b372d", style:"font:700 11.5px system-ui,sans-serif"});
-    tInv.textContent = "¡BAM! ¡BAM!";
-    // Anfitrión empujando la puerta lejos de su propia mesa
-    g("circle", {cx:245, cy:142, r:20, fill:"#2f6f8f"});
-    const tYo = g("text", {x:258, y:102, "text-anchor":"middle", fill:"#1f4b66", style:"font:700 12px system-ui,sans-serif"});
-    tYo.textContent = "Tú (vigilando)";
-    // Línea punteada mostrando la distancia a la mesa
-    g("line", {x1:268, y1:142, x2:360, y2:165, stroke:"#b84a39", "stroke-width":2, "stroke-dasharray":"5 5"});
-
-    $("mPuerta").textContent = "Trancando la puerta";
-    $("mContacto").textContent = "15%";
-    $("mRuido").textContent = "Golpea más fuerte";
-    $("notaFiesta").innerHTML = `<b>Vigilando la puerta:</b> «${nomInv}» no entra a la sala, pero tú tampoco estás en tu fiesta. Toda tu energía se va en sostener el picaporte.`;
+  /* el visitante golpea solo, sin aviso; con la puerta trancada golpea más seguido y más fuerte */
+  golpe = Math.max(0, golpe - dt * 1.8);
+  if(inv.modo === "afuera"){
+    proximoGolpe -= dt;
+    if(proximoGolpe <= 0){
+      golpe = 1;
+      proximoGolpe = anf.modo === "puerta" ? 1.6 + Math.random() * 1.6 : 3.5 + Math.random() * 3;
+    }
+    /* sin nadie sosteniendo la puerta, termina entrando por su cuenta */
+    if(anf.modo === "mesa" && t > 6 && Math.random() < dt * 0.12){ inv.modo = "entrando"; inv.meta = RINCON; }
+  } else if(inv.modo === "entrando"){
+    const paso = 70 * dt;
+    if(inv.x + paso >= inv.meta){ inv.x = inv.meta; inv.modo = "adentro"; }
+    else inv.x += paso;
   } else {
-    // Puerta abierta, invitado en un rincón con un canapé, anfitrión sentado en la mesa principal
-    g("line", {x1:210, y1:95, x2:255, y2:68, stroke:"#6e4726", "stroke-width":6});
-    // Invitado en una esquina de la sala rezongando bajito
-    g("circle", {cx:268, cy:226, r:21, fill:"#8c564b", "fill-opacity":0.8});
-    const tInv = g("text", {x:278, y:260, "text-anchor":"middle", fill:"#6b372d", style:"font:600 11px system-ui,sans-serif"});
-    tInv.textContent = nomInv.length > 26 ? nomInv.slice(0, 24) + "…" : nomInv;
-    // Anfitrión en la cabecera de la mesa compartiendo
-    g("circle", {cx:475, cy:106, r:21, fill:"#2f6f8f", stroke:"#fff", "stroke-width":2.5});
-    const tYo = g("text", {x:475, y:76, "text-anchor":"middle", fill:"#1f4b66", style:"font:700 12.5px system-ui,sans-serif"});
-    tYo.textContent = "Tú (en la fiesta)";
-
-    $("mPuerta").textContent = "En la mesa con los tuyos";
-    $("mContacto").textContent = "90%";
-    $("mRuido").textContent = "En un rincón";
-    $("notaFiesta").innerHTML = `<b>Con la puerta destrancada:</b> «${nomInv}» sigue teniendo modales molestos en una esquina, pero tus manos y tu atención volvieron a «${nomFiesta}».`;
-    $("qFiesta").textContent = "No hace falta que el invitado te caiga bien ni que apruebes su visita. ¿Qué puedes hacer hoy en tu propia mesa aunque él siga rondando por la sala?";
+    /* adentro ronda por la sala, se acerca de vez en cuando y rezonga */
+    if(Math.abs(inv.x - inv.meta) < 2 && Math.random() < dt * 0.35)
+      inv.meta = RINCON + Math.random() * (anf.modo === "mesa" ? 30 : 10);
+    inv.x += Math.sign(inv.meta - inv.x) * Math.min(Math.abs(inv.meta - inv.x), 34 * dt);
+    if(Math.random() < dt * 0.4) quejas.push({x:inv.x + 6, y:PISO - ALTO - 8, v:0});
   }
+  quejas.forEach(q => { q.v += dt; q.y -= 14 * dt; });
+  quejas = quejas.filter(q => q.v < 2.4);
+
+  dibujar();
 }
 
-$("bTrancar").addEventListener("click", () => { postura = "trancar"; pintar(); Kit.guardar(); });
-$("bAbrir").addEventListener("click", () => { postura = "abrir"; pintar(); Kit.guardar(); });
+let fondo = null;
+function figura(clave, cual, x, espejo, extra){
+  const f = FIG[cual], w = ALTO * f.r;
+  const img = Kit.figura(clave + cual, f.href, {x:-w / 2, y:-ALTO, width:w, height:ALTO});
+  const g = Kit.svg("g", {transform:`translate(${x} ${PISO + (extra || 0)})${espejo ? " scale(-1 1)" : ""}`});
+  g.appendChild(img);
+  return g;
+}
+
+function dibujar(){
+  const svg = $("escenaFiesta");
+  svg.innerHTML = "";
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const e = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    e.textContent = s; svg.appendChild(e); return e;
+  };
+  const nomFiesta = Kit.activas("fiesta")[0] || "Lo que te importa";
+  const nomInv = Kit.activas("invitado")[0] || "El invitado incómodo";
+
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:invitado-fiesta-acuarela.jpg]]", x:0, y:0, width:700, height:350, preserveAspectRatio:"xMidYMid slice"});
+  svg.appendChild(fondo);
+
+  /* la sala se enfría: un velo azul de noche crece cuando el anfitrión no está en su mesa */
+  g("rect", {x:PUERTA + 6, y:0, width:700 - PUERTA - 6, height:350, fill:"#1d2f45", opacity:(0.5 * (1 - calidez)).toFixed(3)});
+  g("ellipse", {cx:575, cy:210, rx:160, ry:95, fill:"#ffcf7a", opacity:(0.22 * calidez).toFixed(3), style:"mix-blend-mode:soft-light"});
+
+  /* la puerta: cerrada en el vano, o abierta hacia la sala; tiembla con cada golpe */
+  const tiembla = golpe > 0 ? Math.sin(t * 60) * 2.2 * golpe : 0;
+  const cerrada = inv.modo === "afuera";
+  const madera = {fill:"#7b5537", filter:Kit.acuarela(svg)};
+  if(cerrada) g("rect", Object.assign({x:PUERTA - 7 + tiembla, y:PISO - 182, width:14, height:168, rx:2}, madera));
+  else g("path", Object.assign({d:`M${PUERTA - 7} ${PISO - 182} L${PUERTA + 48} ${PISO - 164} L${PUERTA + 48} ${PISO + 6} L${PUERTA - 7} ${PISO} Z`, opacity:.9}, madera));
+
+  /* los golpes se ven del lado del porche */
+  if(golpe > 0 && cerrada){
+    const fuerza = anf.modo === "puerta" ? 1.4 : 1;
+    for(let k = 0; k < 3; k++){
+      const r = (10 + k * 10 + (1 - golpe) * 18) * fuerza;
+      g("path", {d:`M${PUERTA - 16} ${PISO - 112 - r} A${r} ${r} 0 0 0 ${PUERTA - 16} ${PISO - 112 + r}`, fill:"none",
+        stroke:"#8a3d3d", "stroke-width":2.2, opacity:(golpe * (1 - k * 0.28)).toFixed(2), "stroke-linecap":"round"});
+    }
+  }
+
+  /* el visitante */
+  if(inv.modo === "afuera") svg.appendChild(figura("inv", "toca", inv.x + (golpe > .5 ? 3 : 0), false));
+  else svg.appendChild(figura("inv", inv.modo === "entrando" || Math.abs(inv.meta - inv.x) > 2 ? "ronda" : "rezonga", inv.x, inv.meta < inv.x));
+  quejas.forEach(q => g("path", {d:`M${q.x - 9} ${q.y} q4 -7 9 0 t9 0`, fill:"none", stroke:"#5b4a46", "stroke-width":2,
+    opacity:(1 - q.v / 2.4).toFixed(2), filter:Kit.acuarela(svg)}));
+  texto(inv.modo === "afuera" ? inv.x - 10 : inv.x, PISO + 22, nomInv.length > 30 ? nomInv.slice(0, 28) + "…" : nomInv,
+    "font:600 12px system-ui,sans-serif;fill:#6b372d;paint-order:stroke;stroke:#fffaf2;stroke-width:4px");
+
+  /* el anfitrión */
+  if(anf.modo === "puerta") svg.appendChild(figura("anf", "empuja", EN_PUERTA + tiembla * 0.6, false));
+  else if(anf.modo === "camino") svg.appendChild(figura("anf", "camina", anf.x, anf.meta < anf.x));
+  else svg.appendChild(figura("anf", "mesa", anf.x, false));
+
+  texto(560, 70, nomFiesta.length > 34 ? nomFiesta.slice(0, 32) + "…" : nomFiesta,
+    `font:600 13px Georgia,serif;font-style:italic;fill:#4f3b22;opacity:${(0.35 + 0.65 * calidez).toFixed(2)};paint-order:stroke;stroke:#fffaf2;stroke-width:4px`);
+
+  $("mVolvi").textContent = volvi;
+  $("bVolver").disabled = anf.modo === "mesa" || (anf.modo === "camino" && anf.meta === MESA);
+  $("bTrancar").disabled = anf.modo === "puerta" || (anf.modo === "camino" && anf.meta !== MESA);
+  $("bTrancar").textContent = inv.modo === "afuera" ? "Ir a trancar la puerta" : "Sacarlo y trancar la puerta";
+}
+
+$("bTrancar").addEventListener("click", () => {
+  if(inv.modo !== "afuera"){ inv.modo = "afuera"; inv.x = inv.meta = AFUERA; quejas = []; }
+  anf.meta = EN_PUERTA; anf.modo = "camino";
+  Kit.guardar();
+});
+$("bVolver").addEventListener("click", () => {
+  anf.meta = MESA; anf.modo = "camino"; volvi++;
+  if(volvi === 1) $("qFiesta").textContent = "No hace falta que el invitado te caiga bien ni que apruebes su visita. ¿Qué puedes hacer hoy en tu propia mesa aunque siga rondando por la sala?";
+  Kit.guardar();
+});
+$("bReiniciar").addEventListener("click", () => { reiniciar(); Kit.guardar(); });
 
 Kit.iniciar({
   clave: "met-invitado-incomodo",
-  alCambiar: pintar,
+  alCambiar: dibujar,
   resumen: () => [
     "EL INVITADO INCÓMODO EN LA FIESTA",
     `La fiesta que importa: ${Kit.activas("fiesta")[0] || "—"}`,
     `El invitado incómodo: ${Kit.activas("invitado")[0] || "—"}`,
-    `Posición explorada: ${postura === "abrir" ? "Dejar la puerta abierta y volver a la mesa" : "Trancar la puerta y vigilar"}`,
+    `Veces que volví a la mesa: ${volvi}`,
     $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
   ].filter(Boolean).join("\n")
 });
+escena.andar();

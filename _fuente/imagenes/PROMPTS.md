@@ -73,3 +73,17 @@ cada escena no cambió.
 Lo que depende de lo que se elige (globos, clima, cabezas, cebos, orillas) sigue en vector,
 con el filtro `Kit.acuarela(svg)`: borde irregular y pigmento desparejo, un filtro por escena.
 La cuerda recibió además cielo y pradera (`campo-acuarela.jpg`) y tierra a los lados del hoyo.
+
+## El invitado incómodo (2026-11-09, Nano Banana)
+
+Codex ya no genera imágenes con la suscripción actual; se usó Nano Banana vía Antigravity con
+`-EstiloRef grids_v2/referencia-estilo.jpg` (mosaico de las acuarelas del hexaflex). Pedidos
+completos en `invitado/generar.py`; recorte con `invitado/recortar.py` (inundación del blanco,
+borrado de las rayas de «puerta invisible», WebP de 300 px de alto, imprime las proporciones que
+usa `FIG` en la parte).
+
+| Archivo | Qué es |
+|---|---|
+| `invitado-fiesta-acuarela.jpg` | Corte de la casa de noche: porche a la izquierda, muro cortado en x≈305 del viewBox, sala con cinco amigos a la mesa; piso en y≈293 |
+| `invitado-anfitrion-empuja/mesa/camina.webp` | La anfitriona (moño, suéter crudo, pantalón verde azulado): empujando una puerta a su izquierda, de pie con un vaso, caminando a la derecha |
+| `invitado-toca/rezonga/ronda.webp` | El visitante (abrigo remendado, botas): golpeando a su derecha, de brazos cruzados, caminando a la derecha |
