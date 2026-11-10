@@ -3,64 +3,165 @@ archivo: act-punto-dulce.html
 titulo: El ejercicio del punto dulce
 enfoque: ACT
 etiqueta: Valores
-sub: Conecta con tus valores más auténticos evocando un momento real en el que sentiste plenitud, presencia y sabor vital, lejos del «debería».
+sub: Un recuerdo real de plenitud, evocado en el atardecer. Los «debería» llegan solos y lo van tapando; se puede volver al recuerdo y ver qué estaba encendido ahí.
 fuente: Sweet Spot Exercise de Kelly G. Wilson y Troy DuFrene (2009, Mindfulness for Two, New Harbinger).
-resumen: Descubrir los valores propios por vía experiencial a partir de un recuerdo vivo de plenitud y sembrar esa cualidad en la semana actual.
+resumen: El recuerdo escrito aparece en el cielo del atardecer con sus ingredientes encendidos alrededor. Los «debería» llegan solos, barajados, y lo cubren. «Volver al recuerdo» los disuelve. El marcador cuenta las veces que se volvió al recuerdo.
 @@css
-  .pd-caja{border:1.5px solid #deb873;border-radius:12px;padding:15px;background:linear-gradient(135deg,#fffdf8 0%,#fef6e6 100%);margin-top:10px}
+  .marcas div{min-width:130px}
+  .mandos button.volver{background:#b0692a;border-color:#b0692a;color:#fff;font-weight:600}
+  .mandos button.volver:hover{background:#965822;border-color:#965822}
 @@html
 <section class="paso">
-  <h2><span class="num">1</span>Evocar un momento real de «punto dulce»</h2>
+  <h2><span class="num">1</span>Un momento real de punto dulce</h2>
   <div class="cuerpo">
-    <p class="ayuda">Cuando pensamos en valores desde la cabeza, suelen salir obligaciones («debería rendir más»). Kelly Wilson propone entrar por otra puerta: <b>recordar un momento real —grande o cotidiano— en el que sentiste que la vida tenía sabor y sentido</b>, donde no hacía falta estar en ningún otro lugar.</p>
-    <div class="pd-caja">
-      <label class="etiqueta">Describe esa escena como si estuviera ocurriendo ahora mismo (dónde estabas, haciendo qué o con quién, qué percibían tus sentidos)</label>
-      <textarea id="pdEscena" placeholder="Ej.: Una tarde tranquila conversando sin prisa, un momento en la naturaleza, o el día que acompañé a alguien de corazón..."></textarea>
+    <label class="etiqueta" for="pdEscena">La escena, como si estuviera ocurriendo ahora</label>
+    <textarea id="pdEscena" placeholder="Dónde estabas, con quién, qué percibían tus sentidos"></textarea>
+    <label class="etiqueta">Lo que estaba encendido en ti en ese instante</label>
+    <div class="chips" id="ingredientes">
+      <button class="chip" data-v="Conexión y cercanía">Conexión y cercanía</button>
+      <button class="chip" data-v="Presencia sin prisa">Presencia sin prisa</button>
+      <button class="chip" data-v="Cuidado y ternura">Cuidado y ternura</button>
+      <button class="chip" data-v="Libertad y autenticidad">Libertad y autenticidad</button>
+      <button class="chip" data-v="Asombro y creatividad">Asombro y creatividad</button>
+      <button class="chip" data-v="Contribución generosa">Contribución generosa</button>
     </div>
   </div>
 </section>
 
+<div class="escenario">
+  <svg id="svgDulce" viewBox="0 0 700 467" role="img" aria-label="Una persona en un porche al atardecer evoca un recuerdo que aparece en el cielo"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mVolvi" style="color:#b0692a">0</span><span class="r">veces que volví al recuerdo</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="volver" id="bVolver">Volver al recuerdo</button>
+  </div>
+</div>
+
 <section class="paso">
-  <h2><span class="num">2</span>El ingrediente vivo dentro de ese recuerdo</h2>
+  <h2><span class="num">2</span>Una gota de eso para esta semana</h2>
   <div class="cuerpo">
-    <label class="etiqueta">Qué cualidades tuyas estaban encendidas en ese instante (esos son tus valores reales)</label>
-    <div class="chips" id="ingredientes">
-      <button class="chip" data-v="Conexión y cercanía genuina">Conexión y cercanía genuina</button>
-      <button class="chip" data-v="Presencia plena sin prisa">Presencia plena sin prisa</button>
-      <button class="chip" data-v="Cuidado y ternura">Cuidado y ternura</button>
-      <button class="chip" data-v="Libertad y autenticidad">Libertad y autenticidad</button>
-      <button class="chip" data-v="Asombro, aprendizaje o creatividad">Asombro, aprendizaje o creatividad</button>
-      <button class="chip" data-v="Contribución generosa">Contribución generosa</button>
-    </div>
-    <label class="etiqueta">Cómo sembrar hoy una gota de ese mismo ingrediente en tu semana actual</label>
-    <textarea id="pdSemilla" placeholder="Un gesto pequeño y concreto que traiga ese mismo sabor a tu día de hoy..."></textarea>
+    <textarea id="pdSemilla" placeholder="Un gesto pequeño y concreto que traiga ese mismo sabor a hoy"></textarea>
   </div>
 </section>
 
 <section class="bloque pregunta-sola" id="cierre">
-  <div class="pregunta" id="textoPregunta">¿Notas cómo dentro de lo que nos conmueve o nos duele extrañar habita exactamente lo que más amamos e importa cuidar?</div>
+  <div class="pregunta" id="textoPregunta">Dentro de lo que nos conmueve, o de lo que duele extrañar, vive lo que más nos importa. ¿Qué había ahí que hoy querrías cuidar?</div>
   <details class="apunte">
     <summary>Anotar lo conversado</summary>
-    <textarea id="apunte" placeholder="Qué descubriste sobre tus valores al entrar por este recuerdo..."></textarea>
+    <textarea id="apunte" placeholder="Qué descubriste al entrar por este recuerdo..."></textarea>
   </details>
 </section>
 @@js
 const $ = Kit.$;
 Kit.chips("ingredientes", {multiple:true, libre:true});
 
+/* ----- geometría del porche en acuarela (700 x 350) ----- */
+const CIELO = {x:498, y:150, ancho:330};       // centro y ancho útil del cielo donde aparece el recuerdo
+const DEBERIAS = ["«Debería rendir más»", "«Tendría que estar mejor»", "«No es momento para esto»", "«Eso ya pasó»",
+  "«Primero lo urgente»", "«Debería poder con todo»", "«¿Y de qué sirve?»"];
+
+let nubes, sigNube, baraja, t, volvi, brillo;
+function reiniciar(){ nubes = []; sigNube = 5; baraja = []; t = 0; volvi = 0; brillo = 0; }
+reiniciar();
+
+function renglones(s, n, max){
+  const out = []; let fila = "";
+  s.split(/\s+/).forEach(p => { if((fila + " " + p).trim().length > n){ out.push(fila); fila = p; } else fila = (fila + " " + p).trim(); });
+  if(fila) out.push(fila);
+  if(out.length > max){ out.length = max; out[max - 1] = out[max - 1].replace(/.{0,2}$/, "…"); }
+  return out;
+}
+
+const escena = Kit.reloj(latido);
+function latido(dt){
+  t += dt;
+  brillo = Math.max(0, brillo - dt * 0.25);
+  /* los «debería» llegan solos y se quedan flotando delante del recuerdo */
+  sigNube -= dt;
+  if(sigNube <= 0 && nubes.length < 7){
+    if(!baraja.length){ baraja = DEBERIAS.slice(); for(let i = baraja.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [baraja[i], baraja[j]] = [baraja[j], baraja[i]]; } }
+    nubes.push({txt:baraja.pop(), x:720, meta:CIELO.x - CIELO.ancho / 2 + 40 + Math.random() * (CIELO.ancho - 80),
+                y:CIELO.y - 95 + Math.random() * 210, v:0, sale:false});
+    sigNube = 3.5 + Math.random() * 3;
+  }
+  nubes.forEach(n => {
+    n.v += dt;
+    if(n.sale){ n.y -= 60 * dt; n.x += 40 * dt; n.fuera = (n.fuera || 0) + dt; }
+    else n.x += (n.meta - n.x) * Math.min(1, dt * 0.9);
+  });
+  nubes = nubes.filter(n => !(n.sale && n.fuera > 1.6));
+  dibujar();
+}
+
+let fondo = null;
+function dibujar(){
+  const svg = $("svgDulce");
+  svg.innerHTML = "";
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:dulce-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondo);
+
+  const tapado = Math.min(1, nubes.filter(n => !n.sale).length / 6);
+  /* el recuerdo: un resplandor en el cielo con lo escrito dentro */
+  g("ellipse", {cx:CIELO.x, cy:CIELO.y, rx:CIELO.ancho * 0.46, ry:92, fill:"#fff3c4", opacity:(0.28 + brillo * 0.3).toFixed(2), filter:Kit.acuarela(svg)});
+  const escenaTxt = $("pdEscena").value.trim();
+  const filas = renglones(escenaTxt || "…", Math.floor(CIELO.ancho / 9.2), 4);
+  filas.forEach((s, i) => {
+    const e = Kit.svg("text", {x:CIELO.x, y:CIELO.y - (filas.length - 1) * 10 + i * 21, "text-anchor":"middle",
+      style:`font:600 15px Georgia,serif;font-style:italic;fill:#5a3a12;opacity:${(1 - tapado * 0.75).toFixed(2)};paint-order:stroke;stroke:#fff8e3;stroke-width:4px;stroke-linejoin:round`});
+    e.textContent = s; svg.appendChild(e);
+  });
+  /* lo que estaba encendido: gotas de luz alrededor */
+  const ing = Kit.activas("ingredientes");
+  ing.slice(0, 6).forEach((s, i) => {
+    const a = -Math.PI * 0.92 + i * (Math.PI * 0.84 / Math.max(1, Math.min(6, ing.length) - 1 || 1));
+    const x = CIELO.x + Math.cos(a) * CIELO.ancho * 0.36, y = CIELO.y - 6 + Math.sin(a) * 104 + Math.sin(t * 1.4 + i) * 2;
+    g("circle", {cx:x, cy:y, r:6 + Math.sin(t * 2 + i) * 1.2, fill:"#f2b441", opacity:(0.95 - tapado * 0.6).toFixed(2)});
+    const e = Kit.svg("text", {x, y:y - 12, "text-anchor":"middle",
+      style:`font:600 11.5px system-ui,sans-serif;fill:#6b4a12;opacity:${(1 - tapado * 0.7).toFixed(2)};paint-order:stroke;stroke:#fff8e3;stroke-width:3.5px;stroke-linejoin:round`});
+    e.textContent = s.length > 24 ? s.slice(0, 22) + "…" : s; svg.appendChild(e);
+  });
+
+  /* los «debería» */
+  nubes.forEach(n => {
+    const ancho = n.txt.length * 7 + 30, op = n.sale ? Math.max(0, 1 - n.fuera / 1.6) : Math.min(1, n.v);
+    const gn = Kit.svg("g", {opacity:op.toFixed(2)});
+    gn.appendChild(Kit.svg("rect", {x:n.x - ancho / 2, y:n.y - 18, width:ancho, height:32, rx:16, fill:"#6a7480", filter:Kit.acuarela(svg)}));
+    const e = Kit.svg("text", {x:n.x, y:n.y + 3, "text-anchor":"middle", style:"font:500 12.5px system-ui,sans-serif;fill:#f3f4f5"});
+    e.textContent = n.txt; gn.appendChild(e);
+    svg.appendChild(gn);
+  });
+
+  const gota = $("pdSemilla").value.trim();
+  if(gota){
+    const e = Kit.svg("text", {x:686, y:452, "text-anchor":"end", style:"font:600 12px Georgia,serif;font-style:italic;fill:#5a3a12;paint-order:stroke;stroke:#fff8e3;stroke-width:3.5px;stroke-linejoin:round"});
+    e.textContent = gota.length > 60 ? gota.slice(0, 58) + "…" : gota; svg.appendChild(e);
+  }
+  $("mVolvi").textContent = volvi;
+}
+
+$("bVolver").addEventListener("click", () => {
+  if(nubes.some(n => !n.sale)) volvi++;
+  nubes.forEach(n => n.sale = true);
+  brillo = 1; sigNube = 6;
+  Kit.guardar();
+});
+["pdEscena", "pdSemilla"].forEach(id => $(id).addEventListener("input", dibujar));
+
 Kit.iniciar({
   clave: "act-punto-dulce",
+  alCambiar: dibujar,
   resumen: () => {
-    const esc = $("pdEscena").value.trim() || "—";
-    const ing = Kit.activas("ingredientes");
-    const sem = $("pdSemilla").value.trim() || "—";
-    const ap = $("apunte").value.trim();
+    const ing = Kit.activas("ingredientes"), ap = $("apunte").value.trim();
     return [
       "EL EJERCICIO DEL PUNTO DULCE (SWEET SPOT)",
-      `Recuerdo de plenitud o sabor vital: ${esc}`,
-      `Ingredientes / valores encendidos: ${ing.length ? ing.join(", ") : "—"}`,
-      `Gota / semilla para la semana: ${sem}`,
-      ap ? `Lo conversado / puente de sentido: ${ap}` : ""
+      `Recuerdo de plenitud: ${$("pdEscena").value.trim() || "—"}`,
+      `Lo que estaba encendido: ${ing.length ? ing.join(", ") : "—"}`,
+      `Gota para la semana: ${$("pdSemilla").value.trim() || "—"}`,
+      `Veces que volví al recuerdo: ${volvi}`,
+      ap ? `Lo conversado: ${ap}` : ""
     ].filter(Boolean).join("\n");
   }
 });
+escena.andar();

@@ -3,53 +3,53 @@ archivo: act-piloto-automatico.html
 titulo: Salir del piloto automático
 enfoque: ACT
 etiqueta: Momento presente
-sub: Elige una acción cotidiana que sueles hacer sin darte cuenta y pásala del modo rumia al contacto directo por los cinco sentidos.
+sub: Una mañana cualquiera en la cocina. La mente se va sola y la escena se va borrando; cada sentido es una forma de volver a ella.
 fuente: Salir del piloto automático en actividades cotidianas (Kabat-Zinn, 1990; Segal, Williams y Teasdale, 2013; Harris, 2019).
-resumen: Contrastar una rutina vivida en piloto automático con el anclaje sensorial directo y el retorno amable cuando la mente se va.
+resumen: La mente se va sola, con sus temas barajados, y la cocina se desvanece bajo una bruma. Tocar un sentido (tacto, sonido o aroma, ritmo del cuerpo) devuelve la escena y enciende ese detalle. El marcador cuenta las veces que se volvió.
 @@css
-  .pa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:12px}
-  .pa-sentido{border:1px solid var(--linea);border-top:3px solid var(--acento);border-radius:9px;padding:11px 13px;background:#fff}
-  .pa-sentido b{display:block;font-size:13.5px;margin-bottom:4px;color:var(--acento)}
+  .marcas div{min-width:120px}
+  .pa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .mandos button.volver{background:#2f7a5f;border-color:#2f7a5f;color:#fff;font-weight:600}
+  .mandos button.volver:hover{background:#27674f;border-color:#27674f}
 @@html
 <section class="paso">
-  <h2><span class="num">1</span>Qué momento cotidiano quieres habitar hoy</h2>
+  <h2><span class="num">1</span>El momento cotidiano y adónde se va la mente</h2>
   <div class="cuerpo">
     <div class="chips" id="rutina">
-      <button class="chip" data-v="El primer café o bebida de la mañana">El primer café o bebida de la mañana</button>
-      <button class="chip" data-v="Caminar las primeras dos cuadras al salir">Caminar las primeras dos cuadras al salir</button>
-      <button class="chip" data-v="El agua sobre el cuerpo al ducharme o lavarme las manos">El agua sobre el cuerpo al ducharme o lavarme las manos</button>
-      <button class="chip" data-v="Los primeros minutos al llegar a casa y saludar">Los primeros minutos al llegar a casa y saludar</button>
+      <button class="chip" data-v="El primer café de la mañana">El primer café de la mañana</button>
+      <button class="chip" data-v="Caminar las primeras dos cuadras">Caminar las primeras dos cuadras</button>
+      <button class="chip" data-v="El agua al lavarme las manos">El agua al lavarme las manos</button>
+      <button class="chip" data-v="Los primeros minutos al llegar a casa">Los primeros minutos al llegar a casa</button>
     </div>
-    <label class="etiqueta">Adónde se suele ir el piloto automático mientras tu cuerpo hace eso</label>
+    <label class="etiqueta">Adónde se va mientras tu cuerpo hace eso</label>
     <div class="chips" id="fuga">
-      <button class="chip" data-v="A adelantar pendientes y problemas del día">A adelantar pendientes y problemas del día</button>
-      <button class="chip" data-v="A repasar una conversación que ya pasó">A repasar una conversación que ya pasó</button>
-      <button class="chip" data-v="A saltar de pantalla en pantalla en el teléfono">A saltar de pantalla en pantalla en el teléfono</button>
+      <button class="chip" data-v="A los pendientes del día">A los pendientes del día</button>
+      <button class="chip" data-v="A una conversación que ya pasó">A una conversación que ya pasó</button>
+      <button class="chip" data-v="Al teléfono">Al teléfono</button>
+    </div>
+    <label class="etiqueta">Tres detalles directos para volver</label>
+    <div class="pa-grid">
+      <input type="text" id="sTacto" placeholder="Tacto: el calor de la taza en las palmas">
+      <input type="text" id="sAroma" placeholder="Sonido o aroma: el agua, el café">
+      <input type="text" id="sRitmo" placeholder="Cuerpo: soltar los hombros al exhalar">
     </div>
   </div>
 </section>
 
-<section class="paso">
-  <h2><span class="num">2</span>Anclar la acción en tres canales sensoriales</h2>
-  <p class="ayuda">No hace falta tardar más tiempo ni poner la mente en blanco: basta con notar tres detalles directos cada vez que notes que te fuiste.</p>
-  <div class="pa-grid">
-    <div class="pa-sentido">
-      <b>1 · Temperatura y tacto</b>
-      <input type="text" id="sTacto" placeholder="Ej. El calor de la taza en las palmas o el piso bajo los pies">
-    </div>
-    <div class="pa-sentido">
-      <b>2 · Sonido o aroma directo</b>
-      <input type="text" id="sAroma" placeholder="Ej. El sonido del agua, de mis pasos o el olor del café">
-    </div>
-    <div class="pa-sentido">
-      <b>3 · Ritmo del cuerpo</b>
-      <input type="text" id="sRitmo" placeholder="Ej. Soltar los hombros al exhalar antes del primer sorbo">
-    </div>
+<div class="escenario">
+  <svg id="svgPiloto" viewBox="0 0 700 467" role="img" aria-label="Una persona en la cocina con una taza; la escena se desvanece cuando la mente se va"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mVolvi" style="color:#2f7a5f">0</span><span class="r">veces que volví</span></div>
   </div>
-</section>
+  <div class="mandos">
+    <button type="button" class="volver" id="bTacto">Volver por el tacto</button>
+    <button type="button" class="volver" id="bAroma">Volver por el sonido o el aroma</button>
+    <button type="button" class="volver" id="bRitmo">Volver por el cuerpo</button>
+  </div>
+</div>
 
 <section class="bloque pregunta-sola" id="cierre">
-  <div class="pregunta">La mente se va a ir diez veces durante esa rutina, porque ese es su oficio. ¿Cómo quieres tratarte en el instante exacto en que notes que te habías ido al piloto automático?</div>
+  <div class="pregunta">La mente se va a ir diez veces, porque ese es su oficio. ¿Cómo quieres tratarte en el instante en que notes que te habías ido?</div>
   <details class="apunte">
     <summary>Anotar lo conversado</summary>
     <textarea id="apunte" placeholder="Acuerdo concreto para practicar hoy o mañana..."></textarea>
@@ -58,18 +58,108 @@ resumen: Contrastar una rutina vivida en piloto automático con el anclaje senso
 @@js
 const $ = Kit.$;
 Kit.chips("rutina", {multiple:false, libre:true});
-Kit.chips("fuga", {multiple:false, libre:true});
+Kit.chips("fuga", {multiple:true, libre:true});
+
+/* ----- puntos de la cocina en acuarela (700 x 350) ----- */
+const ANCLA = {
+  tacto: {x:228, y:123, campo:"sTacto", defecto:"El calor de la taza en las palmas"},
+  aroma: {x:166, y:196, campo:"sAroma", defecto:"El sonido del agua, el olor del café"},
+  ritmo: {x:273, y:92, campo:"sRitmo", defecto:"Los hombros sueltan al exhalar"},
+};
+const NUBES_X = [430, 660], NUBES_Y = [70, 340];     // la pared donde se proyecta lo que piensa
+const EXTRA = ["«Lo de mañana»", "«¿Le contesté?»", "«Me falta tanto»", "«¿Y si sale mal?»", "«Después lo miro»"];
+
+let ido, t, volvi, baraja, ideas, sigIdea, luz;
+function barajar(){
+  const a = Kit.activas("fuga").concat(EXTRA);
+  for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function reiniciar(){ ido = 0; t = 0; volvi = 0; baraja = []; ideas = []; sigIdea = 2.5; luz = null; }
+reiniciar();
+
+const escena = Kit.reloj(latido);
+function latido(dt){
+  t += dt;
+  /* la mente se va sola: cada idea que llega se lleva un poco más de la cocina */
+  ido = Math.min(1, ido + dt * 0.035);
+  sigIdea -= dt;
+  if(sigIdea <= 0){
+    if(!baraja.length) baraja = barajar();
+    ideas.push({txt:baraja.pop(), x:NUBES_X[0] + Math.random() * (NUBES_X[1] - NUBES_X[0] - 60), y:NUBES_Y[0] + Math.random() * (NUBES_Y[1] - NUBES_Y[0]), v:0});
+    ido = Math.min(1, ido + 0.09);
+    sigIdea = 2.2 + Math.random() * 2.2;
+  }
+  ideas.forEach(i => { i.v += dt; i.y -= 5 * dt; });
+  ideas = ideas.filter(i => i.v < 9).slice(-6);
+  if(luz){ luz.v += dt; if(luz.v > 6) luz = null; }
+  dibujar();
+}
+
+let fondo = null;
+function dibujar(){
+  const svg = $("svgPiloto");
+  svg.innerHTML = "";
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  const texto = (x, y, s, estilo, ancla) => {
+    const e = Kit.svg("text", {x, y, "text-anchor":ancla || "middle", style:estilo});
+    e.textContent = s; svg.appendChild(e); return e;
+  };
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:piloto-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondo);
+
+  /* la bruma del piloto automático: la cocina sigue ahí, pero ya no se la ve */
+  g("rect", {x:0, y:0, width:700, height:467, fill:"#eef0f1", opacity:(ido * 0.86).toFixed(3)});
+
+  /* lo que la mente proyecta encima */
+  ideas.forEach(i => {
+    const op = Math.min(1, i.v * 1.5, (9 - i.v) / 2) * (0.35 + ido * 0.65);
+    const ancho = i.txt.length * 7 + 26;
+    const gi = Kit.svg("g", {opacity:op.toFixed(2)});
+    gi.appendChild(Kit.svg("rect", {x:i.x - ancho / 2, y:i.y - 16, width:ancho, height:26, rx:13, fill:"#5f6770", filter:Kit.acuarela(svg)}));
+    const e = Kit.svg("text", {x:i.x, y:i.y + 2, "text-anchor":"middle", style:"font:500 12.5px system-ui,sans-serif;fill:#f4f5f6"});
+    e.textContent = i.txt; gi.appendChild(e);
+    svg.appendChild(gi);
+  });
+
+  /* el detalle por el que se volvió queda encendido un momento */
+  if(luz){
+    const a = ANCLA[luz.cual], op = Math.min(1, luz.v * 3, (6 - luz.v) / 1.5);
+    for(let k = 0; k < 3; k++)
+      g("circle", {cx:a.x, cy:a.y, r:16 + k * 11 + Math.sin(t * 2.4 + k) * 2, fill:"none", stroke:"#e0a83a", "stroke-width":2.2 - k * 0.5,
+        opacity:(op * (0.9 - k * 0.25)).toFixed(2)});
+    const s = $(a.campo).value.trim() || a.defecto;
+    texto(Math.min(560, Math.max(140, a.x)), Math.max(26, a.y - 48), s.length > 44 ? s.slice(0, 42) + "…" : s,
+      `font:600 13.5px Georgia,serif;font-style:italic;fill:#6b4a12;opacity:${op.toFixed(2)};paint-order:stroke;stroke:#fffaf0;stroke-width:4px;stroke-linejoin:round`);
+  }
+
+  const rut = Kit.activas("rutina")[0];
+  if(rut) texto(690, 454, rut.length > 44 ? rut.slice(0, 42) + "…" : rut,
+    "font:600 12px Georgia,serif;font-style:italic;fill:#4b5661;paint-order:stroke;stroke:#fffaf0;stroke-width:3.5px;stroke-linejoin:round", "end");
+  $("mVolvi").textContent = volvi;
+}
+
+function volver(cual){
+  if(ido > 0.12) volvi++;
+  ido = 0; ideas = []; sigIdea = 4.5; luz = {cual, v:0};
+  Kit.guardar();
+}
+$("bTacto").addEventListener("click", () => volver("tacto"));
+$("bAroma").addEventListener("click", () => volver("aroma"));
+$("bRitmo").addEventListener("click", () => volver("ritmo"));
 
 Kit.iniciar({
   clave: "act-piloto-automatico",
-  alCambiar: () => {},
+  alCambiar: () => { baraja = []; dibujar(); },
   resumen: () => [
     "SALIR DEL PILOTO AUTOMÁTICO",
     `Rutina elegida: ${Kit.activas("rutina")[0] || "—"}`,
-    `Adónde se va el piloto automático: ${Kit.activas("fuga")[0] || "—"}`,
+    `Adónde se va el piloto automático: ${Kit.activas("fuga").join(" · ") || "—"}`,
     `Ancla de tacto/temperatura: ${$("sTacto").value.trim() || "—"}`,
     `Ancla de sonido/aroma: ${$("sAroma").value.trim() || "—"}`,
     `Ancla corporal: ${$("sRitmo").value.trim() || "—"}`,
+    `Veces que volví: ${volvi}`,
     $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
   ].filter(Boolean).join("\n")
 });
+escena.andar();

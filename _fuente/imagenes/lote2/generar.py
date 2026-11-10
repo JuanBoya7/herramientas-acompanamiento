@@ -63,6 +63,36 @@ PEDIDOS = {
         "the left one centered at 30% of the width and the right one at 70% of the width, both centered at 62% of the height. "
         "Each dial plate is a brass ring with small tick marks all around and a plain EMPTY center (no knob, no pointer, no "
         "needle, no numbers). Warm worn wood around."),
+    "pero-fondo": ("16:9",
+        "Side view of a country landscape with a dirt path running horizontally across the whole image; the walking line of the "
+        "path is at 80% of the image height. LEFT half: a shaded meadow under a soft grey overcast sky. RIGHT 40%: the path "
+        "climbs gently toward a sunlit green hill with a small house and warm golden light. At exactly 55% of the width a low "
+        "rustic wooden fence crosses the landscape from the foreground to the background, with an EMPTY opening where the path "
+        "passes: two sturdy fence posts on each side of the path and NO gate between them. No people, no animals, no gate."),
+    "juicio-fondo": ("16:9",
+        "A quiet room seen straight on: a plain wooden table top occupying the lower 38% of the image, seen slightly from above, "
+        "completely EMPTY (nothing on it). Behind it a soft pale plaster wall, a window on the far left letting in morning light, "
+        "a faint shadow of leaves on the wall. No objects on the table, no people."),
+    "piloto-fondo": ("16:9",
+        "Morning in a small home kitchen, side view. On the LEFT third: " + MUJER + ", standing by the counter next to a window, "
+        "holding a steaming cup with both hands, shoulders relaxed. On the counter: a kettle, a sink with a thin stream of water "
+        "running from the tap, a plant on the window sill, a wooden floor under her bare feet. The RIGHT half of the image is a "
+        "calm pale wall with soft light and very few details. Warm morning light."),
+    "observador-fondo": ("16:9",
+        "Wide landscape: a path crossing a meadow from left to right toward ONE large solitary tree on the horizon at 86% of the "
+        "width. Three figures seen from BEHIND stand along the path, evenly spaced at 18%, 40% and 62% of the width, all looking "
+        "toward the tree, with their feet at 82% of the image height: a little girl about 8 years old, a teenage girl, and "
+        + MUJER + " -- the same person at three ages, same dark hair. Pale open sky, soft hills. Nothing else."),
+    "diana-fondo": ("16:9",
+        "Front view of a large round wooden target board leaning against a big tree trunk in a garden. The target is a perfect "
+        "circle centered exactly in the middle of the image, its diameter 86% of the image height. It has a small center disc and "
+        "SEVEN concentric rings, and is divided by one vertical and one horizontal line into four equal quadrants, each quadrant "
+        "tinted with a different muted color: top-left terracotta, top-right slate blue, bottom-left ochre, bottom-right sage "
+        "green; the tints get lighter toward the rim. NO darts, NO pins, no numbers. Grass and soft foliage at the sides."),
+    "dulce-fondo": ("16:9",
+        "A wooden porch at sunset. On the LEFT third: " + MUJER + ", sitting on the porch steps holding a warm cup, eyes closed, "
+        "a soft smile, body turned toward the right. The RIGHT two thirds of the image: a wide, luminous, almost empty sunset "
+        "sky over a calm sea, glowing softly in warm apricot and pale teal, with no clouds and no objects (empty space)."),
     "hoja-figuras": ("3:2",
         "Character sheet: " + HOJA + "All figures are the SAME woman: " + MUJER + ", all at the same scale. "
         "Cell 1 (top-left): the woman standing upright, full body, front three-quarter view, struggling: both arms raised and "

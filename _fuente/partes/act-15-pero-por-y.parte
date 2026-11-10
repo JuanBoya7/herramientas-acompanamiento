@@ -3,63 +3,51 @@ archivo: act-pero-por-y.html
 titulo: Cambiar «pero» por «y»
 enfoque: ACT
 etiqueta: Defusión
-sub: Observa qué hace la palabra «pero» con tus direcciones valiosas y cómo cambia el peso de la frase cuando la sustituyes por «y».
+sub: Ella camina hacia lo que le importa con su nube encima. Con «pero», el portón está cerrado y el día se va esperando; con «y», el portón se abre y cruza con la nube puesta.
 fuente: Convenciones del lenguaje en ACT: «Pero» frente a «Y» (Hayes, Strosahl y Wilson, 1999, cap. 6, pp. 166-168; Wilson y Luciano, 2002).
-resumen: Desarmar la trampa verbal en la que una emoción difícil («pero tengo miedo») parece prohibir la acción valiosa («y tengo miedo»).
+resumen: La frase se arma con las dos mitades elegidas. Con «pero» el portón queda cerrado y cae la tarde mientras se espera a que la nube se vaya; al cambiarlo por «y» el portón se abre y se cruza con la nube encima. El «pero» vuelve solo en el tramo siguiente. El marcador cuenta las veces que se cruzó con la nube.
 @@css
-  .py-comparador{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-  .py-caja{border:1px solid var(--linea);border-radius:10px;padding:15px 17px;background:#fff}
-  .py-caja.pero{border-top:4px solid var(--alerta);background:#fdf7f5}
-  .py-caja.y{border-top:4px solid var(--logro);background:#f4faf6}
-  .py-caja .rot{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-  .py-caja.pero .rot{color:var(--alerta)}
-  .py-caja.y .rot{color:var(--logro)}
-  .py-frase{font-size:16px;line-height:1.45;font-weight:600;margin:6px 0 10px}
-  .py-efecto{font-size:13.5px;color:var(--tinta-suave)}
-  @media (max-width:700px){.py-comparador{grid-template-columns:1fr}}
+  .marcas div{min-width:130px}
+  .mandos button.y{background:#2f7a5f;border-color:#2f7a5f;color:#fff;font-weight:600}
+  .mandos button.y:hover{background:#27674f;border-color:#27674f}
+  .mandos button.y:disabled{background:#b9d3c8;border-color:#b9d3c8}
 @@html
 <section class="paso">
-  <h2><span class="num">1</span>Las dos partes de tu frase de hoy</h2>
+  <h2><span class="num">1</span>Las dos mitades de tu frase de hoy</h2>
   <div class="cuerpo">
-    <label class="etiqueta">Lo que quieres hacer porque te importa (primera mitad)</label>
+    <label class="etiqueta">Lo que quieres hacer porque te importa</label>
     <div class="chips" id="mitad1">
-      <button class="chip" data-v="Quiero expresar lo que pienso en la reunión">Quiero expresar lo que pienso en la reunión</button>
-      <button class="chip" data-v="Quiero poner un límite claro en casa">Quiero poner un límite claro en casa</button>
-      <button class="chip" data-v="Quiero salir y retomar mis actividades">Quiero salir y retomar mis actividades</button>
+      <button class="chip" data-v="Quiero decir lo que pienso en la reunión">Quiero decir lo que pienso en la reunión</button>
+      <button class="chip" data-v="Quiero poner un límite en casa">Quiero poner un límite en casa</button>
+      <button class="chip" data-v="Quiero retomar mis actividades">Quiero retomar mis actividades</button>
       <button class="chip" data-v="Quiero acercarme y pedir disculpas">Quiero acercarme y pedir disculpas</button>
     </div>
-    <label class="etiqueta">Lo que aparece por dentro al mismo tiempo (segunda mitad)</label>
+    <label class="etiqueta">Lo que aparece por dentro al mismo tiempo</label>
     <div class="chips" id="mitad2">
       <button class="chip" data-v="siento ansiedad en el estómago">siento ansiedad en el estómago</button>
       <button class="chip" data-v="tengo miedo de que se incomoden">tengo miedo de que se incomoden</button>
-      <button class="chip" data-v="estoy cansado y con pocas ganas">estoy cansado y con pocas ganas</button>
+      <button class="chip" data-v="estoy cansado y sin ganas">estoy cansado y sin ganas</button>
       <button class="chip" data-v="mi mente dice que no va a funcionar">mi mente dice que no va a funcionar</button>
     </div>
   </div>
 </section>
 
-<section class="bloque">
-  <h2><span class="num">2</span>Prueba las dos bisagras en voz alta</h2>
-  <svg id="svgBalanza" viewBox="0 0 680 170" role="img" aria-label="Balanza verbal comparando PERO frente a Y"></svg>
-  <div class="py-comparador">
-    <div class="py-caja pero">
-      <div class="rot">Con «PERO» (oposición que frena)</div>
-      <div class="py-frase" id="frasePero">«…»</div>
-      <div class="py-efecto">El «pero» significa «olvida lo primero: lo segundo manda». Para poder actuar tendrías que esperar a que desaparezca lo que sientes.</div>
-    </div>
-    <div class="py-caja y">
-      <div class="rot">Con «Y» (dos verdades que caben juntas)</div>
-      <div class="py-frase" id="fraseY">«…»</div>
-      <div class="py-efecto">El «y» reconoce que ambas cosas son ciertas a la vez: te importa dar el paso <b>y</b> llevas esa sensación contigo al hacerlo.</div>
-    </div>
+<div class="escenario">
+  <svg id="svgBalanza" viewBox="0 0 700 350" role="img" aria-label="Un camino con un portón: una persona camina con una nube encima"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mVolvi" style="color:#2f7a5f">0</span><span class="r">veces que crucé con la nube encima</span></div>
   </div>
-</section>
+  <div class="mandos">
+    <button type="button" class="y" id="bY">Cambiar «pero» por «y»</button>
+    <button type="button" id="bReiniciar">Empezar de nuevo</button>
+  </div>
+</div>
 
 <section class="bloque pregunta-sola" id="cierre">
-  <div class="pregunta">Al leer ambas frases en voz alta, ¿qué pasa en tu cuerpo cuando cambias el «pero» por «y»?</div>
+  <div class="pregunta" id="qPero">Con «pero», lo segundo manda sobre lo primero. ¿Cuánto llevas esperando a que la nube se vaya para cruzar?</div>
   <details class="apunte">
     <summary>Anotar lo conversado</summary>
-    <textarea id="apunte" placeholder="Escribe aquí tu frase con «Y» para esta semana..."></textarea>
+    <textarea id="apunte" placeholder="Tu frase con «y» para esta semana..."></textarea>
   </details>
 </section>
 @@js
@@ -67,44 +55,109 @@ const $ = Kit.$;
 Kit.chips("mitad1", {multiple:false, libre:true});
 Kit.chips("mitad2", {multiple:false, libre:true});
 
-function actualizar(){
-  const a = Kit.activas("mitad1")[0] || "Quiero hacer lo que me importa";
-  const b = Kit.activas("mitad2")[0] || "siento incomodidad al pensarlo";
+/* ----- geometría del camino en acuarela (700 x 350) ----- */
+const PISO = 264, PORTON = 362, ALTO = 86;
+/* tras el portón, el camino se aleja hacia la casa de la colina: posición y tamaño según el avance u (0 a 1) */
+const FONDO = [[362, 264], [388, 236], [402, 196], [468, 152], [560, 116]];
+function lejos(u){
+  const n = FONDO.length - 1, k = Math.min(n - 0.0001, u * n), i = Math.floor(k), f = k - i;
+  return {x:FONDO[i][0] + (FONDO[i + 1][0] - FONDO[i][0]) * f, y:FONDO[i][1] + (FONDO[i + 1][1] - FONDO[i][1]) * f, s:1 - 0.66 * u};
+}
+const FIG = {href:"[[imagen:invitado-anfitrion-camina.webp]]", r:0.513};
+const CERRADO = {href:"[[imagen:pero-porton-cerrado.webp]]", r:1.525, h:54};
+const ABIERTO = {href:"[[imagen:pero-porton-abierto.webp]]", r:1.0, h:58};
 
-  $("frasePero").innerHTML = `«${a}, <span style="color:#a3342b;text-decoration:underline">pero</span> ${b}.»`;
-  $("fraseY").innerHTML = `«${a} <span style="color:#2f7d5b;text-decoration:underline">y</span> ${b}.»`;
+let x, u, modo, espera, cruces, t, pausa, gotas;
+function reiniciar(){
+  x = 50; u = 0; modo = "pero";       // pero | y
+  espera = 0; cruces = 0; t = 0; pausa = 0; gotas = [];
+  $("qPero").textContent = "Con «pero», lo segundo manda sobre lo primero. ¿Cuánto llevas esperando a que la nube se vaya para cruzar?";
+}
+reiniciar();
 
+const escena = Kit.reloj(latido);
+function latido(dt){
+  t += dt;
+  if(pausa > 0){
+    /* llegó: un momento allá, y el camino sigue; el «pero» vuelve solo en el tramo siguiente */
+    pausa -= dt;
+    if(pausa <= 0){ x = 40; u = 0; modo = "pero"; espera = 0; }
+  } else if(x < PORTON){
+    x = Math.min(PORTON, x + 36 * dt);
+  } else if(modo === "y"){
+    u = Math.min(1, u + dt * 0.16);
+    if(u >= 1){
+      cruces++; pausa = 2.6;
+      $("qPero").textContent = "La nube cruzó con ella: las dos cosas eran ciertas a la vez. ¿Qué pasa en tu cuerpo cuando dices tu frase con «y»?";
+    }
+  } else {
+    espera += dt;               /* frente al portón cerrado, el día se va */
+  }
+  if(modo === "y") espera = Math.max(0, espera - dt * 12);
+  if(Math.random() < dt * 14) gotas.push({dx:(Math.random() - .5) * 46, y:0, v:0});
+  gotas.forEach(g => { g.v += dt; g.y += 95 * dt; });
+  gotas = gotas.filter(g => g.v < 0.42);
+  dibujar();
+}
+
+let fondo = null;
+function dibujar(){
   const svg = $("svgBalanza");
   svg.innerHTML = "";
-  const g = (t, at) => svg.appendChild(Kit.svg(t, at));
-  g("rect", {x:0, y:0, width:680, height:170, rx:10, fill:"#f7fafb"});
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:pero-acuarela.jpg]]", x:0, y:0, width:700, height:350, preserveAspectRatio:"none"});
+  svg.appendChild(fondo);
 
-  // Izquierda: PERO tacha la primera mitad
-  g("rect", {x:28, y:36, width:275, height:98, rx:9, fill:"#fff", stroke:"#e4c4bc"});
-  const t1 = g("text", {x:165, y:70, "text-anchor":"middle", fill:"#9aa5b1", style:"font:600 12.5px system-ui,sans-serif;text-decoration:line-through"});
-  t1.textContent = a.length > 34 ? a.slice(0, 32) + "…" : a;
-  const t2 = g("text", {x:165, y:105, "text-anchor":"middle", fill:"#a3342b", style:"font:700 13.5px system-ui,sans-serif"});
-  t2.textContent = "PERO " + (b.length > 28 ? b.slice(0, 26) + "…" : b);
+  /* el portón */
+  if(modo === "pero") svg.appendChild(Kit.figura("portonC", CERRADO.href, {x:PORTON - 62, y:246 - CERRADO.h, width:124, height:CERRADO.h, preserveAspectRatio:"none"}));
+  else svg.appendChild(Kit.figura("portonA", ABIERTO.href, {x:PORTON - 70, y:248 - ABIERTO.h, width:ABIERTO.h, height:ABIERTO.h, preserveAspectRatio:"none"}));
 
-  // Derecha: Y sostiene ambas en paralelo
-  g("rect", {x:377, y:36, width:275, height:98, rx:9, fill:"#fff", stroke:"#b9dec8"});
-  const t3 = g("text", {x:514, y:70, "text-anchor":"middle", fill:"#1f4b66", style:"font:700 12.5px system-ui,sans-serif"});
-  t3.textContent = a.length > 34 ? a.slice(0, 32) + "…" : a;
-  const t4 = g("text", {x:514, y:105, "text-anchor":"middle", fill:"#2f7d5b", style:"font:700 13.5px system-ui,sans-serif"});
-  t4.textContent = "Y ADEMÁS " + (b.length > 25 ? b.slice(0, 23) + "…" : b);
+  /* la persona y su nube */
+  const anda = pausa <= 0 && (x < PORTON || (modo === "y" && u < 1));
+  const pos = x < PORTON ? {x, y:PISO, s:1} : lejos(u);
+  const alto = ALTO * pos.s, w = alto * FIG.r, bote = anda ? Math.abs(Math.sin(t * 5.2)) * 2.5 * pos.s : 0;
+  svg.appendChild(Kit.figura("yo", FIG.href, {x:pos.x - w / 2, y:pos.y - alto - bote, width:w, height:alto}));
+  const ny = pos.y - alto - 40 * pos.s + Math.sin(t * 1.6) * 2.5;
+  const nube = Kit.svg("g", {filter:Kit.acuarela(svg), transform:`translate(${pos.x.toFixed(1)} ${ny.toFixed(1)}) scale(${pos.s.toFixed(3)})`});
+  svg.appendChild(nube);
+  [[-20, 4, 15], [-4, -6, 19], [15, 0, 16], [28, 6, 11], [-2, 8, 17]].forEach(([dx, dy, r]) =>
+    g("circle", {cx:dx, cy:dy, r, fill:"#66727d"}, nube));
+  gotas.forEach(q => g("line", {x1:q.dx, y1:20 + q.y * 0.35, x2:q.dx - 2, y2:28 + q.y * 0.35, stroke:"#5b6f82", "stroke-width":1.6,
+    "stroke-linecap":"round", opacity:(1 - q.v / 0.42).toFixed(2)}, nube));
+
+  /* cae la tarde mientras se espera frente al portón */
+  const tarde = Math.min(0.55, espera / 28);
+  if(tarde > 0.01) g("rect", {x:0, y:0, width:700, height:350, fill:"#1f2a44", opacity:tarde.toFixed(3), style:"mix-blend-mode:multiply"});
+
+  /* la frase, con su bisagra */
+  const a = Kit.activas("mitad1")[0] || "Quiero hacer lo que me importa";
+  const b = Kit.activas("mitad2")[0] || "siento incomodidad";
+  const corta = (s, n) => s.length > n ? s.slice(0, n - 2) + "…" : s;
+  const estilo = "font:600 15px Georgia,serif;font-style:italic;fill:#2b2f36;paint-order:stroke;stroke:#fffdf5;stroke-width:5px;stroke-linejoin:round";
+  const e1 = Kit.svg("text", {x:350, y:34, "text-anchor":"middle", style:estilo}); e1.textContent = "«" + corta(a, 52) + ","; svg.appendChild(e1);
+  const e2 = Kit.svg("text", {x:350, y:58, "text-anchor":"middle", style:estilo});
+  const bis = Kit.svg("tspan", {style:`font-style:normal;font-weight:800;fill:${modo === "pero" ? "#8a3d3d" : "#1f6a50"}`});
+  bis.textContent = modo === "pero" ? "PERO " : "Y ";
+  e2.appendChild(bis); e2.appendChild(document.createTextNode(corta(b, 48) + "»")); svg.appendChild(e2);
+
+  $("mVolvi").textContent = cruces;
+  $("bY").disabled = modo === "y";
 }
+
+$("bY").addEventListener("click", () => { if(modo === "pero" && pausa <= 0){ modo = "y"; Kit.guardar(); } });
+$("bReiniciar").addEventListener("click", () => { reiniciar(); Kit.guardar(); });
 
 Kit.iniciar({
   clave: "act-pero-por-y",
-  alCambiar: actualizar,
+  alCambiar: dibujar,
   resumen: () => {
-    const a = Kit.activas("mitad1")[0] || "Quiero hacer lo que me importa";
-    const b = Kit.activas("mitad2")[0] || "siento incomodidad";
+    const a = Kit.activas("mitad1")[0] || "—", b = Kit.activas("mitad2")[0] || "—";
     return [
       "CAMBIAR «PERO» POR «Y»",
-      `Frase con PERO: «${a}, pero ${b}.»`,
-      `Frase con Y: «${a} y ${b}.»`,
+      `Con «y»: ${a} y ${b}.`,
+      `Veces que crucé con la nube encima: ${cruces}`,
       $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
     ].filter(Boolean).join("\n");
   }
 });
+escena.andar();

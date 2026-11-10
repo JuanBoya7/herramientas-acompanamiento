@@ -28,6 +28,13 @@ FONDOS = {
     "casa-acuarela": ("casa-fondo.jpg", (0, 40, 1376, 728)),
     "calle-acuarela": ("calle-fondo.jpg", None),
     "dial-acuarela": ("dial-fondo.jpg", None),
+    # lote 3 (OpenAI entrega 1536x1024, 3:2): dos recortadas a 2:1 y cuatro enteras (viewBox 700x467)
+    "pero-acuarela": ("pero-fondo.jpg", (0, 110, 1536, 878)),
+    "juicio-acuarela": ("juicio-fondo.jpg", (0, 200, 1536, 968)),
+    "piloto-acuarela": ("piloto-fondo.jpg", None),
+    "observador-acuarela": ("observador-fondo.jpg", None),
+    "diana-acuarela": ("diana-fondo.jpg", None),
+    "dulce-acuarela": ("dulce-fondo.jpg", None),
 }
 # hoja: [(nombre, alto en px)]
 HOJAS = {
@@ -44,7 +51,9 @@ HOJAS = {
 # ajustes por recorte: "rayas" borra trazos horizontales finos (mesa insinuada), "mitad" toma media celda
 # "blanco": umbral más alto para objetos muy claros (piel, loza), que si no se agujerean
 OPCIONES = {"sushi-persona": {"rayas": True}, "paseo-discute": {"mitad": "der"},
-            "trampa-mano": {"blanco": 247}, "juicio-taza": {"blanco": 247}}
+            "trampa-mano": {"blanco": 247}, "juicio-taza": {"blanco": 247},
+            # "huecos": además quita el blanco encerrado (entre las tablas de un portón)
+            "pero-porton-cerrado": {"huecos": True}, "pero-porton-abierto": {"huecos": True}}
 
 
 def sin_reticula(hoja):
@@ -151,6 +160,10 @@ def hojas(solo=None):
                 if op.get("mitad") == "der": x0 = (x0 + x1) // 2
                 fig = transparente(hoja.crop((x0, y0, x1, y1)), op.get("blanco", 226))
                 if op.get("rayas"): fig = sin_rayas(fig)
+                if op.get("huecos"):
+                    a = np.asarray(fig).copy(); rgb = a[:, :, :3].astype(np.int16)
+                    a[(rgb.min(axis=2) > 232) & ((rgb.max(axis=2) - rgb.min(axis=2)) < 18), 3] = 0
+                    fig = Image.fromarray(a)
                 caja = fig.getchannel("A").point(lambda v: 255 if v > 40 else 0).getbbox()
                 fig = fig.crop(caja)
                 fig = fig.resize((max(1, round(fig.width * alto / fig.height)), alto), Image.LANCZOS)
@@ -187,5 +200,5 @@ def fondos(rejilla):
 
 if __name__ == "__main__":
     solo = next((a for a in sys.argv[1:] if not a.startswith("--")), None)   # p. ej. "objetos": solo esa hoja
-    if not solo: fondos("--rejilla" in sys.argv)
-    hojas(solo)
+    if not solo or solo == "fondos": fondos("--rejilla" in sys.argv)
+    if solo != "fondos": hojas(solo)

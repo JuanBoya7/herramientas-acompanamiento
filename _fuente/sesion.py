@@ -100,7 +100,7 @@ REVISION = {
  'met-dos-montanas': (3, [0, 1, 2], 'La roca que de cerca parece tapar todo el camino y el sendero completo visto desde la montaña de enfrente.'),
  'met-la-casa-y-los-muebles': (3, [0, 1, 2], 'Los muebles incómodos o antiguos que ocupan un rincón y la casa amplia que los contiene sin volverse mueble.'),
  'act-diana-de-valores': (4, [0, 1, 2, 3], 'La ubicación del dardo en los cuatro cuadrantes vitales esta semana y el paso concreto hacia el centro de la diana.'),
- 'act-punto-dulce': (3, [0, 1, 2], 'Un momento real de plenitud y presencia evocado con los sentidos para descubrir qué valor latía ahí dentro.'),
+ 'act-punto-dulce': (4, [0, 1, 2, 3], 'Un momento real de plenitud y presencia evocado con los sentidos para descubrir qué valor latía ahí dentro.'),
  'act-dial-disposicion': (3, [0, 1, 2], 'Soltar la perilla trabada del malestar para subir la perilla de la disposición a abrir espacio y actuar.'),
 }
 

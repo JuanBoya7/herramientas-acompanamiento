@@ -91,7 +91,7 @@ Criterio acordado: protagonismo y acceso inicial al componente aprovechable en c
 | met-dos-montanas | La roca que de cerca parece tapar todo el camino y el sendero completo visto desde la montaña de enfrente. | 0, 1, 2 |
 | met-la-casa-y-los-muebles | Los muebles incómodos o antiguos que ocupan un rincón y la casa amplia que los contiene sin volverse mueble. | 0, 1, 2 |
 | act-diana-de-valores | La ubicación del dardo en los cuatro cuadrantes vitales esta semana y el paso concreto hacia el centro de la diana. | 0, 1, 2, 3 |
-| act-punto-dulce | Un momento real de plenitud y presencia evocado con los sentidos para descubrir qué valor latía ahí dentro. | 0, 1, 2 |
+| act-punto-dulce | Un momento real de plenitud y presencia evocado con los sentidos para descubrir qué valor latía ahí dentro. | 0, 1, 2, 3 |
 | act-dial-disposicion | Soltar la perilla trabada del malestar para subir la perilla de la disposición a abrir espacio y actuar. | 0, 1, 2 |
 
 El jardín conserva su secuencia. El plan de seguridad conserva todos sus componentes visibles. Las ramas de Verificar los hechos siguen dependiendo de las respuestas. Las precauciones de sueño preceden al cálculo.

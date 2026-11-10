@@ -3,107 +3,140 @@ archivo: act-observador-en-el-tiempo.html
 titulo: El observador continuo en el tiempo
 enfoque: ACT
 etiqueta: Yo como contexto
-sub: Conecta tres momentos distintos de tu biografía para notar al testigo silencioso («yo, aquí, ahora») que ha estado presente en todos ellos sin romperse.
+sub: La misma persona a tres edades, mirando el mismo árbol. Lo que cada época traía pasa por encima y cambia solo; quien mira sigue ahí.
 fuente: Ejercicio clásico del Observador (Observer Exercise) de Hayes, Strosahl y Wilson (1999, cap. 7; 2012) y Wilson y Luciano (2002).
-resumen: Recorrer tres épocas vitales para distinguir los contenidos cambiantes de la conciencia estable que los observa.
+resumen: Sobre cada edad pasan y cambian solos sus contenidos, que con el tiempo se espesan hasta tapar a quien mira. «Volver a quien mira» despeja y deja a la vista el hilo que une las tres edades con el árbol. El marcador cuenta las veces que se volvió.
 @@css
-  .ot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
-  @media(max-width:780px){.ot-grid{grid-template-columns:1fr}}
-  .ot-card{border:1px solid var(--linea);border-radius:10px;padding:13px;background:#fff}
-  .ot-card .etapa{display:inline-block;padding:2px 9px;border-radius:999px;background:#e6f4ef;color:#1b664e;font-size:11.5px;font-weight:700;margin-bottom:6px}
-  .ot-puente{margin-top:12px;padding:13px 16px;border-radius:10px;background:linear-gradient(90deg,#eff8f4,#fff8eb);border:1px solid #8ec2ae;font-size:14px}
+  .marcas div{min-width:130px}
+  .ot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .ot-grid textarea{min-height:64px}
+  .mandos button.mirar{background:#3c5a78;border-color:#3c5a78;color:#fff;font-weight:600}
+  .mandos button.mirar:hover{background:#324c66;border-color:#324c66}
 @@html
 <section class="paso">
-  <h2><span class="num">1</span>Tres escenas de tu vida, un mismo testigo detrás de tus ojos</h2>
+  <h2><span class="num">1</span>Tres escenas de tu vida</h2>
   <div class="cuerpo">
-    <p class="ayuda">Tus células, tu edad, tus roles y tus pensamientos han cambiado por completo una y otra vez, pero <b>quien mira por detrás de tus ojos</b> ha estado ahí todo el tiempo.</p>
     <div class="ot-grid">
-      <div class="ot-card">
-        <span class="etapa">1. En la niñez</span>
-        <label class="etiqueta">Un recuerdo claro de cuando tenías entre 7 y 10 años</label>
-        <textarea id="otNinez" placeholder="¿Dónde estabas? ¿Qué veían tus ojos o qué sentías en aquel momento?"></textarea>
-      </div>
-      <div class="ot-card">
-        <span class="etapa">2. Hace unos años</span>
-        <label class="etiqueta">Un momento importante de hace algunos años</label>
-        <textarea id="otAyer" placeholder="¿Qué te preocupaba o parecía gigantesco entonces?"></textarea>
-      </div>
-      <div class="ot-card">
-        <span class="etapa">3. Aquí y ahora</span>
-        <label class="etiqueta">Lo que está presente en este preciso instante</label>
-        <textarea id="otHoy" placeholder="¿Qué sensaciones corporales, emociones y pensamientos notas ahora mismo?"></textarea>
-      </div>
-    </div>
-    <div class="ot-puente" id="otPuente">
-      <b>El hilo continuo:</b> Nota que la persona que miraba el mundo en aquel recuerdo infantil es <i>exactamente el mismo «Yo»</i> que está leyendo estas palabras hoy.
+      <div><label class="etiqueta" for="otNinez">En la niñez, entre los 7 y los 10 años</label>
+        <textarea id="otNinez" placeholder="Dónde estabas, qué veían tus ojos"></textarea></div>
+      <div><label class="etiqueta" for="otAyer">Hace unos años</label>
+        <textarea id="otAyer" placeholder="Lo que entonces parecía gigantesco"></textarea></div>
+      <div><label class="etiqueta" for="otHoy">Aquí y ahora</label>
+        <textarea id="otHoy" placeholder="Lo que notas en este instante"></textarea></div>
     </div>
   </div>
 </section>
 
 <div class="escenario">
-  <svg id="lienzo" viewBox="0 0 680 220" role="img" aria-label="Tres siluetas temporales unidas por un hilo luminoso"></svg>
+  <svg id="lienzo" viewBox="0 0 700 467" role="img" aria-label="La misma persona de niña, de adolescente y de adulta, mirando un árbol en el horizonte"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mVolvi" style="color:#3c5a78">0</span><span class="r">veces que volví a quien mira</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="mirar" id="bMirar">Volver a quien mira</button>
+  </div>
 </div>
 
 <section class="bloque pregunta-sola" id="cierre">
-  <div class="pregunta" id="textoPregunta">Desde este «Yo observador» que ha atravesado décadas enteras sin destruirse por lo que sintió: ¿cómo se ve la dificultad que hoy estás atravesando?</div>
+  <div class="pregunta" id="textoPregunta">Cambió el cuerpo, cambiaron los miedos y las certezas. ¿Quién estaba mirando en las tres escenas?</div>
   <details class="apunte">
     <summary>Anotar lo conversado</summary>
-    <textarea id="apunte" placeholder="Qué cambia al recordar que eres el espacio donde pasa esta emoción y no la emoción misma..."></textarea>
+    <textarea id="apunte" placeholder="Cómo se ve lo de hoy desde quien ha mirado todo lo anterior..."></textarea>
   </details>
 </section>
 @@js
 const $ = Kit.$;
+
+/* ----- geometría de la acuarela (700 x 350) ----- */
+const EDADES = [
+  {x:120, cabeza:231, campo:"otNinez"},
+  {x:264, cabeza:182, campo:"otAyer"},
+  {x:412, cabeza:162, campo:"otHoy"},
+];
+const ARBOL = {x:585, y:150};
+const TONOS = ["#7f8fa3", "#b58a6a", "#8aa38c", "#a78aa8", "#c3a55f", "#6f8f98"];
+
+let espeso, t, volvi, manchas, claro;
+function reiniciar(){
+  espeso = 0.25; t = 0; volvi = 0; claro = 0;
+  manchas = [];
+  EDADES.forEach((e, i) => { for(let k = 0; k < 7; k++) manchas.push(nueva(i, true)); });
+}
+function nueva(i, alAzar){
+  return {i, dx:alAzar ? (Math.random() - .5) * 150 : -85, dy:-20 + Math.random() * 120, r:12 + Math.random() * 20,
+          vel:5 + Math.random() * 9, tono:TONOS[Math.floor(Math.random() * TONOS.length)], fase:Math.random() * 6};
+}
+reiniciar();
+
+const escena = Kit.reloj(latido);
+function latido(dt){
+  t += dt;
+  /* los contenidos de cada época se espesan solos hasta tapar a quien mira */
+  espeso = Math.min(1, espeso + dt * 0.03);
+  claro = Math.max(0, claro - dt * 0.18);
+  manchas.forEach(m => { m.dx += m.vel * dt; });
+  manchas = manchas.map(m => m.dx > 85 ? nueva(m.i, false) : m);     // lo que pasa, pasa; llega otra cosa
+  dibujar();
+}
+
+let fondo = null;
 function dibujar(){
   const svg = $("lienzo");
   svg.innerHTML = "";
-  const g = (t, a, p) => (p || svg).appendChild(Kit.svg(t, a));
-  g("rect", {x:0, y:0, width:680, height:220, rx:12, fill:"#f6f9fb"});
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:observador-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondo);
 
-  const lleno1 = $("otNinez").value.trim().length > 0;
-  const lleno2 = $("otAyer").value.trim().length > 0;
-  const lleno3 = $("otHoy").value.trim().length > 0;
+  /* el hilo: de cada mirada al mismo árbol; se ve mejor cuando se vuelve a quien mira */
+  const hilo = 0.25 + claro * 0.75;
+  let d = `M${EDADES[0].x} ${EDADES[0].cabeza}`;
+  EDADES.slice(1).forEach(e => d += ` Q${e.x - 60} ${e.cabeza - 26} ${e.x} ${e.cabeza}`);
+  d += ` Q${(EDADES[2].x + ARBOL.x) / 2} ${ARBOL.y - 30} ${ARBOL.x} ${ARBOL.y}`;
+  g("path", {d, fill:"none", stroke:"#f0c75e", "stroke-width":2 + claro * 1.5, "stroke-linecap":"round", opacity:hilo.toFixed(2),
+    "stroke-dasharray":"2 7", "stroke-dashoffset":(-t * 9).toFixed(1)});
+  EDADES.forEach(e => g("circle", {cx:e.x, cy:e.cabeza, r:5 + claro * 5 + Math.sin(t * 2) * 0.8, fill:"#f6d77e", opacity:(hilo * 0.8).toFixed(2)}));
 
-  // Línea continua del observador
-  g("line", {x1:120, y1:105, x2:560, y2:105, stroke:"#c9962f", "stroke-width":4, "stroke-dasharray":"7,5"});
-
-  const nodos = [
-    {x:130, r:38, etq:"Aquella niñez", sub:"Otro cuerpo, otros miedos", ok:lleno1},
-    {x:340, r:44, etq:"Hace unos años", sub:"Otros roles, otras metas", ok:lleno2},
-    {x:550, r:50, etq:"Aquí y ahora", sub:"Lo que sientes hoy", ok:lleno3},
-  ];
-  nodos.forEach(n => {
-    g("circle", {cx:n.x, cy:105, r:n.r, fill:n.ok ? "#dff1ea" : "#eef3f6", stroke:"#2d7a5e", "stroke-width":2.2});
-    g("circle", {cx:n.x, cy:105, r:10, fill:"#c9962f"});
-    const t1 = g("text", {x:n.x, y:175, "text-anchor":"middle", "font-size":13.5, "font-weight":700, fill:"#1f3b33"});
-    t1.textContent = n.etq;
-    const t2 = g("text", {x:n.x, y:194, "text-anchor":"middle", "font-size":11.5, fill:"#5c7068"});
-    t2.textContent = n.sub;
+  /* lo que cada época traía: manchas que pasan por delante y cambian solas */
+  const capa = Kit.svg("g", {filter:Kit.acuarela(svg)});
+  svg.appendChild(capa);
+  manchas.forEach(m => {
+    const e = EDADES[m.i], borde = Math.min(1, (85 - Math.abs(m.dx)) / 30);
+    g("circle", {cx:e.x + m.dx, cy:e.cabeza + m.dy + Math.sin(t * 0.8 + m.fase) * 5, r:m.r * (0.5 + espeso * 0.9), fill:m.tono,
+      opacity:(Math.max(0, borde) * (0.12 + espeso * 0.62)).toFixed(2)}, capa);
   });
 
-  const tit = g("text", {x:340, y:30, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#8a6214"});
-  tit.textContent = "EL MISMO TESTIGO CONSCIENTE («YO, AQUÍ, AHORA») A TRAVÉS DEL TIEMPO";
-
-  if(lleno1 && lleno2 && lleno3){
-    $("otPuente").innerHTML = "<b>Testigo continuo presente:</b> Has conectado tres momentos muy distintos de tu historia. Todo lo que pensaste y sentiste cambió, pero el espacio consciente que lo notó permanece intacto aquí y ahora.";
-  }
+  /* lo escrito de cada época, bajo sus pies */
+  EDADES.forEach(e => {
+    const s = $(e.campo).value.trim();
+    if(!s) return;
+    const tx = Kit.svg("text", {x:e.x, y:452, "text-anchor":"middle",
+      style:"font:600 11.5px Georgia,serif;font-style:italic;fill:#34403a;paint-order:stroke;stroke:#fffaf0;stroke-width:3.5px;stroke-linejoin:round"});
+    tx.textContent = s.length > 22 ? s.slice(0, 20) + "…" : s; svg.appendChild(tx);
+  });
+  $("mVolvi").textContent = volvi;
 }
+
+$("bMirar").addEventListener("click", () => {
+  if(espeso > 0.4) volvi++;
+  espeso = 0.08; claro = 1;
+  if(volvi >= 2) $("textoPregunta").textContent = "Desde quien ha mirado todo eso sin romperse, ¿cómo se ve la dificultad que hoy estás atravesando?";
+  Kit.guardar();
+});
 ["otNinez", "otAyer", "otHoy"].forEach(id => $(id).addEventListener("input", dibujar));
-dibujar();
 
 Kit.iniciar({
   clave: "act-observador-en-el-tiempo",
   alCambiar: dibujar,
   resumen: () => {
-    const n = $("otNinez").value.trim() || "—";
-    const a = $("otAyer").value.trim() || "—";
-    const h = $("otHoy").value.trim() || "—";
     const ap = $("apunte").value.trim();
     return [
       "EL OBSERVADOR EN EL TIEMPO (YO COMO CONTEXTO)",
-      `Aquella niñez: ${n}`,
-      `Hace unos años: ${a}`,
-      `Aquí y ahora: ${h}`,
-      ap ? `Lo conversado / perspectiva de testigo: ${ap}` : ""
+      `Aquella niñez: ${$("otNinez").value.trim() || "—"}`,
+      `Hace unos años: ${$("otAyer").value.trim() || "—"}`,
+      `Aquí y ahora: ${$("otHoy").value.trim() || "—"}`,
+      `Veces que volví a quien mira: ${volvi}`,
+      ap ? `Lo conversado: ${ap}` : ""
     ].filter(Boolean).join("\n");
   }
 });
+escena.andar();

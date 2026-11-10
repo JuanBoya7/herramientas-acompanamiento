@@ -3,144 +3,174 @@ archivo: act-hecho-o-juicio.html
 titulo: Describir o evaluar: hecho o juicio
 enfoque: ACT
 etiqueta: Momento presente y defusión
-sub: Separa las propiedades observables de una situación (lo que vería una cámara) de las etiquetas valorativas que la mente le pega encima.
+sub: Una taza sobre la mesa y una cámara. Las frases llegan solas: unas las registraría la cámara, otras las pega la mente. La que nadie mira se queda pegada a la taza.
 fuente: Distinción entre propiedades primarias (descripción) y secundarias (evaluación) de Hayes y Smith (2005, Sal de tu mente, entra en tu vida) y Hayes, Strosahl y Wilson (2012).
-resumen: Distinguir hechos observables de evaluaciones mentales para desarmar la autocrítica global y volver al presente.
+resumen: Las frases llegan de a una, barajadas. Lo que vería la cámara queda como registro; lo que pone la mente se suelta. Un juicio tomado por hecho, o una frase que nadie atiende, se pega a la taza hasta taparla. El marcador cuenta los juicios reconocidos como juicios.
 @@css
-  .hj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
-  @media(max-width:720px){.hj-grid{grid-template-columns:1fr}}
-  .hj-col{border:1px solid var(--linea);border-radius:10px;padding:14px;background:#fff}
-  .hj-col.hecho{border-top:4px solid #2d7a5e;background:#f5fbf8}
-  .hj-col.juicio{border-top:4px solid #c26a4e;background:#fdf8f5}
-  .hj-col h3{margin:0 0 6px;font-size:15.5px}
-  .hj-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border:1px solid var(--linea);border-radius:9px;background:#fff;margin-bottom:8px;font-size:14.5px}
-  .hj-btns{display:flex;gap:6px;flex-shrink:0}
-  .hj-btn{padding:5px 11px;border-radius:999px;border:1px solid var(--linea);background:#fff;cursor:pointer;font-size:12.5px;font-weight:600}
-  .hj-btn.sel-h{background:#2d7a5e;color:#fff;border-color:#2d7a5e}
-  .hj-btn.sel-j{background:#c26a4e;color:#fff;border-color:#c26a4e}
-  .hj-res{margin-top:10px;padding:12px 15px;border-radius:10px;background:#eef7f3;border:1px solid var(--linea);font-size:14px}
+  .marcas div{min-width:130px}
+  .hj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:8px}
+  .hj-grid textarea{min-height:70px}
+  .mandos button.camara{background:#3c5a78;border-color:#3c5a78;color:#fff;font-weight:600}
+  .mandos button.camara:hover{background:#324c66;border-color:#324c66}
+  .mandos button.mente{background:#7a4b3a;border-color:#7a4b3a;color:#fff;font-weight:600}
+  .mandos button.mente:hover{background:#673e30;border-color:#673e30}
+  .mandos button:disabled{opacity:.45}
 @@html
-<section class="paso">
-  <h2><span class="num">1</span>Entrenamiento rápido: ¿está en el objeto o en la evaluación de la mente?</h2>
-  <div class="cuerpo">
-    <p class="ayuda">Si todos los seres parlantes desaparecieran hoy de la Tierra, las <b>propiedades descriptivas (hechos)</b> seguirían ahí; las <b>evaluaciones (juicios)</b> desaparecerían con nosotros. Clasifica cada frase:</p>
-    <div id="hjLista">
-      <div class="hj-item" data-tipo="H">
-        <span>«La mesa mide un metro veinte y está hecha de madera de pino.»</span>
-        <div class="hj-btns">
-          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
-          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
-        </div>
-      </div>
-      <div class="hj-item" data-tipo="J">
-        <span>«Mi intervención en la reunión fue un completo desastre.»</span>
-        <div class="hj-btns">
-          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
-          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
-        </div>
-      </div>
-      <div class="hj-item" data-tipo="H">
-        <span>«Durante la reunión me tembló la voz dos veces y olvidé mencionar un punto.»</span>
-        <div class="hj-btns">
-          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
-          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
-        </div>
-      </div>
-      <div class="hj-item" data-tipo="J">
-        <span>«Soy una persona débil e incapaz de sostener la presión.»</span>
-        <div class="hj-btns">
-          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
-          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
-        </div>
-      </div>
-      <div class="hj-item" data-tipo="H">
-        <span>«Hoy siento opresión en el pecho, latidos rápidos y ganas de cancelar la cita.»</span>
-        <div class="hj-btns">
-          <button type="button" class="hj-btn" data-val="H">Hecho observable</button>
-          <button type="button" class="hj-btn" data-val="J">Juicio / evaluación</button>
-        </div>
-      </div>
-    </div>
-    <div class="hj-res" id="hjFeedback">Clasifica las 5 frases para comprobar cómo la mente pega evaluaciones sobre los hechos.</div>
+<div class="escenario">
+  <svg id="svgJuicio" viewBox="0 0 700 350" role="img" aria-label="Una taza sobre una mesa y una cámara en su trípode; llegan frases en etiquetas de papel"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mVolvi" style="color:#2f7a5f">0</span><span class="r">juicios reconocidos como juicios</span></div>
   </div>
-</section>
+  <div class="mandos">
+    <button type="button" class="camara" id="bCamara">Lo vería la cámara</button>
+    <button type="button" class="mente" id="bMente">Lo pone la mente</button>
+    <button type="button" id="bDespegar">Despegar lo que quedó en la taza</button>
+  </div>
+</div>
 
 <section class="paso">
-  <h2><span class="num">2</span>Desarmar mi propia evaluación de hoy</h2>
+  <h2><span class="num">1</span>Tu frase de hoy</h2>
   <div class="cuerpo">
-    <label class="etiqueta">Frase difícil o autocrítica que hoy te está atrapando</label>
     <div class="chips" id="fraseDura">
-      <button class="chip" data-v="«Soy un pésimo profesional y todo me sale mal»">«Soy un pésimo profesional y todo me sale mal»</button>
-      <button class="chip" data-v="«Mi relación está arruinada y no tiene arreglo»">«Mi relación está arruinada y no tiene arreglo»</button>
-      <button class="chip" data-v="«No debería sentirme tan inseguro a esta altura»">«No debería sentirme tan inseguro a esta altura»</button>
+      <button class="chip" data-v="«Soy pésimo en lo que hago»">«Soy pésimo en lo que hago»</button>
+      <button class="chip" data-v="«Mi relación no tiene arreglo»">«Mi relación no tiene arreglo»</button>
+      <button class="chip" data-v="«No debería sentirme así»">«No debería sentirme así»</button>
     </div>
     <div class="hj-grid">
-      <div class="hj-col hecho">
-        <h3>Lo que una cámara de video vería (Hechos descriptivos)</h3>
-        <textarea id="hjHechos" placeholder="¿Qué ocurrió exactamente en el mundo físico o en tu cuerpo sin adjetivos calificativos?"></textarea>
-      </div>
-      <div class="hj-col juicio">
-        <h3>Lo que la mente añade encima (Juicios y etiquetas)</h3>
-        <textarea id="hjJuicios" placeholder="¿Qué adjetivos globales, predicciones o condenas está pegando tu mente sobre ese hecho?"></textarea>
-      </div>
+      <div><label class="etiqueta" for="hjHechos">Lo que vería una cámara</label>
+        <textarea id="hjHechos" placeholder="Qué ocurrió, sin adjetivos"></textarea></div>
+      <div><label class="etiqueta" for="hjJuicios">Lo que la mente pega encima</label>
+        <textarea id="hjJuicios" placeholder="Adjetivos, predicciones, condenas"></textarea></div>
     </div>
   </div>
 </section>
 
 <section class="bloque pregunta-sola" id="cierre">
-  <div class="pregunta" id="textoPregunta">¿Cómo suena reformular hoy tu experiencia diciendo: «El hecho observable es X, y noto que mi mente está produciendo el juicio de Y»?</div>
+  <div class="pregunta" id="textoPregunta">Si todos los que hablamos desapareciéramos hoy, la taza seguiría desportillada, pero ya no sería «fea». ¿Cuál de tus frases de hoy está en el mundo y cuál en la etiqueta?</div>
   <details class="apunte">
     <summary>Anotar lo conversado</summary>
-    <textarea id="apunte" placeholder="Escribe aquí la descripción limpia reconociendo el juicio como juicio..."></textarea>
+    <textarea id="apunte" placeholder="El hecho es… y noto que mi mente le pega…"></textarea>
   </details>
 </section>
 @@js
 const $ = Kit.$;
 Kit.chips("fraseDura", {multiple:false, libre:true});
-const items = document.querySelectorAll("#hjLista .hj-item");
-const fb = $("hjFeedback");
 
-function actualizar(){
-  let resp = 0, ok = 0;
-  items.forEach(it => {
-    const esp = it.getAttribute("data-tipo");
-    const bH = it.querySelector('.hj-btn[data-val="H"]');
-    const bJ = it.querySelector('.hj-btn[data-val="J"]');
-    const selH = bH.classList.contains("sel-h");
-    const selJ = bJ.classList.contains("sel-j");
-    if(selH || selJ){
-      resp++;
-      if((selH ? "H" : "J") === esp) ok++;
-    }
-  });
-  if(!resp){
-    fb.textContent = "Clasifica las 5 frases para comprobar cómo la mente pega evaluaciones sobre los hechos.";
-  } else {
-    fb.innerHTML = "<b>Resultado:</b> " + ok + " de " + resp + " identificadas con precisión. Notar que una evaluación es un juicio de la mente —y no una propiedad física tuya— devuelve la libertad de actuar.";
+/* ----- geometría de la mesa en acuarela (700 x 350) ----- */
+const MESA = 292;                       // donde apoya la taza
+const TAZA = {href:"[[imagen:juicio-taza.webp]]", r:1.46, h:92, x:372};
+const CAMARA = {href:"[[imagen:juicio-camara.webp]]", r:0.531, h:190, x:112, pie:300};
+const ESPERA = {x:520, y:120};               // donde la frase queda flotando, esperando
+const FRASES = [
+  ["Tiene el borde desportillado", "H"], ["Es una taza fea", "J"], ["Es de loza blanca", "H"], ["Ya no sirve para nada", "J"],
+  ["Me tembló la voz dos veces", "H"], ["Mi intervención fue un desastre", "J"], ["Siento opresión en el pecho", "H"],
+  ["Soy débil", "J"], ["Olvidé mencionar un punto", "H"], ["Nunca hago nada bien", "J"],
+];
+
+let cola, actual, pegadas, registro, sueltas, volvi, t, destello;
+function barajar(a){ for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function reiniciar(){
+  cola = barajar(FRASES.map(f => ({txt:f[0], tipo:f[1]})));
+  const mia = Kit.activas("fraseDura")[0];
+  if(mia) cola.splice(2, 0, {txt:mia.replace(/[«»]/g, ""), tipo:"J"});
+  actual = null; pegadas = []; registro = []; sueltas = []; volvi = 0; t = 0; destello = 0;
+}
+reiniciar();
+
+const escena = Kit.reloj(latido);
+function latido(dt){
+  t += dt;
+  destello = Math.max(0, destello - dt * 2.5);
+  if(!actual && cola.length){ actual = Object.assign(cola.shift(), {x:760, y:60, v:0}); }
+  if(actual){
+    actual.v += dt;
+    actual.x += (ESPERA.x - actual.x) * Math.min(1, dt * 2.4);
+    actual.y += (ESPERA.y + Math.sin(t * 1.8) * 5 - actual.y) * Math.min(1, dt * 2.4);
+    /* la frase que nadie mira se pega sola a la taza */
+    if(actual.v > 9) pegar(actual);
   }
+  sueltas.forEach(s => { s.v += dt; s.y -= 42 * dt; s.x += 18 * dt; });
+  sueltas = sueltas.filter(s => s.v < 2.2);
+  dibujar();
+}
+function pegar(f){
+  pegadas.push({txt:f.txt, tipo:f.tipo, dx:(Math.random() - .5) * 70, dy:-12 - Math.random() * 62, giro:(Math.random() - .5) * 26});
+  actual = null;
 }
 
-items.forEach(it => {
-  const bH = it.querySelector('.hj-btn[data-val="H"]');
-  const bJ = it.querySelector('.hj-btn[data-val="J"]');
-  bH.addEventListener("click", () => { bH.classList.add("sel-h"); bJ.classList.remove("sel-j"); actualizar(); });
-  bJ.addEventListener("click", () => { bJ.classList.add("sel-j"); bH.classList.remove("sel-h"); actualizar(); });
+let fondo = null;
+function papel(padre, x, y, s, giro, op, tono){
+  const ancho = Math.min(230, s.length * 7.3 + 22);
+  const g = Kit.svg("g", {transform:`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${giro || 0})`, opacity:op == null ? 1 : op});
+  g.appendChild(Kit.svg("rect", {x:-ancho / 2 + 2, y:-13, width:ancho, height:30, rx:3, fill:"#3b3128", opacity:.18}));
+  g.appendChild(Kit.svg("rect", {x:-ancho / 2, y:-16, width:ancho, height:30, rx:3, fill:tono || "#fff6d8", stroke:"#b9a56a", "stroke-width":1}));
+  const e = Kit.svg("text", {x:0, y:4, "text-anchor":"middle", style:"font:600 13px Georgia,serif;font-style:italic;fill:#3b3128"});
+  e.textContent = s.length > 30 ? s.slice(0, 28) + "…" : s; g.appendChild(e);
+  padre.appendChild(g);
+}
+function dibujar(){
+  const svg = $("svgJuicio");
+  svg.innerHTML = "";
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:juicio-acuarela.jpg]]", x:0, y:0, width:700, height:350, preserveAspectRatio:"none"});
+  svg.appendChild(fondo);
+
+  const cw = CAMARA.h * CAMARA.r;
+  svg.appendChild(Kit.figura("camara", CAMARA.href, {x:CAMARA.x - cw / 2, y:CAMARA.pie - CAMARA.h, width:cw, height:CAMARA.h}));
+  if(destello > 0) g("circle", {cx:CAMARA.x + cw * 0.3, cy:CAMARA.pie - CAMARA.h + 22, r:16 + (1 - destello) * 40, fill:"#fff7d6", opacity:(destello * 0.9).toFixed(2)});
+  const tw = TAZA.h * TAZA.r;
+  svg.appendChild(Kit.figura("taza", TAZA.href, {x:TAZA.x - tw / 2, y:MESA - TAZA.h, width:tw, height:TAZA.h}));
+
+  /* lo que la cámara registró: tiras bajo el trípode */
+  registro.slice(-3).forEach((s, i) => {
+    const e = Kit.svg("text", {x:16, y:28 + i * 19, style:"font:500 12.5px system-ui,sans-serif;fill:#22384d;paint-order:stroke;stroke:#fbfaf5;stroke-width:4px;stroke-linejoin:round"});
+    e.textContent = "· " + (s.length > 34 ? s.slice(0, 32) + "…" : s); svg.appendChild(e);
+  });
+
+  /* lo que se quedó pegado tapa la taza */
+  pegadas.forEach(p => papel(svg, TAZA.x + p.dx, MESA + p.dy, p.txt, p.giro, 1, "#f1e3b4"));
+  sueltas.forEach(s => papel(svg, s.x, s.y, s.txt, s.giro, Math.max(0, 1 - s.v / 2.2)));
+  if(actual) papel(svg, actual.x, actual.y, actual.txt, Math.sin(t * 1.3) * 3, 1);
+
+  $("mVolvi").textContent = volvi;
+  $("bCamara").disabled = $("bMente").disabled = !actual || actual.v < 0.5;
+  $("bDespegar").disabled = !pegadas.length;
+}
+
+$("bCamara").addEventListener("click", () => {
+  if(!actual) return;
+  if(actual.tipo === "H"){ registro.push(actual.txt); destello = 1; actual = null; }
+  else pegar(actual);                 /* un juicio tomado por hecho queda pegado al objeto */
+  Kit.guardar();
+});
+$("bMente").addEventListener("click", () => {
+  if(!actual) return;
+  if(actual.tipo === "J"){ sueltas.push({txt:actual.txt, x:actual.x, y:actual.y, giro:8, v:0}); volvi++; actual = null; }
+  else { cola.push({txt:actual.txt, tipo:actual.tipo}); actual = null; }      /* un hecho no se va: vuelve a pasar */
+  Kit.guardar();
+});
+$("bDespegar").addEventListener("click", () => {
+  pegadas.forEach(p => cola.push({txt:p.txt, tipo:p.tipo}));
+  pegadas = [];
+  Kit.guardar();
 });
 
 Kit.iniciar({
   clave: "act-hecho-o-juicio",
-  alCambiar: actualizar,
+  alCambiar: dibujar,
   resumen: () => {
     const f = Kit.activas("fraseDura")[0] || "—";
     const h = $("hjHechos").value.trim() || "—";
     const j = $("hjJuicios").value.trim() || "—";
     const a = $("apunte").value.trim();
     return [
-      "DESCRIPCIÓN VS EVALUACIÓN: HECHO O JUICIO",
-      `Frase o autocrítica inicial: ${f}`,
-      `Hechos observables (lo que vería una cámara): ${h}`,
-      `Juicios y etiquetas mentales: ${j}`,
-      a ? `Lo conversado / reformulación limpia: ${a}` : ""
+      "DESCRIBIR O EVALUAR: HECHO O JUICIO",
+      `Frase de hoy: ${f}`,
+      `Lo que vería una cámara: ${h}`,
+      `Lo que la mente pega encima: ${j}`,
+      `Juicios reconocidos como juicios: ${volvi}`,
+      a ? `Lo conversado: ${a}` : ""
     ].filter(Boolean).join("\n");
   }
 });
+escena.andar();
