@@ -3,97 +3,164 @@ archivo: act-dial-disposicion.html
 titulo: El dial de la disposición y el dial del malestar
 enfoque: ACT
 etiqueta: Acción comprometida y aceptación
-sub: Suelta la perilla trabada del control emocional («dial del malestar») para mover la única perilla que sí responde a tu mano («dial de la disposición»).
+sub: Un radio viejo con dos perillas. La del malestar se mueve sola y está trabada: forzarla (botón mantenido) la devuelve más arriba y apaga la música. La de la disposición sí responde a la mano.
 fuente: Metáfora de las dos escalas (Two Scales Metaphor) de Hayes, Strosahl y Wilson (1999, cap. 5; 2012) y Hayes y Smith (2005).
-resumen: Contrastar la perilla incontrolable del malestar con la perilla elegida de la disposición a abrir espacio y avanzar hacia lo valioso.
+resumen: La perilla del malestar sube y baja sola; al forzarla cede un poco, rebota más alto y la música se corta. La perilla de la disposición gira con cada toque y la música suena aunque la otra siga alta. El marcador cuenta las veces que se volvió a la perilla de la disposición.
 @@css
-  .dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
-  @media(max-width:720px){.dd-grid{grid-template-columns:1fr}}
-  .dd-caja{border:1px solid var(--linea);border-radius:12px;padding:15px;background:#fff}
-  .dd-caja.dolor{border-top:4px solid #c2593f;background:#fdf8f6}
-  .dd-caja.disp{border-top:4px solid #2d7a5e;background:#f4fbf8}
-  .dd-num{font-size:24px;font-weight:800;margin:6px 0}
-  .dd-aviso{margin-top:8px;padding:10px 12px;border-radius:8px;font-size:13.5px;background:#fff;border:1px solid var(--linea)}
+  .marcas div{min-width:130px}
+  .mandos button.forzar{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600;touch-action:none;user-select:none}
+  .mandos button.forzar:hover{background:#763333;border-color:#763333}
+  .mandos button.abrir{background:#2f7a5f;border-color:#2f7a5f;color:#fff;font-weight:600}
+  .mandos button.abrir:hover{background:#27674f;border-color:#27674f}
 @@html
 <section class="paso">
-  <h2><span class="num">1</span>Las dos perillas del tablero</h2>
+  <h2><span class="num">1</span>Lo que quieres que suene hoy</h2>
   <div class="cuerpo">
-    <p class="ayuda">Imagina dos perillas graduadas de 0 a 10. Solemos intentar bajar a la fuerza la primera (<b>Malestar / Ansiedad / Tristeza</b>), pero cuanto más la forzamos, más se traba. La segunda perilla (<b>Disposición / Apertura</b>) es la única que tiene cable directo a tus manos.</p>
-    <div class="dd-grid">
-      <div class="dd-caja dolor">
-        <b>Perilla 1: Nivel de malestar hoy (0 a 10)</b>
-        <p class="ayuda" style="margin:4px 0 8px">No obedece a órdenes directas; sube o baja según el clima interno.</p>
-        <input type="range" id="ddDolor" min="0" max="10" value="7" style="width:100%">
-        <div class="dd-num" id="ddValDolor" style="color:#c2593f">7 / 10</div>
-        <div class="dd-aviso" id="ddMsgDolor">Si exiges que esta perilla baje a 0 antes de vivir, tu día queda en pausa.</div>
-      </div>
-      <div class="dd-caja disp">
-        <b>Perilla 2: Mi disposición a hacer espacio y actuar (0 a 10)</b>
-        <p class="ayuda" style="margin:4px 0 8px">Sí depende de tu elección: ¿cuánto espacio abres hoy para dar tu paso valioso?</p>
-        <input type="range" id="ddDisp" min="0" max="10" value="8" style="width:100%">
-        <div class="dd-num" id="ddValDisp" style="color:#2d7a5e">8 / 10</div>
-        <div class="dd-aviso" id="ddMsgDisp">Con disposición alta, el malestar deja de multiplicarse y recuperas el timón.</div>
-      </div>
+    <div class="chips" id="situacionDisp">
+      <button class="chip" data-v="Sostener esa conversación importante">Sostener esa conversación importante</button>
+      <button class="chip" data-v="Avanzar en mi tarea sin esperar a sentirme seguro">Avanzar en mi tarea sin esperar a sentirme seguro</button>
+      <button class="chip" data-v="Ir al encuentro llevando mi incomodidad">Ir al encuentro llevando mi incomodidad</button>
     </div>
   </div>
 </section>
 
-<section class="paso">
-  <h2><span class="num">2</span>Dónde elijo poner mi mano hoy</h2>
-  <div class="cuerpo">
-    <label class="etiqueta">Situación valiosa en la que hoy eliges subir tu perilla de disposición</label>
-    <div class="chips" id="situacionDisp">
-      <button class="chip" data-v="Sostener esa conversación importante aunque sienta nervios">Sostener esa conversación importante aunque sienta nervios</button>
-      <button class="chip" data-v="Presentar o avanzar en mi tarea sin esperar a sentirme seguro">Presentar o avanzar en mi tarea sin esperar a sentirme seguro</button>
-      <button class="chip" data-v="Salir al encuentro social llevando mi incomodidad conmigo">Salir al encuentro social llevando mi incomodidad conmigo</button>
-    </div>
+<div class="escenario">
+  <svg id="svgDial" viewBox="0 0 700 350" role="img" aria-label="Tablero de un radio antiguo con dos perillas: la del malestar y la de la disposición"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mVolvi" style="color:#2f7a5f">0</span><span class="r">veces que volví a la disposición</span></div>
   </div>
-</section>
+  <div class="mandos">
+    <button type="button" class="forzar" id="bForzar">Forzar la del malestar (mantener apretado)</button>
+    <button type="button" class="abrir" id="bAbrir">Girar la de la disposición</button>
+    <button type="button" id="bCerrar">Cerrarla un poco</button>
+  </div>
+</div>
 
 <section class="bloque pregunta-sola" id="cierre">
-  <div class="pregunta" id="textoPregunta">¿Qué cambia cuando dejas de medir tu día por «cuánto malestar sentí» y empiezas a medirlo por «cuánta disposición tuve para vivir lo que me importa»?</div>
+  <div class="pregunta" id="textoPregunta">Una perilla se mueve sola y la otra espera tu mano. ¿En cuál de las dos has tenido puesta la mano estos días?</div>
   <details class="apunte">
     <summary>Anotar lo conversado</summary>
-    <textarea id="apunte" placeholder="Qué sensación estás dispuesto a llevar en la mochila mientras das este paso..."></textarea>
+    <textarea id="apunte" placeholder="Qué sensación estás dispuesto a llevar mientras das este paso..."></textarea>
   </details>
 </section>
 @@js
 const $ = Kit.$;
 Kit.chips("situacionDisp", {multiple:false, libre:true});
-const rD = $("ddDolor"), vD = $("ddValDolor"), mD = $("ddMsgDolor");
-const rW = $("ddDisp"), vW = $("ddValDisp"), mW = $("ddMsgDisp");
 
-function actualizar(){
-  const d = parseInt(rD.value, 10) || 0;
-  const w = parseInt(rW.value, 10) || 0;
-  vD.textContent = d + " / 10";
-  vW.textContent = w + " / 10";
-  if(w <= 3 && d >= 5){
-    mD.textContent = "Disposición baja + malestar presente = lucha activa (el malestar limpio se multiplica en sufrimiento añadido).";
-    mW.textContent = "Cuando bajas la disposición, toda tu energía se gasta en vigilar la primera perilla.";
-  } else {
-    mD.textContent = "El malestar está en " + d + "/10, pero ya no gobierna tus manos ni tus pies.";
-    mW.textContent = "Disposición en " + w + "/10: tú eliges hacia dónde caminas hoy aunque el clima interno sea intenso.";
-  }
+/* ----- geometría del tablero en acuarela (700 x 350) ----- */
+const P1 = {x:200, y:213}, P2 = {x:500, y:213}, R = 68;   // centros y radio de las dos perillas
+const BOCINA = {x:350, y:62};                                        // de donde sale la música
+const ANG = v => -130 + v * 260;       // 0..1 → grados de la aguja
+
+let mal, deriva, disp, fuerza, t, volvi, ondas, ruido;
+function reiniciar(){
+  mal = 0.68; deriva = 0.68; disp = 0.12; fuerza = false; t = 0; volvi = 0; ondas = []; ruido = 0;
 }
-rD.addEventListener("input", actualizar);
-rW.addEventListener("input", actualizar);
-actualizar();
+reiniciar();
+
+const escena = Kit.reloj(latido);
+function latido(dt){
+  t += dt;
+  /* el malestar tiene su propio clima: sube y baja solo, sin pedir permiso */
+  deriva = 0.6 + 0.2 * Math.sin(t * 0.23) + 0.1 * Math.sin(t * 0.61 + 1.7);
+  if(fuerza){
+    /* forzada cede apenas, tiembla, y toda la mano se va en sostenerla */
+    mal = Math.max(deriva - 0.16, mal - dt * 0.25);
+    ruido = Math.min(1, ruido + dt * 2);
+    disp = Math.max(0, disp - dt * 0.18);
+  } else {
+    /* al soltarla rebota por encima de donde estaba y luego vuelve a su clima */
+    mal += (deriva + ruido * 0.22 - mal) * Math.min(1, dt * 2.4);
+    ruido = Math.max(0, ruido - dt * 0.5);
+  }
+  /* la música: sale de la bocina según la disposición, esté como esté la otra perilla */
+  if(disp > 0.15 && !fuerza && Math.random() < dt * (0.8 + disp * 3))
+    ondas.push({v:0, lado:Math.random() < .5 ? -1 : 1, alto:(Math.random() - .5) * 26});
+  ondas.forEach(o => o.v += dt);
+  ondas = ondas.filter(o => o.v < 3.2);
+  dibujar();
+}
+
+let fondo = null;
+function perilla(svg, clave, c, valor, tiembla){
+  /* perilla de baquelita: cuerpo oscuro, estrías en el borde y una aguja crema */
+  const g = Kit.svg("g", {transform:`rotate(${(ANG(valor) + tiembla).toFixed(1)} ${c.x} ${c.y})`, filter:Kit.acuarela(svg)});
+  const p = (tg, a) => g.appendChild(Kit.svg(tg, a));
+  p("circle", {cx:c.x + 2, cy:c.y + 4, r:R, fill:"#1c1612", opacity:.35});
+  p("circle", {cx:c.x, cy:c.y, r:R, fill:"#2b2622"});
+  for(let i = 0; i < 28; i++){
+    const a = i * Math.PI * 2 / 28;
+    p("line", {x1:c.x + Math.cos(a) * (R - 9), y1:c.y + Math.sin(a) * (R - 9), x2:c.x + Math.cos(a) * (R - 1), y2:c.y + Math.sin(a) * (R - 1), stroke:"#4a423b", "stroke-width":3});
+  }
+  p("circle", {cx:c.x, cy:c.y, r:R - 13, fill:"#39322c"});
+  p("path", {d:`M${c.x - R * .5} ${c.y - R * .42} A${R * .66} ${R * .66} 0 0 1 ${c.x + R * .2} ${c.y - R * .63}`, fill:"none", stroke:"#6b6259", "stroke-width":5, "stroke-linecap":"round", opacity:.7});
+  p("line", {x1:c.x, y1:c.y - 12, x2:c.x, y2:c.y - R + 6, stroke:"#efe3c6", "stroke-width":6, "stroke-linecap":"round"});
+  p("circle", {cx:c.x, cy:c.y, r:9, fill:"#5a5048"});
+  svg.appendChild(g);
+}
+function rotulo(svg, x, y, s, color){
+  const e = Kit.svg("text", {x, y, "text-anchor":"middle",
+    style:`font:600 13px Georgia,serif;font-style:italic;fill:${color};paint-order:stroke;stroke:#f6ecd9;stroke-width:4px;stroke-linejoin:round`});
+  e.textContent = s; svg.appendChild(e);
+}
+function dibujar(){
+  const svg = $("svgDial");
+  svg.innerHTML = "";
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:dial-acuarela.jpg]]", x:0, y:0, width:700, height:350, preserveAspectRatio:"xMidYMid slice"});
+  svg.appendChild(fondo);
+
+  /* la música: ondas doradas que salen de la bocina; forzando, solo estática gris */
+  ondas.forEach(o => {
+    const k = o.v / 3.2, x = BOCINA.x + o.lado * (20 + k * 250), y = BOCINA.y + o.alto;
+    g("path", {d:`M${x} ${y - 12} q${o.lado * 9} 12 0 24`, fill:"none", stroke:"#c9962e", "stroke-width":2.6 - k,
+      "stroke-linecap":"round", opacity:((1 - k) * (0.35 + disp * 0.65)).toFixed(2), filter:Kit.acuarela(svg)});
+  });
+  if(ruido > 0.05){
+    let d = "";
+    for(let x = BOCINA.x - 150; x <= BOCINA.x + 150; x += 10) d += (d ? " L" : "M") + x + " " + (BOCINA.y + (Math.random() - .5) * 22 * ruido).toFixed(1);
+    g("path", {d, fill:"none", stroke:"#5b5f63", "stroke-width":1.6, opacity:(ruido * .8).toFixed(2)});
+  }
+
+  perilla(svg, "p1", P1, mal, fuerza ? Math.sin(t * 55) * 3 : 0);
+  perilla(svg, "p2", P2, disp, 0);
+  rotulo(svg, P1.x, 338, "malestar", "#7a3328");
+  rotulo(svg, P2.x, 338, "disposición", "#1f5a45");
+  const que = Kit.activas("situacionDisp")[0];
+  if(que && disp > 0.15) rotulo(svg, BOCINA.x, BOCINA.y - 34, que.length > 52 ? que.slice(0, 50) + "…" : que, "#6b4a12");
+
+  $("mVolvi").textContent = volvi;
+  $("bCerrar").disabled = disp <= 0.05;
+  $("bAbrir").disabled = disp >= 0.98;
+}
+
+let veniaDeForzar = false;
+function forzar(si){
+  if(si) veniaDeForzar = true;
+  fuerza = si;
+}
+const bf = $("bForzar");
+bf.addEventListener("pointerdown", () => forzar(true));
+["pointerup", "pointerleave", "pointercancel"].forEach(ev => bf.addEventListener(ev, () => forzar(false)));
+bf.addEventListener("keydown", ev => { if(ev.key === " " || ev.key === "Enter"){ ev.preventDefault(); forzar(true); } });
+bf.addEventListener("keyup", () => forzar(false));
+
+$("bAbrir").addEventListener("click", () => {
+  disp = Math.min(1, disp + 0.22);
+  if(veniaDeForzar){ volvi++; veniaDeForzar = false; }
+  $("textoPregunta").textContent = "El malestar sigue moviéndose a su antojo y la música suena igual. ¿Qué paso darías hoy con la perilla del malestar donde está?";
+  Kit.guardar();
+});
+$("bCerrar").addEventListener("click", () => { disp = Math.max(0, disp - 0.22); Kit.guardar(); });
 
 Kit.iniciar({
   clave: "act-dial-disposicion",
-  alCambiar: actualizar,
-  resumen: () => {
-    const s = Kit.activas("situacionDisp")[0] || "—";
-    const d = $("ddDolor").value;
-    const w = $("ddDisp").value;
-    const ap = $("apunte").value.trim();
-    return [
-      "EL DIAL DE LA DISPOSICIÓN",
-      `Situación elegida: ${s}`,
-      `Perilla 1 (Intensidad del malestar limpio): ${d}/10`,
-      `Perilla 2 (Nivel de disposición voluntaria): ${w}/10`,
-      ap ? `Lo conversado / compromiso: ${ap}` : ""
-    ].filter(Boolean).join("\n");
-  }
+  alCambiar: dibujar,
+  resumen: () => [
+    "EL DIAL DE LA DISPOSICIÓN",
+    `Lo que quiero que suene: ${Kit.activas("situacionDisp")[0] || "—"}`,
+    `Veces que volví a la perilla de la disposición: ${volvi}`,
+    $("apunte").value.trim() ? `Lo conversado: ${$("apunte").value.trim()}` : ""
+  ].filter(Boolean).join("\n")
 });
+escena.andar();

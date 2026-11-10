@@ -1,0 +1,177 @@
+@@meta
+archivo: met-cinta-de-sushi.html
+titulo: El tren de sushi de los pensamientos
+enfoque: ACT
+etiqueta: Defusión
+sub: La cocina de la mente saca platos sin parar y la cinta los pasea sola. Se puede bajar a la mesa el que pasa por delante, o dejar que siga su vuelta.
+fuente: Metáfora del tren de sushi (Harris, 2009/2019, ACT Made Simple; Hayes et al., 1999, Buying a Thought).
+resumen: Los platos salen solos de la cocina con los pensamientos del día, barajados. Bajar uno lo deja sobre la mesa, que se va llenando; devolverlos despeja la mesa. El marcador cuenta las veces que se despejó la mesa y se volvió a mirar la cinta.
+@@css
+  .marcas div{min-width:120px}
+  .mandos button.bajar{background:#7a4b3a;border-color:#7a4b3a;color:#fff;font-weight:600}
+  .mandos button.bajar:hover{background:#673e30;border-color:#673e30}
+  .mandos button.bajar:disabled{background:#cdbcb4;border-color:#cdbcb4}
+  .mandos button.despejar{background:#2f7a5f;border-color:#2f7a5f;color:#fff;font-weight:600}
+  .mandos button.despejar:hover{background:#27674f;border-color:#27674f}
+  .mandos button.despejar:disabled{background:#b9d3c8;border-color:#b9d3c8}
+@@html
+<section class="paso">
+  <h2><span class="num">1</span>Qué platos saca hoy la cocina de tu mente</h2>
+  <div class="cuerpo">
+    <div class="chips" id="platos">
+      <button class="chip" data-v="«Van a pensar que no sé nada»">«Van a pensar que no sé nada»</button>
+      <button class="chip" data-v="«A los demás les sale mejor»">«A los demás les sale mejor»</button>
+      <button class="chip" data-v="«¿Y si después me arrepiento?»">«¿Y si después me arrepiento?»</button>
+      <button class="chip" data-v="«Debería tenerlo bajo control»">«Debería tenerlo bajo control»</button>
+    </div>
+  </div>
+</section>
+
+<div class="escenario">
+  <svg id="svgSushi" viewBox="0 0 700 350" role="img" aria-label="Barra de sushi con una cinta por la que pasan platos"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mPasaron">0</span><span class="r">platos que vi pasar</span></div>
+    <div><span class="n" id="mVolvi" style="color:#2f7a5f">0</span><span class="r">veces que despejé la mesa</span></div>
+  </div>
+  <div class="mandos">
+    <button type="button" class="bajar" id="bComprar">Bajar a mi mesa el plato que pasa</button>
+    <button type="button" class="despejar" id="bDejarPasar">Devolver los platos y mirar la cinta</button>
+  </div>
+</div>
+
+<section class="bloque pregunta-sola" id="cierre">
+  <div class="pregunta">Que un plato pase frente a tus ojos no te obliga a bajarlo ni a comértelo. ¿Cuál es el que más rápido sueles bajar a tu mesa, casi sin darte cuenta?</div>
+  <details class="apunte">
+    <summary>Anotar lo conversado</summary>
+    <textarea id="apunte" placeholder="Cómo reconocer ese plato esta semana y dejar que dé la vuelta..."></textarea>
+  </details>
+</section>
+@@js
+const $ = Kit.$;
+Kit.chips("platos", {multiple:true, libre:true});
+
+/* ----- geometría de la barra en acuarela (700 x 350) ----- */
+const CINTA = __CINTA__;          // y donde apoyan los platos sobre la cinta
+const COCINA = __COCINA__;        // x de la cortina por donde salen
+const FRENTE = 350;               // x de la persona sentada
+const VEL = 42;                   // px por segundo
+const PASO = 235;                 // distancia entre platos
+const ARTE = [
+  {href:"[[imagen:sushi-plato-1.webp]]", r:__R_P1__}, {href:"[[imagen:sushi-plato-2.webp]]", r:__R_P2__},
+  {href:"[[imagen:sushi-plato-3.webp]]", r:__R_P3__}, {href:"[[imagen:sushi-plato-4.webp]]", r:__R_P4__},
+  {href:"[[imagen:sushi-plato-5.webp]]", r:__R_P5__},
+];
+const NIGIRI = {href:"[[imagen:sushi-plato-6.webp]]", r:__R_P6__};
+const PERSONA = {href:"[[imagen:sushi-persona.webp]]", r:__R_PERSONA__};
+const PUESTOS = [[212, 268], [492, 268], [140, 296], [562, 296], [262, 312], [440, 312]];
+const SUELTOS = ["«No voy a poder»", "«Algo va a salir mal»", "«Siempre me pasa lo mismo»", "«Ya es tarde para mí»"];
+
+let cinta, mesa, pasaron, volvi, t, baraja, serie, uid;
+function barajar(){
+  const base = Kit.activas("platos");
+  const a = (base.length ? base : SUELTOS).slice();
+  for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function nuevoPlato(x){
+  serie++;
+  if(serie % 4 === 0) return {id:++uid, x, arte:NIGIRI, txt:""};      // también pasan platos ricos
+  if(!baraja.length) baraja = barajar();
+  return {id:++uid, x, arte:ARTE[Math.floor(Math.random() * ARTE.length)], txt:baraja.pop()};
+}
+function reiniciar(){
+  cinta = []; mesa = []; pasaron = 0; volvi = 0; t = 0; baraja = []; serie = 0; uid = 0;
+  for(let x = COCINA + PASO * 2; x >= COCINA; x -= PASO) cinta.push(nuevoPlato(x));
+}
+reiniciar();
+
+const escena = Kit.reloj(latido);
+function latido(dt){
+  t += dt;
+  cinta.forEach(p => p.x += VEL * dt);
+  const ultimo = cinta[cinta.length - 1];
+  if(!ultimo || ultimo.x - COCINA >= PASO) cinta.push(nuevoPlato(COCINA));
+  const antes = cinta.length;
+  cinta = cinta.filter(p => p.x < 760);
+  pasaron += antes - cinta.length;
+  dibujar();
+}
+const enFrente = () => cinta.find(p => Math.abs(p.x - FRENTE) < 62);
+
+function dosRenglones(s, n){
+  if(s.length <= n) return [s];
+  const corte = s.lastIndexOf(" ", n);
+  const a = s.slice(0, corte > 8 ? corte : n), b = s.slice(a.length).trim();
+  return [a, b.length > n ? b.slice(0, n - 1) + "…" : b];
+}
+
+let fondo = null;
+function plato(svg, clave, arte, x, y, ancho){
+  const h = ancho / arte.r;
+  svg.appendChild(Kit.figura(clave, arte.href, {x:x - ancho / 2, y:y - h, width:ancho, height:h}));
+}
+function rotulo(svg, renglones, x, y, tam){
+  renglones.forEach((s, i) => {
+    const e = Kit.svg("text", {x, y:y + i * (tam + 2), "text-anchor":"middle",
+      style:`font:600 ${tam}px Georgia,serif;font-style:italic;fill:#2c2a26;paint-order:stroke;stroke:#fffaf0;stroke-width:4px;stroke-linejoin:round`});
+    e.textContent = s; svg.appendChild(e);
+  });
+}
+function dibujar(){
+  const svg = $("svgSushi");
+  svg.innerHTML = "";
+  if(!fondo) fondo = Kit.svg("image", {href:"[[imagen:sushi-acuarela.jpg]]", x:0, y:0, width:700, height:350, preserveAspectRatio:"xMidYMid slice"});
+  svg.appendChild(fondo);
+
+  const cerca = enFrente();
+  cinta.forEach(p => {
+    const sale = Math.min(1, (p.x - COCINA + 30) / 40);     // asoma por la cortina
+    if(sale <= 0) return;
+    const gp = Kit.svg("g", {opacity:sale.toFixed(2)});
+    svg.appendChild(gp);
+    if(p === cerca) gp.appendChild(Kit.svg("ellipse", {cx:p.x, cy:CINTA - 2, rx:44, ry:9, fill:"#fff3c9", opacity:.75}));
+    plato(gp, "c" + (p.id % 8), p.arte, p.x, CINTA, 62);
+    if(p.txt) rotulo(gp, dosRenglones(p.txt, 24), p.x, CINTA - 62 - (p.txt.length > 24 ? 14 : 0), 12.5);
+  });
+
+  /* la mesa: lo que se bajó se queda ahí, ocupando el lugar */
+  mesa.forEach((p, i) => {
+    const [x, y] = PUESTOS[i % PUESTOS.length];
+    plato(svg, "m" + i, p.arte, x, y, 78);
+    if(p.txt) rotulo(svg, [p.txt.length > 26 ? p.txt.slice(0, 24) + "…" : p.txt], x, y + 14, 11.5);
+  });
+
+  const hp = 168, wp = hp * PERSONA.r;
+  svg.appendChild(Kit.figura("persona", PERSONA.href, {x:FRENTE - wp / 2, y:350 - hp + 6, width:wp, height:hp}));
+
+  $("mPasaron").textContent = pasaron;
+  $("mVolvi").textContent = volvi;
+  $("bComprar").disabled = !cerca || mesa.length >= PUESTOS.length;
+  $("bDejarPasar").disabled = !mesa.length;
+}
+
+$("bComprar").addEventListener("click", () => {
+  const p = enFrente();
+  if(!p || mesa.length >= PUESTOS.length) return;
+  cinta = cinta.filter(q => q !== p);
+  mesa.push(p);
+  Kit.guardar();
+});
+$("bDejarPasar").addEventListener("click", () => {
+  if(!mesa.length) return;
+  mesa = []; volvi++;
+  Kit.guardar();
+});
+
+Kit.iniciar({
+  clave: "met-cinta-de-sushi",
+  alCambiar: () => { baraja = []; dibujar(); },
+  resumen: () => [
+    "EL TREN DE SUSHI DE LOS PENSAMIENTOS",
+    `Platos identificados: ${Kit.activas("platos").join(" · ") || "—"}`,
+    `Platos que vi pasar: ${pasaron}`,
+    `Veces que despejé la mesa: ${volvi}`,
+    $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
+  ].filter(Boolean).join("\n")
+});
+escena.andar();

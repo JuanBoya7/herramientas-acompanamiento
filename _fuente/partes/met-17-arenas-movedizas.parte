@@ -3,41 +3,42 @@ archivo: met-arenas-movedizas.html
 titulo: Las arenas movedizas
 enfoque: ACT
 etiqueta: Aceptación
-sub: Prueba qué pasa con el hundimiento cuando pataleas para sacar un pie y cuando te tiendes de espaldas abriendo los brazos sobre la superficie.
+sub: La arena tira hacia abajo sola. El botón de patalear se mantiene apretado y hunde más rápido; tenderse de espaldas y abrir los brazos deja al cuerpo flotar hacia la orilla.
 fuente: Metáfora de las arenas movedizas (Hayes y Smith, 2005, cap. 1; Luoma, Hayes y Walser, 2017).
-resumen: Experimentar cómo la lucha vertical hunde más rápido y cómo ampliar la superficie de contacto permite flotar.
+resumen: La figura se hunde sola y despacio; patalear (botón mantenido) la hunde más rápido. Al tenderse, el cuerpo sube a la superficie y deriva hacia la orilla. El marcador cuenta las veces que se volvió a tender.
 @@css
-  .am-nota{background:#f7faf9;border:1px solid var(--linea);border-radius:10px;padding:12px 15px;margin-top:10px;font-size:14px}
+  button.patalear{background:#8a3d3d;border-color:#8a3d3d;color:#fff;font-weight:600;touch-action:none;user-select:none}
+  button.patalear:hover{background:#763333;border-color:#763333}
+  button.tender{background:#2f7a5f;border-color:#2f7a5f;color:#fff;font-weight:600}
+  button.tender:hover{background:#27674f;border-color:#27674f}
+  .marcas div{min-width:120px}
 @@html
 <section class="paso">
   <h2><span class="num">1</span>En qué arena sientes que hoy pataleas</h2>
   <div class="cuerpo">
     <div class="chips" id="arena">
       <button class="chip" data-v="El insomnio y el enojo por no dormirme">El insomnio y el enojo por no dormirme</button>
-      <button class="chip" data-v="Una oleada de pánico o mareo en el cuerpo">Una oleada de pánico o mareo en el cuerpo</button>
-      <button class="chip" data-v="La pena por una pérdida o cambio difícil">La pena por una pérdida o cambio difícil</button>
-      <button class="chip" data-v="La rumia cuando cometo un error en el trabajo">La rumia cuando cometo un error en el trabajo</button>
+      <button class="chip" data-v="Una oleada de pánico en el cuerpo">Una oleada de pánico en el cuerpo</button>
+      <button class="chip" data-v="La pena por una pérdida">La pena por una pérdida</button>
+      <button class="chip" data-v="La rumia después de un error">La rumia después de un error</button>
     </div>
   </div>
 </section>
 
 <div class="escenario">
-  <svg id="svgArena" viewBox="0 0 680 270" role="img" aria-label="Figura en las arenas movedizas: vertical pataleando o flotando horizontal"></svg>
+  <svg id="svgArena" viewBox="0 0 700 350" role="img" aria-label="Corte de un pantano: una persona en las arenas movedizas"></svg>
   <div class="marcas">
-    <div><span class="n" id="mProf">45 cm</span><span class="r">hundimiento</span></div>
-    <div><span class="n" id="mContacto">Poca (solo los pies)</span><span class="r">superficie de contacto</span></div>
-    <div><span class="n" id="mGasto">Alto</span><span class="r">gasto de energía</span></div>
+    <div><span class="n" id="mVolvi" style="color:#2f7a5f">0</span><span class="r">veces que volví a tenderme</span></div>
   </div>
   <div class="mandos">
-    <button type="button" id="bPatalear">Patalear y hacer fuerza para salir</button>
-    <button type="button" class="principal" id="bFlotar">Tenderse de espaldas y abrir los brazos</button>
+    <button type="button" class="patalear" id="bPatalear">Patalear (mantener apretado)</button>
+    <button type="button" class="tender" id="bFlotar">Tenderse y abrir los brazos</button>
     <button type="button" id="bReset">Volver al inicio</button>
   </div>
-  <div class="am-nota" id="amLectura">En las arenas movedizas todo el peso apoyado en dos pies hunde el cuerpo. Prueba ambos movimientos.</div>
 </div>
 
 <section class="bloque pregunta-sola" id="cierre">
-  <div class="pregunta" id="qArena">Tenderse sobre la arena parece lo opuesto a salvarse, porque te pone más en contacto con ella; sin embargo, es lo único que te saca a flote. ¿Cómo se vería hoy «abrir los brazos» ante lo que sientes?</div>
+  <div class="pregunta" id="qArena">Tenderse sobre la arena parece lo opuesto a salvarse, porque te pone más en contacto con ella. ¿Qué es lo que tu cuerpo quiere hacer primero cuando empieza a hundirse?</div>
   <details class="apunte">
     <summary>Anotar lo conversado</summary>
     <textarea id="apunte" placeholder="Qué gesto concreto sería dejar de patalear y aumentar el contacto..."></textarea>
@@ -47,69 +48,115 @@ resumen: Experimentar cómo la lucha vertical hunde más rápido y cómo ampliar
 const $ = Kit.$;
 Kit.chips("arena", {multiple:false, libre:true});
 
-let prof = 45; // cm de hundimiento (10 a 110)
-let postura = "vertical"; // vertical | flotar
+/* ----- geometría del corte en acuarela (700 x 350) ----- */
+const SUP = 178;                  // línea de la superficie de la arena
+const POZO = [118, 572];        // bordes del pozo de arena
+const ORILLA = POZO[1] - 78;          // hasta dónde deriva el cuerpo tendido
+const ALTO = 150;                     // alto de la figura de pie
+const FIG = {
+  lucha:   {href:"[[imagen:arenas-lucha.webp]]",   r:0.603},
+  tendida: {href:"[[imagen:arenas-tendida.webp]]", r:2.193},
+};
 
+let prof, modo, x, pataleo, t, gotas, volvi, llego, cambio;
+function reiniciar(){
+  prof = 0.28;            // 0 = sobre la superficie, 1 = hasta el cuello
+  modo = "pie";           // pie | tendida
+  x = (POZO[0] + POZO[1]) / 2 - 40;
+  pataleo = false; t = 0; gotas = []; volvi = 0; llego = false; cambio = 0;
+  $("qArena").textContent = "Tenderse sobre la arena parece lo opuesto a salvarse, porque te pone más en contacto con ella. ¿Qué es lo que tu cuerpo quiere hacer primero cuando empieza a hundirse?";
+}
+reiniciar();
+
+const escena = Kit.reloj(latido);
+
+function latido(dt){
+  t += dt;
+  cambio = Math.max(0, cambio - dt * 2.2);          // transición breve entre posturas
+  if(modo === "pie"){
+    /* la arena tira sola, despacio; pataleando, mucho más rápido */
+    prof = Math.min(1, prof + dt * (pataleo ? 0.16 : 0.012));
+    if(pataleo && Math.random() < dt * 16)
+      gotas.push({x:x + (Math.random() - .5) * 70, y:SUP - 4, vx:(Math.random() - .5) * 90, vy:-60 - Math.random() * 80, v:0});
+  } else {
+    /* tendida: el cuerpo sube a la superficie y deriva hacia la orilla firme */
+    prof = Math.max(0, prof - dt * 0.35);
+    if(prof < 0.05 && x < ORILLA) x += dt * 11;
+    if(x >= ORILLA && !llego){
+      llego = true;
+      $("qArena").textContent = "La arena sigue siendo la misma y el cuerpo llegó a la orilla sin pelear con ella. ¿Cómo se vería hoy «abrir los brazos» ante lo que sientes?";
+    }
+  }
+  gotas.forEach(g => { g.v += dt; g.x += g.vx * dt; g.y += g.vy * dt; g.vy += 260 * dt; });
+  gotas = gotas.filter(g => g.v < 1 && g.y < SUP + 2);
+  dibujar();
+}
+
+let fondo = null, lodo = null;
 function dibujar(){
   const svg = $("svgArena");
   svg.innerHTML = "";
-  const g = (t, a) => svg.appendChild(Kit.svg(t, a));
+  const g = (tg, a, p) => (p || svg).appendChild(Kit.svg(tg, a));
+  const img = {x:0, y:0, width:700, height:350, preserveAspectRatio:"xMidYMid slice"};
+  if(!fondo) fondo = Kit.svg("image", Object.assign({href:"[[imagen:arenas-acuarela.jpg]]"}, img));
+  svg.appendChild(fondo);
 
-  // Cielo y banco de arena
-  g("rect", {x:0, y:0, width:680, height:135, fill:"#e9f2f7"});
-  g("rect", {x:0, y:135, width:680, height:135, fill:"#df89e"});
-  g("rect", {x:0, y:135, width:680, height:135, fill:"#dfc496"});
-  g("ellipse", {cx:340, cy:140, rx:240, ry:22, fill:"#c8a66c"});
-
-  const nom = Kit.activas("arena")[0] || "La arena movediza";
-  const tNom = g("text", {x:340, y:248, "text-anchor":"middle", fill:"#5b4421", style:"font:700 13px system-ui,sans-serif"});
-  tNom.textContent = nom;
-
-  if(postura === "vertical"){
-    const yCuerpo = 70 + (prof - 45) * 0.85;
-    // Figura vertical hundiéndose
-    g("circle", {cx:340, cy:yCuerpo, r:16, fill:"#2f6f8f"});
-    g("rect", {x:326, y:yCuerpo + 18, width:28, height:58, rx:10, fill:"#2f6f8f"});
-    // Salpicaduras de esfuerzo
-    if(prof > 50){
-      g("line", {x1:295, y1:130, x2:275, y2:110, stroke:"#b84a39", "stroke-width":2.5});
-      g("line", {x1:385, y1:130, x2:405, y2:110, stroke:"#b84a39", "stroke-width":2.5});
-    }
-    // Capa de arena que cubre la mitad inferior
-    g("rect", {x:260, y:138, width:160, height:85, fill:"#c8a66c"});
+  /* la figura */
+  if(modo === "pie"){
+    const tiembla = pataleo ? Math.sin(t * 38) * 3 : Math.sin(t * 2) * 0.6;
+    const w = ALTO * FIG.lucha.r;
+    /* hundida: los pies bajan desde la superficie hasta dejar fuera solo cabeza y brazos */
+    const pies = SUP + 18 + prof * (ALTO - 62);
+    svg.appendChild(Kit.figura("lucha", FIG.lucha.href, {x:x - w / 2 + tiembla, y:pies - ALTO, width:w, height:ALTO,
+      transform:pataleo ? `rotate(${(Math.sin(t * 19) * 4).toFixed(2)} ${x} ${pies})` : ""}));
   } else {
-    // Figura horizontal flotando sobre la superficie con brazos extendidos
-    g("ellipse", {cx:340, cy:134, rx:72, ry:13, fill:"#2f6f8f"});
-    g("circle", {cx:262, cy:130, r:14, fill:"#2f6f8f"});
-    g("line", {x1:290, y1:134, x2:405, y2:134, stroke:"#e8f1f6", "stroke-width":3});
+    const w = 168, h = w / FIG.tendida.r;
+    const y = SUP - h * 0.62 + prof * 60 + Math.sin(t * 1.3) * 1.2;
+    svg.appendChild(Kit.figura("tendida", FIG.tendida.href, {x:x - w / 2, y:y, width:w, height:h, transform:""}));
   }
 
-  $("mProf").textContent = prof + " cm";
-  $("mContacto").textContent = postura === "flotar" ? "Amplia (todo el cuerpo)" : "Mínima (solo los pies)";
-  $("mGasto").textContent = postura === "flotar" ? "Sereno y estable" : (prof > 70 ? "Agotador" : "Alto");
+  /* la arena por delante: el mismo corte, casi opaco, tapa lo que quedó hundido */
+  const d = Kit.svg("defs", {});
+  d.innerHTML = `<clipPath id="amPozo"><rect x="${POZO[0]}" y="${SUP}" width="${POZO[1] - POZO[0]}" height="${350 - SUP}"/></clipPath>`;
+  svg.appendChild(d);
+  if(!lodo) lodo = Kit.svg("image", Object.assign({href:"[[imagen:arenas-acuarela.jpg]]", "clip-path":"url(#amPozo)", opacity:.86}, img));
+  svg.appendChild(lodo);
+
+  /* ondas donde el cuerpo toca la superficie, y el barro que salta al patalear */
+  const ancho = modo === "pie" ? 34 + (pataleo ? 14 : 0) : 92;
+  for(let k = 0; k < 2; k++)
+    g("ellipse", {cx:x, cy:SUP + 1, rx:ancho + k * 16 + Math.sin(t * 2 + k) * 3, ry:4 + k * 2, fill:"none",
+      stroke:"#5d5347", "stroke-width":1.4, opacity:(0.5 - k * 0.2).toFixed(2), filter:Kit.acuarela(svg)});
+  gotas.forEach(q => g("circle", {cx:q.x, cy:q.y, r:2.6, fill:"#6b5d4c", opacity:(1 - q.v).toFixed(2)}));
+
+  const nom = Kit.activas("arena")[0];
+  if(nom){
+    const e = Kit.svg("text", {x:(POZO[0] + POZO[1]) / 2, y:332, "text-anchor":"middle",
+      style:"font:600 13px Georgia,serif;font-style:italic;fill:#f4ecdf;paint-order:stroke;stroke:#4a4034;stroke-width:3px"});
+    e.textContent = nom.length > 48 ? nom.slice(0, 46) + "…" : nom;
+    svg.appendChild(e);
+  }
+
+  $("mVolvi").textContent = volvi;
+  $("bFlotar").disabled = modo === "tendida";
 }
 
-$("bPatalear").addEventListener("click", () => {
-  postura = "vertical";
-  prof = Math.min(105, prof + 20);
-  $("amLectura").innerHTML = "<b>Al patalear:</b> cuando levantas un pie para zafarte, todo tu peso recae en el otro y la succión te lleva más abajo.";
-  dibujar();
-  Kit.guardar();
-});
+function patalear(si){
+  if(si && modo === "tendida"){ modo = "pie"; llego = false; prof = Math.max(prof, 0.3); }
+  pataleo = si;
+}
+const bp = $("bPatalear");
+bp.addEventListener("pointerdown", () => patalear(true));
+["pointerup", "pointerleave", "pointercancel"].forEach(ev => bp.addEventListener(ev, () => patalear(false)));
+bp.addEventListener("keydown", ev => { if(ev.key === " " || ev.key === "Enter"){ ev.preventDefault(); patalear(true); } });
+bp.addEventListener("keyup", () => patalear(false));
 
 $("bFlotar").addEventListener("click", () => {
-  postura = "flotar";
-  prof = 12;
-  $("amLectura").innerHTML = "<b>Al tenderte de espaldas y abrir los brazos:</b> aumentas el contacto con la superficie sin pelear contra ella; el cuerpo deja de hundirse y puedes desplazarte hacia la orilla.";
-  dibujar();
+  if(modo === "tendida") return;
+  modo = "tendida"; pataleo = false; volvi++;
   Kit.guardar();
 });
-
-$("bReset").addEventListener("click", () => {
-  postura = "vertical";
-  prof = 45;
-  dibujar();
-});
+$("bReset").addEventListener("click", () => { reiniciar(); Kit.guardar(); });
 
 Kit.iniciar({
   clave: "met-arenas-movedizas",
@@ -117,7 +164,8 @@ Kit.iniciar({
   resumen: () => [
     "LAS ARENAS MOVEDIZAS",
     `Situación: ${Kit.activas("arena")[0] || "—"}`,
-    `Movimiento ensayado: ${postura === "flotar" ? "Tenderse y ampliar el contacto para flotar" : "Patalear verticalmente"}`,
+    `Veces que volví a tenderme: ${volvi}`,
     $("apunte").value.trim() ? `Notas: ${$("apunte").value.trim()}` : ""
   ].filter(Boolean).join("\n")
 });
+escena.andar();
