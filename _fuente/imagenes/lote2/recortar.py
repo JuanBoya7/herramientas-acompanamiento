@@ -42,18 +42,35 @@ HOJAS = {
 
 
 # ajustes por recorte: "rayas" borra trazos horizontales finos (mesa insinuada), "mitad" toma media celda
-OPCIONES = {"sushi-persona": {"rayas": True}, "paseo-discute": {"mitad": "der"}}
+# "blanco": umbral más alto para objetos muy claros (piel, loza), que si no se agujerean
+OPCIONES = {"sushi-persona": {"rayas": True}, "paseo-discute": {"mitad": "der"},
+            "trampa-mano": {"blanco": 247}, "juicio-taza": {"blanco": 247}}
 
 
 def sin_reticula(hoja):
-    """Borra las líneas de cuadrícula que a veces dibuja el modelo entre celdas."""
+    """Borra las líneas de cuadrícula que a veces dibuja el modelo entre celdas: filas o columnas
+    con tinta en más del 60 % del largo y de no más de 6 px de grosor (un portón o un brazo
+    horizontales también llenan filas, pero son gruesos)."""
     arr = np.asarray(hoja).copy()
     tinta = arr.min(axis=2) < 215
     H, W = tinta.shape
-    for x in np.where(tinta.sum(axis=0) > H * 0.6)[0]:
-        arr[:, max(0, x - 2):x + 3] = 255
-    for y in np.where(tinta.sum(axis=1) > W * 0.6)[0]:
-        arr[max(0, y - 2):y + 3, :] = 255
+
+    def finas(marcadas):
+        idx = np.where(marcadas)[0]
+        grupos, ini = [], None
+        for i, v in enumerate(idx):
+            if ini is None: ini = v
+            if i == len(idx) - 1 or idx[i + 1] != v + 1:
+                if v - ini < 6: grupos.append((ini, v))
+                ini = None
+        return grupos
+
+    # solo cerca de los cortes nominales (tercios del ancho, mitad del alto) y casi continuas
+    cerca = lambda v, total, cortes: any(abs(v - total * c) < total * 0.08 for c in cortes)
+    for a, b in finas(tinta.sum(axis=0) > H * 0.85):
+        if cerca(a, W, (1 / 3, 2 / 3)): arr[:, max(0, a - 2):b + 3] = 255
+    for a, b in finas(tinta.sum(axis=1) > W * 0.85):
+        if cerca(a, H, (0.5,)): arr[max(0, a - 2):b + 3, :] = 255
     return Image.fromarray(arr)
 
 
@@ -90,10 +107,10 @@ def corte(perfil, centro, ventana):
     return int(idx[np.argmin(np.abs(idx - centro))])     # el mínimo más cercano al corte nominal
 
 
-def transparente(celda):
+def transparente(celda, umbral=226):
     arr = np.asarray(celda.convert("RGB")).astype(np.int16)
     h, w, _ = arr.shape
-    blanco = (arr.min(axis=2) > 226) & ((arr.max(axis=2) - arr.min(axis=2)) < 24)
+    blanco = (arr.min(axis=2) > umbral) & ((arr.max(axis=2) - arr.min(axis=2)) < 24)
     fuera = np.zeros((h, w), bool)
     q = deque()
     for x in range(w):
@@ -113,9 +130,10 @@ def transparente(celda):
     return rgba
 
 
-def hojas():
+def hojas(solo=None):
     props = {}
     for archivo, celdas in HOJAS.items():
+        if solo and solo not in archivo: continue
         p = AQUI / archivo
         if not p.exists():
             print("falta", archivo); continue
@@ -131,7 +149,7 @@ def hojas():
                 nombre, alto = celdas[i]; i += 1
                 op = OPCIONES.get(nombre, {})
                 if op.get("mitad") == "der": x0 = (x0 + x1) // 2
-                fig = transparente(hoja.crop((x0, y0, x1, y1)))
+                fig = transparente(hoja.crop((x0, y0, x1, y1)), op.get("blanco", 226))
                 if op.get("rayas"): fig = sin_rayas(fig)
                 caja = fig.getchannel("A").point(lambda v: 255 if v > 40 else 0).getbbox()
                 fig = fig.crop(caja)
@@ -168,5 +186,6 @@ def fondos(rejilla):
 
 
 if __name__ == "__main__":
-    fondos("--rejilla" in sys.argv)
-    hojas()
+    solo = next((a for a in sys.argv[1:] if not a.startswith("--")), None)   # p. ej. "objetos": solo esa hoja
+    if not solo: fondos("--rejilla" in sys.argv)
+    hojas(solo)

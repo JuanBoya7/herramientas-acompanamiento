@@ -101,13 +101,16 @@ PEDIDOS = {
 }
 
 
+PUERTA = "C:/Users/User/Documents/Varios/_agentes/generar-imagen.py"
+
+
 def generar(nombre):
+    """Regla del docente: Nano Banana primero hasta agotar la cuota; OpenAI solo de contingencia."""
     formato, brief = PEDIDOS[nombre]
     salida = AQUI / (nombre + ".jpg")
-    cmd = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", SCRIPT,
-           "-Descripcion", brief + " " + ESTILO, "-Salida", str(salida), "-Formato", formato, "-Paleta", "libre", "-EstiloRef", str(REF)]
+    cmd = [sys.executable, PUERTA, "--descripcion", brief + " " + ESTILO, "--salida", str(salida), "--formato", formato]
     r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
-    print(nombre, "->", "ok" if salida.exists() else "SIN IMAGEN\n" + r.stdout[-800:] + r.stderr[-800:], flush=True)
+    print(nombre, "->", (r.stdout.strip().splitlines() or ["?"])[-1][:200], flush=True)
 
 
 if __name__ == "__main__":
