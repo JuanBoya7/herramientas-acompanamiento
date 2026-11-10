@@ -162,6 +162,38 @@ PEDIDOS = {
         "on her lap, hands open on her knees, looking ahead. "
         "Cell 6: an antique brass toggle switch lever seen from the front, a short brass handle with a round ball tip, "
         "pointing straight UP."),
+    # ---------- lote 5 (2026-11-10): cabeceras de las hojas de trabajo; el motivo a la derecha
+    "cab-fear-dare": ("3:2", 'Wide header illustration. The subject sits in the RIGHT 45% of the image; the LEFT 55% is completely empty pure white paper, and the painting fades softly into that white toward the left (no hard edge). ' + "Subject: a stone staircase climbing a misty hillside; the first step is very small and low, "
+        "and " + MUJER + " is placing her foot on it."),
+    "cab-perfeccionismo": ("3:2", 'Wide header illustration. The subject sits in the RIGHT 45% of the image; the LEFT 55% is completely empty pure white paper, and the painting fades softly into that white toward the left (no hard edge). ' + "Subject: a potter's wheel with a slightly uneven clay vase being shaped by two clay-covered "
+        "hands, and behind it a shelf with imperfect pots, one repaired with golden seams."),
+    "cab-matriz": ("3:2", 'Wide header illustration. The subject sits in the RIGHT 45% of the image; the LEFT 55% is completely empty pure white paper, and the painting fades softly into that white toward the left (no hard edge). ' + "Subject: " + MUJER + " standing still at a crossroads in a meadow where four paths meet, looking "
+        "around calmly, a simple wooden signpost with four blank arms beside her."),
+    "cab-brujula": ("3:2", 'Wide header illustration. The subject sits in the RIGHT 45% of the image; the LEFT 55% is completely empty pure white paper, and the painting fades softly into that white toward the left (no hard edge). ' + "Subject: an open antique brass compass resting on a rock beside a path that winds toward low hills "
+        "at dawn."),
+    "cab-costo": ("3:2", 'Wide header illustration. The subject sits in the RIGHT 45% of the image; the LEFT 55% is completely empty pure white paper, and the painting fades softly into that white toward the left (no hard edge). ' + "Subject: an old brass balance scale on a wooden table: on one pan a small grey rain cloud, on the "
+        "other pan a heap of precious things (a framed photo, a small plant, running shoes, an unopened letter) hanging lower."),
+    "cab-entrar": ("3:2", 'Wide header illustration. The subject sits in the RIGHT 45% of the image; the LEFT 55% is completely empty pure white paper, and the painting fades softly into that white toward the left (no hard edge). ' + "Subject: a small six-sided garden pavilion (a hexagonal gazebo) with six open doorways, each "
+        "leading to a different little path, seen from slightly above, soft morning light."),
+    # ---------- lote 6 (2026-11-10): escenas de octubre que quedaron atrás
+    "cielo-fondo": ("3:2",
+        "A vast open sky over low soft hills: the sky fills the upper 78% of the image, clear and luminous pale blue with a "
+        "warm glow near the horizon and NO clouds at all (empty sky). At the bottom, a grassy hilltop where " + MUJER +
+        " sits small, seen from behind, at 22% of the width, looking at the sky."),
+    "ancla-fondo": ("3:2",
+        "Cutaway cross-section of the sea in a storm: dark rainy sky in the upper 30%; the water surface line at 32% of the "
+        "image height; below it deep teal-green water getting darker, down to a rocky sandy seabed along the bottom 14%. "
+        "No boat, no anchor, no rope, no fish: empty water."),
+    "hoja-octubre": ("3:2",
+        "Prop sheet: " + HOJA +
+        "Cell 1: a small wooden rowing boat with a short mast, strict side view, with " + MUJER + " sitting inside holding the sides. "
+        "Cell 2: an old iron ship anchor, front view. "
+        "Cell 3: an open human LEFT hand seen from the palm side, fingers together pointing up, wrist at the bottom, with a few "
+        "faint ink scribbles like handwriting on the palm. "
+        "Cell 4: an open human RIGHT hand seen from the palm side, fingers together pointing up, wrist at the bottom, with a few "
+        "faint ink scribbles like handwriting on the palm. "
+        "Cell 5: a pair of feet in simple canvas shoes seen from directly above, both pointing UP, with the hems of teal-grey trousers. "
+        "Cell 6: a single soft grey storm cloud with a darker underside."),
     "hoja-figuras": ("3:2",
         "Character sheet: " + HOJA + "All figures are the SAME woman: " + MUJER + ", all at the same scale. "
         "Cell 1 (top-left): the woman standing upright, full body, front three-quarter view, struggling: both arms raised and "

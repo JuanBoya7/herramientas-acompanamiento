@@ -8,6 +8,12 @@ sub: Cuando un paso valioso se frena, casi siempre tropieza en alguna de las cua
 fuente: Barreras FEAR y respuestas DARE en el plan de disposición y acción, en Harris, ACT Made Simple (2009), caps. 12 y 13; Luoma, Hayes y Walser, Learning ACT (2017), cap. 7.
 resumen: Se elige el paso valioso que está frenado y se marcan las barreras FEAR presentes. El panel transforma en vivo cada obstáculo en su respuesta DARE (defusión, aceptación, realismo en la meta y enlace con el valor) para acordar la versión más pequeña y honesta del paso.
 @@css
+  /* cabecera en acuarela: el motivo a la derecha de la tapa, como en las escenas */
+  header.tapa{background-image:url("[[imagen:cab-fear-dare.jpg]]");background-repeat:no-repeat;background-position:right center;
+    background-size:auto 210%;background-position:right 46%;padding-right:min(36%,250px);min-height:140px !important;
+    display:flex;flex-direction:column;justify-content:center}
+  @media(max-width:560px){header.tapa{background-size:auto 62%;background-position:right bottom;padding-right:15px;padding-bottom:84px}}
+  @media print{header.tapa{background-image:none;padding-right:15px;min-height:0}}
   .rejilla-fd{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
   .caja-fd{border:1px solid var(--linea);border-radius:10px;padding:13px 15px;background:#fbfcfd;
     transition:border-color .2s,background .2s,box-shadow .2s}

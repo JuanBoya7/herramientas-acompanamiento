@@ -111,7 +111,7 @@ function dibujar(){
   /* cartel izquierdo: Alivio inmediato (controlar y evitar) */
   g("rect", {x:16, y:26, width:218, height:56, rx:9, fill:"#fdf3ef", stroke:"#d99b8c", "stroke-width":1.6});
   const ti1 = g("text", {x:125, y:46, "text-anchor":"middle", style:"font:700 11.5px system-ui,sans-serif;fill:#9e3c2c"});
-  ti1.textContent = "← IR TRAS EL ALIVIO INMEDIATO";
+  ti1.textContent = "← el alivio inmediato";
   const ti2 = g("text", {x:125, y:66, "text-anchor":"middle", style:"font:600 11.5px system-ui,sans-serif;fill:#6e433b"});
   const q = Kit.activas("buscadoQuitar")[0] || "Controlar y evitar sentir";
   ti2.textContent = q.length > 30 ? q.slice(0, 29) + "…" : q;
@@ -119,7 +119,7 @@ function dibujar(){
   /* cartel derecho: Construir una vida con sentido */
   g("rect", {x:466, y:26, width:218, height:56, rx:9, fill:"#f1faf5", stroke:"#88bfa0", "stroke-width":1.8});
   const td1 = g("text", {x:575, y:46, "text-anchor":"middle", style:"font:700 11.5px system-ui,sans-serif;fill:#2c6647"});
-  td1.textContent = "CONSTRUIR VIDA CON SENTIDO →";
+  td1.textContent = "una vida con sentido →";
   const td2 = g("text", {x:575, y:66, "text-anchor":"middle", style:"font:600 11.5px system-ui,sans-serif;fill:#2c523d"});
   const p = Kit.activas("pilares")[0] || "Lo que importa cuidar";
   td2.textContent = p.length > 30 ? p.slice(0, 29) + "…" : p;
@@ -145,37 +145,12 @@ function dibujar(){
     svg.appendChild(gh);
   }
 
-  /* disco brújula / figura que rota de 180° (izquierda) a 0° (derecha) en el centro del sendero */
-  const cx = 335 + (angulo / 180) * 45;
-  const cy = 182;
-  const rad = (180 - angulo) * Math.PI / 180; /* angulo=0 -> apunta izq (pi); angulo=180 -> apunta der (0) */
-
-  g("circle", {
-    cx:cx, cy:cy, r:34, fill:"#fff", "fill-opacity":0.9,
-    stroke:etapa === 3 ? "#3f7d5a" : "#6c7f91", "stroke-width":2.2
-  });
-
-  /* arco de progreso del giro */
-  const gf = Kit.svg("g", {
-    transform:`translate(${cx.toFixed(1)} ${cy.toFixed(1)}) rotate(${(180 - angulo).toFixed(1)})`
-  });
-  const colPies = Kit.mezcla("#b0503f", "#3f7d5a", angulo / 180);
-  /* dos huellas de zapatos orientadas en la dirección actual */
-  gf.appendChild(Kit.svg("ellipse", {cx:2, cy:-9, rx:13, ry:5.5, fill:colPies, filter:Kit.acuarela(svg)}));
-  gf.appendChild(Kit.svg("ellipse", {cx:2, cy:9, rx:13, ry:5.5, fill:colPies, filter:Kit.acuarela(svg)}));
-  /* flecha de orientación de la mirada */
-  gf.appendChild(Kit.svg("path", {
-    d:"M16 0 L28 0 M22 -6 L29 0 L22 6",
-    fill:"none", stroke:colPies, "stroke-width":2.8, "stroke-linecap":"round", "stroke-linejoin":"round"
-  }));
+  /* los pies, vistos desde arriba, giran sobre el sendero: de mirar al alivio a mirar a lo que importa */
+  const cx = 335 + (angulo / 180) * 45, cy = 184, lado = 74;
+  g("ellipse", {cx:cx + 3, cy:cy + 6, rx:36, ry:24, fill:"#3a2f22", opacity:.18});
+  const gf = Kit.svg("g", {transform:`translate(${cx.toFixed(1)} ${cy.toFixed(1)}) rotate(${(angulo - 90).toFixed(1)})`});
+  gf.appendChild(Kit.figura("pies", "[[imagen:camino-pies.webp]]", {x:-lado * 1.023 / 2, y:-lado / 2, width:lado * 1.023, height:lado}));
   svg.appendChild(gf);
-
-  const tAng = g("text", {
-    x:cx, y:cy - 42, "text-anchor":"middle",
-    style:"font:700 12px system-ui,sans-serif;fill:#283845;paint-order:stroke;stroke:#fff;stroke-width:3"
-  });
-  tAng.textContent = `Giro: ${Math.round(angulo)}°`;
-  void rad;
 }
 
 const reloj = Kit.reloj(dt => {

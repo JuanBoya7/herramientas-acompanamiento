@@ -16,7 +16,7 @@ REVISION = {
  'act-brujula-de-valores': (4, [0, 1], 'Lo que importa y el lugar que está teniendo en la vida cotidiana.'),
  'act-costo-de-la-lucha': (5, [0, 1], 'Lo que has intentado: qué alivia en el momento y qué sucede con el tiempo.'),
  'act-por-donde-entrar': (3, [0, 1, 2], 'Un mapa de los seis procesos para orientar la formulación y elegir por dónde trabajar.'),
- 'act-soltar-el-anzuelo': (4, [0, 1], 'Un pensamiento y distintas formas de relacionarte con él. Elige una para explorar.'),
+ 'act-soltar-el-anzuelo': (4, [0, 1, 2, 3], 'Un pensamiento que baja al agua como un anzuelo y cinco maneras cortas de soltarlo.'),
  'act-matriz': (3, [0], 'Quién y qué importa, lo que aparece por dentro y los movimientos de la vida cotidiana.'),
  'act-los-ganchos': (5, [0, 1, 2, 3], 'Lo que engancha, lo que haces después y la dirección hacia la que quieres nadar.'),
  'act-el-cielo-y-el-clima': (4, [0, 1], 'Darle espacio a lo que aparece, como el cielo al clima que lo atraviesa.'),

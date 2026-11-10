@@ -10,6 +10,12 @@ resumen: Doce ámbitos vitales: se eligen direcciones de un mostrador y se calib
 campo3: Momento
 campo3ph: Ej. Sesión 4 / Revisión
 @@css
+  /* cabecera en acuarela: el motivo a la derecha de la tapa, como en las escenas */
+  header.tapa{background-image:url("[[imagen:cab-brujula.jpg]]");background-repeat:no-repeat;background-position:right center;
+    background-size:auto 210%;background-position:right 46%;padding-right:min(36%,250px);min-height:140px !important;
+    display:flex;flex-direction:column;justify-content:center}
+  @media(max-width:560px){header.tapa{background-size:auto 62%;background-position:right bottom;padding-right:15px;padding-bottom:84px}}
+  @media print{header.tapa{background-image:none;padding-right:15px;min-height:0}}
   .tablero{display:grid;grid-template-columns:minmax(330px,46%) 1fr;gap:18px;align-items:start}
   .panel-brujula{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);
     padding:16px 14px 12px;position:sticky;top:14px}

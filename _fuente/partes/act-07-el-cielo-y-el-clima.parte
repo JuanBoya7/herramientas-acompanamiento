@@ -134,30 +134,19 @@ function dibujar(){
   if(c){ resp = c[3] === "entra" ? p : c[3] === "sale" ? (c === CICLO[0] ? 0 : 1 - p) : 0; }
   const r = Math.min(200, 100 + Math.min(ciclos, 8) * 8) + resp * 22;
 
-  const def = Kit.svg("defs", {});
-  const grad = Kit.svg("radialGradient", {id:"gCielo", cx:"50%", cy:"45%", r:"60%"});
-  grad.appendChild(Kit.svg("stop", {offset:"0%", "stop-color":"#dff0fb"}));
-  grad.appendChild(Kit.svg("stop", {offset:"100%", "stop-color":"#a9cfe8"}));
-  def.appendChild(grad);
-  svg.appendChild(def);
-  svg.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78, fill:"url(#gCielo)"}));
-  /* la acuarela del cielo, recortada a la elipse que crece con cada ciclo */
-  const recorte = Kit.svg("clipPath", {id:"rCielo"});
-  recorte.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78}));
-  def.appendChild(recorte);
-  if(!acuarelaCielo) acuarelaCielo = Kit.svg("image", {href:"[[imagen:cielo-acuarela.jpg]]",
-    preserveAspectRatio:"xMidYMid slice", "clip-path":"url(#rCielo)", opacity:.82});
-  for(const [k, v] of Object.entries({x:220 - r * 1.25, y:140 - r * .78, width:r * 2.5, height:r * 1.56}))
-    acuarelaCielo.setAttribute(k, v);
+  /* el cielo entero sobre la colina; el espacio que se abre con cada ciclo es un trazo que crece */
+  if(!acuarelaCielo) acuarelaCielo = Kit.svg("image", {href:"[[imagen:cielo-colina-acuarela.jpg]]", x:0, y:0, width:440, height:293,
+    preserveAspectRatio:"none"});
   svg.appendChild(acuarelaCielo);
-  svg.appendChild(Kit.svg("ellipse", {cx:220, cy:140, rx:r * 1.25, ry:r * .78, fill:"none",
-    stroke:"#8fbfdc", "stroke-width":1.5, "stroke-dasharray":"3 5"}));
+  svg.appendChild(Kit.svg("ellipse", {cx:220, cy:128, rx:r * 1.02, ry:r * .64, fill:"#ffffff", opacity:.14}));
+  svg.appendChild(Kit.svg("ellipse", {cx:220, cy:128, rx:r * 1.02, ry:r * .64, fill:"none",
+    stroke:"#ffffff", "stroke-width":1.6, "stroke-dasharray":"3 6", opacity:.85}));
 
   /* el clima */
   const col = COLORES[uno("color")] || "#7b8490";
   const base = {"Pequeño":.7, "Mediano":1, "Grande":1.35}[uno("tamano")] || 1;
   const s = base * escala;
-  const x = 220 + Math.sin(deriva) * 26, y = 138 + Math.cos(deriva * .7) * 10;
+  const x = 220 + Math.sin(deriva) * 26, y = 122 + Math.cos(deriva * .7) * 10;
   /* el clima en vector, con textura de acuarela para que no desentone con el cielo */
   const g = Kit.svg("g", {transform:`translate(${x} ${y}) scale(${s})`, filter:Kit.acuarela(svg), opacity:.92});
   const forma = uno("forma") || "Nube";
@@ -184,7 +173,7 @@ function dibujar(){
 
   const n = Kit.activas("nombre").join(", ");
   if(n){
-    const tx = Kit.svg("text", {x:220, y:268, "text-anchor":"middle", "font-size":13, fill:"#55616d"});
+    const tx = Kit.svg("text", {x:300, y:268, "text-anchor":"middle", "font-size":13, "font-weight":600, fill:"#3b3128", style:"paint-order:stroke;stroke:#fffaf0;stroke-width:3.5px;stroke-linejoin:round"});
     tx.textContent = n + (Kit.activas("donde").length ? " · " + Kit.activas("donde").join(", ").toLowerCase() : "");
     svg.appendChild(tx);
   }

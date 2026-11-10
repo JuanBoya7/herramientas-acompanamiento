@@ -10,6 +10,12 @@ resumen: Cada estrategia de control se califica por alivio inmediato, resultado 
 campo3: Momento
 campo3ph: Ej. Sesión 2
 @@css
+  /* cabecera en acuarela: el motivo a la derecha de la tapa, como en las escenas */
+  header.tapa{background-image:url("[[imagen:cab-costo.jpg]]");background-repeat:no-repeat;background-position:right center;
+    background-size:auto 210%;background-position:right 46%;padding-right:min(36%,250px);min-height:140px !important;
+    display:flex;flex-direction:column;justify-content:center}
+  @media(max-width:560px){header.tapa{background-size:auto 62%;background-position:right bottom;padding-right:15px;padding-bottom:84px}}
+  @media print{header.tapa{background-image:none;padding-right:15px;min-height:0}}
   .agrega{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:12px}
   .agrega input{flex:1 1 260px}
   .sugeridas{margin-top:11px}

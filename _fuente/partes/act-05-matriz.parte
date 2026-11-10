@@ -8,6 +8,12 @@ sub: Dos líneas que se cruzan y cuatro preguntas. Abajo, lo que nadie más ve: 
 fuente: La matriz ACT, paso 1, en Polk, Schoendorff, Webster y Olaz, The Essential Guide to the ACT Matrix (2016).
 resumen: Los cuatro cuadrantes de la matriz, en el orden en que los recorren sus autores: quién y qué importa, qué se interpone, qué haces para alejarte y qué podrías hacer para acercarte. Deja acordada la práctica de notar movimientos hacia y de alejamiento.
 @@css
+  /* cabecera en acuarela: el motivo a la derecha de la tapa, como en las escenas */
+  header.tapa{background-image:url("[[imagen:cab-matriz.jpg]]");background-repeat:no-repeat;background-position:right center;
+    background-size:auto 210%;background-position:right 46%;padding-right:min(36%,250px);min-height:140px !important;
+    display:flex;flex-direction:column;justify-content:center}
+  @media(max-width:560px){header.tapa{background-size:auto 62%;background-position:right bottom;padding-right:15px;padding-bottom:84px}}
+  @media print{header.tapa{background-image:none;padding-right:15px;min-height:0}}
   .matriz{position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;
     gap:0;border-radius:var(--radio);overflow:hidden;border:1px solid var(--linea);background:#fff}
   .cuad{padding:14px 16px 16px;min-height:150px}

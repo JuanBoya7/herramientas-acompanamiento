@@ -8,6 +8,12 @@ sub: Cuando la mente impone «no equivocarse», «no sentir duda» o «hacerlo i
 fuente: Metas de persona muerta frente a metas valiosas, pasos imperfectos y los dos maestros, en Kemp, The ACT Workbook for Perfectionism (2021), caps. 1, 5 y 6; Ong y Twohig, The Anxious Perfectionist (2022), cap. 7.
 resumen: Se identifica la regla rígida que hoy bloquea la acción, se traduce la exigencia de «no fallar ni sentir» en una meta de persona viva y se elige entre la voz del crítico implacable y la del maestro firme y compasivo para ensayar un paso imperfecto.
 @@css
+  /* cabecera en acuarela: el motivo a la derecha de la tapa, como en las escenas */
+  header.tapa{background-image:url("[[imagen:cab-perfeccionismo.jpg]]");background-repeat:no-repeat;background-position:right center;
+    background-size:auto 210%;background-position:right 46%;padding-right:min(36%,250px);min-height:140px !important;
+    display:flex;flex-direction:column;justify-content:center}
+  @media(max-width:560px){header.tapa{background-size:auto 62%;background-position:right bottom;padding-right:15px;padding-bottom:84px}}
+  @media print{header.tapa{background-image:none;padding-right:15px;min-height:0}}
   .traductor{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
   .col-meta{border:1px solid var(--linea);border-radius:10px;padding:14px 15px;background:#fbfcfd}
   .col-meta.muerta{border-top:4px solid #b0503f;background:#fdf7f5}

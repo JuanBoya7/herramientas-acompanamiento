@@ -35,6 +35,7 @@ FONDOS = {
     "observador-acuarela": ("observador-fondo.jpg", None),
     "diana-acuarela": ("diana-fondo.jpg", None),
     "dulce-acuarela": ("dulce-fondo.jpg", None),
+    "cielo-colina-acuarela": ("cielo-fondo.jpg", None),
     # lote 4: todos enteros, 3:2 (viewBox 700x467)
     "tablero-acuarela": ("tablero-fondo.jpg", None),
     "poligrafo-acuarela": ("poligrafo-fondo.jpg", None),
@@ -60,6 +61,8 @@ HOJAS = {
     "hoja-invitados.jpg": [("ochenta-invitado-%d" % i, 220) for i in range(1, 7)],
     "hoja-varios.jpg": [("moneda-dolor", 240), ("moneda-valor", 240), ("anzuelo-pez", 140),
                         ("papel-empuja", 300), ("papel-regazo", 300), ("interruptor-palanca", 200)],
+    "hoja-octubre.jpg": [("ancla-barca", 220), ("ancla-hierro", 200), ("manos-izq", 300), ("manos-der", 300),
+                         ("camino-pies", 220), ("cielo-nube", 160)],
     "hoja-objetos.jpg": [("trampa-mano", 200), ("pero-porton-cerrado", 240), ("pero-porton-abierto", 240),
                          ("juicio-taza", 200), ("dial-perilla", 240), ("juicio-camara", 260)],
 }
@@ -68,7 +71,7 @@ HOJAS = {
 # ajustes por recorte: "rayas" borra trazos horizontales finos (mesa insinuada), "mitad" toma media celda
 # "blanco": umbral más alto para objetos muy claros (piel, loza), que si no se agujerean
 OPCIONES = {"sushi-persona": {"rayas": True}, "paseo-discute": {"mitad": "der"},
-            "trampa-mano": {"blanco": 247}, "juicio-taza": {"blanco": 247},
+            "trampa-mano": {"blanco": 247}, "juicio-taza": {"blanco": 247}, "manos-izq": {"blanco": 247}, "manos-der": {"blanco": 247},
             "tablero-blanca-peon": {"blanco": 247}, "tablero-blanca-caballo": {"blanco": 247}, "tablero-blanca-reina": {"blanco": 247},
             "papel-empuja": {"blanco": 245}, "papel-regazo": {"blanco": 245},
             # "huecos": además quita el blanco encerrado (entre las tablas de un portón)

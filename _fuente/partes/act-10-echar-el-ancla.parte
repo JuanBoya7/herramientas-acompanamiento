@@ -183,39 +183,12 @@ function dibujar(){
     "stroke-width":3, "stroke-dasharray":"5 4", "stroke-linecap":"round"
   });
 
-  /* el ancla en vector con textura de acuarela */
-  const ga = Kit.svg("g", {
-    transform:`translate(${anclaX.toFixed(1)} ${cadenaY.toFixed(1)})`,
-    filter:Kit.acuarela(svg)
-  });
-  ga.appendChild(Kit.svg("circle", {cx:0, cy:-10, r:4, fill:"none", stroke:"#2c3a48", "stroke-width":2.4}));
-  ga.appendChild(Kit.svg("line", {x1:0, y1:-6, x2:0, y2:10, stroke:"#2c3a48", "stroke-width":3}));
-  ga.appendChild(Kit.svg("line", {x1:-8, y1:-2, x2:8, y2:-2, stroke:"#2c3a48", "stroke-width":2.4}));
-  ga.appendChild(Kit.svg("path", {
-    d:"M-12 4 Q 0 16 12 4", fill:"none", stroke:tramo === 3 ? "#2c5a44" : "#2c3a48",
-    "stroke-width":3, "stroke-linecap":"round"
-  }));
-  svg.appendChild(ga);
-
-  /* el barco en acuarela vectorial */
-  const gb = Kit.svg("g", {
-    transform:`translate(${bx.toFixed(1)} ${olaEnBarco.toFixed(1)}) rotate(${inclinacion.toFixed(1)})`,
-    filter:Kit.acuarela(svg)
-  });
-  /* mástil y vela */
-  gb.appendChild(Kit.svg("line", {x1:0, y1:0, x2:0, y2:-62, stroke:"#5a4634", "stroke-width":3.2}));
-  gb.appendChild(Kit.svg("path", {
-    d:"M2 -58 L38 -16 L2 -16 Z", fill:tramo === 3 ? "#f4faf6" : "#fbf8f1",
-    stroke:"#8a7968", "stroke-width":1.5
-  }));
-  gb.appendChild(Kit.svg("path", {
-    d:"M-2 -54 L-28 -18 L-2 -18 Z", fill:"#efe9dc", stroke:"#8a7968", "stroke-width":1.4
-  }));
-  /* casco */
-  gb.appendChild(Kit.svg("path", {
-    d:"M-46 -6 L46 -6 L32 14 L-32 14 Z",
-    fill:tramo === 3 ? "#3f7d5a" : "#8a4a2c", stroke:"#3b2a1e", "stroke-width":1.8
-  }));
+  /* el ancla de hierro y la barca, en acuarela */
+  const ah = 40, aw = ah * 0.76;
+  svg.appendChild(Kit.figura("ancla", "[[imagen:ancla-hierro.webp]]", {x:anclaX - aw / 2, y:cadenaY - 26, width:aw, height:ah}));
+  const gb = Kit.svg("g", {transform:`translate(${bx.toFixed(1)} ${olaEnBarco.toFixed(1)}) rotate(${inclinacion.toFixed(1)})`});
+  const bw = 124, bh = bw / 1.173;
+  gb.appendChild(Kit.figura("barca", "[[imagen:ancla-barca.webp]]", {x:-bw / 2, y:-bh + 22, width:bw, height:bh}));
   svg.appendChild(gb);
 
   /* rótulo en el fondo cuando el ancla agarra */

@@ -87,6 +87,7 @@ function textoFrente(){
   return f.length ? f.join(" · ") : "Lo que importa frente a ti";
 }
 
+const MANO_IZQ = {href:"[[imagen:manos-izq.webp]]", r:0.47}, MANO_DER = {href:"[[imagen:manos-der.webp]]", r:0.507};
 function dibujar(){
   const svg = $("svgManos");
   svg.innerHTML = "";
@@ -139,16 +140,11 @@ function dibujar(){
   [[-1, fIzq], [1, fDer]].forEach(([lado, frase]) => {
     const cx = 350 + lado * sep;
     const gm = Kit.svg("g", {
-      transform:`translate(${cx.toFixed(1)} ${yManos.toFixed(1)}) scale(${escala.toFixed(2)})`,
-      filter:Kit.acuarela(svg)
+      transform:`translate(${cx.toFixed(1)} ${yManos.toFixed(1)}) scale(${escala.toFixed(2)})`
     });
     /* silueta cálida de palma abierta y dedos */
-    gm.appendChild(Kit.svg("path", {
-      d: lado < 0
-        ? "M-68 70 L-68 -10 Q-68 -52 -52 -52 Q-38 -52 -38 -16 L-38 -68 Q-38 -96 -22 -96 Q-6 -96 -6 -22 L-6 -76 Q-6 -104 10 -104 Q26 -104 26 -22 L26 -62 Q26 -86 42 -86 Q56 -86 56 -12 L56 12 Q76 -8 88 4 Q98 16 68 48 L52 72 Z"
-        : "M68 70 L68 -10 Q68 -52 52 -52 Q38 -52 38 -16 L38 -68 Q38 -96 22 -96 Q6 -96 6 -22 L6 -76 Q6 -104 -10 -104 Q-26 -104 -26 -22 L-26 -62 Q-26 -86 -42 -86 Q-56 -86 -56 -12 L-56 12 Q-76 -8 -88 4 Q-98 16 -68 48 L-52 72 Z",
-      fill:"#e7c4aa", stroke:"#9c7258", "stroke-width":2.2
-    }));
+    const fm = lado < 0 ? MANO_IZQ : MANO_DER, am = 184 * fm.r;
+    gm.appendChild(Kit.figura("mano" + lado, fm.href, {x:-am / 2, y:-110, width:am, height:184}));
     svg.appendChild(gm);
 
     /* texto escrito sobre la palma (sin filtro de desplazamiento para máxima nitidez) */
