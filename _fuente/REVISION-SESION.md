@@ -85,7 +85,7 @@ Criterio acordado: protagonismo y acceso inicial al componente aprovechable en c
 | act-pasear-la-mente | La charla incesante de la mente anotada en su globo y la dirección que eligen tus pies con libertad. | 0, 1, 2 |
 | act-pero-por-y | Cambiar el «pero» que frena la vida por el «y» que permite sentir lo que hay y aun así caminar hacia lo valioso. | 0, 1, 2 |
 | met-cinta-de-sushi | Los platillos mentales que desfilan por la cinta transportadora sin obligación de comprarlos ni tragarlos. | 0, 1, 2 |
-| act-piloto-automatico | Identificar una rutina cotidiana hecha en piloto automático y encender los cinco sentidos para habitar el presente. | 0, 1, 2 |
+| act-piloto-automatico | Una rutina cotidiana que se borra cuando la mente se va, y tres sentidos por los que volver a ella. | 0, 1, 2 |
 | act-hecho-o-juicio | Separar lo que una cámara de video registraría (hecho descriptivo) de la etiqueta valorativa que añade la mente (juicio). | 0, 1, 2 |
 | act-observador-en-el-tiempo | Tres momentos distintos de la vida conectados por el mismo testigo silencioso que mira por detrás de los ojos. | 0, 1, 2 |
 | met-dos-montanas | La roca que de cerca parece tapar todo el camino y el sendero completo visto desde la montaña de enfrente. | 0, 1, 2 |

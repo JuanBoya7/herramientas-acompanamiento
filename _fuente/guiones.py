@@ -1863,3 +1863,7 @@ GUIONES = {
    'Refuerce que la disposición no es resignarse ni querer sufrir, sino elegir vivir con las manos '
    'libres.'])],
 }
+
+# Correcciones de redacción tras el rework de escenas (ver ajustes_texto.py).
+import ajustes_texto as _ajustes
+_HALLADOS_GUIONES = _ajustes.aplicar(GUIONES)

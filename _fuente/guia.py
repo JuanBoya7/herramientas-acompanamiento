@@ -1644,6 +1644,13 @@ GUIA = [
 ]
 
 # Encadenamientos que se repiten. Cada uno es una secuencia de hojas.
+# Correcciones de redacción tras el rework de escenas (ver ajustes_texto.py).
+import ajustes_texto as _ajustes
+_FICHAS = {e["archivo"]: e for _g, _l in GUIA for e in _l}
+_HALLADOS_GUIA = _ajustes.aplicar(_FICHAS)
+for _g, _l in GUIA:
+    for _i, _e in enumerate(_l): _l[_i] = _FICHAS[_e["archivo"]]
+
 RUTAS = [
  {"nombre":"Ansiedad y evitación", "color":"#c26a4e",
   "cuando":"Evitación experiencial con agenda de control instalada.",
