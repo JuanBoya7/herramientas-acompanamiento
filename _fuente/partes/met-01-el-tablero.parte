@@ -102,7 +102,9 @@ const BROTES_NEGROS = [
 ];
 const BROTES_BLANCOS = [
   "Tengo que poder","No pasa nada","Hay gente peor","Ya se me va a pasar",
-  "Solo tengo que esforzarme","Piensa positivo","Es cuestión de actitud","Respira y ya"
+  "Solo tengo que esforzarme","Piensa positivo","Es cuestión de actitud","Respira y ya",
+  "Esta vez sí","Soy fuerte","No es para tanto","Todo tiene solución",
+  "Yo puedo con esto","Mañana será distinto","Tengo que calmarme","No debería preocuparme"
 ];
 
 const SOLA = 3.4;                 /* cada cuánto brota una negra por su cuenta */
@@ -135,6 +137,9 @@ function latido(dt){
     const {b, n} = elegidas();
     const t = brote(BROTES_NEGROS, n.concat(brotesN));
     if(t) brotesN.push(t);
+    /* y a cada negra le sale al paso una blanca: la partida es pareja y por eso no termina */
+    const tb = brote(BROTES_BLANCOS, b.concat(brotesB));
+    if(tb) brotesB.push(tb);
     proximaSola = SOLA + Math.random() * 2;
     recomponer();
   }
@@ -229,9 +234,9 @@ function dibujar(){
   if(mesa > .02) g("rect", {x:x0 - 34, y:y0 - 34, width:lado + 68, height:lado + 68, rx:6, fill:"none",
     stroke:"#3f7d5a", "stroke-width":4, opacity:mesa.toFixed(2)}, mundo);
 
-  /* Las negras engordan con cada empujón; las blancas casi no. */
+  /* Con cada empujón engordan los dos bandos por igual. */
   const rN = 15 + Math.min(8, rondas * 1.4);
-  const rB = 15 + Math.min(8, rondas * 1.4) * .35;
+  const rB = rN;
 
   piezas.forEach(p => {
     const negra = p.bando === "negra";
@@ -266,7 +271,7 @@ function dibujar(){
     mundo.appendChild(t);
   };
   if(sobranN > 0) rotulo(CX, CY + 218, `y ${sobranN} más que ya no caben`, "#22262b");
-  if(sobranB > 0) rotulo(CX, CY - 214, `y ${sobranB} más`, "#7a6a4e");
+  if(sobranB > 0) rotulo(CX, CY - 214, `y ${sobranB} más que ya no caben`, "#5d4c2c");
 
   if(mesa > .05){
     g("circle", {cx:CX, cy:CY, r:198, fill:"none", stroke:"#3f7d5a",
@@ -302,14 +307,16 @@ function pelear(){
   if(!escena.anda()) escena.andar();
   rondas++;
   energia += 10 + rondas * 5;
-  /* Dos pensamientos negros nuevos por empujón, y uno blanco de respuesta. */
+  /* Dos pensamientos negros nuevos por empujón, y dos blancos de respuesta. */
   const puestosN = n.concat(brotesN), puestosB = b.concat(brotesB);
   for(let k = 0; k < 2; k++){
     const t = brote(BROTES_NEGROS, puestosN);
     if(t){ brotesN.push(t); puestosN.push(t); }
   }
-  const tb = brote(BROTES_BLANCOS, puestosB);
-  if(tb) brotesB.push(tb);
+  for(let k = 0; k < 2; k++){
+    const tb = brote(BROTES_BLANCOS, puestosB);
+    if(tb){ brotesB.push(tb); puestosB.push(tb); }
+  }
 
   vista = "partida";
   $("btnVolver").hidden = true;

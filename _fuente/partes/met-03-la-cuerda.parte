@@ -152,17 +152,10 @@ function persona(padre, x, base, col, estado, tiembla){
   const cad = base - 46, hom = base - 84, cab = base - 98;
 
   if(estado === "caido"){
-    padre.setAttribute("filter", Kit.acuarela(padre.ownerSVGElement || padre));
-    /* dentro del hoyo, con los brazos arriba */
-    const y = base + 26;
-    g("circle", {cx:x, cy:y, r:11, fill:col});
-    g("path", {d:`M${x - 5} ${y - 8} q 5 -7 10 0`, stroke:"#2c3a48", "stroke-width":3,
-      fill:"none", "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${y + 11} L${x} ${y + 26}`, stroke:col, "stroke-width":6,
-      "stroke-linecap":"round"});
-    g("path", {d:`M${x} ${y + 15} L${x - 16} ${y - 2} M${x} ${y + 15} L${x + 16} ${y - 2}`,
-      stroke:col, "stroke-width":5, "stroke-linecap":"round"});
-    return {mano:[x, y - 2]};
+    /* dentro del hoyo, colgado de la cuerda con los brazos arriba: la misma persona, en acuarela */
+    const alto = 132, ancho = alto * 0.438, izq = x - ancho * 0.5, arriba = base - 40;
+    padre.appendChild(Kit.figura("personaCaida", "[[imagen:cuerda-caido.webp]]", {x:izq, y:arriba, width:ancho, height:alto}));
+    return {mano:[izq + ancho * 0.72, arriba + 6]};
   }
 
   /* La persona en acuarela, de unos 112 px de alto como el dibujo anterior. Tirando,
@@ -241,7 +234,7 @@ function dibujar(){
     globo(svg, px, SUELO - 172, Kit.activas("manosLibres"));
   } else {
     /* la cuerda tensa por encima del hoyo: se comba menos cuanto más se jala */
-    const combado = caido ? 40
+    const combado = caido ? 10
       : Math.max(4, 26 - jalones * 2) + (tenso ? Math.sin(fase * 15) * 1.6 : 0);
     g("path", {d:`M${p.mano[0]} ${p.mano[1]} Q ${(px + mx) / 2} ${p.mano[1] + combado} ` +
       `${m.mano[0]} ${m.mano[1]}`, stroke:"#8a7a5f", "stroke-width":4, fill:"none",
