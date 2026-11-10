@@ -28,8 +28,8 @@ campo3ph: Ej. Sesión 2
 </section>
 
 <div class="escenario">
-  <svg id="papel" viewBox="0 0 700 300" role="img"
-    aria-label="Registro de polígrafo con la aguja, la zona de descarga y la línea del piso"></svg>
+  <svg id="papel" viewBox="0 0 700 467" role="img"
+    aria-label="Una persona conectada a un polígrafo; la aguja dibuja sobre el rollo de papel"></svg>
   <div class="marcas">
     <div><span class="n" id="mNivel" style="color:#8a3d3d">0</span><span class="r">la aguja</span></div>
     <div><span class="n" id="mPiso" style="color:#c9962f">18</span><span class="r">el piso al que vuelve</span></div>
@@ -97,10 +97,11 @@ function latido(dt){
 }
 
 /* ====================== EL PAPEL ====================== */
-const Y0 = 252, Y1 = 42;                 /* nivel 0 abajo, nivel 100 arriba */
-const X0 = 44,  X1 = 656;
+const Y0 = 300, Y1 = 160;                 /* nivel 0 abajo, nivel 100 arriba */
+const X0 = 338, X1 = 668;
 const alturaDe = v => Y0 - (v / 100) * (Y0 - Y1);
 
+let fondoSala = null;
 function dibujar(){
   const svg = $("papel");
   svg.innerHTML = "";
@@ -110,14 +111,11 @@ function dibujar(){
     t.textContent = s; svg.appendChild(t); return t;
   };
 
-  g("rect", {x:0, y:0, width:700, height:300, fill:"#f7f4ee"});
-  /* la cuadrícula del papel de registro */
-  for(let y = Y1; y <= Y0; y += 21)
-    g("path", {d:`M${X0} ${y} L${X1} ${y}`, stroke:"#e6ddcd", "stroke-width":1});
-  for(let x = X0; x <= X1; x += 34)
-    g("path", {d:`M${x} ${Y1} L${x} ${Y0}`, stroke:"#e6ddcd", "stroke-width":1});
-  g("rect", {x:X0, y:Y1, width:X1 - X0, height:Y0 - Y1, fill:"none", stroke:"#c9bda6",
-    "stroke-width":1.5});
+  if(!fondoSala) fondoSala = Kit.svg("image", {href:"[[imagen:poligrafo-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondoSala);
+  /* la cuadrícula tenue del papel de registro */
+  for(let y = Y1; y <= Y0; y += 20)
+    g("path", {d:`M${X0} ${y} L${X1} ${y}`, stroke:"#b9a98a", "stroke-width":.6, opacity:.5});
 
   /* la zona de descarga, arriba */
   g("rect", {x:X0, y:Y1, width:X1 - X0, height:alturaDe(100) - Y1 + 20, fill:"#8a3d3d",
@@ -154,14 +152,12 @@ function dibujar(){
 
   /* qué se está midiendo */
   const et = loQue().length ? loQue().join(" · ") : "lo que no puedes sentir";
-  texto(X0 + 6, 26, et.length > 44 ? et.slice(0, 43) + "…" : et,
-    "font:600 13px system-ui;fill:#3f5163", "start");
-  texto(X1 - 6, 26, "no puedes sentirlo",
-    "font:italic 12px system-ui;fill:#8a7f74", "end");
+  texto(X0 + 4, Y1 - 28, et.length > 40 ? et.slice(0, 39) + "…" : et,
+    "font:600 14px Georgia,serif;font-style:italic;fill:#2c3e50;paint-order:stroke;stroke:#fbf8f0;stroke-width:4px;stroke-linejoin:round", "start");
 
   /* el fogonazo de la descarga */
   if(fogonazo > 0)
-    g("rect", {x:0, y:0, width:700, height:300, fill:"#8a3d3d",
+    g("rect", {x:0, y:0, width:700, height:467, fill:"#8a3d3d",
       opacity:(fogonazo * .42).toFixed(2)});
 }
 

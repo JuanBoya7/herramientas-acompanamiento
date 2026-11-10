@@ -35,6 +35,17 @@ FONDOS = {
     "observador-acuarela": ("observador-fondo.jpg", None),
     "diana-acuarela": ("diana-fondo.jpg", None),
     "dulce-acuarela": ("dulce-fondo.jpg", None),
+    # lote 4: todos enteros, 3:2 (viewBox 700x467)
+    "tablero-acuarela": ("tablero-fondo.jpg", None),
+    "poligrafo-acuarela": ("poligrafo-fondo.jpg", None),
+    "radio-acuarela": ("radio-fondo.jpg", None),
+    "interruptor-acuarela": ("interruptor-fondo.jpg", None),
+    "escenario-acuarela": ("escenario-fondo.jpg", None),
+    "moneda-acuarela": ("moneda-fondo.jpg", None),
+    "ochenta-acuarela": ("ochenta-fondo.jpg", None),
+    "palabra-acuarela": ("palabra-fondo.jpg", None),
+    "papel-acuarela": ("papel-fondo.jpg", None),
+    "anzuelo-acuarela": ("anzuelo-fondo.jpg", None),
 }
 # hoja: [(nombre, alto en px)]
 HOJAS = {
@@ -43,6 +54,12 @@ HOJAS = {
     "hoja-platos.jpg": [("sushi-plato-%d" % i, 150) for i in range(1, 7)],
     "hoja-muebles.jpg": [("casa-sillon", 200), ("casa-cajas", 200), ("casa-armario", 240),
                          ("casa-lampara", 240), ("casa-piano", 200), ("casa-espejo", 240)],
+    "hoja-ajedrez.jpg": [("tablero-blanca-peon", 200), ("tablero-blanca-caballo", 200), ("tablero-blanca-reina", 200),
+                         ("tablero-negra-peon", 200), ("tablero-negra-caballo", 200), ("tablero-negra-reina", 200)],
+    "hoja-actores.jpg": [("escenario-actor-%d" % i, 260) for i in range(1, 7)],
+    "hoja-invitados.jpg": [("ochenta-invitado-%d" % i, 220) for i in range(1, 7)],
+    "hoja-varios.jpg": [("moneda-dolor", 240), ("moneda-valor", 240), ("anzuelo-pez", 140),
+                        ("papel-empuja", 300), ("papel-regazo", 300), ("interruptor-palanca", 200)],
     "hoja-objetos.jpg": [("trampa-mano", 200), ("pero-porton-cerrado", 240), ("pero-porton-abierto", 240),
                          ("juicio-taza", 200), ("dial-perilla", 240), ("juicio-camara", 260)],
 }
@@ -52,6 +69,8 @@ HOJAS = {
 # "blanco": umbral más alto para objetos muy claros (piel, loza), que si no se agujerean
 OPCIONES = {"sushi-persona": {"rayas": True}, "paseo-discute": {"mitad": "der"},
             "trampa-mano": {"blanco": 247}, "juicio-taza": {"blanco": 247},
+            "tablero-blanca-peon": {"blanco": 247}, "tablero-blanca-caballo": {"blanco": 247}, "tablero-blanca-reina": {"blanco": 247},
+            "papel-empuja": {"blanco": 245}, "papel-regazo": {"blanco": 245},
             # "huecos": además quita el blanco encerrado (entre las tablas de un portón)
             "pero-porton-cerrado": {"huecos": True}, "pero-porton-abierto": {"huecos": True}}
 

@@ -44,7 +44,7 @@ REVISION = {
  'met-el-bus': (5, [0, 1, 2], 'Una dirección importante y los pasajeros que aparecen durante el camino.'),
  'met-los-ochenta-anos': (4, [0, 1, 2, 3], 'Personas importantes y la huella que quisieras dejar en sus vidas.'),
  'met-el-poligrafo': (3, [0, 1, 2], 'Explora qué ocurre cuando intentas controlar lo que estás sintiendo.'),
- 'met-la-palabra-repetida': (5, [0, 2, 4], 'Di la palabra en voz alta al ritmo del punto. Prueba primero con «limón» y observa qué ocurre.'),
+ 'met-la-palabra-repetida': (5, [0, 2, 4], 'Di la palabra en voz alta al ritmo del punto. Prueba primero con «leche» y observa qué ocurre.'),
  'met-la-radio': (4, [0, 1, 2, 3], 'Una tarea por hacer mientras la radio de la mente sigue transmitiendo.'),
  'met-el-hoyo': (3, [0, 1, 2], 'Lo que has estado haciendo para salir del hoyo y lo que ocurre al seguir cavando.'),
  'pp-tres-cosas-buenas': (4, [0], 'Recupera algo bueno de hoy o de ayer y explora qué hizo posible que ocurriera.'),

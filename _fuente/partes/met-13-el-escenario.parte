@@ -27,12 +27,13 @@ resumen: Se identifica qué voz acapara hoy el centro del escenario y qué otros
 </section>
 
 <div class="escenario">
-  <svg class="teatro" id="svgTeatro" viewBox="0 0 700 260" role="img"
-    aria-label="Un escenario teatral visto desde la butaca con controles para abrir la luz a toda la escena"></svg>
-  <div class="fase" id="fase">Reflector cerrado sobre el problema</div>
-  <div class="fase-sub" id="faseSub">El cono de luz dura agiganta a un solo actor y deja el resto del escenario en la oscuridad.</div>
+  <svg class="teatro" id="svgTeatro" viewBox="0 0 700 467" role="img"
+    aria-label="Un teatro visto desde las butacas: el reflector, las tablas y quien mira"></svg>
+  <div class="marcas">
+    <div><span class="n" id="mVolvi" style="color:#3f7d5a">0</span><span class="r">veces que volví a abrir la luz</span></div>
+  </div>
   <div class="duracion" id="luces">
-    <button type="button" class="chip activa" id="luzCerrada" onclick="ponerLuz('cerrada')">Reflector cerrado sobre el problema</button>
+    <button type="button" class="chip activa" id="luzCerrada" onclick="ponerLuz('cerrada')">Reflector cerrado</button>
     <button type="button" class="chip" id="luzAbierta" onclick="ponerLuz('abierta')">Encender las luces de todo el escenario</button>
     <button type="button" class="chip" id="luzButaca" onclick="ponerLuz('butaca')">Mirar desde la butaca</button>
   </div>
@@ -82,129 +83,49 @@ function listaOtros(){
   return ["El afecto por los míos", "Lo que sí salió bien hoy", "La calma de este momento"];
 }
 
+let fondoTeatro = null, volvi = 0, abierto = 0;
+const ACTORES = [{href:"[[imagen:escenario-actor-1.webp]]", r:0.85}, {href:"[[imagen:escenario-actor-2.webp]]", r:0.412}, {href:"[[imagen:escenario-actor-3.webp]]", r:0.365}, {href:"[[imagen:escenario-actor-4.webp]]", r:0.492}, {href:"[[imagen:escenario-actor-5.webp]]", r:0.546}, {href:"[[imagen:escenario-actor-6.webp]]", r:0.581}];
+const TABLAS = 248;      /* donde pisan los actores */
 function dibujar(){
   const svg = $("svgTeatro");
   svg.innerHTML = "";
-  const g = (tag, a) => svg.appendChild(Kit.svg(tag, a));
+  const g = (tag, a, p) => (p || svg).appendChild(Kit.svg(tag, a));
+  const rotulo = (x, y, s, tam, color, op) => {
+    const e = Kit.svg("text", {x, y, "text-anchor":"middle",
+      style:`font:600 ${tam}px Georgia,serif;font-style:italic;fill:${color};opacity:${op};paint-order:stroke;stroke:#151b22;stroke-width:4px;stroke-linejoin:round`});
+    e.textContent = s; svg.appendChild(e);
+  };
+  const actor = (clave, cual, x, alto, op) => {
+    const f = ACTORES[cual], w = alto * f.r;
+    svg.appendChild(Kit.figura(clave, f.href, {x:x - w / 2, y:TABLAS - alto, width:w, height:alto, opacity:op}));
+  };
+  if(!fondoTeatro) fondoTeatro = Kit.svg("image", {href:"[[imagen:escenario-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondoTeatro);
 
-  /* fondo del teatro: pasa de negro cerrado a azul cálido iluminado */
-  const colFondo = Kit.mezcla("#1c2029", "#304459", apertura);
-  g("rect", {x:0, y:0, width:700, height:260, fill:colFondo});
+  /* los demás siguen en las tablas aunque no se los vea */
+  const otros = listaOtros(), sitios = [150, 232, 468, 556];
+  otros.slice(0, 4).forEach((txt, i) => actor("otro" + i, [3, 4, 5, 1][i], sitios[i], 104, 1));
 
-  /* telones laterales en acuarela vectorial */
-  g("path", {
-    d:"M0 0 L62 0 Q48 100 32 195 L0 195 Z",
-    fill:"#6e2b2b", opacity:.85, filter:Kit.acuarela(svg)
-  });
-  g("path", {
-    d:"M700 0 L638 0 Q652 100 668 195 L700 195 Z",
-    fill:"#6e2b2b", opacity:.85, filter:Kit.acuarela(svg)
-  });
+  /* la sala a oscuras: con el reflector cerrado solo existe lo que está bajo el cono */
+  const oscuro = 0.8 * (1 - apertura);
+  if(oscuro > 0.01) g("rect", {x:0, y:0, width:700, height:260, fill:"#0b1016", opacity:oscuro.toFixed(3)});
+  if(apertura > 0.02) g("ellipse", {cx:350, cy:150, rx:310 * apertura, ry:120 * apertura, fill:"#ffe9b8", opacity:(0.18 * apertura).toFixed(2), style:"mix-blend-mode:soft-light"});
+  if(apertura < 0.98) g("polygon", {points:`350,0 ${262 - 40 * apertura},${TABLAS + 6} ${438 + 40 * apertura},${TABLAS + 6}`, fill:"#fff3c4", opacity:((1 - apertura) * 0.3).toFixed(2)});
 
-  /* tablas del escenario */
-  const colTablas = Kit.mezcla("#382c22", "#8f6d4f", apertura);
-  g("path", {
-    d:"M28 190 L672 190 L700 232 L0 232 Z",
-    fill:colTablas, stroke:"#241b14", "stroke-width":1.5
-  });
-
-  /* luz general cálida cuando se enciende todo el escenario */
-  if(apertura > 0.02){
-    g("ellipse", {
-      cx:350, cy:135, rx:300 * apertura, ry:95 * apertura,
-      fill:"#f9eed2", opacity:(0.32 * apertura).toFixed(2)
-    });
-  }
-
-  /* cono del reflector estrecho cuando está cerrado */
-  if(apertura < 0.98){
-    g("polygon", {
-      points:"350,6 250,195 450,195",
-      fill:"#fff3c4", opacity:((1 - apertura) * 0.36).toFixed(2)
-    });
-  }
-
-  /* otros actores en las tablas (visibles al encender las luces generales) */
-  const otros = listaOtros();
-  const posOtros = [
-    {x:145, col:"#3f9b86"},
-    {x:235, col:"#4f7ea8"},
-    {x:475, col:"#c9962f"},
-    {x:565, col:"#5a8a65"}
-  ];
-  otros.forEach((txt, i) => {
-    const p = posOtros[i % posOtros.length];
-    const op = 0.14 + 0.86 * apertura;
-    const ga = Kit.svg("g", {
-      transform:`translate(${p.x} 188)`,
-      opacity:op.toFixed(2)
-    });
-    ga.appendChild(Kit.svg("circle", {cx:0, cy:-54, r:11, fill:p.col, filter:Kit.acuarela(svg)}));
-    ga.appendChild(Kit.svg("path", {
-      d:"M-14 0 L-10 -38 Q0 -44 10 -38 L14 0 Z",
-      fill:p.col, filter:Kit.acuarela(svg)
-    }));
-    const et = Kit.svg("text", {
-      x:0, y:-72 - (i % 2) * 14, "text-anchor":"middle",
-      style:"font:600 11.5px system-ui,sans-serif;fill:#f3f7fa;paint-order:stroke;stroke:#1c2530;stroke-width:3"
-    });
-    et.textContent = txt.length > 22 ? txt.slice(0, 21) + "…" : txt;
-    ga.appendChild(et);
-    svg.appendChild(ga);
-  });
-
-  /* actor que grita en el centro: no se va al abrir la luz, pero recupera su tamaño proporcional */
-  const escGrita = 1.38 - 0.38 * apertura;
-  const gc = Kit.svg("g", {
-    transform:`translate(350 190) scale(${escGrita.toFixed(2)})`
-  });
-  gc.appendChild(Kit.svg("circle", {cx:0, cy:-58, r:13, fill:"#b0503f", filter:Kit.acuarela(svg)}));
-  gc.appendChild(Kit.svg("path", {
-    d:"M-18 0 L-13 -42 Q0 -48 13 -42 L18 0 Z",
-    fill:"#b0503f", filter:Kit.acuarela(svg)
-  }));
-  const etG = Kit.svg("text", {
-    x:0, y:-80, "text-anchor":"middle",
-    style:"font:700 12px system-ui,sans-serif;fill:#ffd8cf;paint-order:stroke;stroke:#2b1612;stroke-width:3.2"
-  });
+  /* quien grita: bajo el cono se ve enorme; con la luz abierta recupera su tamaño */
   const ng = nombreGrita();
-  etG.textContent = "«" + (ng.length > 26 ? ng.slice(0, 25) + "…" : ng) + "»";
-  gc.appendChild(etG);
-  svg.appendChild(gc);
+  const alto = 104 * (1.42 - 0.42 * apertura);
+  actor("grita", 0, 350, alto, 1);
+  rotulo(350, TABLAS - alto - 26, "«" + (ng.length > 28 ? ng.slice(0, 26) + "…" : ng) + "»", 14, "#ffd9cf", 1);
+  otros.slice(0, 4).forEach((txt, i) =>
+    rotulo(sitios[i], TABLAS - 112 - (i % 2) * 15, txt.length > 19 ? txt.slice(0, 18) + "…" : txt, 11.5, "#f1f5f8", (0.05 + 0.95 * apertura).toFixed(2)));
 
-  /* fila de butacas abajo y la silueta del observador */
-  [120, 210, 490, 580].forEach(bx => {
-    g("path", {
-      d:`M${bx - 24} 260 L${bx - 20} 234 Q${bx} 226 ${bx + 20} 234 L${bx + 24} 260 Z`,
-      fill:"#25303d", opacity:.85
-    });
-  });
-
-  /* la butaca central del yo observador */
-  const gObs = Kit.svg("g", {});
-  if(verButaca > 0.05){
-    gObs.appendChild(Kit.svg("ellipse", {
-      cx:350, cy:234, rx:78, ry:24,
-      fill:"none", stroke:"#7fd1b9", "stroke-width":2, "stroke-dasharray":"4 4",
-      opacity:verButaca.toFixed(2)
-    }));
+  /* la butaca: quien mira todo el escenario */
+  if(verButaca > 0.03){
+    g("rect", {x:0, y:0, width:700, height:262, fill:"#0b1016", opacity:(0.22 * verButaca).toFixed(3)});
+    g("ellipse", {cx:498, cy:318, rx:112, ry:120, fill:"#ffe9b8", opacity:(0.34 * verButaca).toFixed(2), style:"mix-blend-mode:soft-light"});
+    g("ellipse", {cx:498, cy:318, rx:104, ry:112, fill:"none", stroke:"#f3d27a", "stroke-width":2, "stroke-dasharray":"2 7", "stroke-linecap":"round", opacity:verButaca.toFixed(2)});
   }
-  gObs.appendChild(Kit.svg("path", {
-    d:"M316 260 L322 226 Q350 218 378 226 L384 260 Z",
-    fill:verButaca > 0.5 ? "#2f6f5e" : "#2c3b4a", stroke:"#7fd1b9",
-    "stroke-width":verButaca > 0.5 ? 2 : 0.8
-  }));
-  gObs.appendChild(Kit.svg("circle", {
-    cx:350, cy:214, r:12,
-    fill:verButaca > 0.5 ? "#a8e6cf" : "#6c7f91"
-  }));
-  const etObs = Kit.svg("text", {
-    x:350, y:254, "text-anchor":"middle",
-    style:`font:700 11.5px system-ui,sans-serif;fill:${verButaca > 0.5 ? "#e6fff5" : "#b5c4d1"}`
-  });
-  etObs.textContent = verButaca > 0.5 ? "Tú en la butaca, notando todo el escenario" : "La butaca desde donde miras";
-  gObs.appendChild(etObs);
-  svg.appendChild(gObs);
 }
 
 const reloj = Kit.reloj(dt => {
@@ -212,9 +133,10 @@ const reloj = Kit.reloj(dt => {
   const metaB = modoLuz === "butaca" ? 1 : 0;
   apertura += (metaA - apertura) * Math.min(1, dt * 5);
   verButaca += (metaB - verButaca) * Math.min(1, dt * 5);
-  if(Math.abs(metaA - apertura) < 0.01 && Math.abs(metaB - verButaca) < 0.01){
-    apertura = metaA; verButaca = metaB;
-    reloj.parar();
+  /* la atención se cierra sola: al rato el reflector vuelve a quien grita */
+  if(modoLuz !== "cerrada"){
+    abierto += dt;
+    if(abierto > 16){ modoLuz = "cerrada"; abierto = 0; actualizarUI(); }
   }
   dibujar();
 });
@@ -223,20 +145,12 @@ function actualizarUI(){
   $("luzCerrada").classList.toggle("activa", modoLuz === "cerrada");
   $("luzAbierta").classList.toggle("activa", modoLuz === "abierta");
   $("luzButaca").classList.toggle("activa", modoLuz === "butaca");
-  if(modoLuz === "cerrada"){
-    $("fase").textContent = "Reflector cerrado sobre el problema";
-    $("faseSub").textContent = "El cono de luz dura agiganta a un solo actor y deja el resto del escenario en la oscuridad.";
-  } else if(modoLuz === "abierta"){
-    $("fase").textContent = "Luces de todo el escenario encendidas";
-    $("faseSub").textContent = "Quien gritaba sigue en las tablas, pero ahora comparte el espacio con todo lo demás que vive en tu vida.";
-  } else {
-    $("fase").textContent = "Mirando el espectáculo desde la butaca";
-    $("faseSub").textContent = "Distintas voces suben y bajan en las tablas; tú eres quien las observa desde el asiento.";
-  }
+  $("mVolvi").textContent = volvi;
 }
 
 function ponerLuz(m){
-  modoLuz = m;
+  if(m !== "cerrada" && modoLuz === "cerrada") volvi++;
+  modoLuz = m; abierto = 0;
   actualizarUI();
   reloj.andar();
   Kit.guardar();
@@ -264,6 +178,7 @@ Kit.chips("otrosActores", OTROS, leer);
 Kit.chips("focoElegido", FOCO);
 dibujar();
 
+reloj.andar();
 Kit.iniciar({
   clave: "met-el-escenario",
   alCambiar: leer,

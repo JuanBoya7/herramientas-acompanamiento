@@ -31,13 +31,10 @@ resumen: Se distingue la emoción que llegó primero de la pelea que se encendi�
 </section>
 
 <div class="escenario">
-  <svg class="ondas" id="escenaInterruptor" viewBox="0 0 700 250" role="img"
-    aria-label="Onda de emoción natural y un gran interruptor que enciende o apaga los anillos de lucha secundaria"></svg>
-  <div class="fase" id="fase">Interruptor de la lucha: ENCENDIDO</div>
-  <div class="fase-sub" id="faseSub">Cada ola natural dispara anillos de pelea secundaria y agota la energía disponible.</div>
+  <svg class="ondas" id="escenaInterruptor" viewBox="0 0 700 467" role="img"
+    aria-label="Una pared con un interruptor antiguo; la emoción cruza la habitación como una ola"></svg>
   <div class="marcas">
-    <div><span class="n" id="mEstado" style="color:#b0503f">Encendida</span><span class="r">lucha secundaria</span></div>
-    <div><span class="n" id="mEnergia" style="color:#3f7d5a">18 %</span><span class="r">energía libre hoy</span></div>
+    <div><span class="n" id="mVolvi" style="color:#3f7d5a">0</span><span class="r">veces que solté el interruptor</span></div>
   </div>
   <div class="mandos">
     <button type="button" class="apagar" id="btnInterruptor" onclick="alternarInterruptor()">Soltar el interruptor de la lucha</button>
@@ -89,103 +86,60 @@ function nombreSecundaria(){
   return s.length ? s[0] : "Pelear contra lo que siento";
 }
 
+let fondoPared = null, volvi = 0;
+const PALANCA = {href:"[[imagen:interruptor-palanca.webp]]", r:0.535};
 function dibujar(){
   const svg = $("escenaInterruptor");
   svg.innerHTML = "";
-  const g = (tag, a) => svg.appendChild(Kit.svg(tag, a));
+  const g = (tag, a, p) => (p || svg).appendChild(Kit.svg(tag, a));
+  const rotulo = (x, y, s, color, op) => {
+    const e = Kit.svg("text", {x, y, "text-anchor":"middle",
+      style:`font:600 14px Georgia,serif;font-style:italic;fill:${color};opacity:${op};paint-order:stroke;stroke:#fbf7ee;stroke-width:4px;stroke-linejoin:round`});
+    e.textContent = s.length > 46 ? s.slice(0, 44) + "…" : s; svg.appendChild(e);
+  };
+  if(!fondoPared) fondoPared = Kit.svg("image", {href:"[[imagen:interruptor-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondoPared);
 
-  g("rect", {x:0, y:0, width:700, height:250, rx:10, fill:lucha ? "#fdf6f4" : "#f4faf7"});
+  const capa = Kit.svg("g", {filter:Kit.acuarela(svg)});
+  svg.appendChild(capa);
+  const BASE = 250;       /* altura por donde cruza la ola */
 
-  /* zona izquierda: las ondas (0 a 500) */
-  /* anillos turbulentos secundarios cuando la lucha está encendida */
-  if(nivelPalanca > 0.03){
-    for(let k = 0; k < 3; k++){
-      const pulso = ((t * 1.4 + k * 0.33) % 1);
-      const cx = 130 + k * 125;
-      const cy = 128 + Math.sin(t * 2 + k * 1.5) * 24;
-      g("circle", {
-        cx:cx, cy:cy, r:16 + pulso * 58 * nivelPalanca,
-        fill:"none", stroke:"#b0503f", "stroke-width":2.2,
-        opacity:((1 - pulso) * 0.65 * nivelPalanca).toFixed(2),
-        "stroke-dasharray":"6 4"
-      });
-    }
-    /* trazado dentado de amplificación secundaria */
-    let dSec = "M24 128";
-    for(let i = 1; i <= 46; i++){
-      const x = 24 + i * 10;
-      const base = Math.sin(t * 2.1 + i * 0.28) * 26;
-      const pico = (Math.sin(t * 9 + i * 1.7) * 34 + (i % 2 ? 18 : -18)) * nivelPalanca;
-      dSec += ` L${x} ${(128 + base + pico).toFixed(1)}`;
-    }
-    g("path", {
-      d:dSec, fill:"none", stroke:"#b0503f",
-      "stroke-width":2.4, opacity:(0.85 * nivelPalanca).toFixed(2)
-    });
-    const etSec = g("text", {
-      x:260, y:42, "text-anchor":"middle",
-      style:`font:700 12.5px system-ui,sans-serif;fill:#9e3c2c;opacity:${nivelPalanca.toFixed(2)}`
-    });
-    etSec.textContent = "Amplificación secundaria: " + nombreSecundaria();
-  }
-
-  /* onda suave primaria (siempre presente: sube y baja con la vida) */
-  let dPri = "M24 136";
-  for(let i = 0; i <= 46; i++){
-    const x = 24 + i * 10;
-    const y = 136 + Math.sin(t * 2.1 + i * 0.28) * 26 + Math.cos(t * 1.1 - i * 0.15) * 7;
+  /* la ola primaria: cruza la habitación, sube y baja sola, esté como esté el interruptor */
+  let dPri = `M0 ${BASE}`;
+  for(let i = 0; i <= 49; i++){
+    const x = i * 10;
+    const y = BASE + Math.sin(t * 2.1 + i * 0.28) * 30 + Math.cos(t * 1.1 - i * 0.15) * 8;
     dPri += ` L${x} ${y.toFixed(1)}`;
   }
-  g("path", {
-    d:dPri + " L484 225 L24 225 Z",
-    fill:"#3f83a6", "fill-opacity":0.16
-  });
-  g("path", {
-    d:dPri, fill:"none", stroke:"#2f6f8f", "stroke-width":3.2, "stroke-linecap":"round"
-  });
-  const etPri = g("text", {
-    x:254, y:198, "text-anchor":"middle",
-    style:"font:600 12.5px system-ui,sans-serif;fill:#234f66"
-  });
-  etPri.textContent = "Onda primaria (sube y baja sola): " + nombrePrimaria();
+  g("path", {d:dPri + ` Q548 ${BASE + 46} 498 372 L0 372 Z`, fill:"#3f83a6", opacity:.3}, capa);
+  g("path", {d:dPri, fill:"none", stroke:"#2f6f8f", "stroke-width":4, "stroke-linecap":"round", opacity:.85}, capa);
 
-  /* barra de energía disponible */
-  g("rect", {x:24, y:214, width:460, height:12, rx:6, fill:"#dfe7ee"});
-  const colE = Kit.mezcla("#b0503f", "#3f7d5a", energia / 100);
-  g("rect", {x:24, y:214, width:Math.max(12, 4.6 * energia), height:12, rx:6, fill:colE});
-  const etEn = g("text", {
-    x:254, y:242, "text-anchor":"middle",
-    style:"font:600 11.5px system-ui,sans-serif;fill:#556575"
-  });
-  etEn.textContent = lucha
-    ? "Energía consumida en pelear contra la emoción"
-    : "Energía libre para hacer lo que importa mientras la ola pasa";
+  /* la lucha encendida: sobre cada ola se monta otra, dentada, y anillos que se abren por la pared */
+  if(nivelPalanca > 0.03){
+    let dSec = `M0 ${BASE - 8}`;
+    for(let i = 1; i <= 49; i++){
+      const x = i * 10;
+      const base = Math.sin(t * 2.1 + i * 0.28) * 30;
+      const pico = (Math.sin(t * 9 + i * 1.7) * 44 + (i % 2 ? 24 : -24)) * nivelPalanca;
+      dSec += ` L${x} ${(BASE - 8 + base + pico).toFixed(1)}`;
+    }
+    g("path", {d:dSec, fill:"none", stroke:"#a8432f", "stroke-width":3.4, "stroke-linejoin":"round", opacity:(0.85 * nivelPalanca).toFixed(2)}, capa);
+    for(let k = 0; k < 4; k++){
+      const pulso = ((t * 0.9 + k * 0.25) % 1);
+      g("circle", {cx:90 + k * 118, cy:BASE - 30 + Math.sin(t * 2 + k * 1.5) * 34, r:18 + pulso * 92 * nivelPalanca,
+        fill:"#b0503f", opacity:((1 - pulso) * 0.22 * nivelPalanca).toFixed(2)}, capa);
+    }
+    /* y la habitación entera se tiñe */
+    g("rect", {x:0, y:0, width:700, height:467, fill:"#8a2f22", opacity:(0.13 * nivelPalanca).toFixed(3), style:"mix-blend-mode:multiply"});
+    rotulo(245, 128, nombreSecundaria(), "#8a2f22", nivelPalanca.toFixed(2));
+  }
+  rotulo(245, 356, nombrePrimaria(), "#1f4a63", 1);
 
-  /* panel del interruptor interactivo a la derecha (x: 520..676) */
-  g("rect", {
-    x:526, y:26, width:148, height:198, rx:14,
-    fill:"#ffffff", stroke:lucha ? "#e2b5aa" : "#b8dcc8", "stroke-width":2
-  });
-  const tInt = g("text", {
-    x:600, y:52, "text-anchor":"middle",
-    style:"font:700 12px system-ui,sans-serif;fill:#3f5163;letter-spacing:.5px"
-  });
-  tInt.textContent = "INTERRUPTOR";
-
-  /* riel vertical del interruptor */
-  g("rect", {
-    x:572, y:68, width:56, height:112, rx:28,
-    fill:lucha ? "#d96854" : "#4a946d", filter:Kit.acuarela(svg)
-  });
-  const cyBoton = 96 + (1 - nivelPalanca) * 56;
-  g("circle", {
-    cx:600, cy:cyBoton, r:22, fill:"#fff", stroke:"#d0dae3", "stroke-width":2
-  });
-  const tEstado = g("text", {
-    x:600, y:204, "text-anchor":"middle",
-    style:`font:700 13px system-ui,sans-serif;fill:${lucha ? "#b0503f" : "#2f6f4e"}`
-  });
-  tEstado.textContent = lucha ? "LUCHA ON" : "LUCHA OFF";
+  /* la palanca en su placa de bronce: arriba encendida, abajo suelta */
+  const lado = 2 * nivelPalanca - 1, alto = 92, ancho = alto * PALANCA.r;
+  const gp = Kit.svg("g", {transform:`translate(560 197) scale(1 ${(Math.abs(lado) < .08 ? .08 : lado).toFixed(3)})`});
+  gp.appendChild(Kit.figura("palanca", PALANCA.href, {x:-ancho / 2, y:-alto + 12, width:ancho, height:alto}));
+  svg.appendChild(gp);
 }
 
 $("escenaInterruptor").addEventListener("click", () => alternarInterruptor());
@@ -196,32 +150,20 @@ const reloj = Kit.reloj(dt => {
   nivelPalanca += (metaP - nivelPalanca) * Math.min(1, dt * 6);
   const metaE = lucha ? 16 + Math.sin(t * 3) * 4 : 88;
   energia += (metaE - energia) * Math.min(1, dt * 2.4);
-  $("mEnergia").textContent = Math.round(energia) + " %";
-  $("mEnergia").style.color = lucha ? "#b0503f" : "#3f7d5a";
   dibujar();
 });
 
 function actualizarUI(){
-  $("mEstado").textContent = lucha ? "Encendida" : "Apagada";
-  $("mEstado").style.color = lucha ? "#b0503f" : "#3f7d5a";
-  if(lucha){
-    $("fase").textContent = "Interruptor de la lucha: ENCENDIDO";
-    $("faseSub").textContent = "Cada ola natural dispara anillos de pelea secundaria y agota la energía disponible.";
-    $("btnInterruptor").textContent = "Soltar el interruptor de la lucha";
-    $("btnInterruptor").className = "apagar";
-  } else {
-    $("fase").textContent = "Interruptor de la lucha: APAGADO";
-    $("faseSub").textContent = "La emoción primaria sigue subiendo y bajando con naturalidad, pero sin la pelea encima.";
-    $("btnInterruptor").textContent = "Volver a encender la lucha (comparar)";
-    $("btnInterruptor").className = "encender";
-  }
+  $("mVolvi").textContent = volvi;
+  $("btnInterruptor").textContent = lucha ? "Soltar el interruptor de la lucha" : "Volver a encender la lucha";
+  $("btnInterruptor").className = lucha ? "apagar" : "encender";
   if(!reloj.anda()) reloj.andar();
   dibujar();
 }
 
 function alternarInterruptor(){
   lucha = !lucha;
-  if(!lucha) Kit.brindis("Interruptor apagado: la ola sigue, la pelea secundaria se detiene");
+  if(!lucha) volvi++;
   actualizarUI();
   Kit.guardar();
 }

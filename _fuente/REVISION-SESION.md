@@ -35,7 +35,7 @@ Criterio acordado: protagonismo y acceso inicial al componente aprovechable en c
 | met-el-bus | Una dirección importante y los pasajeros que aparecen durante el camino. | 0, 1, 2 |
 | met-los-ochenta-anos | Personas importantes y la huella que quisieras dejar en sus vidas. | 0, 1, 2, 3 |
 | met-el-poligrafo | Explora qué ocurre cuando intentas controlar lo que estás sintiendo. | 0, 1, 2 |
-| met-la-palabra-repetida | Di la palabra en voz alta al ritmo del punto. Prueba primero con «limón» y observa qué ocurre. | 0, 2, 4 |
+| met-la-palabra-repetida | Di la palabra en voz alta al ritmo del punto. Prueba primero con «leche» y observa qué ocurre. | 0, 2, 4 |
 | met-la-radio | Una tarea por hacer mientras la radio de la mente sigue transmitiendo. | 0, 1, 2, 3 |
 | met-el-hoyo | Lo que has estado haciendo para salir del hoyo y lo que ocurre al seguir cavando. | 0, 1, 2 |
 | pp-tres-cosas-buenas | Recupera algo bueno de hoy o de ayer y explora qué hizo posible que ocurriera. | 0 |

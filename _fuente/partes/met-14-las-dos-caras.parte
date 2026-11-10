@@ -32,10 +32,8 @@ resumen: Se nombra qué duele hoy en una cara de la moneda y qué amor o valor h
 </section>
 
 <div class="escenario">
-  <svg class="moneda-svg" id="svgMoneda" viewBox="0 0 700 250" role="img"
-    aria-label="Una moneda artesanal con el dolor en una cara y el valor en el reverso"></svg>
-  <div class="fase" id="fase">Cara A a la vista: lo que hoy duele</div>
-  <div class="fase-sub" id="faseSub">Toca para girar la moneda y mirar qué sostiene este dolor del otro lado.</div>
+  <svg class="moneda-svg" id="svgMoneda" viewBox="0 0 700 467" role="img"
+    aria-label="Una moneda de bronce sobre una mesa: en una cara el dolor, en la otra lo que importa"></svg>
   <div class="duracion" id="mandosMoneda">
     <button type="button" class="chip activa" id="btnGirar" onclick="girarMoneda()">Girar la moneda: ver el dolor / ver el valor</button>
     <button type="button" class="chip" id="btnEsconder" onclick="esconderMoneda()">Intentar partir o esconder la moneda</button>
@@ -87,101 +85,44 @@ function textoValor(){
   return v.length ? v[0] : "Haber querido de verdad";
 }
 
+let fondoMesa = null, tiempo = 0;
+const CARA = {dolor:"[[imagen:moneda-dolor.webp]]", valor:"[[imagen:moneda-valor.webp]]"};
 function dibujar(){
   const svg = $("svgMoneda");
   svg.innerHTML = "";
-  const g = (tag, a) => svg.appendChild(Kit.svg(tag, a));
-
-  const fondo = estado === "escondida" ? "#eceff2" : estado === "completa" ? "#f2faf5" : "#f7f5ef";
-  g("rect", {x:0, y:0, width:700, height:250, rx:10, fill:fondo});
+  const g = (tag, a, p) => (p || svg).appendChild(Kit.svg(tag, a));
+  const rotulo = (x, y, s, color, op) => {
+    const e = Kit.svg("text", {x, y, "text-anchor":"middle",
+      style:`font:600 15px Georgia,serif;font-style:italic;fill:${color};opacity:${op};paint-order:stroke;stroke:#fbf6ea;stroke-width:4.5px;stroke-linejoin:round`});
+    e.textContent = s.length > 44 ? s.slice(0, 42) + "…" : s; svg.appendChild(e);
+  };
+  const moneda = (clave, cara, x, y, radio, escalaX, op) => {
+    g("ellipse", {cx:x + 6, cy:y + radio * 0.86, rx:radio * 0.9 * Math.max(0.12, escalaX), ry:radio * 0.2, fill:"#231c14", opacity:(0.28 * op).toFixed(2)});
+    const gm = Kit.svg("g", {transform:`translate(${x} ${y}) scale(${Math.max(0.04, escalaX).toFixed(3)} 1)`, opacity:op.toFixed(2)});
+    gm.appendChild(Kit.figura(clave, CARA[cara], {x:-radio, y:-radio, width:radio * 2, height:radio * 2}));
+    svg.appendChild(gm);
+  };
+  if(!fondoMesa) fondoMesa = Kit.svg("image", {href:"[[imagen:moneda-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondoMesa);
 
   if(estado === "completa"){
-    /* vista de la moneda entera mostrando simultáneamente sus dos caras unidas en la palma */
-    /* silueta suave de mano sosteniendo ambas caras */
-    g("path", {
-      d:"M150 205 Q350 238 550 205 Q515 182 350 186 Q185 182 150 205 Z",
-      fill:"#e5c4aa", opacity:.85, filter:Kit.acuarela(svg)
-    });
-    /* arco que une las dos caras de la misma moneda */
-    g("path", {
-      d:"M230 112 Q350 58 470 112",
-      fill:"none", stroke:"#c9962f", "stroke-width":3, "stroke-dasharray":"5 4"
-    });
-
-    /* Cara izquierda: Dolor */
-    const gd = Kit.svg("g", {transform:"translate(225 118)", filter:Kit.acuarela(svg)});
-    gd.appendChild(Kit.svg("circle", {cx:0, cy:0, r:74, fill:"#d88c7a", stroke:"#9e4736", "stroke-width":3}));
-    gd.appendChild(Kit.svg("circle", {cx:0, cy:0, r:63, fill:"none", stroke:"#fbe7e2", "stroke-width":1.4, "stroke-dasharray":"4 4"}));
-    svg.appendChild(gd);
-    const td1 = g("text", {x:225, y:96, "text-anchor":"middle", style:"font:700 11px system-ui,sans-serif;fill:#5e2218;letter-spacing:.7px"});
-    td1.textContent = "ANVERSO · EL DOLOR";
-    const td2 = g("text", {x:225, y:122, "text-anchor":"middle", style:"font:700 13px system-ui,sans-serif;fill:#3b130d"});
-    const sD = textoDolor();
-    td2.textContent = sD.length > 24 ? sD.slice(0, 23) + "…" : sD;
-
-    /* Cara derecha: Valor */
-    const gv = Kit.svg("g", {transform:"translate(475 118)", filter:Kit.acuarela(svg)});
-    gv.appendChild(Kit.svg("circle", {cx:0, cy:0, r:74, fill:"#6ab08e", stroke:"#2f6f50", "stroke-width":3}));
-    gv.appendChild(Kit.svg("circle", {cx:0, cy:0, r:63, fill:"none", stroke:"#e8f7ef", "stroke-width":1.4, "stroke-dasharray":"4 4"}));
-    svg.appendChild(gv);
-    const tv1 = g("text", {x:475, y:96, "text-anchor":"middle", style:"font:700 11px system-ui,sans-serif;fill:#17422d;letter-spacing:.7px"});
-    tv1.textContent = "REVERSO · EL VALOR";
-    const tv2 = g("text", {x:475, y:122, "text-anchor":"middle", style:"font:700 13px system-ui,sans-serif;fill:#102e1f"});
-    const sV = textoValor();
-    tv2.textContent = sV.length > 24 ? sV.slice(0, 23) + "…" : sV;
-
-    const tc = g("text", {x:350, y:232, "text-anchor":"middle", style:"font:700 13px system-ui,sans-serif;fill:#2c5a44"});
-    tc.textContent = "Una sola moneda en la mano: hay sitio para el dolor porque hay sitio para el amor";
+    /* la moneda entera: las dos caras a la vista, unidas */
+    g("path", {d:"M262 205 Q350 150 438 205 Q350 260 262 205 Z", fill:"#f0c75e", opacity:.3, filter:Kit.acuarela(svg)});
+    moneda("mCd", "dolor", 232, 200 + Math.sin(tiempo * 1.3) * 3, 84, 1, 1);
+    moneda("mCv", "valor", 468, 200 - Math.sin(tiempo * 1.3) * 3, 84, 1, 1);
+    rotulo(232, 322, textoDolor(), "#6b2f24", 1);
+    rotulo(468, 322, textoValor(), "#1f5a45", 1);
     return;
   }
-
-  /* giro 3D de la moneda en el centro (coseno de pi * giro) */
-  const ang = giro * Math.PI;
-  const cos = Math.cos(ang);
-  const escalaX = Math.max(0.06, Math.abs(cos));
-  const viendoValor = cos < 0;
-
-  const gm = Kit.svg("g", {
-    transform:`translate(350 122) scale(${escalaX.toFixed(2)} 1)`,
-    opacity:opacidad.toFixed(2),
-    filter:Kit.acuarela(svg)
-  });
-  const colRelleno = estado === "escondida" ? "#b5bec7" : (viendoValor ? "#6ab08e" : "#d88c7a");
-  const colBorde = estado === "escondida" ? "#7b8691" : (viendoValor ? "#2f6f50" : "#9e4736");
-  gm.appendChild(Kit.svg("circle", {cx:0, cy:0, r:88, fill:colRelleno, stroke:colBorde, "stroke-width":3.5}));
-  gm.appendChild(Kit.svg("circle", {cx:0, cy:0, r:75, fill:"none", stroke:"#ffffff", "stroke-opacity":.65, "stroke-width":1.6, "stroke-dasharray":"5 4"}));
-  svg.appendChild(gm);
-
-  if(escalaX > 0.22){
-    const gt = Kit.svg("g", {opacity:(opacidad * Math.min(1, (escalaX - 0.2) * 2)).toFixed(2)});
-    const tSup = Kit.svg("text", {
-      x:350, y:95, "text-anchor":"middle",
-      style:`font:700 11.5px system-ui,sans-serif;fill:${viendoValor ? "#17422d" : "#5e2218"};letter-spacing:.7px`
-    });
-    tSup.textContent = estado === "escondida"
-      ? "MONEDA APAGADA"
-      : (viendoValor ? "CARA B · EL AMOR Y EL VALOR DETRÁS" : "CARA A · LO QUE HOY DUELE");
-    gt.appendChild(tSup);
-
-    const tCen = Kit.svg("text", {
-      x:350, y:126, "text-anchor":"middle",
-      style:"font:700 15px system-ui,sans-serif;fill:#1f2421"
-    });
-    const frase = estado === "escondida"
-      ? "Sin dolor, pero también sin lo que amas"
-      : (viendoValor ? textoValor() : textoDolor());
-    tCen.textContent = frase.length > 34 ? frase.slice(0, 33) + "…" : frase;
-    gt.appendChild(tCen);
-
-    const tInf = Kit.svg("text", {
-      x:350, y:152, "text-anchor":"middle",
-      style:"font:600 12px system-ui,sans-serif;fill:#2e3833"
-    });
-    tInf.textContent = estado === "escondida"
-      ? "Al bloquear una cara, se apaga la otra"
-      : "Toca la moneda para ver su reverso";
-    gt.appendChild(tInf);
-    svg.appendChild(gt);
+  /* la moneda gira sobre su canto: nunca muestra una cara sin llevar la otra detrás */
+  const ang = giro * Math.PI, escalaX = Math.abs(Math.cos(ang)), viendoValor = giro > 0.5;
+  moneda("mG" + (viendoValor ? "v" : "d"), viendoValor ? "valor" : "dolor", 350, 200, 106, escalaX, opacidad);
+  if(estado === "escondida"){
+    /* tapar la cara que duele apaga la moneda entera */
+    g("rect", {x:0, y:0, width:700, height:467, fill:"#8d949b", opacity:.3, style:"mix-blend-mode:saturation"});
+    rotulo(350, 344, textoValor(), "#5d666e", 0.55);
+  } else {
+    rotulo(350, 344, viendoValor ? textoValor() : textoDolor(), viendoValor ? "#1f5a45" : "#6b2f24", Math.min(1, escalaX * 1.6).toFixed(2));
   }
 }
 
@@ -204,20 +145,6 @@ function actualizarUI(){
   $("btnGirar").classList.toggle("activa", estado === "dolor" || estado === "valor");
   $("btnEsconder").classList.toggle("activa", estado === "escondida");
   $("btnCompleta").classList.toggle("activa", estado === "completa");
-
-  if(estado === "dolor"){
-    $("fase").textContent = "Cara A a la vista: lo que hoy duele";
-    $("faseSub").textContent = "Toca para girar la moneda y mirar qué sostiene este dolor del otro lado.";
-  } else if(estado === "valor"){
-    $("fase").textContent = "Cara B a la vista: el amor y el valor en el reverso";
-    $("faseSub").textContent = "Duele porque importa. Sin este cuidado tampoco existiría ese dolor.";
-  } else if(estado === "escondida"){
-    $("fase").textContent = "Intentar esconder o arrancar el lado que duele";
-    $("faseSub").textContent = "No se puede borrar una sola cara de una moneda: al anestesiar el dolor se apaga también el vínculo.";
-  } else {
-    $("fase").textContent = "Llevar la moneda completa en la mano";
-    $("faseSub").textContent = "Haces espacio para el dolor porque eliges quedarte con el amor y el sentido que viven en el reverso.";
-  }
 }
 
 function girarMoneda(){
@@ -243,7 +170,6 @@ function esconderMoneda(){
 function llevarCompleta(){
   estado = "completa";
   opacidadMeta = 1;
-  Kit.brindis("La moneda entera en la mano: dolor y valor juntos");
   actualizarUI();
   dibujar();
   Kit.guardar();

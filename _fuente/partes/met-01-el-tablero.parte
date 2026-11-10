@@ -206,6 +206,11 @@ function recomponer(){
 }
 
 /* ====================== ESCENA ====================== */
+let fondoTablero = null;
+const PIEZAS = {
+  blanca: [{href:"[[imagen:tablero-blanca-peon.webp]]", r:0.625}, {href:"[[imagen:tablero-blanca-caballo.webp]]", r:0.57}, {href:"[[imagen:tablero-blanca-reina.webp]]", r:0.515}],
+  negra:  [{href:"[[imagen:tablero-negra-peon.webp]]", r:0.615}, {href:"[[imagen:tablero-negra-caballo.webp]]", r:0.555}, {href:"[[imagen:tablero-negra-reina.webp]]", r:0.505}],
+};
 function dibujar(){
   const svg = $("escena");
   svg.innerHTML = "";
@@ -217,12 +222,12 @@ function dibujar(){
   svg.appendChild(mundo);
 
   const casilla = 55, lado = 8 * casilla, x0 = CX - lado / 2, y0 = CY - lado / 2;
-  for(let f = 0; f < 8; f++)
-    for(let c = 0; c < 8; c++)
-      g("rect", {x:x0 + c*casilla, y:y0 + f*casilla, width:casilla, height:casilla,
-        fill:(f + c) % 2 ? "#d8cfbe" : "#f2ede3"}, mundo);
-  g("rect", {x:x0, y:y0, width:lado, height:lado, fill:"none",
-    stroke: Kit.mezcla("#b6ab97", "#3f7d5a", mesa), "stroke-width": 2.5 + 1.5 * mesa}, mundo);
+  /* el tablero de madera en acuarela: sus 64 casillas caen justo en el cuadrado de 440 */
+  g("rect", {x:-400, y:-400, width:1500, height:1300, fill:"#efe6d6"}, mundo);
+  if(!fondoTablero) fondoTablero = Kit.svg("image", {href:"[[imagen:tablero-acuarela.jpg]]", x:-69.7, y:-21.2, width:796, height:531, preserveAspectRatio:"none"});
+  mundo.appendChild(fondoTablero);
+  if(mesa > .02) g("rect", {x:x0 - 34, y:y0 - 34, width:lado + 68, height:lado + 68, rx:6, fill:"none",
+    stroke:"#3f7d5a", "stroke-width":4, opacity:mesa.toFixed(2)}, mundo);
 
   /* Las negras engordan con cada empujón; las blancas casi no. */
   const rN = 15 + Math.min(8, rondas * 1.4);
@@ -236,16 +241,19 @@ function dibujar(){
       opacity:((1 - .55 * mesa) * p.ap).toFixed(2)});
     mundo.appendChild(pieza);
 
-    g("circle", {cx:0, cy:1, r:r + 2, fill:"#00000018"}, pieza);
-    g("circle", {cx:0, cy:-2, r:r, fill: negra ? "#3a3f47" : "#faf6ee",
-      stroke: negra ? "#22262b" : "#c3b79f", "stroke-width":2}, pieza);
+    /* piezas de madera en acuarela: la figura (peón, caballo, reina) sale del texto, para que no cambie */
+    let suma = 0; for(let k = 0; k < p.texto.length; k++) suma += p.texto.charCodeAt(k);
+    const fig = PIEZAS[negra ? "negra" : "blanca"][suma % 3], alto = r * 3.7, ancho = alto * fig.r;
+    g("ellipse", {cx:0, cy:r - 1, rx:ancho * .46, ry:5, fill:"#2a2620", opacity:.22}, pieza);
+    pieza.appendChild(Kit.figura("pz" + (negra ? "n" : "b") + (suma % 3) + "-" + p.clave.length + "-" + suma, fig.href,
+      {x:-ancho / 2, y:r - alto, width:ancho, height:alto}));
 
     /* el rótulo siempre hacia afuera del centro: las blancas por arriba,
        las negras por abajo. Así ninguna etiqueta invade el otro bando. */
-    const et = Kit.svg("text", {x:0, y: negra ? r + 14 : -r - 8, "text-anchor":"middle",
+    const et = Kit.svg("text", {x:0, y: negra ? r + 15 : -r * 2.7 - 6, "text-anchor":"middle",
       style:`font:600 ${(11 - 2 * mesa).toFixed(1)}px system-ui,sans-serif;` +
-            `paint-order:stroke;stroke:#f2ede3;stroke-width:3.5;stroke-linejoin:round;` +
-            `fill:${negra ? "#22262b" : "#7a6a4e"}`});
+            `paint-order:stroke;stroke:#fbf6ea;stroke-width:4;stroke-linejoin:round;` +
+            `fill:${negra ? "#1c2328" : "#5d4c2c"}`});
     et.textContent = p.texto.length > 24 ? p.texto.slice(0, 23) + "…" : p.texto;
     pieza.appendChild(et);
   });

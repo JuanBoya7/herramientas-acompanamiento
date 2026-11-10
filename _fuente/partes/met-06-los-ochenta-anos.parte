@@ -58,8 +58,8 @@ resumen: Tres invitados, dos frases cada uno y un calibrador por frase. Las fras
 </section>
 
 <div class="panel-mesa">
-  <svg class="mesa" id="mesa" viewBox="0 0 720 420" role="img"
-    aria-label="La mesa de los ochenta años con los invitados y lo que dicen"></svg>
+  <svg class="mesa" id="mesa" viewBox="0 0 700 467" role="img"
+    aria-label="La mesa de los ochenta años en el jardín, con los invitados y lo que dicen"></svg>
   <div class="distancias">
     <div><span class="n" id="dFrases">0</span><span class="r">frases elegidas</span></div>
     <div><span class="n" id="dParecido" style="color:#3f7d5a">0.0</span><span class="r">parecido medio</span></div>
@@ -165,30 +165,12 @@ function pintarMedidores(){
 }
 
 /* ====================== LA MESA ====================== */
-/* Una persona de pie detrás de la mesa. Se apaga cuando lo que dice no se
-   parece a como se vivió el último mes. */
-function invitadoDePie(svg, x, suelo, col, vivo){
-  const g = Kit.svg("g", {opacity: (.28 + .72 * vivo).toFixed(2),
-    style:"transition:opacity .4s"});
-  svg.appendChild(g);
-  const p = (t, a) => g.appendChild(Kit.svg(t, a));
-  const cad = suelo - 30, hom = suelo - 62, cab = suelo - 76;
-  p("path", {d:`M${x - 7} ${cad} L${x - 9} ${suelo}`, stroke:col, "stroke-width":6,
-    "stroke-linecap":"round"});
-  p("path", {d:`M${x + 7} ${cad} L${x + 9} ${suelo}`, stroke:col, "stroke-width":6,
-    "stroke-linecap":"round"});
-  p("path", {d:`M${x} ${cad} L${x} ${hom}`, stroke:col, "stroke-width":15,
-    "stroke-linecap":"round"});
-  /* un brazo levantado, como quien está hablando */
-  p("path", {d:`M${x - 2} ${hom + 4} q -14 8 -16 20`, stroke:col, "stroke-width":5,
-    fill:"none", "stroke-linecap":"round"});
-  p("path", {d:`M${x + 2} ${hom + 4} q 15 -4 17 -16`, stroke:col, "stroke-width":5,
-    fill:"none", "stroke-linecap":"round"});
-  p("circle", {cx:x, cy:cab, r:11, fill:col});
-  p("path", {d:`M${x - 11} ${cab - 2} q 3 -12 11 -11 q 8 -1 11 11 q -5 -6 -11 -5 q -6 0 -11 5 Z`,
-    fill:Kit.mezcla(col, "#241c2b", .5)});
-  return cab;
-}
+/* Los invitados en acuarela, sentados detrás de la mesa del jardín. Cada uno se apaga cuando
+   lo que dice no se parece a como se vivió el último mes. */
+let fondoJardin = null;
+const INVITADO = [{href:"[[imagen:ochenta-invitado-1.webp]]", r:0.918}, {href:"[[imagen:ochenta-invitado-2.webp]]", r:0.932}, {href:"[[imagen:ochenta-invitado-3.webp]]", r:1.014}, {href:"[[imagen:ochenta-invitado-4.webp]]", r:0.959}, {href:"[[imagen:ochenta-invitado-5.webp]]", r:0.695}, {href:"[[imagen:ochenta-invitado-6.webp]]", r:1.014}];
+const SILLAS = [128, 566, 250, 446, 92, 604];      /* x de las sillas vacías del dibujo */
+const MESA = 264;                                   /* borde de la mesa: de ahí hacia arriba se ve cada invitado */
 
 function dibujar(){
   const svg = $("mesa");
@@ -198,61 +180,49 @@ function dibujar(){
     const t = Kit.svg("text", {x, y, "text-anchor":"middle", style:estilo});
     t.textContent = s; svg.appendChild(t); return t;
   };
-
-  g("rect", {x:0, y:0, width:720, height:420, fill:"#faf7f2"});
+  if(!fondoJardin) fondoJardin = Kit.svg("image", {href:"[[imagen:ochenta-acuarela.jpg]]", x:0, y:0, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondoJardin);
 
   const lista = sentados();
   if(!lista.length){
-    texto(360, 200, "La mesa está puesta y no hay nadie sentado todavía.",
-      "font:14.5px system-ui;fill:#b8ab98");
+    texto(350, 410, "La mesa está puesta y todavía no se ha sentado nadie.",
+      "font:italic 15px Georgia,serif;fill:#5d5548;paint-order:stroke;stroke:#fffaf0;stroke-width:4px;stroke-linejoin:round");
     return;
   }
 
-  const SUELO = 296;
   lista.forEach((inv, i) => {
-    const cx = 720 / lista.length * (i + .5);
+    const cx = SILLAS[i % SILLAS.length];
     const fs = frasesDe(inv).slice(0, 2);
     const media = fs.length ? fs.reduce((s, f) => s + valorDe(inv, f), 0) / fs.length : .5 * 10;
     const vivo = media / 10;
-    const col = Kit.mezcla("#b0a596", inv.color, Math.pow(vivo, .7));
 
-    invitadoDePie(svg, cx, SUELO, col, vivo);
+    let suma = 0; for(let k = 0; k < inv.titulo.length; k++) suma += inv.titulo.charCodeAt(k);
+    const fig = INVITADO[(suma + i) % INVITADO.length], alto = 104, ancho = alto * fig.r;
+    svg.appendChild(Kit.figura("inv" + i + "-" + ((suma + i) % INVITADO.length), fig.href,
+      {x:cx - ancho / 2, y:MESA - alto, width:ancho, height:alto, opacity:(.5 + .5 * vivo).toFixed(2)}));
 
     /* lo que dice, en globos que se apagan */
     fs.forEach((f, k) => {
-      const v = valorDe(inv, f), op = .2 + .8 * (v / 10);
-      const y = 190 - k * 66;
+      const v = valorDe(inv, f), op = .25 + .75 * (v / 10);
+      const y = MESA - alto - 14 - k * 46;
       const txt = f.length > 26 ? f.slice(0, 25) + "…" : f;
-      const ancho = Math.min(210, 18 + txt.length * 6.4);
+      const ancho2 = Math.min(210, 18 + txt.length * 6.4);
+      const x0 = Math.min(700 - ancho2 - 6, Math.max(6, cx - ancho2 / 2));
       const borde = Kit.mezcla("#c9bda9", "#3f7d5a", v / 10);
-      const bur = Kit.svg("g", {transform:`translate(${cx - ancho / 2},${y - 26})`,
-        style:"transition:opacity .4s", opacity:op});
+      const bur = Kit.svg("g", {transform:`translate(${x0},${y - 28})`, opacity:op.toFixed(2)});
       svg.appendChild(bur);
-      bur.appendChild(Kit.svg("rect", {x:0, y:0, width:ancho, height:28, rx:14,
-        fill:"#fff", stroke:borde, "stroke-width":1.6}));
-      bur.appendChild(Kit.svg("path", {d:`M${ancho / 2 - 5} 28 l 5 9 l 6 -9 Z`, fill:"#fff",
-        stroke:borde, "stroke-width":1.6}));
-      const t = Kit.svg("text", {x:ancho / 2, y:18.5, "text-anchor":"middle",
-        style:`font:italic 11.5px system-ui;fill:${Kit.mezcla("#8a8073", "#2f6b4c", v / 10)}`});
+      bur.appendChild(Kit.svg("rect", {x:0, y:0, width:ancho2, height:28, rx:14, fill:"#fffdf6", stroke:borde, "stroke-width":1.6}));
+      if(k === 0) bur.appendChild(Kit.svg("path", {d:`M${cx - x0 - 5} 28 l 5 8 l 6 -8 Z`, fill:"#fffdf6", stroke:borde, "stroke-width":1.6}));
+      const t = Kit.svg("text", {x:ancho2 / 2, y:18.5, "text-anchor":"middle",
+        style:`font:italic 11.5px Georgia,serif;fill:${Kit.mezcla("#8a8073", "#2f6b4c", v / 10)}`});
       t.textContent = "«" + txt + "»";
       bur.appendChild(t);
-      const nota = Kit.svg("text", {x:ancho / 2, y:-6, "text-anchor":"middle",
-        style:`font:600 10px system-ui;fill:${borde};letter-spacing:.4px`});
-      nota.textContent = comoFue(v).toUpperCase();
-      bur.appendChild(nota);
     });
 
-    texto(cx, SUELO + 58, inv.titulo.length > 22 ? inv.titulo.slice(0, 21) + "…" : inv.titulo,
-      `font:600 12.5px system-ui;fill:${col};paint-order:stroke;stroke:#faf7f2;` +
+    texto(cx, MESA + 50 + (i % 2) * 19, inv.titulo.length > 22 ? inv.titulo.slice(0, 21) + "…" : inv.titulo,
+      `font:600 13px Georgia,serif;font-style:italic;fill:${Kit.mezcla("#8a8073", "#3b3128", vivo)};paint-order:stroke;stroke:#fffdf6;` +
       `stroke-width:4;stroke-linejoin:round`);
   });
-
-  /* la mesa larga, delante de todos */
-  g("rect", {x:52, y:SUELO + 4, width:616, height:24, rx:6, fill:"#c9a97f"});
-  g("rect", {x:52, y:SUELO + 28, width:616, height:9, rx:4, fill:"#a8875f"});
-  g("rect", {x:92, y:SUELO + 37, width:12, height:44, fill:"#a8875f"});
-  g("rect", {x:616, y:SUELO + 37, width:12, height:44, fill:"#a8875f"});
-  texto(360, 412, "ochenta años", "font:italic 13px system-ui;fill:#a89a86");
 }
 
 /* ====================== REFRESCO ====================== */

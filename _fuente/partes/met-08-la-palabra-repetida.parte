@@ -47,15 +47,15 @@ campo3ph: Ej. Sesión 6
 </section>
 
 <div class="escenario">
-  <svg id="lienzo" viewBox="0 0 660 230" role="img"
-    aria-label="La palabra repitiéndose cada vez más rápido"></svg>
+  <svg id="lienzo" viewBox="0 0 700 300" role="img"
+    aria-label="Una mesa de cocina con un vaso de leche; la palabra se repite sobre la pared"></svg>
   <div class="marcas">
     <div><span class="n" id="mReloj" style="color:#2f6f8f">0:45</span><span class="r">quedan</span></div>
     <div><span class="n" id="mVeces" style="color:#3f7d5a">0</span><span class="r">veces dicha</span></div>
     <div><span class="n" id="mRitmo" style="color:#c9962f">0</span><span class="r">por segundo</span></div>
   </div>
   <div class="duracion" id="turnos">
-    <button type="button" class="chip activa" id="tEnsayo">Turno con «limón»</button>
+    <button type="button" class="chip activa" id="tEnsayo">Turno con «leche»</button>
     <button type="button" class="chip" id="tPropia">Turno con mi palabra</button>
   </div>
   <div class="mandos">
@@ -106,7 +106,7 @@ campo3ph: Ej. Sesión 6
 const $ = Kit.$;
 
 const PALABRAS = ["Inútil","Débil","Fracasado","Insuficiente"];
-const NEUTRA = "limón";
+const NEUTRA = "leche";
 const DUR = 45;
 const LENTO = .6, RAPIDO = 4;    /* veces por segundo, al principio y al final */
 const ARRANQUE = .18;            /* proporción del turno que se dice al ritmo de entrada */
@@ -155,12 +155,17 @@ function latido(dt){
 }
 
 /* ====================== LA PANTALLA ====================== */
+let fondoCocina = null;
 function dibujar(){
   const svg = $("lienzo");
   svg.innerHTML = "";
   const g = (tg, a) => svg.appendChild(Kit.svg(tg, a));
 
-  g("rect", {x:0, y:0, width:660, height:230, fill:"#f6f8fa"});
+  if(!fondoCocina) fondoCocina = Kit.svg("image", {href:"[[imagen:palabra-acuarela.jpg]]", x:0, y:-84, width:700, height:467, preserveAspectRatio:"none"});
+  svg.appendChild(fondoCocina);
+  /* todo lo que sigue se dibuja sobre la pared, a la derecha del vaso */
+  const lienzo = svg, pared = Kit.svg("g", {transform:"translate(130 34)"});
+  lienzo.appendChild(pared);
 
   const pal = palabra();
   const propia = ronda === "propia";
@@ -171,31 +176,31 @@ function dibujar(){
     const op = Math.max(0, 1 - e.t / 1.5) * .3;
     const et = Kit.svg("text", {x:e.x.toFixed(1), y:e.y.toFixed(1), "text-anchor":"middle",
       transform:`rotate(${e.rot.toFixed(1)} ${e.x.toFixed(1)} ${e.y.toFixed(1)})`,
-      style:`font:600 ${(30 * e.esc).toFixed(1)}px system-ui,sans-serif;fill:${col};` +
+      style:`font:600 ${(30 * e.esc).toFixed(1)}px Georgia,serif;fill:${col};` +
             `opacity:${op.toFixed(3)}`});
     et.textContent = pal;
-    svg.appendChild(et);
+    pared.appendChild(et);
   });
 
   /* el pulso del ritmo, para decirla encima */
   const r = 16 + pulso * 13;
-  g("circle", {cx:330, cy:196, r:r.toFixed(1), fill:col, opacity:(.12 + pulso * .3).toFixed(2)});
-  g("circle", {cx:330, cy:196, r:9, fill:col, opacity:(.35 + pulso * .5).toFixed(2)});
+  pared.appendChild(Kit.svg("circle", {cx:330, cy:196, r:r.toFixed(1), fill:col, opacity:(.12 + pulso * .3).toFixed(2)}));
+  pared.appendChild(Kit.svg("circle", {cx:330, cy:196, r:9, fill:col, opacity:(.35 + pulso * .5).toFixed(2)}));
 
   /* la palabra, en el centro, latiendo con cada repetición */
   const esc = 1 + pulso * .22;
   const et = Kit.svg("text", {x:330, y:112, "text-anchor":"middle",
     transform:`translate(330,112) scale(${esc.toFixed(3)}) translate(-330,-112)`,
-    style:`font:700 54px system-ui,sans-serif;fill:${col};letter-spacing:-.5px`});
+    style:`font:700 56px Georgia,serif;fill:${col};letter-spacing:-.5px`});
   et.textContent = pal;
-  svg.appendChild(et);
+  pared.appendChild(et);
 
   const rotulo = Kit.svg("text", {x:330, y:44, "text-anchor":"middle",
-    style:"font:600 12px system-ui,sans-serif;fill:#7b8288;letter-spacing:.6px;" +
-          "text-transform:uppercase"});
+    style:"font:600 12px system-ui,sans-serif;fill:#5f6a70;letter-spacing:.6px;" +
+          "text-transform:uppercase;paint-order:stroke;stroke:#fbf8f0;stroke-width:3.5px"});
   rotulo.textContent = corriendo ? "en voz alta, al ritmo del punto"
     : propia ? "turno con tu palabra" : "turno de ensayo";
-  svg.appendChild(rotulo);
+  pared.appendChild(rotulo);
 }
 
 /* ====================== TURNOS ====================== */

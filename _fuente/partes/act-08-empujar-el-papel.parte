@@ -135,12 +135,16 @@ function postit(svg, x, y, s, txt, col, rot){
   });
   svg.appendChild(g);
 }
+let fondoMesa = null;
 function dibujar(){
   const svg = $("mesa");
   svg.innerHTML = "";
-  svg.appendChild(Kit.svg("rect", {x:0, y:0, width:640, height:300, rx:10, fill:"#efe6d8"}));
+  /* la mesa de trabajo en acuarela, vista desde arriba */
+  if(!fondoMesa) fondoMesa = Kit.svg("image", {href:"[[imagen:moneda-acuarela.jpg]]", x:-130, y:-112, width:900, height:600, preserveAspectRatio:"none"});
+  svg.appendChild(fondoMesa);
   /* la hoja de trabajo */
-  svg.appendChild(Kit.svg("rect", {x:150, y:22, width:260, height:256, rx:4, fill:"#fff", stroke:"#d8d2c6"}));
+  svg.appendChild(Kit.svg("rect", {x:155, y:27, width:260, height:256, rx:4, fill:"#3a2f22", opacity:.2}));
+  svg.appendChild(Kit.svg("rect", {x:150, y:22, width:260, height:256, rx:4, fill:"#fdfbf4", stroke:"#cfc6b2", transform:"rotate(-1.2 280 150)"}));
   const tt = Kit.svg("text", {x:280, y:46, "text-anchor":"middle", "font-size":13, "font-weight":700, fill:"#2f6f8f"});
   tt.textContent = tarea().charAt(0).toUpperCase() + tarea().slice(1);
   svg.appendChild(tt);
@@ -154,7 +158,7 @@ function dibujar(){
   alLadoN.forEach((t, i) => postit(svg, 520 + (i % 2) * 22, 70 + Math.floor(i / 2) * 44 + (i % 2) * 14,
     .48, t, "#fbe99a", (i % 3 - 1) * 6));
   if(alLadoN.length){
-    const ll = Kit.svg("text", {x:530, y:290, "text-anchor":"middle", "font-size":11, fill:"#7a6e5c"});
+    const ll = Kit.svg("text", {x:530, y:290, "text-anchor":"middle", "font-size":11.5, "font-weight":600, fill:"#fbf6ea", style:"paint-order:stroke;stroke:#3a2f22;stroke-width:3px"});
     ll.textContent = "siguen en la mesa";
     svg.appendChild(ll);
   }
@@ -167,10 +171,10 @@ function dibujar(){
     postit(svg, x, y, Math.min(1.9, s * 1.3), papel.txt, "#fde67a", papel.sale ? 8 * papel.sale : -3);
   }
   /* el cansancio */
-  svg.appendChild(Kit.svg("rect", {x:60, y:40, width:14, height:220, rx:7, fill:"#e3d9c9"}));
+  svg.appendChild(Kit.svg("rect", {x:60, y:40, width:14, height:220, rx:7, fill:"#fbf6ea", stroke:"#b9ad98", "stroke-width":1}));
   svg.appendChild(Kit.svg("rect", {x:60, y:40 + 220 * (1 - cansancio / 100), width:14, height:220 * cansancio / 100,
     rx:7, fill:"#b0503f"}));
-  const lc = Kit.svg("text", {x:67, y:278, "text-anchor":"middle", "font-size":10.5, fill:"#7a6e5c"});
+  const lc = Kit.svg("text", {x:67, y:278, "text-anchor":"middle", "font-size":11, "font-weight":600, fill:"#fbf6ea", style:"paint-order:stroke;stroke:#3a2f22;stroke-width:3px"});
   lc.textContent = "cansancio";
   svg.appendChild(lc);
 }
